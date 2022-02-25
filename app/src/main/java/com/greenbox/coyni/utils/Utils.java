@@ -428,6 +428,13 @@ public class Utils {
         }
     }
 
+    public static void displayAlertDecline(String msg, Activity activity, String header, String fieldError) {
+
+
+        displayAlertDecline(msg, activity, header);
+
+    }
+
     public static String convertBigDecimalUSDC(String amount) {
         String strValue = "";
         BigDecimal value;
@@ -661,6 +668,56 @@ public class Utils {
         }
 
         actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public static void displayAlertDecline(String msg, final Context context, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_decline_rules_btmshet);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = dialog.findViewById(R.id.tvHeading);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        LinearLayout llgoback = dialog.findViewById(R.id.llgoback);
+        LinearLayout cancelBtn = dialog.findViewById(R.id.cancelBtn);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        llgoback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();

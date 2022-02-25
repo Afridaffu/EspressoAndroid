@@ -61,7 +61,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         initFields();
         initObservers();
         showUserData();
-        showIdentityVerificationReview();
+         showIdentityVerificationReview();
         //showAdditionalActionView();
 
         mUserIconRelativeLayout.setOnClickListener(new View.OnClickListener() {

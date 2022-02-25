@@ -152,5 +152,33 @@ public class ProfilesResponse {
         public void setDbaOwner(String dbaOwner) {
             this.dbaOwner = dbaOwner;
         }
+
+        @Override
+        public String toString() {
+            return "Profiles{" +
+                    "id=" + id +
+                    ", fullName='" + fullName + '\'' +
+                    ", accountType='" + accountType + '\'' +
+                    ", countryCode='" + countryCode + '\'' +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", email='" + email + '\'' +
+                    ", image='" + image + '\'' +
+                    ", companyName='" + companyName + '\'' +
+                    ", dbaName='" + dbaName + '\'' +
+                    ", accountStatus='" + accountStatus + '\'' +
+                    ", dbaOwner='" + dbaOwner + '\'' +
+                    ", isSelected=" + isSelected +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ProfilesResponse{" +
+                "status='" + status + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", data=" + data +
+                ", error=" + error +
+                '}';
     }
 }

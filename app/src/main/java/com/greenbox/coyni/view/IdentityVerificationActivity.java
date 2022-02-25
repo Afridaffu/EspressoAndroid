@@ -88,18 +88,18 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class IdentityVerificationActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
-    TextInputLayout dobTIL, ssnTIL, mailingAddTIL, mailingAddlineoptTIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
-    TextInputEditText dobET, ssnET, cityET, mailAddr1, mailAddr2, state, zipcode;
-    TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
-    ConstraintLayout idveriDOBConLayout, stateCL;
-    LinearLayout bottomSheet, fileSelectedLL, ssnErrorLL, swipeLL, bottomNaviLL;
-    ScrollView firstIVeri;
+    private TextInputLayout dobTIL, ssnTIL, mailingAddTIL, mailingAddlineoptTIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
+    private TextInputEditText dobET, ssnET, cityET, mailAddr1, mailAddr2, state, zipcode;
+    private TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
+    private ConstraintLayout idveriDOBConLayout, stateCL;
+    private LinearLayout bottomSheet, fileSelectedLL, ssnErrorLL, swipeLL, bottomNaviLL;
+    private ScrollView firstIVeri;
     public static CardView btnNext, btnSubmit;
-    ScrollView secondIVeri;
-    View viewLeft, viewRight;
-    ImageButton closebtn, backbtn;
-    ImageView upIdSuccessImg;
-    int mYear, mMonth, mDay;
+    private ScrollView secondIVeri;
+    private View viewLeft, viewRight;
+    private ImageButton closebtn, backbtn;
+    private ImageView upIdSuccessImg;
+    private int mYear, mMonth, mDay;
     public static boolean isMailAddr1 = false, isCity = false, isState = false, isZip = false, isSubmit = false, isNext = false;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     public static File identityFile;
@@ -108,20 +108,19 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     public static boolean isFileSelected = false, isSSNSelected = false, isDOBSelected = false;
 
     public static IdentityVerificationActivity identityVerificationActivity;
-    IdentityVerificationViewModel identityVerificationViewModel;
+    private IdentityVerificationViewModel identityVerificationViewModel;
     ProgressDialog dialog;
-
-    LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
-    TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
-    MyApplication myApplicationObj;
-    Long mLastClickTime = 0L;
-    DashboardViewModel dashboardViewModel;
+    private LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
+    private TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
+    private MyApplication myApplicationObj;
+    private Long mLastClickTime = 0L;
+    private DashboardViewModel dashboardViewModel;
     private DatePicker datepicker;
     private LoginViewModel loginViewModel;
     private String addBusiness="false";
 
-    IdentityPagerAdapter identityPagerAdapter;
-    static AutoScrollViewPager viewPager;
+    private IdentityPagerAdapter identityPagerAdapter;
+    public static AutoScrollViewPager viewPager;
     private String respCode;
 
     @Override
@@ -811,34 +810,21 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             closebtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if(addBusiness.equalsIgnoreCase("true")){
-                        loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
-                    } else {
-                        finish();
-                    }
+                     finishMethod();
                 }
             });
 
             exitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(addBusiness.equalsIgnoreCase("true")){
-                        loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
-                    } else {
-                        finish();
-                    }
+                    finishMethod();
                 }
             });
 
             btnExit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(addBusiness.equalsIgnoreCase("true")){
-                        loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
-                    } else {
-                        finish();
-                    }
+                    finishMethod();
                 }
             });
 
@@ -978,6 +964,15 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             e.printStackTrace();
         }
 
+    }
+
+    private void finishMethod() {
+
+        if(addBusiness.equalsIgnoreCase("true")){
+            loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
+        } else {
+            finish();
+        }
     }
 
     public static void showIdentityTypePopup(final Context context) {

@@ -35,21 +35,21 @@ import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class BusinessRegistrationTrackerActivity extends BaseActivity {
-    TextView caStartTV, dbaStartTV, boStartTV, addBankStartTV, aggrementsStartTV, caTV, caIncompleteTV, dbaTV, dbaIncompleteTV,
+    private TextView caStartTV, dbaStartTV, boStartTV, addBankStartTV, aggrementsStartTV, caTV, caIncompleteTV, dbaTV, dbaIncompleteTV,
             boTV, boIncompleteTV, addBankTV, addBankIncompleteTV, aggrementsTV, aggrementsIncompleteTV;
-    Dialog choose;
-    LinearLayout caCompleteLL, caIncompleteLL, dbaCompleteLL, dbaIncompleteLL, boCompleteLL, boIncompleteLL, addBankCompleteLL,
+    private Dialog choose;
+    private LinearLayout caCompleteLL, caIncompleteLL, dbaCompleteLL, dbaIncompleteLL, boCompleteLL, boIncompleteLL, addBankCompleteLL,
             addBankIncompleteLL, aggrementsCompleteLL, aggrementsIncompleteLL;
-    Long mLastClickTime = 0L;
-    BusinessTrackerResponse businessTrackerResponse;
-    MyApplication objMyApplication;
-    ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    DBAInfoResp dbaInfoResponse;
+    private Long mLastClickTime = 0L;
+    private BusinessTrackerResponse businessTrackerResponse;
+    private MyApplication objMyApplication;
+    private ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private DBAInfoResp dbaInfoResponse;
     private String addBusiness="false";
     private String addDBA="false";
     private LoginViewModel loginViewModel;
-    String boAPICallFrom = "RESUME";
+    private String boAPICallFrom = "RESUME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -17,19 +17,34 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SignatureTempActivity extends BaseActivity {
 
     private ImageView mIVSignature;
+    List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
+    List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    List<ProfilesResponse.Profiles> dbaAccountList = new ArrayList<>();
+    List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
+    Map<String, ArrayList<ProfilesResponse.Profiles>> map = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
