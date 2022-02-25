@@ -997,6 +997,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     }
                 } else {
                     b_address1ET.setHint("Address");
+                    b_address1ErrorLL.setVisibility(GONE);
                     b_address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_address1TIL, getColor(R.color.primary_green));
                 }
@@ -1043,6 +1044,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     }
                 } else {
                     b_cityET.setHint("City");
+                    b_cityErrorLL.setVisibility(GONE);
                     b_cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_cityTIL, getColor(R.color.primary_green));
                 }
@@ -1073,6 +1075,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     }
                 } else {
                     b_zipcodeET.setHint("Zip Code");
+                    b_zipcodeErrorLL.setVisibility(GONE);
                     b_zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_zipcodeTIL, getColor(R.color.primary_green));
                 }

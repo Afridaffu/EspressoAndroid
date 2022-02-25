@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="Transaction Details"
+                android:text="@string/transaction_details"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp" />
         </LinearLayout>
@@ -70,14 +70,14 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/withbankheaderTV"
+                            android:id="@+id/SalesheaderTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_22sdp"
                             android:layout_marginBottom="@dimen/_6sdp"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="Sale Order - Token"
+                            android:text="@string/sale_order_tokens"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_12ssp" />
 
@@ -88,6 +88,7 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/SalesAmount_TV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/_6sdp"
@@ -101,7 +102,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="CYN"
+                                android:text="@string/currency"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -132,12 +133,12 @@
                                 android:layout_marginBottom="@dimen/_11sdp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Status"
+                                android:text="@string/status"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/withBankStatusTV"
+                                android:id="@+id/SalesStatusTV"
                                 android:layout_width="@dimen/_68sdp"
                                 android:layout_height="@dimen/_14sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
@@ -168,7 +169,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/withbankDatetimeTV"
+                                android:id="@+id/SalesDatetimeTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -193,12 +194,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Reference ID"
+                                android:text="@string/reference_id"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-
+                                android:id="@+id/SalesReferenceidTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -209,7 +210,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <ImageView
-                                android:id="@+id/withBankwithdrawIDIV"
+                                android:id="@+id/SalesReferenceidIV"
                                 android:layout_width="@dimen/_11sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_gravity="center"
@@ -231,11 +232,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Fees"
+                                android:text="@string/fees"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/SalesfeesidTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/_4sdp"
@@ -251,31 +253,32 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="CYN"
+                                android:text="@string/currency"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
                             android:paddingLeft="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:visibility="gone"
                             android:paddingRight="@dimen/_11sdp"
-                            android:paddingBottom="@dimen/_11sdp">
+                            android:paddingBottom="@dimen/_11sdp"
+                            android:visibility="visible">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Reserve Amount"
+                                android:text="@string/reserve_amount"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-
+                                android:id="@+id/SalesreserveTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/_4sdp"
@@ -291,10 +294,11 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="CYN"
+                                android:text="@string/currency"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -309,12 +313,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Net Amount"
+                                android:text="@string/netamount"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-
+android:id="@+id/SalesnetamountTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/_4sdp"
@@ -330,10 +334,11 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="CYN"
+                                android:text="@string/currency"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -348,12 +353,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Merchant Balance"
+                                android:text="@string/MerchantBalance"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-
+android:id="@+id/SalesMerchantBalanceTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/_4sdp"
@@ -369,10 +374,11 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="CYN"
+                                android:text="@string/currency"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_1sdp"
@@ -382,6 +388,7 @@
                             android:layout_marginRight="@dimen/_11sdp"
                             android:layout_marginBottom="@dimen/_11sdp"
                             android:background="@color/blue_light" />
+
                         <ImageView
                             android:id="@+id/RefundIV"
                             android:layout_width="wrap_content"
@@ -392,10 +399,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:gravity="center"
-                            android:layout_marginTop="@dimen/_4sdp"
-                            android:text="Refund"
+                            android:text="@string/refund"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_11ssp" />
                     </LinearLayout>
@@ -429,13 +436,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Sender Name"
+                                android:text="@string/sender_name"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
 
                             <TextView
-                                android:id="@+id/withBankWithdrawidTV"
+                                android:id="@+id/SalessendernameTVTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -462,13 +469,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Sender Email"
+                                android:text="@string/sender_email"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
 
                             <TextView
-                                android:id="@+id/withBankReferenceIDTV"
+                                android:id="@+id/SalessenderemailTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -481,216 +488,216 @@
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_21sdp"
-                    android:layout_marginRight="@dimen/_21sdp"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="Activity Log"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:visibility="gone"
-                    />
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:layout_marginRight="@dimen/_11sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:visibility="gone"
-                    app:cardCornerRadius="@dimen/_10sdp">
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="@dimen/_21sdp"-->
+<!--                    android:layout_marginRight="@dimen/_21sdp"-->
+<!--                    android:fontFamily="@font/opensans_bold"-->
+<!--                    android:text="Activity Log"-->
+<!--                    android:textColor="@color/primary_black"-->
+<!--                    android:textSize="@dimen/_12ssp"-->
+<!--                    android:visibility="gone" />-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                    android:layout_marginTop="@dimen/_12sdp"-->
+<!--                    android:layout_marginRight="@dimen/_11sdp"-->
+<!--                    android:layout_marginBottom="@dimen/_20sdp"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:cardCornerRadius="@dimen/_10sdp">-->
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_17sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:orientation="horizontal">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical">-->
 
-                            <View
-                                android:layout_width="@dimen/_4sdp"
-                                android:layout_height="@dimen/_4sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/dot_view_" />
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginTop="@dimen/_17sdp"-->
+<!--                            android:layout_marginRight="@dimen/_11sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_4sdp"-->
+<!--                            android:orientation="horizontal">-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_6sdp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Withdraw"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11ssp" />
+<!--                            <View-->
+<!--                                android:layout_width="@dimen/_4sdp"-->
+<!--                                android:layout_height="@dimen/_4sdp"-->
+<!--                                android:layout_marginTop="@dimen/_6sdp"-->
+<!--                                android:background="@drawable/dot_view_" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_7sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:gravity="right"
-                                android:text="6/23/2021 7:43pm"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_10ssp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_6sdp"-->
+<!--                                android:fontFamily="@font/opensans_semibold"-->
+<!--                                android:text="Withdraw"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="@dimen/_11ssp" />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Bank withdraw request Failed for reason [add the\nreason code from Signature Bank]  Total of [withdraw \namount] been credit back to your token account \n[reference ID + will be hyper link to the Failed ACH \nwithdraw transaction"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_9ssp" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_7sdp"-->
+<!--                                android:fontFamily="@font/opensans_regular"-->
+<!--                                android:gravity="right"-->
+<!--                                android:text="6/23/2021 7:43pm"-->
+<!--                                android:textColor="@color/primary_black"-->
+<!--                                android:textSize="@dimen/_10ssp" />-->
+<!--                        </LinearLayout>-->
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_17sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:orientation="horizontal">
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginRight="@dimen/_11sdp"-->
+<!--                            android:fontFamily="@font/opensans_regular"-->
+<!--                            android:text="Bank withdraw request Failed for reason [add the\nreason code from Signature Bank]  Total of [withdraw \namount] been credit back to your token account \n[reference ID + will be hyper link to the Failed ACH \nwithdraw transaction"-->
+<!--                            android:textColor="@color/primary_black"-->
+<!--                            android:textSize="@dimen/_9ssp" />-->
 
-                            <View
-                                android:layout_width="@dimen/_4sdp"
-                                android:layout_height="@dimen/_4sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/dot_view_" />
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginTop="@dimen/_17sdp"-->
+<!--                            android:layout_marginRight="@dimen/_11sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_4sdp"-->
+<!--                            android:orientation="horizontal">-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_6sdp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Withdraw"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11ssp" />
+<!--                            <View-->
+<!--                                android:layout_width="@dimen/_4sdp"-->
+<!--                                android:layout_height="@dimen/_4sdp"-->
+<!--                                android:layout_marginTop="@dimen/_6sdp"-->
+<!--                                android:background="@drawable/dot_view_" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_7sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:gravity="right"
-                                android:text="6/23/2021 7:43pm"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_10ssp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_6sdp"-->
+<!--                                android:fontFamily="@font/opensans_semibold"-->
+<!--                                android:text="Withdraw"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="@dimen/_11ssp" />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginRight="@dimen/_9sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Bank withdraw request got canceled, Total of [withdraw \namount + processing fee] been credit back to your \ntoken account [reference ID + will be hyper link to the \ncanceled ACH withdraw transaction]"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_9ssp" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_7sdp"-->
+<!--                                android:fontFamily="@font/opensans_regular"-->
+<!--                                android:gravity="right"-->
+<!--                                android:text="6/23/2021 7:43pm"-->
+<!--                                android:textColor="@color/primary_black"-->
+<!--                                android:textSize="@dimen/_10ssp" />-->
+<!--                        </LinearLayout>-->
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_17sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:orientation="horizontal">
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginRight="@dimen/_9sdp"-->
+<!--                            android:fontFamily="@font/opensans_regular"-->
+<!--                            android:text="Bank withdraw request got canceled, Total of [withdraw \namount + processing fee] been credit back to your \ntoken account [reference ID + will be hyper link to the \ncanceled ACH withdraw transaction]"-->
+<!--                            android:textColor="@color/primary_black"-->
+<!--                            android:textSize="@dimen/_9ssp" />-->
 
-                            <View
-                                android:layout_width="@dimen/_4sdp"
-                                android:layout_height="@dimen/_4sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/dot_view_" />
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginTop="@dimen/_17sdp"-->
+<!--                            android:layout_marginRight="@dimen/_11sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_4sdp"-->
+<!--                            android:orientation="horizontal">-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_6sdp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Withdraw"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11ssp" />
+<!--                            <View-->
+<!--                                android:layout_width="@dimen/_4sdp"-->
+<!--                                android:layout_height="@dimen/_4sdp"-->
+<!--                                android:layout_marginTop="@dimen/_6sdp"-->
+<!--                                android:background="@drawable/dot_view_" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_7sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:gravity="right"
-                                android:text="6/23/2021 7:43pm"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_10ssp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_6sdp"-->
+<!--                                android:fontFamily="@font/opensans_semibold"-->
+<!--                                android:text="Withdraw"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="@dimen/_11ssp" />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginRight="@dimen/_9sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Successfully Deposit [xxx.xx USD] to bank account\naccount ending in [****1234]"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_9ssp" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_7sdp"-->
+<!--                                android:fontFamily="@font/opensans_regular"-->
+<!--                                android:gravity="right"-->
+<!--                                android:text="6/23/2021 7:43pm"-->
+<!--                                android:textColor="@color/primary_black"-->
+<!--                                android:textSize="@dimen/_10ssp" />-->
+<!--                        </LinearLayout>-->
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_17sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:layout_marginBottom="@dimen/_4sdp"
-                            android:orientation="horizontal">
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginRight="@dimen/_9sdp"-->
+<!--                            android:fontFamily="@font/opensans_regular"-->
+<!--                            android:text="Successfully Deposit [xxx.xx USD] to bank account\naccount ending in [****1234]"-->
+<!--                            android:textColor="@color/primary_black"-->
+<!--                            android:textSize="@dimen/_9ssp" />-->
 
-                            <View
-                                android:layout_width="@dimen/_4sdp"
-                                android:layout_height="@dimen/_4sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/dot_view_" />
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginTop="@dimen/_17sdp"-->
+<!--                            android:layout_marginRight="@dimen/_11sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_4sdp"-->
+<!--                            android:orientation="horizontal">-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_6sdp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="Withdraw"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11ssp" />
+<!--                            <View-->
+<!--                                android:layout_width="@dimen/_4sdp"-->
+<!--                                android:layout_height="@dimen/_4sdp"-->
+<!--                                android:layout_marginTop="@dimen/_6sdp"-->
+<!--                                android:background="@drawable/dot_view_" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_7sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:gravity="right"
-                                android:text="6/23/2021 7:43pm"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_10ssp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_6sdp"-->
+<!--                                android:fontFamily="@font/opensans_semibold"-->
+<!--                                android:text="Withdraw"-->
+<!--                                android:textColor="@color/black"-->
+<!--                                android:textSize="@dimen/_11ssp" />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginRight="@dimen/_9sdp"
-                            android:layout_marginBottom="@dimen/_16sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Bank withdraw request sent"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_9ssp" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/_7sdp"-->
+<!--                                android:fontFamily="@font/opensans_regular"-->
+<!--                                android:gravity="right"-->
+<!--                                android:text="6/23/2021 7:43pm"-->
+<!--                                android:textColor="@color/primary_black"-->
+<!--                                android:textSize="@dimen/_10ssp" />-->
+<!--                        </LinearLayout>-->
 
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="@dimen/_11sdp"-->
+<!--                            android:layout_marginRight="@dimen/_9sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_16sdp"-->
+<!--                            android:fontFamily="@font/opensans_regular"-->
+<!--                            android:text="Bank withdraw request sent"-->
+<!--                            android:textColor="@color/primary_black"-->
+<!--                            android:textSize="@dimen/_9ssp" />-->
+
+<!--                    </LinearLayout>-->
+<!--                </androidx.cardview.widget.CardView>-->
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
