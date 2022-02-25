@@ -36,6 +36,7 @@ import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
+import com.greenbox.coyni.view.business.BusinessAdditonalActionRequired;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -49,7 +50,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     private CardView mIvUserIconCV;
     private TextView mTvUserName, mTvUserIconText;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
-            mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView;
+            mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView,
+            mLlBuyTokensFirstTimeView;
     private TextView mTvIdentityReviewCancelMessage;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
@@ -61,8 +63,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         initFields();
         initObservers();
         showUserData();
+
         showIdentityVerificationReview();
         //showAdditionalActionView();
+        //showIdentityVerificationReview();
+        //showBusinessDashboardView();
 
         mUserIconRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +80,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mCvAdditionalDataContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AdditionalInformationRequiredActivity.class));
+                startActivity(new Intent(getActivity(), BusinessAdditonalActionRequired.class));
 
             }
         });
@@ -101,6 +106,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityAdditionDataRequired = mCurrentView.findViewById(R.id.ll_identity_additional_data);
         mLlIdentityVerificationReview = mCurrentView.findViewById(R.id.ll_identity_verification_review);
         mLlIdentityVerificationFailedView = mCurrentView.findViewById(R.id.ll_identity_verification_failed);
+        mLlBuyTokensFirstTimeView = mCurrentView.findViewById(R.id.ll_buy_tokens_first_time);
         mTvIdentityReviewCancelMessage = mCurrentView.findViewById(R.id.tv_identity_review_cancel_text);
         notificationsRL = mCurrentView.findViewById(R.id.notificationsRL);
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
@@ -110,6 +116,13 @@ public class BusinessDashboardFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(requireContext(), NotificationsActivity.class));
+            }
+        });
+
+        mLlBuyTokensFirstTimeView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((BusinessDashboardActivity) getActivity()).launchBuyTokens();
             }
         });
     }
@@ -148,6 +161,13 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlBusinessDashboardView.setVisibility(View.GONE);
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
+    }
+
+    private void showBusinessDashboardView() {
+        mLlIdentityVerificationReview.setVisibility(View.GONE);
+        mLlBusinessDashboardView.setVisibility(View.VISIBLE);
+        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
+        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
     }
 
     private void showAdditionalActionView() {
