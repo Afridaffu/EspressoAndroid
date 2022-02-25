@@ -60,6 +60,7 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                holder.ownerNameTV.setText("No name");
             }
 
 

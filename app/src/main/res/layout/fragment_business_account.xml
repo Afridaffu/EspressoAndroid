@@ -154,6 +154,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_11sdp"
                                 android:fontFamily="@font/opensans_bold"
+                                android:text="0.00"
                                 android:textColor="@color/price"
                                 android:textSize="@dimen/_30ssp" />
 
@@ -165,7 +166,7 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="CYN"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_14ssp"/>
+                                android:textSize="@dimen/_14ssp" />
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>

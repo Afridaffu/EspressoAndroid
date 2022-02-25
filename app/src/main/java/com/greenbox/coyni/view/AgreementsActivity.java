@@ -27,6 +27,8 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -47,10 +49,12 @@ public class AgreementsActivity extends AppCompatActivity {
     TextView pastTV, activeTV;
     int i = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        dashboardViewModel.agreementsByType("1");
         setContentView(R.layout.activity_agreements);
         recyclerView = findViewById(R.id.recyclerview);
         recyclPastAgree = findViewById(R.id.recyclPastAgree);
@@ -122,6 +126,11 @@ public class AgreementsActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
+
+                                Item privacyPolicy = new Item();
+                                Item tos = new Item();
+                                Item merchantAgre = new Item();
+
                                 for (int i = 0; i < agreements.getData().getItems().size(); i++) {
                                     if (agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().contains("v")) {
                                         versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim()));
@@ -131,15 +140,25 @@ public class AgreementsActivity extends AppCompatActivity {
                                     }
                                     if (cTSVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 0) {
                                         activeItems.add(agreements.getData().getItems().get(i));
+                                        tos = agreements.getData().getItems().get(i);
                                     } else if (cPPVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 1) {
                                         activeItems.add(agreements.getData().getItems().get(i));
+                                        privacyPolicy = agreements.getData().getItems().get(i);
                                     } else if (bMAVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 5) {
                                         activeItems.add(agreements.getData().getItems().get(i));
+                                        merchantAgre = agreements.getData().getItems().get(i);
                                     } else {
                                         pastItems.add(agreements.getData().getItems().get(i));
                                     }
                                 }
+
+                                activeItems = new ArrayList<>();
+                                activeItems.add(privacyPolicy);
+                                activeItems.add(tos);
+                                activeItems.add(merchantAgre);
                             }
+
+
                             adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, dashboardViewModel, listener);
                             recyclerView.setAdapter(adapter);
 
@@ -168,7 +187,7 @@ public class AgreementsActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(AgreementsPdf agreementsPdf) {
                     if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        objMyApplication.setAgreementsPdf(agreementsPdf);
+//                        objMyApplication.setAgreementsPdf(agreementsPdf);
                         adapter = new AgreeListAdapter(AgreementsActivity.this, agreements.getData().getItems(), dashboardViewModel, listener);
                         recyclerView.setAdapter(adapter);
                     }
@@ -184,7 +203,7 @@ public class AgreementsActivity extends AppCompatActivity {
 
             listener = (view, position) -> {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                    if (position == 2) {
+                    if (position == 1) {
                         Intent inte = new Intent(Intent.ACTION_VIEW);
                         inte.setDataAndType(
                                 Uri.parse(tosURL + "?" + System.currentTimeMillis()),
@@ -192,7 +211,7 @@ public class AgreementsActivity extends AppCompatActivity {
                         startActivity(inte);
 
                     }
-                    if (position == 1) {
+                    if (position == 0) {
                         Intent inte = new Intent(Intent.ACTION_VIEW);
                         inte.setDataAndType(
                                 Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
