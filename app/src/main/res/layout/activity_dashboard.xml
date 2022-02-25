@@ -218,9 +218,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="@dimen/_5sdp"
+                        android:visibility="gone"
                         app:cardBackgroundColor="@color/primary_green"
-                        app:cardCornerRadius="@dimen/_10sdp"
-                        android:visibility="gone">
+                        app:cardCornerRadius="@dimen/_10sdp">
 
                         <TextView
                             android:id="@+id/countTV"

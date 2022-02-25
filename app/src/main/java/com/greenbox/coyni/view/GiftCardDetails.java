@@ -238,6 +238,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
                 obj.setTransactionSubType(Integer.parseInt(Utils.giftcardType));
 //                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                pDialog = Utils.showProgressDialog(GiftCardDetails.this);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 } else {
@@ -385,6 +386,9 @@ public class GiftCardDetails extends AppCompatActivity {
         buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
             @Override
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (pDialog != null) {
+                    pDialog.dismiss();
+                }
                 if (transactionLimitResponse != null) {
                     objTranLimit = transactionLimitResponse;
                 }
@@ -1288,7 +1292,6 @@ public class GiftCardDetails extends AppCompatActivity {
         super.onDestroy();
 
     }
-
 
 
 }

@@ -518,6 +518,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 obj.setTransactionType(Integer.parseInt(Utils.payType));
                 obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
 //                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                pDialog = Utils.showProgressDialog(PayRequestActivity.this);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 } else {
@@ -542,6 +543,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
             @Override
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (pDialog != null) {
+                    pDialog.dismiss();
+                }
                 if (transactionLimitResponse != null) {
                     objResponse = transactionLimitResponse;
                     setDailyWeekLimit(objResponse.getData());

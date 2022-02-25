@@ -283,6 +283,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (getIntent().getStringExtra("cvv") != null && !getIntent().getStringExtra("cvv").equals("")) {
                 strCvv = getIntent().getStringExtra("cvv");
             }
+            pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
             bindPayMethod(selectedCard);
 //            SetToken();
             SetFaceLock();
@@ -404,7 +405,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     }
                 }
             });
-            pDialog = Utils.showProgressDialog(this);
+            //pDialog = Utils.showProgressDialog(this);
             calculateFee("10");
             strSignOn = objMyApplication.getStrSignOnError();
             signOnData = objMyApplication.getSignOnData();
@@ -420,6 +421,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
                 if (transactionLimitResponse != null) {
                     try {
+                        if (pDialog != null) {
+                            pDialog.dismiss();
+                        }
                         objResponse = transactionLimitResponse;
                         setDailyWeekLimit(transactionLimitResponse.getData());
                         if (etAmount.getText().toString().trim().length() > 0) {
