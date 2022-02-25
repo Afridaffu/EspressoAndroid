@@ -138,7 +138,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onResume() {
         try {
             super.onResume();
-            dbanameET.requestFocus();
+//            dbanameET.requestFocus();
 //            businessIdentityVerificationViewModel.getBusinessType();
         } catch (Exception e) {
             e.printStackTrace();
