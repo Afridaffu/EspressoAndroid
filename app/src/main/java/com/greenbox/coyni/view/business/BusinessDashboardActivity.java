@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.BaseFragment;
 import com.greenbox.coyni.fragments.BusinessAccountFragment;
@@ -337,6 +338,36 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
+        String iconText = "";
+        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                && objMyApplication.getMyProfile().getData().getFirstName() != null) {
+            String firstName = objMyApplication.getMyProfile().getData().getFirstName();
+            iconText = firstName.substring(0, 1).toUpperCase();
+            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+            if (objMyApplication.getMyProfile().getData().getLastName() != null) {
+                String lastName = objMyApplication.getMyProfile().getData().getLastName();
+                iconText = iconText + lastName.substring(0, 1).toUpperCase();
+                username = username + " ";
+                username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+            }
+            mTvUserName.setText(getResources().getString(R.string.dba_name, username));
+        }
+        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                && objMyApplication.getMyProfile().getData().getImage() != null) {
+            mTvUserIconText.setVisibility(View.GONE);
+            mIvUserIcon.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .load(objMyApplication.getMyProfile().getData().getImage())
+                    .placeholder(R.drawable.ic_profile_male_user)
+                    .into(mIvUserIcon);
+        } else {
+            mTvUserIconText.setVisibility(View.VISIBLE);
+            mIvUserIcon.setVisibility(View.GONE);
+            mTvUserIconText.setText(iconText);
         }
     }
 

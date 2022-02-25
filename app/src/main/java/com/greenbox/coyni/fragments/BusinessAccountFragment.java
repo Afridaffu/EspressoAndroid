@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,11 +26,9 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletName;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
-import com.greenbox.coyni.model.wallet.WalletInfo;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.TransactionListActivity;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -37,14 +36,17 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import java.util.List;
 
 public class BusinessAccountFragment extends BaseFragment {
-    LinearLayout viewMoreLL;
-    RecyclerView txnRV;
-    TextView noTxnTV, tvBalance;
-    SwipeRefreshLayout latestTxnRefresh;
-    DashboardViewModel dashboardViewModel;
-    BusinessDashboardViewModel businessDashboardViewModel;
-    MyApplication objMyApplication;
-    NestedScrollView transactionsNSV;
+
+    private LinearLayout viewMoreLL;
+    private RecyclerView txnRV;
+    private TextView noTxnTV, tvBalance;
+    private SwipeRefreshLayout latestTxnRefresh;
+    private ImageView mIvUserIcon;
+    private TextView mTvUserName, mTvUserIconText;
+    private DashboardViewModel dashboardViewModel;
+    private BusinessDashboardViewModel businessDashboardViewModel;
+    private MyApplication objMyApplication;
+    private NestedScrollView transactionsNSV;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +55,9 @@ public class BusinessAccountFragment extends BaseFragment {
         txnRV = currentView.findViewById(R.id.txnRV);
         noTxnTV = currentView.findViewById(R.id.noTxnTV);
         tvBalance = currentView.findViewById(R.id.tvBalance);
+        mIvUserIcon = currentView.findViewById(R.id.iv_user_icon);
+        mTvUserName = currentView.findViewById(R.id.tv_user_name);
+        mTvUserIconText = currentView.findViewById(R.id.tv_user_icon_text);
         transactionsNSV = currentView.findViewById(R.id.transactionsNSV);
         latestTxnRefresh = currentView.findViewById(R.id.latestTxnRefresh);
         objMyApplication = (MyApplication) requireContext().getApplicationContext();
@@ -84,10 +89,17 @@ public class BusinessAccountFragment extends BaseFragment {
 
 
         initObservers();
-
-//        viewMoreLL.setOnClickListener(view -> goToTransact());
-
+        showUserData();
         return currentView;
+    }
+
+    @Override
+    public void updateData() {
+        showUserData();
+    }
+
+    private void showUserData() {
+        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
     }
 
     private void initObservers() {
@@ -157,17 +169,10 @@ public class BusinessAccountFragment extends BaseFragment {
 
             }
         });
-
-
     }
 
     public void goToTransact() {
         startActivity(new Intent(requireActivity().getApplication(), BusinessTransactionListActivity.class));
-    }
-
-    @Override
-    public void updateData() {
-
     }
 
     private void getBalance(WalletResponseData walletResponse) {
@@ -178,6 +183,7 @@ public class BusinessAccountFragment extends BaseFragment {
                     if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
                         strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
                         tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+
                     }
                 }
             }

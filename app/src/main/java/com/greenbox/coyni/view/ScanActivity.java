@@ -239,11 +239,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             }
             saveToAlbumbindImage();
             WalletResponse walletResponse = objMyApplication.getWalletResponse();
-            if (walletResponse != null) {
+            if (walletResponse != null && walletResponse.getData() != null
+                    && walletResponse.getData().getWalletInfo() != null && walletResponse.getData().getWalletInfo().size() > 0
+                    && walletResponse.getData().getWalletInfo().get(0).getWalletId() != null) {
                 strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
                 generateQRCode(strWallet);
+                tvWalletAddress.setText(strWallet.substring(0, 16) + "...");
             }
-            tvWalletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -727,7 +729,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     protected void onPause() {
         try {
             super.onPause();
-            mcodeScanner.releaseResources();
+            if(mcodeScanner != null) {
+                mcodeScanner.releaseResources();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

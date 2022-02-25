@@ -1215,6 +1215,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         if (type.equalsIgnoreCase("SAME")) {
             isCopyCompanyInfo = true;
 
+//            dbaFillingLL.setVisibility(GONE);
+
             if (objMyApplication.getCompanyInfoResp() != null) {
                 CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
                 if (cir.getName() != null && !cir.getName().equals("")) {
@@ -1271,6 +1273,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             }
         } else if (type.equalsIgnoreCase("DIFF")) {
             isCopyCompanyInfo = false;
+//            dbaFillingLL.setVisibility(VISIBLE);
         } else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
             isCopyCompanyInfo = false;
 

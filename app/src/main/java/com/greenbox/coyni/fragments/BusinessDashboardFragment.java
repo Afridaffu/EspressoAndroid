@@ -32,9 +32,12 @@ import com.greenbox.coyni.model.business_id_verification.CancelApplicationRespon
 import com.greenbox.coyni.utils.CustomConfirmationDialog;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.OnDialogButtonClickListener;
+import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 
@@ -50,7 +53,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mTvIdentityReviewCancelMessage;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
-    private RelativeLayout mUserIconRelativeLayout;
+    private RelativeLayout mUserIconRelativeLayout,notificationsRL;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +79,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             }
         });
+
+        showUserData();
         return mCurrentView;
     }
 
@@ -97,7 +102,16 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityVerificationReview = mCurrentView.findViewById(R.id.ll_identity_verification_review);
         mLlIdentityVerificationFailedView = mCurrentView.findViewById(R.id.ll_identity_verification_failed);
         mTvIdentityReviewCancelMessage = mCurrentView.findViewById(R.id.tv_identity_review_cancel_text);
+        notificationsRL = mCurrentView.findViewById(R.id.notificationsRL);
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
+
+
+        notificationsRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(requireContext(), NotificationsActivity.class));
+            }
+        });
     }
 
     private void initObservers() {
@@ -126,33 +140,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             });
 
     private void showUserData() {
-        String iconText = "";
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                && myApplication.getMyProfile().getData().getFirstName() != null) {
-            String firstName = myApplication.getMyProfile().getData().getFirstName();
-            iconText = firstName.substring(0, 1).toUpperCase();
-            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-            if (myApplication.getMyProfile().getData().getLastName() != null) {
-                String lastName = myApplication.getMyProfile().getData().getLastName();
-                iconText = iconText + lastName.substring(0, 1).toUpperCase();
-                username = username + " ";
-                username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
-            }
-            mTvUserName.setText(getResources().getString(R.string.dba_name, username));
-        }
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                && myApplication.getMyProfile().getData().getImage() != null) {
-            mTvUserIconText.setVisibility(View.GONE);
-            mIvUserIcon.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .load(myApplication.getMyProfile().getData().getImage())
-                    .placeholder(R.drawable.ic_profile_male_user)
-                    .into(mIvUserIcon);
-        } else {
-            mTvUserIconText.setVisibility(View.VISIBLE);
-            mIvUserIcon.setVisibility(View.GONE);
-            mTvUserIconText.setText(iconText);
-        }
+        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
     }
 
     private void showIdentityVerificationFailed() {

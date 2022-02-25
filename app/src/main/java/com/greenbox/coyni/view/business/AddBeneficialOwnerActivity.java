@@ -1152,7 +1152,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     address1ET.setHint("");
                     if (address1ET.getText().toString().trim().length() > 0) {
                         address1ErrorLL.setVisibility(GONE);
-                        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+                        address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_black));
 
                     } else {
@@ -1165,7 +1165,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     address1ET.setHint("Street Address");
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_green));
-                    address2ErrorLL.setVisibility(GONE);
+                    address1ErrorLL.setVisibility(GONE);
                 }
             }
         });
@@ -1542,6 +1542,25 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         try {
             super.onDestroy();
             businessIdentityVerificationViewModel.patchBeneficialOwner(boID, prepareRequest());
+
+            isfname = false;
+            islname = false;
+            isssn = false;
+            isownership = false;
+            isNextEnabled = false;
+            isDOBSelected = false;
+            isAddress1 = false;
+            isAddress2 = false;
+            isCity = false;
+            isState = false;
+            isZipcode = false;
+            isSaveEnabled = false;
+            isFileUploaded = false;
+
+            identityFile = null;
+            identityType = 0;
+            existingIdentityType = -1;
+            isFileSelected = false;
         } catch (Exception e) {
             e.printStackTrace();
         }

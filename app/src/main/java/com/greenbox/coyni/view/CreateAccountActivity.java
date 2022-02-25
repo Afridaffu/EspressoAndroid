@@ -46,7 +46,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -221,6 +220,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             medium = Pattern.compile(MEDIUM_PATTERN);
             firstNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             firstNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+//            firstNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
+
 
             lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             lastNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
@@ -458,6 +460,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_green));
+                        String str = firstNameET.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
+                            firstNameET.setSelection(firstNameET.getText().length());
+                        }
                     } else {
                         isFirstName = false;
                     }
@@ -506,6 +513,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         lastNameErrorLL.setVisibility(GONE);
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_green));
+                        String str = lastNameET.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
+                            lastNameET.setSelection(lastNameET.getText().length());
+                        }
                     } else {
                         isLastName = false;
                     }
@@ -796,6 +808,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
+//                        firstNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
                     }
                 }
             });
@@ -829,6 +843,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
+//                        lastNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
                     }
                 }
             });
@@ -944,7 +960,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Field Required");
+                            emailErrorTV.setText("Please Enter a valid Email");
                         } else {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));

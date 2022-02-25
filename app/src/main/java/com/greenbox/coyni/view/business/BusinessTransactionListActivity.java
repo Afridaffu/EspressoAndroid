@@ -1355,28 +1355,28 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
         dialog.setCanceledOnTouchOutside(true);
 
         dialog.show();
-//
-//        dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
-//                    return;
-//                }
-//                mLastClickTimeFilters = SystemClock.elapsedRealtime();
-//                showCalendar(getDateFromPickerET);
-//            }
-//        });
-//
-//        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
-//                    return;
-//                }
-//                mLastClickTimeFilters = SystemClock.elapsedRealtime();
-//                showCalendar(getDateFromPickerET);
-//            }
-//        });
+
+        dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+                showCalendar(getDateFromPickerET);
+            }
+        });
+
+        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+                showCalendar(getDateFromPickerET);
+            }
+        });
 
     }
 
