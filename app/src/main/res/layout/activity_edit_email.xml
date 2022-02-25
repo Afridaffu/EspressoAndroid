@@ -226,7 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#f2f4f5"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_alignParentTop="true"
             android:orientation="vertical">
 
@@ -316,6 +316,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:orientation="horizontal"
                     android:visibility="gone">
 

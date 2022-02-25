@@ -249,6 +249,7 @@
 
     <string name="dba_name">Hi! %1$s</string>
     <string name="MerchantBalance">Merchant Balance</string>
+    <string name="business_officially_verified">%1$s  Is Officially Verified!</string>
     <string name="processing_volume">Processing Volume</string>
     <string name="lastmonth">Last Month</string>
     <string name="grossamount">Gross Amount</string>

@@ -10,37 +10,38 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <LinearLayout
-        android:id="@+id/profileLL"
         android:layout_width="match_parent"
+        android:id="@+id/profileLL"
+        android:layout_marginTop="@dimen/_10ssp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profileviewLL"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/_16sdp">
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="@dimen/_33sdp"
+            android:layout_height="@dimen/_33sdp"
+            android:src="@drawable/profile" />
+
+        <TextView
+            android:id="@+id/txv_comapny_name"
+            android:text="textt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/_11sdp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/primary_black"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10ssp"
+            android:textSize="@dimen/text_size_14sp"
+            android:layout_weight="1"/>
 
-            <ImageView
-                android:layout_width="@dimen/_33sdp"
-                android:layout_height="@dimen/_33sdp"
-                android:src="@drawable/profile" />
-
-            <TextView
-                android:id="@+id/txv_comapny_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:text="GreenBoxpos"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11ssp" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/tickIcon"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/_10ssp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_custom_tick"
+            app:tint="@color/primary_green" />
 
     </LinearLayout>
     <View
