@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -64,6 +65,8 @@ public class DBAInfoDetails extends AppCompatActivity {
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS=101;
     ProgressDialog dialog;
     Long mLastClickTime=0L;
+    private LinearLayout editEmail,editPhone;
+    String emailID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,8 @@ public class DBAInfoDetails extends AppCompatActivity {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             responce = objMyApplication.getBusinessTypeResp().getData();
             editProfileIV = findViewById(R.id.dba_editProfileIV);
+            editEmail = findViewById(R.id.editEmailDBALL);
+            editPhone = findViewById(R.id.editPhoneNumDBALL);
 
             editProfileIV.setOnClickListener(view -> {
                 try {
@@ -114,6 +119,13 @@ public class DBAInfoDetails extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            });
+
+            editEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DBAInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen","DBAInfo").putExtra("action","EditEmailDBA").putExtra("value",emailID));
                 }
             });
 
@@ -140,6 +152,11 @@ public class DBAInfoDetails extends AppCompatActivity {
             }
             if (dbaInfoResp.getData().getEmail() != null) {
                 emailTV.setText(dbaInfoResp.getData().getEmail());
+                try {
+                    emailID=dbaInfoResp.getData().getEmail();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 emailTV.setText("");
             }
