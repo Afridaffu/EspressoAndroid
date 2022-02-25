@@ -827,11 +827,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if(objMyApplication.getAccountType()==Utils.PERSONAL_ACCOUNT) {
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenPaymentMethodsActivity.class);
                             i.putExtra("screen", "withdraw");
                             startActivity(i);
-                        }else{
+                        } else {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, SelectPaymentMethodActivity.class);
                             i.putExtra("screen", "withdraw");
                             startActivity(i);
