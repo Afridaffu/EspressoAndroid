@@ -27,9 +27,9 @@ public class BusinessSalesOrderActivity extends AppCompatActivity {
 
     private ImageView refundIV, backIV, salesReferenceidIV;
     private TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesidTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
-    DashboardViewModel dashboardViewModel;
-    MyApplication objMyApplication;
-    String strGbxTxnIdType = "";
+    private DashboardViewModel dashboardViewModel;
+    private MyApplication objMyApplication;
+    private String strGbxTxnIdType = "";
     int txnType, txnSubType;
 
     @Override
@@ -39,6 +39,21 @@ public class BusinessSalesOrderActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_sales_order);
+
+        salesReferenceidIV = findViewById(R.id.SalesReferenceidIV);
+        backIV = findViewById(R.id.BackIV);
+        refundIV = findViewById(R.id.RefundIV);
+        salesheaderTV = findViewById(R.id.SalesheaderTV);
+        salesAmount_TV = findViewById(R.id.SalesAmount_TV);
+        salesStatusTV = findViewById(R.id.SalesStatusTV);
+        salesDatetimeTV = findViewById(R.id.SalesDatetimeTV);
+        salesReferenceidTV = findViewById(R.id.SalesReferenceidTV);
+        salesfeesidTV = findViewById(R.id.SalesfeesidTV);
+        salesreserveTV = findViewById(R.id.SalesreserveTV);
+        salesnetamountTV = findViewById(R.id.SalesnetamountTV);
+        salesMerchantBalanceTV = findViewById(R.id.SalesMerchantBalanceTV);
+        salessendernameTVTV = findViewById(R.id.SalessendernameTVTV);
+        salessenderemailTV = findViewById(R.id.SalessenderemailTV);
 
         backIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,62 +68,6 @@ public class BusinessSalesOrderActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        backIV = findViewById(R.id.BackIV);
-        refundIV = findViewById(R.id.RefundIV);
     }
 
-
-//        private void withdrawGiftcard(TransactionData objData) {
-//
-//
-
-//            salesReferenceidIV = findViewById(R.id.SalesReferenceidIV);
-//
-//            salesheaderTV = findViewById(R.id.SalesheaderTV);
-//            salesAmount_TV = findViewById(R.id.SalesAmount_TV);
-//            salesStatusTV = findViewById(R.id.SalesStatusTV);
-//            salesDatetimeTV = findViewById(R.id.SalesDatetimeTV);
-//            salesReferenceidTV = findViewById(R.id.SalesReferenceidTV);
-//            salesfeesidTV = findViewById(R.id.SalesfeesidTV);
-//            salesreserveTV = findViewById(R.id.SalesreserveTV);
-//            salesnetamountTV = findViewById(R.id.SalesnetamountTV);
-//            salesMerchantBalanceTV = findViewById(R.id.SalesMerchantBalanceTV);
-//            salessendernameTVTV = findViewById(R.id.SalessendernameTVTV);
-//            salessenderemailTV = findViewById(R.id.SalessenderemailTV);
-//
-//
-//            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-//            objMyApplication = (MyApplication) getApplicationContext();
-//            salesheaderTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-//            salesAmount_TV.setText(Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
-//
-//            salesStatusTV.setText(objData.getStatus());
-//            switch (objData.getStatus().toLowerCase()) {
-//                case "completed":
-//                    salesStatusTV.setTextColor(getResources().getColor(R.color.completed_status));
-//                    salesStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
-//                    break;
-//                case "in progress":
-//                    salesStatusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
-//                    salesStatusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
-//                    break;
-//                case "pending":
-//                    salesStatusTV.setTextColor(getResources().getColor(R.color.pending_status));
-//                    salesStatusTV.setBackgroundResource(R.drawable.txn_pending_bg);
-//                    break;
-//                case "failed":
-//                    salesStatusTV.setTextColor(getResources().getColor(R.color.failed_status));
-//                    salesStatusTV.setBackgroundResource(R.drawable.txn_failed_bg);
-//                    break;
-//            }
-//
-//
-//            salesDatetimeTV.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-//            salesReferenceidTV.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-//
-//            salesfeesidTV.setText("" + Utils.convertTwoDecimal(objData.getGiftCardFee().replace(" CYN", "").trim()));
-//            salessendernameTVTV.setText(objData.getSenderName());
-//
-//        }
-    }
-
+}
