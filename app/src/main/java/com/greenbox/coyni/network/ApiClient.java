@@ -1,7 +1,5 @@
 package com.greenbox.coyni.network;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.greenbox.coyni.BuildConfig;
@@ -13,10 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLHandshakeException;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -32,16 +27,15 @@ public class ApiClient {
     private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(
             BuildConfig.LOGGING_ENABLED ? HttpLoggingInterceptor.Level.BODY
                     : HttpLoggingInterceptor.Level.NONE);
-    private TokenInterceptor tokenInterceptor = new TokenInterceptor();
-    private EncryptionInterceptor encryptionInterceptor = new EncryptionInterceptor();
+
+    private CustomEncryptionHandler encryptionInterceptor = new CustomEncryptionHandler();
 
     private OkHttpClient client = new OkHttpClient.Builder().
             connectTimeout(TIME_OUT, TimeUnit.SECONDS).
             readTimeout(TIME_OUT, TimeUnit.SECONDS).
             addInterceptor(encryptionInterceptor).
-            addInterceptor(tokenInterceptor).
-            addInterceptor(interceptor).
-            build();
+                    addInterceptor(interceptor).
+                    build();
 
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
@@ -54,8 +48,9 @@ public class ApiClient {
     private static ApiClient apiClient;
 
     public static Retrofit getInstance() {
-        if (apiClient == null)
+        if (apiClient == null) {
             apiClient = new ApiClient();
+        }
         return apiClient.retrofit;
     }
 
@@ -66,45 +61,6 @@ public class ApiClient {
             return TYPE_NO_NETWORK;
         }
 
-    }
-
-    private static class TokenInterceptor implements Interceptor {
-
-        @Override
-        public Response intercept(Chain chain) throws NoConnectivityException, SessionTimeOutException, ConnectionInterruptedException {
-            Request initialRequest = chain.request();
-            String CLIENT = "android";
-            String KEY_CLIENT = "client";
-            String VERSION = "1.4";
-            String KEY_PROTOCOL_VERSION = "X-ProtocolVersion";
-            Request.Builder requestBuild = initialRequest.newBuilder()
-                    .header(KEY_PROTOCOL_VERSION, VERSION)
-                    .addHeader(KEY_CLIENT, CLIENT)
-                    .addHeader("Referer", Utils.getStrReferer())
-                    .addHeader("Accept", "application/json")
-                    .addHeader("User-Agent", "Coyni")
-                    .addHeader("App-version", Utils.getAppVersion())
-                    .addHeader("Accept-Language", Utils.getStrLang());
-
-            if (BuildConfig.SKIP_ENCRYPTION) {
-                requestBuild.addHeader("SkipDecryption", "true");
-            }
-            initialRequest = requestBuild.build();
-
-            Response response = null;
-            try {
-                response = chain.proceed(initialRequest);
-            } catch (SocketTimeoutException ste) {
-                throw new SessionTimeOutException();
-            } catch (SSLHandshakeException she) {
-                throw new ConnectionInterruptedException(TYPE_CONNECTION_INTERRUPT);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                throw new ConnectionInterruptedException(TYPE_SOMETHING_WENT_WRONG);
-            }
-            Log.e("resp auth",new Gson().toJson(response.code()));
-            return response;
-        }
     }
 
     public static class ConnectionInterruptedException extends SSLHandshakeException {

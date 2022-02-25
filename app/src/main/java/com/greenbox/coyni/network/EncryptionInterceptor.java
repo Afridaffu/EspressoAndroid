@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.util.ArrayUtils;
 import com.greenbox.coyni.BuildConfig;
+import com.greenbox.coyni.utils.LogUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -21,54 +22,57 @@ import okio.Buffer;
 
 public class EncryptionInterceptor implements Interceptor {
 
+    private final String TAG = getClass().getSimpleName();
     private final String encryptionPassword = "A#$#@123#431";
     private final String[] methodsAllowed = {"POST", "PUT", "PATCH"};
     @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
-        RequestBody oldBody = request.body();
+        RequestBody requestBody = request.body();
         String method = request.method();
         String randomReqId = getRandomRequestID();
 
-        /*Encryption should be skipped when SKIP_ENCRYPTION is set to true and for GET requests.
+          /*Encryption should be skipped when SKIP_ENCRYPTION is set to true and for GET requests.
           As per the requirement while developing this feature, encryption should not be done for
           Multipart requests. Changes needs to done for Multipart requests based on Backend changes*/
-        if(!BuildConfig.SKIP_ENCRYPTION && ArrayUtils.contains(methodsAllowed, method)
-                && oldBody != null && !(oldBody instanceof MultipartBody)) {
-            oldBody = getEncryptedRequestBody(randomReqId, oldBody);
+        if(BuildConfig.SKIP_ENCRYPTION || !ArrayUtils.contains(methodsAllowed, method)
+                || requestBody instanceof MultipartBody) {
+            Request newRequest = request.newBuilder()
+                    .addHeader("X-REQUESTID", randomReqId)
+                    .build();
+            return chain.proceed(newRequest);
         }
 
+        requestBody = getEncryptedRequestBody(randomReqId, requestBody);
+
         Request.Builder builder = request.newBuilder();
-        if(oldBody!= null && oldBody.contentType() != null) {
-            builder.header("Content-Type", oldBody.contentType().toString());
-        }
-        if(oldBody!= null) {
-            builder.header("Content-Length", String.valueOf(oldBody.contentLength()));
-        }
+        //builder.headers(request.headers());
         builder.header("X-REQUESTID", randomReqId);
-        builder.method(request.method(), oldBody);
+
+        builder.method(request.method(), requestBody);
         request = builder.build();
         return chain.proceed(request);
     }
 
-    private RequestBody getEncryptedRequestBody(String randomRequestId, RequestBody oldBody) throws IOException {
+    private RequestBody getEncryptedRequestBody(String randomRequestId, RequestBody requestBody) throws IOException {
         Buffer buffer = new Buffer();
-        oldBody.writeTo(buffer);
+        requestBody.writeTo(buffer);
         String strOldBody = buffer.readUtf8();
         String strNewBody = null;
-
+        LogUtils.v(TAG, "BNR Old Body " + strOldBody);
         String base64Str = java.util.Base64.getEncoder().encodeToString(strOldBody.getBytes());
         String finalStr = appendDateTime(base64Str) + "." + randomRequestId;
         try {
             strNewBody = AESEncryptionHelper.encrypt(encryptionPassword, finalStr);
+            LogUtils.v(TAG, "BNR New Body " + strNewBody);
         } catch (Exception e) {
+            LogUtils.e(TAG, "BNR Encryption Exception " + e.getMessage());
             e.printStackTrace();
         }
 
-        MediaType mediaType = MediaType.parse("application/json");
-
-        return RequestBody.create(mediaType, strNewBody);
+        MediaType mediaType = MediaType.parse("text/plain");
+        return RequestBody.create(strNewBody, mediaType);
     }
 
     private String appendDateTime(String requestData) {
