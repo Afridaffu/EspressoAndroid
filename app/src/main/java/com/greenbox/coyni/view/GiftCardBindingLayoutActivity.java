@@ -158,13 +158,14 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(d);
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
+//                                try {
+//                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+//                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(d);
+//                                } catch (Exception ex) {
+//                                    ex.printStackTrace();
+//                                }
+                                dashboardNavigation();
                             }
                         }, 2000);
                     } else if (enableType.equals("TOUCH")) {
@@ -174,13 +175,14 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(d);
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
+//                                try {
+//                                    Intent d = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+//                                    d.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(d);
+//                                } catch (Exception ex) {
+//                                    ex.printStackTrace();
+//                                }
+                                dashboardNavigation();
                             }
                         }, 2000);
                     }
@@ -269,19 +271,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    try {
-                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                            Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
-                        } else {
-                            Intent i = new Intent(GiftCardBindingLayoutActivity.this, BusinessDashboardActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    dashboardNavigation();
                 }
             });
 
@@ -348,9 +338,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    dashboardNavigation();
                 }
             });
         } catch (Exception ex) {
@@ -422,9 +410,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    dashboardNavigation();
                 }
             });
             layoutReference.setOnClickListener(new View.OnClickListener() {
@@ -479,14 +465,11 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    dashboardNavigation();
                 }
             });
 
             if (!objMyApplication.getBiometric()) {
-//                if (Utils.getIsBiometric()) {
                 if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
                     if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
                         enableType = "TOUCH";
@@ -497,7 +480,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         loadSecurePay("FACE");
                     }
                 }
-//                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -578,9 +560,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    dashboardNavigation();
                 }
             });
         } catch (Exception ex) {
@@ -700,5 +680,20 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+
+    private void dashboardNavigation() {
+        try {
+            Intent i;
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                i = new Intent(GiftCardBindingLayoutActivity.this, DashboardActivity.class);
+            } else {
+                i = new Intent(GiftCardBindingLayoutActivity.this, BusinessDashboardActivity.class);
+            }
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
