@@ -3,48 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/et_bg_gray"
-    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
+    android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_85sdp"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginHorizontal="@dimen/_11sdp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/corner_radius_white">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_21sdp"
-                    android:layout_marginTop="@dimen/_46sdp"
-                    android:layout_marginBottom="@dimen/_16sdp"
-                    android:src="@drawable/acct_profile" />
-
-
-            </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_85sdp"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/_17sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_17sdp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -60,50 +45,55 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="Identify Verification\nUnder Review"
+                        android:text="@string/identify_verification_nUnder_review"
                         android:textAlignment="center"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_16sdp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Thank you for your interest in coyni. Please allow\nus up to 3 business days for further review of\nyour account. Within that time you may receive a\nnotification and/or email if further information is\nneeded."
+                        android:text="@string/thank_you_for_intrest"
                         android:textAlignment="center"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11sdp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_56sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Thank you for your submission to the coyni review\nteam. No additional information needed at this time.\nPlease check back here for updates. If you wish to"
+                        android:text="@string/thank_you_for_submission"
                         android:textAlignment="center"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_10sdp" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                 android:gravity="center"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="cancel your merchant application "
-                        android:textAlignment="center"
-                        android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_10sdp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="@string/clickhere"
-                        android:textAlignment="center"
-                        android:textColor="@color/primary_green"
-                        android:textSize="@dimen/_10sdp" />
-                </LinearLayout>
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/cancel_merchant"
+                            android:textAlignment="center"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_10sdp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/clickhere"
+                            android:textAlignment="center"
+                            android:textColor="@color/primary_green"
+                            android:textSize="@dimen/_10sdp" />
+                    </LinearLayout>
 
                 </LinearLayout>
 

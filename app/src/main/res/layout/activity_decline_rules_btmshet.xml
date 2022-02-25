@@ -23,6 +23,7 @@
         />
     <TextView
         android:layout_width="match_parent"
+        android:id="@+id/tvHeading"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_16ssp"
         android:text="@string/decline_reserve_rules"
@@ -33,6 +34,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/tvMessage"
             android:lineHeight="@dimen/_26sdp"
             android:text="Are you sure you want to decline this \nreserve rule and cancel your merchant \napplication? You will need to complete \nanother application to apply again."
             android:textSize="@dimen/_12ssp"
@@ -48,7 +50,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.9"
+                android:id="@+id/llgoback"
                 android:background="@drawable/shape_green_round_rect_core"
                 android:gravity="center"
                 android:paddingTop="@dimen/_13sdp"
@@ -70,7 +73,7 @@
                 android:id="@+id/cancelBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.1"
                 android:background="@drawable/shape_green_round_rect"
                 android:layout_gravity="end"
                 android:paddingTop="@dimen/_13sdp"

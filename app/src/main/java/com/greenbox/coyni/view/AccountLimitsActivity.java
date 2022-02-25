@@ -25,7 +25,7 @@ public class AccountLimitsActivity extends BaseActivity {
     TextView withdrawTokenBankLimit, withdrawTokenInstantLimit, withdrawTokenGiftcardLimit, buyTokenBankLimit, buyTokenDebitcardLimit, buyTokenCreditcardLimit, payRequestTranLimit,
             b_monthlyProcessingVolume, b_highTicketLimit, b_buyBankAccount, b_buySignetAccount, b_withdrawBankAccount, b_withDrawinstantPay, b_withDrawgiftCard, b_withdrawSignetAccount;
     ScrollView personalAccountLimitsSv, businessAccountLimitsSv;
-    LinearLayout backBtn;
+    LinearLayout backBtn,business_AccountLimitsLL;
     AccountLimitsViewModel accountLimitsViewModel;
     MyApplication objMyApplication;
     int userType = 0;
@@ -52,7 +52,7 @@ public class AccountLimitsActivity extends BaseActivity {
 
 
         //Business Account Limits....
-        businessAccountLimitsSv = (ScrollView) findViewById(R.id.Business_AccountLimitsSV);
+        business_AccountLimitsLL = findViewById(R.id.Business_AccountLimitsLL);
         b_monthlyProcessingVolume = (TextView) findViewById(R.id.TvMonthlyProcessingVolume);
         b_highTicketLimit = (TextView) findViewById(R.id.TVHighTicketLimit);
         b_buyBankAccount = findViewById(R.id.TV_B_BUYBankAccount);
@@ -66,11 +66,11 @@ public class AccountLimitsActivity extends BaseActivity {
         showProgressDialog();
         if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             personalAccountLimitsSv.setVisibility(View.VISIBLE);
-            businessAccountLimitsSv.setVisibility(View.GONE);
+            business_AccountLimitsLL.setVisibility(View.GONE);
 //            accountLimitsViewModel.meAccountLimits(userType);
             accountLimitsViewModel.meAccountLimits(Utils.userTypeCust);
         }else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            businessAccountLimitsSv.setVisibility(View.VISIBLE);
+            business_AccountLimitsLL.setVisibility(View.VISIBLE);
             personalAccountLimitsSv.setVisibility(View.GONE);
 //            accountLimitsViewModel.meAccountLimits(b_userType);
             accountLimitsViewModel.meAccountLimits(Utils.userTypeBusiness);

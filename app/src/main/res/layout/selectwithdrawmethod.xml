@@ -236,6 +236,70 @@
                 android:layout_marginTop="@dimen/_15sdp"
                 android:background="@color/viewcolor"></View>
 
+            <RelativeLayout
+                android:id="@+id/lySignet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/_11sdp"
+                android:paddingTop="@dimen/_15sdp"
+                android:paddingRight="@dimen/_7sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/imgSignetAcLogo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:contentDescription="@string/signet_account"
+                    android:src="@drawable/ic_signet_ac_logo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_14sdp"
+                    android:layout_toLeftOf="@+id/imgCCardArrow"
+                    android:layout_toRightOf="@+id/imgSignetAcLogo"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/signet_account"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/signet_ac_withdrawing_funds"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/_9ssp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imgCCardArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:src="@drawable/ic_chevron_right" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/viewSignet"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:background="@color/viewcolor"
+                android:visibility="gone" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

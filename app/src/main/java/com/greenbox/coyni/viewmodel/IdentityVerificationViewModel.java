@@ -37,6 +37,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<IdentityAddressResponse> uploadIdentityAddressPatchResponse = new MutableLiveData<>();
     private MutableLiveData<TrackerResponse> getStatusTracker = new MutableLiveData<>();
     private MutableLiveData<AddBusinessUserResponse> getBusinessAddCustomer = new MutableLiveData<>();
+    private MutableLiveData<AddBusinessUserResponse> getBusinessAddDBAResponse = new MutableLiveData<>();
     private MutableLiveData<GetIdentityResponse> getIdentity = new MutableLiveData<>();
 
     public IdentityVerificationViewModel(@NonNull Application application) {
@@ -61,6 +62,9 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
 
     public MutableLiveData<AddBusinessUserResponse> getBusinessAddCustomer() {
         return getBusinessAddCustomer;
+    }
+    public MutableLiveData<AddBusinessUserResponse> getBusinessAddDBAResponse() {
+        return getBusinessAddDBAResponse;
     }
 
     public MutableLiveData<IdentityAddressResponse> getUploadIdentityAddressResponse() {
@@ -268,6 +272,42 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         getBusinessAddCustomer.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AddBusinessUserResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void getPostAddDBABusiness(int companyID) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<AddBusinessUserResponse> mCall = apiService.addDBAInBusinessAccount(companyID);
+            mCall.enqueue(new Callback<AddBusinessUserResponse>() {
+                @Override
+                public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
+                    try {
+                        Log.d("businessreg","rrrrr"+response);
+                        if (response.isSuccessful()) {
+                            AddBusinessUserResponse obj = response.body();
+                            getBusinessAddDBAResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<TrackerResponse>() {
+                            }.getType();
+                            AddBusinessUserResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            getBusinessAddDBAResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getBusinessAddDBAResponse.setValue(null);
                     }
                 }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +17,7 @@ import androidx.cardview.widget.CardView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 
 public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity {
     String strScreen = "";
@@ -57,21 +59,36 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
+            Log.d("objMyApplication","objMyApplication"+objMyApplication.getAccountType());
+
             ivSuccessCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    if(objMyApplication.getAccountType()==2) {
+                        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, BusinessDashboardActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    } else {
+                        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    }
                 }
             });
 
             successCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    if(objMyApplication.getAccountType()==2) {
+                        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, BusinessDashboardActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    } else {
+                        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, DashboardActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    }
+
                 }
             });
 

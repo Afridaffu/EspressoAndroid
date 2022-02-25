@@ -12,11 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.collection.LongSparseArray;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
 import com.greenbox.coyni.adapters.GiftCardsRecyclerAdapter;
@@ -25,6 +27,8 @@ import com.greenbox.coyni.model.giftcard.Brand;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
+import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
@@ -39,8 +43,14 @@ import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BusinessCreateAccountsActivity extends BaseActivity {
 
@@ -52,9 +62,14 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private ExpandableListView brandsGV;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> dbaAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private BusinessProfileRecyclerAdapter giftCardsAdapter;
     private String personalAccountExist;
+
+
+    private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
+    private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
 
 
     @Override
@@ -105,8 +120,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             mIvUserIcon = findViewById(R.id.profile_img);
             mTvUserIconText = findViewById(R.id.b_imageTextTV);
             businessPersonalProfileAccount = findViewById(R.id.profileLL);
-
             myApplication = (MyApplication) getApplicationContext();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,20 +190,56 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
+
+                    Map<String, ArrayList<ProfilesResponse.Profiles>> map = new HashMap<>();
                     filterList = profilesResponse.getData();
 
                     for(ProfilesResponse.Profiles c: filterList){
                         if(c.getAccountType().equals(Utils.BUSINESS)){
                                 businessAccountList.add(c);
+
+                                addDetails(String.valueOf(c.getId()),c.getDbaOwner());
                         } else {
                             personalAccountList.add(c);
                         }
-
                     }
+
+//                    try {
+//
+//                        for(ProfilesResponse.Profiles c: filterList){
+//                            if(c.getAccountType().equals(Utils.BUSINESS)){
+//                                businessAccountList.add(c);
+//                            } else {
+//                                personalAccountList.add(c);
+//                            }
+//                        }
+//
+//
+//                        for(ProfilesResponse.Profiles d: businessAccountList) {
+//                            if(d.getDbaOwner() == null) {
+//                                map.put(d.getId()+"", null);
+//                            } else {
+//
+//                                ArrayList<ProfilesResponse.Profiles> list = map.get(d.getDbaOwner()+"");
+//                                if(list == null) {
+//                                    list = new ArrayList<>();
+//                                }
+//                                list.add(d);
+//                                map.put(d.getDbaOwner()+"", list);
+//                            }
+//
+//
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+
+                    LogUtils.v(TAG, map.toString());
 
                     if(businessAccountList.size()!=0) {
                         brandsGV.setVisibility(View.VISIBLE);
-                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, businessAccountList);
+                        LogUtils.d(TAG,"subSet"+subSet);
+                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, subSet);
                         brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);
@@ -227,6 +278,25 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         });
 
 
+    }
+    private int addDetails(String mainSet, String subSet) {
+        int groupPosition = 0;
+        BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
+        if (headerInfo == null) {
+            headerInfo = new BusinessAccountsListInfo();
+            headerInfo.setName(mainSet);
+            this.mainSet.put(mainSet, headerInfo);
+            this.subSet.add(headerInfo);
+        }
+        ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
+        int listSize = subList.size();
+        listSize++;
+        BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+        detailInfo.setName(subSet);
+        subList.add(detailInfo);
+        headerInfo.setSubsetName(subList);
+        groupPosition = this.subSet.indexOf(headerInfo);
+        return groupPosition;
     }
 
 }
