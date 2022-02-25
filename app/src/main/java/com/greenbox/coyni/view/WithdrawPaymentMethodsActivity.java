@@ -39,6 +39,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.AddPaymentSignetActivity;
 import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -59,6 +60,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
+    List<PaymentsList> signetList;
     Dialog payDialog;
     String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
@@ -286,11 +288,14 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
                 if (payMethodsResponse != null) {
-//                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-//                    paymentMethodsResponse = payMethodsResponse;
-                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
-                    objMyApplication.setPaymentMethodsResponse(objResponse);
-                    paymentMethodsResponse = objResponse;
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                        objMyApplication.setPaymentMethodsResponse(objResponse);
+                        paymentMethodsResponse = objResponse;
+                    } else {
+                        objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                        paymentMethodsResponse = payMethodsResponse;
+                    }
                     getPayments(payMethodsResponse.getData().getData());
                     if (isDeCredit) {
                         isDeCredit = false;
@@ -640,6 +645,17 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             RelativeLayout lyExternal = findViewById(R.id.lyExternal);
             RelativeLayout lyInstantPay = findViewById(R.id.lyInstantPay);
             RelativeLayout lyGiftCard = findViewById(R.id.lyGiftCard);
+            RelativeLayout lySignet = findViewById(R.id.lySignet);
+            View viewSignet = findViewById(R.id.viewSignet);
+
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                lySignet.setVisibility(VISIBLE);
+                viewSignet.setVisibility(VISIBLE);
+            } else {
+                lySignet.setVisibility(View.GONE);
+                viewSignet.setVisibility(View.GONE);
+            }
+
             lySelBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -690,6 +706,23 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            lySignet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (signetList != null && signetList.size() > 0) {
+                            selectPayMethod(signetList);
+                        } else {
+                            strCurrent = "signet";
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 4);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1120,13 +1153,25 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             if (allPayments != null && allPayments.size() > 0) {
                 bankList = new ArrayList<>();
                 cardList = new ArrayList<>();
+                signetList = new ArrayList<>();
                 for (int i = 0; i < allPayments.size(); i++) {
                     if (allPayments.get(i).getPaymentMethod() != null) {
-                        if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
-                            bankList.add(allPayments.get(i));
-                        } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
-                            cardList.add(allPayments.get(i));
+                        switch (allPayments.get(i).getPaymentMethod().toLowerCase()) {
+                            case "bank":
+                                bankList.add(allPayments.get(i));
+                                break;
+                            case "debit":
+                                cardList.add(allPayments.get(i));
+                                break;
+                            case "signet":
+                                signetList.add(allPayments.get(i));
+                                break;
                         }
+//                        if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
+//                            bankList.add(allPayments.get(i));
+//                        } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
+//                            cardList.add(allPayments.get(i));
+//                        }
                     }
                 }
             }

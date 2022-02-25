@@ -5,8 +5,8 @@ public class WalletName {
     private String walletId;
     private String walletName;
     private String availableBalance;
-    private int availabilityToUse;
-    private int exchangeRate;
+    private double availabilityToUse;
+    private double exchangeRate;
     private String exchangeVariation;
     private double exchangeAmount;
     private String status;
@@ -50,19 +50,19 @@ public class WalletName {
         this.availableBalance = availableBalance;
     }
 
-    public int getAvailabilityToUse() {
+    public double getAvailabilityToUse() {
         return availabilityToUse;
     }
 
-    public void setAvailabilityToUse(int availabilityToUse) {
+    public void setAvailabilityToUse(double availabilityToUse) {
         this.availabilityToUse = availabilityToUse;
     }
 
-    public int getExchangeRate() {
+    public double getExchangeRate() {
         return exchangeRate;
     }
 
-    public void setExchangeRate(int exchangeRate) {
+    public void setExchangeRate(double exchangeRate) {
         this.exchangeRate = exchangeRate;
     }
 
