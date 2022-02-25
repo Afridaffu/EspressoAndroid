@@ -63,7 +63,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         initFields();
         initObservers();
         showUserData();
-
         showIdentityVerificationReview();
         //showAdditionalActionView();
         //showIdentityVerificationReview();

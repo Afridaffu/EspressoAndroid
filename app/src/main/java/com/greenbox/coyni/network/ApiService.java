@@ -253,6 +253,7 @@ public interface ApiService {
     @GET("api/v2/profile/me/profile-accounts")
     Call<ProfilesResponse> getProfiles();
 
+
     @POST("api/v2/fiserv/signon")
     Call<SignOn> meSignOn();
 
@@ -264,6 +265,9 @@ public interface ApiService {
 
     @POST("api/v2/transactions/token/info")
     Call<TransactionDetails> getTransactionDt();
+
+    @POST("api/v2/user/change-account")
+    Call<AddBusinessUserResponse> getChangeAccount(@Query("userId") int loginUsedId);
 
     @POST("api/v2/transactions/me/pending-posted-txns")
     Call<TransactionList> meTransactionList(@Body TransactionListRequest request);
@@ -306,6 +310,9 @@ public interface ApiService {
 
     @POST("api/v2/register/add-business-user")
     Call<AddBusinessUserResponse> addBusinessUserInIndividual();
+
+    @POST("api/v2/register/add-dba/{companyID}")
+    Call<AddBusinessUserResponse> addDBAInBusinessAccount(@Path("companyID") int companyID);
 
 //    @POST("api/v2/cards/encrypt/me")
 //    Call<CardResponse> saveCards(@Body CardRequest request);

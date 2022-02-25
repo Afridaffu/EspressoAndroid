@@ -129,10 +129,12 @@
                 android:layout_marginEnd="@dimen/_15sdp"/>
         </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_10ssp"
             android:layout_marginBottom="@dimen/_10ssp"
             android:background="@drawable/fullradius_list_items"
@@ -142,7 +144,7 @@
                 android:id="@+id/recyclerView"
                 android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_250sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:divider="@null"
@@ -151,7 +153,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-        </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/profileLL"
@@ -246,7 +247,8 @@
 
 
     </LinearLayout>
+        </LinearLayout>
 
-
+    </ScrollView>
 
 </LinearLayout>
