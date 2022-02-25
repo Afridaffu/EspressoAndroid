@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,11 +50,9 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
-import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
-import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -1076,7 +1073,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
                     } else {
                         ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                        Utils.setUpperHintColor(ssntil, getColor(R.color.error_red));
+                        Utils.setUpperHintColor(ssntil, getColor(R.color.light_gray));
                         ssnLL.setVisibility(VISIBLE);
                         ssnTV.setText("Field Required");
                     }

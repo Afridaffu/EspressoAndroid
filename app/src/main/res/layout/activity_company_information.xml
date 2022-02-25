@@ -166,7 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:hint="Company’s Email"
+                    android:hint="@string/company_s_email"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -468,7 +468,7 @@
                     style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Company Address Line 1"
+                    android:hint="@string/company_address_line_1"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -527,7 +527,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:hint="Company Address Line 2(Optional)"
+                    android:hint="@string/company_address_line_2_optional"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -1090,6 +1090,19 @@
                                 android:text="Uploaded W-9 Form"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_10ssp" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_1sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="Uploaded on "
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_8ssp" />
 
                             <TextView
                                 android:id="@+id/w9FormUpdatedOnTV"
@@ -1099,6 +1112,7 @@
                                 android:text=""
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_8ssp" />
+                            </LinearLayout>
 
                         </LinearLayout>
 

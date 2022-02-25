@@ -292,6 +292,7 @@
                             android:importantForAutofill="no"
                             android:inputType="textPassword|textNoSuggestions"
                             android:longClickable="false"
+                            android:textIsSelectable="false"
                             android:maxLength="12"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
