@@ -42,6 +42,7 @@
             android:textColor="@color/primary_black"
             android:layout_marginBottom="@dimen/_24sdp"
             />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,6 +51,7 @@
             android:textSize="@dimen/_11ssp"
             android:fontFamily="@font/opensans_regular"
             />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
