@@ -46,8 +46,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     private ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private DBAInfoResp dbaInfoResponse;
-    private String addBusiness="false";
-    private String addDBA="false";
+    private String addBusiness = "false";
+    private String addDBA = "false";
     private LoginViewModel loginViewModel;
     private String boAPICallFrom = "RESUME";
 
@@ -61,16 +61,16 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
             TextView dashboardTV = findViewById(R.id.dashboardTV);
 
-            if(getIntent().getStringExtra("ADDBUSINESS")!=null) {
+            if (getIntent().getStringExtra("ADDBUSINESS") != null) {
                 loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
                 addBusiness = getIntent().getStringExtra("ADDBUSINESS");
-                LogUtils.d("addBusiness","addBusiness"+addBusiness);
+                LogUtils.d("addBusiness", "addBusiness" + addBusiness);
             }
 
-            if(getIntent().getStringExtra("ADDDBA")!=null) {
+            if (getIntent().getStringExtra("ADDDBA") != null) {
                 loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
                 addDBA = getIntent().getStringExtra("ADDDBA");
-                LogUtils.d("addDBA","addDBA"+addDBA);
+                LogUtils.d("addDBA", "addDBA" + addDBA);
 
             }
 
@@ -344,7 +344,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 public void onChanged(AddBusinessUserResponse btResp) {
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
-                            LogUtils.d("btResp","btResp"+btResp);
+                            LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             finish();
                         }
@@ -505,7 +505,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         businessIdentityVerificationViewModel.getDBAInfo();
         boAPICallFrom = "RESUME";
         businessIdentityVerificationViewModel.getBeneficialOwners();
-        LogUtils.d("BusinessTrackerResponse","BusinessTrackerResponse"+businessTrackerResponse);
+        LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + businessTrackerResponse);
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
@@ -520,11 +520,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             caIncompleteLL.setVisibility(View.VISIBLE);
         }
 
-        if(addDBA.equalsIgnoreCase("true")) {
+        if (addDBA.equalsIgnoreCase("true")) {
             caIncompleteLL.setVisibility(View.GONE);
         }
 
-            if (businessTrackerResponse.getData().isDbaInfo()) {
+        if (businessTrackerResponse.getData().isDbaInfo()) {
             boInProgressIV.setVisibility(GONE);
             boStartTV.setVisibility(View.VISIBLE);
             boIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
