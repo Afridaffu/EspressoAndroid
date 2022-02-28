@@ -202,16 +202,17 @@ public class ReviewApplicationActivity extends BaseActivity {
                 }
             }
         });
+
         submitCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog = Utils.showProgressDialog(ReviewApplicationActivity.this);
                 saveApplicationData();
+
                 Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                 startActivity(intent);
             }
         });
-
 
         mCompanyNameTx = (TextView) findViewById(R.id.companyNameTx);
         mBusinessEntityTx = (TextView) findViewById(R.id.businesEntityTx);
@@ -239,6 +240,7 @@ public class ReviewApplicationActivity extends BaseActivity {
         mPrivacyImg = (ImageView) findViewById(R.id.privacy);
         mTermsImg = (ImageView) findViewById(R.id.terms);
         mAgreementsImg = (ImageView) findViewById(R.id.merchant_agreem);
+
         mPrivacyImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,6 +248,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                 startActivity(browserIntent);
             }
         });
+
         mTermsImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,6 +256,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                 startActivity(browserIntent);
             }
         });
+
 //        mAgreementsImg.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
