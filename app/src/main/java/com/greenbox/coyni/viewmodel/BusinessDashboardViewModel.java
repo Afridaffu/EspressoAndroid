@@ -37,7 +37,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
 
-    public BusinessDashboardViewModel(@ NonNull Application application) {
+    public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
     }
 
