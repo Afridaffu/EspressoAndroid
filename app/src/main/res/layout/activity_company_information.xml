@@ -166,6 +166,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
+                    android:hint="@string/company_s_email"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -468,6 +469,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/light_gray"
+                    android:hint="@string/company_address_line_1"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:hintTextColor="@color/primary_green">
@@ -525,6 +527,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
+                    android:hint="@string/company_address_line_2_optional"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
