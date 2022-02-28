@@ -75,7 +75,7 @@
         android:layout_marginEnd="@dimen/_21sdp"
         >
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editfnametil"
+        android:id="@+id/edit_fName_til"
         style="@style/TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
         app:hintTextColor="@color/primary_green">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editfnameET"
+            android:id="@+id/editFNameET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -130,7 +130,7 @@
         </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editlnametil"
+            android:id="@+id/edit_lName_til"
             style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
             app:hintTextColor="@color/primary_green">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editlnameET"
+                android:id="@+id/editLNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -188,7 +188,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editemailtil"
+            android:id="@+id/edit_email_til"
             style="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
             app:hintTextColor="@color/primary_green">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editemailET"
+                android:id="@+id/editEmailET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_semibold"

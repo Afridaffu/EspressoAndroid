@@ -17,151 +17,181 @@ import androidx.cardview.widget.CardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
+import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.model.team.PhoneNumberTeam;
+import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class EditTeamMember extends AppCompatActivity {
-    TextInputLayout editfnametil,editlnametil,editemailtil;
-    TextInputEditText editfnameET,editlnameET,editemailET;
-    LinearLayout editfnameLL,editlnameLL,editemailLL,editphoneLL;
-    TextView editfnameTV,editlnameTV,editemailTV,editphoneTV;
+    TextInputLayout editFNameTil,editLNameTil,editEmailTil,editPhoneTil;
+    TextInputEditText editFNameET,editLNameET,editEmailET;
+    OutLineBoxPhoneNumberEditText editPhoneET;
+    LinearLayout editFNameLL,editLNameLL,editEmailLL,editPhoneLL;
+    TextView editFNameTV,editLNameTV,editEmailTV,editPhoneTV;
     public static int focusedID = 0;
-    public CardView sendcv;
+    public CardView sendCV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
-
-
+    String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
+    TeamViewModel teamViewModel;
+    int roleId=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_team_member);
-
-        initfields();
+        Bundle bundle=getIntent().getExtras();
+        firstName= bundle.getString("TeamMemberFirstName",firstName);
+        lastName=bundle.getString("TeamMemberLastName",lastName);
+        role=bundle.getString("Role",role);
+        status=bundle.getString("Status",status);
+        emailAddress=bundle.getString("EmailAddress",emailAddress);
+        phoneNumber=bundle.getString("PhoneNumber",phoneNumber);
+        imageName=bundle.getString("ImageName",imageName);
+        roleId=bundle.getInt("RoleId",roleId);
+        initFields();
         focusWatchers();
         textWatchers();
 
     }
 
-    private void initfields() {
-        editfnametil = findViewById(R.id.editfnametil);
-        editlnametil = findViewById(R.id.editlnametil);
-        editemailtil = findViewById(R.id.editemailtil);
+    private void initFields() {
+        editFNameTil = findViewById(R.id.edit_fName_til);
+        editLNameTil = findViewById(R.id.edit_lName_til);
+        editEmailTil = findViewById(R.id.edit_email_til);
+        //editPhoneTil = findViewById(R.id.phoneNumberOET);
 
-        editfnameET = findViewById(R.id.editfnameET);
-        editlnameET = findViewById(R.id.editlnameET);
-        editemailET = findViewById(R.id.editemailET);
+        editFNameET = findViewById(R.id.editFNameET);
+        editLNameET = findViewById(R.id.editLNameET);
+        editEmailET = findViewById(R.id.editEmailET);
+        editPhoneET=findViewById(R.id.phoneNumberOET);
 
-        editfnameLL = findViewById(R.id.editfirstNameErrorLL);
-        editlnameLL = findViewById(R.id.editlastNameErrorLL);
-        editemailLL = findViewById(R.id.editemailErrorLL);
-        editphoneLL = findViewById(R.id.editphoneErrorLL);
+        editFNameLL = findViewById(R.id.editfirstNameErrorLL);
+        editLNameLL = findViewById(R.id.editlastNameErrorLL);
+        editEmailLL = findViewById(R.id.editemailErrorLL);
+        editPhoneLL = findViewById(R.id.editphoneErrorLL);
 
-        editfnameTV = findViewById(R.id.editfirstNameErrorTV);
-        editlnameTV = findViewById(R.id.editlastNameErrorTV);
-        editemailTV = findViewById(R.id.editemailErrorTV);
-        editphoneTV = findViewById(R.id.editphoneErrorTV);
+        editFNameTV = findViewById(R.id.editfirstNameErrorTV);
+        editLNameTV = findViewById(R.id.editlastNameErrorTV);
+        editEmailTV = findViewById(R.id.editemailErrorTV);
+        editPhoneTV = findViewById(R.id.editphoneErrorTV);
 
-        sendcv = findViewById(R.id.sendCV);
+        editFNameET.setText(firstName);
+        editLNameET.setText(lastName);
+        editEmailET.setText(emailAddress);
+        editPhoneET.setText(phoneNumber);
+
+        sendCV = findViewById(R.id.sendCV);
+        sendCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                teamInfoAPICall(prepareRequest());
+            }
+        });
+
 
     }
     private void focusWatchers() {
         try {
 
-            editfnameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            editFNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        editfnameET.setHint("");
-                        if (editfnameET.getText().toString().trim().length() > 1) {
-                            editfnameLL.setVisibility(GONE);
-                            editfnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editfnametil, getColor(R.color.primary_black));
+                        editFNameET.setHint("");
+                        if (editFNameET.getText().toString().trim().length() > 1) {
+                            editFNameLL.setVisibility(GONE);
+                            editFNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editFNameTil, getColor(R.color.primary_black));
 
-                        } else if (editfnameET.getText().toString().trim().length() == 1) {
-                            editfnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editfnametil, getColor(R.color.error_red));
-                            editfnameLL.setVisibility(VISIBLE);
-                            editfnameTV.setText("Minimum 2 Characters Required");
+                        } else if (editFNameET.getText().toString().trim().length() == 1) {
+                            editFNameTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editFNameTil, getColor(R.color.error_red));
+                            editFNameLL.setVisibility(VISIBLE);
+                            editFNameTV.setText("Minimum 2 Characters Required");
                         } else {
-                            editfnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editfnametil, getColor(R.color.light_gray));
-                            editfnameLL.setVisibility(VISIBLE);
-                            editfnameTV.setText("Field Required");
+                            editFNameTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editFNameTil, getColor(R.color.light_gray));
+                            editFNameLL.setVisibility(VISIBLE);
+                            editFNameTV.setText("Field Required");
                         }
                     } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(EditTeamMember.this);
-                        focusedID = editfnameET.getId();
-                        editfnameET.setHint("First Name");
-                        editfnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(editfnametil, getColor(R.color.primary_green));
+                        focusedID = editFNameET.getId();
+                        editFNameET.setHint("First Name");
+                        editFNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(editFNameTil, getColor(R.color.primary_green));
                     }
                 }
             });
 
-            editlnameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            editLNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        editlnameET.setHint("");
-                        if (editlnameET.getText().toString().trim().length() > 1) {
-                            editlnameLL.setVisibility(GONE);
-                            editlnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editlnametil, getColor(R.color.primary_black));
+                        editLNameET.setHint("");
+                        if (editLNameET.getText().toString().trim().length() > 1) {
+                            editLNameLL.setVisibility(GONE);
+                            editLNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editLNameTil, getColor(R.color.primary_black));
 
-                        } else if (editlnameET.getText().toString().trim().length() == 1) {
-                            editlnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editlnametil, getColor(R.color.error_red));
-                            editlnameLL.setVisibility(VISIBLE);
-                            editlnameTV.setText("Minimum 2 Characters Required");
+                        } else if (editLNameET.getText().toString().trim().length() == 1) {
+                            editLNameTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editLNameTil, getColor(R.color.error_red));
+                            editLNameLL.setVisibility(VISIBLE);
+                            editLNameTV.setText("Minimum 2 Characters Required");
                         } else {
-                            editlnametil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editlnametil, getColor(R.color.light_gray));
-                            editlnameLL.setVisibility(VISIBLE);
-                            editlnameTV.setText("Field Required");
+                            editLNameTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editLNameTil, getColor(R.color.light_gray));
+                            editLNameLL.setVisibility(VISIBLE);
+                            editLNameTV.setText("Field Required");
                         }
                     } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(EditTeamMember.this);
-                        focusedID = editlnameET.getId();
-                        editlnameET.setHint("Last Name");
-                        editlnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(editlnametil, getColor(R.color.primary_green));
+                        focusedID = editLNameET.getId();
+                        editLNameET.setHint("Last Name");
+                        editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(editLNameTil, getColor(R.color.primary_green));
                     }
                 }
             });
 
-            editemailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            editEmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
-                        editemailET.setHint("");
-                        if (editemailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(editemailET.getText().toString().trim())) {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editemailtil, getColor(R.color.error_red));
-                            editemailLL.setVisibility(VISIBLE);
-                            editemailTV.setText("Please Enter a valid Email");
-                        } else if (editemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(editemailET.getText().toString().trim())) {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editemailtil, getColor(R.color.primary_black));
-                            editemailLL.setVisibility(GONE);
-                        } else if (editemailET.getText().toString().trim().length() > 0 && editemailET.getText().toString().trim().length() <= 5) {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editemailtil, getColor(R.color.error_red));
-                            editemailLL.setVisibility(VISIBLE);
-                            editemailTV.setText("Field Required");
+                        editEmailET.setHint("");
+                        if (editEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(editEmailET.getText().toString().trim())) {
+                            editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editEmailTil, getColor(R.color.error_red));
+                            editEmailLL.setVisibility(VISIBLE);
+                            editEmailTV.setText("Please Enter a valid Email");
+                        } else if (editEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(editEmailET.getText().toString().trim())) {
+                            editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_black));
+                            editEmailLL.setVisibility(GONE);
+                        } else if (editEmailET.getText().toString().trim().length() > 0 && editEmailET.getText().toString().trim().length() <= 5) {
+                            editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editEmailTil, getColor(R.color.error_red));
+                            editEmailLL.setVisibility(VISIBLE);
+                            editEmailTV.setText("Field Required");
                         } else {
-                            editemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(editemailtil, getColor(R.color.light_gray));
-                            editemailLL.setVisibility(VISIBLE);
-                            editemailTV.setText("Field Required");
+                            editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(editEmailTil, getColor(R.color.light_gray));
+                            editEmailLL.setVisibility(VISIBLE);
+                            editEmailTV.setText("Field Required");
                         }
                     } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(EditTeamMember.this);
-                        focusedID = editemailET.getId();
-                        editemailET.setHint("Email");
-                        editemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(editemailtil, getColor(R.color.primary_green));
+                        focusedID = editEmailET.getId();
+                        editEmailET.setHint("Email");
+                        editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_green));
                     }
                 }
             });
@@ -171,7 +201,7 @@ public class EditTeamMember extends AppCompatActivity {
         }
     }
     private void textWatchers() {
-        editfnameET.addTextChangedListener(new TextWatcher() {
+        editFNameET.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -182,12 +212,12 @@ public class EditTeamMember extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                     isFirstName = true;
-                    editfnameLL.setVisibility(GONE);
-                    editfnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editfnametil, getResources().getColor(R.color.primary_green));
-                } else if (editfnameET.getText().toString().trim().length() == 0) {
-                    editfnameLL.setVisibility(VISIBLE);
-                    editfnameTV.setText("Field Required");
+                    editFNameLL.setVisibility(GONE);
+                    editFNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_green));
+                } else if (editFNameET.getText().toString().trim().length() == 0) {
+                    editFNameLL.setVisibility(VISIBLE);
+                    editFNameTV.setText("Field Required");
                 } else {
                     isFirstName = false;
                 }
@@ -197,16 +227,16 @@ public class EditTeamMember extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    String str = editfnameET.getText().toString();
+                    String str = editFNameET.getText().toString();
                     if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
-                        editfnameET.setText("");
-                        editfnameET.setSelection(editfnameET.getText().length());
+                        editFNameET.setText("");
+                        editFNameET.setSelection(editFNameET.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
-                        editfnameET.setText(editfnameET.getText().toString().replaceAll("\\.", ""));
-                        editfnameET.setSelection(editfnameET.getText().length());
+                        editFNameET.setText(editFNameET.getText().toString().replaceAll("\\.", ""));
+                        editFNameET.setSelection(editFNameET.getText().length());
                     } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                        editfnameET.setText("");
-                        editfnameET.setSelection(editfnameET.getText().length());
+                        editFNameET.setText("");
+                        editFNameET.setSelection(editFNameET.getText().length());
                     }
 
                 } catch (Exception ex) {
@@ -215,7 +245,7 @@ public class EditTeamMember extends AppCompatActivity {
             }
         });
 
-        editlnameET.addTextChangedListener(new TextWatcher() {
+        editLNameET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -226,12 +256,12 @@ public class EditTeamMember extends AppCompatActivity {
 
                 if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                     isLastName = true;
-                    editlnameLL.setVisibility(GONE);
-                    editlnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editlnametil, getResources().getColor(R.color.primary_green));
-                } else if (editlnameET.getText().toString().trim().length() == 0) {
-                    editlnameLL.setVisibility(VISIBLE);
-                    editlnameTV.setText("Field Required");
+                    editLNameLL.setVisibility(GONE);
+                    editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_green));
+                } else if (editLNameET.getText().toString().trim().length() == 0) {
+                    editLNameLL.setVisibility(VISIBLE);
+                    editLNameTV.setText("Field Required");
                 } else {
                     isLastName = false;
                 }
@@ -241,13 +271,13 @@ public class EditTeamMember extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
-                    String str = editlnameET.getText().toString();
+                    String str = editLNameET.getText().toString();
                     if (str.length() > 0 && str.substring(0).equals(" ")) {
-                        editlnameET.setText(editlnameET.getText().toString().replaceAll(" ", ""));
-                        editlnameET.setSelection(editlnameET.getText().length());
+                        editLNameET.setText(editLNameET.getText().toString().replaceAll(" ", ""));
+                        editLNameET.setSelection(editLNameET.getText().length());
                     } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
-                        editlnameET.setText(editlnameET.getText().toString().replaceAll(".", ""));
-                        editlnameET.setSelection(editlnameET.getText().length());
+                        editLNameET.setText(editLNameET.getText().toString().replaceAll(".", ""));
+                        editLNameET.setSelection(editLNameET.getText().length());
                     }
 
                 } catch (Exception ex) {
@@ -256,7 +286,7 @@ public class EditTeamMember extends AppCompatActivity {
             }
         });
 
-        editemailET.addTextChangedListener(new TextWatcher() {
+        editEmailET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -266,14 +296,14 @@ public class EditTeamMember extends AppCompatActivity {
 
                 if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                     isEmail = false;
-                    editemailLL.setVisibility(GONE);
-                    editemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    editEmailLL.setVisibility(GONE);
+                    editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        emailTIL.setHintTextColor(colorState);
-                    Utils.setUpperHintColor(editemailtil, getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(editEmailTil, getResources().getColor(R.color.primary_green));
 
-                } else if (editemailET.getText().toString().trim().length() == 0) {
-                    editemailLL.setVisibility(VISIBLE);
-                    editemailTV.setText("Field Required");
+                } else if (editEmailET.getText().toString().trim().length() == 0) {
+                    editEmailLL.setVisibility(VISIBLE);
+                    editEmailTV.setText("Field Required");
                 }
                 if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
                     isEmail = true;
@@ -286,10 +316,10 @@ public class EditTeamMember extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 try {
-                    String str = editemailET.getText().toString();
+                    String str = editEmailET.getText().toString();
                     if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                        editemailET.setText(editemailET.getText().toString().replaceAll(" ", ""));
-                        editemailET.setSelection(editemailET.getText().length());
+                        editEmailET.setText(editEmailET.getText().toString().replaceAll(" ", ""));
+                        editEmailET.setSelection(editEmailET.getText().length());
                     }
 
                 } catch (Exception ex) {
@@ -305,7 +335,7 @@ public class EditTeamMember extends AppCompatActivity {
         try {
             if (isFirstName && isLastName && isEmail ) {
                 isNextEnabled = true;
-                sendcv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " );
             } else {
@@ -313,12 +343,32 @@ public class EditTeamMember extends AppCompatActivity {
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " + isPhoneNumber + " ");
 
                 isNextEnabled = false;
-                sendcv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                sendCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+    public void teamInfoAPICall(TeamRequest teamRequest) {
+        teamViewModel.updateTeamInfo(teamRequest,roleId);
+    }
+    public TeamRequest prepareRequest() {
+        TeamRequest teamRequest = new TeamRequest();
+        try {
+                PhoneNumberTeam phone = new PhoneNumberTeam();
+                phone.setCountryCode(Utils.strCCode);
+                phone.setPhoneNumber(editPhoneET.getText().toString());
+                teamRequest.setFirstName(editFNameET.getText().toString());
+                teamRequest.setFirstName(editLNameET.getText().toString());
+                teamRequest.setFirstName(editEmailET.getText().toString());
+                teamRequest.setFirstName(editPhoneET.getText().toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return teamRequest;
     }
 
 }
