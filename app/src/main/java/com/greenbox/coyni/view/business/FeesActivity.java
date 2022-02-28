@@ -14,9 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
-public class FeesActivity extends AppCompatActivity {
+public class FeesActivity extends BaseActivity {
     private LinearLayout bpbackBtn;
     TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
@@ -52,7 +53,7 @@ public class FeesActivity extends AppCompatActivity {
             monthlyFeeDollTV = findViewById(R.id.monthlyFeeDollTV);
             monthlyFeePerTV = findViewById(R.id.monthlyFeePerTV);
 
-            viewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+            viewModel=new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
 
             bpbackBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -60,8 +61,13 @@ public class FeesActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            viewModel.meFees(123);
-            initObserver();
+            showProgressDialog();
+            try {
+                viewModel.meFees(123);
+                initObserver();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,10 +78,11 @@ public class FeesActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onChanged(Fees fees) {
-                if (fees.getStatus().equalsIgnoreCase("SUCCESS")) {
+                dismissDialog();
+                if (fees.getStatus().equalsIgnoreCase("SUCCESS")){
 
                     try {
-                        //withdrawal
+                            //withdrawal
                         if (fees.getData().getWithdrawalBankFeeInDollar() != null) {
                             tvEBADoll.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalBankFeeInDollar()))));
                         } else {

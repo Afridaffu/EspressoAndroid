@@ -141,8 +141,6 @@ public class EditCardActivity extends AppCompatActivity {
             etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
-
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             etName.setEnabled(false);
@@ -399,9 +397,10 @@ public class EditCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
                             }
                         } else {
-                            etExpiry.setHint("Card Exp");
+                            etExpiry.setHint("MM/YY");
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
+                            expiryErrorLL.setVisibility(GONE);
                         }
                         enableOrDisableNext();
                     } catch (Exception ex) {
@@ -432,6 +431,9 @@ public class EditCardActivity extends AppCompatActivity {
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             etAddress1.setSelection(etAddress1.getText().length());
+                            if(etAddress1.getText().length()==0){
+                                address1ErrorLL.setVisibility(GONE);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -448,9 +450,16 @@ public class EditCardActivity extends AppCompatActivity {
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     } else {
-                        etAddress2.setHint("");
-                        etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
+                        if (etAddress2.getText().length()>0) {
+                            etAddress2.setHint("");
+                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
+                        }
+                        else {
+                            etAddress2.setHint("");
+                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                        }
                     }
                 }
             });
@@ -477,6 +486,7 @@ public class EditCardActivity extends AppCompatActivity {
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                             etCity.setSelection(etCity.getText().length());
+                            cityErrorLL.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -538,6 +548,7 @@ public class EditCardActivity extends AppCompatActivity {
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                             etZipcode.setSelection(etZipcode.getText().length());
+                            zipErrorLL.setVisibility(GONE);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
