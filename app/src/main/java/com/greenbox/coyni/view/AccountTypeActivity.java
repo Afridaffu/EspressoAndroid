@@ -55,7 +55,6 @@ public class AccountTypeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-
                     startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
                 }
             });

@@ -181,7 +181,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                 reloadTrackerDashboard(businessTrackerResponse);
             }
 
-
             businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -190,7 +189,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     } else {
                         finish();
                     }
-
                 }
             });
 

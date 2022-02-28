@@ -470,6 +470,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/company_address_line_1"
                     android:textColorHint="@color/light_gray"
+                    android:hint="@string/company_address_line_1"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:hintTextColor="@color/primary_green">
