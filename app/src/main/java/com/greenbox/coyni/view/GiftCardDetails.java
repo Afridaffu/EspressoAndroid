@@ -457,8 +457,12 @@ public class GiftCardDetails extends AppCompatActivity {
 
 //                            amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
-
-                            Double walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
+                            Double walletAmount = 0.0;
+                            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                                walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
+                            } else {
+                                walletAmount = Double.parseDouble(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                            }
                             Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
                             Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
                             if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
@@ -481,12 +485,17 @@ public class GiftCardDetails extends AppCompatActivity {
                                 amountErrorTV.setText("Amount entered exceeds limit");
                             } else if (objTranLimit.getData().getTokenLimitFlag()) {
                                 String limitType = objTranLimit.getData().getLimitType();
-                                if (limitType.equalsIgnoreCase("DAILY")) {
+                                if (limitType.equalsIgnoreCase("PER TRANSACTION")) {
                                     if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds transaction limit");
-                                    } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getDailyAccountLimit())) {
+                                    } else {
+                                        isAmount = true;
+                                        amountErrorLL.setVisibility(GONE);
+                                    }
+                                } else if (limitType.equalsIgnoreCase("DAILY")) {
+                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getDailyAccountLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds daily limit");
@@ -495,11 +504,7 @@ public class GiftCardDetails extends AppCompatActivity {
                                         amountErrorLL.setVisibility(GONE);
                                     }
                                 } else {
-                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
-                                        isAmount = false;
-                                        amountErrorLL.setVisibility(VISIBLE);
-                                        amountErrorTV.setText("Amount entered exceeds transaction limit");
-                                    } else if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getWeeklyAccountLimit())) {
+                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getWeeklyAccountLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds weekly limit");
