@@ -56,6 +56,7 @@ public class CompanyInfoResp {
         private String country;
         private String businessEntity;
         private String ssnOrEin;
+
         private ArrayList<RequiredDocumets> requiredDocuments = new ArrayList<>();
 
 

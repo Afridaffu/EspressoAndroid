@@ -19,6 +19,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
+import com.greenbox.coyni.model.bank.BanksResponseModel;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
@@ -105,6 +106,12 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
+import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
+import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
+import com.greenbox.coyni.model.team.TeamDeleteModel;
+import com.greenbox.coyni.model.team.TeamInfoAddModel;
+import com.greenbox.coyni.model.team.TeamRequest;
+import com.greenbox.coyni.model.team.TeamResponseModel;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
@@ -489,6 +496,25 @@ public interface ApiService {
 
     @GET("api/v2/business/beneficial-owners-validate")
     Call<BOValidateResp> validateBeneficailOwners();
+
+    @GET("/api/v2/banks/me")
+    Call<BanksResponseModel> getBankAccountsData();
+
+    @POST("/api/v2/business/submit")
+    Call<ApplicationSubmitResponseModel> postApplicationSubmissionData(@Body ApplicationSubmitRequest request);
+
+    @POST("/api/v2/team/retrieve")
+    Call<TeamResponseModel> getTeamData(@Body TeamRequest request);
+
+    @PATCH("/api/v2/team/{teamMemberId}")
+    Call<TeamResponseModel> updateTeamData(@Body TeamRequest request,@Query("teamMemberId") Integer teamMemberId);
+
+    @DELETE("/api/v2/team/{teamMemberId}")
+    Call<TeamDeleteModel> deleteTeam(@Query("teamMemberId") Integer teamMemberId);
+
+    @POST("/api/v2/team/send-invitation")
+    Call<TeamInfoAddModel> addTeamMember(@Body TeamRequest request);
+
 
 }
 
