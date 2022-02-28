@@ -58,6 +58,8 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<BOValidateResp> validateBOResponse = new MutableLiveData<>();
 
 
+
+
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
         super(application);
     }

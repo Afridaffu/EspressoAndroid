@@ -146,7 +146,7 @@
                         android:id="@+id/etWalletId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
                         android:maxLength="50"

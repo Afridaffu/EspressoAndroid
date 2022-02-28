@@ -503,12 +503,12 @@ public class EnableAuthID extends AppCompatActivity {
 
     private void launchDashboard() {
         try {
-            Intent dashboardIntent = new Intent(EnableAuthID.this, DashboardActivity.class);
+            Intent dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
                 if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
                         && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
-                    dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
+                    dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
                 } else {
                     dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
                 }

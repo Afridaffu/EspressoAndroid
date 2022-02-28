@@ -42,6 +42,7 @@ public class AddBusinessUserResponse {
     }
 
     public class TrackerData{
+
         private boolean isProfileVerified;
         private boolean isAuthyRegistered;
         private boolean isAddressAvailable;

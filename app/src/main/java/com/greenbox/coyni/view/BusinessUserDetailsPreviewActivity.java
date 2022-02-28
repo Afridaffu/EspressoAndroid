@@ -158,6 +158,11 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
             });
 
         }
+        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
+            heading.setText(getString(R.string.email));
+            title.setText(getString(R.string.email_curr));
+            value.setText(getIntent().getStringExtra("value"));
+        }
 
     }
 

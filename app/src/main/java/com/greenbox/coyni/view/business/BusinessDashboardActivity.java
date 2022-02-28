@@ -175,18 +175,8 @@ public class BusinessDashboardActivity extends BaseActivity {
             buyTokenLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
-                            return;
-                        }
-                        dialog.dismiss();
-                        mLastClickTimeQA = SystemClock.elapsedRealtime();
-                        Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
-                        i.putExtra("screen", "dashboard");
-                        startActivity(i);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    dialog.dismiss();
+                    launchBuyTokens();
                 }
             });
             widthdrawtoLL.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +201,20 @@ public class BusinessDashboardActivity extends BaseActivity {
                     startActivity(new Intent(BusinessDashboardActivity.this, ScanActivity.class));
                 }
             });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void launchBuyTokens() {
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
+            i.putExtra("screen", "dashboard");
+            startActivity(i);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

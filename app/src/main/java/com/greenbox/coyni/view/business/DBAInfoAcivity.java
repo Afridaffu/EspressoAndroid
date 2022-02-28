@@ -138,7 +138,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onResume() {
         try {
             super.onResume();
-            dbanameET.requestFocus();
+//            dbanameET.requestFocus();
 //            businessIdentityVerificationViewModel.getBusinessType();
         } catch (Exception e) {
             e.printStackTrace();
@@ -662,7 +662,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbaemailTV.setText("Field Required");
                         }
                     } else {
-                        dbaemailET.setHint("support@firebbq.com");
+                        dbaemailET.setHint("@string/customer_service_email");
                         dbaemailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         dbaemailET.setHintTextColor(getColor(R.color.light_gray));
                         dbaemailLL.setVisibility(GONE);

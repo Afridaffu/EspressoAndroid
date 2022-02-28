@@ -71,7 +71,8 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
         llPersonalAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    identityVerificationViewModel.getPostAddCustomer();
+                startActivity(new Intent(BusinessAddNewAccountActivity.this, BindingLayoutActivity.class));
+                //identityVerificationViewModel.getPostAddCustomer();
 
             }
         });
@@ -82,30 +83,9 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
                 finish();
             }
         });
-        initObservers();
+       // initObservers();
 
     }
 
-    public void initObservers() {
-        try {
-            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
-                @Override
-                public void onChanged(AddBusinessUserResponse identityImageResponse) {
-
-                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                        LogUtils.d("AddBusinessUserResponse","AddBusinessUserResponse"+identityImageResponse);
-                        LogUtils.d("Utils.getStrAuth();","Utils.getStrAuth();"+Utils.getStrAuth());
-                        //Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                         startActivity(new Intent(BusinessAddNewAccountActivity.this, BindingLayoutActivity.class));
-
-                    } else {
-                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 }
