@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
-                    android:hint="Company’s Name"
+                    android:hint="@string/companys_name"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -117,10 +117,10 @@
                         android:id="@+id/companynameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="textVisiblePassword|textCapSentences"
+                        android:inputType="text|textNoSuggestions"
                         android:autofillHints="creditCardSecurityCode"
                         android:importantForAutofill="no"
                         android:maxLength="30"
@@ -182,7 +182,7 @@
                         android:inputType="textEmailAddress|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
-                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
+                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"
@@ -213,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="User already exists. Try a new email or log in."
+                        android:text="@string/email_error_warning"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
@@ -244,7 +244,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Field Required"
+                        android:text="@string/field_required"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
@@ -275,7 +275,7 @@
                         style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Business Entity"
+                        android:hint="@string/business_entity"
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
@@ -363,7 +363,7 @@
                         style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Time Zone(Optional)"
+                        android:hint="@string/time_zone"
                         android:textColorHint="@color/black"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
@@ -381,7 +381,7 @@
                             android:editable="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
-                            android:hint="Select time zone"
+                            android:hint="@string/select_time_zone"
                             android:imeOptions="actionNext"
                             android:inputType="text|textNoSuggestions"
                             android:maxLength="30"
@@ -405,7 +405,7 @@
                     android:layout_marginTop="@dimen/_4sdp"
                     android:layout_marginBottom="@dimen/_45sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="By selecting this we will clear your batch based on\nyour time zone at 11:59:59pm."
+                    android:text="@string/by_selecting"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10ssp"
                     android:visibility="gone"/>
@@ -425,17 +425,17 @@
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center"
-                        android:text="Next"
+                        android:text="@string/next"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
 
                 </androidx.cardview.widget.CardView>
 
-                <!--                <View-->
-                <!--                    android:id="@+id/pageOneView"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="@dimen/_200sdp"-->
-                <!--                    android:visibility="gone"/>-->
+<!--                <View-->
+<!--                    android:id="@+id/pageOneView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/_200sdp"-->
+<!--                    android:visibility="gone"/>-->
             </LinearLayout>
 
         </ScrollView>
@@ -459,7 +459,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_14sdp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="Company Address"
+                    android:text="@string/company_address"
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_12ssp" />
 
@@ -468,8 +468,8 @@
                     style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/company_address_line_1"
                     android:textColorHint="@color/light_gray"
+                    android:hint="@string/company_address_line_1"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:hintTextColor="@color/primary_green">
@@ -587,7 +587,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:hint="City"
+                    android:hint="@string/city"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -668,7 +668,7 @@
                         style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="State"
+                        android:hint="@string/state"
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
@@ -730,7 +730,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:hint="Zipcode"
+                    android:hint="@string/zipcode"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -778,7 +778,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text=""
+                        android:text="@string/field_required"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
@@ -824,7 +824,7 @@
                             android:inputType="text"
                             android:maxLength="30"
                             android:padding="@dimen/_12sdp"
-                            android:text="United States"
+                            android:text="@string/united_states"
                             android:textColor="@color/dark_grey"
                             android:textColorHint="@color/light_gray"
                             android:textSize="@dimen/_12ssp" />
@@ -848,16 +848,16 @@
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center"
-                        android:text="Next"
+                        android:text="@string/next"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp" />
                 </androidx.cardview.widget.CardView>
 
-                <!--                <View-->
-                <!--                    android:id="@+id/pageTwoView"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="@dimen/_200sdp"-->
-                <!--                    android:visibility="gone"/>-->
+<!--                <View-->
+<!--                    android:id="@+id/pageTwoView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/_200sdp"-->
+<!--                    android:visibility="gone"/>-->
             </LinearLayout>
 
         </ScrollView>
@@ -882,7 +882,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_11sdp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="Additional Documents "
+                    android:text="@string/additional_documents"
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_12ssp" />
 
@@ -911,7 +911,7 @@
                         android:layout_gravity="center"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Upload Articles of Incorporation"
+                        android:text="@string/uploaded_articles"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_10ssp"
                         android:visibility="visible" />
@@ -935,7 +935,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_1sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="Uploaded Articles of Incorporation"
+                                android:text="@string/uploaded_articles"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_10ssp" />
 
@@ -988,7 +988,7 @@
                         android:layout_gravity="center"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Upload EIN Letter"
+                        android:text="@string/upload_letter"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_10ssp"
                         android:visibility="visible" />
@@ -1012,7 +1012,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_1sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="Uploaded EIN Letter"
+                                android:text="@string/upload_letter"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_10ssp" />
 
@@ -1063,7 +1063,7 @@
                         android:layout_gravity="center"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Upload W-9 Form"
+                        android:text="@string/upload_w9_form"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_10ssp"
                         android:visibility="visible" />
@@ -1087,7 +1087,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_1sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="Uploaded W-9 Form"
+                                android:text="@string/upload_w9_form"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_10ssp" />
                             <LinearLayout
@@ -1095,23 +1095,23 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 >
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="@dimen/_1sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="Uploaded on "
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_8ssp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_1sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="@string/uploaded_on"
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_8ssp" />
 
-                                <TextView
-                                    android:id="@+id/w9FormUpdatedOnTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text=""
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_8ssp" />
+                            <TextView
+                                android:id="@+id/w9FormUpdatedOnTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text=""
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -1146,7 +1146,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/opensans_bold"
                     android:gravity="center"
-                    android:text="Done"
+                    android:text="@string/done"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />
 
