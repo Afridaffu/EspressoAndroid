@@ -254,8 +254,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:text="@string/email_error_warning"
                 android:fontFamily="@font/opensans_regular"
+                android:text="@string/email_error_warning"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>
@@ -287,8 +287,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:text="@string/phone_number_error_warning"
                 android:fontFamily="@font/opensans_regular"
+                android:text="@string/phone_number_error_warning"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>

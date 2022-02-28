@@ -103,6 +103,7 @@
                     android:importantForAutofill="no"
                     android:inputType="textEmailAddress|textNoSuggestions"
                     android:longClickable="false"
+                    android:textIsSelectable="false"
                     android:maxLines="1"
                     android:padding="@dimen/_14sdp"
                     android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"

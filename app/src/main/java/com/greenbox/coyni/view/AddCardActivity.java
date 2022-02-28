@@ -355,6 +355,8 @@ public class AddCardActivity extends AppCompatActivity {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(AddCardActivity.this);
                             mLastClickTime = SystemClock.elapsedRealtime();
                             progressDialog = Utils.showProgressDialog(AddCardActivity.this);
                             strAdd1 = etAddress1.getText().toString().trim();
