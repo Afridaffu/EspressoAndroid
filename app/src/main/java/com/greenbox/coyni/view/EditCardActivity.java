@@ -399,7 +399,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
                             }
                         } else {
-                            etExpiry.setHint("Card Exp");
+                            etExpiry.setHint("MM/YY");
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                         }
@@ -432,6 +432,9 @@ public class EditCardActivity extends AppCompatActivity {
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             etAddress1.setSelection(etAddress1.getText().length());
+                            if(etAddress1.getText().length()==0){
+                                address1ErrorLL.setVisibility(GONE);
+                            }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -448,9 +451,16 @@ public class EditCardActivity extends AppCompatActivity {
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     } else {
-                        etAddress2.setHint("");
-                        etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
+                        if (etAddress2.getText().length()>0) {
+                            etAddress2.setHint("");
+                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
+                        }
+                        else {
+                            etAddress2.setHint("");
+                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                        }
                     }
                 }
             });

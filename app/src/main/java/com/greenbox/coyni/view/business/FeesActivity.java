@@ -14,9 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
-public class FeesActivity extends AppCompatActivity {
+public class FeesActivity extends BaseActivity {
     private LinearLayout bpbackBtn;
     TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
@@ -60,6 +61,7 @@ public class FeesActivity extends AppCompatActivity {
                     finish();
                 }
             });
+            showProgressDialog();
             try {
                 viewModel.meFees(123);
                 initObserver();
@@ -76,6 +78,7 @@ public class FeesActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onChanged(Fees fees) {
+                dismissDialog();
                 if (fees.getStatus().equalsIgnoreCase("SUCCESS")){
 
                     try {
