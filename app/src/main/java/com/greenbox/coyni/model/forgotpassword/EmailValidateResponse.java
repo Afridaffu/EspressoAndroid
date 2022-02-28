@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.forgotpassword;
 
+import com.greenbox.coyni.model.Error;
+
 public class EmailValidateResponse {
     private String status;
     private String timestamp;
