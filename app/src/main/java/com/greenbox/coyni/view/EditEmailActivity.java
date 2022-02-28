@@ -68,9 +68,13 @@ public class EditEmailActivity extends AppCompatActivity {
                 findViewById(R.id.b_topLL).setVisibility(GONE);
                 findViewById(R.id.editEmailSV).setVisibility(VISIBLE);
             }
+            else
             if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
                 findViewById(R.id.b_topLL).setVisibility(VISIBLE);
                 findViewById(R.id.editEmailSV).setVisibility(GONE);
+                if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
+
+                }
             }
             initObservers();
             textWatchers();
@@ -145,28 +149,28 @@ public class EditEmailActivity extends AppCompatActivity {
                     }
                 }
             });
-
-            saveEmailCV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isSaveEnabled) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-
-                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
-
-                        callSendEmailOTPAPI();
-
-                    } else {
-                        Log.e("isSaveEnabled", isSaveEnabled + "");
-                    }
-                }
-            });
+//
+//            saveEmailCV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (isSaveEnabled) {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                            return;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//
+//                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
+//                        dialog.setIndeterminate(false);
+//                        dialog.setMessage("Please wait...");
+//                        dialog.show();
+//
+//                        callSendEmailOTPAPI();
+//
+//                    } else {
+//                        Log.e("isSaveEnabled", isSaveEnabled + "");
+//                    }
+//                }
+//            });
             editEmailCloseLL.setOnClickListener(view -> {
                 finish();
             });

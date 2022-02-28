@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -162,6 +163,20 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
             heading.setText(getString(R.string.email));
             title.setText(getString(R.string.email_curr));
             value.setText(getIntent().getStringExtra("value"));
+            changeCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    try {
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditEmailActivity.class).putExtra("screen","DBAChangeEmail").putExtra("action","EditEmailDBA"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
     }
