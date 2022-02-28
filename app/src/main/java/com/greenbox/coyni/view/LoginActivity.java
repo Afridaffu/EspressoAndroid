@@ -171,6 +171,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }
 
         }
+        etEmail.setText("tutranafya@vusra.com");
+        etPassword.setText("Reddy@28");
     }
 
     @Override
