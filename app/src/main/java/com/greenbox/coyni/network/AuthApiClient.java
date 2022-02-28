@@ -4,9 +4,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.BuildConfig;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AuthApiClient {
+    private final String TAG = getClass().getSimpleName();
     public static final String TYPE_NO_NETWORK = "NO_NETWORK";
     public static final String TYPE_CONNECTION_INTERRUPT = "CONNECTION_INTERRUPT";
     public static final String TYPE_SESSION_TIMEOUT = "SESSION_TIMEOUT";
@@ -31,22 +32,24 @@ public class AuthApiClient {
 //    private static final String Referer = "http://mobile/"; //QA
 //    private static final String Referer = "https://members.coyni.com"; //SAT && //UAT
     private final int TIME_OUT = 120;
+    private static final String KEY_AUTHORIZATION = "Authorization";
+
 
     private HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor().setLevel(
             BuildConfig.LOGGING_ENABLED ? HttpLoggingInterceptor.Level.BODY
                     : HttpLoggingInterceptor.Level.NONE);
     private AuthApiClient.TokenInterceptor tokenInterceptor = new AuthApiClient.TokenInterceptor();
-    private EncryptionInterceptor encryptionInterceptor = new EncryptionInterceptor();
+    private CustomEncryptionHandler encryptionInterceptor = new CustomEncryptionHandler();
 
-    private OkHttpClient client = new OkHttpClient.Builder().
+    private final OkHttpClient client = new OkHttpClient.Builder().
             connectTimeout(TIME_OUT, TimeUnit.SECONDS).
             readTimeout(TIME_OUT, TimeUnit.SECONDS).
-            addInterceptor(encryptionInterceptor).
             addInterceptor(tokenInterceptor).
+            addInterceptor(encryptionInterceptor).
             addInterceptor(interceptor).
             build();
 
-    private Retrofit retrofit = new Retrofit.Builder()
+    private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(Utils.getStrURL_PRODUCTION())
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
@@ -59,39 +62,14 @@ public class AuthApiClient {
         return apiClient.retrofit;
     }
 
-    public static class NoConnectivityException extends IOException {
-
-        @Override
-        public String getMessage() {
-            return TYPE_NO_NETWORK;
-        }
-
-    }
-
     private static class TokenInterceptor implements Interceptor {
 
         @Override
         public Response intercept(Chain chain) throws ApiClient.NoConnectivityException, ApiClient.SessionTimeOutException, ApiClient.ConnectionInterruptedException {
             Request initialRequest = chain.request();
-            String CLIENT = "android";
-            String KEY_CLIENT = "client";
-            String VERSION = "1.4";
-            String KEY_PROTOCOL_VERSION = "X-ProtocolVersion";
             Request.Builder requestBuild = initialRequest.newBuilder()
-                    .header(KEY_PROTOCOL_VERSION, VERSION)
-                    .addHeader(KEY_CLIENT, CLIENT)
-                    .addHeader("Referer", Utils.getStrReferer())
-                    .addHeader("Accept", "application/json")
-                    .addHeader("Accept-Language", Utils.getStrLang())
-                    .addHeader("User-Agent", "Coyni")
-                    .addHeader("App-version", Utils.getAppVersion())
-                    .addHeader("Authorization", "Bearer " + Utils.getStrAuth());
-
-            if (BuildConfig.SKIP_ENCRYPTION) {
-                requestBuild.addHeader("SkipDecryption", "true");
-            }
+                    .addHeader(KEY_AUTHORIZATION, "Bearer " + Utils.getStrAuth());
             initialRequest = requestBuild.build();
-
             Response response = null;
             try {
                 response = chain.proceed(initialRequest);
@@ -103,34 +81,8 @@ public class AuthApiClient {
                 ex.printStackTrace();
                 throw new ApiClient.ConnectionInterruptedException(TYPE_SOMETHING_WENT_WRONG);
             }
-            Log.e("resp auth", new Gson().toJson(response.code()));
+            LogUtils.e("resp auth", new Gson().toJson(response.code()));
             return response;
-        }
-    }
-
-    public static class ConnectionInterruptedException extends SSLHandshakeException {
-
-        /**
-         * Constructs an exception reporting an error found by
-         * an SSL subsystem during handshaking.
-         *
-         * @param reason describes the problem.
-         */
-        ConnectionInterruptedException(String reason) {
-            super(reason);
-        }
-
-        @Override
-        public String getMessage() {
-            return TYPE_CONNECTION_INTERRUPT;
-        }
-
-    }
-
-    public static class SessionTimeOutException extends SocketTimeoutException {
-        @Override
-        public String getMessage() {
-            return TYPE_SESSION_TIMEOUT;
         }
     }
 }
