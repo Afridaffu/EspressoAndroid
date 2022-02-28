@@ -468,6 +468,10 @@
     <string name="custom_date_range">Custom Date Range</string>
     <string name="view_edit">View/Edit</string>
     <string name="delete">Delete</string>
+    <string name="company_s_email">Company’s Email</string>
+    <string name="company_address_line_1">Company Address Line 1</string>
+    <string name="company_address_line_2_optional">Company Address Line 2(Optional)</string>
+    <string name="customer_service_email">Customer Service Email</string>
 
     <string name="paying_dba_name">Paying [DBA name]</string>
     <string name="paying_method">Paying Method</string>
