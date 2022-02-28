@@ -1171,8 +1171,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     } else {
                         address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.light_gray));
-//                        address1ErrorLL.setVisibility(VISIBLE);
-//                        address1ErrorTV.setText("Field Required");
+                        address1ErrorLL.setVisibility(VISIBLE);
+                        address1ErrorTV.setText("Field Required");
                     }
                 } else {
                     address1ET.setHint("Street Address");
@@ -1246,7 +1246,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                     } else {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
                         zipcodeErrorLL.setVisibility(VISIBLE);
                         zipcodeErrorTV.setText("Field Required");

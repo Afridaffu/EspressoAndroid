@@ -154,7 +154,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginBottom="@dimen/_1sdp"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:text="Uploaded "
+                                    android:text="@string/uploaded"
                                     android:textColor="@color/primary_color"
                                     android:textSize="@dimen/_10ssp" />
 
@@ -200,7 +200,7 @@
                             android:id="@+id/FirstNameET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="text|textCapSentences|textNoSuggestions"
@@ -256,7 +256,7 @@
                             android:id="@+id/LastNameET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="text|textCapSentences|textNoSuggestions"
@@ -888,7 +888,7 @@
                                 android:inputType="text"
                                 android:maxLength="30"
                                 android:padding="@dimen/_12sdp"
-                                android:text="United States"
+                                android:text="@string/united_states"
                                 android:textColor="@color/dark_grey"
                                 android:textColorHint="@color/light_gray"
                                 android:textSize="@dimen/_12ssp" />
