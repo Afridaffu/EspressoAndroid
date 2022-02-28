@@ -31,7 +31,7 @@ public class GiftCardsRecyclerAdapter extends RecyclerView.Adapter<GiftCardsRecy
 
         public MyViewHolder(View view) {
             super(view);
-           // imgBrand = (ImageView) view.findViewById(R.id.imgBrand);
+            imgBrand = (ImageView) view.findViewById(R.id.imgBrand);
             brandNameTV = (TextView) view.findViewById(R.id.brandNameTV);
         }
     }
