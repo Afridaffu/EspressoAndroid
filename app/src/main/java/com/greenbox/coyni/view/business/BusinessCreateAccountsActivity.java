@@ -62,6 +62,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private ExpandableListView brandsGV;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> dbaList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> dbaAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private BusinessProfileRecyclerAdapter giftCardsAdapter;
@@ -197,12 +198,26 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     for(ProfilesResponse.Profiles c: filterList){
                         if(c.getAccountType().equals(Utils.BUSINESS)){
                                 businessAccountList.add(c);
-
-                                addDetails(String.valueOf(c.getId()),c.getDbaOwner());
+                                addDetails(String.valueOf(c.getCompanyName()),c.getDbaOwner());
                         } else {
                             personalAccountList.add(c);
                         }
                     }
+//                   LogUtils.d(TAG,"business"+businessAccountList);
+//                    for(ProfilesResponse.Profiles addDBA: filterList) {
+//                        for (ProfilesResponse.Profiles dbaChild : businessAccountList) {
+//
+//                            if (String.valueOf(dbaChild.getId()).equalsIgnoreCase(addDBA.getDbaOwner())) {
+//                                dbaList.add(dbaChild);
+//                                addDetails(String.valueOf(dbaChild.getCompanyName()),dbaChild.getDbaOwner());
+//                            } else {
+//                                //personalAccountList.add(c);
+//                                //addDetails(String.valueOf(dbaChild.getCompanyName()),dbaChild.getDbaOwner());
+//                            }
+//                        }
+//                    }
+//                        LogUtils.d(TAG,"dbaChild"+dbaList);
+
 
 //                    try {
 //
