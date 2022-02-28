@@ -49,7 +49,6 @@ public class TeamActivity extends BaseActivity {
     private TeamViewModel teamViewModel;
     private RecyclerView recyclerViewTeam;
     private TeamAdapter teamAdapter;
-    public static TeamActivity teamActivity;
     private List<TeamData> datumList = new ArrayList<>();
     private TextView noBrandsTV;
     private EditText searchET;
@@ -76,6 +75,7 @@ public class TeamActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+        addTeamMemberL.setVisibility(View.VISIBLE);
 
         addTeamMemberL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +89,7 @@ public class TeamActivity extends BaseActivity {
         teamViewModel.getTeamInfo(request);
 
         searchET.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -96,6 +97,7 @@ public class TeamActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                addTeamMemberL.setVisibility(View.GONE);
                 if (charSequence.toString().length() > 0) {
                     clearTextLL.setVisibility(View.VISIBLE);
                 } else {
@@ -136,6 +138,8 @@ public class TeamActivity extends BaseActivity {
             public void onClick(View view) {
                 searchET.setText("");
                 searchET.clearFocus();
+                noBrandsTV.setVisibility(View.GONE);
+                addTeamMemberL.setVisibility(View.VISIBLE);
                 Utils.hideKeypad(TeamActivity.this);
             }
         });

@@ -36,7 +36,7 @@ import com.greenbox.coyni.viewmodel.TeamViewModel;
 public class TeamMember extends BaseActivity {
     private TextView txName, txRole, txStatus, txImageName,txEmailAddress,txPhoneNumber;
     private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
-    private int roleId=0,statusValue=1;
+    private int teamMemberId=0,statusValue=1;
     private CardView mEditCv,mCancelCV,mRemoveCv,mResendInvitation;
     private ImageView mStatusIcon;
     private TeamViewModel teamViewModel;
@@ -54,7 +54,7 @@ public class TeamMember extends BaseActivity {
         emailAddress=bundle.getString("EmailAddress",emailAddress);
         phoneNumber=bundle.getString("PhoneNumber",phoneNumber);
         imageName=bundle.getString("ImageName",imageName);
-        roleId=bundle.getInt("RoleId",roleId);
+        teamMemberId=bundle.getInt("RoleId",teamMemberId);
 
         initFields();
         initObservers();
@@ -84,7 +84,7 @@ public class TeamMember extends BaseActivity {
         mResendInvitation=findViewById(R.id.resendInvitationCV);
         mStatusIcon=findViewById(R.id.editStatusIV);
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
-        teamViewModel.deleteTeam(roleId);
+        teamViewModel.deleteTeam(teamMemberId);
         txName.setText(firstName+""+lastName);
         txRole.setText(role);
         txStatus.setText(status);
@@ -132,7 +132,7 @@ public class TeamMember extends BaseActivity {
                 intent.putExtra("Status",status);
                 intent.putExtra("EmailAddress",emailAddress);
                 intent.putExtra("PhoneNumber",phoneNumber);
-                intent.putExtra("RoleId",roleId);
+                intent.putExtra("TeamMemberId",teamMemberId);
                 startActivity(intent);
             }
         });
@@ -147,7 +147,7 @@ public class TeamMember extends BaseActivity {
                 intent.putExtra("Status",status);
                 intent.putExtra("EmailAddress",emailAddress);
                 intent.putExtra("PhoneNumber",phoneNumber);
-                intent.putExtra("RoleId",roleId);
+                intent.putExtra("TeamMemberId",teamMemberId);
                 startActivity(intent);
             }
         });

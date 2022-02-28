@@ -95,7 +95,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                     intent.putExtra("Status",objData.getStatus().toString());
                     intent.putExtra("EmailAddress",objData.getEmailAddress());
                     intent.putExtra("PhoneNumber",objData.getPhoneNumber().getPhoneNumber());
-                    intent.putExtra("RoleId",objData.getRoleId());
+                    intent.putExtra("TeamMemberId",objData.getId());
                     mContext.startActivity(intent);
 
                 }

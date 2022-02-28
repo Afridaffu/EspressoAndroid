@@ -36,7 +36,7 @@ public class EditTeamMember extends AppCompatActivity {
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
     String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
     TeamViewModel teamViewModel;
-    int roleId=0;
+    int teamMemberId=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class EditTeamMember extends AppCompatActivity {
         emailAddress=bundle.getString("EmailAddress",emailAddress);
         phoneNumber=bundle.getString("PhoneNumber",phoneNumber);
         imageName=bundle.getString("ImageName",imageName);
-        roleId=bundle.getInt("RoleId",roleId);
+        teamMemberId=bundle.getInt("TeamMemberId",teamMemberId);
         initFields();
         focusWatchers();
         textWatchers();
@@ -351,7 +351,7 @@ public class EditTeamMember extends AppCompatActivity {
 
     }
     public void teamInfoAPICall(TeamRequest teamRequest) {
-        teamViewModel.updateTeamInfo(teamRequest,roleId);
+        teamViewModel.updateTeamInfo(teamRequest,teamMemberId);
     }
     public TeamRequest prepareRequest() {
         TeamRequest teamRequest = new TeamRequest();
