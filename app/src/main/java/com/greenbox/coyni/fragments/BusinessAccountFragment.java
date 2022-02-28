@@ -64,6 +64,12 @@ public class BusinessAccountFragment extends BaseFragment {
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
 
+        viewMoreLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToTransact();
+            }
+        });
         try {
             getBalance(objMyApplication.getWalletResponseData());
             getLatestTxns(objMyApplication.getListLatestTxn());
@@ -171,7 +177,7 @@ public class BusinessAccountFragment extends BaseFragment {
         });
     }
 
-    public void goToTransact() {
+    private void goToTransact() {
         startActivity(new Intent(requireActivity().getApplication(), BusinessTransactionListActivity.class));
     }
 
