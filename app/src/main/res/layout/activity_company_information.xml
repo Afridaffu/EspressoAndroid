@@ -431,11 +431,11 @@
 
                 </androidx.cardview.widget.CardView>
 
-<!--                <View-->
-<!--                    android:id="@+id/pageOneView"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/_200sdp"-->
-<!--                    android:visibility="gone"/>-->
+                <!--                <View-->
+                <!--                    android:id="@+id/pageOneView"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="@dimen/_200sdp"-->
+                <!--                    android:visibility="gone"/>-->
             </LinearLayout>
 
         </ScrollView>
@@ -470,7 +470,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/company_address_line_1"
                     android:textColorHint="@color/light_gray"
-                    android:hint="@string/company_address_line_1"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
                     app:hintTextColor="@color/primary_green">
@@ -854,11 +853,11 @@
                         android:textSize="@dimen/_12ssp" />
                 </androidx.cardview.widget.CardView>
 
-<!--                <View-->
-<!--                    android:id="@+id/pageTwoView"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="@dimen/_200sdp"-->
-<!--                    android:visibility="gone"/>-->
+                <!--                <View-->
+                <!--                    android:id="@+id/pageTwoView"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="@dimen/_200sdp"-->
+                <!--                    android:visibility="gone"/>-->
             </LinearLayout>
 
         </ScrollView>
@@ -1096,23 +1095,23 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 >
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_1sdp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Uploaded on "
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_8ssp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/_1sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="Uploaded on "
+                                    android:textColor="@color/dark_grey"
+                                    android:textSize="@dimen/_8ssp" />
 
-                            <TextView
-                                android:id="@+id/w9FormUpdatedOnTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text=""
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_8ssp" />
+                                <TextView
+                                    android:id="@+id/w9FormUpdatedOnTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text=""
+                                    android:textColor="@color/dark_grey"
+                                    android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
 
                         </LinearLayout>
