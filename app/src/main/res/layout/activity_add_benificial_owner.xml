@@ -811,6 +811,7 @@
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionDone"
                             android:importantForAutofill="no"
+                            android:digits="0123456789"
                             android:inputType="number|textNoSuggestions"
                             android:maxLength="5"
                             android:maxLines="1"

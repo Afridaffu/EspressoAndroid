@@ -232,6 +232,21 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         zipcodeErrorTV = findViewById(R.id.Zip_ErrorTV);
         countryTIL = findViewById(R.id.Country_TIL);
 
+        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        lnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        dobtil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        ssntil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
+
+        address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
+
         doneCV = findViewById(R.id.doneCV);
         dobtil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -639,11 +654,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isfname = true;
                     fnameLL.setVisibility(GONE);
                     fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
-                } else if (fnameET.getText().toString().trim().length() == 0) {
-//                    fnameLL.setVisibility(VISIBLE);
-//                    fnameTV.setText("Field Required");
-                    isfname = false;
+                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_green));
+                    String str = fnameET.getText().toString();
+                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                        fnameET.setText(fnameET.getText().toString().replaceAll(" ", ""));
+                        fnameET.setSelection(fnameET.getText().length());
+                    }
                 } else {
                     isfname = false;
                 }
@@ -654,7 +670,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void afterTextChanged(Editable editable) {
                 try {
                     String str = fnameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                    if (str.length() > 0 && str.substring(0).equals(" ")) {
                         fnameET.setText("");
                         fnameET.setSelection(fnameET.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -678,18 +694,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
-                    islname = true;
-                    lnameLL.setVisibility(GONE);
-                    lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
-                } else if (lnameTV.getText().toString().trim().length() == 0) {
-//                    lnameLL.setVisibility(VISIBLE);
-//                    lnameTV.setText("Field Required");
-                    islname = false;
-                } else {
-                    islname = false;
-                }
+                if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) { islname = true;
+                lnameLL.setVisibility(GONE);
+                lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_green));
+                        String str = lnameET.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
+                            lnameET.setSelection(lnameET.getText().length());
+                        }
+                    } else {
+                islname = false;
+                    }
                 enableOrDisableNext();
             }
 
