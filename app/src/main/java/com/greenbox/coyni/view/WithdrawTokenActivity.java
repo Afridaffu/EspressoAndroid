@@ -106,7 +106,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     float fontSize, dollarFont;
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
-    Boolean isUSD = false, isCYN = false, isBank = false;
+    Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false;
     Boolean isFaceLock = false, isTouchId = false;
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID;
@@ -292,7 +292,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
             SetFaceLock();
             SetTouchId();
-
             bindPayMethod(selectedCard);
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
@@ -364,7 +363,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     enableButton();
                 }
             });
-
+            pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
             calculateFee("10");
             strSignOn = objMyApplication.getStrSignOnError();
             signOnData = objMyApplication.getSignOnData();
@@ -377,6 +376,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
             @Override
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (pDialog != null) {
+                    pDialog.dismiss();
+                }
                 if (transactionLimitResponse != null) {
                     objResponse = transactionLimitResponse;
                     setDailyWeekLimit(transactionLimitResponse.getData());
@@ -394,19 +396,27 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
             @Override
             public void onChanged(TransferFeeResponse transferFeeResponse) {
-                if (transferFeeResponse != null) {
-                    objMyApplication.setTransferFeeResponse(transferFeeResponse);
-                    feeInAmount = transferFeeResponse.getData().getFeeInAmount();
-                    feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                    if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Double.parseDouble(etAmount.getText().toString()) > 0) {
-                        Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
-                        pfee = transferFeeResponse.getData().getFee();
-                        dget = pay - pfee;
-                        withdrawTokenPreview();
-                        ctKey.enableButton();
-                    } else {
-                        ctKey.disableButton();
+                try {
+                    if (pDialog != null) {
+                        pDialog.dismiss();
                     }
+                    if (transferFeeResponse != null) {
+                        objMyApplication.setTransferFeeResponse(transferFeeResponse);
+                        feeInAmount = transferFeeResponse.getData().getFeeInAmount();
+                        feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
+                        if (isButtonClick && !etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0") && Double.parseDouble(etAmount.getText().toString()) > 0) {
+                            isButtonClick = false;
+                            Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
+                            pfee = transferFeeResponse.getData().getFee();
+                            dget = pay - pfee;
+                            withdrawTokenPreview();
+                            ctKey.enableButton();
+                        } else {
+                            ctKey.disableButton();
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -520,11 +530,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
                 if (payMethodsResponse != null) {
-//                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-//                    paymentMethodsResponse = payMethodsResponse;
-                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
-                    objMyApplication.setPaymentMethodsResponse(objResponse);
-                    paymentMethodsResponse = objResponse;
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                        objMyApplication.setPaymentMethodsResponse(objResponse);
+                        paymentMethodsResponse = objResponse;
+                    } else {
+                        objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                        paymentMethodsResponse = payMethodsResponse;
+                    }
                     if (objMyApplication.getSelectedCard() != null) {
                         selectedCard = objMyApplication.getSelectedCard();
                         bindPayMethod(selectedCard);
@@ -1354,6 +1367,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             }
             cynValue = Double.parseDouble(etAmount.getText().toString().trim());
             mLastClickTime = SystemClock.elapsedRealtime();
+            isButtonClick = true;
             convertUSDtoCYN();
             calculateFee(Utils.USNumberFormat(cynValue));
         } catch (Exception ex) {

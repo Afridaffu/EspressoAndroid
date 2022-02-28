@@ -82,6 +82,10 @@
     <color name="txn_pending_trans">#fff6e5</color>
     <color name="pending_status">#FFA70F</color>
 
+    <color name="txn_active_status">#E5F3E5</color>
+    <color name="txn_resend_invitation_status">#FAD0D0</color>
+
+
     <color name="transparent_black">#43000000</color>
     <color name="txn_failed_trans">#22DD2C00</color>
     <color name="failed_status">#FFDD2C00</color>

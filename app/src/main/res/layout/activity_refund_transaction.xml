@@ -203,7 +203,7 @@
                             android:background="@color/blue_light" />
 
                         <TextView
-                            android:id="@+id/etRemarks"
+                            android:id="@+id/eTremarks"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_54sdp"
                             android:layout_marginLeft="@dimen/_15sdp"

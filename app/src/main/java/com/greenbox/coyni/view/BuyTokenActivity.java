@@ -91,7 +91,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0;
     SignOnData signOnData;
     float fontSize, dollarFont;
-    Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false, isBuyTokenAPICalled = false;
+    Boolean isUSD = false, isCYN = false, isBank = false, isFaceLock = false, isTouchId = false, isBuyTokenAPICalled = false, isButtonClick = false;
     public static BuyTokenActivity buyTokenActivity;
     TextInputEditText etCVV;
     Long mLastClickTime = 0L;
@@ -284,7 +284,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
-//            SetToken();
             SetFaceLock();
             SetTouchId();
             etAmount.addTextChangedListener(this);
@@ -420,6 +419,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
                 if (transactionLimitResponse != null) {
                     try {
+                        if (pDialog != null) {
+                            pDialog.dismiss();
+                        }
                         objResponse = transactionLimitResponse;
                         setDailyWeekLimit(transactionLimitResponse.getData());
                         if (etAmount.getText().toString().trim().length() > 0) {
@@ -453,7 +455,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         objMyApplication.setTransferFeeResponse(transferFeeResponse);
                         feeInAmount = transferFeeResponse.getData().getFeeInAmount();
                         feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
-                        if (!etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
+                        if (isButtonClick && !etAmount.getText().toString().equals("") && !etAmount.getText().toString().equals("0")) {
+                            isButtonClick = false;
                             Double pay = Double.parseDouble(etAmount.getText().toString().replace(",", ""));
                             pfee = transferFeeResponse.getData().getFee();
                             dget = pay - pfee;
@@ -567,11 +570,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
                 if (payMethodsResponse != null) {
-//                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-//                    paymentMethodsResponse = payMethodsResponse;
-                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
-                    objMyApplication.setPaymentMethodsResponse(objResponse);
-                    paymentMethodsResponse = objResponse;
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
+                        objMyApplication.setPaymentMethodsResponse(objResponse);
+                        paymentMethodsResponse = objResponse;
+                    } else {
+                        objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
+                        paymentMethodsResponse = payMethodsResponse;
+                    }
                     if (objMyApplication.getSelectedCard() != null) {
                         selectedCard = objMyApplication.getSelectedCard();
                         bindPayMethod(selectedCard);
@@ -1119,6 +1125,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             } else {
                 convertCYNtoUSD();
             }
+            isButtonClick = true;
             calculateFee(Utils.USNumberFormat(cynValue));
         } catch (Exception ex) {
             ex.printStackTrace();

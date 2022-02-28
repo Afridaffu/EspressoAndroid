@@ -50,9 +50,9 @@ public class EditAddressActivity extends AppCompatActivity {
     TextInputEditText b_address1ET, b_cityET, b_stateET, b_zipcodeET;
     TextInputLayout address1TIL, address2TIL, cityTIL, stateTIL, zipcodeTIL, countryTIL;
     TextInputLayout b_address1TIL, b_cityTIL, b_stateTIL, b_zipcodeTIL, b_countryTIL;
-    ConstraintLayout stateCL,b_stateCL;
+    ConstraintLayout stateCL, b_stateCL;
     MyApplication myApplicationObj;
-    CardView editAddressSaveCV,b_editAddressSaveCV;
+    CardView editAddressSaveCV, b_editAddressSaveCV;
     boolean isAddress1, isAddress2, isCity, isState, isZipcode, isSaveEnabled;
     Dialog popupStates;
     StatesListAdapter statesListAdapter;
@@ -75,28 +75,27 @@ public class EditAddressActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
             initfields();
-           if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
-               try {
-                   textWatchers();
-                   focusWatchers();
-                   initObservers();
-                   findViewById(R.id.customerEditAddressRL).setVisibility(VISIBLE);
-                   findViewById(R.id.businessEditAddressLL).setVisibility(GONE);
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
-           }
-           else if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
-               try {
-                   findViewById(R.id.customerEditAddressRL).setVisibility(GONE);
-                   findViewById(R.id.businessEditAddressLL).setVisibility(VISIBLE);
-                   b_textWatchers();
-                   b_focusWatchers();
-                   initObservers();
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
-           }
+            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                try {
+                    textWatchers();
+                    focusWatchers();
+                    initObservers();
+                    findViewById(R.id.customerEditAddressRL).setVisibility(VISIBLE);
+                    findViewById(R.id.businessEditAddressLL).setVisibility(GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                try {
+                    findViewById(R.id.customerEditAddressRL).setVisibility(GONE);
+                    findViewById(R.id.businessEditAddressLL).setVisibility(VISIBLE);
+                    b_textWatchers();
+                    b_focusWatchers();
+                    initObservers();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -289,7 +288,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getAddressLine1() != null
                         && !myApplicationObj.getMyProfile().getData().getAddressLine1().equals("")) {
                     address1ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine1());
-                    Utils.setUpperHintColor(address1TIL,getResources().getColor(R.color.primary_black));
+                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
 
                     isAddress1 = true;
                 } else {
@@ -298,7 +297,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getAddressLine2() != null
                         && !myApplicationObj.getMyProfile().getData().getAddressLine2().equals("")) {
                     address2ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine2());
-                    Utils.setUpperHintColor(address2TIL,getResources().getColor(R.color.primary_black));
+                    Utils.setUpperHintColor(address2TIL, getResources().getColor(R.color.primary_black));
 
                     isAddress2 = true;
                 } else {
@@ -308,7 +307,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getCity() != null
                         && !myApplicationObj.getMyProfile().getData().getCity().equals("")) {
                     cityET.setText(myApplicationObj.getMyProfile().getData().getCity());
-                    Utils.setUpperHintColor(cityTIL,getResources().getColor(R.color.primary_black));
+                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                     isCity = true;
                 } else {
                     isCity = false;
@@ -324,7 +323,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getZipCode() != null
                         && !myApplicationObj.getMyProfile().getData().getZipCode().equals("")) {
                     zipcodeET.setText(myApplicationObj.getMyProfile().getData().getZipCode());
-                    Utils.setUpperHintColor(zipcodeTIL,getResources().getColor(R.color.primary_black));
+                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
                     isZipcode = true;
                 } else {
                     isZipcode = false;
@@ -337,7 +336,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getAddressLine1() != null
                         && !myApplicationObj.getMyProfile().getData().getAddressLine1().equals("")) {
                     b_address1ET.setText(myApplicationObj.getMyProfile().getData().getAddressLine1());
-                    Utils.setUpperHintColor(b_address1TIL,getResources().getColor(R.color.primary_black));
+                    Utils.setUpperHintColor(b_address1TIL, getResources().getColor(R.color.primary_black));
 
                     isAddress1 = true;
                 } else {
@@ -356,7 +355,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getCity() != null
                         && !myApplicationObj.getMyProfile().getData().getCity().equals("")) {
                     b_cityET.setText(myApplicationObj.getMyProfile().getData().getCity());
-                    Utils.setUpperHintColor(b_cityTIL,getResources().getColor(R.color.primary_black));
+                    Utils.setUpperHintColor(b_cityTIL, getResources().getColor(R.color.primary_black));
                     isCity = true;
                 } else {
                     isCity = false;
@@ -364,6 +363,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getState() != null
                         && !myApplicationObj.getMyProfile().getData().getState().equals("")) {
                     b_stateET.setText(myApplicationObj.getMyProfile().getData().getState());
+                    Utils.setUpperHintColor(b_stateTIL, getResources().getColor(R.color.primary_black));
                     Utils.tempStateName = myApplicationObj.getMyProfile().getData().getState();
                     isState = true;
                 } else {
@@ -372,7 +372,7 @@ public class EditAddressActivity extends AppCompatActivity {
                 if (myApplicationObj.getMyProfile().getData().getZipCode() != null
                         && !myApplicationObj.getMyProfile().getData().getZipCode().equals("")) {
                     b_zipcodeET.setText(myApplicationObj.getMyProfile().getData().getZipCode());
-                    Utils.setUpperHintColor(b_zipcodeTIL,getResources().getColor(R.color.primary_black));
+                    Utils.setUpperHintColor(b_zipcodeTIL, getResources().getColor(R.color.primary_black));
                     isZipcode = true;
                 } else {
                     isZipcode = false;
@@ -525,6 +525,7 @@ public class EditAddressActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     isState = true;
+
                 } else {
                     isState = false;
                 }
@@ -550,7 +551,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
-                } else if (charSequence.length()>0&&charSequence.length() < 5) {
+                } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
                     zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -602,11 +603,10 @@ public class EditAddressActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     address2ET.setHint("");
-                    if (address2ET.getText().toString().length()>0){
+                    if (address2ET.getText().toString().length() > 0) {
                         address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_black));
-                    }
-                    else {
+                    } else {
                         address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         Utils.setUpperHintColor(address2TIL, getColor(R.color.light_gray));
                     }
@@ -847,9 +847,9 @@ public class EditAddressActivity extends AppCompatActivity {
 //                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_green));
                 } else {
-                    b_address1ErrorLL.setVisibility(VISIBLE);
-                    b_address1ErrorTV.setText("Field Required");
-                    isAddress1 = false;
+//                    b_address1ErrorLL.setVisibility(VISIBLE);
+//                    b_address1ErrorTV.setText("Field Required");
+//                    isAddress1 = false;
                 }
                 b_enableOrDisableSave();
 
@@ -891,8 +891,8 @@ public class EditAddressActivity extends AppCompatActivity {
 //                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_green));
                 } else {
-                    b_cityErrorLL.setVisibility(VISIBLE);
-                    b_cityErrorTV.setText("Field Required");
+//                    b_cityErrorLL.setVisibility(VISIBLE);
+//                    b_cityErrorTV.setText("Field Required");
                     isCity = false;
                 }
                 b_enableOrDisableSave();
@@ -932,6 +932,7 @@ public class EditAddressActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     isState = true;
+                    Utils.setUpperHintColor(b_stateTIL, getResources().getColor(R.color.primary_black));
                 } else {
                     isState = false;
                 }
@@ -957,7 +958,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     b_zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
-                } else if (charSequence.length()>0&&charSequence.length() < 5) {
+                } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
                     b_zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -965,8 +966,8 @@ public class EditAddressActivity extends AppCompatActivity {
                     b_zipcodeErrorTV.setText("Minimum 5 Characters Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
-                    b_zipcodeErrorLL.setVisibility(VISIBLE);
-                    b_zipcodeErrorTV.setText("Field Required");
+//                    b_zipcodeErrorLL.setVisibility(VISIBLE);
+//                    b_zipcodeErrorTV.setText("Field Required");
                 }
                 b_enableOrDisableSave();
             }
@@ -998,6 +999,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     }
                 } else {
                     b_address1ET.setHint("Address");
+                    b_address1ErrorLL.setVisibility(GONE);
                     b_address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_address1TIL, getColor(R.color.primary_green));
                 }
@@ -1044,6 +1046,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     }
                 } else {
                     b_cityET.setHint("City");
+                    b_cityErrorLL.setVisibility(GONE);
                     b_cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_cityTIL, getColor(R.color.primary_green));
                 }
@@ -1074,6 +1077,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     }
                 } else {
                     b_zipcodeET.setHint("Zip Code");
+                    b_zipcodeErrorLL.setVisibility(GONE);
                     b_zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(b_zipcodeTIL, getColor(R.color.primary_green));
                 }
@@ -1209,25 +1213,25 @@ public class EditAddressActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-                if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
-                    try {
-                        b_address1ET.setSelection(Objects.requireNonNull(b_address1ET.getText()).length());
-                        b_cityET.setSelection(Objects.requireNonNull(b_cityET.getText()).length());
-                        b_zipcodeET.setSelection(Objects.requireNonNull(b_zipcodeET.getText()).length());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                try {
+                    b_address1ET.setSelection(Objects.requireNonNull(b_address1ET.getText()).length());
+                    b_cityET.setSelection(Objects.requireNonNull(b_cityET.getText()).length());
+                    b_zipcodeET.setSelection(Objects.requireNonNull(b_zipcodeET.getText()).length());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
-                    try {
-                        address1ET.setSelection(Objects.requireNonNull(address1ET.getText()).length());
-                        address2ET.setSelection(address2ET.getText().length());
-                        cityET.setSelection(Objects.requireNonNull(cityET.getText()).length());
-                        zipcodeET.setSelection(Objects.requireNonNull(zipcodeET.getText()).length());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            }
+            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                try {
+                    address1ET.setSelection(Objects.requireNonNull(address1ET.getText()).length());
+                    address2ET.setSelection(address2ET.getText().length());
+                    cityET.setSelection(Objects.requireNonNull(cityET.getText()).length());
+                    zipcodeET.setSelection(Objects.requireNonNull(zipcodeET.getText()).length());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
