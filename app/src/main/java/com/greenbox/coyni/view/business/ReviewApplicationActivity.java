@@ -36,10 +36,13 @@ import com.greenbox.coyni.model.bank.BanksResponseModel;
 
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.submit.RequiredDocumentsDb;
+import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
@@ -48,6 +51,7 @@ import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,14 +85,19 @@ public class ReviewApplicationActivity extends BaseActivity {
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
     private ProgressDialog progressDialog;
     private boolean isAgree = false;
+    private LoginViewModel loginViewModel;
+    private MyApplication objMyApplication;
     private String mCompanyName="", mBusinessEntity="", mEIN="", mEmail="", mPhoneNumber="", mAddress="", mArticleDate="", mEINDate="", mW9Date="";
     private String mDbName="", mBusinessType="", mTimeZone="", mWebsite="", mMonthlyProcVolume="", mHighTicket="", mAverageTicket="", mCustomerServiceEmail="", mCustomerServicePhone="", mDbAddressLine="", mDbFillingDate="";
-
+    private boolean addbusiness=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_application);
+
+        objMyApplication = (MyApplication) getApplicationContext();
+
         initFields();
         initObservers();
 
@@ -208,9 +217,14 @@ public class ReviewApplicationActivity extends BaseActivity {
             public void onClick(View v) {
                 dialog = Utils.showProgressDialog(ReviewApplicationActivity.this);
                 saveApplicationData();
+                 if(addbusiness) {
+                     loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
+                     loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                 } else {
 
-                Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                startActivity(intent);
+                     Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                     startActivity(intent);
+                 }
             }
         });
 
@@ -497,6 +511,26 @@ public class ReviewApplicationActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+        try {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse btResp) {
+                    dialog.dismiss();
+                    if (btResp != null) {
+                        if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                            LogUtils.d("btResp","btResp"+btResp);
+                            Utils.setStrAuth(btResp.getData().getJwtToken());
+                            //finish();
+                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            startActivity(intent);
+
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
