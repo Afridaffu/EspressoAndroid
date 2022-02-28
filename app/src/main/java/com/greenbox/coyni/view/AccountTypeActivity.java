@@ -55,10 +55,7 @@ public class AccountTypeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-
-                    //startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
-                    Intent intent=new Intent(AccountTypeActivity.this, DashboardActivity.class);
-                    startActivity(intent);
+                    startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
                 }
             });
 
