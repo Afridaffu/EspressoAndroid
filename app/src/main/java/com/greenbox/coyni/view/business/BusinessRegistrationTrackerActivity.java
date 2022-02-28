@@ -186,11 +186,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(addBusiness.equalsIgnoreCase("true")){
-                        loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                    } else {
-                        finish();
-                    }
+
+                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class);
+                    startActivity(intent);
                 }
             });
 
