@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -507,7 +506,7 @@ public class EnableAuthID extends AppCompatActivity {
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
                 if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
                     dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
                 } else {
                     dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);

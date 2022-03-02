@@ -261,6 +261,7 @@ public class AddCardActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 buttonLayoutParams.setMargins(0, 0, 0, 0);
                 layoutCvv.setLayoutParams(buttonLayoutParams);
+                etExpiry.setImeOptions(EditorInfo.IME_ACTION_DONE);
             } else {
                 layoutCvv.setVisibility(VISIBLE);
             }
@@ -1020,7 +1021,7 @@ public class AddCardActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
                     }
                     String str = etName.getText().toString();
-                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etName.setText("");
                         etName.setSelection(etName.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -1068,7 +1069,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etExpiry.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etExpiry.setText("");
                         etExpiry.setSelection(etExpiry.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -1118,7 +1119,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etCVV.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etCVV.setText("");
                         etCVV.setSelection(etCVV.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -1162,7 +1163,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etAddress1.getText().toString();
-                    if (str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
                         address1ErrorLL.setVisibility(GONE);
@@ -1205,7 +1206,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etCity.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etCity.setText("");
                         etCity.setSelection(etCity.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -1270,8 +1271,6 @@ public class AddCardActivity extends AppCompatActivity {
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
-//                        zipErrorLL.setVisibility(VISIBLE);
-//                        zipErrorTV.setText("Zip Code must have at least 5 numbers");
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -1283,7 +1282,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etZipCode.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etZipCode.setText("");
                         etZipCode.setSelection(etCity.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
