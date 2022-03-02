@@ -463,7 +463,7 @@ public interface ApiService {
     Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
 
     @GET("api/v2/fees/{UserID}")
-    Call<Fees> meFees(@Path("UserID") int UserID);
+    Call<Fees> meFees(@Path("UserID") long UserID);
 
     @POST("api/v2/cards/merchant/addcard")
     Call<BusinessCardResponse> saveBusinessCards(@Body BusinessCardRequest request);

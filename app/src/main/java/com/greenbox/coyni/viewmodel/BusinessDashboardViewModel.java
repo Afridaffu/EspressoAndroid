@@ -213,7 +213,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     }
 
-    public void meFees(int UserID) {
+    public void meFees(long UserID) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<Fees> mCall = apiService.meFees(UserID);
