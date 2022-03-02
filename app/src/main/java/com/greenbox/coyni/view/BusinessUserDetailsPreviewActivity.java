@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
@@ -14,8 +15,10 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
@@ -26,6 +29,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
     DashboardViewModel dashboardViewModel;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     Long mLastClickTime = 0L;
     MyApplication myApplicationObj;
 
@@ -36,6 +40,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_user_details_preview);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         heading = findViewById(R.id.intentName);
         title = findViewById(R.id.titleTV);
         value = findViewById(R.id.contentTV);
@@ -163,6 +168,12 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
             heading.setText(getString(R.string.email));
             title.setText(getString(R.string.email_curr));
             value.setText(getIntent().getStringExtra("value"));
+
+            if (myApplicationObj.getDbaInfoResp()!=null){
+                value.setText(myApplicationObj.getDbaInfoResp().getData().getEmail());
+            }
+
+
             changeCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -217,6 +228,17 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
             }
 
         });
+
+        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
+            @Override
+            public void onChanged(DBAInfoResp dbaInfoResp) {
+                if (dbaInfoResp!=null&&dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                    myApplicationObj.setDbaInfoResp(dbaInfoResp);
+                    if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA"))
+                    value.setText(dbaInfoResp.getData().getEmail());
+                }
+            }
+        });
     }
 
     @Override
@@ -270,6 +292,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
         super.onResume();
         try {
             dashboardViewModel.meProfile();
+            businessIdentityVerificationViewModel.getDBAInfo();
             initObservers();
         } catch (Exception e) {
             e.printStackTrace();

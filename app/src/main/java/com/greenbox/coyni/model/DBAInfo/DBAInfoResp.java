@@ -62,7 +62,15 @@ public class DBAInfoResp {
         private String averageTicket;
         private int timeZone;
         private ArrayList<RequiredDocumets> requiredDocuments = new ArrayList<>();
+        private boolean copyCompanyInfo = false;
 
+        public boolean isCopyCompanyInfo() {
+            return copyCompanyInfo;
+        }
+
+        public void setCopyCompanyInfo(boolean copyCompanyInfo) {
+            this.copyCompanyInfo = copyCompanyInfo;
+        }
 
         public String getName() {
             return name;
