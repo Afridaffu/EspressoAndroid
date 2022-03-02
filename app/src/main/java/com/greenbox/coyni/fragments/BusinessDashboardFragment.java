@@ -25,16 +25,14 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.utils.CustomConfirmationDialog;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.OnDialogButtonClickListener;
-import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessAdditonalActionRequired;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
@@ -55,7 +53,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mTvIdentityReviewCancelMessage;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
-    private RelativeLayout mUserIconRelativeLayout,notificationsRL;
+    private RelativeLayout mUserIconRelativeLayout, notificationsRL;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,10 +61,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         initFields();
         initObservers();
         showUserData();
-        showIdentityVerificationReview();
-        //showAdditionalActionView();
-        //showIdentityVerificationReview();
-        //showBusinessDashboardView();
 
         mUserIconRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +147,20 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showUserData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                && myApplication.getMyProfile().getData().getAccountStatus() != null) {
+            String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                showIdentityVerificationReview();
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_DETAILS_REQUIRED.getStatus())) {
+                showIdentityVerificationReview();
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.CANCELLED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.FAILED.getStatus())) {
+                showIdentityVerificationFailed();
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                showBusinessDashboardView();
+            }
+        }
     }
 
     private void showIdentityVerificationFailed() {
