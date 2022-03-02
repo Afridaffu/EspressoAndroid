@@ -409,8 +409,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
                     if(businessAccountList.size()!=0) {
                         brandsGV.setVisibility(View.VISIBLE);
-                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
-                        brandsGV.setAdapter(listAdapter);
+//                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
+//                        brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);
                     }

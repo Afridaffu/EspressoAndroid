@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/aditional"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_88sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:layout_marginBottom="@dimen/_14sdp"
         />
     <TextView
@@ -226,6 +226,7 @@
         </androidx.cardview.widget.CardView>
          <TextView
                 android:layout_width="wrap_content"
+                android:id="@+id/business_approved_decline"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_13sdp"

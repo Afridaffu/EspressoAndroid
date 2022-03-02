@@ -782,7 +782,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
 
                     } else {
-                        companyemailET.setHint("123@coyni.com");
+                        companyemailET.setHint("@string/company_s_email");
                         companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
                         companyemailErrorLL.setVisibility(GONE);
@@ -808,7 +808,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             address1ErrorTV.setText("Field Required");
                         }
                     } else {
-                        companyaddressET.setHint("Street Address");
+                        companyaddressET.setHint("@string/company_address_line_1");
                         companyaddresstil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddresstil, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);
@@ -832,7 +832,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     } else {
                         companyaddress2til.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddress2til, getColor(R.color.primary_green));
-                        companyaddress2ET.setHint("Apt#, Suit, Floor");
+                        companyaddress2ET.setHint("@string/company_address_line_2_optional");
                         address2ErrorLL.setVisibility(GONE);
                     }
                 }

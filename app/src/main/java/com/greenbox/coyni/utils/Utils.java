@@ -1,8 +1,7 @@
 package com.greenbox.coyni.utils;
 
-import static android.content.Context.KEYGUARD_SERVICE;
-
 import static android.content.Context.FINGERPRINT_SERVICE;
+import static android.content.Context.KEYGUARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
@@ -53,6 +52,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessTypeListAdapter;
@@ -70,8 +71,13 @@ import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -428,6 +434,13 @@ public class Utils {
         }
     }
 
+    public static void displayAlertDecline(String msg, Activity activity, String header, String fieldError) {
+
+
+        displayAlertDecline(msg, activity, header);
+
+    }
+
     public static String convertBigDecimalUSDC(String amount) {
         String strValue = "";
         BigDecimal value;
@@ -640,6 +653,22 @@ public class Utils {
         }
     }
 
+    public static boolean isValidJson(String jsonString) {
+        if (jsonString == null || jsonString.trim().equals("")) {
+            return false;
+        }
+        try {
+            new JSONObject(jsonString);
+        } catch (JSONException ex) {
+            try {
+                new JSONArray(jsonString);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void displayAlertNew(String msg, final Context context, String headerText) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
@@ -661,6 +690,56 @@ public class Utils {
         }
 
         actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public static void displayAlertDecline(String msg, final Context context, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_decline_rules_btmshet);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = dialog.findViewById(R.id.tvHeading);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        LinearLayout llgoback = dialog.findViewById(R.id.llgoback);
+        LinearLayout cancelBtn = dialog.findViewById(R.id.cancelBtn);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        llgoback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();

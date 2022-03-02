@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/_11sdp"
+    android:paddingBottom="@dimen/_11sdp">
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_11sdp"
+        android:paddingBottom="@dimen/_11sdp">
+
+        <ImageView
+            android:id="@+id/imgBank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_11sdp"
+            android:src="@drawable/ic__01_bank" />
+
+        <TextView
+            android:id="@+id/bankName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="Bank of America"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/accountNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="••••5359"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:background="@color/vlight_gray" />
+
+</LinearLayout>

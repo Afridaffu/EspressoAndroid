@@ -25,25 +25,31 @@ import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class BusinessRegistrationTrackerActivity extends BaseActivity {
-    TextView caStartTV, dbaStartTV, boStartTV, addBankStartTV, aggrementsStartTV, caTV, caIncompleteTV, dbaTV, dbaIncompleteTV,
+    private TextView caStartTV, dbaStartTV, boStartTV, addBankStartTV, aggrementsStartTV, caTV, caIncompleteTV, dbaTV, dbaIncompleteTV,
             boTV, boIncompleteTV, addBankTV, addBankIncompleteTV, aggrementsTV, aggrementsIncompleteTV;
-    Dialog choose;
-    LinearLayout caCompleteLL, caIncompleteLL, dbaCompleteLL, dbaIncompleteLL, boCompleteLL, boIncompleteLL, addBankCompleteLL,
+    private Dialog choose;
+    private LinearLayout caCompleteLL, caIncompleteLL, dbaCompleteLL, dbaIncompleteLL, boCompleteLL, boIncompleteLL, addBankCompleteLL,
             addBankIncompleteLL, aggrementsCompleteLL, aggrementsIncompleteLL;
-    Long mLastClickTime = 0L;
-    BusinessTrackerResponse businessTrackerResponse;
-    MyApplication objMyApplication;
-    ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    DBAInfoResp dbaInfoResponse;
-    String boAPICallFrom = "RESUME";
+    private Long mLastClickTime = 0L;
+    private BusinessTrackerResponse businessTrackerResponse;
+    private MyApplication objMyApplication;
+    private ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private DBAInfoResp dbaInfoResponse;
+    private String addBusiness = "false";
+    private String addDBA = "false";
+    private LoginViewModel loginViewModel;
+    private String boAPICallFrom = "RESUME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,21 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             setContentView(R.layout.activity_business_tracker_account);
 
             TextView dashboardTV = findViewById(R.id.dashboardTV);
+
+            if (getIntent().getStringExtra("ADDBUSINESS") != null) {
+                loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+                addBusiness = getIntent().getStringExtra("ADDBUSINESS");
+                LogUtils.d("addBusiness", "addBusiness" + addBusiness);
+            }
+
+            if (getIntent().getStringExtra("ADDDBA") != null) {
+                loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+                addDBA = getIntent().getStringExtra("ADDDBA");
+                LogUtils.d("addDBA", "addDBA" + addDBA);
+
+            }
+
+
             dashboardTV.setOnClickListener(view -> {
                 startActivity(new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class));
             });
@@ -163,7 +184,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    if (addBusiness.equalsIgnoreCase("true")) {
+                        loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                    } else {
+                        finish();
+                    }
                 }
             });
 
@@ -305,6 +330,23 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                             businessTrackerResponse = btResp;
                             reloadTrackerDashboard(btResp);
 
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse btResp) {
+                    if (btResp != null) {
+                        if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                            LogUtils.d("btResp", "btResp" + btResp);
+                            Utils.setStrAuth(btResp.getData().getJwtToken());
+                            finish();
                         }
                     }
                 }
@@ -463,6 +505,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         businessIdentityVerificationViewModel.getDBAInfo();
         boAPICallFrom = "RESUME";
         businessIdentityVerificationViewModel.getBeneficialOwners();
+        LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + businessTrackerResponse);
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
@@ -475,6 +518,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             dbaStartTV.setVisibility(View.GONE);
             caCompleteLL.setVisibility(View.GONE);
             caIncompleteLL.setVisibility(View.VISIBLE);
+        }
+
+        if (addDBA.equalsIgnoreCase("true")) {
+            caIncompleteLL.setVisibility(View.GONE);
         }
 
         if (businessTrackerResponse.getData().isDbaInfo()) {

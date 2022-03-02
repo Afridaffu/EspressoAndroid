@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="Transaction Details"
+                android:text="@string/transaction_details"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp" />
 
@@ -76,7 +76,7 @@
                             android:layout_marginTop="@dimen/_22sdp"
                             android:layout_marginBottom="@dimen/_6sdp"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="Merchant Payout"
+                            android:text="@string/merchant_payout"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_12ssp" />
 
@@ -101,7 +101,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="CYN"
+                                android:text="@string/currency"
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -130,7 +130,7 @@
                                 android:layout_marginBottom="@dimen/_11sdp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Status"
+                                android:text="@string/status"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -141,7 +141,7 @@
                                 android:background="@drawable/fill_grn_color_smallradius"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
-                                android:text="Completed"
+                                android:text="@string/completed"
                                 android:textColor="@color/active_green"
                                 android:textSize="@dimen/_7ssp" />
 
@@ -192,7 +192,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Payout ID"
+                                android:text="@string/payout_id"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -230,7 +230,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Reference ID"
+                                android:text="@string/reference_id"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -264,7 +264,7 @@
                     android:layout_marginTop="@dimen/_11sdp"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="Payout Information"
+                    android:text="@string/payout_information"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />
 
@@ -297,7 +297,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Payout Date"
+                                android:text="@string/payout_date"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -327,17 +327,23 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Total Amount"
+                                android:text="@string/total_amount"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="1,000.00"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
-                                android:text="1,000.00 CYN"
+                                android:text="@string/currency"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -356,7 +362,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Total Transactions"
+                                android:text="@string/total_transactions"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -385,7 +391,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Deposit To"
+                                android:text="@string/deposit_to"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -400,7 +406,7 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:gravity="right"
-                                    android:text="Business Token Account"
+                                    android:text="@string/business_tokenaccount"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 

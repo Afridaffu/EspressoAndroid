@@ -22,17 +22,24 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_back" />
+            <LinearLayout
+                android:id="@+id/bpCloseLL"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             android:layout_marginTop="@dimen/_20sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="Email"
@@ -53,6 +60,7 @@
             android:orientation="vertical"
             >
             <TextView
+                android:id="@+id/currentTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Email"
@@ -63,6 +71,7 @@
                 android:textColor="@color/primary_black"
                 android:fontFamily="@font/opensans_regular"/>
             <TextView
+                android:id="@+id/company_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="support@firebbq.com"

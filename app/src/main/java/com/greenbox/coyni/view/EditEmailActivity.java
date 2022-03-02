@@ -3,11 +3,8 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,13 +16,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
@@ -266,9 +260,10 @@ public class EditEmailActivity extends AppCompatActivity {
 //                        newEmailTIL.setHintTextColor(colorState);
                         Utils.setUpperHintColor(newEmailTIL, getResources().getColor(R.color.primary_green));
                         isNewEmail = true;
-                    } else if (newEmailET.getText().toString().trim().length() == 0) {
-                        newEmailErrorLL.setVisibility(VISIBLE);
-                        newEmailErrorTV.setText("Field Required");
+                    }
+                    else if (newEmailET.getText().toString().trim().length() == 0) {
+//                        newEmailErrorLL.setVisibility(VISIBLE);
+//                        newEmailErrorTV.setText("Field Required");
                         isNewEmail = false;
                     }
                     if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
@@ -309,8 +304,8 @@ public class EditEmailActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(b_newEmailTIL, getResources().getColor(R.color.primary_green));
                         isNewEmail = true;
                     } else if (b_newEmailET.getText().toString().trim().length() == 0) {
-                        b_newEmailErrorLL.setVisibility(VISIBLE);
-                        b_newEmailErrorTV.setText("Field Required");
+//                        b_newEmailErrorLL.setVisibility(VISIBLE);
+//                        b_newEmailErrorTV.setText("Field Required");
                         isNewEmail = false;
                     }
                     if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
@@ -397,6 +392,7 @@ public class EditEmailActivity extends AppCompatActivity {
                     } else {
                         b_newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_green));
+//                        b_newEmailErrorTV.setText("Field Required");
 
 //                        currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //                        Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));

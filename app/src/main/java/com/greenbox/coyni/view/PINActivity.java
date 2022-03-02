@@ -1052,10 +1052,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private void BuyTokenMethod() {
-
-    }
-
     private void payTransaction() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {

@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,11 +50,9 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
-import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
-import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.utils.MyApplication;
@@ -234,6 +231,21 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         zipcodeErrorLL = findViewById(R.id.Zip_ErrorLL);
         zipcodeErrorTV = findViewById(R.id.Zip_ErrorTV);
         countryTIL = findViewById(R.id.Country_TIL);
+
+        fnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        lnametil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        dobtil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        ssntil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
+
+        address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
 
         doneCV = findViewById(R.id.doneCV);
         dobtil.setOnClickListener(new View.OnClickListener() {
@@ -642,11 +654,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isfname = true;
                     fnameLL.setVisibility(GONE);
                     fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
-                } else if (fnameET.getText().toString().trim().length() == 0) {
-//                    fnameLL.setVisibility(VISIBLE);
-//                    fnameTV.setText("Field Required");
-                    isfname = false;
+                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_green));
+                    String str = fnameET.getText().toString();
+                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                        fnameET.setText(fnameET.getText().toString().replaceAll(" ", ""));
+                        fnameET.setSelection(fnameET.getText().length());
+                    }
                 } else {
                     isfname = false;
                 }
@@ -657,7 +670,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void afterTextChanged(Editable editable) {
                 try {
                     String str = fnameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                    if (str.length() > 0 && str.substring(0).equals(" ")) {
                         fnameET.setText("");
                         fnameET.setSelection(fnameET.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -681,18 +694,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
-                    islname = true;
-                    lnameLL.setVisibility(GONE);
-                    lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
-                } else if (lnameTV.getText().toString().trim().length() == 0) {
-//                    lnameLL.setVisibility(VISIBLE);
-//                    lnameTV.setText("Field Required");
-                    islname = false;
-                } else {
-                    islname = false;
-                }
+                if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) { islname = true;
+                lnameLL.setVisibility(GONE);
+                lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_green));
+                        String str = lnameET.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
+                            lnameET.setSelection(lnameET.getText().length());
+                        }
+                    } else {
+                islname = false;
+                    }
                 enableOrDisableNext();
             }
 
@@ -1076,7 +1089,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
                     } else {
                         ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                        Utils.setUpperHintColor(ssntil, getColor(R.color.error_red));
+                        Utils.setUpperHintColor(ssntil, getColor(R.color.light_gray));
                         ssnLL.setVisibility(VISIBLE);
                         ssnTV.setText("Field Required");
                     }
@@ -1158,8 +1171,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     } else {
                         address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.light_gray));
-//                        address1ErrorLL.setVisibility(VISIBLE);
-//                        address1ErrorTV.setText("Field Required");
+                        address1ErrorLL.setVisibility(VISIBLE);
+                        address1ErrorTV.setText("Field Required");
                     }
                 } else {
                     address1ET.setHint("Street Address");
@@ -1233,7 +1246,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                     } else {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
                         zipcodeErrorLL.setVisibility(VISIBLE);
                         zipcodeErrorTV.setText("Field Required");
