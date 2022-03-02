@@ -865,18 +865,22 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     finish();
                                 } else {
 
-                                    Utils.showCustomToast(OTPValidation.this, "Email updated", R.drawable.ic_check, "EMAIL");
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                finish();
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
+                                    startActivity(new Intent(OTPValidation.this, BindingLayoutActivity.class)
+                                            .putExtra("screen", "EditEmail"));
+                                    finish();
 
-                                        }
-                                    }, 2000);
+//                                    Utils.showCustomToast(OTPValidation.this, "Email updated", R.drawable.ic_check, "EMAIL");
+//                                    new Handler().postDelayed(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            try {
+//                                                finish();
+//                                            } catch (Exception e) {
+//                                                e.printStackTrace();
+//                                            }
+//
+//                                        }
+//                                    }, 2000);
                                 }
                             }
                         }
