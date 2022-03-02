@@ -61,7 +61,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
-    LinearLayout lyAPayClose, lyExternalClose, lySelBack, lyAddPay;
+    LinearLayout lyBPayClose, lyExternalClose, lySelBack, lyAddPay;
     RelativeLayout layoutDCard, lyExternal, layoutSignet;
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
@@ -400,8 +400,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
 
     private void addPayment() {
         try {
-            lyAPayClose = findViewById(R.id.lyAPayClose);
-            tvBankError = findViewById(R.id.tvBankError);
+            lyBPayClose = findViewById(R.id.lyBPayClose);
+            tvBankError = findViewById(R.id.tvBBankError);
             tvDCardError = findViewById(R.id.tvDCardError);
             tvSignetError = findViewById(R.id.tvSignetError);
             lyExternal = findViewById(R.id.lyAddBank);
@@ -409,7 +409,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             tvExtBHead = findViewById(R.id.tvBankHead);
             tvExtBankHead = findViewById(R.id.tvBankCount);
             tvExtBankMsg = findViewById(R.id.tvBankMsg);
-            imgBankArrow = findViewById(R.id.imgBankArrow);
+            imgBankArrow = findViewById(R.id.imgBBankArrow);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgDCardLogo = findViewById(R.id.imgDCardLogo);
             tvDCHead = findViewById(R.id.tvDCHead);
@@ -427,19 +427,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
             imgLogo = findViewById(R.id.imgLogo);
-//            if (strScreen != null && (strScreen.equals("dashboard") || strScreen.equals("payRequest"))) {
-//                imgLogo.setVisibility(View.VISIBLE);
-//                imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
-//                tvMessage.setVisibility(VISIBLE);
-//                tvExtBHead.setText("External Bank Account");
-//                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
-//            } else {
-//                imgLogo.setVisibility(View.GONE);
-//                tvExtBHead.setText("Bank Account");
-//                tvMessage.setText("Choose a payment method");
-//                tvMessage.setVisibility(VISIBLE);
-//            }
-            lyAPayClose.setOnClickListener(new View.OnClickListener() {
+
+            lyBPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {

@@ -595,6 +595,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         buyToken();
+                    } else {
+                        if (!biometricTokenResponse.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(biometricTokenResponse.getError().getErrorDescription(), BuyTokenActivity.this, "", biometricTokenResponse.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(biometricTokenResponse.getError().getFieldErrors().get(0), BuyTokenActivity.this, "", "");
+                        }
                     }
                 }
             }

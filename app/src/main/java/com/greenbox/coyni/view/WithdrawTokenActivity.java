@@ -555,6 +555,12 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                             Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         withdrawToken();
+                    } else {
+                        if (!biometricTokenResponse.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(biometricTokenResponse.getError().getErrorDescription(), WithdrawTokenActivity.this, "", biometricTokenResponse.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(biometricTokenResponse.getError().getFieldErrors().get(0), WithdrawTokenActivity.this, "", "");
+                        }
                     }
                 }
             }
@@ -618,10 +624,18 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter;
             prevSelectedCard = objMyApplication.getSelectedCard();
             List<PaymentsList> listPayments = new ArrayList<>();
+            String strPaymentMethod = "";
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < paymentMethodsResponse.getData().getData().size(); i++) {
-                    if (!paymentMethodsResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("credit")) {
-                        listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        if (!paymentMethodsResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("credit")) {
+                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                        }
+                    } else {
+                        strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
+                        if (strPaymentMethod != null && (strPaymentMethod.toLowerCase().equals("bank") || strPaymentMethod.toLowerCase().equals("signet"))) {
+                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+                        }
                     }
                 }
                 if (listPayments != null && listPayments.size() > 0) {
@@ -724,6 +738,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 request.setTxnSubType(Utils.instantType);
             } else if (strType.toLowerCase().equals("bank")) {
                 request.setTxnSubType(Utils.bankType);
+            } else if (strType.toLowerCase().equals("signet")) {
+                request.setTxnSubType(Utils.signetType);
             }
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
                 buyTokenViewModel.transferFee(request);
@@ -742,10 +758,15 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             TransactionLimitRequest obj = new TransactionLimitRequest();
             obj.setTransactionType(Integer.parseInt(Utils.withdrawType));
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
-                strType = "bank";
+            if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
+                if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                    strType = "bank";
+                    strSubType = Utils.bankType;
+                } else {
+                    strType = "signet";
+                    strSubType = Utils.signetType;
+                }
                 strBankId = String.valueOf(objData.getId());
-                strSubType = Utils.bankType;
                 obj.setTransactionSubType(Integer.parseInt(Utils.bankType));
                 lyBDetails.setVisibility(View.VISIBLE);
                 lyCDetails.setVisibility(View.GONE);
@@ -900,7 +921,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             isAuthenticationCalled = false;
             createWithdrawRequest();
 
-            if (selectedCard.getPaymentMethod().toLowerCase().equals("bank")) {
+            if (selectedCard.getPaymentMethod().toLowerCase().equals("bank") || selectedCard.getPaymentMethod().toLowerCase().equals("signet")) {
                 layoutBank.setVisibility(View.VISIBLE);
                 layoutCard.setVisibility(View.GONE);
                 tvBankName.setText(selectedCard.getBankName());
@@ -971,29 +992,6 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-//                    if (currentId == motionLayout.getEndState()) {
-//                        try {
-//                            slideToConfirm.setInteractionEnabled(false);
-//                            tv_lable.setText("Verifying");
-//                            //withdrawToken();
-//                            prevDialog.dismiss();
-//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
-//                                if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(WithdrawTokenActivity.this)) || (isFaceLock))) {
-//                                    Utils.checkAuthentication(WithdrawTokenActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                                } else {
-//                                    startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
-//                                            .putExtra("TYPE", "ENTER")
-//                                            .putExtra("screen", "GiftCard"), FOR_RESULT);
-//                                }
-//                            } else {
-//                                startActivityForResult(new Intent(WithdrawTokenActivity.this, PINActivity.class)
-//                                        .putExtra("TYPE", "ENTER")
-//                                        .putExtra("screen", "GiftCard"), FOR_RESULT);
-//                            }
-//                        } catch (Exception ex) {
-//                            ex.printStackTrace();
-//                        }
-//                    }
                 }
 
                 @Override
