@@ -597,7 +597,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
-
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="textPostalAddress|textNoSuggestions"
@@ -650,7 +649,6 @@
                         app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                         app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
-
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 

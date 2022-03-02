@@ -49,6 +49,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
+import com.greenbox.coyni.intro_slider.OneDirectionViewPager;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
@@ -58,6 +59,7 @@ import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.SwipeDirection;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.utils.outline_et.SSNOutlineBoxNumberEditText;
@@ -87,7 +89,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public boolean iscompanyName = false, iscompanyEmail = false, iscompPhoneNumber = false, isBusinessEntity = false, isSSN = false, isTimeZone = false, isBasicNextEnabled = false;
     public static CompanyInformationActivity companyInformationActivity;
     CompanyInforamtionPager companyInforamtionPager;
-    AutoScrollViewPager viewPager;
+    OneDirectionViewPager viewPager;
     Long mLastClickTime = 0L;
 
     //Address
@@ -241,7 +243,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             companyInforamtionPager = new CompanyInforamtionPager();
             viewPager = findViewById(R.id.view_pager);
             viewPager.setAdapter(companyInforamtionPager);
-            viewPager.setPagingEnabled(false);
+            viewPager.setAllowedSwipeDirection(SwipeDirection.NONE);
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -253,28 +255,42 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onPageSelected(int position) {
                     selectedPage = position;
                     if (position == 0) {
+                        enableOrDisableNext();
                         close.setVisibility(VISIBLE);
                         backIV.setVisibility(GONE);
                         divider0.setBackgroundResource(R.drawable.button_background);
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background1);
+
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+
                     } else if (position == 1) {
+                        enableOrDisableAddressNext();
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
                         divider0.setBackgroundResource(R.drawable.button_background1);
                         divider1.setBackgroundResource(R.drawable.button_background);
                         divider2.setBackgroundResource(R.drawable.button_background1);
+
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 2) {
+                        enableOrDisableDocsDone();
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
                         divider0.setBackgroundResource(R.drawable.button_background1);
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background);
 
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(CompanyInformationActivity.this);
+
                         if (SSNTYPE.equals("SSN")) {
                             aoiLL.setVisibility(GONE);
                             einLetterLL.setVisibility(GONE);
                             w9FormLL.setVisibility(VISIBLE);
+
                         } else {
                             aoiLL.setVisibility(VISIBLE);
                             einLetterLL.setVisibility(VISIBLE);
@@ -496,7 +512,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     isBusinessEntity = true;
                                 }
 
-                                if (cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")) {
+                                if (cir.getIdentificationType() != null && !cir.getIdentificationType().equals("") && !cir.getIdentificationType().equals("0")) {
                                     if (cir.getIdentificationType().equals("10")) {
                                         SSNTYPE = "EIN/TIN";
                                     } else if (cir.getIdentificationType().equals("11")) {
@@ -504,6 +520,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     }
                                     identificationType = Integer.parseInt(cir.getIdentificationType());
                                     ssnET.setSSNTypeText(SSNTYPE);
+                                    ssnET.setVisibility(VISIBLE);
                                 }
 
                                 if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
@@ -542,7 +559,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     zipcodeET.setSelection(cir.getZipCode().length());
                                 }
 
-                                if (cir.getRequiredDocumets().size() > 0) {
+                                if (cir.getRequiredDocumets() != null && cir.getRequiredDocumets().size() > 0) {
                                     for (int i = 0; i < cir.getRequiredDocumets().size(); i++) {
                                         if (cir.getRequiredDocumets().get(i).getIdentityId() == 5) {
                                             aoiUploadTV.setVisibility(GONE);
@@ -554,7 +571,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                             einLetterUploadedLL.setVisibility(VISIBLE);
                                             einLetterUpdatedOnTV.setText(Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
                                             isEINLetterUploaded = true;
-                                        } else if (cir.getRequiredDocumets().get(i).getIdentityId() == 7) {
+                                        } else if (cir.getRequiredDocumets().get(i).getIdentityId() == 7 || cir.getRequiredDocumets().get(i).getIdentityId() == 11) {
                                             w9FormUploadTV.setVisibility(GONE);
                                             w9FormUploadedLL.setVisibility(VISIBLE);
                                             w9FormUpdatedOnTV.setText(Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
@@ -562,9 +579,12 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                         }
                                     }
                                 }
-                                enableOrDisableNext();
-                                enableOrDisableAddressNext();
-                                enableOrDisableDocsDone();
+                                if (selectedPage == 0)
+                                    enableOrDisableNext();
+                                else if (selectedPage == 1)
+                                    enableOrDisableAddressNext();
+                                else if (selectedPage == 2)
+                                    enableOrDisableDocsDone();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -671,7 +691,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             idFile = MultipartBody.Part.createFormData("identityFile", w9FormFile.getName(), requestBody);
                         }
                         RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), docTypeID + "");
-                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getUnmaskedText());
+                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText());
                         identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
                     }
                 }
@@ -745,7 +765,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         companyemailET.setHint("");
-                        if (companyemailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(companyemailET.getText().toString().trim())) {
+                        if ((companyemailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(companyemailET.getText().toString().trim())) || (companyemailET.getText().toString().trim().length() <= 5 && companyemailET.getText().toString().trim().length() > 0)) {
                             companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.error_red));
                             companyemailErrorLL.setVisibility(VISIBLE);
@@ -890,7 +910,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 2) {
+                    if (charSequence.toString().trim().length() > 1) {
                         iscompanyName = true;
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_green));
@@ -903,6 +923,22 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    try {
+                        String str = companynameET.getText().toString();
+                        if (str.length() > 0 && str.toString().trim().length() == 0) {
+                            companynameET.setText("");
+                            companynameET.setSelection(companynameET.getText().length());
+                        } else if (str.length() > 0 && str.contains(".")) {
+                            companynameET.setText(companynameET.getText().toString().replaceAll("\\.", ""));
+                            companynameET.setSelection(companynameET.getText().length());
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            companynameET.setText("");
+                            companynameET.setSelection(companynameET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -1185,11 +1221,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             if (iscompanyName && iscompanyEmail && iscompPhoneNumber && isBusinessEntity && isSSN) {
                 isBasicNextEnabled = true;
                 basicNextCV.setCardBackgroundColor(companyInformationActivity.getResources().getColor(R.color.primary_color));
-                viewPager.setPagingEnabled(true);
+                viewPager.setAllowedSwipeDirection(SwipeDirection.RIGHT);
             } else {
                 isBasicNextEnabled = false;
                 basicNextCV.setCardBackgroundColor(companyInformationActivity.getResources().getColor(R.color.inactive_color));
-                viewPager.setPagingEnabled(false);
+                viewPager.setAllowedSwipeDirection(SwipeDirection.NONE);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1202,9 +1238,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             if (isCompanyAdress1 && isCity && isState && isZipcode) {
                 isAddressNextEnabled = true;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                viewPager.setAllowedSwipeDirection(SwipeDirection.ALL);
             } else {
                 isAddressNextEnabled = false;
                 addressNextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                viewPager.setAllowedSwipeDirection(SwipeDirection.LEFT);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1332,14 +1370,20 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
     private void setBusinessEntity(String type, TextView textView, Dialog dialog) {
         ssnET.setVisibility(VISIBLE);
+        ssnET.setText("");
         ssnET.setSSNTypeText(type);
         businessET.setText(textView.getText().toString());
         isBusinessEntity = true;
         enableOrDisableNext();
         SSNTYPE = ssnET.getSSNTypeText();
-        if (SSNTYPE.equals("SSN"))
+        if (SSNTYPE.equals("SSN")) {
+            w9FormUploadTV.setVisibility(VISIBLE);
+            w9FormUploadedLL.setVisibility(GONE);
+            w9FormUpdatedOnTV.setVisibility(GONE);
+            isW9FormUploaded = false;
+
             identificationType = 11;
-        else if (SSNTYPE.equals("EIN/TIN"))
+        } else if (SSNTYPE.equals("EIN/TIN"))
             identificationType = 10;
         dialog.dismiss();
     }
@@ -1408,7 +1452,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             //Identfication ID and SSN
             if (identificationType != 0) {
                 companyInfoRequest.setIdentificationType(identificationType);
-                companyInfoRequest.setSsnOrEin(ssnET.getUnmaskedText().trim());
+                companyInfoRequest.setSsnOrEin(ssnET.getText().trim());
             }
 //            }
 
