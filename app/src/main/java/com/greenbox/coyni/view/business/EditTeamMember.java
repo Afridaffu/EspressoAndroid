@@ -17,40 +17,39 @@ import androidx.cardview.widget.CardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
-public class EditTeamMember extends AppCompatActivity {
-    TextInputLayout editFNameTil,editLNameTil,editEmailTil,editPhoneTil;
-    TextInputEditText editFNameET,editLNameET,editEmailET;
-    OutLineBoxPhoneNumberEditText editPhoneET;
-    LinearLayout editFNameLL,editLNameLL,editEmailLL,editPhoneLL;
-    TextView editFNameTV,editLNameTV,editEmailTV,editPhoneTV;
+public class EditTeamMember extends BaseActivity {
+    private TextInputLayout editFNameTil,editLNameTil,editEmailTil,editPhoneTil;
+    private TextInputEditText editFNameET,editLNameET,editEmailET;
+    private OutLineBoxPhoneNumberEditText editPhoneET;
+    private LinearLayout editFNameLL,editLNameLL,editEmailLL,editPhoneLL;
+    private TextView editFNameTV,editLNameTV,editEmailTV,editPhoneTV;
     public static int focusedID = 0;
-    public CardView sendCV;
-    public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
-    String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
-    TeamViewModel teamViewModel;
-    int teamMemberId=0;
+    private CardView sendCV;
+    private boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
+    private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
+    private TeamViewModel teamViewModel;
+    private int teamMemberId=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_team_member);
         Bundle bundle=getIntent().getExtras();
-        firstName= bundle.getString("TeamMemberFirstName",firstName);
-        lastName=bundle.getString("TeamMemberLastName",lastName);
-        role=bundle.getString("Role",role);
-        status=bundle.getString("Status",status);
-        emailAddress=bundle.getString("EmailAddress",emailAddress);
-        phoneNumber=bundle.getString("PhoneNumber",phoneNumber);
-        imageName=bundle.getString("ImageName",imageName);
-        teamMemberId=bundle.getInt("TeamMemberId",teamMemberId);
+        firstName= bundle.getString(Utils.teamFirstName,firstName);
+        lastName=bundle.getString(Utils.teamLastName,lastName);
+        role=bundle.getString(Utils.teamRoleName,role);
+        status=bundle.getString(Utils.teamStatus,status);
+        emailAddress=bundle.getString(Utils.teamEmailAddress,emailAddress);
+        phoneNumber=bundle.getString(Utils.teamPhoneNumber,phoneNumber);
+        imageName=bundle.getString(Utils.teamImageName,imageName);
+        teamMemberId=bundle.getInt(Utils.teamMemberId,teamMemberId);
         initFields();
         focusWatchers();
         textWatchers();

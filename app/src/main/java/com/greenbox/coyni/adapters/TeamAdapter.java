@@ -33,6 +33,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
     Context mContext;
     MyApplication objMyApplication;
     String memberName="";
+    private TeamAdapter.TeamMemberClickListener memberClickListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView txName, txRole, txStatus, txImageName;
@@ -40,21 +41,20 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 
         public MyViewHolder(View view) {
             super(view);
-           // layoutCard = view.findViewById(R.id.layoutCard);
             txName=view.findViewById(R.id.name);
             txRole=view.findViewById(R.id.role);
             txStatus=view.findViewById(R.id.status);
             txImageName=view.findViewById(R.id.imageTextTV);
-            teamLL=view.findViewById(R.id.teamLL);
 
         }
     }
 
 
-    public TeamAdapter(Context context,List<TeamData> listTeam) {
+    public TeamAdapter(Context context,List<TeamData> listTeam,TeamAdapter.TeamMemberClickListener memberClickListener) {
         this.mContext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
         this.listTeam= listTeam;
+        this.memberClickListener=memberClickListener;
     }
 
     @Override
@@ -62,6 +62,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_team, parent, false);
         return new MyViewHolder(itemView);
+    }
+    public interface TeamMemberClickListener {
+        void onItemClick(View view, int position);
     }
 
     @Override
@@ -72,7 +75,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             if(objData.getFirstName()!=null&&!objData.getFirstName().equals("")){
                  firstName=objData.getFirstName();
             }
-            if(objData.getFirstName()!=null&&!objData.getFirstName().equals("")){
+            if(objData.getLastName()!=null&&!objData.getLastName().equals("")){
                 lastName=objData.getLastName();
             }
             memberName=firstName.substring(0)+lastName.substring(0);
@@ -84,22 +87,6 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             if(objData.getStatus()!=null&&!objData.getStatus().equals("")){
                 holder.txStatus.setText(objData.getStatus().toString());
             }
-            holder.teamLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent=new Intent(mContext, TeamMember.class);
-                    intent.putExtra("TeamMemberFirstName",objData.getFirstName());
-                    intent.putExtra("TeamMemberLastName",objData.getLastName());
-                    intent.putExtra("ImageName", memberName);
-                    intent.putExtra("Role",objData.getRoleName());
-                    intent.putExtra("Status",objData.getStatus().toString());
-                    intent.putExtra("EmailAddress",objData.getEmailAddress());
-                    intent.putExtra("PhoneNumber",objData.getPhoneNumber().getPhoneNumber());
-                    intent.putExtra("TeamMemberId",objData.getId());
-                    mContext.startActivity(intent);
-
-                }
-            });
 
 
 
