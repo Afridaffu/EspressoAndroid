@@ -1,8 +1,7 @@
 package com.greenbox.coyni.utils;
 
-import static android.content.Context.KEYGUARD_SERVICE;
-
 import static android.content.Context.FINGERPRINT_SERVICE;
+import static android.content.Context.KEYGUARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.Activity;
@@ -53,6 +52,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessTypeListAdapter;
@@ -70,8 +71,13 @@ import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -656,6 +662,22 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean isValidJson(String jsonString) {
+        if (jsonString == null || jsonString.trim().equals("")) {
+            return false;
+        }
+        try {
+            new JSONObject(jsonString);
+        } catch (JSONException ex) {
+            try {
+                new JSONArray(jsonString);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void displayAlertNew(String msg, final Context context, String headerText) {
