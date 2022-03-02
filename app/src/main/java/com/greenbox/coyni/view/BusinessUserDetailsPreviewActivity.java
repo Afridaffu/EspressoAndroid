@@ -23,15 +23,15 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
 
-    String authenticateType = "", phoneFormat = "";
-    TextView heading, title, value;
-    CardView changeCV;
+    private String authenticateType = "", phoneFormat = "";
+    private TextView heading, title, value;
+    private CardView changeCV;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
-    DashboardViewModel dashboardViewModel;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    Long mLastClickTime = 0L;
-    MyApplication myApplicationObj;
+    private DashboardViewModel dashboardViewModel;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private Long mLastClickTime = 0L;
+    private MyApplication myApplicationObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
