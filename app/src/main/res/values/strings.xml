@@ -561,4 +561,5 @@
 
     <string name="email_error_warning">User already exists. Try a new email or log in.</string>
     <string name="phone_number_error_warning">User already exists. Try a new phone number or log in.</string>
+    <string name="password">Password</string>
 </resources>

@@ -48,13 +48,17 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
-        if (items.get(pos).getSignatureType() == 1) {
-            holder.agreementTV.setText("Privacy Policy " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-        } else if (items.get(pos).getSignatureType() == 0) {
-            holder.agreementTV.setText("Terms of Service " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-        }
-        if(items.get(pos).getSignatureType() == 5){
-            holder.agreementTV.setText("Merchant’s Agreement " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+        try {
+            if (items.get(pos).getSignatureType() == 1) {
+                holder.agreementTV.setText("Privacy Policy " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+            } else if (items.get(pos).getSignatureType() == 0) {
+                holder.agreementTV.setText("Terms of Service " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+            }
+            if (items.get(pos).getSignatureType() == 5) {
+                holder.agreementTV.setText("Merchant’s Agreement " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
