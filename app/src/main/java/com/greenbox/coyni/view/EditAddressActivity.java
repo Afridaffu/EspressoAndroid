@@ -178,17 +178,18 @@ public class EditAddressActivity extends AppCompatActivity {
             b_cityET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
             b_zipcodeET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(5)});
 
-            address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
-            b_address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            b_cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            b_stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            b_zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            b_countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            b_address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            b_cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            b_stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            b_zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            b_countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
             editAddressSaveCV.setOnClickListener(view -> {
                 if (isSaveEnabled) {

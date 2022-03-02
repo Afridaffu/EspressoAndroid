@@ -30,7 +30,7 @@
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginTop="@dimen/_2sdp"
             android:fontFamily="@font/opensans_bold"
-            android:text="Additional Beneficial Owner(s)"
+            android:text="@string/AB_owners"
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp" />
 
@@ -80,7 +80,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/validateCV"
         android:layout_below="@+id/topLL"
         android:scrollbars="none">
 
@@ -103,7 +102,7 @@
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
-                android:text="No Beneficial Owner is found"
+                android:text="@string/no_beneficial_owner_is_found"
                 android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_12ssp"
                 android:visibility="gone" />
@@ -165,30 +164,31 @@
                     android:src="@drawable/ic_rightarrow" />
 
             </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/validateCV"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="@dimen/_21sdp"
+                android:layout_marginBottom="@dimen/_34sdp"
+                app:cardBackgroundColor="@color/bg_inactive"
+                app:cardCornerRadius="@dimen/_21sdp"
+                tools:ignore="MissingClass">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/done"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp" />
+
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
     </ScrollView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/validateCV"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="@dimen/_21sdp"
-        android:layout_marginBottom="@dimen/_34sdp"
-        app:cardBackgroundColor="@color/bg_inactive"
-        app:cardCornerRadius="@dimen/_21sdp"
-        tools:ignore="MissingClass">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/opensans_bold"
-            android:text="@string/done"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp" />
-
-    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

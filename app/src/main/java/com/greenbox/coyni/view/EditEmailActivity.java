@@ -264,9 +264,10 @@ public class EditEmailActivity extends AppCompatActivity {
 //                        newEmailTIL.setHintTextColor(colorState);
                         Utils.setUpperHintColor(newEmailTIL, getResources().getColor(R.color.primary_green));
                         isNewEmail = true;
-                    } else if (newEmailET.getText().toString().trim().length() == 0) {
-                        newEmailErrorLL.setVisibility(VISIBLE);
-                        newEmailErrorTV.setText("Field Required");
+                    }
+                    else if (newEmailET.getText().toString().trim().length() == 0) {
+//                        newEmailErrorLL.setVisibility(VISIBLE);
+//                        newEmailErrorTV.setText("Field Required");
                         isNewEmail = false;
                     }
                     if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {

@@ -93,6 +93,12 @@ public class BusinessAccountFragment extends BaseFragment {
             }
         });
 
+        viewMoreLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToTransact();
+            }
+        });
 
         initObservers();
         showUserData();
