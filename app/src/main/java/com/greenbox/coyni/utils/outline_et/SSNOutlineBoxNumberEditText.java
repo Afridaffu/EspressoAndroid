@@ -19,7 +19,7 @@ import com.greenbox.coyni.view.business.CompanyInformationActivity;
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     private TextView ssnType;
     private LinearLayout hintHolder;
-    private MaskEditText ssnET;
+    private EditText ssnET;
     private Context mContext;
     public String FROM = "";
 
@@ -48,14 +48,14 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                 try {
                     CompanyInformationActivity comp = (CompanyInformationActivity) mContext;
                     if (b) {
-                        if(FROM.equals("CompanyInfo")){
+                        if (FROM.equals("CompanyInfo")) {
                             comp.ssnErrorLL.setVisibility(GONE);
                             comp.basicInfoSL.scrollTo(comp.basicNextCV.getLeft(), comp.basicNextCV.getBottom());
                         }
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                        if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 10)) {
+                        if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 9)) {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             comp.ssnErrorLL.setVisibility(VISIBLE);
                             comp.ssnErrorTV.setText("Enter a Valid " + getSSNTypeText());
@@ -98,13 +98,12 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 CompanyInformationActivity comAct = (CompanyInformationActivity) mContext;
-                if (charSequence.length() == 10) {
+                if (charSequence.length() == 9) {
                     comAct.ssnErrorLL.setVisibility(GONE);
                     comAct.isSSN = true;
-                } else if (charSequence.length() > 0 && charSequence.length() < 10) {
+                } else if (charSequence.length() > 0 && charSequence.length() < 9) {
                     comAct.isSSN = false;
-                }
-                else if ((ssnET.getText().length() == 0)) {
+                } else if ((ssnET.getText().length() == 0)) {
                     comAct.isSSN = false;
 //                    comAct.ssnErrorLL.setVisibility(VISIBLE);
 //                    comAct.ssnErrorTV.setText("Field Required");
@@ -154,7 +153,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         return ssnType.getText().toString();
     }
 
-    public String getUnmaskedText() {
-        return ssnET.getUnMasked();
-    }
+//    public String getUnmaskedText() {
+//        return ssnET.getUnMasked();
+//    }
 }

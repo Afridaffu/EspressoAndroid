@@ -48,6 +48,8 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.internal.Util;
+
 public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
@@ -65,14 +67,16 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
-    LinearLayout lyAPayClose, lyExternalClose;
-    RelativeLayout layoutDCard, lyAddExternal, layoutCCard;
+    LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
+    RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutSignet;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
     CardView cvNext, cvTryAgain, cvDone;
     public static WithdrawPaymentMethodsActivity withdrawPaymentMethodsActivity;
     TextView tvErrorHead, tvErrorMessage;
+    TextView tvBankHead, tvBankCount, tvBankMsg, tvBBankError, tvSignetHead, tvSignetCount, tvSignetMsg, tvSignetError;
+    ImageView imgBBankIcon, imgBBankArrow, imgSignetLogo, imgSignetArrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +107,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                     if (cardList != null && cardList.size() > 0) {
                         isDeCredit = true;
-                        ControlMethod("addpayment");
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            ControlMethod("addpayment");
+                        } else {
+                            ControlMethod("addbpayment");
+                        }
                     } else {
                         ControlMethod("withdrawmethod");
                         selectWithdrawMethod();
@@ -133,7 +141,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 ControlMethod("withdrawpay");
                 withdrawPaymentMethod("card");
                 strScreen = "withdrawpay";
-            } else if ((strScreen.equals("withdrawpay") && !strCurrent.equals("firstError")) || strCurrent.equals("addpayment")) {
+            } else if ((strScreen.equals("withdrawpay") && !strCurrent.equals("firstError")) || strCurrent.equals("addpayment") || strCurrent.equals("addbpayment")) {
                 ControlMethod("withdrawmethod");
                 selectWithdrawMethod();
                 strScreen = "withdrawmethod";
@@ -299,9 +307,15 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     getPayments(payMethodsResponse.getData().getData());
                     if (isDeCredit) {
                         isDeCredit = false;
-                        ControlMethod("addpayment");
-                        strCurrent = "addpayment";
-                        numberOfAccounts();
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                            numberOfAccounts();
+                        } else {
+                            ControlMethod("addbpayment");
+                            strCurrent = "addbpayment";
+                            numberOfMerchantAccounts();
+                        }
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         if (isNoToken) {
@@ -453,8 +467,12 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             lyExternalClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ControlMethod("addpayment");
-                    strCurrent = "addpayment";
+                    try {
+                        ControlMethod("addpayment");
+                        strCurrent = "addpayment";
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -560,6 +578,203 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
+    private void addMerchantPayment() {
+        try {
+            lyBPayClose = findViewById(R.id.lyBPayClose);
+            tvBBankError = findViewById(R.id.tvBBankError);
+            tvDCardError = findViewById(R.id.tvDCardError);
+            tvSignetError = findViewById(R.id.tvSignetError);
+            lyAddBank = findViewById(R.id.lyAddBank);
+            lyExternalClose = findViewById(R.id.lyExternalClose);
+            tvBankHead = findViewById(R.id.tvBankHead);
+            tvBankCount = findViewById(R.id.tvBankCount);
+            tvBankMsg = findViewById(R.id.tvBankMsg);
+            imgBBankArrow = findViewById(R.id.imgBBankArrow);
+            imgBBankIcon = findViewById(R.id.imgBBankIcon);
+            imgDCardLogo = findViewById(R.id.imgDCardLogo);
+            tvDCHead = findViewById(R.id.tvDCHead);
+            tvDCardHead = findViewById(R.id.tvDCardHead);
+            tvDCardMsg = findViewById(R.id.tvDCardMsg);
+            imgDCardArrow = findViewById(R.id.imgDCardArrow);
+            imgSignetLogo = findViewById(R.id.imgSignetLogo);
+            imgSignetArrow = findViewById(R.id.imgSignetArrow);
+            tvSignetHead = findViewById(R.id.tvSignetHead);
+            tvSignetCount = findViewById(R.id.tvSignetCount);
+            tvSignetMsg = findViewById(R.id.tvSignetMsg);
+            layoutDCard = findViewById(R.id.layoutDCard);
+            layoutSignet = findViewById(R.id.layoutSignet);
+            cvNext = findViewById(R.id.cvNext);
+            tvLearnMore = findViewById(R.id.tvLearnMore);
+            tvMessage = findViewById(R.id.tvMessage);
+            imgLogo = findViewById(R.id.imgLogo);
+            lyBPayClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                        ControlMethod("paymentMethods");
+                        strCurrent = "paymentMethods";
+                    } else {
+                        onBackPressed();
+                    }
+                }
+            });
+
+            lyAddBank.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                            ControlMethod("externalBank");
+                            strCurrent = "externalBank";
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            layoutDCard.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                            strCurrent = "debit";
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                            i.putExtra("card", "debit");
+                            startActivityForResult(i, 3);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            layoutSignet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                            strCurrent = "credit";
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                            i.putExtra("card", "credit");
+                            startActivityForResult(i, 3);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            lyExternalClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ControlMethod("addbpayment");
+                    strCurrent = "addbpayment";
+                }
+            });
+
+            cvNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                            isBank = true;
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
+                            i.putExtra("signon", signOnData);
+                            startActivityForResult(i, 1);
+                        } else {
+                            Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            numberOfMerchantAccounts();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void numberOfMerchantAccounts() {
+        try {
+            if (paymentMethodsResponse.getData() != null) {
+                tvBankCount.setText("(" + paymentMethodsResponse.getData().getBankCount() + "/" + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + ")");
+                tvDCardHead.setText("(" + paymentMethodsResponse.getData().getDebitCardCount() + "/" + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + ")");
+                tvSignetCount.setText("(" + paymentMethodsResponse.getData().getSignetCount() + "/" + paymentMethodsResponse.getData().getMaxSignetAccountsAllowed() + ")");
+
+                tvBBankError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxBankAccountsAllowed() + " banks");
+                tvDCardError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxDebitCardsAllowed() + " cards");
+                tvSignetError.setText("This method has reached maximum " + paymentMethodsResponse.getData().getMaxCreditCardsAllowed() + " cards");
+            }
+            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                if (paymentMethodsResponse.getData().getBankCount() >= paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
+                    tvBBankError.setVisibility(View.VISIBLE);
+                    tvBankHead.setTextColor(getColor(R.color.light_gray));
+                    tvBankCount.setTextColor(getColor(R.color.light_gray));
+                    tvBankMsg.setTextColor(getColor(R.color.light_gray));
+                    imgBBankArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgBBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
+                } else {
+                    tvBBankError.setVisibility(View.GONE);
+                    tvBankHead.setTextColor(getColor(R.color.primary_black));
+                    tvBankCount.setTextColor(getColor(R.color.dark_grey));
+                    tvBankMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgBBankArrow.clearColorFilter();
+                    imgBBankIcon.setImageResource(R.drawable.ic_bank_account_active);
+                }
+                if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
+                    tvDCardError.setVisibility(View.VISIBLE);
+                    tvDCHead.setTextColor(getColor(R.color.light_gray));
+                    tvDCardHead.setTextColor(getColor(R.color.light_gray));
+                    tvDCardMsg.setTextColor(getColor(R.color.light_gray));
+                    imgDCardArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
+                } else {
+                    tvDCardError.setVisibility(View.GONE);
+                    tvDCHead.setTextColor(getColor(R.color.primary_black));
+                    tvDCardHead.setTextColor(getColor(R.color.dark_grey));
+                    tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgDCardArrow.clearColorFilter();
+                    imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
+                }
+                if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                    tvSignetError.setVisibility(View.VISIBLE);
+                    tvSignetHead.setTextColor(getColor(R.color.light_gray));
+                    tvSignetCount.setTextColor(getColor(R.color.light_gray));
+                    tvSignetMsg.setTextColor(getColor(R.color.light_gray));
+                    imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
+                } else {
+                    tvSignetError.setVisibility(View.GONE);
+                    tvSignetHead.setTextColor(getColor(R.color.primary_black));
+                    tvSignetCount.setTextColor(getColor(R.color.dark_grey));
+                    tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgSignetArrow.clearColorFilter();
+                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card);
+
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void ControlMethod(String methodToShow) {
         try {
             switch (methodToShow) {
@@ -571,6 +786,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
                     findViewById(R.id.banksuccess).setVisibility(View.GONE);
+                    findViewById(R.id.addbpayment).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawnotoken": {
@@ -581,10 +797,23 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
                     findViewById(R.id.banksuccess).setVisibility(View.GONE);
+                    findViewById(R.id.addbpayment).setVisibility(View.GONE);
                 }
                 break;
                 case "addpayment": {
                     findViewById(R.id.addpayment).setVisibility(View.VISIBLE);
+                    findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawpay).setVisibility(View.GONE);
+                    findViewById(R.id.externalBank).setVisibility(View.GONE);
+                    findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.banksuccess).setVisibility(View.GONE);
+                    findViewById(R.id.addbpayment).setVisibility(View.GONE);
+                }
+                break;
+                case "addbpayment": {
+                    findViewById(R.id.addbpayment).setVisibility(View.VISIBLE);
+                    findViewById(R.id.addpayment).setVisibility(View.GONE);
                     findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
                     findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
                     findViewById(R.id.withdrawpay).setVisibility(View.GONE);
@@ -601,6 +830,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.externalBank).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
                     findViewById(R.id.banksuccess).setVisibility(View.GONE);
+                    findViewById(R.id.addbpayment).setVisibility(View.GONE);
                 }
                 break;
                 case "externalBank": {
@@ -611,6 +841,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
                     findViewById(R.id.banksuccess).setVisibility(View.GONE);
+                    findViewById(R.id.addbpayment).setVisibility(View.GONE);
                 }
                 break;
                 case "firstError": {
@@ -620,6 +851,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
                     findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
                     findViewById(R.id.banksuccess).setVisibility(View.GONE);
+                    findViewById(R.id.addbpayment).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.VISIBLE);
                 }
                 break;
@@ -630,6 +862,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawmethod).setVisibility(View.GONE);
                     findViewById(R.id.withdrawnotoken).setVisibility(View.GONE);
                     findViewById(R.id.firstError).setVisibility(View.GONE);
+                    findViewById(R.id.addbpayment).setVisibility(View.GONE);
                     findViewById(R.id.banksuccess).setVisibility(View.VISIBLE);
                 }
                 break;
@@ -926,9 +1159,15 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         payDialog.dismiss();
-                        ControlMethod("addpayment");
-                        addPayment();
-                        strCurrent = "addpayment";
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            ControlMethod("addpayment");
+                            addPayment();
+                            strCurrent = "addpayment";
+                        } else {
+                            ControlMethod("addbpayment");
+                            addMerchantPayment();
+                            strCurrent = "addbpayment";
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

@@ -69,6 +69,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
             objMyApplication = (MyApplication) getApplicationContext();
+            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

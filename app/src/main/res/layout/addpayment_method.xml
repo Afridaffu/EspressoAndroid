@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/lyAPayClose"
+            android:id="@+id/lyBPayClose"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="@dimen/_20sdp"
@@ -79,7 +79,7 @@
                 android:paddingBottom="@dimen/_13sdp">
 
                 <ImageView
-                    android:id="@+id/imgBankIcon"
+                    android:id="@+id/imgBBankIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -90,8 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_20sdp"
-                    android:layout_toLeftOf="@+id/imgBankArrow"
-                    android:layout_toRightOf="@+id/imgBankIcon"
+                    android:layout_toLeftOf="@+id/imgBBankArrow"
+                    android:layout_toRightOf="@+id/imgBBankIcon"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -130,7 +130,7 @@
                         android:textSize="@dimen/_9ssp" />
 
                     <TextView
-                        android:id="@+id/tvBankError"
+                        android:id="@+id/tvBBankError"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -142,7 +142,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/imgBankArrow"
+                    android:id="@+id/imgBBankArrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

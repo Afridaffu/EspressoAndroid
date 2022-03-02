@@ -74,8 +74,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_6sdp"
-                            android:text="Account ID M-1234"
                             android:fontFamily="@font/opensans_semibold"
+                            android:text="Account ID M-1234"
                             android:textColor="@color/xdark_gray"
                             android:textSize="@dimen/_10ssp" />
 
@@ -99,11 +99,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
-                                android:text="Active"
-
-                                android:textColor="@color/active_green"
                                 android:layout_marginTop="@dimen/_6sdp"
+
                                 android:fontFamily="@font/opensans_semibold"
+                                android:text="Active"
+                                android:textColor="@color/active_green"
                                 android:textSize="@dimen/_11ssp" />
 
                             <androidx.cardview.widget.CardView
@@ -137,8 +137,8 @@
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/business_userProfileCV"
-                                android:layout_width="@dimen/_49sdp"
-                                android:layout_height="@dimen/_49sdp"
+                                android:layout_width="@dimen/_48sdp"
+                                android:layout_height="@dimen/_48sdp"
                                 android:layout_alignParentRight="true"
                                 android:layout_gravity="center"
                                 app:cardCornerRadius="@dimen/_24sdp"
