@@ -48,20 +48,20 @@ public class AccountLimitsViewModel extends AndroidViewModel {
                         } else {
                             Gson gson = new Gson();
 
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<AccountLimits>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
+                            AccountLimits errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            userAccountLimitsMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        apiErrorMutableLiveData.setValue(null);
+                        userAccountLimitsMutableLiveData.setValue(null);
                     }
                 }
                 @Override
                 public void onFailure(Call<AccountLimits> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
+                    userAccountLimitsMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {
