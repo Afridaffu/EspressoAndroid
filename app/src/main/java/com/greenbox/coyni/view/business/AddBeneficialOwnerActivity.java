@@ -654,12 +654,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isfname = true;
                     fnameLL.setVisibility(GONE);
                     fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_green));
-                    String str = fnameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                        fnameET.setText(fnameET.getText().toString().replaceAll(" ", ""));
-                        fnameET.setSelection(fnameET.getText().length());
-                    }
+                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
+//                    String str = fnameET.getText().toString();
+//                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+//                        fnameET.setText(fnameET.getText().toString().replaceAll(" ", ""));
+//                        fnameET.setSelection(fnameET.getText().length());
+//                    }
                 } else {
                     isfname = false;
                 }
@@ -670,9 +670,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void afterTextChanged(Editable editable) {
                 try {
                     String str = fnameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         fnameET.setText("");
                         fnameET.setSelection(fnameET.getText().length());
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        fnameET.setText(str.trim());
                     } else if (str.length() > 0 && str.contains(".")) {
                         fnameET.setText(fnameET.getText().toString().replaceAll("\\.", ""));
                         fnameET.setSelection(fnameET.getText().length());
@@ -694,18 +696,19 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) { islname = true;
-                lnameLL.setVisibility(GONE);
-                lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_green));
-                        String str = lnameET.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                            lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
-                            lnameET.setSelection(lnameET.getText().length());
-                        }
-                    } else {
-                islname = false;
-                    }
+                if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
+                    islname = true;
+                    lnameLL.setVisibility(GONE);
+                    lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
+//                        String str = lnameET.getText().toString();
+//                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+//                            lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
+//                            lnameET.setSelection(lnameET.getText().length());
+//                        }
+                } else {
+                    islname = false;
+                }
                 enableOrDisableNext();
             }
 
@@ -713,11 +716,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void afterTextChanged(Editable s) {
                 try {
                     String str = lnameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
-                        lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
+                        lnameET.setText("");
                         lnameET.setSelection(lnameET.getText().length());
-                    } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
-                        lnameET.setText(lnameET.getText().toString().replaceAll(".", ""));
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        lnameET.setText(str.trim());
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        lnameET.setText(lnameET.getText().toString().replaceAll("\\.", ""));
+                        lnameET.setSelection(lnameET.getText().length());
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        lnameET.setText("");
                         lnameET.setSelection(lnameET.getText().length());
                     }
 
@@ -855,7 +863,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         address1ET.setSelection(address1ET.getText().length());
                         address1ErrorLL.setVisibility(GONE);
                     }
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

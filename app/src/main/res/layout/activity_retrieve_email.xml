@@ -113,10 +113,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="creditCardSecurityCode"
-                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="textVisiblePassword|textCapSentences"
+                        android:inputType="text|textCapSentences|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -175,10 +175,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="creditCardSecurityCode"
-                        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionDone"
-                        android:inputType="textVisiblePassword|textCapSentences"
+                        android:inputType="text|textCapSentences|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -187,6 +187,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
+                        android:textIsSelectable="false"
                         android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>

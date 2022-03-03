@@ -880,7 +880,7 @@
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
                     android:layout_margin="@dimen/_20sdp"
-                    android:text="No Benificial Owners Found"
+                    android:text="No Beneficial Owners Found"
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_10ssp"
                     android:visibility="gone" />
@@ -924,7 +924,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/banksRecycler"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         />
 
                 </LinearLayout>
@@ -934,7 +934,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
                     android:gravity="center"
-                    android:layout_margin="@dimen/_20sdp"
                     android:text="No Bank Accounts Found"
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_10ssp"
@@ -1115,7 +1114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="By clicking this box, I acknowledge I have read and agree to the"
+                    android:text="I agree to "
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 

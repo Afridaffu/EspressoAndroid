@@ -39,7 +39,6 @@ public class BankAccountsViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<BanksResponseModel>() {
                 @Override
                 public void onResponse(Call<BanksResponseModel> call, Response<BanksResponseModel> response) {
-                    Log.d("CompanyInfo", response.toString());
                     try {
                         if (response.isSuccessful()) {
                             BanksResponseModel obj = response.body();

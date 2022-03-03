@@ -47,7 +47,6 @@ public class GiftCardsViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<BrandsResponse> call, Response<BrandsResponse> response) {
                     try {
-                        Log.d("GiftCards", response.toString());
                         if (response.isSuccessful()) {
                             BrandsResponse obj = response.body();
                             giftCardsMutableLiveData.setValue(obj);

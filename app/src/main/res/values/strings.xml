@@ -249,7 +249,7 @@
     <string name="greater">greater.</string>
     <string name="no_beneficial_owner_is_found">No Beneficial Owner is found</string>
     <string name="ownership">Ownership(%)</string>
-    <string name="beneficialnreach">Please add an additional beneficial owner below to\nreach 51%</string>
+    <string name="beneficialnreach">Please add an additional beneficial owner below\n to reach 51%</string>
 
     <string name="dba_name">Hi! %1$s</string>
     <string name="MerchantBalance">Merchant Balance</string>
