@@ -44,6 +44,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.ConfirmPasswordActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
 import com.greenbox.coyni.viewmodel.BusinessApplicationSummaryViewModel;
@@ -134,7 +135,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         request.setCompanyPhoneNumberDto(phone);
         request.setRequiredDocuments(companyReqDocList);
 
-
         request.setDbName(mDbName);
         request.setDbBusinessType(mBusinessType);
         request.setDbWebsite(mWebsite);
@@ -148,7 +148,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         phone1.setPhoneNumber(mCustomerServicePhone);
         request.setDbPhoneNumberDto(phone1);
         request.setCompanyAddressLine1(mAddress);
-        request.setRequiredDocuments1(dbReqDocList);
+        //request.setRequiredDocuments1(dbReqDocList);
 
         //
         Bankaccount bankAccountsDataModel = new Bankaccount();
@@ -215,6 +215,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     isAgree = true;
                     submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                 } else {
+                    isAgree = false;
                     submitCv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 }
             }
@@ -223,17 +224,13 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         submitCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog = Utils.showProgressDialog(ReviewApplicationActivity.this);
-                saveApplicationData();
+                showProgressDialog();
                 if (addbusiness) {
                     loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
                     loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                 } else {
-
-                    Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                    startActivity(intent);
+                    saveApplicationData();
                 }
-                submitResponse();
             }
         });
 
@@ -510,21 +507,21 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try {
-            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
-                @Override
-                public void onChanged(ApplicationSubmitResponseModel applicationSubmitResponseModel) {
-                    progressDialog.dismiss();
-                    if (applicationSubmitResponseModel != null && applicationSubmitResponseModel.getStatus().toString().toLowerCase().equals("success")) {
-                        saveApplicationData();
-                    } else {
-
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
+//                @Override
+//                public void onChanged(ApplicationSubmitResponseModel applicationSubmitResponseModel) {
+//                    progressDialog.dismiss();
+//                    if (applicationSubmitResponseModel != null && applicationSubmitResponseModel.getStatus().toString().toLowerCase().equals("success")) {
+//                        saveApplicationData();
+//                    } else {
+//
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         try {
             loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
@@ -540,6 +537,26 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             startActivity(intent);
 
                         }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
+                @Override
+                public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
+                    if (submissionViewModel != null) {
+                        dismissDialog();
+                        if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
+                        }
+                    } else {
+
                     }
                 }
             });
@@ -571,28 +588,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             LogUtils.v(TAG, "fileUrl is null or empty");
         }
     }
-
-    public void submitResponse() {
-        try {
-            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
-                @Override
-                public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
-                    if (submissionViewModel != null) {
-                        dialog.dismiss();
-                        if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                            startActivity(intent);
-                        }
-                    } else {
-
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Override
     public void selectedItem(String file) {
