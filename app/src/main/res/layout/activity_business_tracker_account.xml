@@ -12,7 +12,7 @@
         android:background="@drawable/bg_arc_shape"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_coyni_backgrnd"
@@ -24,15 +24,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_44sdp"
-                android:src="@drawable/ic_x" />
+                android:src="@drawable/ic_x"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/bagIV"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_60sdp"
                 android:src="@drawable/aplica_mdpi" />
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/infoTV"
@@ -52,13 +54,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_16sdp"
             android:fontFamily="@font/opensans_bold"
             android:text="Application Completed!"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_16ssp"
-            android:visibility="gone"
-            android:layout_marginTop="@dimen/_16sdp"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/dashboardTV"
@@ -117,8 +119,7 @@
                             android:layout_marginTop="@dimen/_2sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
                             android:gravity="right"
-                            android:src="@drawable/ic_company_info_business"
-                            />
+                            android:src="@drawable/ic_company_info_business" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
