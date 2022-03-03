@@ -249,7 +249,7 @@
     <string name="greater">greater.</string>
     <string name="no_beneficial_owner_is_found">No Beneficial Owner is found</string>
     <string name="ownership">Ownership(%)</string>
-    <string name="beneficialnreach">Please add an additional beneficial owner below to\nreach 51%</string>
+    <string name="beneficialnreach">Please add an additional beneficial owner below\n to reach 51%</string>
 
     <string name="dba_name">Hi! %1$s</string>
     <string name="MerchantBalance">Merchant Balance</string>
@@ -559,7 +559,18 @@
     <string name="companys_name">Company’s Name</string>
     <string name="gift_card_name">Gift Card Name</string>
 
+    <string name="back_button">back button</string>
+    <string name="name_on_card">Name on Card</string>
+    <string name="card_exp">Card Exp</string>
+    <string name="billing_address_line_1">Billing Address Line 1</string>
+    <string name="visa_debit_8765">Visa Debit ••••8765</string>
+    <string name="billing_address_line_2_optional">Billing Address Line 2(Optional)</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="remove_this_card">Remove This Card</string>
+    <string name="save">Save</string>
+
     <string name="email_error_warning">User already exists. Try a new email or log in.</string>
     <string name="phone_number_error_warning">User already exists. Try a new phone number or log in.</string>
     <string name="password">Password</string>
+
 </resources>

@@ -12,31 +12,20 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
-import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
-import com.greenbox.coyni.model.bank.BankDeleteResponseData;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.team.TeamDeleteModel;
-import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
-import com.greenbox.coyni.view.PaymentMethodsActivity;
-import com.greenbox.coyni.view.UserDetailsActivity;
-import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class TeamMember extends BaseActivity {
     private TextView txName, txRole, txStatus, txImageName,txEmailAddress,txPhoneNumber;
     private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
-    private int roleId=0,statusValue=1;
+    private int teamMemberId=0,statusValue=1;
     private CardView mEditCv,mCancelCV,mRemoveCv,mResendInvitation;
     private ImageView mStatusIcon;
     private TeamViewModel teamViewModel;
@@ -47,14 +36,14 @@ public class TeamMember extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_member);
         Bundle bundle=getIntent().getExtras();
-        firstName= bundle.getString("TeamMemberFirstName",firstName);
-        lastName=bundle.getString("TeamMemberLastName",lastName);
-        role=bundle.getString("Role",role);
-        status=bundle.getString("Status",status);
-        emailAddress=bundle.getString("EmailAddress",emailAddress);
-        phoneNumber=bundle.getString("PhoneNumber",phoneNumber);
-        imageName=bundle.getString("ImageName",imageName);
-        roleId=bundle.getInt("RoleId",roleId);
+        firstName= bundle.getString(Utils.teamFirstName,firstName);
+        lastName=bundle.getString(Utils.teamLastName,lastName);
+        role=bundle.getString(Utils.teamRoleName,role);
+        status=bundle.getString(Utils.teamStatus,status);
+        emailAddress=bundle.getString(Utils.teamEmailAddress,emailAddress);
+        phoneNumber=bundle.getString(Utils.teamPhoneNumber,phoneNumber);
+        imageName=bundle.getString(Utils.teamImageName,imageName);
+        teamMemberId=bundle.getInt(Utils.teamMemberId,teamMemberId);
 
         initFields();
         initObservers();
@@ -84,7 +73,7 @@ public class TeamMember extends BaseActivity {
         mResendInvitation=findViewById(R.id.resendInvitationCV);
         mStatusIcon=findViewById(R.id.editStatusIV);
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
-        teamViewModel.deleteTeam(roleId);
+        teamViewModel.deleteTeam(teamMemberId);
         txName.setText(firstName+""+lastName);
         txRole.setText(role);
         txStatus.setText(status);
@@ -125,14 +114,13 @@ public class TeamMember extends BaseActivity {
             public void onClick(View v) {
 
                 Intent intent=new Intent(TeamMember.this,EditTeamMember.class);
-                intent.putExtra("TeamMemberFirstName",firstName);
-                intent.putExtra("TeamMemberLastName",lastName);
-                intent.putExtra("ImageName", imageName);
-                intent.putExtra("Role",role);
-                intent.putExtra("Status",status);
-                intent.putExtra("EmailAddress",emailAddress);
-                intent.putExtra("PhoneNumber",phoneNumber);
-                intent.putExtra("RoleId",roleId);
+                intent.putExtra(Utils.teamFirstName,firstName);
+                intent.putExtra(Utils.teamLastName,lastName);
+                intent.putExtra(Utils.teamImageName, imageName);
+                intent.putExtra(Utils.teamRole,role);
+                intent.putExtra(Utils.teamEmailAddress,emailAddress);
+                intent.putExtra(Utils.teamPhoneNumber,phoneNumber);
+                intent.putExtra(Utils.teamMemberId,teamMemberId);
                 startActivity(intent);
             }
         });
@@ -140,14 +128,13 @@ public class TeamMember extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(TeamMember.this,EditTeamMember.class);
-                intent.putExtra("TeamMemberFirstName",firstName);
-                intent.putExtra("TeamMemberLastName",lastName);
-                intent.putExtra("ImageName", imageName);
-                intent.putExtra("Role",role);
-                intent.putExtra("Status",status);
-                intent.putExtra("EmailAddress",emailAddress);
-                intent.putExtra("PhoneNumber",phoneNumber);
-                intent.putExtra("RoleId",roleId);
+                intent.putExtra(Utils.teamFirstName,firstName);
+                intent.putExtra(Utils.teamLastName,lastName);
+                intent.putExtra(Utils.teamImageName, imageName);
+                intent.putExtra(Utils.teamRole,role);
+                intent.putExtra(Utils.teamEmailAddress,emailAddress);
+                intent.putExtra(Utils.teamPhoneNumber,phoneNumber);
+                intent.putExtra(Utils.teamMemberId,teamMemberId);
                 startActivity(intent);
             }
         });
