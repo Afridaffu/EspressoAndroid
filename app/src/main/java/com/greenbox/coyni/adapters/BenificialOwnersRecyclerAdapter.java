@@ -82,10 +82,10 @@ public class BenificialOwnersRecyclerAdapter extends
             if(objData.getOwnershipParcentage()!=0) {
                 holder.ownershipTx.setText(objData.getOwnershipParcentage().toString());
             }
-            if(objData.getRequiredDocuments()!=null ) {
+            if (objData.getRequiredDocuments() != null && objData.getRequiredDocuments().size() > 0) {
                 if (objData.getRequiredDocuments().get(0).getUpdatedAt() != null
                 && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
-                    holder.dateTx.setText("Uploaded on" + "" + objData.getRequiredDocuments().
+                    holder.dateTx.setText("Uploaded on " + objData.getRequiredDocuments().
                                   get(0).getUpdatedAt());
                     holder.uploadeMethodTx.setText("Uploaded [ "+objData.getRequiredDocuments().
                             get(0).getImgName()+"]");

@@ -1166,7 +1166,7 @@
                 android:layout_marginRight="@dimen/_21sdp"
                 android:layout_marginBottom="@dimen/_6sdp"
                 app:cardBackgroundColor="@color/inactive_color"
-                app:cardCornerRadius="@dimen/_33sdp">
+                app:cardCornerRadius="@dimen/_22sdp">
 
                 <TextView
                     android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -208,14 +209,17 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 startActivity(intent);
             }
         });
-        agreeCB.setOnClickListener(new View.OnClickListener() {
+
+        agreeCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if ((agreeCB.isEnabled())) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
                     isAgree = true;
+                    submitCv.setEnabled(true);
                     submitCv.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                 } else {
                     isAgree = false;
+                    submitCv.setEnabled(false);
                     submitCv.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 }
             }
