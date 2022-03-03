@@ -12,6 +12,19 @@ public class TeamRequest {
 
     private String roleName;
 
+
+    public PhoneNumberTeam getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(PhoneNumberTeam phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    private String emailAddress;
+
+    private PhoneNumberTeam phoneNumber;
+
     public String getFirstName() {
         return firstName;
     }
@@ -50,5 +63,12 @@ public class TeamRequest {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 }

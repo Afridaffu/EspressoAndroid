@@ -69,7 +69,6 @@
     </LinearLayout>
 
 
-
     <com.greenbox.coyni.intro_slider.AutoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -200,7 +199,8 @@
                             android:id="@+id/FirstNameET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:autofillHints="creditCardSecurityCode"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="text|textCapSentences|textNoSuggestions"
@@ -256,7 +256,8 @@
                             android:id="@+id/LastNameET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:autofillHints="creditCardSecurityCode"
+                            android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="text|textCapSentences|textNoSuggestions"
@@ -316,6 +317,7 @@
                                 android:id="@+id/IdveriDOBET"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:autofillHints="creditCardSecurityCode"
                                 android:cursorVisible="false"
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
@@ -336,9 +338,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignEnd="@id/IdveriDOBTIL"
+                            android:layout_centerInParent="true"
                             android:layout_marginRight="@dimen/_10sdp"
-                            android:src="@drawable/ic_down"
-                            android:layout_centerInParent="true"/>
+                            android:src="@drawable/ic_down" />
                     </RelativeLayout>
 
                     <LinearLayout
@@ -381,10 +383,12 @@
                             android:id="@+id/SsnET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
                             android:inputType="numberPassword"
                             android:maxLength="9"
+
                             android:paddingVertical="@dimen/_12sdp"
                             android:singleLine="true"
                             android:textColor="@color/text_color"
@@ -432,7 +436,9 @@
                             android:id="@+id/OwnershipET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
                             android:fontFamily="@font/opensans_semibold"
+                            android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLength="3"
                             android:paddingVertical="@dimen/_12sdp"
@@ -440,8 +446,7 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_green"
-                            android:textSize="@dimen/_12ssp"
-                            android:imeOptions="actionDone"/>
+                            android:textSize="@dimen/_12ssp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
@@ -536,10 +541,11 @@
                             android:id="@+id/mailing_address_ET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="textPostalAddress|textNoSuggestions"
+                            android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="100"
                             android:maxLines="1"
                             android:paddingVertical="@dimen/_12sdp"
@@ -588,7 +594,6 @@
                         app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                         app:boxCornerRadiusTopEnd="@dimen/_10sdp"
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
-
                         app:boxStrokeColor="@color/primary_green"
                         app:hintTextColor="@color/primary_green">
 
@@ -596,10 +601,11 @@
                             android:id="@+id/m_a_optionalET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="textPostalAddress|textNoSuggestions"
+                            android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="100"
                             android:maxLines="1"
                             android:paddingVertical="@dimen/_12sdp"
@@ -656,10 +662,11 @@
                             android:id="@+id/City_ET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="text|textNoSuggestions"
+                            android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="50"
                             android:maxLines="1"
                             android:paddingVertical="@dimen/_12sdp"
@@ -739,6 +746,7 @@
                                 android:id="@+id/stateET"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:autofillHints="creditCardSecurityCode"
                                 android:cursorVisible="false"
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
@@ -749,6 +757,7 @@
                                 android:inputType="textEmailAddress|textNoSuggestions"
                                 android:maxLines="1"
                                 android:padding="@dimen/_14sdp"
+
                                 android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                                 android:singleLine="true"
                                 android:textColor="@color/text_color"
@@ -806,10 +815,11 @@
                             android:id="@+id/Zip_ET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="creditCardSecurityCode"
+                            android:digits="0123456789"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionDone"
                             android:importantForAutofill="no"
-                            android:digits="0123456789"
                             android:inputType="number|textNoSuggestions"
                             android:maxLength="5"
                             android:maxLines="1"
@@ -876,6 +886,7 @@
                                 android:id="@+id/Country_ET"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:autofillHints="creditCardSecurityCode"
                                 android:clickable="false"
                                 android:cursorVisible="false"
                                 android:enabled="false"

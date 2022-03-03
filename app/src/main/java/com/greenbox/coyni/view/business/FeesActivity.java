@@ -2,17 +2,16 @@ package com.greenbox.coyni.view.business;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.fee.Fees;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -22,6 +21,7 @@ public class FeesActivity extends BaseActivity {
     TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
     BusinessDashboardViewModel viewModel;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +54,14 @@ public class FeesActivity extends BaseActivity {
             monthlyFeePerTV = findViewById(R.id.monthlyFeePerTV);
 
             viewModel=new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+            objMyApplication = (MyApplication) getApplicationContext();
 
-            bpbackBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            long user_id = objMyApplication.getLoginUserId();
+
+            bpbackBtn.setOnClickListener(v -> finish());
             showProgressDialog();
             try {
-                viewModel.meFees(123);
+                viewModel.meFees(user_id);
                 initObserver();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,15 +72,15 @@ public class FeesActivity extends BaseActivity {
     }
 
     private void initObserver() {
-        viewModel.getFeesMutableLiveData().observe(this, new Observer<Fees>() {
+        viewModel.getFeesMutableLiveData().observe(this, new Observer<>() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onChanged(Fees fees) {
                 dismissDialog();
-                if (fees.getStatus().equalsIgnoreCase("SUCCESS")){
+                if (fees.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                     try {
-                            //withdrawal
+                        //withdrawal
                         if (fees.getData().getWithdrawalBankFeeInDollar() != null) {
                             tvEBADoll.setText("$ " + Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(fees.getData().getWithdrawalBankFeeInDollar()))));
                         } else {

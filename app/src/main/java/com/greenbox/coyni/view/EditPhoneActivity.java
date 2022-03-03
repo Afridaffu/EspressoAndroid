@@ -107,6 +107,7 @@ public class EditPhoneActivity extends AppCompatActivity {
             }
 
             currentPhoneET.setText(getIntent().getStringExtra("OLD_PHONE"));
+//            currentPhoneET.setHint("Current Phone Number");
 
             savePhoneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
