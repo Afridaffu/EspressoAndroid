@@ -6,7 +6,6 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Patterns;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
 import java.util.regex.Matcher;
@@ -122,6 +120,24 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                try {
+                    String str = websiteET.getText().toString();
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
+                        websiteET.setText("");
+                        websiteET.setSelection(websiteET.getText().length());
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        websiteET.setText(str.trim());
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        websiteET.setText(websiteET.getText().toString().replaceAll("\\.", ""));
+                        websiteET.setSelection(websiteET.getText().length());
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        websiteET.setText("");
+                        websiteET.setSelection(websiteET.getText().length());
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 

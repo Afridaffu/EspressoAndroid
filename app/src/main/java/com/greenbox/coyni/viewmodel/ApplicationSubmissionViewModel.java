@@ -1,6 +1,7 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -25,6 +26,7 @@ public class ApplicationSubmissionViewModel extends AndroidViewModel {
     public ApplicationSubmissionViewModel(@NonNull Application application) {
         super(application);
     }
+
         public MutableLiveData<ApplicationSubmitResponseModel> getPostCompanyInfoResponse() {
             return postApplicationSubmissionData;
         }
@@ -55,7 +57,7 @@ public class ApplicationSubmissionViewModel extends AndroidViewModel {
 
                     @Override
                     public void onFailure(Call<ApplicationSubmitResponseModel> call, Throwable t) {
-                       // Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                         postApplicationSubmissionData.setValue(null);
                     }
                 });

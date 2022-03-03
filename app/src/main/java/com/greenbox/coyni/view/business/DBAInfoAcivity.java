@@ -803,6 +803,24 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    try {
+                        String str = dbanameET.getText().toString();
+                        if (str.length() > 0 && str.toString().trim().length() == 0) {
+                            dbanameET.setText("");
+                            dbanameET.setSelection(dbanameET.getText().length());
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            dbanameET.setText(str.trim());
+                        } else if (str.length() > 0 && str.contains(".")) {
+                            dbanameET.setText(dbanameET.getText().toString().replaceAll("\\.", ""));
+                            dbanameET.setSelection(dbanameET.getText().length());
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            dbanameET.setText("");
+                            dbanameET.setSelection(dbanameET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
