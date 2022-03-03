@@ -116,7 +116,6 @@ public class ReviewApplicationActivity extends BaseActivity {
         mEmail=mEmailTx.getText().toString().trim();
         mPhoneNumber=mPhoneNumberTx.getText().toString().trim();
 
-        //
         mDbName=mDbNameTx.getText().toString().trim();
         mBusinessType=mBusinessTypeTx.getText().toString().trim();
         mWebsite=mWebsiteTx.getText().toString().trim();
