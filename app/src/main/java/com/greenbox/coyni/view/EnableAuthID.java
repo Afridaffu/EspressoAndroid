@@ -507,7 +507,7 @@ public class EnableAuthID extends AppCompatActivity {
                 BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
                 if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
                         && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-                    dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
+                    dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
                 } else {
                     dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
                 }
