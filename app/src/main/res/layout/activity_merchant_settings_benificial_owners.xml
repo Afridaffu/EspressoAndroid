@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/boxbackgroundgray"
+    android:orientation="vertical"
+    tools:context=".view.business.MerchantSettingsBeneficialOwnersActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:background="@drawable/bottomradius"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/_21sdp"
+                android:paddingTop="@dimen/_45sdp"
+                android:paddingBottom="@dimen/_11sdp">
+
+                <LinearLayout
+                    android:id="@+id/backLL"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_back" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="Beneficial Owners "
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16ssp" />
+
+            </LinearLayout>
+
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvBo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/noDataTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
+                android:text="@string/no_beneficial_owner_is_found"
+                android:textColor="@color/xdark_gray"
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
