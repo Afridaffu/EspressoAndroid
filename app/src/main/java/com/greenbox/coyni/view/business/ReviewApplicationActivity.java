@@ -295,6 +295,7 @@ public class ReviewApplicationActivity extends BaseActivity {
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         dashboardViewModel.meAgreementsById();
         applicationSubmissionViewModel = new ViewModelProvider(this).get(ApplicationSubmissionViewModel.class);
+
         mAgreementsImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -15,7 +15,8 @@ import com.greenbox.coyni.utils.MyApplication;
 
 import java.util.List;
 
-public class BenificialOwnersRecyclerAdapter extends RecyclerView.Adapter<BenificialOwnersRecyclerAdapter.MyViewHolder> {
+public class BenificialOwnersRecyclerAdapter extends
+        RecyclerView.Adapter<BenificialOwnersRecyclerAdapter.MyViewHolder> {
     List<BeneficialOwnerInfo> beneficialOwnerList;
     Context mContext;
     MyApplication objMyApplication;
@@ -71,8 +72,12 @@ public class BenificialOwnersRecyclerAdapter extends RecyclerView.Adapter<Benifi
             if(objData.getOwnershipParcentage()!=0) {
                 holder.ownershipTx.setText(objData.getOwnershipParcentage().toString());
             }
-            if(objData.getRequiredDocuments().get(position).getUpdatedAt()!=null&&!objData.getRequiredDocuments().get(position).getUpdatedAt().equals("")) {
-                holder.dateTx.setText("Uploaded on"+""+objData.getRequiredDocuments().get(position).getUpdatedAt());
+            if(objData.getRequiredDocuments()!=null ) {
+                if (objData.getRequiredDocuments().get(0).getUpdatedAt() != null
+                && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
+                    holder.dateTx.setText("Uploaded on" + "" + objData.getRequiredDocuments().
+                                  get(position).getUpdatedAt());
+                }
             }
 
 

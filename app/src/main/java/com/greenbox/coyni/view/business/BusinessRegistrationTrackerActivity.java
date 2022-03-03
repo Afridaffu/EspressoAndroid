@@ -289,15 +289,16 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                 }
             });
-            if(review==true) {
                 mReviewCv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class);
-                        startActivity(intent);
+                        if(review) {
+                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 });
-            }
+
 
 //            boCompleteLL.setOnClickListener(new View.OnClickListener() {
 //                @Override
