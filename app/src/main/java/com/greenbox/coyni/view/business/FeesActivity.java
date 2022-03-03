@@ -22,7 +22,6 @@ public class FeesActivity extends BaseActivity {
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
     BusinessDashboardViewModel viewModel;
     MyApplication objMyApplication;
-    public long user_id = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class FeesActivity extends BaseActivity {
             viewModel=new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
 
-            user_id = objMyApplication.getLoginUserId();
+            long user_id = objMyApplication.getLoginUserId();
 
             bpbackBtn.setOnClickListener(v -> finish());
             showProgressDialog();
