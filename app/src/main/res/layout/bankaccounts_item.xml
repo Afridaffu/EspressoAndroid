@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="@dimen/_11sdp"
-    android:paddingBottom="@dimen/_11sdp">
-     <LinearLayout
+    >
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="@dimen/_11sdp"
-        android:paddingBottom="@dimen/_11sdp">
+        android:paddingBottom="@dimen/_16sdp">
 
         <ImageView
             android:id="@+id/imgBank"
@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
             android:text="Bank of America"
+            android:maxLength="10"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
@@ -37,7 +38,7 @@
             android:text="••••5359"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
-     </LinearLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
