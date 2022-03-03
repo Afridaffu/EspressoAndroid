@@ -4,11 +4,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -28,9 +23,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class SignatureActivity extends BaseActivity {
 
@@ -53,8 +46,7 @@ public class SignatureActivity extends BaseActivity {
         mCustomSignatureView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                mTvDone.setEnabled(true);
-                mTvDone.setTextColor(getResources().getColor(R.color.primary_color));
+                setDoneButtonEnabled(true);
                 return false;
             }
         });
@@ -79,6 +71,7 @@ public class SignatureActivity extends BaseActivity {
     }
 
     public void onClearClicked(View view) {
+        setDoneButtonEnabled(false);
         if (mCustomSignatureView != null) {
             mCustomSignatureView.clearSignature();
         }
@@ -109,6 +102,12 @@ public class SignatureActivity extends BaseActivity {
         mTvDone = findViewById(R.id.tv_signature_done);
         mLlSignatureLayout = findViewById(R.id.ll_signature_layout);
         mTvDone.setEnabled(false);
+    }
+
+    private void setDoneButtonEnabled(boolean isEnabled) {
+        mTvDone.setEnabled(isEnabled);
+        mTvDone.setTextColor(isEnabled ? getResources().getColor(R.color.primary_color) :
+                getResources().getColor(R.color.light_gray));
     }
 
     private void handleOrientationChanges() {

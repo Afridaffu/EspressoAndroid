@@ -790,7 +790,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 2) {
+                    if (charSequence.toString().trim().length() > 1) {
                         isdbaName = true;
                         dbanameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(dbanameTIL, getResources().getColor(R.color.primary_black));
