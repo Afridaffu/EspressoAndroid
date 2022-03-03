@@ -229,8 +229,8 @@ public class BusinessAccountFragment extends BaseFragment {
                 txnRV.setVisibility(View.VISIBLE);
                 viewMoreLL.setVisibility(View.VISIBLE);
                 noTxnTV.setVisibility(View.GONE);
-                LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(daata, requireContext().getApplicationContext());
-                LinearLayoutManager mLayoutManager = new LinearLayoutManager(requireContext().getApplicationContext());
+                LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(daata, getActivity());
+                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 txnRV.setLayoutManager(mLayoutManager);
                 txnRV.setItemAnimator(new DefaultItemAnimator());
                 txnRV.setAdapter(latestTxnAdapter);
@@ -238,8 +238,8 @@ public class BusinessAccountFragment extends BaseFragment {
                 txnRV.setVisibility(View.VISIBLE);
                 viewMoreLL.setVisibility(View.GONE);
                 noTxnTV.setVisibility(View.GONE);
-                LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(daata, requireContext().getApplicationContext());
-                LinearLayoutManager mLayoutManager = new LinearLayoutManager(requireContext().getApplicationContext());
+                LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(daata, getActivity());
+                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                 txnRV.setLayoutManager(mLayoutManager);
                 txnRV.setItemAnimator(new DefaultItemAnimator());
                 txnRV.setAdapter(latestTxnAdapter);
