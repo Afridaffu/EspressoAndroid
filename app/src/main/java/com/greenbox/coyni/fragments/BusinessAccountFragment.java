@@ -158,7 +158,6 @@ public class BusinessAccountFragment extends BaseFragment {
 //                        buyTokensCV.setVisibility(View.VISIBLE);
 
                 } else if (latestTxnResponse.getData().size() > 4) {
-//                        buyTokensCV.setVisibility(View.GONE);
                     txnRV.setVisibility(View.VISIBLE);
                     viewMoreLL.setVisibility(View.VISIBLE);
                     noTxnTV.setVisibility(View.GONE);
