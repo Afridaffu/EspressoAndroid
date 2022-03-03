@@ -5,12 +5,13 @@
     android:layout_height="wrap_content"
 
     >
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginEnd="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
         app:cardCornerRadius="@dimen/_10sdp">
 
         <RelativeLayout
@@ -50,6 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="top"
                         android:layout_toRightOf="@+id/nameTx"
+                        android:contentDescription="@string/primary"
                         android:src="@drawable/ic_icon_awesome_star" />
 
                     <TextView
@@ -62,11 +64,13 @@
                         android:text="35% Ownership"
                         android:textColor="@color/xdark_gray"
                         android:textSize="@dimen/_10ssp" />
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
                         android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/arrow_right"
                         android:gravity="right"
                         android:src="@drawable/ic_rightarrow" />
                 </RelativeLayout>

@@ -55,7 +55,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
-            businessResetPin, preferencesLL,beneficialOwnersLL;
+            businessResetPin, preferencesLL, beneficialOwnersLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -156,7 +156,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-            beneficialOwnersLL=findViewById(R.id.beneficialOwnersLL);
+            beneficialOwnersLL = findViewById(R.id.beneficialOwnersLL);
             beneficialOwnersLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

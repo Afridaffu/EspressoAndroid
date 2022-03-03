@@ -95,31 +95,32 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
         if (objMyApplication.getBeneficialOwnersResponse().getData().size() > 0) {
             noDataTV.setVisibility(View.GONE);
             beneficialOwnersRV.setVisibility(View.VISIBLE);
-            beneficialOwnerList=boResp.getData();
+            beneficialOwnerList = boResp.getData();
 
             Collections.sort(beneficialOwnerList, Comparator.comparing(BOResp.BeneficialOwner::getOwnershipParcentage, Comparator.reverseOrder())
                     .thenComparing(BOResp.BeneficialOwner::getId, Comparator.reverseOrder()));
-            MerchantSettingsBeneficialOwnersAdapter beneficialOwnersAdapter = new MerchantSettingsBeneficialOwnersAdapter(this, beneficialOwnerList,beneficialClickListener);
+            MerchantSettingsBeneficialOwnersAdapter beneficialOwnersAdapter = new MerchantSettingsBeneficialOwnersAdapter(this, beneficialOwnerList, beneficialClickListener);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
             beneficialOwnersRV.setLayoutManager(mLayoutManager);
             beneficialOwnersRV.setAdapter(beneficialOwnersAdapter);
 
         }
     }
+
     private void setOnClickListener() {
         try {
 
             beneficialClickListener = (view, position) -> {
                 Context context = view.getContext();
                 Intent intent = new Intent();
-                intent =  new Intent(context, BenificialOwnerDetails.class);
-                intent.putExtra(Utils.boFirstName,beneficialOwnerList.get(position).getFirstName());
-                intent.putExtra(Utils.boLastName,beneficialOwnerList.get(position).getLastName());
-                intent.putExtra(Utils.boAddress, beneficialOwnerList.get(position).getAddressLine1()+beneficialOwnerList.get(position).getAddressLine2());
-                intent.putExtra(Utils.boDob,beneficialOwnerList.get(position).getDob());
+                intent = new Intent(context, BenificialOwnerDetails.class);
+                intent.putExtra(Utils.boFirstName, beneficialOwnerList.get(position).getFirstName());
+                intent.putExtra(Utils.boLastName, beneficialOwnerList.get(position).getLastName());
+                intent.putExtra(Utils.boAddress, beneficialOwnerList.get(position).getAddressLine1() + beneficialOwnerList.get(position).getAddressLine2());
+                intent.putExtra(Utils.boDob, beneficialOwnerList.get(position).getDob());
                 intent.putExtra(String.valueOf(Utils.boOwnershipPercentage), beneficialOwnerList.get(position).getOwnershipParcentage());
-                intent.putExtra(Utils.boSSN,beneficialOwnerList.get(position).getSsn());
-                intent.putExtra(String.valueOf(Utils.position),position);
+                intent.putExtra(Utils.boSSN, beneficialOwnerList.get(position).getSsn());
+                intent.putExtra(String.valueOf(Utils.position), position);
 
                 context.startActivity(intent);
             };

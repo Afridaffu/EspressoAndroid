@@ -51,7 +51,7 @@ public class MerchantSettingsBeneficialOwnersAdapter extends RecyclerView.Adapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
         BOResp.BeneficialOwner objData = beneficialOwnerList.get(pos);
-        if(pos==0){
+        if (pos == 0) {
             holder.primaryIcon.setVisibility(View.VISIBLE);
         }
         String firstName = "", lastName = "";
@@ -61,9 +61,9 @@ public class MerchantSettingsBeneficialOwnersAdapter extends RecyclerView.Adapte
         if (objData.getLastName() != null && !objData.getLastName().equals("")) {
             lastName = objData.getLastName();
         }
-        holder.txName.setText(firstName + "" + lastName+"");
+        holder.txName.setText(firstName + "" + lastName + "");
         if (objData.getOwnershipParcentage() != 0) {
-            holder.ownershipTx.setText(objData.getOwnershipParcentage() + "% Ownership");
+            holder.ownershipTx.setText(objData.getOwnershipParcentage() + getContext().getString(R.string.ownership_percentage));
         }
     }
 
@@ -90,7 +90,7 @@ public class MerchantSettingsBeneficialOwnersAdapter extends RecyclerView.Adapte
             txName = itemView.findViewById(R.id.nameTx);
             ownershipTx = itemView.findViewById(R.id.ownershipTx);
             boRL = itemView.findViewById(R.id.bowLL);
-            primaryIcon=itemView.findViewById(R.id.primary_icon);
+            primaryIcon = itemView.findViewById(R.id.primary_icon);
             primaryIcon.setVisibility(View.GONE);
             itemView.setOnClickListener(this);
         }

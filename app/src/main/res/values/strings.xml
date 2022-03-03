@@ -245,7 +245,7 @@
     <string name="AB_owners">Additional Beneficial Owner(s)</string>
     <string name="Beneficialownership">Beneficial ownership you have added is less\nthan 51%, you will need to add an additional</string>
     <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
-    <string name="percentage"> 51% or</string>
+    <string name="percentage">\%</string>
     <string name="greater">greater.</string>
     <string name="no_beneficial_owner_is_found">No Beneficial Owner is found</string>
     <string name="ownership">Ownership(%)</string>
@@ -571,5 +571,9 @@
     <string name="email_error_warning">User already exists. Try a new email or log in.</string>
     <string name="phone_number_error_warning">User already exists. Try a new phone number or log in.</string>
     <string name="password">Password</string>
+
+    <string name="ownership_percentage">\% Ownership"</string>
+    <string name="primary">Primary</string>
+    <string name="arrow_right">ArrowRight</string>
 
 </resources>
