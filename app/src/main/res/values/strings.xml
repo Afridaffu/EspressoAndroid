@@ -581,5 +581,6 @@
     <string name="phone_number">Phone Number</string>
     <string name="move_button">move Button</string>
 
+    <string name="companyemail">Company’s Email</string>
 
 </resources>
