@@ -245,6 +245,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                         InputMethodManager imm = (InputMethodManager) AddPaymentSignetActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(etName, 0);
+                        nameErrorLL.setVisibility(GONE);
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
@@ -275,6 +276,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         etWalletId.setHint("XXXXXXXXXXXX XXXX");
                         etlWalletId.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_green));
+                        walletErrorLL.setVisibility(GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -303,6 +305,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         etAddress1.setHint("Billing Address Line 1");
                         etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
+                        address1ErrorLL.setVisibility(GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -321,7 +324,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
 
                         } else {
-                            etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
                         }
                     } else {
@@ -356,6 +359,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         etCity.setHint("City");
                         etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
+                        cityErrorLL.setVisibility(GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -382,6 +386,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                     } else {
                         etlState.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlState, getColor(R.color.primary_green));
+                        stateErrorLL.setVisibility(GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -414,6 +419,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         etZipCode.setHint("Zip Code");
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
+                        zipErrorLL.setVisibility(GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -459,7 +465,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
                     }
                     String str = etName.getText().toString();
-                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etName.setText("");
                         etName.setSelection(etName.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -506,20 +512,20 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    if (!etName.hasFocus() && etName.getText().toString().trim().length() > 1) {
-                        etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
+                    if (!etWalletId.hasFocus() && etWalletId.getText().toString().trim().length() > 1) {
+                        etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
                     }
-                    String str = etName.getText().toString();
-                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
-                        etName.setText("");
-                        etName.setSelection(etName.getText().length());
+                    String str = etWalletId.getText().toString();
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
+                        etWalletId.setText("");
+                        etWalletId.setSelection(etWalletId.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
-                        etName.setText(etName.getText().toString().replaceAll("\\.", ""));
-                        etName.setSelection(etName.getText().length());
+                        etWalletId.setText(etWalletId.getText().toString().replaceAll("\\.", ""));
+                        etWalletId.setSelection(etWalletId.getText().length());
                     } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                        etName.setText("");
-                        etName.setSelection(etName.getText().length());
+                        etWalletId.setText("");
+                        etWalletId.setSelection(etWalletId.getText().length());
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -554,7 +560,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etAddress1.getText().toString();
-                    if (str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
                         address1ErrorLL.setVisibility(GONE);
@@ -597,7 +603,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etCity.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etCity.setText("");
                         etCity.setSelection(etCity.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {
@@ -673,7 +679,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = etZipCode.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etZipCode.setText("");
                         etZipCode.setSelection(etCity.getText().length());
                     } else if (str.length() > 0 && str.contains(".")) {

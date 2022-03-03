@@ -58,7 +58,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
     RecyclerView rvPaymentMethods;
-    LinearLayout lyAPayClose, lyExternalClose, lyPayBack;
+    LinearLayout lyBPayClose, lyExternalClose, lyPayBack;
     TextView tvBankError, tvSignetError, tvDCardError, tvLearnMore, tvBankCount, tvSignetCount, tvDCardCount;
     TextView tvBankHead, tvBankMsg, tvSignetHead, tvSignetMsg, tvDCHead, tvDCardMsg, tvErrorHead, tvErrorMessage;
     RelativeLayout lyAddBank, layoutSignet, layoutDCard;
@@ -313,8 +313,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
 
     private void addPayment() {
         try {
-            lyAPayClose = findViewById(R.id.lyAPayClose);
-            tvBankError = findViewById(R.id.tvBankError);
+            lyBPayClose = findViewById(R.id.lyBPayClose);
+            tvBankError = findViewById(R.id.tvBBankError);
             tvSignetError = findViewById(R.id.tvSignetError);
             tvDCardError = findViewById(R.id.tvDCardError);
             tvBankCount = findViewById(R.id.tvBankCount);
@@ -326,8 +326,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             tvSignetMsg = findViewById(R.id.tvSignetMsg);
             tvDCHead = findViewById(R.id.tvDCHead);
             tvDCardMsg = findViewById(R.id.tvDCardMsg);
-            imgBankIcon = findViewById(R.id.imgBankIcon);
-            imgBankArrow = findViewById(R.id.imgBankArrow);
+            imgBankIcon = findViewById(R.id.imgBBankIcon);
+            imgBankArrow = findViewById(R.id.imgBBankArrow);
             imgSignetLogo = findViewById(R.id.imgSignetLogo);
             imgSignetArrow = findViewById(R.id.imgSignetArrow);
             imgDCardLogo = findViewById(R.id.imgDCardLogo);
@@ -339,7 +339,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
 
-            lyAPayClose.setOnClickListener(new View.OnClickListener() {
+            lyBPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if ((strCurrent.equals("addpay") || strCurrent.equals("addpayment") || strCurrent.equals("debit") || strCurrent.equals("credit"))
@@ -433,6 +433,10 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         Utils.populateLearnMore(BusinessPaymentMethodsActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();

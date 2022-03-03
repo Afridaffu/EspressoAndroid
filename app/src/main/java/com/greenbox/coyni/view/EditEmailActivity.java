@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -18,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -29,13 +31,19 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
+import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+import java.util.Objects;
 
 public class EditEmailActivity extends AppCompatActivity {
 
@@ -50,6 +58,7 @@ public class EditEmailActivity extends AppCompatActivity {
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     LoginViewModel loginViewModel;
     LinearLayout editEmailCloseLL,b_editEmailCloseLL;
 
@@ -68,9 +77,13 @@ public class EditEmailActivity extends AppCompatActivity {
                 findViewById(R.id.b_topLL).setVisibility(GONE);
                 findViewById(R.id.editEmailSV).setVisibility(VISIBLE);
             }
+            else
             if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
                 findViewById(R.id.b_topLL).setVisibility(VISIBLE);
                 findViewById(R.id.editEmailSV).setVisibility(GONE);
+                    if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
+                            Log.e("This is ","DBA Info  Edit");
+                    }
             }
             initObservers();
             textWatchers();
@@ -83,6 +96,7 @@ public class EditEmailActivity extends AppCompatActivity {
     public void initFields() {
         try {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
             myApplicationObj = (MyApplication) getApplicationContext();
@@ -138,35 +152,65 @@ public class EditEmailActivity extends AppCompatActivity {
                         dialog.setMessage("Please wait...");
                         dialog.show();
 
-                        callSendEmailOTPAPI();
-
-                    } else {
-                        Log.e("isSaveEnabled", isSaveEnabled + "");
-                    }
-                }
-            });
-
-            saveEmailCV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isSaveEnabled) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
+                        if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")){
+                            try {
+                                DBAInfoRequest dbaInfoRequest=new DBAInfoRequest();
+                                dbaInfoRequest.setEmail(Objects.requireNonNull(b_newEmailET.getText()).toString());
+                                dbaInfoRequest.setAddressLine1(myApplicationObj.getDbaInfoResp().getData().getAddressLine1());
+                                dbaInfoRequest.setAddressLine2(myApplicationObj.getDbaInfoResp().getData().getAddressLine2());
+                                dbaInfoRequest.setBusinessType(myApplicationObj.getDbaInfoResp().getData().getBusinessType());
+                                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getAverageTicket().trim().replace(",", "")).split("\\.")[0]));
+                                dbaInfoRequest.setCity(myApplicationObj.getDbaInfoResp().getData().getCity());
+                                dbaInfoRequest.setCopyCompanyInfo(myApplicationObj.getDbaInfoResp().getData().isCopyCompanyInfo());
+                                dbaInfoRequest.setCountry(myApplicationObj.getDbaInfoResp().getData().getCountry());
+                                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getHighTicket().trim().replace(",", "")).split("\\.")[0]));
+                                dbaInfoRequest.setIdentificationType(Integer.parseInt(myApplicationObj.getDbaInfoResp().getData().getIdentificationType()));
+                                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getMonthlyProcessingVolume().trim().replace(",", "")).split("\\.")[0]));
+                                dbaInfoRequest.setName(myApplicationObj.getDbaInfoResp().getData().getName());
+                                PhNoWithCountryCode phNoWithCountryCode=new PhNoWithCountryCode();
+                                phNoWithCountryCode.setCountryCode(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getCountryCode());
+                                phNoWithCountryCode.setPhoneNumber(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
+                                dbaInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                dbaInfoRequest.setState(myApplicationObj.getDbaInfoResp().getData().getState());
+                                dbaInfoRequest.setTimeZone(myApplicationObj.getDbaInfoResp().getData().getTimeZone());
+                                dbaInfoRequest.setWebsite(myApplicationObj.getDbaInfoResp().getData().getWebsite());
+                                dbaInfoRequest.setZipCode(myApplicationObj.getDbaInfoResp().getData().getZipCode());
+                                businessIdentityVerificationViewModel.patchDBAInfo(dbaInfoRequest);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-
-                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
-
-                        callSendEmailOTPAPI();
+                        else if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT||myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                            callSendEmailOTPAPI();
+                        }
 
                     } else {
                         Log.e("isSaveEnabled", isSaveEnabled + "");
                     }
                 }
             });
+//
+//            saveEmailCV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    if (isSaveEnabled) {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                            return;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//
+//                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
+//                        dialog.setIndeterminate(false);
+//                        dialog.setMessage("Please wait...");
+//                        dialog.show();
+//
+//                        callSendEmailOTPAPI();
+//
+//                    } else {
+//                        Log.e("isSaveEnabled", isSaveEnabled + "");
+//                    }
+//                }
+//            });
             editEmailCloseLL.setOnClickListener(view -> {
                 finish();
             });
@@ -260,9 +304,10 @@ public class EditEmailActivity extends AppCompatActivity {
 //                        newEmailTIL.setHintTextColor(colorState);
                         Utils.setUpperHintColor(newEmailTIL, getResources().getColor(R.color.primary_green));
                         isNewEmail = true;
-                    } else if (newEmailET.getText().toString().trim().length() == 0) {
-                        newEmailErrorLL.setVisibility(VISIBLE);
-                        newEmailErrorTV.setText("Field Required");
+                    }
+                    else if (newEmailET.getText().toString().trim().length() == 0) {
+//                        newEmailErrorLL.setVisibility(VISIBLE);
+//                        newEmailErrorTV.setText("Field Required");
                         isNewEmail = false;
                     }
                     if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
@@ -583,6 +628,32 @@ public class EditEmailActivity extends AppCompatActivity {
                         Utils.hideSoftKeyboard(EditEmailActivity.this);
                         Utils.displayAlert(apiError.getError().getFieldErrors().get(0), EditEmailActivity.this, "", apiError.getError().getFieldErrors().get(0));
                     }
+                }
+            }
+        });
+
+        businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
+            @Override
+            public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
+                dialog.dismiss();
+                try {
+                    if (dbaInfoUpdateResp !=null && dbaInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                        Utils.showCustomToast(EditEmailActivity.this, "Email updated", R.drawable.ic_check, "EMAIL");
+                        new Handler().postDelayed(() -> {
+                            try {
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }, 2000);
+
+                    }
+                    else {
+                        Toast.makeText(EditEmailActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
