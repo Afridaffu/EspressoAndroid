@@ -471,6 +471,9 @@ public class MyApplication extends Application {
     }
 
     public String exportDate(String date) {
+        if (date.length() == 22) {
+            date = date + "0";
+        }
         String strDate = "";
         try {
             if (Build.VERSION.SDK_INT >= 26) {
