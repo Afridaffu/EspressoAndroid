@@ -48,7 +48,6 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
-import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.intro_slider.OneDirectionViewPager;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
@@ -786,6 +785,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     } else {
                         companyemailET.setHint("Company’s Name");
+                        companyemailET.setHint(getResources().getString(R.string.company_s_email));
                         companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
                         companyemailErrorLL.setVisibility(GONE);
@@ -811,7 +811,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             address1ErrorTV.setText("Field Required");
                         }
                     } else {
-                        companyaddressET.setHint("Company Address Line 1");
+                        companyaddressET.setHint(getResources().getString(R.string.company_address_line_1));
                         companyaddresstil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddresstil, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);
@@ -835,7 +835,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     } else {
                         companyaddress2til.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddress2til, getColor(R.color.primary_green));
-                        companyaddress2ET.setHint("Company Address Line 2(Optional)");
+                        companyaddress2ET.setHint(getResources().getString(R.string.company_address_line_2_optional));
                         address2ErrorLL.setVisibility(GONE);
                     }
                 }
@@ -931,6 +931,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (str.length() > 0 && str.toString().trim().length() == 0) {
                             companynameET.setText("");
                             companynameET.setSelection(companynameET.getText().length());
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            companynameET.setText(str.trim());
                         } else if (str.length() > 0 && str.contains(".")) {
                             companynameET.setText(companynameET.getText().toString().replaceAll("\\.", ""));
                             companynameET.setSelection(companynameET.getText().length());
@@ -1048,7 +1050,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             companyaddressET.setText("");
                             companyaddressET.setSelection(companyaddressET.getText().length());
                             address1ErrorLL.setVisibility(GONE);
-                        } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            companyaddressET.setText(str.trim());
+                        }else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             companyaddressET.setText("");
                             companyaddressET.setSelection(companyaddressET.getText().length());
                             address1ErrorLL.setVisibility(GONE);
@@ -1087,6 +1091,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             companyaddress2ET.setText("");
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
                             address2ErrorLL.setVisibility(GONE);
+                        }else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            companyaddress2ET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             companyaddress2ET.setText("");
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
@@ -1261,7 +1267,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 if (isW9FormUploaded) {
                     isDocsDoneEnabled = true;
                     doneCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-
                 } else {
                     isDocsDoneEnabled = false;
                     doneCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
@@ -1586,8 +1591,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         try {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(CompanyInformationActivity.this);
             switch (requestCode) {
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
 

@@ -479,7 +479,7 @@
     <string name="view_edit">View/Edit</string>
     <string name="delete">Delete</string>
     <string name="company_address">Company Address</string>
-    <string name="company_s_email">Company’s Email</string>
+    <string name="company_s_email">Companys Email</string>
     <string name="company_address_line_1">Company Address Line 1</string>
     <string name="company_address_line_2_optional">Company Address Line 2(Optional)</string>
     <string name="customer_service_email">Customer Service Email</string>
@@ -537,7 +537,8 @@
     <string name="sender_email">Sender Email</string>
     <string name="original_transaction_information">Original Transaction Information</string>
     <string name="please_note_new_team_members">*Please Note: New team members get full administrator permission</string>
-
+    <string name="identity_verification_under_review">Identify Verification\nUnder Review</string>
+    <string name="thank_you_interest_in_coyni">Thank you for your interest in coyni. Please allow us up to 3 business days for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
     <string name="reference_id_name">Reference ID.</string>
     <string name="you_have_no_transactions">You have no transactions</string>
     <string name="load_more">Load More</string>
@@ -547,7 +548,7 @@
     <string name="filter_button">filter Button</string>
     <string name="total_available_funds">Total Available Funds</string>
     <string name="recent_token_transactions">Recent Token Transactions</string>
-    <string name="identify_verification_nUnder_review">Identify Verification\nUnder Review</string>
+    <string name="identify_verification_under_review">Identify Verification\nUnder Review</string>
 
     <string name="purchase_amount_processing_fee">(Purchase Amount + Processing Fee)</string>
     <string name="dollor">$</string>
@@ -571,5 +572,16 @@
 
     <string name="email_error_warning">User already exists. Try a new email or log in.</string>
     <string name="phone_number_error_warning">User already exists. Try a new phone number or log in.</string>
+    <string name="password">Password</string>
+    <string name="phone">Phone Number</string>
+    <string name="phone_curr">Current Phone Number</string>
+    <string name="this_is_web_icon">this is web icon</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="edit_profile_icon">edit Profile Icon</string>
+    <string name="customer_service">Customer Service</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="move_button">move Button</string>
+
+    <string name="companyemail">Company’s Email</string>
 
 </resources>

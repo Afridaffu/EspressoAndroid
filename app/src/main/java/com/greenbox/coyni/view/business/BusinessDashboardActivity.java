@@ -183,7 +183,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-//                startActivity(new Intent(BusinessDashboardActivity.this, SelectWithdrawMethodActivity.class));
                     startActivity(new Intent(BusinessDashboardActivity.this, WithdrawPaymentMethodsActivity.class));
                 }
             });

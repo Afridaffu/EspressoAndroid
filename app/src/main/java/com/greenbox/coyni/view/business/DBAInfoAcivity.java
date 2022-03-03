@@ -808,7 +808,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 2) {
+                    if (charSequence.toString().trim().length() > 1) {
                         isdbaName = true;
                         dbanameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(dbanameTIL, getResources().getColor(R.color.primary_black));
@@ -821,6 +821,24 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    try {
+                        String str = dbanameET.getText().toString();
+                        if (str.length() > 0 && str.toString().trim().length() == 0) {
+                            dbanameET.setText("");
+                            dbanameET.setSelection(dbanameET.getText().length());
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            dbanameET.setText(str.trim());
+                        } else if (str.length() > 0 && str.contains(".")) {
+                            dbanameET.setText(dbanameET.getText().toString().replaceAll("\\.", ""));
+                            dbanameET.setSelection(dbanameET.getText().length());
+                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                            dbanameET.setText("");
+                            dbanameET.setSelection(dbanameET.getText().length());
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 

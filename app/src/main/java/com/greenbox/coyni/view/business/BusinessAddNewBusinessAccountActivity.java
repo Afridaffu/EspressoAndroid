@@ -87,6 +87,8 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
             @Override
             public void onClick(View view) {
                 identityVerificationViewModel.getAddBusinessUser();
+
+
             }
         });
 
@@ -186,6 +188,7 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         try {
             identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override

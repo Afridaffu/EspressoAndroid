@@ -1219,6 +1219,7 @@ public class EditAddressActivity extends AppCompatActivity {
         try {
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 try {
+                    b_address1ET.requestFocus();
                     b_address1ET.setSelection(Objects.requireNonNull(b_address1ET.getText()).length());
                     b_cityET.setSelection(Objects.requireNonNull(b_cityET.getText()).length());
                     b_zipcodeET.setSelection(Objects.requireNonNull(b_zipcodeET.getText()).length());
@@ -1228,6 +1229,7 @@ public class EditAddressActivity extends AppCompatActivity {
             }
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 try {
+                    address1ET.requestFocus();
                     address1ET.setSelection(Objects.requireNonNull(address1ET.getText()).length());
                     address2ET.setSelection(address2ET.getText().length());
                     cityET.setSelection(Objects.requireNonNull(cityET.getText()).length());
