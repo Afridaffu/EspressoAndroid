@@ -58,7 +58,6 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
                     holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) +" "+items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
                 }
     }
-
     @Override
     public int getItemCount() {
         if (this.items != null) {
