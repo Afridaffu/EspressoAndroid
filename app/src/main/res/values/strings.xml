@@ -574,5 +574,12 @@
     <string name="password">Password</string>
     <string name="phone">Phone Number</string>
     <string name="phone_curr">Current Phone Number</string>
+    <string name="this_is_web_icon">this is web icon</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="edit_profile_icon">edit Profile Icon</string>
+    <string name="customer_service">Customer Service</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="move_button">move Button</string>
+
 
 </resources>
