@@ -136,7 +136,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -153,6 +153,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_officially_verified"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_10sdp"
@@ -1748,6 +1749,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_20sdp"
+                                android:contentDescription="@string/identify_verification_under_review"
                                 android:src="@drawable/ic_in_progress_icon" />
 
                             <TextView
@@ -1756,7 +1758,7 @@
                                 android:layout_marginTop="@dimen/_20sdp"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="Identify Verification\nUnder Review"
+                                android:text="@string/identity_verification_under_review"
                                 android:textAlignment="center"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_16sdp" />
@@ -1764,9 +1766,10 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginTop="@dimen/_10sdp"
                                 android:fontFamily="@font/opensans_regular"
-                                android:text="Thank you for your interest in coyni. Please allow\nus up to 3 business days for further review of\nyour account. Within that time you may receive a\nnotification and/or email if further information is\nneeded."
+                                android:padding="@dimen/_10sdp"
+                                android:text="@string/thank_you_interest_in_coyni"
                                 android:textAlignment="center"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11sdp" />
@@ -1775,7 +1778,8 @@
                                 android:id="@+id/tv_identity_review_cancel_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_56sdp"
+                                android:layout_marginTop="@dimen/_30sdp"
+                                android:padding="@dimen/_10sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/identity_review_cancel_message"
                                 android:textAlignment="center"
