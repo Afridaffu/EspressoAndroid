@@ -116,6 +116,7 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="@string/beneficialnreach"
                 android:textColor="@color/primary_black"
+                android:visibility="visible"
                 android:textSize="@dimen/_11ssp" />
 
             <LinearLayout
