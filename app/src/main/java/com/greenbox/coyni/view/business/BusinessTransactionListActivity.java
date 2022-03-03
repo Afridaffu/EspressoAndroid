@@ -163,7 +163,6 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
 
@@ -422,6 +421,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -50,6 +51,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     private String addDBA = "false";
     private LoginViewModel loginViewModel;
     private String boAPICallFrom = "RESUME";
+    private CardView mReviewCv;
+    private boolean review=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +179,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             aggrementsTV = findViewById(R.id.aggrementsTV);
             aggrementsIncompleteTV = findViewById(R.id.aggrementsIncompleteTV);
             aggrementsInProgressIV = findViewById(R.id.aggrementsInProgressIV);
+            mReviewCv=findViewById(R.id.reviewCv);
 
             if (businessTrackerResponse != null) {
                 reloadTrackerDashboard(businessTrackerResponse);
@@ -285,6 +289,15 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                 }
             });
+            if(review==true) {
+                mReviewCv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
 
 //            boCompleteLL.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -312,6 +325,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                     }
                 }
             });
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -571,6 +585,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             aggrementsCompleteLL.setVisibility(View.GONE);
             aggrementsIncompleteLL.setVisibility(View.VISIBLE);
         }
-
+        if (businessTrackerResponse != null && businessTrackerResponse.getData().isCompanyInfo() && businessTrackerResponse.getData().isDbaInfo() && businessTrackerResponse.getData().isBeneficialOwners()
+                && businessTrackerResponse.getData().isIsbankAccount() && businessTrackerResponse.getData().isAgreementSigned()) {
+            review=true;
+            mReviewCv.setVisibility(VISIBLE);
+        }
     }
 }

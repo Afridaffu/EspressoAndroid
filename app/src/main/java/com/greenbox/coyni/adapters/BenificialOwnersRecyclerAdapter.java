@@ -10,14 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.summary.BeneficialOwnerInfo;
 import com.greenbox.coyni.utils.MyApplication;
 
 import java.util.List;
 
 public class BenificialOwnersRecyclerAdapter extends RecyclerView.Adapter<BenificialOwnersRecyclerAdapter.MyViewHolder> {
-    List<BOResp.BeneficialOwner> beneficialOwnerList;
+    List<BeneficialOwnerInfo> beneficialOwnerList;
     Context mContext;
     MyApplication objMyApplication;
+    int count=0;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView firstNameTx,lastnameTx,ssnTx,dobTx,ownershipTx,dateTx,numberTx;
@@ -35,7 +37,7 @@ public class BenificialOwnersRecyclerAdapter extends RecyclerView.Adapter<Benifi
     }
 
 
-    public BenificialOwnersRecyclerAdapter(Context context, List<BOResp.BeneficialOwner> beneficialOwnerList) {
+    public BenificialOwnersRecyclerAdapter(Context context, List<BeneficialOwnerInfo> beneficialOwnerList) {
         this.mContext = context;
         this.beneficialOwnerList = beneficialOwnerList;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
@@ -51,8 +53,9 @@ public class BenificialOwnersRecyclerAdapter extends RecyclerView.Adapter<Benifi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
-            BOResp.BeneficialOwner objData = beneficialOwnerList.get(position);
-            holder.numberTx.setText("Beneficial Owner "+position);
+            BeneficialOwnerInfo objData = beneficialOwnerList.get(position);
+            count=position+1;
+            holder.numberTx.setText("Beneficial Owner "+count);
             if(objData.getFirstName()!=null&&!objData.getFirstName().equals("")) {
                 holder.firstNameTx.setText(objData.getFirstName());
             }
@@ -66,7 +69,7 @@ public class BenificialOwnersRecyclerAdapter extends RecyclerView.Adapter<Benifi
                 holder.dobTx.setText(objData.getDob());
             }
             if(objData.getOwnershipParcentage()!=0) {
-                holder.ownershipTx.setText(objData.getOwnershipParcentage());
+                holder.ownershipTx.setText(objData.getOwnershipParcentage().toString());
             }
             if(objData.getRequiredDocuments().get(position).getUpdatedAt()!=null&&!objData.getRequiredDocuments().get(position).getUpdatedAt().equals("")) {
                 holder.dateTx.setText("Uploaded on"+""+objData.getRequiredDocuments().get(position).getUpdatedAt());
