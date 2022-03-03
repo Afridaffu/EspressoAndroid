@@ -936,7 +936,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     }
                                 }, Utils.duration);
                             }
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                           else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -958,6 +958,9 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                     public void run() {
                                                         try {
                                                             finish();
+                                                            if (EditPhoneActivity.editPhoneActivity != null) {
+                                                                EditPhoneActivity.editPhoneActivity.finish();
+                                                            }
                                                         } catch (Exception e) {
                                                             e.printStackTrace();
                                                         }

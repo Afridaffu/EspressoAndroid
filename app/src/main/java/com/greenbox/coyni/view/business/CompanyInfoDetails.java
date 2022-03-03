@@ -34,14 +34,6 @@ public class CompanyInfoDetails extends BaseActivity {
 
     private void initFields() {
         closeLL = findViewById(R.id.bpCloseLL);
-        closeLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CompanyInfoDetails.this, BusinessProfileActivity.class);
-
-                startActivity(intent);
-            }
-        });
         mEmailTx=(TextView) findViewById(R.id.emailTx);
         mPhoneNumberTx=(TextView) findViewById(R.id.phoneNumberTx);
         mAddressTx=(TextView) findViewById(R.id.addressTx);
@@ -49,6 +41,14 @@ public class CompanyInfoDetails extends BaseActivity {
         phoneLL=(LinearLayout)findViewById(R.id.phoneLL);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessIdentityVerificationViewModel.getCompanyInfo();
+
+        closeLL.setOnClickListener(v -> {
+            try {
+                finish();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
         emailLL.setOnClickListener(new View.OnClickListener() {
             @Override
