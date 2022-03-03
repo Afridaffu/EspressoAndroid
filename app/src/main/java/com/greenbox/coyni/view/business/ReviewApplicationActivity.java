@@ -59,8 +59,8 @@ public class ReviewApplicationActivity extends BaseActivity {
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
-    private TextView noBanksTv,noBoTV;
-    private LinearLayout banksLL,boLL;
+    private TextView noBanksTv, noBoTV;
+    private LinearLayout banksLL, boLL;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
     private int monthlyProcVolume = 0;
@@ -72,8 +72,8 @@ public class ReviewApplicationActivity extends BaseActivity {
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
     private ProgressDialog progressDialog;
     private boolean isAgree = false;
-    private String mCompanyName="", mBusinessEntity="", mEIN="", mEmail="", mPhoneNumber="", mAddress="", mArticleDate="", mEINDate="", mW9Date="";
-    private String mDbName="", mBusinessType="", mTimeZone="", mWebsite="", mMonthlyProcVolume="", mHighTicket="", mAverageTicket="", mCustomerServiceEmail="", mCustomerServicePhone="", mDbAddressLine="", mDbFillingDate="";
+    private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
+    private String mDbName = "", mBusinessType = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
     private MyApplication objMyApplication;
 
     @Override
@@ -87,23 +87,23 @@ public class ReviewApplicationActivity extends BaseActivity {
 
     private void saveApplicationData() {
 
-        mCompanyName=mCompanyNameTx.getText().toString().trim();
-        mBusinessEntity=mBusinessEntityTx.getText().toString().trim();
-        mEIN=mEINTx.getText().toString().trim();
-        mEmail=mEmailTx.getText().toString().trim();
-        mPhoneNumber=mPhoneNumberTx.getText().toString().trim();
+        mCompanyName = mCompanyNameTx.getText().toString().trim();
+        mBusinessEntity = mBusinessEntityTx.getText().toString().trim();
+        mEIN = mEINTx.getText().toString().trim();
+        mEmail = mEmailTx.getText().toString().trim();
+        mPhoneNumber = mPhoneNumberTx.getText().toString().trim();
 
         //
-        mDbName=mDbNameTx.getText().toString().trim();
-        mBusinessType=mBusinessTypeTx.getText().toString().trim();
-        mWebsite=mWebsiteTx.getText().toString().trim();
-        mTimeZone=mTimeZoneTx.getText().toString().trim();
-        mMonthlyProcVolume=mMonthlyProcVolumeTx.getText().toString().trim();
-        mHighTicket=mHighTicketTx.getText().toString().trim();
-        mAverageTicket=mAverageTicketTx.getText().toString().trim();
-        mCustomerServiceEmail=mCustomerServiceEmailTx.getText().toString().trim();
-        mCustomerServicePhone=mCustomerServicePhoneTx.getText().toString().trim();
-        mAddress=mAddressTx.getText().toString().trim();
+        mDbName = mDbNameTx.getText().toString().trim();
+        mBusinessType = mBusinessTypeTx.getText().toString().trim();
+        mWebsite = mWebsiteTx.getText().toString().trim();
+        mTimeZone = mTimeZoneTx.getText().toString().trim();
+        mMonthlyProcVolume = mMonthlyProcVolumeTx.getText().toString().trim();
+        mHighTicket = mHighTicketTx.getText().toString().trim();
+        mAverageTicket = mAverageTicketTx.getText().toString().trim();
+        mCustomerServiceEmail = mCustomerServiceEmailTx.getText().toString().trim();
+        mCustomerServicePhone = mCustomerServicePhoneTx.getText().toString().trim();
+        mAddress = mAddressTx.getText().toString().trim();
         ApplicationSubmitRequest request = new ApplicationSubmitRequest();
         request.setCompanyName(mCompanyName);
         request.setCompanyBusinessEntity(mBusinessEntity);
@@ -157,9 +157,9 @@ public class ReviewApplicationActivity extends BaseActivity {
         agreeCB = findViewById(R.id.agreeCB);
         submitCv = findViewById(R.id.submitCV);
         noBanksTv = findViewById(R.id.noBanksTV);
-        noBoTV=findViewById(R.id.noBOTV);
+        noBoTV = findViewById(R.id.noBOTV);
         banksLL = findViewById(R.id.banksLL);
-        boLL=findViewById(R.id.boLL);
+        boLL = findViewById(R.id.boLL);
         bankRecyclerView = findViewById(R.id.banksRecycler);
         boRecyclerView = findViewById(R.id.boRecycler);
 
@@ -167,6 +167,7 @@ public class ReviewApplicationActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, CompanyInformationActivity.class);
+                intent.putExtra("FROM", "EDIT");
                 startActivity(intent);
             }
         });
@@ -174,6 +175,8 @@ public class ReviewApplicationActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, DBAInfoAcivity.class);
+                intent.putExtra("FROM", "EDIT");
+                intent.putExtra("TYPE", "EXIST");
                 startActivity(intent);
             }
         });
@@ -249,12 +252,12 @@ public class ReviewApplicationActivity extends BaseActivity {
         mAgreementsImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             isAgree=true;
+                isAgree = true;
             }
         });
 
         summaryViewModel = new ViewModelProvider(this).get(BusinessApplicationSummaryViewModel.class);
-        summaryViewModel.getApplicationSummaryData();
+
 
 
     }
@@ -300,7 +303,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                                             mArticleDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 6) {
                                             mEINDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7||cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
+                                        } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7 || cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
                                             mW9DateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         }
                                     }
@@ -314,7 +317,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                                 if (dbaInfo.getBusinessType() != null && !dbaInfo.getBusinessType().equals("")) {
                                     mBusinessTypeTx.setText(dbaInfo.getBusinessType());
                                 }
-                                if (dbaInfo.getTimeZone()!=0) {
+                                if (dbaInfo.getTimeZone() != 0) {
                                     mTimeZoneTx.setText(dbaInfo.getTimeZone().toString());
                                 }
                                 if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
@@ -339,8 +342,8 @@ public class ReviewApplicationActivity extends BaseActivity {
                                 if (dbaInfo.getPhoneNumberDto() != null && !dbaInfo.getPhoneNumberDto().equals("")) {
                                     mCustomerServicePhoneTx.setText(dbaInfo.getPhoneNumberDto().toString());
                                 }
-                                if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("")||dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    mDbAddressLineTx.setText(dbaInfo.getAddressLine1().toString()+dbaInfo.getAddressLine2().toString());
+                                if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("") || dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
+                                    mDbAddressLineTx.setText(dbaInfo.getAddressLine1().toString() + dbaInfo.getAddressLine2().toString());
                                 }
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
@@ -348,7 +351,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                                     }
                                 }
                                 List<BeneficialOwnerInfo> boList = summaryModelResponse.getData().getBeneficialOwnerInfo();
-                                Log.d("BOWData",boList.toString());
+                                Log.d("BOWData", boList.toString());
                                 if (boList.size() > 0) {
                                     boLL.setVisibility(View.VISIBLE);
                                     noBoTV.setVisibility(View.GONE);
@@ -357,42 +360,41 @@ public class ReviewApplicationActivity extends BaseActivity {
                                     beneficialOwnerList = boList;
                                     boRecyclerView.setLayoutManager(layoutManager);
                                     boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
-                                }
-                                else{
+                                } else {
                                     noBoTV.setVisibility(View.VISIBLE);
                                     boLL.setVisibility(View.GONE);
                                 }
                                 if (summaryModelResponse.getData().getBankaccount().getItems().size() > 0) {
-                                banksLL.setVisibility(View.VISIBLE);
-                                noBanksTv.setVisibility(View.GONE);
-                                bankItems = summaryModelResponse.getData().getBankaccount().getItems();
-                                Log.d("BankItems",bankItems.toString());
-                                LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
-                                accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems);
+                                    banksLL.setVisibility(View.VISIBLE);
+                                    noBanksTv.setVisibility(View.GONE);
+                                    bankItems = summaryModelResponse.getData().getBankaccount().getItems();
+                                    Log.d("BankItems", bankItems.toString());
+                                    LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
+                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems);
 
-                                bankRecyclerView.setLayoutManager(layoutManager);
-                                bankRecyclerView.setAdapter(accountsRecyclerAdapter);
+                                    bankRecyclerView.setLayoutManager(layoutManager);
+                                    bankRecyclerView.setAdapter(accountsRecyclerAdapter);
 
-                            } else {
-                                banksLL.setVisibility(View.GONE);
-                                noBanksTv.setVisibility(View.VISIBLE);
-                            }
+                                } else {
+                                    banksLL.setVisibility(View.GONE);
+                                    noBanksTv.setVisibility(View.VISIBLE);
+                                }
                                 agreements = summaryModelResponse.getData().getAgreements().getItems();
-                                Agreements agreements1=summaryModelResponse.getData().getAgreements();
-                            if (agreements != null && agreements1.getItems().size() > 0) {
-                                for (int i = 0; i < agreements1.getItems().size(); i++) {
-                                    if (agreements1.getItems().get(i).getSignatureType() == 0) {
-                                        mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-                                    }
-                                    if (agreements1.getItems().get(i).getSignatureType() == 1) {
-                                        mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-                                    }
-                                    if (agreements1.getItems().get(i).getSignatureType() == 5) {
-                                        mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                Agreements agreements1 = summaryModelResponse.getData().getAgreements();
+                                if (agreements != null && agreements1.getItems().size() > 0) {
+                                    for (int i = 0; i < agreements1.getItems().size(); i++) {
+                                        if (agreements1.getItems().get(i).getSignatureType() == 0) {
+                                            mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                        }
+                                        if (agreements1.getItems().get(i).getSignatureType() == 1) {
+                                            mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                        }
+                                        if (agreements1.getItems().get(i).getSignatureType() == 5) {
+                                            mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
 
+                                        }
                                     }
                                 }
-                            }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -405,27 +407,35 @@ public class ReviewApplicationActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-  public void submitResponse(){
-      try {
-          applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
-              @Override
-              public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
-                  if (submissionViewModel != null) {
-                      dialog.dismiss();
-                      if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                          Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                          startActivity(intent);
-                      }
-                  }
-                  else{
 
-                  }
-              }
-          });
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
-  }
+    public void submitResponse() {
+        try {
+            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
+                @Override
+                public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
+                    if (submissionViewModel != null) {
+                        dialog.dismiss();
+                        if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            startActivity(intent);
+                        }
+                    } else {
 
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    protected void onResume() {
+        try {
+            super.onResume();
+            summaryViewModel.getApplicationSummaryData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

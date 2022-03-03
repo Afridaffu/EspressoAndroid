@@ -53,10 +53,10 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity implements AddNewBusinessAccountDBAAdapter.OnSelectListner{
+public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity implements AddNewBusinessAccountDBAAdapter.OnSelectListner {
 
     private ImageView imageViewClose;
-    private LinearLayout llNewComapny,llNewDba;
+    private LinearLayout llNewComapny, llNewDba;
     private MyApplication objMyApplication;
     private List<String> listComapny = new ArrayList<>();
     private IdentityVerificationViewModel identityVerificationViewModel;
@@ -98,7 +98,6 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
                 displayAlert(BusinessAddNewBusinessAccountActivity.this);
 
 
-
             }
         });
 
@@ -131,18 +130,18 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
 //            listComapny.add(c.getCompanyName());
 //        }
 
-        AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext,BusinessAddNewBusinessAccountActivity.this);
+        AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, BusinessAddNewBusinessAccountActivity.this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         rvCompanyList.setLayoutManager(mLayoutManager);
         rvCompanyList.setItemAnimator(new DefaultItemAnimator());
         rvCompanyList.setAdapter(addNewBusinessAccountDBAAdapter);
-        LogUtils.d("eeee","eeee"+companyId);
+        LogUtils.d("eeee", "eeee" + companyId);
 
         addDBACardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(companyId!=0) {
+                if (companyId != 0) {
                     identityVerificationViewModel.getPostAddDBABusiness(companyId);
                     dialog.cancel();
                 } else {
@@ -169,21 +168,21 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
 
     public void initObservers() {
         try {
-        dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
-            @Override
-            public void onChanged(ProfilesResponse profilesResponse) {
-                if (profilesResponse != null) {
-                    filterList = profilesResponse.getData();
-                    for(ProfilesResponse.Profiles c: filterList){
-                        if(c.getAccountType().equals(Utils.BUSINESS)){
-                            businessAccountList.add(c);
-                            //listComapny.add(c.getAccountType());
-                        } else {
+            dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
+                @Override
+                public void onChanged(ProfilesResponse profilesResponse) {
+                    if (profilesResponse != null) {
+                        filterList = profilesResponse.getData();
+                        for (ProfilesResponse.Profiles c : filterList) {
+                            if (c.getAccountType().equals(Utils.BUSINESS)) {
+                                businessAccountList.add(c);
+                                //listComapny.add(c.getAccountType());
+                            } else {
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -193,13 +192,13 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
 
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                          Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                          startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
+                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                        startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
                                 .putExtra("ADDBUSINESS", "true")
-                                  .putExtra("ADDDBA", "false"));
+                                .putExtra("ADDDBA", "false"));
 
                     } else {
-                       Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
                 }
             });
@@ -211,13 +210,13 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d("addDBAresponse","addDBAresponse"+identityImageResponse.getData());
+                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse.getData());
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
                                 .putExtra("ADDBUSINESS", "true")
                                 .putExtra("ADDDBA", "true"));
-                            //displayAlert(BusinessAddNewBusinessAccountActivity.this);
+                        //displayAlert(BusinessAddNewBusinessAccountActivity.this);
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
@@ -231,7 +230,7 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
     @Override
     public void selectedItem(ProfilesResponse.Profiles item) {
 
-        LogUtils.d("dbaselected","dbaselectes"+item.toString());
+        LogUtils.d("dbaselected", "dbaselectes" + item.toString());
 
         companyId = item.getId();
 

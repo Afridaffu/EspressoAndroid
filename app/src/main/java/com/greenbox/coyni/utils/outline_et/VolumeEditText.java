@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -163,11 +164,21 @@ public class VolumeEditText extends ConstraintLayout {
         FROM = fromm;
         mContext = context;
         mType = type;
+
+        if (mType.equals("MPV")) {
+            volumeET.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        } else if (mType.equals("HT")) {
+            volumeET.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        } else if (mType.equals("AT")) {
+            volumeET.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        }
     }
 
 
     public void setText(String text) {
+        volumeET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(mContext.getString(R.string.maxlendecimal)))});
         volumeET.setText(text);
+        volumeET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(mContext.getString(R.string.maxlength)))});
     }
 
     public void setHint(String text) {
