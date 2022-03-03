@@ -21,21 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
-import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
-import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
-import com.greenbox.coyni.model.Item;
-import com.greenbox.coyni.model.bank.BankAccountsDataModel;
-import com.greenbox.coyni.model.bank.BankItems;
-import com.greenbox.coyni.model.bank.BanksResponseModel;
-
-import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
-import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
-import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
-import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
-import com.greenbox.coyni.model.submit.RequiredDocumentsDb;
-import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
@@ -47,6 +33,7 @@ import com.greenbox.coyni.model.summary.CompanyInfo;
 import com.greenbox.coyni.model.summary.DbaInfo;
 import com.greenbox.coyni.model.summary.Item1;
 import com.greenbox.coyni.model.summary.RequiredDocument;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -73,8 +60,9 @@ public class ReviewApplicationActivity extends BaseActivity {
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
-    private TextView noBanksTv,noBoTV;
-    private LinearLayout banksLL,boLL;
+    private TextView noBanksTv, noBoTV;
+    private LinearLayout banksLL, boLL;
+    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
     private int monthlyProcVolume = 0;
@@ -88,9 +76,9 @@ public class ReviewApplicationActivity extends BaseActivity {
     private boolean isAgree = false;
     private LoginViewModel loginViewModel;
     private MyApplication objMyApplication;
-    private String mCompanyName="", mBusinessEntity="", mEIN="", mEmail="", mPhoneNumber="", mAddress="", mArticleDate="", mEINDate="", mW9Date="";
-    private String mDbName="", mBusinessType="", mTimeZone="", mWebsite="", mMonthlyProcVolume="", mHighTicket="", mAverageTicket="", mCustomerServiceEmail="", mCustomerServicePhone="", mDbAddressLine="", mDbFillingDate="";
-    private boolean addbusiness=false;
+    private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
+    private String mDbName = "", mBusinessType = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
+    private boolean addbusiness = false;
     private BankAccountsViewModel bankAccountsViewModel;
     private DashboardViewModel dashboardViewModel;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
@@ -110,22 +98,23 @@ public class ReviewApplicationActivity extends BaseActivity {
 
     private void saveApplicationData() {
 
-        mCompanyName=mCompanyNameTx.getText().toString().trim();
-        mBusinessEntity=mBusinessEntityTx.getText().toString().trim();
-        mEIN=mEINTx.getText().toString().trim();
-        mEmail=mEmailTx.getText().toString().trim();
-        mPhoneNumber=mPhoneNumberTx.getText().toString().trim();
+        mCompanyName = mCompanyNameTx.getText().toString().trim();
+        mBusinessEntity = mBusinessEntityTx.getText().toString().trim();
+        mEIN = mEINTx.getText().toString().trim();
+        mEmail = mEmailTx.getText().toString().trim();
+        mPhoneNumber = mPhoneNumberTx.getText().toString().trim();
 
-        mDbName=mDbNameTx.getText().toString().trim();
-        mBusinessType=mBusinessTypeTx.getText().toString().trim();
-        mWebsite=mWebsiteTx.getText().toString().trim();
-        mTimeZone=mTimeZoneTx.getText().toString().trim();
-        mMonthlyProcVolume=mMonthlyProcVolumeTx.getText().toString().trim();
-        mHighTicket=mHighTicketTx.getText().toString().trim();
-        mAverageTicket=mAverageTicketTx.getText().toString().trim();
-        mCustomerServiceEmail=mCustomerServiceEmailTx.getText().toString().trim();
-        mCustomerServicePhone=mCustomerServicePhoneTx.getText().toString().trim();
-        mAddress=mAddressTx.getText().toString().trim();
+        mDbName = mDbNameTx.getText().toString().trim();
+        mBusinessType = mBusinessTypeTx.getText().toString().trim();
+        mWebsite = mWebsiteTx.getText().toString().trim();
+        mTimeZone = mTimeZoneTx.getText().toString().trim();
+        mMonthlyProcVolume = mMonthlyProcVolumeTx.getText().toString().trim();
+        mHighTicket = mHighTicketTx.getText().toString().trim();
+        mAverageTicket = mAverageTicketTx.getText().toString().trim();
+        mCustomerServiceEmail = mCustomerServiceEmailTx.getText().toString().trim();
+        mCustomerServicePhone = mCustomerServicePhoneTx.getText().toString().trim();
+        mAddress = mAddressTx.getText().toString().trim();
+
         ApplicationSubmitRequest request = new ApplicationSubmitRequest();
         request.setCompanyName(mCompanyName);
         request.setCompanyBusinessEntity(mBusinessEntity);
@@ -179,11 +168,15 @@ public class ReviewApplicationActivity extends BaseActivity {
         agreeCB = findViewById(R.id.agreeCB);
         submitCv = findViewById(R.id.submitCV);
         noBanksTv = findViewById(R.id.noBanksTV);
-        noBoTV=findViewById(R.id.noBOTV);
+        noBoTV = findViewById(R.id.noBOTV);
         banksLL = findViewById(R.id.banksLL);
-        boLL=findViewById(R.id.boLL);
+        boLL = findViewById(R.id.boLL);
         bankRecyclerView = findViewById(R.id.banksRecycler);
         boRecyclerView = findViewById(R.id.boRecycler);
+        uploadArticlesLL = findViewById(R.id.ll_upload_articles);
+        uploadEINLL = findViewById(R.id.ll_upload_ein);
+        uploadW9LL = findViewById(R.id.ll_upload_w9);
+        dbaFillingLL = findViewById(R.id.ll_dba_filling);
 
         edit1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,14 +216,14 @@ public class ReviewApplicationActivity extends BaseActivity {
             public void onClick(View v) {
                 dialog = Utils.showProgressDialog(ReviewApplicationActivity.this);
                 saveApplicationData();
-                 if(addbusiness) {
-                     loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
-                     loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                 } else {
+                if (addbusiness) {
+                    loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
+                    loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                } else {
 
-                     Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                     startActivity(intent);
-                 }
+                    Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                    startActivity(intent);
+                }
                 submitResponse();
             }
         });
@@ -298,7 +291,7 @@ public class ReviewApplicationActivity extends BaseActivity {
         mAgreementsImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             isAgree=true;
+                isAgree = true;
             }
         });
 
@@ -346,10 +339,34 @@ public class ReviewApplicationActivity extends BaseActivity {
                                 if (cir.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
                                         if (cir.getRequiredDocuments().get(i).getIdentityId() == 5) {
+                                            uploadArticlesLL.setVisibility(View.VISIBLE);
+                                            uploadArticlesLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                            uploadArticlesLL.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    showFile((String) v.getTag());
+                                                }
+                                            });
                                             mArticleDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 6) {
+                                            uploadEINLL.setVisibility(View.VISIBLE);
+                                            uploadEINLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                            uploadEINLL.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    showFile((String) v.getTag());
+                                                }
+                                            });
                                             mEINDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7||cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
+                                        } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7 || cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
+                                            uploadW9LL.setVisibility(View.VISIBLE);
+                                            uploadW9LL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                            uploadW9LL.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    showFile((String) v.getTag());
+                                                }
+                                            });
                                             mW9DateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         }
                                     }
@@ -363,7 +380,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                                 if (dbaInfo.getBusinessType() != null && !dbaInfo.getBusinessType().equals("")) {
                                     mBusinessTypeTx.setText(dbaInfo.getBusinessType());
                                 }
-                                if (dbaInfo.getTimeZone()!=0) {
+                                if (dbaInfo.getTimeZone() != 0) {
                                     mTimeZoneTx.setText(dbaInfo.getTimeZone().toString());
                                 }
                                 if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
@@ -388,16 +405,23 @@ public class ReviewApplicationActivity extends BaseActivity {
                                 if (dbaInfo.getPhoneNumberDto() != null && !dbaInfo.getPhoneNumberDto().equals("")) {
                                     mCustomerServicePhoneTx.setText(dbaInfo.getPhoneNumberDto().toString());
                                 }
-                                if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("")||dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    mDbAddressLineTx.setText(dbaInfo.getAddressLine1().toString()+dbaInfo.getAddressLine2().toString());
+                                if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("") || dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
+                                    mDbAddressLineTx.setText(dbaInfo.getAddressLine1().toString() + dbaInfo.getAddressLine2().toString());
                                 }
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                         mDbFillingDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        dbaFillingLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                        dbaFillingLL.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                showFile((String) v.getTag());
+                                            }
+                                        });
                                     }
                                 }
                                 List<BeneficialOwnerInfo> boList = summaryModelResponse.getData().getBeneficialOwnerInfo();
-                                Log.d("BOWData",boList.toString());
+                                Log.d("BOWData", boList.toString());
                                 if (boList.size() > 0) {
                                     boLL.setVisibility(View.VISIBLE);
                                     noBoTV.setVisibility(View.GONE);
@@ -406,42 +430,41 @@ public class ReviewApplicationActivity extends BaseActivity {
                                     beneficialOwnerList = boList;
                                     boRecyclerView.setLayoutManager(layoutManager);
                                     boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
-                                }
-                                else{
+                                } else {
                                     noBoTV.setVisibility(View.VISIBLE);
                                     boLL.setVisibility(View.GONE);
                                 }
                                 if (summaryModelResponse.getData().getBankaccount().getItems().size() > 0) {
-                                banksLL.setVisibility(View.VISIBLE);
-                                noBanksTv.setVisibility(View.GONE);
-                                bankItems = summaryModelResponse.getData().getBankaccount().getItems();
-                                Log.d("BankItems",bankItems.toString());
-                                LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
-                                accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems);
+                                    banksLL.setVisibility(View.VISIBLE);
+                                    noBanksTv.setVisibility(View.GONE);
+                                    bankItems = summaryModelResponse.getData().getBankaccount().getItems();
+                                    Log.d("BankItems", bankItems.toString());
+                                    LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
+                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems);
 
-                                bankRecyclerView.setLayoutManager(layoutManager);
-                                bankRecyclerView.setAdapter(accountsRecyclerAdapter);
+                                    bankRecyclerView.setLayoutManager(layoutManager);
+                                    bankRecyclerView.setAdapter(accountsRecyclerAdapter);
 
-                            } else {
-                                banksLL.setVisibility(View.GONE);
-                                noBanksTv.setVisibility(View.VISIBLE);
-                            }
+                                } else {
+                                    banksLL.setVisibility(View.GONE);
+                                    noBanksTv.setVisibility(View.VISIBLE);
+                                }
                                 agreements = summaryModelResponse.getData().getAgreements().getItems();
-                                Agreements agreements1=summaryModelResponse.getData().getAgreements();
-                            if (agreements != null && agreements1.getItems().size() > 0) {
-                                for (int i = 0; i < agreements1.getItems().size(); i++) {
-                                    if (agreements1.getItems().get(i).getSignatureType() == 0) {
-                                        mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-                                    }
-                                    if (agreements1.getItems().get(i).getSignatureType() == 1) {
-                                        mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-                                    }
-                                    if (agreements1.getItems().get(i).getSignatureType() == 5) {
-                                        mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                Agreements agreements1 = summaryModelResponse.getData().getAgreements();
+                                if (agreements != null && agreements1.getItems().size() > 0) {
+                                    for (int i = 0; i < agreements1.getItems().size(); i++) {
+                                        if (agreements1.getItems().get(i).getSignatureType() == 0) {
+                                            mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                        }
+                                        if (agreements1.getItems().get(i).getSignatureType() == 1) {
+                                            mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                        }
+                                        if (agreements1.getItems().get(i).getSignatureType() == 5) {
+                                            mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
 
+                                        }
                                     }
                                 }
-                            }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -465,7 +488,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                     }
                 }
             });
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -476,7 +499,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                     dialog.dismiss();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
-                            LogUtils.d("btResp","btResp"+btResp);
+                            LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             //finish();
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
@@ -490,27 +513,35 @@ public class ReviewApplicationActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-  public void submitResponse(){
-      try {
-          applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
-              @Override
-              public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
-                  if (submissionViewModel != null) {
-                      dialog.dismiss();
-                      if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                          Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                          startActivity(intent);
-                      }
-                  }
-                  else{
 
-                  }
-              }
-          });
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
-  }
+    private void showFile(String fileUrl) {
+        if(fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
+            //Call the activity here
+        } else {
+            LogUtils.v(TAG, "fileUrl is null or empty");
+        }
+    }
+
+    public void submitResponse() {
+        try {
+            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
+                @Override
+                public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
+                    if (submissionViewModel != null) {
+                        dialog.dismiss();
+                        if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            startActivity(intent);
+                        }
+                    } else {
+
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
