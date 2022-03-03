@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -20,12 +22,18 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
+import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+
+import java.util.Objects;
 
 public class EditPhoneActivity extends AppCompatActivity {
 
@@ -39,6 +47,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     public static EditPhoneActivity editPhoneActivity;
     String currentPhoneNumber, newPhoneNumber;
     TextView contactUsTV,b_contactUsTV;
@@ -57,6 +66,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     public void initFields() {
         try {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -93,6 +103,7 @@ public class EditPhoneActivity extends AppCompatActivity {
             if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
                 findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
                 findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
+
             }
 
             currentPhoneET.setText(getIntent().getStringExtra("OLD_PHONE"));
@@ -111,8 +122,42 @@ public class EditPhoneActivity extends AppCompatActivity {
                         dialog.setIndeterminate(false);
                         dialog.setMessage("Please wait...");
                         dialog.show();
-
-                        callSendPhoneOTPAPI();
+                        if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangePhone")){
+                            try {
+                                DBAInfoRequest dbaInfoRequest=new DBAInfoRequest();
+                                dbaInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getDbaInfoResp().getData().getEmail()));
+                                dbaInfoRequest.setAddressLine1(myApplicationObj.getDbaInfoResp().getData().getAddressLine1());
+                                dbaInfoRequest.setAddressLine2(myApplicationObj.getDbaInfoResp().getData().getAddressLine2());
+                                dbaInfoRequest.setBusinessType(myApplicationObj.getDbaInfoResp().getData().getBusinessType());
+                                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getAverageTicket().trim().replace(",", "")).split("\\.")[0]));
+                                dbaInfoRequest.setCity(myApplicationObj.getDbaInfoResp().getData().getCity());
+                                dbaInfoRequest.setCopyCompanyInfo(myApplicationObj.getDbaInfoResp().getData().isCopyCompanyInfo());
+                                dbaInfoRequest.setCountry(myApplicationObj.getDbaInfoResp().getData().getCountry());
+                                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getHighTicket().trim().replace(",", "")).split("\\.")[0]));
+                                dbaInfoRequest.setIdentificationType(Integer.parseInt(myApplicationObj.getDbaInfoResp().getData().getIdentificationType()));
+                                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getMonthlyProcessingVolume().trim().replace(",", "")).split("\\.")[0]));
+                                dbaInfoRequest.setName(myApplicationObj.getDbaInfoResp().getData().getName());
+                                PhNoWithCountryCode phNoWithCountryCode=new PhNoWithCountryCode();
+                                phNoWithCountryCode.setCountryCode(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getCountryCode());
+                                newPhoneNumber=b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
+                                phNoWithCountryCode.setPhoneNumber(newPhoneNumber);
+                                dbaInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                dbaInfoRequest.setState(myApplicationObj.getDbaInfoResp().getData().getState());
+                                dbaInfoRequest.setTimeZone(myApplicationObj.getDbaInfoResp().getData().getTimeZone());
+                                dbaInfoRequest.setWebsite(myApplicationObj.getDbaInfoResp().getData().getWebsite());
+                                dbaInfoRequest.setZipCode(myApplicationObj.getDbaInfoResp().getData().getZipCode());
+                                businessIdentityVerificationViewModel.patchDBAInfo(dbaInfoRequest);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT||myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                            try {
+                                callSendPhoneOTPAPI();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
 
                     } else {
                         Log.e("isSaveEnabled", isSaveEnabled + "");
@@ -255,6 +300,33 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             }
         });
+
+        businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
+            @Override
+            public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
+                dialog.dismiss();
+                try {
+                    if (dbaInfoUpdateResp !=null && dbaInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                        Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
+                        new Handler().postDelayed(() -> {
+                            try {
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }, 2000);
+
+                    }
+                    else {
+                        Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override

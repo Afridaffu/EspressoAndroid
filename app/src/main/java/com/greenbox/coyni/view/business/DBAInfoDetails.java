@@ -66,7 +66,7 @@ public class DBAInfoDetails extends AppCompatActivity {
     ProgressDialog dialog;
     Long mLastClickTime=0L;
     private LinearLayout editEmail,editPhone;
-    String emailID;
+    String emailID,phone_Number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +129,13 @@ public class DBAInfoDetails extends AppCompatActivity {
                 }
             });
 
+            editPhone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DBAInfoDetails.this,BusinessUserDetailsPreviewActivity.class).putExtra("screen","DBAInfo").putExtra("action","EditPhoneDBA").putExtra("value",phone_Number));
+                }
+            });
+
 
             closeLL.setOnClickListener(v -> {
                 try {
@@ -166,7 +173,10 @@ public class DBAInfoDetails extends AppCompatActivity {
                 webSiteTV.setText("");
             }
             if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
-                phoneNumberTV.setText(dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber());
+                String pnhNum=dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
+                String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
+                phoneNumberTV.setText(phone_number);
+                phone_Number = phone_number;
             } else {
                 phoneNumberTV.setText("");
             }
@@ -306,7 +316,7 @@ public class DBAInfoDetails extends AppCompatActivity {
                             webSiteTV.setText("");
                         }
                         if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
-                            phoneNumberTV.setText(dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber());
+                            phoneNumberTV.setText("(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
                         } else {
                             phoneNumberTV.setText("");
                         }

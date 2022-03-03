@@ -144,15 +144,18 @@
                         android:textSize="@dimen/_16ssp" />
 
                     <LinearLayout
+                        android:id="@+id/webIdLL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_gravity="center"
+                        android:visibility="visible"
                         >
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_x"
+                            android:layout_gravity="center"
+                            android:src="@drawable/dba_web_icon"
                             />
                         <TextView
                             android:id="@+id/websiteTV"
@@ -160,7 +163,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_3sdp"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text=""
+                            android:text="jdshbvubwvudvby"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
 
