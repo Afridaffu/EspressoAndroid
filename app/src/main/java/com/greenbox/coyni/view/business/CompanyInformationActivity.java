@@ -781,7 +781,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
 
                     } else {
-                        companyemailET.setHint(getResources().getString(R.string.companyemail));
+                        companyemailET.setHint(getResources().getString(R.string.company_s_email));
                         companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
                         companyemailErrorLL.setVisibility(GONE);
