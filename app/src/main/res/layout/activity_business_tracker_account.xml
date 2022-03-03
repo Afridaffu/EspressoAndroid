@@ -797,7 +797,7 @@
                     android:gravity="center"
                     android:visibility="gone"
                     app:cardBackgroundColor="@color/primary_color"
-                    app:cardCornerRadius="@dimen/_33sdp">
+                    app:cardCornerRadius="@dimen/_22sdp">
 
                     <TextView
                         android:layout_width="wrap_content"

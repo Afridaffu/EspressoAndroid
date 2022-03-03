@@ -154,7 +154,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         closebtn.setVisibility(GONE);
                         mailAddr1.requestFocus();
                         Utils.shwForcedKeypad(IdentityVerificationActivity.this);
-
                     }
                 }
 
