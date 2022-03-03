@@ -198,6 +198,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     private void initialization() {
         try {
+
             setKeyboardVisibilityListener(this);
             etlPassword = findViewById(R.id.etlPassword);
             etlEmail = findViewById(R.id.etlEmail);
@@ -317,7 +318,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     Utils.shwForcedKeypad(LoginActivity.this);
                                 etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
-                                etEmail.setHint("Coyni@example.com");
+                                etEmail.setHint((getResources().getString(R.string.email)));
                                 layoutEmailError.setVisibility(GONE);
                             }
                         }
