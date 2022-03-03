@@ -48,18 +48,15 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
-        try {
-            if (items.get(pos).getSignatureType() == 1) {
-                holder.agreementTV.setText("Privacy Policy " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-            } else if (items.get(pos).getSignatureType() == 0) {
-                holder.agreementTV.setText("Terms of Service " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-            }
-            if (items.get(pos).getSignatureType() == 5) {
-                holder.agreementTV.setText("Merchant’s Agreement " + items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                if (items.get(pos).getSignatureType() == 1 && items.get(pos).getDocumentVersion()!=null) {
+                    holder.agreementTV.setText(context.getResources().getString(R.string.privay_policy) +" " +items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+
+                } else if (items.get(pos).getSignatureType() == 0 && items.get(pos).getDocumentVersion()!=null) {
+                    holder.agreementTV.setText(context.getResources().getString(R.string.tos) +" "+items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                }
+                if (items.get(pos).getSignatureType() == 5 && items.get(pos).getDocumentVersion()!=null) {
+                    holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) +" "+items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                }
     }
 
     @Override
