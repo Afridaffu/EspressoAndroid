@@ -41,6 +41,10 @@ import java.util.Map;
 public class WebViewActivity extends BaseActivity {
 
     private WebView webView;
+    private ImageView imageView;
+    private static final String HTML_FORMAT = "<html><body style=\"text-align: center; background-color: black; vertical-align: center;\"><img width=\"300\" src = \"%s\" /></body></html>";
+    private LinearLayout llClose;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +55,27 @@ public class WebViewActivity extends BaseActivity {
             setContentView(R.layout.activity_web_view);
 
             webView =(WebView)findViewById(R.id.webView);
+            llClose =(LinearLayout)findViewById(R.id.layoutClose);
 
+            String uri = "http://www.africau.edu/images/default/sample.pdf";
+            String extension = uri.substring(uri.lastIndexOf(".") + 1);
 
-            startWebView("https://g3-identitydocs.s3.amazonaws.com/744_SSN_COMPANY_W9.jpg");
+            LogUtils.d("extension","extension"+extension);
+
+            if(extension.equalsIgnoreCase("pdf")){
+                webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + uri);
+            } else {
+                final String html = String.format(HTML_FORMAT, uri);
+                webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
+
+            }
+
+            llClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
 
 
         }   catch (Exception ex) {
