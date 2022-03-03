@@ -362,6 +362,9 @@ public class DBAInfoDetails extends AppCompatActivity {
                         }
                         bindImage(objMyApplication.getMyProfile().getData().getImage(), dbaInfoResp);
                     }
+                    else {
+                        Utils.displayAlert(dbaInfoResp.getError().getErrorDescription(),DBAInfoDetails.this,"",dbaInfoResp.getError().getFieldErrors().get(0));
+                    }
 
 
                 }

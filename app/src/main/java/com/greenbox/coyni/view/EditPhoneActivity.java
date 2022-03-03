@@ -282,7 +282,6 @@ public class EditPhoneActivity extends AppCompatActivity {
                                         .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
                                         .putExtra("OLD_PHONE", currentPhoneNumber)
                                         .putExtra("NEW_PHONE", newPhoneNumber));
-                                finish();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
