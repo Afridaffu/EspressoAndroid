@@ -37,17 +37,12 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/iv_user_icon_CV"
-                        android:layout_width="@dimen/_48sdp"
-                        android:layout_height="@dimen/_48sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_24sdp">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="@dimen/_48sdp"
-                            android:layout_height="@dimen/_48sdp"
-                            android:padding="2dp"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="@dimen/_24sdp">
+
 
                             <ImageView
                                 android:id="@+id/iv_user_icon"
@@ -57,7 +52,6 @@
                                 android:scaleType="fitXY"
                                 android:src="@drawable/acct_profile"
                                 android:visibility="visible" />
-                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:id="@+id/tv_user_icon_text"

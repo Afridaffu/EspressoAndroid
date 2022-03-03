@@ -560,6 +560,27 @@
     <string name="companys_name">Company’s Name</string>
     <string name="gift_card_name">Gift Card Name</string>
 
+    <string name="back_button">back button</string>
+    <string name="name_on_card">Name on Card</string>
+    <string name="card_exp">Card Exp</string>
+    <string name="billing_address_line_1">Billing Address Line 1</string>
+    <string name="visa_debit_8765">Visa Debit ••••8765</string>
+    <string name="billing_address_line_2_optional">Billing Address Line 2(Optional)</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="remove_this_card">Remove This Card</string>
+    <string name="save">Save</string>
+
     <string name="email_error_warning">User already exists. Try a new email or log in.</string>
     <string name="phone_number_error_warning">User already exists. Try a new phone number or log in.</string>
+    <string name="password">Password</string>
+    <string name="phone">Phone Number</string>
+    <string name="phone_curr">Current Phone Number</string>
+    <string name="this_is_web_icon">this is web icon</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="edit_profile_icon">edit Profile Icon</string>
+    <string name="customer_service">Customer Service</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="move_button">move Button</string>
+
+
 </resources>

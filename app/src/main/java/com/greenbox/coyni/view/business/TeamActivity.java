@@ -1,58 +1,45 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
-import com.greenbox.coyni.adapters.GiftCardsRecyclerAdapter;
 import com.greenbox.coyni.adapters.TeamAdapter;
-import com.greenbox.coyni.model.Agreements;
-import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
-import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
-import com.greenbox.coyni.model.bank.BanksResponseModel;
-import com.greenbox.coyni.model.giftcard.Brand;
-import com.greenbox.coyni.model.giftcard.BrandsResponse;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
-import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
 import com.greenbox.coyni.model.team.TeamData;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.GiftCardActivity;
-import com.greenbox.coyni.viewmodel.GiftCardsViewModel;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamActivity extends BaseActivity {
+public class TeamActivity extends BaseActivity implements TeamAdapter.TeamMemberClickListener {
 
     private LinearLayout bpbackBtn, addTeamMemberL,clearTextLL;
     private TeamViewModel teamViewModel;
     private RecyclerView recyclerViewTeam;
     private TeamAdapter teamAdapter;
-    public static TeamActivity teamActivity;
     private List<TeamData> datumList = new ArrayList<>();
     private TextView noBrandsTV;
     private EditText searchET;
+    private TeamAdapter.TeamMemberClickListener memberClickListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +63,7 @@ public class TeamActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+        addTeamMemberL.setVisibility(View.VISIBLE);
 
         addTeamMemberL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +77,7 @@ public class TeamActivity extends BaseActivity {
         teamViewModel.getTeamInfo(request);
 
         searchET.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -96,6 +85,7 @@ public class TeamActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                addTeamMemberL.setVisibility(View.GONE);
                 if (charSequence.toString().length() > 0) {
                     clearTextLL.setVisibility(View.VISIBLE);
                 } else {
@@ -116,7 +106,7 @@ public class TeamActivity extends BaseActivity {
                 if (filterList.size() > 0) {
                     noBrandsTV.setVisibility(View.GONE);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
-                    teamAdapter = new TeamAdapter(TeamActivity.this, filterList);
+                    teamAdapter = new TeamAdapter(TeamActivity.this, filterList,memberClickListener);
                     recyclerViewTeam.setLayoutManager(layoutManager);
                     recyclerViewTeam.setAdapter(teamAdapter);
 
@@ -136,12 +126,41 @@ public class TeamActivity extends BaseActivity {
             public void onClick(View view) {
                 searchET.setText("");
                 searchET.clearFocus();
+                noBrandsTV.setVisibility(View.GONE);
+                addTeamMemberL.setVisibility(View.VISIBLE);
                 Utils.hideKeypad(TeamActivity.this);
             }
         });
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        Context context=view.getContext();
+        Intent intent=new Intent();
+        switch (position){
+            default:
+                String firstName="",lastName="";
+                if(datumList.get(position).getFirstName()!=null&&!datumList.get(position).getFirstName().equals("")){
+                    firstName=datumList.get(position).getFirstName();
+                }
+                if(datumList.get(position).getLastName()!=null&&!datumList.get(position).getLastName().equals("")){
+                    lastName=datumList.get(position).getLastName();
+                }
+               String memberName=firstName.substring(0)+lastName.substring(0);
+                intent =  new Intent(context, TeamMember.class);
+                intent.putExtra(Utils.teamFirstName,datumList.get(position).getFirstName());
+                intent.putExtra(Utils.teamLastName,datumList.get(position).getLastName());
+                intent.putExtra(Utils.teamImageName, memberName);
+                intent.putExtra(Utils.teamRoleName,datumList.get(position).getRoleName());
+                intent.putExtra(Utils.teamStatus, (Parcelable) datumList.get(position).getStatus());
+                intent.putExtra(Utils.teamEmailAddress,datumList.get(position).getEmailAddress());
+                intent.putExtra(Utils.teamPhoneNumber, (Parcelable) datumList.get(position).getPhoneNumber());
+                intent.putExtra(Utils.teamMemberId,datumList.get(position).getId());
+                context.startActivity(intent);
+                break;
 
+        }
+    }
     private void initObservers() {
 
         try {
@@ -155,7 +174,7 @@ public class TeamActivity extends BaseActivity {
 
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
                                 recyclerViewTeam.setLayoutManager(layoutManager);
-                                teamAdapter = new TeamAdapter(TeamActivity.this, datumList);
+                                teamAdapter = new TeamAdapter(TeamActivity.this, datumList,memberClickListener);
                                 recyclerViewTeam.setAdapter(teamAdapter);
 
                             } else {

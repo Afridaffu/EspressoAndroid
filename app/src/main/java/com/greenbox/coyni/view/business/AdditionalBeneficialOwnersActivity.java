@@ -258,6 +258,9 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
         } else {
             notFoundTV.setVisibility(View.VISIBLE);
             beneficialOwnersRV.setVisibility(View.GONE);
+
+            isValidateEnabled = false;
+            validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
         }
     }
 

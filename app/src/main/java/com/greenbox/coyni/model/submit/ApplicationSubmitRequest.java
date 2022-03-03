@@ -1,12 +1,11 @@
 package com.greenbox.coyni.model.submit;
 
-import com.greenbox.coyni.model.AgreementsData;
-import com.greenbox.coyni.model.BeneficialOwners.BOResp;
-import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
-import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.Error;
-import com.greenbox.coyni.model.bank.BankAccountsDataModel;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.model.summary.Agreements;
+import com.greenbox.coyni.model.summary.Bankaccount;
+import com.greenbox.coyni.model.summary.BeneficialOwnerInfo;
+import com.greenbox.coyni.model.summary.RequiredDocument;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,7 @@ public class ApplicationSubmitRequest {
     private int companyIdentificationType = 0; // Here Identification Type is SSN(11) or EIN/TIN(10)
 
 
-    private ArrayList<CompanyInfoResp.RequiredDocumets> requiredDocuments = new ArrayList<>();
+    private List<RequiredDocument> requiredDocuments;
 //DbInfo
 
     private String dbAddressLine1 = "";
@@ -37,14 +36,14 @@ public class ApplicationSubmitRequest {
     private PhNoWithCountryCode dbPhoneNumberDto = new PhNoWithCountryCode();
     private String dbBusinessType = "";
 
-    private ArrayList<DBAInfoResp.RequiredDocumets> requiredDocuments1 = new ArrayList<>();
+    private List<Object> requiredDocuments1 = new ArrayList<>();
 
 
-    public ArrayList<DBAInfoResp.RequiredDocumets> getRequiredDocuments1() {
+    public List<Object> getRequiredDocuments1() {
         return requiredDocuments1;
     }
 
-    public void setRequiredDocuments1(ArrayList<DBAInfoResp.RequiredDocumets> requiredDocuments1) {
+    public void setRequiredDocuments1(List<Object> requiredDocuments1) {
         this.requiredDocuments1 = requiredDocuments1;
     }
 
@@ -92,34 +91,35 @@ public class ApplicationSubmitRequest {
 //Bank Info
 
 
-    private BankAccountsDataModel bankAccountsDataModel;
+    private Bankaccount bankAccountsDataModel;
 
-    public BankAccountsDataModel getData() {
+    public Bankaccount getData() {
         return bankAccountsDataModel;
     }
 
-    public void setData(BankAccountsDataModel data) {
+    public void setData(Bankaccount data) {
         this.bankAccountsDataModel = data;
     }
 
 
     //Benificial
 
-    private BOResp boResp;
 
-    public BOResp getBoResp() {
-        return boResp;
+    private List<BeneficialOwnerInfo> beneficialOwnerInfo;
+
+    public List<BeneficialOwnerInfo> getBeneficialOwnerInfo() {
+        return beneficialOwnerInfo;
     }
 
-    public void setBoResp(BOResp boResp) {
-        this.boResp = boResp;
+    public void setBeneficialOwnerInfo(List<BeneficialOwnerInfo> beneficialOwnerInfo) {
+        this.beneficialOwnerInfo = beneficialOwnerInfo;
     }
 
 
     //Agreements
-    private AgreementsData data;
+    private Agreements data;
 
-    public void setData(AgreementsData data) {
+    public void setData(Agreements data) {
         this.data = data;
     }
 
@@ -198,11 +198,12 @@ public class ApplicationSubmitRequest {
         this.companyIdentificationType = companyIdentificationType;
     }
 
-    public ArrayList<CompanyInfoResp.RequiredDocumets> getCompanyRequiredDocumets() {
+
+    public List<RequiredDocument> getRequiredDocuments() {
         return requiredDocuments;
     }
 
-    public void setCompanyRequiredDocumets(ArrayList<CompanyInfoResp.RequiredDocumets> requiredDocuments) {
+    public void setRequiredDocuments(List<RequiredDocument> requiredDocuments) {
         this.requiredDocuments = requiredDocuments;
     }
 
