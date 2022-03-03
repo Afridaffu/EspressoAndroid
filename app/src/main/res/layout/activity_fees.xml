@@ -99,13 +99,12 @@
 
                             <TextView
                                 android:id="@+id/salesOrderDollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -118,7 +117,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -148,7 +146,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -161,7 +158,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -233,13 +229,12 @@
 
                             <TextView
                                 android:id="@+id/tvEBADoll"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -252,7 +247,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -276,13 +270,12 @@
 
                             <TextView
                                 android:id="@+id/instantPayDollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -295,7 +288,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -319,13 +311,12 @@
 
                             <TextView
                                 android:id="@+id/signetAccDollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -338,7 +329,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -362,13 +352,12 @@
 
                             <TextView
                                 android:id="@+id/giftCardDollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -381,7 +370,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -405,13 +393,12 @@
 
                             <TextView
                                 android:id="@+id/fdwDollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -424,7 +411,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -456,7 +442,7 @@
 
                         <View
                             android:layout_width="match_parent"
-                            android:layout_height="1sp"
+                            android:layout_height="1dp"
                             android:layout_marginHorizontal="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_8sdp"
                             android:background="@color/viewcolor" />
@@ -480,13 +466,12 @@
 
                             <TextView
                                 android:id="@+id/buyTokenEBADollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -499,7 +484,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -523,13 +507,12 @@
 
                             <TextView
                                 android:id="@+id/buytokenSignetDollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -542,7 +525,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -596,13 +578,12 @@
 
                             <TextView
                                 android:id="@+id/monthlyFeeDollTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="$ 0.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -615,7 +596,6 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
                                 android:singleLine="true"
-                                android:text="0%"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>

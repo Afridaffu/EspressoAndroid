@@ -12,7 +12,7 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/editPhoneSV"
         android:layout_width="match_parent"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -144,7 +144,7 @@
         android:layout_alignParentTop="true"
         android:background="#f2f4f5"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -229,6 +229,7 @@
                 android:gravity="center"
                 android:text="Don't have access"
                 android:textColor="@color/primary_black"
+                android:visibility="gone"
                 android:textSize="@dimen/_12ssp" />
 
             <TextView
@@ -241,6 +242,7 @@
                 android:gravity="center"
                 android:text="@string/contact_us"
                 android:textColor="@color/primary_color"
+                android:visibility="gone"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
