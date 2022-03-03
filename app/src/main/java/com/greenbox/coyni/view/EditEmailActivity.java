@@ -541,7 +541,6 @@ public class EditEmailActivity extends AppCompatActivity {
                                     .putExtra("IS_OLD_EMAIL", "true")
                                     .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
                                     .putExtra("NEW_EMAIL", b_newEmailET.getText().toString().trim()));
-                            finish();
                         }
                     } else {
                         if (updateEmailResponse.getError().getErrorDescription().equals("")) {

@@ -41,7 +41,8 @@
                 android:fontFamily="@font/opensans_bold"
                 android:text="Create Account"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_16ssp" />
+                android:textSize="@dimen/_16ssp"
+                />
         </LinearLayout>
 
         <ScrollView
@@ -292,7 +293,6 @@
                             android:importantForAutofill="no"
                             android:inputType="textPassword|textNoSuggestions"
                             android:longClickable="false"
-                            android:textIsSelectable="false"
                             android:maxLength="12"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -300,6 +300,7 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
+                            android:textIsSelectable="false"
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
