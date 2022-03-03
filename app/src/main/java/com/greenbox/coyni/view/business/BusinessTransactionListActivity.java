@@ -305,7 +305,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
             @Override
             public void onChanged(TransactionList transactionList) {
                 try {
-                    if (transactionList != null && transactionList.getData().getItems() != null) {
+                    if (transactionList != null && transactionList.getData() != null && transactionList.getData().getItems() != null) {
                         if (transactionList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             progressBar.setVisibility(View.GONE);
                             loadMoreTV.setVisibility(View.GONE);

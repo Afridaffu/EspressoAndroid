@@ -216,11 +216,11 @@ public class BusinessAccountFragment extends BaseFragment {
         try {
             transactionsNSV.setVisibility(View.VISIBLE);
 
-            if (daata.getData().size() == 0) {
+            if (daata.getData().size() == 0 && daata.getData() != null) {
                 txnRV.setVisibility(View.GONE);
                 noTxnTV.setVisibility(View.VISIBLE);
 
-            } else if (daata.getData().size() > 4) {
+            } else if (daata.getData().size() > 4 && daata.getData() != null) {
                 txnRV.setVisibility(View.VISIBLE);
                 viewMoreLL.setVisibility(View.VISIBLE);
                 noTxnTV.setVisibility(View.GONE);
@@ -229,7 +229,7 @@ public class BusinessAccountFragment extends BaseFragment {
                 txnRV.setLayoutManager(mLayoutManager);
                 txnRV.setItemAnimator(new DefaultItemAnimator());
                 txnRV.setAdapter(latestTxnAdapter);
-            } else if (daata.getData().size() <= 4) {
+            } else if (daata.getData().size() <= 4 && daata.getData() != null) {
                 txnRV.setVisibility(View.VISIBLE);
                 viewMoreLL.setVisibility(View.GONE);
                 noTxnTV.setVisibility(View.GONE);
