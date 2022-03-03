@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
             android:orientation="horizontal">
 
             <ImageView
@@ -35,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_21sdp"
             android:layout_marginBottom="@dimen/_14sdp"
             app:cardCornerRadius="@dimen/_19sdp">

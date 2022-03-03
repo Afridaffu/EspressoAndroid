@@ -223,7 +223,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 //            firstNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
 
-
             lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             lastNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
 
@@ -460,11 +459,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         firstNameErrorLL.setVisibility(GONE);
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_green));
-                        String str = firstNameET.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                            firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
-                            firstNameET.setSelection(firstNameET.getText().length());
-                        }
+//                        String str = firstNameET.getText().toString();
+//                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+//                            firstNameET.setText(firstNameET.getText().toString().replaceAll(" ", ""));
+//                            firstNameET.setSelection(firstNameET.getText().length());
+//                        }
                     } else {
                         isFirstName = false;
                     }
@@ -485,6 +484,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (str.length() > 0 && str.toString().trim().length() == 0) {
                             firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            firstNameET.setText(str.trim());
                         } else if (str.length() > 0 && str.contains(".")) {
                             firstNameET.setText(firstNameET.getText().toString().replaceAll("\\.", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
@@ -513,11 +514,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         lastNameErrorLL.setVisibility(GONE);
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_green));
-                        String str = lastNameET.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                            lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
-                            lastNameET.setSelection(lastNameET.getText().length());
-                        }
+//                        String str = lastNameET.getText().toString();
+//                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+//                            lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
+//                            lastNameET.setSelection(lastNameET.getText().length());
+//                        }
                     } else {
                         isLastName = false;
                     }
@@ -538,7 +539,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (str.length() > 0 && str.toString().trim().length() == 0) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
-                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            lastNameET.setText(str.trim());
+                        } else if (str.length() > 0 && str.contains(".")) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(".", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
                         }
@@ -857,7 +860,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                            passwordET.setHint("8-12 Characters");
+                            passwordET.setHint("Password");
 //                            stregnthViewLL.setVisibility(VISIBLE);
 //                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
