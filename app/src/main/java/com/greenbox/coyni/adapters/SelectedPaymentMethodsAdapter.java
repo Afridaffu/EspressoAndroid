@@ -253,7 +253,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         ((WithdrawPaymentMethodsActivity) mContext).expiry();
                                     }
                                 } else if (!objData.getExpired()) {
-//                                    ((WithdrawPaymentMethodsActivity) mContext).displayCVV("withdraw");
                                     ((WithdrawPaymentMethodsActivity) mContext).bindSelectedCard("withdraw");
                                 } else {
                                     ((WithdrawPaymentMethodsActivity) mContext).expiry();
@@ -263,7 +262,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
                                     objMyApplication.setSelectedCard(objData);
                                     notifyDataSetChanged();
-                                    if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
+                                    if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
                                         if (!objData.getRelink()) {
                                             ((WithdrawTokenActivity) mContext).bindSelectedBank(objData);
                                         } else {
@@ -271,7 +270,6 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                         }
                                     } else {
                                         if (!objData.getExpired()) {
-//                                            ((WithdrawTokenActivity) mContext).displayCVV(objData);
                                             ((WithdrawTokenActivity) mContext).bindSelectedCard(objData);
                                         } else {
                                             ((WithdrawTokenActivity) mContext).expiry();

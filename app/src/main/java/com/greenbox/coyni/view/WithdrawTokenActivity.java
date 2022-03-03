@@ -627,15 +627,19 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             String strPaymentMethod = "";
             if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                 for (int i = 0; i < paymentMethodsResponse.getData().getData().size(); i++) {
-                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                        if (!paymentMethodsResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("credit")) {
-                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
-                        }
-                    } else {
-                        strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
-                        if (strPaymentMethod != null && (strPaymentMethod.toLowerCase().equals("bank") || strPaymentMethod.toLowerCase().equals("signet"))) {
-                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
-                        }
+//                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                        if (!paymentMethodsResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("credit")) {
+//                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+//                        }
+//                    } else {
+//                        strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
+//                        if (strPaymentMethod != null && (strPaymentMethod.toLowerCase().equals("bank") || strPaymentMethod.toLowerCase().equals("signet"))) {
+//                            listPayments.add(paymentMethodsResponse.getData().getData().get(i));
+//                        }
+//                    }
+                    strPaymentMethod = paymentMethodsResponse.getData().getData().get(i).getPaymentMethod();
+                    if (strPaymentMethod != null && !strPaymentMethod.toLowerCase().equals("credit")) {
+                        listPayments.add(paymentMethodsResponse.getData().getData().get(i));
                     }
                 }
                 if (listPayments != null && listPayments.size() > 0) {
@@ -833,6 +837,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     public void bindSelectedBank(PaymentsList objData) {
         try {
+            strCardId = "0";
             prevSelectedCard = null;
             bindPayMethod(objData);
         } catch (Exception ex) {
@@ -1190,6 +1195,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     public void bindSelectedCard(PaymentsList objData) {
         try {
+            strBankId = "0";
             prevSelectedCard = null;
             bindPayMethod(objData);
         } catch (Exception ex) {
