@@ -195,6 +195,9 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
 
     public void setText(String text) {
         pnET.setText(text);
+        if(text.trim().length() > 0){
+            hintName.setVisibility(VISIBLE);
+        }
     }
 
     public String getText() {
