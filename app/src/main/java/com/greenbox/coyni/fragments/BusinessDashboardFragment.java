@@ -54,6 +54,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
+    private TextView mTvOfficiallyVerified;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,7 +67,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
-
             }
         });
 
@@ -74,7 +74,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), BusinessAdditonalActionRequired.class));
-
             }
         });
 
@@ -102,6 +101,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlBuyTokensFirstTimeView = mCurrentView.findViewById(R.id.ll_buy_tokens_first_time);
         mTvIdentityReviewCancelMessage = mCurrentView.findViewById(R.id.tv_identity_review_cancel_text);
         notificationsRL = mCurrentView.findViewById(R.id.notificationsRL);
+        mTvOfficiallyVerified = mCurrentView.findViewById(R.id.tv_officially_verified);
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
 
 
@@ -159,6 +159,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 showIdentityVerificationFailed();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 showBusinessDashboardView();
+                mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
             }
         }
     }
