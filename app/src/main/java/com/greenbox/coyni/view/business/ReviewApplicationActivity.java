@@ -15,12 +15,18 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.AddNewBusinessAccountDBAAdapter;
+import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
+import com.greenbox.coyni.adapters.PastAgreeListAdapter;
+import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
@@ -36,6 +42,7 @@ import com.greenbox.coyni.model.summary.RequiredDocument;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
@@ -47,7 +54,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewApplicationActivity extends BaseActivity {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner  {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -62,7 +69,7 @@ public class ReviewApplicationActivity extends BaseActivity {
     private RecyclerView bankRecyclerView, boRecyclerView;
     private TextView noBanksTv, noBoTV;
     private LinearLayout banksLL, boLL;
-    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL;
+    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL,llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
     private int monthlyProcVolume = 0;
@@ -72,6 +79,7 @@ public class ReviewApplicationActivity extends BaseActivity {
     private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
+    private LinearLayout llPrivacy, llTerms, llMerchant;
     private ProgressDialog progressDialog;
     private boolean isAgree = false;
     private LoginViewModel loginViewModel;
@@ -177,6 +185,7 @@ public class ReviewApplicationActivity extends BaseActivity {
         uploadEINLL = findViewById(R.id.ll_upload_ein);
         uploadW9LL = findViewById(R.id.ll_upload_w9);
         dbaFillingLL = findViewById(R.id.ll_dba_filling);
+        llDBADocuments = findViewById(R.id.llDBADocuments);
 
         edit1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +263,9 @@ public class ReviewApplicationActivity extends BaseActivity {
         mPrivacyImg = (ImageView) findViewById(R.id.privacy);
         mTermsImg = (ImageView) findViewById(R.id.terms);
         mAgreementsImg = (ImageView) findViewById(R.id.merchant_agreem);
+        llPrivacy = (LinearLayout) findViewById(R.id.ll_privacy);
+        llTerms = (LinearLayout) findViewById(R.id.ll_terms);
+        llMerchant = (LinearLayout) findViewById(R.id.ll_merchant);
 
         mPrivacyImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -410,6 +422,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                                 }
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
+                                        llDBADocuments.setVisibility(View.VISIBLE);
                                         mDbFillingDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         dbaFillingLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
                                         dbaFillingLL.setOnClickListener(new View.OnClickListener() {
@@ -426,7 +439,7 @@ public class ReviewApplicationActivity extends BaseActivity {
                                     boLL.setVisibility(View.VISIBLE);
                                     noBoTV.setVisibility(View.GONE);
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
-                                    benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList);
+                                    benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList,ReviewApplicationActivity.this);
                                     beneficialOwnerList = boList;
                                     boRecyclerView.setLayoutManager(layoutManager);
                                     boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
@@ -451,16 +464,37 @@ public class ReviewApplicationActivity extends BaseActivity {
                                 }
                                 agreements = summaryModelResponse.getData().getAgreements().getItems();
                                 Agreements agreements1 = summaryModelResponse.getData().getAgreements();
+
                                 if (agreements != null && agreements1.getItems().size() > 0) {
                                     for (int i = 0; i < agreements1.getItems().size(); i++) {
                                         if (agreements1.getItems().get(i).getSignatureType() == 0) {
                                             mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            llPrivacy.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dashboardViewModel.agreementsByType("0");
+                                                }
+                                            });
                                         }
                                         if (agreements1.getItems().get(i).getSignatureType() == 1) {
                                             mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            llTerms.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dashboardViewModel.agreementsByType("1");
+
+                                                }
+                                            });
                                         }
                                         if (agreements1.getItems().get(i).getSignatureType() == 5) {
                                             mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            llMerchant.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dashboardViewModel.agreementsByType("5");
+
+                                                }
+                                            });
 
                                         }
                                     }
@@ -512,11 +546,27 @@ public class ReviewApplicationActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+        dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
+            @Override
+            public void onChanged(AgreementsPdf agreementsPdf) {
+                LogUtils.d("pdfff","pdf"+agreementsPdf);
+                if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        if(agreementsPdf.getData().getAgreementFileRefPath()!=null) {
+                            showFile(agreementsPdf.getData().getAgreementFileRefPath());
+                        }
+                }
+            }
+        });
     }
 
     private void showFile(String fileUrl) {
         if(fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
             //Call the activity here
+            Intent intent = new Intent(ReviewApplicationActivity.this, WebViewActivity.class);
+            intent.putExtra("FILEURL",fileUrl);
+            startActivity(intent);
         } else {
             LogUtils.v(TAG, "fileUrl is null or empty");
         }
@@ -544,4 +594,12 @@ public class ReviewApplicationActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void selectedItem(String file) {
+
+        LogUtils.d("file","file"+file);
+
+        showFile(file);
+
+    }
 }

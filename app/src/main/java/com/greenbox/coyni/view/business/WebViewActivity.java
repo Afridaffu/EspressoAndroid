@@ -44,6 +44,8 @@ public class WebViewActivity extends BaseActivity {
     private ImageView imageView;
     private static final String HTML_FORMAT = "<html><body style=\"text-align: center; background-color: black; vertical-align: center;\"><img width=\"300\" src = \"%s\" /></body></html>";
     private LinearLayout llClose;
+    private ImageView btnClose;
+    private String fileURL;
 
 
     @Override
@@ -54,23 +56,29 @@ public class WebViewActivity extends BaseActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_web_view);
 
+            Bundle bundle=getIntent().getExtras();
+            if(bundle.getString("FILEURL")!=null) {
+                fileURL = bundle.getString("FILEURL");
+            }
+            LogUtils.d("fileURL","fileURL"+fileURL);
             webView =(WebView)findViewById(R.id.webView);
             llClose =(LinearLayout)findViewById(R.id.layoutClose);
+            btnClose =(ImageView)findViewById(R.id.closeBtn);
 
-            String uri = "http://www.africau.edu/images/default/sample.pdf";
-            String extension = uri.substring(uri.lastIndexOf(".") + 1);
+            String extension = fileURL.substring(fileURL.lastIndexOf(".") + 1);
 
             LogUtils.d("extension","extension"+extension);
+            LogUtils.d("extension","fillee"+fileURL.replaceAll(" ","%20"));
 
             if(extension.equalsIgnoreCase("pdf")){
-                webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + uri);
+                webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL.replaceAll(" ","%20"));
             } else {
-                final String html = String.format(HTML_FORMAT, uri);
+                final String html = String.format(HTML_FORMAT, fileURL);
                 webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
 
             }
 
-            llClose.setOnClickListener(new View.OnClickListener() {
+            btnClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();

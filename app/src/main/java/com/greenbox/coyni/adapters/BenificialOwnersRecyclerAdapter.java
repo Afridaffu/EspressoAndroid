@@ -4,26 +4,32 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.summary.BeneficialOwnerInfo;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 import java.util.List;
 
 public class BenificialOwnersRecyclerAdapter extends
         RecyclerView.Adapter<BenificialOwnersRecyclerAdapter.MyViewHolder> {
-    List<BeneficialOwnerInfo> beneficialOwnerList;
-    Context mContext;
-    MyApplication objMyApplication;
-    int count=0;
+    private List<BeneficialOwnerInfo> beneficialOwnerList;
+    private Context mContext;
+    private MyApplication objMyApplication;
+    private int count=0;
+    private OnSelectListner listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView firstNameTx,lastnameTx,ssnTx,dobTx,ownershipTx,dateTx,numberTx;
+        TextView firstNameTx,lastnameTx,ssnTx,dobTx,ownershipTx,dateTx,numberTx,uploadeMethodTx;
+        LinearLayout llUploadDocument;
 
         public MyViewHolder(View view) {
             super(view);
@@ -34,14 +40,18 @@ public class BenificialOwnersRecyclerAdapter extends
             dobTx=(TextView) view.findViewById(R.id.dob_bo);
             ownershipTx=(TextView) view.findViewById(R.id.ownership_bo);
             dateTx=(TextView) view.findViewById(R.id.bo_uploaded_date);
+            llUploadDocument=(LinearLayout) view.findViewById(R.id.llUploadDocument);
+            uploadeMethodTx=(TextView) view.findViewById(R.id.bo_uploaded_method);
         }
     }
 
 
-    public BenificialOwnersRecyclerAdapter(Context context, List<BeneficialOwnerInfo> beneficialOwnerList) {
+    public BenificialOwnersRecyclerAdapter(Context context, List<BeneficialOwnerInfo> beneficialOwnerList, OnSelectListner listener) {
         this.mContext = context;
         this.beneficialOwnerList = beneficialOwnerList;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
+        this.listener = listener;
+
     }
 
     @Override
@@ -76,9 +86,26 @@ public class BenificialOwnersRecyclerAdapter extends
                 if (objData.getRequiredDocuments().get(0).getUpdatedAt() != null
                 && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
                     holder.dateTx.setText("Uploaded on" + "" + objData.getRequiredDocuments().
-                                  get(position).getUpdatedAt());
+                                  get(0).getUpdatedAt());
+                    holder.uploadeMethodTx.setText("Uploaded [ "+objData.getRequiredDocuments().
+                            get(0).getImgName()+"]");
+
+                    holder.llUploadDocument.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                listener.selectedItem(objData.getRequiredDocuments().
+                                        get(0).getImgLink());
+                                notifyDataSetChanged();
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+
                 }
             }
+
 
 
         } catch (Exception ex) {
@@ -91,6 +118,9 @@ public class BenificialOwnersRecyclerAdapter extends
         return beneficialOwnerList.size();
     }
 
+    public interface OnSelectListner{
+        void selectedItem(String file);
+    }
 
 }
 

@@ -9,19 +9,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:fitsSystemWindows="true">
 
     <LinearLayout
         android:id="@+id/layoutClose"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="@dimen/_10ssp"
         android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/closeBtn"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             android:background="@color/white"
             android:src="@drawable/ic_close"
             android:visibility="visible"
