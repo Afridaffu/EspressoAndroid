@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,21 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.summary.Item;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
+import com.greenbox.coyni.view.business.AddBankAccount;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 import java.util.List;
 
-public class BankAccountsRecyclerAdapter extends RecyclerView.Adapter<BankAccountsRecyclerAdapter.MyViewHolder> {
+public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccountsRecyclerAdapter.MyViewHolder> {
     List<Item> banks;
     Context mContext;
     MyApplication objMyApplication;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView bankNameTx, accountNumberTx;
+        public LinearLayout deleteLL;
+
 
         public MyViewHolder(View view) {
             super(view);
             bankNameTx = (TextView) view.findViewById(R.id.bankName);
             accountNumberTx = (TextView) view.findViewById(R.id.accountNumber);
+            deleteLL = view.findViewById(R.id.deleteLL);
+
         }
     }
 
@@ -50,6 +58,22 @@ public class BankAccountsRecyclerAdapter extends RecyclerView.Adapter<BankAccoun
             holder.bankNameTx.setText(objData.getBankName());
 
             holder.accountNumberTx.setText(objData.getAccountNumber());
+
+            holder.deleteLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        ReviewApplicationActivity addBankAccount = (ReviewApplicationActivity) mContext;
+                        if (banks.size() > 1) {
+                            addBankAccount.deleteBankAPICall(objData.getId());
+                        } else if (banks.size() == 1) {
+                            addBankAccount.showPopup();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -58,6 +82,11 @@ public class BankAccountsRecyclerAdapter extends RecyclerView.Adapter<BankAccoun
     @Override
     public int getItemCount() {
         return banks.size();
+    }
+
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return R.id.swipeLayout;
     }
 
 

@@ -176,6 +176,7 @@
     <string name="learn_more1"> <u>Learn More</u></string>
     <string name="learn"><u>Learn More</u></string>
     <string name="privay_policy"><u>Privay Policy</u></string>
+    <string name="termsservice"><u> Terms of Service</u></string>
 
     <string name="EST">Eastern (EST)</string>
     <string name="CST">Central (CST)</string>
@@ -247,6 +248,7 @@
     <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
     <string name="percentage">\%</string>
     <string name="greater">greater.</string>
+    <string name="percentageSymbol">%</string>
     <string name="no_beneficial_owner_is_found">No Beneficial Owner is found</string>
     <string name="ownership">Ownership(%)</string>
     <string name="beneficialnreach">Please add an additional beneficial owner below\n to reach 51%</string>
