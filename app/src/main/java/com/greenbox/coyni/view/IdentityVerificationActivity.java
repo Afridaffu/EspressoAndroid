@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -320,8 +319,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.primary_black));
                         } else {
-                            address1ErrorLL.setVisibility(VISIBLE);
-                            address1ErrorTV.setText("Field Required");
+//                            address1ErrorLL.setVisibility(VISIBLE);
+//                            address1ErrorTV.setText("Field Required");
                             isMailAddr1 = false;
                         }
                         enableORdiableSubmit();
@@ -411,8 +410,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             //                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                         } else {
-                            cityErrorLL.setVisibility(VISIBLE);
-                            cityErrorTV.setText("Field Required");
+//                            cityErrorLL.setVisibility(VISIBLE);
+//                            cityErrorTV.setText("Field Required");
                             isCity = false;
                         }
                         enableORdiableSubmit();
@@ -459,7 +458,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     try {
                         if (charSequence.length() > 0) {
                             Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
-                            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             isState = true;
                         } else {
                             isState = false;
@@ -497,8 +496,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZip = false;
-                            zipcodeErrorLL.setVisibility(VISIBLE);
-                            zipcodeErrorTV.setText("Field Required");
+//                            zipcodeErrorLL.setVisibility(VISIBLE);
+//                            zipcodeErrorTV.setText("Field Required");
                         }
                         enableORdiableSubmit();
                     } catch (Resources.NotFoundException e) {
@@ -529,11 +528,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         mailAddr1.setHint("");
                         if (mailAddr1.getText().toString().trim().length() > 0) {
                             address1ErrorLL.setVisibility(GONE);
-                            mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_black));
 
                         } else {
-                            mailingAddTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            mailingAddTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.light_gray));
                             address1ErrorLL.setVisibility(VISIBLE);
                             address1ErrorTV.setText("Field Required");
@@ -542,6 +541,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         mailAddr1.setHint("Street Address");
                         mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_green));
+                        address1ErrorLL.setVisibility(GONE);
                     }
                 }
             });
@@ -553,10 +553,10 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         mailAddr2.setHint("");
                         if (mailAddr2.getText().toString().trim().length() > 0) {
                             Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_black));
-                            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         } else {
                             Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.light_gray));
-                            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
                         }
                     } else {
@@ -574,11 +574,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         cityET.setHint("");
                         if (cityET.getText().toString().trim().length() > 0) {
                             cityErrorLL.setVisibility(GONE);
-                            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_black));
 
                         } else {
-                            cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
                             cityErrorLL.setVisibility(VISIBLE);
                             cityErrorTV.setText("Field Required");
@@ -587,6 +587,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         cityET.setHint("City");
                         cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_green));
+                        cityErrorLL.setVisibility(GONE);
                     }
                 }
             });
@@ -598,17 +599,17 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         zipcode.setHint("");
                         if (zipcode.getText().toString().trim().length() == 5) {
                             zipcodeErrorLL.setVisibility(GONE);
-                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_black));
 
                         } else if (zipcode.getText().toString().trim().length() < 5 && zipcode.getText().toString().trim().length() > 0) {
-                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                             zipcodeErrorLL.setVisibility(VISIBLE);
                             zipcodeErrorTV.setText("Minimum 5 Characters Required");
 
                         } else {
-                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
                             zipcodeErrorLL.setVisibility(VISIBLE);
                             zipcodeErrorTV.setText("Field Required");
@@ -617,6 +618,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         zipcode.setHint("Zip Code");
                         zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
+                        zipcodeErrorLL.setVisibility(GONE);
                     }
                 }
             });
@@ -633,28 +635,31 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
+                        ssnET.setHint("");
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(IdentityVerificationActivity.this);
                         if (ssnET.getText().toString().trim().length() == 4) {
                             ssnErrorLL.setVisibility(GONE);
-                            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_black));
 
                         } else if (ssnET.getText().toString().trim().length() > 0 && ssnET.getText().toString().trim().length() < 4) {
-                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
                             ssnErrorLL.setVisibility(VISIBLE);
                             ssnErrorTV.setText("Minimum 4 Characters Required");
 
                         } else {
-                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
+                            ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(ssnTIL, getColor(R.color.light_gray));
                             ssnErrorLL.setVisibility(VISIBLE);
                             ssnErrorTV.setText("Field Required");
                         }
                     } else {
                         ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
+                        ssnET.setHint(R.string.digits4);
+                        ssnErrorLL.setVisibility(GONE);
                     }
                 }
             });
@@ -950,15 +955,15 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 }
             });
 
-            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            dobTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            ssnTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            dobTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
-            mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            mailingAddTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            zipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            countryTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
         } catch (Exception e) {
             e.printStackTrace();
