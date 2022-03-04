@@ -121,7 +121,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
                         android:inputType="textCapSentences"
-                        android:maxLength="255"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
