@@ -805,19 +805,22 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     private void launchDashboard() {
-        Intent dashboardIntent = new Intent(LoginActivity.this, DashboardActivity.class);
-        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-                dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
-            } else {
-                dashboardIntent = new Intent(LoginActivity.this, BusinessRegistrationTrackerActivity.class);
-                dashboardIntent.putExtra("FROM","login");
-            }
-        }
-        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(dashboardIntent);
+
+        objMyApplication.launchDashboard(this, "login");
+
+//        Intent dashboardIntent = new Intent(LoginActivity.this, DashboardActivity.class);
+//        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+//            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+//                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
+//                dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
+//            } else {
+//                dashboardIntent = new Intent(LoginActivity.this, BusinessRegistrationTrackerActivity.class);
+//                dashboardIntent.putExtra("FROM","login");
+//            }
+//        }
+//        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        startActivity(dashboardIntent);
     }
 
     private void login() {

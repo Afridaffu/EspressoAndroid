@@ -127,12 +127,6 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                         websiteET.setSelection(websiteET.getText().length());
                     } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
                         websiteET.setText(str.trim());
-                    } else if (str.length() > 0 && str.contains(".")) {
-                        websiteET.setText(websiteET.getText().toString().replaceAll("\\.", ""));
-                        websiteET.setSelection(websiteET.getText().length());
-                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                        websiteET.setText("");
-                        websiteET.setSelection(websiteET.getText().length());
                     }
 
                 } catch (Exception ex) {

@@ -96,9 +96,9 @@ import java.util.regex.Pattern;
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
+
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
-    public static enum BUSINESS_ACCOUNT_STATUS
-    {
+    public static enum BUSINESS_ACCOUNT_STATUS {
         UNVERIFIED("Unverified"),
         ADDITIONAL_DETAILS_REQUIRED("AdditionalDetailsRequired"),
         CANCELLED("Cancelled"),
@@ -115,6 +115,7 @@ public class Utils {
             return status;
         }
     }
+
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strDesc = "abcd";
@@ -224,15 +225,15 @@ public class Utils {
 
     public static final int boTargetPercentage = 51;
 
-    public static final String teamFirstName="TeamMemberFirstName";
-    public static final String teamLastName="TeamMemberLastName";
-    public static final String teamImageName="ImageName";
-    public static final String teamRoleName="RoleName";
-    public static final String teamRole="Role";
-    public static final String teamStatus="Status";
-    public static final String teamEmailAddress="TeamEmailAddress";
-    public static final String teamPhoneNumber="TeamPhoneNumber";
-    public static final String teamMemberId="TeamMemberId";
+    public static final String teamFirstName = "TeamMemberFirstName";
+    public static final String teamLastName = "TeamMemberLastName";
+    public static final String teamImageName = "ImageName";
+    public static final String teamRoleName = "RoleName";
+    public static final String teamRole = "Role";
+    public static final String teamStatus = "Status";
+    public static final String teamEmailAddress = "TeamEmailAddress";
+    public static final String teamPhoneNumber = "TeamPhoneNumber";
+    public static final String teamMemberId = "TeamMemberId";
 
 
     public static String getStrLang() {

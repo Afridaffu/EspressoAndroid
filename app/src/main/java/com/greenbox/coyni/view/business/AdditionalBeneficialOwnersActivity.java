@@ -86,7 +86,11 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                if (objMyApplication.getBeneficialOwnersResponse().getData().size() < 5) {
+                    businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                } else {
+                    Utils.showCustomToast(this, "You are exceeded your benificial accounts max limit.", 0, "");
+                }
             });
 
             validateCV.setOnClickListener(view -> {
@@ -235,14 +239,6 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
             beneficialOwnersRV.setItemAnimator(new DefaultItemAnimator());
             beneficialOwnersRV.setAdapter(beneficialOwnersAdapter);
 
-            if (objMyApplication.getBeneficialOwnersResponse().getData().size() == 5) {
-                addNewBOLL.setVisibility(View.GONE);
-                percentageTV.setVisibility(View.GONE);
-            } else {
-                addNewBOLL.setVisibility(View.VISIBLE);
-                percentageTV.setVisibility(View.VISIBLE);
-            }
-
             int totalPercentage = 0;
             for (int i = 0; i < objMyApplication.getBeneficialOwnersResponse().getData().size(); i++) {
                 totalPercentage = totalPercentage + objMyApplication.getBeneficialOwnersResponse().getData().get(i).getOwnershipParcentage();
@@ -254,6 +250,14 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
             } else {
                 isValidateEnabled = false;
                 validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+            }
+
+            if (totalPercentage >= 100) {
+                addNewBOLL.setVisibility(View.GONE);
+                percentageTV.setVisibility(View.GONE);
+            } else {
+                addNewBOLL.setVisibility(View.VISIBLE);
+                percentageTV.setVisibility(View.VISIBLE);
             }
         } else {
             notFoundTV.setVisibility(View.VISIBLE);

@@ -63,6 +63,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Matcher;
@@ -1140,10 +1141,14 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         privacyPolicyTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(CreateAccountActivity.this);
+
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+
 
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                 browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
@@ -1158,6 +1163,10 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         tosTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(CreateAccountActivity.this);
+
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }

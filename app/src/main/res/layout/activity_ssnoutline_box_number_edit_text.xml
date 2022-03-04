@@ -50,7 +50,7 @@
             android:fontFamily="@font/opensans_semibold"
             android:hint="•••-•••-••••"
             android:imeOptions="actionDone"
-            android:inputType="textPassword"
+            android:inputType="numberPassword"
             android:maxLines="1"
             android:padding="14dp"
             android:maxLength="9"

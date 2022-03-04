@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -122,7 +123,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
     @Override
     protected void onResume() {
         super.onResume();
-        fnameET.requestFocus();
     }
 
     private void initFields() {
@@ -151,11 +151,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     backIV.setVisibility(GONE);
                     divider1.setBackgroundResource(R.drawable.button_background);
                     divider2.setBackgroundResource(R.drawable.button_background1);
+
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
+
                 } else if (position == 1) {
                     closeIV.setVisibility(GONE);
                     backIV.setVisibility(VISIBLE);
                     divider1.setBackgroundResource(R.drawable.button_background1);
                     divider2.setBackgroundResource(R.drawable.button_background);
+
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
                 }
             }
 
@@ -390,56 +397,70 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             objMyApplication.setBeneficialOwnersResponse(boResp);
 
                             for (int i = 0; i < boResp.getData().size(); i++) {
-                                totalOwnerShipPerc = totalOwnerShipPerc + boResp.getData().get(i).getOwnershipParcentage();
+                                if (boResp.getData().get(i).getId() != boID) {
+                                    totalOwnerShipPerc = totalOwnerShipPerc + boResp.getData().get(i).getOwnershipParcentage();
+                                }
+
                                 if (boResp.getData().get(i).getId() == boID) {
                                     if (boResp.getData().get(i).getFirstName() != null && !boResp.getData().get(i).getFirstName().equals("")) {
                                         fnameET.setText(boResp.getData().get(i).getFirstName());
                                         fnameET.setSelection(boResp.getData().get(i).getFirstName().length());
+                                        isfname = true;
                                     }
 
                                     if (boResp.getData().get(i).getLastName() != null && !boResp.getData().get(i).getLastName().equals("")) {
                                         lnameET.setText(boResp.getData().get(i).getLastName());
                                         lnameET.setSelection(boResp.getData().get(i).getFirstName().length());
+                                        islname = true;
                                     }
 
                                     if (boResp.getData().get(i).getDob() != null && !boResp.getData().get(i).getDob().equals("")) {
                                         dobET.setText(convertDateNew(boResp.getData().get(i).getDob()));
                                         dateOfBirth = boResp.getData().get(i).getDob();
+                                        isDOBSelected = true;
                                     }
 
                                     if (boResp.getData().get(i).getSsn() != null && !boResp.getData().get(i).getSsn().equals("")) {
                                         ssnET.setText(boResp.getData().get(i).getSsn());
                                         ssnET.setSelection(boResp.getData().get(i).getSsn().length());
+                                        isssn = true;
                                     }
 
-                                    if (boResp.getData().get(i).getOwnershipParcentage() != -1) {
-                                        ownershipET.setText(boResp.getData().get(i).getOwnershipParcentage() + "");
+                                    if (boResp.getData().get(i).getOwnershipParcentage() != -1 && boResp.getData().get(i).getOwnershipParcentage() != 0) {
+                                        ownershipET.setText(boResp.getData().get(i).getOwnershipParcentage() + "%");
                                         ownershipET.setSelection(String.valueOf(boResp.getData().get(i).getOwnershipParcentage()).length());
+                                        isownership = true;
+                                        Utils.setUpperHintColor(ownershiptil, getResources().getColor(R.color.primary_black));
                                     }
 
                                     if (boResp.getData().get(i).getAddressLine1() != null && !boResp.getData().get(i).getAddressLine1().equals("")) {
                                         address1ET.setText(boResp.getData().get(i).getAddressLine1());
                                         address1ET.setSelection(boResp.getData().get(i).getAddressLine1().length());
+                                        isAddress1 = true;
                                     }
 
                                     if (boResp.getData().get(i).getAddressLine2() != null && !boResp.getData().get(i).getAddressLine2().equals("")) {
                                         address2ET.setText(boResp.getData().get(i).getAddressLine2());
                                         address2ET.setSelection(boResp.getData().get(i).getAddressLine2().length());
+                                        isAddress2 = true;
                                     }
 
                                     if (boResp.getData().get(i).getCity() != null && !boResp.getData().get(i).getCity().equals("")) {
                                         cityET.setText(boResp.getData().get(i).getCity());
                                         cityET.setSelection(boResp.getData().get(i).getCity().length());
+                                        isCity = true;
                                     }
 
                                     if (boResp.getData().get(i).getState() != null && !boResp.getData().get(i).getState().equals("")) {
                                         stateET.setText(boResp.getData().get(i).getState());
                                         stateET.setSelection(boResp.getData().get(i).getState().length());
+                                        isState = true;
                                     }
 
                                     if (boResp.getData().get(i).getZipCode() != null && !boResp.getData().get(i).getZipCode().equals("")) {
                                         zipcodeET.setText(boResp.getData().get(i).getZipCode());
                                         zipcodeET.setSelection(boResp.getData().get(i).getZipCode().length());
+                                        isZipcode = true;
                                     }
 
                                     if (boResp.getData().get(i).getRequiredDocuments().size() > 0) {
@@ -480,6 +501,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     try {
                         if (imageResponse != null) {
+                            showProgressDialog();
                             RequestBody requestBody = null;
                             MultipartBody.Part idFile = null;
 
@@ -502,7 +524,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             businessIdentityVerificationViewModel.getUploadBODocResponse().observe(this, new Observer<IdentityImageResponse>() {
                 @Override
                 public void onChanged(IdentityImageResponse identityImageResponse) {
-
+                    dismissDialog();
                     Log.e("upload respo", identityImageResponse.toString());
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         isFileUploaded = true;
@@ -802,9 +824,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     int allowPerc = 100 - totalOwnerShipPerc;
                     int enteredAmt = Integer.parseInt(charSequence.toString().trim().replace("%", ""));
                     isownership = enteredAmt > 0 && enteredAmt <= allowPerc;
-                    ownershipLL.setVisibility(GONE);
-                    ownershiptil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(ownershiptil, getResources().getColor(R.color.primary_black));
+//                    ownershipLL.setVisibility(GONE);
+//                    ownershiptil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                    Utils.setUpperHintColor(ownershiptil, getResources().getColor(R.color.primary_black));
                 } else {
 //                    ownershipTV.setText("Field Required");
                     isownership = false;
@@ -1110,6 +1132,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
+                    ownershipET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
                     ownershipET.setHint("");
                     if (ownershipET.getText().toString().trim().replace("%", "").length() > 0) {
                         int allowPerc = 100 - totalOwnerShipPerc;
@@ -1124,6 +1147,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             ownershipTV.setText("Please Enter a Valid Ownership Percentage");
                         }
 
+                        ownershipET.setText(ownershipET.getText().toString() + "%");
                     } else {
                         ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(ownershiptil, getColor(R.color.light_gray));
@@ -1131,10 +1155,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         ownershipTV.setText("Field Required");
                     }
                 } else {
+                    ownershipET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
                     ownershipET.setHint("Ownership %");
                     ownershiptil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_green));
                     ownershipLL.setVisibility(GONE);
+
+                    if (ownershipET.getText().toString().length() > 0) {
+                        ownershipET.setText(ownershipET.getText().toString().replace("%", ""));
+                        ownershipET.setSelection(ownershipET.getText().toString().length());
+                    }
                 }
             }
         });
@@ -1582,6 +1612,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             identityType = 0;
             existingIdentityType = -1;
             isFileSelected = false;
+            dateOfBirth = "";
         } catch (Exception e) {
             e.printStackTrace();
         }

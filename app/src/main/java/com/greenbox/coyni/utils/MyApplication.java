@@ -50,8 +50,13 @@ import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.users.AccountLimitsData;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -978,4 +983,32 @@ public class MyApplication extends Application {
         return objResponse;
     }
 
+    public void launchDashboard(Context context, String fromScreen) {
+        try {
+            Intent dashboardIntent = new Intent(context, DashboardActivity.class);
+            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                BusinessTrackerResponse btr = getBusinessTrackerResponse();
+                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+
+                    if (btr.getData().isApplicationSummary() && btr.getData().isProfileVerified()) {
+                        dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
+                    } else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+                    } else {
+                        dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+                        dashboardIntent.putExtra("FROM", fromScreen);
+                    }
+
+                } else {
+                    dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+                    dashboardIntent.putExtra("FROM", fromScreen);
+                }
+            }
+            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(dashboardIntent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

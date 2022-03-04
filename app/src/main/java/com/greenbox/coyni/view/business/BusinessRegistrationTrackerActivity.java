@@ -257,9 +257,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 //                    }
 //                    mLastClickTime = SystemClock.elapsedRealtime();
 //                    if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
-//
-//                        dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-//
+//                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() == 0) {
+//                            dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+//                        } else if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() != 0) {
+//                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+//                            intent.putExtra("FROM", "TRACKER");
+//                            intent.putExtra("TYPE", "EXIST");
+//                            startActivity(intent);
+//                        }
 //                    }
 //                }
 //            });
@@ -352,7 +357,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
                 @Override
                 public void onChanged(BusinessTrackerResponse btResp) {
-
+                    dismissDialog();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(btResp);
@@ -520,6 +525,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     protected void onResume() {
         try {
             super.onResume();
+            showProgressDialog();
             businessIdentityVerificationViewModel.getBusinessTracker();
 //            businessIdentityVerificationViewModel.getCompanyInfo();
 //            businessIdentityVerificationViewModel.getDBAInfo();
