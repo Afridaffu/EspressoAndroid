@@ -245,7 +245,7 @@
     <string name="AB_owners">Additional Beneficial Owner(s)</string>
     <string name="Beneficialownership">Beneficial ownership you have added is less\nthan 51%, you will need to add an additional</string>
     <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
-    <string name="percentage"> 51% or</string>
+    <string name="percentage">\%</string>
     <string name="greater">greater.</string>
     <string name="no_beneficial_owner_is_found">No Beneficial Owner is found</string>
     <string name="ownership">Ownership(%)</string>
@@ -584,5 +584,10 @@
 
     <string name="companyemail">Company’s Email</string>
     <string name="bankdeletemsg">Are you sure you want to delete bank account? To submit the application you have to have at least 1 bank account. Or use the button below to relink.</string>
+
+    <string name="ownership_percentage">\% Ownership"</string>
+    <string name="ownership_title">Ownership"</string>
+    <string name="primary">Primary</string>
+    <string name="arrow_right">ArrowRight</string>
 
 </resources>

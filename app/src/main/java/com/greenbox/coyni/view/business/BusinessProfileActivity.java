@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -56,7 +55,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
-            businessResetPin, preferencesLL;
+            businessResetPin, preferencesLL, beneficialOwnersLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -157,7 +156,18 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-
+            beneficialOwnersLL = findViewById(R.id.beneficialOwnersLL);
+            beneficialOwnersLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, MerchantSettingsBeneficialOwnersActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             businessResetPin.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
