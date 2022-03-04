@@ -120,7 +120,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textNoSuggestions"
+                        android:inputType="text|textNoSuggestions|textCapSentences"
                         android:maxLength="255"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
