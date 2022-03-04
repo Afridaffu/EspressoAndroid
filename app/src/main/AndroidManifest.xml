@@ -109,11 +109,6 @@
             android:name=".view.business.CompanyInfoDetails"
             android:exported="false" />
         <activity
-            android:name=".view.business.ClearBatchPromptActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
             android:name=".view.business.TeamActivity"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -142,16 +137,6 @@
         <activity
             android:name=".view.business.BankAccoutAddedSuccessfullyActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.AddBankAccountActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
-            android:name=".view.business.LearnMoreAddbankacActivity"
-            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -649,6 +634,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BusinessAdditonalActionRequired"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.WebViewActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"

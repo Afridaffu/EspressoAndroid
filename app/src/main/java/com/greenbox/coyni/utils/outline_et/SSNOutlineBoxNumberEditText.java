@@ -14,7 +14,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
+
+import okhttp3.internal.Util;
 
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     private TextView ssnType;
@@ -143,6 +146,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
 
     public void requestETFocus() {
         ssnET.requestFocus();
+        Utils.shwForcedKeypad(mContext);
     }
 
     public void setSSNTypeText(String text) {

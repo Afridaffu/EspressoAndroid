@@ -121,7 +121,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public static File aoiFile = null, einLetterFile = null, w9FormFile = null;
     public int docTypeID = 0;
     IdentityVerificationViewModel identityVerificationViewModel;
-    String selectedDocType = "";
+    String selectedDocType = "", from = "";
     CompanyInformationActivity myActivity;
     View globalView;
 
@@ -149,6 +149,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             setKeyboardVisibilityListener(CompanyInformationActivity.this);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+            from = getIntent().getStringExtra("FROM");
             businessIdentityVerificationViewModel.getCompanyInfo();
 
             basicInfoSL = findViewById(R.id.basicInfoSL);
@@ -563,17 +564,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                         if (cir.getRequiredDocumets().get(i).getIdentityId() == 5) {
                                             aoiUploadTV.setVisibility(GONE);
                                             aoiUploadedLL.setVisibility(VISIBLE);
-                                            aoiUpdatedOnTV.setText(Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
+                                            aoiUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
                                             isAOIUploaded = true;
                                         } else if (cir.getRequiredDocumets().get(i).getIdentityId() == 6) {
                                             einLetterUploadTV.setVisibility(GONE);
                                             einLetterUploadedLL.setVisibility(VISIBLE);
-                                            einLetterUpdatedOnTV.setText(Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
+                                            einLetterUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
                                             isEINLetterUploaded = true;
                                         } else if (cir.getRequiredDocumets().get(i).getIdentityId() == 7 || cir.getRequiredDocumets().get(i).getIdentityId() == 11) {
                                             w9FormUploadTV.setVisibility(GONE);
                                             w9FormUploadedLL.setVisibility(VISIBLE);
-                                            w9FormUpdatedOnTV.setText(Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
+                                            w9FormUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocumets().get(i).getUpdatedAt()));
                                             isW9FormUploaded = true;
                                         }
                                     }
@@ -638,27 +639,28 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             identityVerificationViewModel.getUploadIdentityImageResponse().observe(this, new Observer<IdentityImageResponse>() {
                 @Override
                 public void onChanged(IdentityImageResponse identityImageResponse) {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+                    dismissDialog();
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         if (docTypeID == 5) {
                             aoiUploadTV.setVisibility(GONE);
                             aoiUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
-                            aoiUpdatedOnTV.setText(dateString);
+                            aoiUpdatedOnTV.setText("Uploaded on " + dateString);
+                            aoiUpdatedOnTV.setVisibility(VISIBLE);
                             isAOIUploaded = true;
                         } else if (docTypeID == 6) {
                             einLetterUploadTV.setVisibility(GONE);
                             einLetterUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
-                            einLetterUpdatedOnTV.setText(dateString);
+                            einLetterUpdatedOnTV.setText("Uploaded on " + dateString);
+                            einLetterUpdatedOnTV.setVisibility(VISIBLE);
                             isEINLetterUploaded = true;
                         } else if (docTypeID == 7 || docTypeID == 11) {
                             w9FormUploadTV.setVisibility(GONE);
                             w9FormUploadedLL.setVisibility(VISIBLE);
                             String dateString = new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis()));
-                            w9FormUpdatedOnTV.setText(dateString);
+                            w9FormUpdatedOnTV.setText("Uploaded on " + dateString);
+                            w9FormUpdatedOnTV.setVisibility(VISIBLE);
                             isW9FormUploaded = true;
                         }
 
@@ -677,6 +679,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 @Override
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     if (imageResponse != null) {
+                        showProgressDialog();
                         RequestBody requestBody = null;
                         MultipartBody.Part idFile = null;
                         if (docTypeID == 5) {
@@ -781,6 +784,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
 
                     } else {
+                        companyemailET.setHint("Company’s Name");
                         companyemailET.setHint(getResources().getString(R.string.company_s_email));
                         companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
@@ -1252,6 +1256,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
     public void enableOrDisableDocsDone() {
 
+        viewPager.setAllowedSwipeDirection(SwipeDirection.ALL);
+
         if (SSNTYPE.equals("SSN")) {
             try {
                 if (isW9FormUploaded) {
@@ -1339,27 +1345,52 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             TextView llcTV = chooseEntityDialog.findViewById(R.id.llcTV);
 
             soleLLCTV.setOnClickListener(view -> {
-                setBusinessEntity("SSN", soleLLCTV, chooseEntityDialog);
+                if (!soleLLCTV.getText().toString().equals(editText.getText().toString()))
+                    setBusinessEntity("SSN", soleLLCTV, chooseEntityDialog);
+                else
+                    chooseEntityDialog.dismiss();
+
+                ssnET.requestETFocus();
             });
 
             cCorpTV.setOnClickListener(view -> {
-                setBusinessEntity("EIN/TIN", cCorpTV, chooseEntityDialog);
+                if (!cCorpTV.getText().toString().equals(editText.getText().toString()))
+                    setBusinessEntity("EIN/TIN", cCorpTV, chooseEntityDialog);
+                else
+                    chooseEntityDialog.dismiss();
+                ssnET.requestETFocus();
             });
 
             sCorpTV.setOnClickListener(view -> {
-                setBusinessEntity("EIN/TIN", sCorpTV, chooseEntityDialog);
+                if (!sCorpTV.getText().toString().equals(editText.getText().toString()))
+                    setBusinessEntity("EIN/TIN", sCorpTV, chooseEntityDialog);
+                else
+                    chooseEntityDialog.dismiss();
+                ssnET.requestETFocus();
             });
 
             partnershipTV.setOnClickListener(view -> {
-                setBusinessEntity("EIN/TIN", partnershipTV, chooseEntityDialog);
+                if (!partnershipTV.getText().toString().equals(editText.getText().toString()))
+                    setBusinessEntity("EIN/TIN", partnershipTV, chooseEntityDialog);
+                else
+                    chooseEntityDialog.dismiss();
+                ssnET.requestETFocus();
             });
 
             trustTV.setOnClickListener(view -> {
-                setBusinessEntity("EIN/TIN", trustTV, chooseEntityDialog);
+                if (!trustTV.getText().toString().equals(editText.getText().toString()))
+                    setBusinessEntity("EIN/TIN", trustTV, chooseEntityDialog);
+                else
+                    chooseEntityDialog.dismiss();
+                ssnET.requestETFocus();
             });
 
             llcTV.setOnClickListener(view -> {
-                setBusinessEntity("EIN/TIN", llcTV, chooseEntityDialog);
+                if (!llcTV.getText().toString().equals(editText.getText().toString()))
+                    setBusinessEntity("EIN/TIN", llcTV, chooseEntityDialog);
+                else
+                    chooseEntityDialog.dismiss();
+                ssnET.requestETFocus();
             });
 
             chooseEntityDialog.show();
@@ -1558,6 +1589,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             switch (requestCode) {
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
+
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         Utils.displayAlert("Requires Access to Camera.", CompanyInformationActivity.this, "", "");
@@ -1573,6 +1605,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     } else {
 //                        startActivity(new Intent(this, CameraActivity.class));
 //                        chooseFilePopup(this, selectedDocType);
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(CompanyInformationActivity.this);
 
                         if (selectedDocType.equals("CI-AOI")) {
                             aoiClick(findViewById(R.id.aoiLL).getRootView());

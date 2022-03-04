@@ -49,4 +49,13 @@ public class AgreementsPdf {
             this.error = error;
         }
 
+    @Override
+    public String toString() {
+        return "AgreementsPdf{" +
+                "status='" + status + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", data=" + data +
+                ", error=" + error +
+                '}';
     }
+}

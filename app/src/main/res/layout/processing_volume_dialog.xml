@@ -16,19 +16,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginLeft="@dimen/_20sdp"
         android:layout_marginRight="@dimen/_20sdp"
         android:gravity="center_vertical"
-        android:layout_marginHorizontal="@dimen/_21sdp"
         android:orientation="vertical"
         android:paddingTop="@dimen/_12sdp"
         android:paddingBottom="@dimen/_33sdp">
 
-
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fontFamily="@font/opensans_semibold"
+            android:paddingTop="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_14sdp"
             android:text="@string/today_current_batch"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
@@ -36,64 +37,66 @@
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_14sdp"
             android:background="@color/blue_light" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
+            android:paddingTop="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_14sdp"
             android:text="@string/yesterday"
-            android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_14sdp"
             android:background="@color/blue_light" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
+            android:paddingTop="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_14sdp"
             android:text="@string/month_to_date"
-            android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_14sdp"
             android:background="@color/blue_light" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
+            android:paddingTop="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_14sdp"
             android:text="@string/lastmonth"
-            android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_14sdp"
             android:background="@color/blue_light" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
+            android:paddingTop="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_14sdp"
             android:text="@string/custom_date_range"
-            android:layout_marginTop="@dimen/_14sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_14sdp"
             android:background="@color/blue_light" />
 
     </LinearLayout>

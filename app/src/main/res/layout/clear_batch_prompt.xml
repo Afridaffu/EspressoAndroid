@@ -4,94 +4,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".view.business.ClearBatchPromptActivity"
-    android:orientation="vertical"
-    android:background="@drawable/top_rounded_bg">
+    android:background="@drawable/top_rounded_bg"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <View
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_3sdp"
-                android:background="@drawable/bg_core_colorfill"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_28sdp"/>
+                android:layout_marginBottom="@dimen/_28sdp"
+                android:background="@drawable/bg_core_colorfill" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/closing_batch"
-            android:textSize="@dimen/_12ssp"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            android:fontFamily="@font/opensans_semibold"
-            android:layout_marginTop="@dimen/_2sdp"
             android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_12sdp"/>
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:text="@string/closing_batch"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="@dimen/_7sdp"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_bold"
                 android:text="6,890.43"
-                android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/primary_green"
-                android:textSize="@dimen/_35ssp"/>
+                android:textSize="@dimen/_35ssp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cyn"
-                android:textSize="@dimen/_11ssp"
-                android:textColor="@color/primary_green"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:layout_marginStart="@dimen/_5sdp"/>
+                android:text="@string/cyn"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_21sdp"
             android:layout_marginHorizontal="@dimen/_11sdp"
-            android:gravity="center">
+            android:layout_marginTop="@dimen/_21sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/send_to"
-                android:textSize="@dimen/_11ssp"
-                android:textColor="#505050"
-                android:singleLine="true"
-                android:fontFamily="@font/opensans_regular"
                 android:layout_marginStart="@dimen/_11sdp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_regular"
+                android:singleLine="true"
+                android:text="@string/send_to"
+                android:textColor="#505050"
+                android:textSize="@dimen/_11ssp" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginEnd="@dimen/_11sdp"
                 android:gravity="end"
-                android:layout_marginEnd="@dimen/_11sdp">
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/business_token_account"
-                    android:textSize="@dimen/_11ssp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:textColor="@color/primary_black"/>
+                    android:text="@string/business_token_account"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="@string/available_balance"
-                    android:textSize="@dimen/_9ssp"
-                    android:fontFamily="@font/opensans_semibold"/>
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
         </LinearLayout>
 

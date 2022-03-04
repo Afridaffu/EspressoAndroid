@@ -87,7 +87,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/_11sdp"
                     android:paddingRight="@dimen/_11sdp">
@@ -266,13 +266,15 @@
                         android:background="@color/light_gray" />
 
                     <LinearLayout
+                        android:id="@+id/ll_upload_articles"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_14sdp"
                         android:background="@drawable/bg_white_color_light_border"
                         android:paddingLeft="@dimen/_8sdp"
                         android:paddingTop="@dimen/_13sdp"
-                        android:paddingBottom="@dimen/_14sdp">
+                        android:paddingBottom="@dimen/_14sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -327,13 +329,15 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_upload_ein"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_14sdp"
                         android:background="@drawable/bg_white_color_light_border"
                         android:paddingLeft="@dimen/_8sdp"
                         android:paddingTop="@dimen/_13sdp"
-                        android:paddingBottom="@dimen/_14sdp">
+                        android:paddingBottom="@dimen/_14sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -388,13 +392,15 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_upload_w9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_14sdp"
                         android:background="@drawable/bg_white_color_light_border"
                         android:paddingLeft="@dimen/_8sdp"
                         android:paddingTop="@dimen/_13sdp"
-                        android:paddingBottom="@dimen/_14sdp">
+                        android:paddingBottom="@dimen/_14sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -761,8 +767,10 @@
                         />
 
                     <LinearLayout
+                        android:id="@+id/llDBADocuments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:layout_marginBottom="@dimen/_14sdp"
                         android:background="@drawable/bg_white_color_light_border"
                         android:paddingLeft="@dimen/_8sdp"
@@ -776,6 +784,7 @@
                             android:src="@drawable/ic_upload" />
 
                         <LinearLayout
+                            android:id="@+id/ll_dba_filling"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
@@ -851,20 +860,21 @@
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_16sdp"
-                app:cardCornerRadius="@dimen/_10sdp">
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/boLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/_11sdp">
+                    >
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/boRecycler"
@@ -884,7 +894,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_10ssp"
                     android:visibility="gone" />
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
 
 
@@ -975,6 +985,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:id="@+id/ll_privacy"
                         android:paddingTop="@dimen/_11sdp"
                         android:paddingBottom="@dimen/_11sdp">
 
@@ -1015,6 +1026,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:id="@+id/ll_terms"
                         android:paddingTop="@dimen/_11sdp"
                         android:paddingBottom="@dimen/_11sdp">
 
@@ -1054,6 +1066,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:id="@+id/ll_merchant"
                         android:paddingTop="@dimen/_11sdp"
                         android:paddingBottom="@dimen/_11sdp">
 
@@ -1153,7 +1166,7 @@
                 android:layout_marginRight="@dimen/_21sdp"
                 android:layout_marginBottom="@dimen/_6sdp"
                 app:cardBackgroundColor="@color/inactive_color"
-                app:cardCornerRadius="@dimen/_33sdp">
+                app:cardCornerRadius="@dimen/_22sdp">
 
                 <TextView
                     android:layout_width="match_parent"

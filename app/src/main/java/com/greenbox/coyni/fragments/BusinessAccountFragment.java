@@ -28,6 +28,7 @@ import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -47,6 +48,7 @@ public class BusinessAccountFragment extends BaseFragment {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private MyApplication objMyApplication;
     private NestedScrollView transactionsNSV;
+    private ImageView mIvNotifications;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class BusinessAccountFragment extends BaseFragment {
         mTvUserIconText = currentView.findViewById(R.id.tv_user_icon_text);
         transactionsNSV = currentView.findViewById(R.id.transactionsNSV);
         latestTxnRefresh = currentView.findViewById(R.id.latestTxnRefresh);
+        mIvNotifications = currentView.findViewById(R.id.iv_notifications);
         objMyApplication = (MyApplication) requireContext().getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
@@ -97,6 +100,13 @@ public class BusinessAccountFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 goToTransact();
+            }
+        });
+
+        mIvNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), NotificationsActivity.class));
             }
         });
 
@@ -221,11 +231,11 @@ public class BusinessAccountFragment extends BaseFragment {
         try {
             transactionsNSV.setVisibility(View.VISIBLE);
 
-            if (daata.getData().size() == 0 && daata.getData() != null) {
+            if (daata.getData() != null && daata.getData().size() == 0) {
                 txnRV.setVisibility(View.GONE);
                 noTxnTV.setVisibility(View.VISIBLE);
 
-            } else if (daata.getData().size() > 4 && daata.getData() != null) {
+            } else if (daata.getData() != null && daata.getData().size() > 4) {
                 txnRV.setVisibility(View.VISIBLE);
                 viewMoreLL.setVisibility(View.VISIBLE);
                 noTxnTV.setVisibility(View.GONE);
@@ -234,7 +244,7 @@ public class BusinessAccountFragment extends BaseFragment {
                 txnRV.setLayoutManager(mLayoutManager);
                 txnRV.setItemAnimator(new DefaultItemAnimator());
                 txnRV.setAdapter(latestTxnAdapter);
-            } else if (daata.getData().size() <= 4 && daata.getData() != null) {
+            } else if (daata.getData() != null && daata.getData().size() <= 4) {
                 txnRV.setVisibility(View.VISIBLE);
                 viewMoreLL.setVisibility(View.GONE);
                 noTxnTV.setVisibility(View.GONE);

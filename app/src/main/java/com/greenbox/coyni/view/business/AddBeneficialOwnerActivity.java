@@ -449,7 +449,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
                                         uploadTV.setVisibility(GONE);
                                         uploadedLL.setVisibility(VISIBLE);
-                                        updatedOnTV.setText(Utils.convertDocUploadedDate(boResp.getData().get(i).getRequiredDocuments().get(0).getUpdatedAt()));
+                                        updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(boResp.getData().get(i).getRequiredDocuments().get(0).getUpdatedAt()));
 
                                         if (existingIdentityType == 4)
                                             uploadedTV.setText("Uploaded Driver’s License");
@@ -510,16 +510,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             uploadTV.setVisibility(GONE);
                             uploadedLL.setVisibility(VISIBLE);
                             uploadedTV.setText("Uploaded Driver’s License");
-                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
                         } else if (identityType == 2) {
                             uploadTV.setVisibility(GONE);
                             uploadedLL.setVisibility(VISIBLE);
-                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
                             uploadedTV.setText("Uploaded Passport");
                         } else if (identityType == 1) {
                             uploadTV.setVisibility(GONE);
                             uploadedLL.setVisibility(VISIBLE);
-                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
                             uploadedTV.setText("Uploaded State-Issued Card");
                         } else {
                             isFileUploaded = false;

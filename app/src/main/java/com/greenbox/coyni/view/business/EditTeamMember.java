@@ -41,6 +41,7 @@ public class EditTeamMember extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_team_member);
+
         Bundle bundle=getIntent().getExtras();
         firstName= bundle.getString(Utils.teamFirstName,firstName);
         lastName=bundle.getString(Utils.teamLastName,lastName);
