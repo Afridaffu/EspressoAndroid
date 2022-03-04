@@ -39,15 +39,8 @@
                         android:id="@+id/iv_user_icon_CV"
                         android:layout_width="@dimen/_48sdp"
                         android:layout_height="@dimen/_48sdp"
-                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_24sdp">
 
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="@dimen/_48sdp"
-                            android:layout_height="@dimen/_48sdp"
-                            android:padding="2dp"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="@dimen/_24sdp">
 
                             <ImageView
                                 android:id="@+id/iv_user_icon"
@@ -55,18 +48,18 @@
                                 android:layout_height="match_parent"
                                 android:contentDescription="@string/user_details"
                                 android:scaleType="fitXY"
-                                android:src="@drawable/acct_profile"
                                 android:visibility="visible" />
-                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:id="@+id/tv_user_icon_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
                             android:layout_gravity="center"
                             android:fontFamily="@font/opensans_bold"
-                            android:textColor="@color/primary_black"
+                            android:text="SS"
+                            android:textColor="@color/primary_green"
                             android:textSize="@dimen/_20sdp"
                             android:visibility="gone" />
 
