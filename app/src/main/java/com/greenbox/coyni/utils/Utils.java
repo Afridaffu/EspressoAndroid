@@ -423,7 +423,7 @@ public class Utils {
         try {
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MMM dd, yyyy");
+            spf = new SimpleDateFormat("dd/MM/yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -625,6 +625,12 @@ public class Utils {
     public static String convertToUSFormat(String strPhone) {
         String strNumber = "";
         strNumber = "(" + strPhone.substring(0, 3) + ") " + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
+        return strNumber;
+    }
+
+    public static String convertToUSFormatNew(String strPhone) {
+        String strNumber = "";
+        strNumber = strPhone.substring(0, 3) + "-" + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
         return strNumber;
     }
 
@@ -1228,6 +1234,19 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertTxnDatebusiness(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MMM dd,yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
     }
@@ -1320,6 +1339,20 @@ public class Utils {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    public static String getBusinessName(MyApplication myApplicationObj, String key) {
+        LogUtils.d("key","key"+key);
+        LogUtils.d("myApplicationObj","myApplicationObj"+myApplicationObj);
+        if (myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
+            List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
+            for(BusinessType businessType : listBT) {
+                if(businessType.getKey().equalsIgnoreCase(key)) {
+                    return businessType.getValue();
+                }
+            }
+        }
+        return key;
     }
 
     public static void populateBusinessTypes(Context context, EditText editText, MyApplication myApplicationObj, String from) {

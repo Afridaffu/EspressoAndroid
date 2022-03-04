@@ -35,6 +35,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
