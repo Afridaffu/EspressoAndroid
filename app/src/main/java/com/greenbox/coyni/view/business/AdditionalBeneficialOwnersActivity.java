@@ -133,8 +133,11 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
                             loadBeneficialOwners();
                         } else {
-                            notFoundTV.setVisibility(View.VISIBLE);
+                            notFoundTV.setVisibility(View.GONE);
+                            percentageTV.setVisibility(View.GONE);
                             beneficialOwnersRV.setVisibility(View.GONE);
+                            isValidateEnabled = false;
+                            validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
                     }
                 }
@@ -249,16 +252,15 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
             }
 
             if (totalPercentage >= Utils.boTargetPercentage) {
+                percentageTV.setVisibility(View.GONE);
                 isValidateEnabled = true;
                 validateCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             } else {
+                percentageTV.setVisibility(View.VISIBLE);
                 isValidateEnabled = false;
                 validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             }
         } else {
-            notFoundTV.setVisibility(View.VISIBLE);
-            beneficialOwnersRV.setVisibility(View.GONE);
-
             isValidateEnabled = false;
             validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
         }
