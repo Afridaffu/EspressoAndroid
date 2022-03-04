@@ -21,6 +21,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApplicationSubmissionViewModel extends AndroidViewModel {
+
         private MutableLiveData<ApplicationSubmitResponseModel> postApplicationSubmissionData = new MutableLiveData<>();
 
     public ApplicationSubmissionViewModel(@NonNull Application application) {
@@ -34,7 +35,7 @@ public class ApplicationSubmissionViewModel extends AndroidViewModel {
         public void postApplicationData(ApplicationSubmitRequest applicationSubmitRequest) {
             try {
                 ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-                Call<ApplicationSubmitResponseModel> mCall = apiService.postApplicationSubmissionData(applicationSubmitRequest);
+                Call<ApplicationSubmitResponseModel> mCall = apiService.postApplicationSubmissionData();
                 mCall.enqueue(new Callback<ApplicationSubmitResponseModel>() {
                     @Override
                     public void onResponse(Call<ApplicationSubmitResponseModel> call, Response<ApplicationSubmitResponseModel> response) {

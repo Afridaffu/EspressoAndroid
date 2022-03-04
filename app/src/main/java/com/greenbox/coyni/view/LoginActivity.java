@@ -809,10 +809,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
             BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
             if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
                 dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
             } else {
                 dashboardIntent = new Intent(LoginActivity.this, BusinessRegistrationTrackerActivity.class);
+                dashboardIntent.putExtra("FROM","login");
             }
         }
         dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

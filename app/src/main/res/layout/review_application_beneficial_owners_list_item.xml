@@ -3,15 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/et_bg_gray"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginRight="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_16sdp"
         app:cardCornerRadius="@dimen/_10sdp">
 
@@ -184,6 +181,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/llUploadDocument"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_14sdp"
                 android:background="@drawable/bg_white_color_light_border"
@@ -206,6 +204,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
+                        android:id="@+id/bo_uploaded_method"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:fontFamily="@font/opensans_semibold"

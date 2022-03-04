@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.submit;
 
+import com.greenbox.coyni.model.Error;
+
 public class ApplicationSubmitResponseModel {
 
     private String status;
@@ -8,7 +10,7 @@ public class ApplicationSubmitResponseModel {
 
     private Data data;
 
-    private Object error;
+    private Error error;
 
     public String getStatus() {
         return status;
@@ -34,13 +36,14 @@ public class ApplicationSubmitResponseModel {
         this.data = data;
     }
 
-    public Object getError() {
+    public Error getError() {
         return error;
     }
 
-    public void setError(Object error) {
+    public void setError(Error error) {
         this.error = error;
     }
+
     public class Data {
         private Integer userId;
 
