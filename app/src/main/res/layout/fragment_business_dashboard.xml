@@ -62,7 +62,7 @@
                             android:layout_gravity="center"
                             android:fontFamily="@font/opensans_bold"
                             android:text="SS"
-                            android:textColor="@color/primary_green"
+                            android:textColor="@color/primary_black"
                             android:textSize="@dimen/_20sdp"
                             android:visibility="gone" />
 
