@@ -1,27 +1,23 @@
-package com.greenbox.coyni.utils;
+package com.greenbox.coyni.dialogs;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.DialogAttributes;
+import com.greenbox.coyni.utils.OnDialogButtonClickListener;
 
-public class CustomConfirmationDialog extends Dialog {
+public class CustomConfirmationDialog extends BaseDialog {
 
     private DialogAttributes dialogAttributes;
     private TextView mTvTitle, mTvMessage, mTvPositiveBtn, mTvNegativeBtn;
     private OnDialogButtonClickListener onButtonClickLister;
 
     public CustomConfirmationDialog(Context context, DialogAttributes dialogAttributes) {
-        super(context, R.style.Theme_Dialog);
+        super(context);
         this.dialogAttributes = dialogAttributes;
-        setDefaultProperties();
     }
 
     public void setOnButtonClickLister(OnDialogButtonClickListener onButtonClickLister) {
@@ -50,7 +46,7 @@ public class CustomConfirmationDialog extends Dialog {
         mTvPositiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onButtonClickLister != null) {
+                if (onButtonClickLister != null) {
                     onButtonClickLister.onPositiveButtonClicked();
                 }
                 dismiss();
@@ -60,7 +56,7 @@ public class CustomConfirmationDialog extends Dialog {
         mTvNegativeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onButtonClickLister != null) {
+                if (onButtonClickLister != null) {
                     onButtonClickLister.onNegativeButtonClicked();
                 }
                 dismiss();
@@ -68,17 +64,5 @@ public class CustomConfirmationDialog extends Dialog {
         });
     }
 
-    private void setDefaultProperties() {
-        Window window = this.getWindow();
-        if (window != null) {
-            window.requestFeature(Window.FEATURE_NO_TITLE);
-            WindowManager.LayoutParams wlp = window.getAttributes();
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setBackgroundDrawableResource(R.color.mb_transparent);
-            window.setAttributes(wlp);
-            window.getAttributes().windowAnimations = R.style.DialogAnimation;
-            setCanceledOnTouchOutside(true);
-        }
-    }
+
 }
