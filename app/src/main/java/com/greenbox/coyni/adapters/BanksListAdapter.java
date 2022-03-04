@@ -72,8 +72,16 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
             holder.deleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AddBankAccount addBankAccount = (AddBankAccount) mContext;
-                    addBankAccount.deleteBankAPICall(objData.getId());
+                    try {
+                        AddBankAccount addBankAccount = (AddBankAccount) mContext;
+                        if (listBanks.size() > 1) {
+                            addBankAccount.deleteBankAPICall(objData.getId());
+                        } else if (listBanks.size() == 1) {
+                            addBankAccount.showPopup();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         } catch (Exception ex) {
