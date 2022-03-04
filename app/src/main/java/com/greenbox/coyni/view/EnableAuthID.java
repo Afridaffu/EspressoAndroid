@@ -287,7 +287,7 @@ public class EnableAuthID extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class));
+                        startActivity(new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class).putExtra("FROM","signup"));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -510,6 +510,7 @@ public class EnableAuthID extends AppCompatActivity {
                     dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
                 } else {
                     dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
+                    dashboardIntent.putExtra("FROM",strScreen);
                 }
             }
             dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

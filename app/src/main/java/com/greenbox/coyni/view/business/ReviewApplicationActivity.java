@@ -192,6 +192,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, CompanyInformationActivity.class);
+                intent.putExtra("FROM", "EDIT");
                 startActivity(intent);
             }
         });
@@ -199,6 +200,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, DBAInfoAcivity.class);
+                intent.putExtra("FROM", "EDIT");
+                intent.putExtra("TYPE", "EXIST");
                 startActivity(intent);
             }
         });
@@ -309,7 +312,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         });
 
         summaryViewModel = new ViewModelProvider(this).get(BusinessApplicationSummaryViewModel.class);
-        summaryViewModel.getApplicationSummaryData();
+
 
 
     }
@@ -600,5 +603,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         showFile(file);
 
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            super.onResume();
+            summaryViewModel.getApplicationSummaryData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
