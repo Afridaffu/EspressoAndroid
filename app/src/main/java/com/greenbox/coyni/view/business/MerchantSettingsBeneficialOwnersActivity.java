@@ -70,9 +70,8 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
             businessIdentityVerificationViewModel.getBeneficialOwnersResponse().observe(this, new Observer<BOResp>() {
                 @Override
                 public void onChanged(BOResp boResp) {
-
+                    dialog.dismiss();
                     if (boResp != null) {
-                        dialog.dismiss();
                         if (boResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
                             loadBeneficialOwners(boResp);
@@ -92,7 +91,7 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
 
     public void loadBeneficialOwners(BOResp boResp) {
 
-        if (objMyApplication.getBeneficialOwnersResponse().getData().size() > 0) {
+        if (objMyApplication.getBeneficialOwnersResponse().getData().size() > 0 && beneficialOwnerList != null) {
             noDataTV.setVisibility(View.GONE);
             beneficialOwnersRV.setVisibility(View.VISIBLE);
             beneficialOwnerList = boResp.getData();
@@ -114,8 +113,7 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
                 Context context = view.getContext();
                 Intent intent = new Intent();
                 intent = new Intent(context, BenificialOwnerDetails.class);
-                intent.putExtra(Utils.boFirstName, beneficialOwnerList.get(position).getFirstName());
-                intent.putExtra(Utils.boLastName, beneficialOwnerList.get(position).getLastName());
+                intent.putExtra(Utils.boName, beneficialOwnerList.get(position).getFirstName() + "" + beneficialOwnerList.get(position).getLastName());
                 intent.putExtra(Utils.boAddress, beneficialOwnerList.get(position).getAddressLine1() + beneficialOwnerList.get(position).getAddressLine2());
                 intent.putExtra(Utils.boDob, beneficialOwnerList.get(position).getDob());
                 intent.putExtra(String.valueOf(Utils.boOwnershipPercentage), beneficialOwnerList.get(position).getOwnershipParcentage());

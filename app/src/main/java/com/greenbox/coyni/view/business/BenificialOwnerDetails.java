@@ -13,7 +13,7 @@ import com.greenbox.coyni.view.BaseActivity;
 public class BenificialOwnerDetails extends BaseActivity {
     private ProgressBar mProgress;
     private TextView mPercentage, mMailingAddress, mSSN, mName, mDob;
-    private String firstName = "", lastName = "", address = "", dob = "", ssn = "";
+    private String name = "", address = "", dob = "", ssn = "";
     private int percentage = 0, position = 0;
     private LinearLayout bpbackBtn, primaryLL;
 
@@ -22,8 +22,7 @@ public class BenificialOwnerDetails extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_benificial_owner_details);
         Bundle bundle = getIntent().getExtras();
-        firstName = bundle.getString(Utils.boFirstName, firstName);
-        lastName = bundle.getString(Utils.boLastName, lastName);
+        name = bundle.getString(Utils.boName, name);
         percentage = bundle.getInt(String.valueOf(Utils.boOwnershipPercentage), percentage);
         address = bundle.getString(Utils.boAddress, address);
         dob = bundle.getString(Utils.boDob, dob);
@@ -52,8 +51,8 @@ public class BenificialOwnerDetails extends BaseActivity {
                 onBackPressed();
             }
         });
-        if (firstName != null || lastName != null) {
-            mName.setText(firstName + "" + lastName);
+        if (name != null) {
+            mName.setText(name);
         }
 
         mProgress.setProgress(percentage);

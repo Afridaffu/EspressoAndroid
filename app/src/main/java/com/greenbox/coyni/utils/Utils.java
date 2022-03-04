@@ -232,8 +232,7 @@ public class Utils {
     public static final String teamPhoneNumber="TeamPhoneNumber";
     public static final String teamMemberId="TeamMemberId";
 
-    public static final String boFirstName="BOFirstName";
-    public static final String boLastName="BOLastName";
+    public static final String boName="BOName";
     public static final int boOwnershipPercentage=50;
     public static final String boAddress="BoAddress";
     public static final String boDob="BoDob";
