@@ -96,6 +96,25 @@ import java.util.regex.Pattern;
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
+    //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
+    public static enum BUSINESS_ACCOUNT_STATUS
+    {
+        UNVERIFIED("Unverified"),
+        ADDITIONAL_DETAILS_REQUIRED("AdditionalDetailsRequired"),
+        CANCELLED("Cancelled"),
+        FAILED("Failed"),
+        ACTIVE("Active");
+
+        private String status;
+
+        BUSINESS_ACCOUNT_STATUS(String status) {
+            this.status = status;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+    }
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strDesc = "abcd";

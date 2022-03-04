@@ -449,7 +449,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
                                         uploadTV.setVisibility(GONE);
                                         uploadedLL.setVisibility(VISIBLE);
-                                        updatedOnTV.setText(Utils.convertDocUploadedDate(boResp.getData().get(i).getRequiredDocuments().get(0).getUpdatedAt()));
+                                        updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(boResp.getData().get(i).getRequiredDocuments().get(0).getUpdatedAt()));
 
                                         if (existingIdentityType == 4)
                                             uploadedTV.setText("Uploaded Driver’s License");
@@ -510,16 +510,16 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             uploadTV.setVisibility(GONE);
                             uploadedLL.setVisibility(VISIBLE);
                             uploadedTV.setText("Uploaded Driver’s License");
-                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
                         } else if (identityType == 2) {
                             uploadTV.setVisibility(GONE);
                             uploadedLL.setVisibility(VISIBLE);
-                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
                             uploadedTV.setText("Uploaded Passport");
                         } else if (identityType == 1) {
                             uploadTV.setVisibility(GONE);
                             uploadedLL.setVisibility(VISIBLE);
-                            updatedOnTV.setText(Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
+                            updatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDateAPITime(identityImageResponse.getTimestamp().split("T")[0]));
                             uploadedTV.setText("Uploaded State-Issued Card");
                         } else {
                             isFileUploaded = false;
@@ -800,11 +800,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().replace("%", "").length() > 0) {
                     int allowPerc = 100 - totalOwnerShipPerc;
-                    if (Integer.parseInt(charSequence.toString().trim().replace("%", "")) <= allowPerc) {
-                        isownership = true;
-                    } else {
-                        isownership = false;
-                    }
+                    int enteredAmt = Integer.parseInt(charSequence.toString().trim().replace("%", ""));
+                    isownership = enteredAmt > 0 && enteredAmt <= allowPerc;
                     ownershipLL.setVisibility(GONE);
                     ownershiptil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(ownershiptil, getResources().getColor(R.color.primary_black));
@@ -1146,19 +1143,23 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ownershipET.clearFocus();
-                    int allowPerc = 100 - totalOwnerShipPerc;
-                    if (Integer.parseInt(ownershipET.getText().toString().trim()) <= allowPerc) {
-                        ownershipLL.setVisibility(GONE);
-                        ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
-                        Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
-                    } else {
-                        ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                        Utils.setUpperHintColor(ownershiptil, getColor(R.color.error_red));
-                        ownershipLL.setVisibility(VISIBLE);
-                        ownershipTV.setText("Please Enter a Valid Ownership Percentage");
-                    }
+                    try {
+                        ownershipET.clearFocus();
+                        int allowPerc = 100 - totalOwnerShipPerc;
+                        if (!ownershipET.getText().toString().trim().equals("") && Integer.parseInt(ownershipET.getText().toString().trim()) <= allowPerc) {
+                            ownershipLL.setVisibility(GONE);
+                            ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
+                            Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
+                        } else {
+                            ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+                            Utils.setUpperHintColor(ownershiptil, getColor(R.color.light_gray));
+                            ownershipLL.setVisibility(VISIBLE);
+                            ownershipTV.setText("Please Enter a Valid Ownership Percentage");
+                        }
 //                    ownershipET.setText(ownershipET.getText().toString()+"%");
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 return false;

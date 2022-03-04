@@ -13,6 +13,10 @@ public class AgreementType {
     @SerializedName("content")
     @Expose
     private String content;
+    @SerializedName("agreementFileRefPath")
+    @Expose
+    private String agreementFileRefPath;
+
     @SerializedName("startDate")
     @Expose
     private String startDate;
@@ -58,5 +62,24 @@ public class AgreementType {
 
     public void setChangeSummary(String changeSummary) {
         this.changeSummary = changeSummary;
+    }
+
+    public String getAgreementFileRefPath() {
+        return agreementFileRefPath;
+    }
+
+    public void setAgreementFileRefPath(String agreementFileRefPath) {
+        this.agreementFileRefPath = agreementFileRefPath;
+    }
+
+    @Override
+    public String toString() {
+        return "AgreementType{" +
+                "agreementType=" + agreementType +
+                ", version='" + version + '\'' +
+                ", content='" + content + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", changeSummary='" + changeSummary + '\'' +
+                '}';
     }
 }

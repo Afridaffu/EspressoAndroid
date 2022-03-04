@@ -64,6 +64,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class NotificationsActivity extends AppCompatActivity {
@@ -94,6 +95,7 @@ public class NotificationsActivity extends AppCompatActivity {
     public TransferPayRequest userPayRequest = new TransferPayRequest();
     PayViewModel payViewModel;
     StatusRequest statusRequest = new StatusRequest();
+    CardView viewSideBarCV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +115,17 @@ public class NotificationsActivity extends AppCompatActivity {
         notificationsTV = findViewById(R.id.notificationsTV);
         requestsTV = findViewById(R.id.requestsTV);
         noDataTV = findViewById(R.id.noDataTV);
+        viewSideBarCV = findViewById(R.id.viewSideBarCV);
+
+        try {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+                viewSideBarCV.setVisibility(View.GONE);
+            else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
+                viewSideBarCV.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
         payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
