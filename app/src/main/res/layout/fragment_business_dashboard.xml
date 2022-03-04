@@ -138,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -393,6 +393,7 @@
                                     android:textSize="@dimen/_12sdp" />
 
                                 <LinearLayout
+                                    android:id="@+id/ll_processing_volume"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -406,6 +407,7 @@
                                     android:paddingBottom="@dimen/_6sdp">
 
                                     <TextView
+                                        android:id="@+id/tv_processing_volume"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
@@ -788,11 +790,13 @@
                                 android:background="@color/viewcolor" />
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_merchant_transactions"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_18sdp"
-                                android:layout_marginBottom="@dimen/_18sdp"
+                                android:gravity="center"
+                                android:paddingTop="@dimen/_18sdp"
+                                android:paddingBottom="@dimen/_18sdp"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="@string/view_m_transactions"
                                 android:textColor="@color/primary_green"
@@ -1042,6 +1046,7 @@
                             </LinearLayout>
 
                             <androidx.cardview.widget.CardView
+                                android:id="@+id/cv_batch_now"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_42sdp"
                                 android:layout_marginLeft="@dimen/_68sdp"

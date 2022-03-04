@@ -1,6 +1,7 @@
 package com.greenbox.coyni.model.DBAInfo;
 
-public class BusinessType {
+public class BusinessType implements Comparable<BusinessType> {
+
     private int id;
     private String key;
     private String type;
@@ -45,5 +46,10 @@ public class BusinessType {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    @Override
+    public int compareTo(BusinessType obj) {
+        return value.compareTo(obj.value);
     }
 }

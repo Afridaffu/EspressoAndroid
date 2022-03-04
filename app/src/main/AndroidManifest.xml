@@ -109,11 +109,6 @@
             android:name=".view.business.CompanyInfoDetails"
             android:exported="false" />
         <activity
-            android:name=".view.business.ClearBatchPromptActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
-        <activity
             android:name=".view.business.TeamActivity"
             android:exported="false"
             android:screenOrientation="portrait"
