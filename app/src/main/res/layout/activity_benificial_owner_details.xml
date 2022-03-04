@@ -65,7 +65,7 @@
                 android:layout_marginTop="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="Jonathan Joestar"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_16ssp" />
 
@@ -74,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -127,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="25%"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_18ssp" />
 
@@ -138,7 +139,7 @@
                         android:layout_below="@+id/percentage"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:text="Ownership"
+                        android:text="@string/ownership_title"
                         android:textColor="@color/dark_gray"
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
@@ -190,7 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="August 23, 1991"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -215,7 +216,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="3131 Camino Del Rio, San Diego,\nCA, 92108"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -240,7 +241,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="•••-••-••23"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
