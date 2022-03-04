@@ -32,10 +32,11 @@ import okhttp3.RequestBody;
 public class MerchantsAgrementActivity extends BaseActivity {
     public CardView doneCV;
     LinearLayout signatureEditLl;
-    ImageView mIVSignature;
+    ImageView mIVSignature,canceledIV;
     TextView savedText;
     BusinessDashboardViewModel businessDashboardViewModel;
     private String filePath = null;
+    private boolean isSignatureCaptured = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,14 @@ public class MerchantsAgrementActivity extends BaseActivity {
         signatureEditLl = findViewById(R.id.signatureEditLL);
         mIVSignature = findViewById(R.id.signatureEditIV);
         savedText = findViewById(R.id.savedtextTV);
+        canceledIV = findViewById(R.id.canceledIV);
+
+        canceledIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    onBackPressed();
+            }
+        });
 
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +71,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
         signatureEditLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchSignature();
+                if(!isSignatureCaptured) {
+                    launchSignature();
+                }
             }
         });
 
@@ -92,6 +103,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 savedText.setVisibility(View.VISIBLE);
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
+                isSignatureCaptured = true;
             }
         }
     }

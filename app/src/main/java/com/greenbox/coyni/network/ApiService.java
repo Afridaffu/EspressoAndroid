@@ -502,7 +502,7 @@ public interface ApiService {
     Call<BanksResponseModel> getBankAccountsData();
 
     @POST("/api/v2/business/submit")
-    Call<ApplicationSubmitResponseModel> postApplicationSubmissionData(@Body ApplicationSubmitRequest request);
+    Call<ApplicationSubmitResponseModel> postApplicationSubmissionData();
 
     @POST("/api/v2/team/retrieve")
     Call<TeamResponseModel> getTeamData(@Body TeamRequest request);
