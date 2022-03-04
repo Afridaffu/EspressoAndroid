@@ -120,8 +120,8 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="textCapSentences"
-                        android:maxLength="50"
+                        android:inputType="text|textNoSuggestions|textCapSentences"
+                        android:maxLength="255"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -325,7 +325,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:fontFamily="@font/opensans_regular"
+                        android:fontFamily="@font/opensans_semibold"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
@@ -410,7 +410,7 @@
                     android:id="@+id/basicNextCV"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_44sdp"
-                    android:layout_marginTop="@dimen/_70sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
                     android:layout_marginBottom="@dimen/_39sdp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="@dimen/_22sdp">

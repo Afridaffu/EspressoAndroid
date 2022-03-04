@@ -52,8 +52,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessTypeListAdapter;
@@ -77,7 +75,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -86,6 +83,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -1356,6 +1354,7 @@ public class Utils {
             }
 
             BusinessTypeListAdapter finalBTListAdapter = businessTypeListAdapter;
+            Collections.sort(listBT);
             List<BusinessType> finalListBT = listBT;
             searchET.addTextChangedListener(new TextWatcher() {
                 @Override
