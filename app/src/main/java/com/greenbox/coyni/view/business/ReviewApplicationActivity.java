@@ -2,15 +2,21 @@ package com.greenbox.coyni.view.business;
 
 
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
+import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -34,6 +40,9 @@ import com.greenbox.coyni.adapters.PastAgreeListAdapter;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.Item;
+import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
@@ -57,8 +66,10 @@ import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
 import com.greenbox.coyni.viewmodel.BusinessApplicationSummaryViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,9 +110,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private BankAccountsViewModel bankAccountsViewModel;
     private DashboardViewModel dashboardViewModel;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    Boolean isCPwdEye = false;
+    private String strScreen = "", strSignOn = "";
+    private Boolean isBank = false;
+    private Boolean isCPwdEye = false;
+    SignOnData signOnData;
 
     private ImageView llEin;
+    private PaymentMethodsViewModel paymentMethodsViewModel;
+    private TextView tosTV,prTv;
 
 
     @Override
@@ -236,7 +252,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     } else {
                         isCPwdEye = false;
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
-                        mEINTx.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                       mEINTx.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     }
 
                 } catch (Exception ex) {
@@ -295,6 +311,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         mDbFillingDateTx = (TextView) findViewById(R.id.db_filling_date);
         mPrivacyVno = (TextView) findViewById(R.id.privacy_policy);
         mTermsVno = (TextView) findViewById(R.id.terms_of_service);
+        tosTV = (TextView) findViewById(R.id.tosTV);
+        prTv = (TextView) findViewById(R.id.privacyTV);
         mMerchantsVno = (TextView) findViewById(R.id.merchant_agreements);
         mPrivacyImg = (ImageView) findViewById(R.id.privacy);
         mTermsImg = (ImageView) findViewById(R.id.terms);
@@ -310,6 +328,22 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 startActivity(browserIntent);
             }
         });
+        tosTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dashboardViewModel.agreementsByType("0");
+
+            }
+        });
+        prTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dashboardViewModel.agreementsByType("1");
+
+
+            }
+        });
+
 
         mTermsImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -337,6 +371,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         dashboardViewModel.meAgreementsById();
         applicationSubmissionViewModel = new ViewModelProvider(this).get(ApplicationSubmissionViewModel.class);
+        paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+
 
         mAgreementsImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -347,12 +383,118 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         summaryViewModel = new ViewModelProvider(this).get(BusinessApplicationSummaryViewModel.class);
 
+        customerProfileViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(CustomerProfileViewModel.class);
+        customerProfileViewModel.meSignOn();
 
 
     }
 
+    public void deleteBankAPICall(int id) {
+        paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+        paymentMethodsViewModel.deleteBanks(id);
+    }
+
+    public void showPopup() {
+        try {
+            final Dialog dialog = new Dialog(ReviewApplicationActivity.this);
+            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.bankdeleteconfirmation);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvRelink = dialog.findViewById(R.id.tvRelink);
+            TextView tvKeep = dialog.findViewById(R.id.tvKeep);
+
+            tvRelink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        dialog.dismiss();
+                        if (objMyApplication.getStrSignOnError().equals("") && objMyApplication.getSignOnData() != null && objMyApplication.getSignOnData().getUrl() != null) {
+                            isBank = true;
+                            Intent i = new Intent(ReviewApplicationActivity.this, com.greenbox.coyni.view.WebViewActivity.class);
+                            i.putExtra("signon", objMyApplication.getSignOnData());
+                            startActivityForResult(i, 1);
+                        } else {
+                            Utils.displayAlert(objMyApplication.getStrSignOnError(), ReviewApplicationActivity.this, "", "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            tvKeep.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            Window window = dialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void initObservers() {
 
+        paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
+            @Override
+            public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+                if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
+
+                    Utils.showCustomToast(ReviewApplicationActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+
+                }
+            }
+        });
+
+        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+            @Override
+            public void onChanged(SignOn signOn) {
+                try {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                    if (signOn != null) {
+                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                            objMyApplication.setSignOnData(signOn.getData());
+                            signOnData = signOn.getData();
+                            objMyApplication.setStrSignOnError("");
+                            strSignOn = "";
+                            if (objMyApplication.getResolveUrl()) {
+                                objMyApplication.callResolveFlow(ReviewApplicationActivity.this, strSignOn, signOnData);
+                            }
+                        } else {
+                            if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                objMyApplication.setResolveUrl(true);
+                                customerProfileViewModel.meSignOn();
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                signOnData = null;
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                                strSignOn = signOn.getError().getErrorDescription();
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         try {
             summaryViewModel.getSummaryMutableLiveData().observe(this, new Observer<ApplicationSummaryModelResponse>() {
@@ -380,7 +522,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
 
                                 if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
-                                    mEINTx.setText(cir.getSsnOrEin());
+                                    mEINTx.setText(cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "."));
 
                                 }
 

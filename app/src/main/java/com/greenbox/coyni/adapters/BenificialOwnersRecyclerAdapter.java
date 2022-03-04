@@ -91,15 +91,15 @@ public class BenificialOwnersRecyclerAdapter extends
                 holder.dobTx.setText(Utils.convertTxnDatebusiness(objData.getDob()));
             }
             if(objData.getOwnershipParcentage()!=0) {
-                holder.ownershipTx.setText(objData.getOwnershipParcentage().toString()+" "+mContext.getString(R.string.percentageSymbol));
+                holder.ownershipTx.setText(objData.getOwnershipParcentage().toString()+""+mContext.getString(R.string.percentageSymbol));
             }
             if (objData.getRequiredDocuments() != null && objData.getRequiredDocuments().size() > 0) {
                 if (objData.getRequiredDocuments().get(0).getUpdatedAt() != null
                 && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
-                    holder.dateTx.setText(mContext.getString(R.string.uploaded_on)+" "+ objData.getRequiredDocuments().
-                                  get(0).getUpdatedAt());
-                    holder.uploadeMethodTx.setText("Uploaded [ "+Utils.convertTxnDate(objData.getRequiredDocuments().
-                            get(0).getImgName())+"]");
+                    holder.dateTx.setText(mContext.getString(R.string.uploaded_on)+" "+ Utils.convertDocUploadedDate(objData.getRequiredDocuments().
+                                  get(0).getUpdatedAt()));
+                    holder.uploadeMethodTx.setText("Uploaded [ "+objData.getRequiredDocuments().
+                            get(0).getImgName()+"]");
 
                     holder.llUploadDocument.setOnClickListener(new View.OnClickListener() {
                         @Override

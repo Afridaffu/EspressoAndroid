@@ -680,7 +680,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbaemailTV.setText("Field Required");
                         }
                     } else {
-                        dbaemailET.setHint("@string/customer_service_email");
+                        dbaemailET.setHint(R.string.customer_service_email);
                         dbaemailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         dbaemailET.setHintTextColor(getColor(R.color.light_gray));
                         dbaemailLL.setVisibility(GONE);
