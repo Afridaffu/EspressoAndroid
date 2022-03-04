@@ -82,14 +82,13 @@ public class BusinessDashboardActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        pushFragment(new BusinessDashboardFragment());
 
     }
 
     public void onDashboardTabSelected(View view) {
         try {
             if (selectedTab != Tabs.DASHBOARD) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
@@ -106,7 +105,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onAccountTabSelected(View view) {
         try {
             if (selectedTab != Tabs.ACCOUNT) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
@@ -123,15 +122,17 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onTransactionsTabSelected(View view) {
         try {
             if (selectedTab != Tabs.TRANSACTIONS) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                     return;
                 }
 
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                selectedTab = Tabs.TRANSACTIONS;
-                setSelectedTab(false, false, true, false);
-                LogUtils.d(TAG, "onTransactionsTabSelected");
-                pushFragment(new BusinessTransactionsFragment());
+                startActivity(new Intent(BusinessDashboardActivity.this, MerchantTransactionListActivity.class));
+
+//                selectedTab = Tabs.TRANSACTIONS;
+//                setSelectedTab(false, false, true, false);
+//                LogUtils.d(TAG, "onTransactionsTabSelected");
+//                pushFragment(new BusinessTransactionsFragment());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -140,7 +141,7 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void onProfileTabSelected(View view) {
         try {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
             }
 
