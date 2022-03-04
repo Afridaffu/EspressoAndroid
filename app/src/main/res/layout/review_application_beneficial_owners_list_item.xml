@@ -105,7 +105,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_7sdp"
                     android:layout_weight="1"
-                    android:inputType="textPassword"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_12ssp" />

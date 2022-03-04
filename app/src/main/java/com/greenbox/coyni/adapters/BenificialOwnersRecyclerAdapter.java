@@ -85,7 +85,11 @@ public class BenificialOwnersRecyclerAdapter extends
                 holder.lastnameTx.setText(objData.getLastName());
             }
             if(objData.getSsn()!=null&&!objData.getSsn().equals("")) {
-                holder.ssnTx.setText(objData.getSsn());
+                isCPwdEye = true;
+                String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
+                String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                holder.ssnTx.setText(hifened);
             }
             if(objData.getDob()!=null&&!objData.getDob().equals("")) {
                 holder.dobTx.setText(Utils.convertTxnDatebusiness(objData.getDob()));
@@ -120,12 +124,19 @@ public class BenificialOwnersRecyclerAdapter extends
                             try {
                                 if (!isCPwdEye) {
                                     isCPwdEye = true;
-                                    holder.llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                                    holder.ssnTx.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                    holder.llEin.setBackgroundResource(R.drawable.ic_eyeclose);
+                                    String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
+                                    String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                                    //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                                    holder.ssnTx.setText(hifened);
                                 } else {
                                     isCPwdEye = false;
-                                    holder.llEin.setBackgroundResource(R.drawable.ic_eyeclose);
-                                    holder.ssnTx.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                    holder.llEin.setBackgroundResource(R.drawable.ic_eyeopen);
+                                    String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
+                                    String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                                    //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                                    holder.ssnTx.setText(hifened);
+                                    holder.ssnTx.setText(objData.getSsn().substring(0,2) + "-" + objData.getSsn().substring(2));
                                 }
 
                             } catch (Exception ex) {

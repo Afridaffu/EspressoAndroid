@@ -118,6 +118,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private ImageView llEin;
     private PaymentMethodsViewModel paymentMethodsViewModel;
     private TextView tosTV,prTv;
+    private CompanyInfo cir;
 
 
     @Override
@@ -247,12 +248,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 try {
                     if (!isCPwdEye) {
                         isCPwdEye = true;
-                        llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                        mEINTx.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                        llEin.setBackgroundResource(R.drawable.ic_eyeclose);
+                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                        String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                        mEINTx.setText(hifened);
                     } else {
                         isCPwdEye = false;
-                        llEin.setBackgroundResource(R.drawable.ic_eyeclose);
-                       mEINTx.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        llEin.setBackgroundResource(R.drawable.ic_eyeopen);
+                        mEINTx.setText(cir.getSsnOrEin().substring(0,2)+ "-"+ cir.getSsnOrEin().substring(2));
                     }
 
                 } catch (Exception ex) {
@@ -503,7 +506,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (summaryModelResponse != null) {
                         if (summaryModelResponse.getStatus().toLowerCase().toString().equals("success")) {
                             try {
-                                CompanyInfo cir = summaryModelResponse.getData().getCompanyInfo();
+                                 cir = summaryModelResponse.getData().getCompanyInfo();
                                 companyReqDocList = cir.getRequiredDocuments();
                                 if (cir.getName() != null && !cir.getName().equals("")) {
                                     mCompanyNameTx.setText(cir.getName());
@@ -522,7 +525,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
 
                                 if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
-                                    mEINTx.setText(cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "."));
+                                    isCPwdEye = true;
+                                    String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                                    String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                                    //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                                    mEINTx.setText(hifened);
 
                                 }
 
