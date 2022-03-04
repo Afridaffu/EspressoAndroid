@@ -233,11 +233,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             confirmPasswordET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
 
 
-            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
 
             textWatchers();
@@ -273,9 +273,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 }
             });
 
-            createAccountCloseIV.setOnClickListener(view -> {
-                onBackPressed();
-            });
+            createAccountCloseIV.setOnClickListener(view -> onBackPressed());
 
             passwordTIL.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
@@ -426,13 +424,13 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             public void onChanged(EmailExistsResponse emailExistsResponse) {
                 if (emailExistsResponse != null) {
                     if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
-                        emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                         emailErrorLL.setVisibility(GONE);
                         isEmail = true;
                         enableOrDisableNext();
                     } else {
-                        emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                         emailErrorLL.setVisibility(VISIBLE);
                         emailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
@@ -641,7 +639,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordTIL.setHint("Password");
                             confPasswordTIL.setHint("Confirm Password");
 
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             if (confirmPasswordET.getText().toString().trim().length() == 0)
                                 Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
                             else
@@ -654,7 +652,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordTIL.setHint("Password");
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
 
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             confPasswordTIL.setHint("Confirm Password");
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
 
@@ -665,18 +663,18 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                                 passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
 
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 confPasswordTIL.setHint("Password doesn’t match");
                                 Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
                             } else if (confirmPasswordET.getText().toString().trim().length() == 0) {
-                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 confPasswordTIL.setHint("Confirm Password");
                                 Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
 
                                 passwordTIL.setHint("Password");
 
                                 if (confPassErrorLL.getVisibility() == VISIBLE) {
-                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 }
                             }
                         }
@@ -715,7 +713,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             confPasswordTIL.setHint("Confirm Password");
                             if (passwordET.getText().toString().trim().length() > 0) {
                                 if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                     Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                                 } else {
                                     passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -725,7 +723,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                                 strong.matcher(passwordET.getText().toString().trim()).matches()) {
                             isConfirmPassword = true;
 
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             passwordTIL.setHint("Password");
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
 
@@ -790,16 +788,16 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         firstNameET.setHint("");
                         if (firstNameET.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
-                            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_black));
 
                         } else if (firstNameET.getText().toString().trim().length() == 1) {
-                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
-                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.light_gray));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
@@ -825,16 +823,16 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         lastNameET.setHint("");
                         if (lastNameET.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
-                            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_black));
 
                         } else if (lastNameET.getText().toString().trim().length() == 1) {
-                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
-                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.light_gray));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
@@ -879,7 +877,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     } else {
                         stregnthViewLL.setVisibility(GONE);
                         if (passwordET.getText().toString().trim().length() == 0) {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             passwordTIL.setHint("Password");
                             passwordET.setHint("");
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.light_gray));
@@ -896,14 +894,14 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordInfoTV.setVisibility(VISIBLE);
                             passwordInfoTV.setTextColor(getResources().getColor(R.color.error_red));
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
+                            //passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                         }
                     }
@@ -925,19 +923,19 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     } else {
                         confirmPasswordET.setHint("");
                         if (confirmPasswordET.getText().toString().trim().length() == 0) {
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
                             confPassErrorLL.setVisibility(VISIBLE);
                             confPassErrorTV.setText("Field Required");
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
                         }
                     }
@@ -951,22 +949,22 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     if (!b) {
                         emailET.setHint("");
                         if (emailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(emailET.getText().toString().trim())) {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Please Enter a valid Email");
                         } else if (emailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(emailET.getText().toString().trim())) {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);
                             loginViewModel.validateEmail(emailET.getText().toString().trim());
                         } else if (emailET.getText().toString().trim().length() > 0 && emailET.getText().toString().trim().length() <= 5) {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Please Enter a valid Email");
                         } else {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Field Required");
@@ -1163,6 +1161,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         tosTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 
                 if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(CreateAccountActivity.this);

@@ -16,6 +16,7 @@
         android:paddingTop="@dimen/_20sdp">
 
         <LinearLayout
+            android:id="@+id/backLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -26,6 +27,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/back_button"
                 android:src="@drawable/ic_back" />
         </LinearLayout>
 
@@ -56,20 +58,23 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/owner_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="Jonathan Joestar"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_16ssp" />
 
             <LinearLayout
+                android:id="@+id/primaryLL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView
@@ -86,6 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/primary"
                     android:src="@drawable/ic_icon_awesome_star" />
             </LinearLayout>
             <!--            <ImageView-->
@@ -107,8 +113,8 @@
                     android:layout_width="180dp"
                     android:layout_height="130dp"
                     android:layout_centerInParent="true"
-                    android:progress="10"/>
-<!--                    android:progressDrawable="@drawable/progressbar_bg1" />-->
+                    android:progress="51"
+                    android:progressDrawable="@drawable/progressbar_bg1" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -122,7 +128,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="25%"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_18ssp" />
 
@@ -133,7 +139,7 @@
                         android:layout_below="@+id/percentage"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:text="Ownership"
+                        android:text="@string/ownership_title"
                         android:textColor="@color/dark_gray"
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
@@ -180,11 +186,12 @@
                 android:textSize="@dimen/_11ssp" />
 
             <TextView
+                android:id="@+id/dob_bo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="August 23, 1991"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -204,11 +211,12 @@
                 android:textSize="@dimen/_11ssp" />
 
             <TextView
+                android:id="@+id/address_bo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="3131 Camino Del Rio, San Diego,\nCA, 92108"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -228,11 +236,12 @@
                 android:textSize="@dimen/_11ssp" />
 
             <TextView
+                android:id="@+id/ssn_bo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="•••-••-••23"
+                android:text=""
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 

@@ -1,13 +1,11 @@
 package com.greenbox.coyni.view.business;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,13 +45,7 @@ public class EditEmail extends BaseActivity {
 
     private void initFields() {
         closeLL = findViewById(R.id.bpCloseLL);
-        closeLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditEmail.this, ChangeEmail.class);
-                startActivity(intent);
-            }
-        });
+        closeLL.setOnClickListener(v -> finish());
         mEditTitle=(TextView) findViewById(R.id.editTitle);
         textInputLayout=(TextInputLayout) findViewById(R.id.textInputLayout);
         textInputEditText=(TextInputEditText) findViewById(R.id.companyEmailET);

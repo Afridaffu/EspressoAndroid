@@ -1182,7 +1182,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
                         } else {
                             ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                            Utils.setUpperHintColor(ownershiptil, getColor(R.color.light_gray));
+                            Utils.setUpperHintColor(ownershiptil, getColor(R.color.error_red));
                             ownershipLL.setVisibility(VISIBLE);
                             ownershipTV.setText("Please Enter a Valid Ownership Percentage");
                         }
