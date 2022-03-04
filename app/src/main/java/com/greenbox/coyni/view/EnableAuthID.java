@@ -35,6 +35,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
@@ -507,7 +508,7 @@ public class EnableAuthID extends AppCompatActivity {
                 BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
                 if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
                         && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-                    dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
+                    dashboardIntent = new Intent(EnableAuthID.this, ReviewApplicationActivity.class);
                 } else {
                     dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
                     dashboardIntent.putExtra("FROM",strScreen);

@@ -247,6 +247,7 @@
     <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
     <string name="percentage"> 51% or</string>
     <string name="greater">greater.</string>
+    <string name="percentageSymbol">%</string>
     <string name="no_beneficial_owner_is_found">No Beneficial Owner is found</string>
     <string name="ownership">Ownership(%)</string>
     <string name="beneficialnreach">Please add an additional beneficial owner below\n to reach 51%</string>

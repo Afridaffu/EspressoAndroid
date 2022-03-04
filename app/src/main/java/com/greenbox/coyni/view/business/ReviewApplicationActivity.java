@@ -1,10 +1,14 @@
 package com.greenbox.coyni.view.business;
 
 
+import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -17,6 +21,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +32,7 @@ import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
 import com.greenbox.coyni.adapters.PastAgreeListAdapter;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
@@ -40,6 +46,7 @@ import com.greenbox.coyni.model.summary.CompanyInfo;
 import com.greenbox.coyni.model.summary.DbaInfo;
 import com.greenbox.coyni.model.summary.Item1;
 import com.greenbox.coyni.model.summary.RequiredDocument;
+import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -92,6 +99,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private BankAccountsViewModel bankAccountsViewModel;
     private DashboardViewModel dashboardViewModel;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    Boolean isCPwdEye = false;
+
+    private ImageView llEin;
 
 
     @Override
@@ -171,6 +181,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         objMyApplication = (MyApplication) getApplicationContext();
         applicationSubmissionViewModel = new ViewModelProvider(this).get(ApplicationSubmissionViewModel.class);
 
+
         edit1 = findViewById(R.id.edit1);
         edit2 = findViewById(R.id.edit2TV);
         edit3 = findViewById(R.id.edit3TV);
@@ -187,6 +198,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         uploadW9LL = findViewById(R.id.ll_upload_w9);
         dbaFillingLL = findViewById(R.id.ll_dba_filling);
         llDBADocuments = findViewById(R.id.llDBADocuments);
+        llEin = findViewById(R.id.llEIN);
 
         edit1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,6 +222,26 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewApplicationActivity.this, AdditionalBeneficialOwnersActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        llEin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (!isCPwdEye) {
+                        isCPwdEye = true;
+                        llEin.setBackgroundResource(R.drawable.ic_eyeopen);
+                        mEINTx.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    } else {
+                        isCPwdEye = false;
+                        llEin.setBackgroundResource(R.drawable.ic_eyeclose);
+                        mEINTx.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 
@@ -298,6 +330,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         businessIdentityVerificationViewModel.getCompanyInfo();
         businessIdentityVerificationViewModel.getDBAInfo();
         businessIdentityVerificationViewModel.getBeneficialOwners();
+        businessIdentityVerificationViewModel.getBusinessType();
+
         bankAccountsViewModel = new ViewModelProvider(this).get(BankAccountsViewModel.class);
         bankAccountsViewModel.getBankAccountsData();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -318,6 +352,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     }
 
     public void initObservers() {
+
+
         try {
             summaryViewModel.getSummaryMutableLiveData().observe(this, new Observer<ApplicationSummaryModelResponse>() {
                 @Override
@@ -336,7 +372,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
 
                                 if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
-                                    mPhoneNumberTx.setText(cir.getPhoneNumberDto().getPhoneNumber());
+                                    mPhoneNumberTx.setText(Utils.convertToUSFormatNew(cir.getPhoneNumberDto().getPhoneNumber()));
                                 }
 
                                 if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
@@ -348,9 +384,24 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
                                 }
 
+                                StringBuilder sbCompany = new StringBuilder();
                                 if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
-                                    mAddressTx.setText(cir.getAddressLine1());
+                                    sbCompany.append(cir.getAddressLine1());
                                 }
+                                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                    sbCompany.append(",").append(cir.getAddressLine1());
+                                }
+                                if (cir.getCity() != null && !cir.getCity().equals("")) {
+                                    sbCompany.append(",").append(cir.getCity());
+                                }
+                                if (cir.getState() != null && !cir.getState().equals("")) {
+                                    sbCompany.append(",").append(cir.getState());
+                                }
+                                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                                    sbCompany.append(",").append(cir.getZipCode());
+                                }
+                                mAddressTx.setText(sbCompany.toString());
+
 
                                 if (cir.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
@@ -363,7 +414,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                     showFile((String) v.getTag());
                                                 }
                                             });
-                                            mArticleDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                            mArticleDateTx.setText(getResources().getString(R.string.uploaded_on) +" " +Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 6) {
                                             uploadEINLL.setVisibility(View.VISIBLE);
                                             uploadEINLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
@@ -373,7 +424,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                     showFile((String) v.getTag());
                                                 }
                                             });
-                                            mEINDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                            mEINDateTx.setText(getResources().getString(R.string.uploaded_on) +" " +Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7 || cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
                                             uploadW9LL.setVisibility(View.VISIBLE);
                                             uploadW9LL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
@@ -383,7 +434,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                     showFile((String) v.getTag());
                                                 }
                                             });
-                                            mW9DateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                            mW9DateTx.setText(getResources().getString(R.string.uploaded_on) +" " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         }
                                     }
                                 }
@@ -394,40 +445,74 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
 
                                 if (dbaInfo.getBusinessType() != null && !dbaInfo.getBusinessType().equals("")) {
-                                    mBusinessTypeTx.setText(dbaInfo.getBusinessType());
+                                   mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType()));
+                                   // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
                                 }
-                                if (dbaInfo.getTimeZone() != 0) {
-                                    mTimeZoneTx.setText(dbaInfo.getTimeZone().toString());
+                                if (dbaInfo.getTimeZone()!=null) {
+                                    ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
+                                    LogUtils.d("TimeZoneModel","TimeZoneModel"+arrZonesList);
+                                    if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("3")){
+                                        mTimeZoneTx.setText(R.string.EST);
+                                    } else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("2")){
+                                        mTimeZoneTx.setText(R.string.CST);
+                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("1")){
+                                        mTimeZoneTx.setText(R.string.MST);
+                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("0")){
+                                        mTimeZoneTx.setText(R.string.PST);
+                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("5")){
+                                        mTimeZoneTx.setText(R.string.AST);
+                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("4")){
+                                        mTimeZoneTx.setText(R.string.HST);
+                                    }
                                 }
                                 if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
                                     mWebsiteTx.setText(dbaInfo.getWebsite().toString());
+                                } else {
+                                    mWebsiteTx.setText("");
+
                                 }
 
                                 if (dbaInfo.getMonthlyProcessingVolume() != null && !dbaInfo.getMonthlyProcessingVolume().equals("")) {
                                     // monthlyProcVolume=cir.getMonthlyProcessingVolume();
-                                    mMonthlyProcVolumeTx.setText(dbaInfo.getMonthlyProcessingVolume().toString());
+                                    mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor)+" "+convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
                                 }
 
                                 if (dbaInfo.getHighTicket() != null && !dbaInfo.getHighTicket().equals("")) {
-                                    mHighTicketTx.setText(dbaInfo.getHighTicket().toString());
+                                    mHighTicketTx.setText(getResources().getString(R.string.dollor)+" "+convertTwoDecimal(dbaInfo.getHighTicket().toString()));
                                 }
 
                                 if (dbaInfo.getAverageTicket() != null && !dbaInfo.getAverageTicket().equals("")) {
-                                    mAverageTicketTx.setText(dbaInfo.getAverageTicket().toString());
+                                    mAverageTicketTx.setText(getResources().getString(R.string.dollor)+" "+convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
                                 }
                                 if (dbaInfo.getEmail() != null && !dbaInfo.getEmail().equals("")) {
                                     mCustomerServiceEmailTx.setText(dbaInfo.getEmail().toString());
                                 }
                                 if (dbaInfo.getPhoneNumberDto() != null && !dbaInfo.getPhoneNumberDto().equals("")) {
-                                    mCustomerServicePhoneTx.setText(dbaInfo.getPhoneNumberDto().toString());
+                                    mCustomerServicePhoneTx.setText(Utils.convertToUSFormatNew(dbaInfo.getPhoneNumberDto().getPhoneNumber()));
                                 }
-                                if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("") || dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    mDbAddressLineTx.setText(dbaInfo.getAddressLine1().toString() + dbaInfo.getAddressLine2().toString());
+
+                                StringBuilder sb = new StringBuilder();
+                                if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("")) {
+                                    sb.append(dbaInfo.getAddressLine1());
                                 }
+                                if (dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
+                                    sb.append(",").append(dbaInfo.getAddressLine1());
+                                }
+                                if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
+                                    sb.append(",").append(dbaInfo.getCity());
+                                }
+                                if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
+                                    sb.append(",").append(dbaInfo.getState());
+                                }
+                                if (dbaInfo.getZipCode() != null && !dbaInfo.getZipCode().equals("")) {
+                                    sb.append(",").append(dbaInfo.getZipCode());
+                                }
+                                mDbAddressLineTx.setText(sb.toString());
+
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                         llDBADocuments.setVisibility(View.VISIBLE);
-                                        mDbFillingDateTx.setText(Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on)+" "+Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         dbaFillingLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
                                         dbaFillingLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -457,10 +542,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     bankItems = summaryModelResponse.getData().getBankaccount().getItems();
                                     Log.d("BankItems", bankItems.toString());
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
+
                                     accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems);
 
                                     bankRecyclerView.setLayoutManager(layoutManager);
                                     bankRecyclerView.setAdapter(accountsRecyclerAdapter);
+
 
                                 } else {
                                     banksLL.setVisibility(View.GONE);
@@ -583,6 +670,24 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
             }
         });
+
+        try {
+            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+                @Override
+                public void onChanged(BusinessTypeResp businessTypeResp) {
+
+                    if (businessTypeResp != null) {
+                        if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTypeResp(businessTypeResp);
+                            businessIdentityVerificationViewModel.getDBAInfo();
+//                           loadCompanyInfo();
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showFile(String fileUrl) {

@@ -1,9 +1,14 @@
 package com.greenbox.coyni.adapters;
 
+import static com.greenbox.coyni.utils.Utils.convertDate;
+
 import android.content.Context;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +20,7 @@ import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.summary.BeneficialOwnerInfo;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 import java.util.List;
@@ -26,10 +32,13 @@ public class BenificialOwnersRecyclerAdapter extends
     private MyApplication objMyApplication;
     private int count=0;
     private OnSelectListner listener;
+    Boolean isCPwdEye = false;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView firstNameTx,lastnameTx,ssnTx,dobTx,ownershipTx,dateTx,numberTx,uploadeMethodTx;
         LinearLayout llUploadDocument;
+        ImageView llEin;
 
         public MyViewHolder(View view) {
             super(view);
@@ -42,6 +51,8 @@ public class BenificialOwnersRecyclerAdapter extends
             dateTx=(TextView) view.findViewById(R.id.bo_uploaded_date);
             llUploadDocument=(LinearLayout) view.findViewById(R.id.llUploadDocument);
             uploadeMethodTx=(TextView) view.findViewById(R.id.bo_uploaded_method);
+            llEin = (ImageView)view.findViewById(R.id.llEIN);
+
         }
     }
 
@@ -77,18 +88,18 @@ public class BenificialOwnersRecyclerAdapter extends
                 holder.ssnTx.setText(objData.getSsn());
             }
             if(objData.getDob()!=null&&!objData.getDob().equals("")) {
-                holder.dobTx.setText(objData.getDob());
+                holder.dobTx.setText(Utils.convertTxnDatebusiness(objData.getDob()));
             }
             if(objData.getOwnershipParcentage()!=0) {
-                holder.ownershipTx.setText(objData.getOwnershipParcentage().toString());
+                holder.ownershipTx.setText(objData.getOwnershipParcentage().toString()+" "+mContext.getString(R.string.percentageSymbol));
             }
             if (objData.getRequiredDocuments() != null && objData.getRequiredDocuments().size() > 0) {
                 if (objData.getRequiredDocuments().get(0).getUpdatedAt() != null
                 && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
-                    holder.dateTx.setText("Uploaded on " + objData.getRequiredDocuments().
+                    holder.dateTx.setText(mContext.getString(R.string.uploaded_on)+" "+ objData.getRequiredDocuments().
                                   get(0).getUpdatedAt());
-                    holder.uploadeMethodTx.setText("Uploaded [ "+objData.getRequiredDocuments().
-                            get(0).getImgName()+"]");
+                    holder.uploadeMethodTx.setText("Uploaded [ "+Utils.convertTxnDate(objData.getRequiredDocuments().
+                            get(0).getImgName())+"]");
 
                     holder.llUploadDocument.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -103,11 +114,28 @@ public class BenificialOwnersRecyclerAdapter extends
                         }
                     });
 
+                    holder.llEin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                if (!isCPwdEye) {
+                                    isCPwdEye = true;
+                                    holder.llEin.setBackgroundResource(R.drawable.ic_eyeopen);
+                                    holder.ssnTx.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                                } else {
+                                    isCPwdEye = false;
+                                    holder.llEin.setBackgroundResource(R.drawable.ic_eyeclose);
+                                    holder.ssnTx.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                                }
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+
                 }
             }
-
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
