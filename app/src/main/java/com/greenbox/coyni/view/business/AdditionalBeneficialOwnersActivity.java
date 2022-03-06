@@ -86,7 +86,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                if (objMyApplication.getBeneficialOwnersResponse().getData().size() < 5) {
+                if (objMyApplication.getBeneficialOwnersResponse().getData().size() < 20) {
                     businessIdentityVerificationViewModel.postBeneficialOwnersID();
                 } else {
                     Utils.showCustomToast(this, "You are exceeded your benificial accounts max limit.", 0, "");
@@ -236,18 +236,34 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
             notFoundTV.setVisibility(View.GONE);
             beneficialOwnersRV.setVisibility(View.VISIBLE);
 
+            int totalPercentage = 0;
+            boolean hasDrafts = false;
+            for (int i = 0; i < objMyApplication.getBeneficialOwnersResponse().getData().size(); i++) {
+                totalPercentage = totalPercentage + objMyApplication.getBeneficialOwnersResponse().getData().get(i).getOwnershipParcentage();
+                BOResp.BeneficialOwner bo = objMyApplication.getBeneficialOwnersResponse().getData().get(i);
+
+                try {
+                    objMyApplication.getBeneficialOwnersResponse().getData().get(i).setDraft(bo.getFirstName().equals("") || bo.getLastName().equals("") || bo.getDob().equals("")
+                            || bo.getOwnershipParcentage() <= 0 || bo.getAddressLine1().equals("") || bo.getAddressLine2().equals("")
+                            || bo.getCity().equals("") || bo.getState().equals("") || bo.getZipCode().equals("")
+                            || bo.getSsn().equals("") || bo.getRequiredDocuments().size() <= 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    objMyApplication.getBeneficialOwnersResponse().getData().get(i).setDraft(true);
+                }
+
+                if (objMyApplication.getBeneficialOwnersResponse().getData().get(i).isDraft())
+                    hasDrafts = true;
+            }
+
             BeneficialOwnersAdapter beneficialOwnersAdapter = new BeneficialOwnersAdapter(this, objMyApplication.getBeneficialOwnersResponse());
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
             beneficialOwnersRV.setLayoutManager(mLayoutManager);
             beneficialOwnersRV.setItemAnimator(new DefaultItemAnimator());
             beneficialOwnersRV.setAdapter(beneficialOwnersAdapter);
 
-            int totalPercentage = 0;
-            for (int i = 0; i < objMyApplication.getBeneficialOwnersResponse().getData().size(); i++) {
-                totalPercentage = totalPercentage + objMyApplication.getBeneficialOwnersResponse().getData().get(i).getOwnershipParcentage();
-            }
 
-            if (totalPercentage >= Utils.boTargetPercentage) {
+            if (totalPercentage >= Utils.boTargetPercentage && !hasDrafts) {
                 percentageTV.setVisibility(View.GONE);
                 isValidateEnabled = true;
                 validateCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));

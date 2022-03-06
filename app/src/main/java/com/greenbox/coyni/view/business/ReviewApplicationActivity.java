@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.DisplayMetrics;
@@ -62,6 +63,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
 import com.greenbox.coyni.viewmodel.BusinessApplicationSummaryViewModel;
@@ -74,7 +76,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner  {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -88,8 +90,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
     private TextView noBanksTv, noBoTV;
-    private LinearLayout banksLL, boLL;
-    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL,llDBADocuments;
+    private LinearLayout banksLL, boLL, CloseLL;
+    private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
     private int monthlyProcVolume = 0;
@@ -117,7 +119,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     private ImageView llEin;
     private PaymentMethodsViewModel paymentMethodsViewModel;
-    private TextView tosTV,prTv;
+    private TextView tosTV, prTv;
     private CompanyInfo cir;
 
 
@@ -216,6 +218,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         dbaFillingLL = findViewById(R.id.ll_dba_filling);
         llDBADocuments = findViewById(R.id.llDBADocuments);
         llEin = findViewById(R.id.llEIN);
+        CloseLL = findViewById(R.id.CloseLL);
 
         edit1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,12 +253,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         isCPwdEye = true;
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                         String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                        String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
                         mEINTx.setText(hifened);
                     } else {
                         isCPwdEye = false;
                         llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                        mEINTx.setText(cir.getSsnOrEin().substring(0,2)+ "-"+ cir.getSsnOrEin().substring(2));
+                        mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
                     }
 
                 } catch (Exception ex) {
@@ -389,6 +392,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         customerProfileViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(CustomerProfileViewModel.class);
         customerProfileViewModel.meSignOn();
 
+        CloseLL.setOnClickListener(view -> finish());
 
     }
 
@@ -503,10 +507,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             summaryViewModel.getSummaryMutableLiveData().observe(this, new Observer<ApplicationSummaryModelResponse>() {
                 @Override
                 public void onChanged(ApplicationSummaryModelResponse summaryModelResponse) {
+                    dismissDialog();
                     if (summaryModelResponse != null) {
                         if (summaryModelResponse.getStatus().toLowerCase().toString().equals("success")) {
                             try {
-                                 cir = summaryModelResponse.getData().getCompanyInfo();
+                                cir = summaryModelResponse.getData().getCompanyInfo();
                                 companyReqDocList = cir.getRequiredDocuments();
                                 if (cir.getName() != null && !cir.getName().equals("")) {
                                     mCompanyNameTx.setText(cir.getName());
@@ -527,7 +532,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
                                     isCPwdEye = true;
                                     String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                    String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                                    String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
                                     //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                                     mEINTx.setText(hifened);
 
@@ -563,7 +568,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                     showFile((String) v.getTag());
                                                 }
                                             });
-                                            mArticleDateTx.setText(getResources().getString(R.string.uploaded_on) +" " +Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                            mArticleDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 6) {
                                             uploadEINLL.setVisibility(View.VISIBLE);
                                             uploadEINLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
@@ -573,7 +578,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                     showFile((String) v.getTag());
                                                 }
                                             });
-                                            mEINDateTx.setText(getResources().getString(R.string.uploaded_on) +" " +Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                            mEINDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7 || cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
                                             uploadW9LL.setVisibility(View.VISIBLE);
                                             uploadW9LL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
@@ -583,7 +588,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                                     showFile((String) v.getTag());
                                                 }
                                             });
-                                            mW9DateTx.setText(getResources().getString(R.string.uploaded_on) +" " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                            mW9DateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         }
                                     }
                                 }
@@ -594,23 +599,23 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
 
                                 if (dbaInfo.getBusinessType() != null && !dbaInfo.getBusinessType().equals("")) {
-                                   mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType()));
-                                   // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
+                                    mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()));
+                                    // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
                                 }
-                                if (dbaInfo.getTimeZone()!=null) {
+                                if (dbaInfo.getTimeZone() != null) {
                                     ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
-                                    LogUtils.d("TimeZoneModel","TimeZoneModel"+arrZonesList);
-                                    if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("3")){
+                                    LogUtils.d("TimeZoneModel", "TimeZoneModel" + arrZonesList);
+                                    if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("3")) {
                                         mTimeZoneTx.setText(R.string.EST);
-                                    } else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("2")){
+                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("2")) {
                                         mTimeZoneTx.setText(R.string.CST);
-                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("1")){
+                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("1")) {
                                         mTimeZoneTx.setText(R.string.MST);
-                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("0")){
+                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("0")) {
                                         mTimeZoneTx.setText(R.string.PST);
-                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("5")){
+                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("5")) {
                                         mTimeZoneTx.setText(R.string.AST);
-                                    }else  if(dbaInfo.getTimeZone().toString().equalsIgnoreCase("4")){
+                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("4")) {
                                         mTimeZoneTx.setText(R.string.HST);
                                     }
                                 }
@@ -623,15 +628,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
                                 if (dbaInfo.getMonthlyProcessingVolume() != null && !dbaInfo.getMonthlyProcessingVolume().equals("")) {
                                     // monthlyProcVolume=cir.getMonthlyProcessingVolume();
-                                    mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor)+" "+convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
+                                    mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
                                 }
 
                                 if (dbaInfo.getHighTicket() != null && !dbaInfo.getHighTicket().equals("")) {
-                                    mHighTicketTx.setText(getResources().getString(R.string.dollor)+" "+convertTwoDecimal(dbaInfo.getHighTicket().toString()));
+                                    mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
                                 }
 
                                 if (dbaInfo.getAverageTicket() != null && !dbaInfo.getAverageTicket().equals("")) {
-                                    mAverageTicketTx.setText(getResources().getString(R.string.dollor)+" "+convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
+                                    mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
                                 }
                                 if (dbaInfo.getEmail() != null && !dbaInfo.getEmail().equals("")) {
                                     mCustomerServiceEmailTx.setText(dbaInfo.getEmail().toString());
@@ -661,7 +666,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                         llDBADocuments.setVisibility(View.VISIBLE);
-                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on)+" "+Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                         dbaFillingLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
                                         dbaFillingLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -677,7 +682,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     boLL.setVisibility(View.VISIBLE);
                                     noBoTV.setVisibility(View.GONE);
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
-                                    benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList,ReviewApplicationActivity.this);
+                                    benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList, ReviewApplicationActivity.this);
                                     beneficialOwnerList = boList;
                                     boRecyclerView.setLayoutManager(layoutManager);
                                     boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
@@ -811,11 +816,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
             @Override
             public void onChanged(AgreementsPdf agreementsPdf) {
-                LogUtils.d("pdfff","pdf"+agreementsPdf);
+                LogUtils.d("pdfff", "pdf" + agreementsPdf);
                 if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        if(agreementsPdf.getData().getAgreementFileRefPath()!=null) {
-                            showFile(agreementsPdf.getData().getAgreementFileRefPath());
-                        }
+                    if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
+                        showFile(agreementsPdf.getData().getAgreementFileRefPath());
+                    }
                 }
             }
         });
@@ -840,10 +845,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     }
 
     private void showFile(String fileUrl) {
-        if(fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
+        if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
             //Call the activity here
             Intent intent = new Intent(ReviewApplicationActivity.this, WebViewActivity.class);
-            intent.putExtra("FILEURL",fileUrl);
+            intent.putExtra("FILEURL", fileUrl);
             startActivity(intent);
         } else {
             LogUtils.v(TAG, "fileUrl is null or empty");
@@ -853,7 +858,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     @Override
     public void selectedItem(String file) {
 
-        LogUtils.d("file","file"+file);
+        LogUtils.d("file", "file" + file);
 
         showFile(file);
 
@@ -863,7 +868,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     protected void onResume() {
         try {
             super.onResume();
-            summaryViewModel.getApplicationSummaryData();
+            if(Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
+            showProgressDialog();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    summaryViewModel.getApplicationSummaryData();
+                }
+            }, 2000);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -122,7 +122,13 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
     @Override
     protected void onResume() {
-        super.onResume();
+        try {
+            super.onResume();
+            fnameET.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void initFields() {
@@ -151,7 +157,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     backIV.setVisibility(GONE);
                     divider1.setBackgroundResource(R.drawable.button_background);
                     divider2.setBackgroundResource(R.drawable.button_background1);
-
+                    fnameET.requestFocus();
                     if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
 
@@ -160,7 +166,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     backIV.setVisibility(VISIBLE);
                     divider1.setBackgroundResource(R.drawable.button_background1);
                     divider2.setBackgroundResource(R.drawable.button_background);
-
+                    address1ET.requestFocus();
                     if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
                 }
@@ -410,7 +416,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
                                     if (boResp.getData().get(i).getLastName() != null && !boResp.getData().get(i).getLastName().equals("")) {
                                         lnameET.setText(boResp.getData().get(i).getLastName());
-                                        lnameET.setSelection(boResp.getData().get(i).getFirstName().length());
+                                        lnameET.setSelection(boResp.getData().get(i).getLastName().length());
                                         islname = true;
                                     }
 
@@ -837,9 +843,11 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-//                    if (s.length() > 0) {
-//                        s.append("%");
-//                    }
+                    int perc = Integer.parseInt(ownershipET.getText().toString());
+                    if (perc > 100) {
+                        ownershipET.setText(String.valueOf(perc).substring(0,String.valueOf(perc).length()-1));
+                        ownershipET.setSelection(ownershipET.getText().length());
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

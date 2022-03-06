@@ -46,8 +46,8 @@ public class BOResp {
 
     public class BeneficialOwner {
         private int id;
-        private String firstName;
-        private String lastName;
+        private String firstName = "";
+        private String lastName = "";
         private String dob;
         private int ownershipParcentage = -1;
         private String addressLine1;
@@ -57,6 +57,7 @@ public class BOResp {
         private String zipCode;
         private String country;
         private String ssn;
+        private boolean isDraft = false;
         private ArrayList<RequiredDocumets> requiredDocuments = new ArrayList<>();
 
         public int getId() {
@@ -161,6 +162,14 @@ public class BOResp {
 
         public void setRequiredDocuments(ArrayList<RequiredDocumets> requiredDocumets) {
             this.requiredDocuments = requiredDocumets;
+        }
+
+        public boolean isDraft() {
+            return isDraft;
+        }
+
+        public void setDraft(boolean draft) {
+            isDraft = draft;
         }
     }
 
