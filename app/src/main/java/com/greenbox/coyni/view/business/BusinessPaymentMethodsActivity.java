@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WebViewActivity;
@@ -293,7 +294,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 pDialog.dismiss();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+//                    Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
+                    Utils.showCustomToast(BusinessPaymentMethodsActivity.this, bankDeleteResponseData.getData(), R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
                 }
             }
@@ -306,6 +308,24 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
+                }
+            }
+        });
+
+        paymentMethodsViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
+            @Override
+            public void onChanged(APIError apiError) {
+                try {
+                    pDialog.dismiss();
+                    if (apiError != null) {
+                        if (!apiError.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(apiError.getError().getErrorDescription(), BusinessPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(apiError.getError().getFieldErrors().get(0), BusinessPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });

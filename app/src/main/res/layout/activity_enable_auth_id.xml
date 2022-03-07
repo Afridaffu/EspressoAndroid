@@ -404,7 +404,7 @@
         android:layout_marginLeft="@dimen/_21sdp"
         android:layout_marginRight="@dimen/_21sdp"
         android:background="@color/white"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -426,7 +426,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/_35sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:gravity="start"
+                android:gravity="center"
                 android:text="Your Account Has Been Created"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp" />

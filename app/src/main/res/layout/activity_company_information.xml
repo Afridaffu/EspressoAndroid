@@ -120,8 +120,8 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="text|textNoSuggestions"
-                        android:maxLength="255"
+                        android:inputType="text|textNoSuggestions|textCapSentences"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -325,7 +325,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_10sdp"
-                        android:fontFamily="@font/opensans_semibold"
+                        android:fontFamily="@font/opensans_regular"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>

@@ -3,6 +3,7 @@ package com.greenbox.coyni.utils;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -39,9 +40,14 @@ import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
+import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.WebViewActivity;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -965,6 +971,45 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return objResponse;
+    }
+
+    public void launchDashboard(Context context, String fromScreen) {
+        try {
+            Intent dashboardIntent = new Intent(context, DashboardActivity.class);
+            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                BusinessTrackerResponse btr = getBusinessTrackerResponse();
+                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+
+                    if (btr.getData().isApplicationSummary() && btr.getData().isProfileVerified()) {
+                        dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
+                    } else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+                    } else {
+                        dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+                        dashboardIntent.putExtra("FROM", fromScreen);
+                    }
+
+                } else {
+                    dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+                    dashboardIntent.putExtra("FROM", fromScreen);
+                }
+            }
+            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(dashboardIntent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Boolean isDeviceID() {
+        Boolean value = false;
+        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+        value = prefs.getBoolean("isDevice", false);
+        if (value) {
+            Utils.setDeviceID(prefs.getString("deviceId", ""));
+        }
+        return value;
     }
 
 }

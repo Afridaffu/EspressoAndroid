@@ -95,9 +95,9 @@ public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
     public static final String TOKEN = "TOKEN",MERCHANT = "MERCHANT";
+
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
-    public static enum BUSINESS_ACCOUNT_STATUS
-    {
+    public static enum BUSINESS_ACCOUNT_STATUS {
         UNVERIFIED("Unverified"),
         ADDITIONAL_DETAILS_REQUIRED("AdditionalDetailsRequired"),
         CANCELLED("Cancelled"),
@@ -114,6 +114,7 @@ public class Utils {
             return status;
         }
     }
+
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strDesc = "abcd";
@@ -223,15 +224,24 @@ public class Utils {
 
     public static final int boTargetPercentage = 51;
 
-    public static final String teamFirstName="TeamMemberFirstName";
-    public static final String teamLastName="TeamMemberLastName";
-    public static final String teamImageName="ImageName";
-    public static final String teamRoleName="RoleName";
-    public static final String teamRole="Role";
-    public static final String teamStatus="Status";
-    public static final String teamEmailAddress="TeamEmailAddress";
-    public static final String teamPhoneNumber="TeamPhoneNumber";
-    public static final String teamMemberId="TeamMemberId";
+    public static final String teamFirstName = "TeamMemberFirstName";
+    public static final String teamLastName = "TeamMemberLastName";
+    public static final String teamImageName = "ImageName";
+    public static final String teamRoleName = "RoleName";
+    public static final String teamRole = "Role";
+    public static final String teamStatus = "Status";
+    public static final String teamEmailAddress = "TeamEmailAddress";
+    public static final String teamPhoneNumber = "TeamPhoneNumber";
+    public static final String teamMemberId = "TeamMemberId";
+
+    public static final String boName="BOName";
+    public static final int boOwnershipPercentage=50;
+    public static final String boAddress="BoAddress";
+    public static final String boDob="BoDob";
+    public static final String boSSN="BoSSN";
+
+    public static final int position=0;
+
 
 
     public static String getStrLang() {
@@ -414,7 +424,7 @@ public class Utils {
         try {
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MMM dd, yyyy");
+            spf = new SimpleDateFormat("dd/MM/yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -616,6 +626,12 @@ public class Utils {
     public static String convertToUSFormat(String strPhone) {
         String strNumber = "";
         strNumber = "(" + strPhone.substring(0, 3) + ") " + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
+        return strNumber;
+    }
+
+    public static String convertToUSFormatNew(String strPhone) {
+        String strNumber = "";
+        strNumber = strPhone.substring(0, 3) + "-" + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
         return strNumber;
     }
 
@@ -1219,6 +1235,19 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertTxnDatebusiness(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MMM dd,yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
     }
@@ -1311,6 +1340,20 @@ public class Utils {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    public static String getBusinessName(MyApplication myApplicationObj, String key) {
+        LogUtils.d("key","key"+key);
+        LogUtils.d("myApplicationObj","myApplicationObj"+myApplicationObj);
+        if (myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
+            List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
+            for(BusinessType businessType : listBT) {
+                if(businessType.getKey().equalsIgnoreCase(key)) {
+                    return businessType.getValue();
+                }
+            }
+        }
+        return key;
     }
 
     public static void populateBusinessTypes(Context context, EditText editText, MyApplication myApplicationObj, String from) {

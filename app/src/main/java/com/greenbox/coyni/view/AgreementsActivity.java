@@ -27,8 +27,6 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -44,6 +42,7 @@ public class AgreementsActivity extends AppCompatActivity {
     String status;
     String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
+    String merchantagreeURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
     Agreements agreements;
     MyApplication objMyApplication;
     TextView pastTV, activeTV;
@@ -152,10 +151,13 @@ public class AgreementsActivity extends AppCompatActivity {
                                     }
                                 }
 
+
                                 activeItems = new ArrayList<>();
                                 activeItems.add(privacyPolicy);
                                 activeItems.add(tos);
-                                activeItems.add(merchantAgre);
+                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                    activeItems.add(merchantAgre);
+                                }
                             }
 
 
@@ -215,6 +217,14 @@ public class AgreementsActivity extends AppCompatActivity {
                         Intent inte = new Intent(Intent.ACTION_VIEW);
                         inte.setDataAndType(
                                 Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
+
+                    }
+                    if (position == 2) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(merchantagreeURL + "?" + System.currentTimeMillis()),
                                 "application/pdf");
                         startActivity(inte);
 

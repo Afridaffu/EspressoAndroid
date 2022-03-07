@@ -37,6 +37,17 @@
             android:textColor="@color/dark_gray"
             android:textSize="@dimen/_10ssp" />
 
+        <TextView
+            android:id="@+id/draftTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/opensans_italic"
+            android:text="[draft]"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10ssp" />
+
     </LinearLayout>
 
     <ImageView

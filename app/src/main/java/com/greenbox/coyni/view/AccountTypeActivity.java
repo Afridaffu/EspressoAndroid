@@ -6,17 +6,12 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
-import com.greenbox.coyni.view.business.EditTeamMember;
-import com.greenbox.coyni.view.business.GetstartedSuccessAcivity;
-import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 
 public class AccountTypeActivity extends AppCompatActivity {

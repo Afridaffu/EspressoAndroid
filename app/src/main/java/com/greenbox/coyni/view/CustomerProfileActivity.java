@@ -819,7 +819,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
 //                    dialog.dismiss();
                     if (biometricResponse != null) {
                         saveToken(biometricResponse.getData().getToken());
-                        Utils.generateUUID(CustomerProfileActivity.this);
+//                        Utils.generateUUID(CustomerProfileActivity.this);
+                        if (!objMyApplication.isDeviceID()) {
+                            Utils.generateUUID(CustomerProfileActivity.this);
+                        }
                         if (!isSwitchEnabled) {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
 //                                saveFace("false");
