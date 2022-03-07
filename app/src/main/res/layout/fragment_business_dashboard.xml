@@ -380,10 +380,10 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_10sdp"
-                                    android:layout_marginTop="@dimen/_4sdp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:text="@string/processing_volume"
@@ -392,11 +392,10 @@
 
                                 <LinearLayout
                                     android:id="@+id/ll_processing_volume"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginStart="@dimen/_54sdp"
                                     android:layout_marginEnd="@dimen/_13sdp"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:background="@drawable/corner_bg_grey"
                                     android:orientation="horizontal"
@@ -410,7 +409,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:fontFamily="@font/opensans_semibold"
-                                        android:text="@string/lastmonth"
+                                        android:text="Custom Date Range"
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_12sdp" />
 
@@ -418,7 +417,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
-                                        android:layout_marginStart="@dimen/_3sdp"
+                                        android:layout_marginStart="@dimen/_4sdp"
                                         android:src="@drawable/ic_chevron_down" />
 
                                 </LinearLayout>
