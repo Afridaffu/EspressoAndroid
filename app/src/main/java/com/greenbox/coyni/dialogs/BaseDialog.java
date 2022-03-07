@@ -13,12 +13,22 @@ import com.greenbox.coyni.R;
 
 public class BaseDialog extends Dialog {
 
+    private OnDialogClickListener listener;
+
     public BaseDialog(@NonNull Context context) {
         super(context, R.style.Theme_Dialog);
     }
 
     public BaseDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
+    }
+
+    public void setOnDialogClickListener(OnDialogClickListener listener) {
+        this.listener = listener;
+    }
+
+    public OnDialogClickListener getOnDialogClickListener() {
+        return listener;
     }
 
     @Override

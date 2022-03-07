@@ -27,12 +27,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
+import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
-import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.OnDialogButtonClickListener;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
@@ -258,18 +258,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                 getString(R.string.no));
         CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
                 (getActivity(), dialogAttributes);
-        customConfirmationDialog.setOnButtonClickLister(new OnDialogButtonClickListener() {
+
+        customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
-            public void onPositiveButtonClicked() {
-                //businessDashboardViewModel.cancelBusinessApplication();
+            public void onDialogClicked(String action, Object value) {
                 launchApplicationCancelledScreen();
             }
-
-            @Override
-            public void onNegativeButtonClicked() {
-
-            }
         });
+
         customConfirmationDialog.show();
     }
 }
