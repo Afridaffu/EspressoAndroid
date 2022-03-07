@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
     String strURL = "";
     RelativeLayout layoutLoader;
     CircularProgressIndicator cpProgress;
-    AdvancedWebView mywebview;
+    WebView mywebview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
             super.onCreate(savedInstanceState);
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
             setContentView(R.layout.activity_web_view);
-            mywebview = (AdvancedWebView) findViewById(R.id.webView);
+            mywebview = (WebView) findViewById(R.id.webView);
             SignOnData signOnData;
             objMyApplication = (MyApplication) getApplicationContext();
             layoutLoader = findViewById(R.id.layoutLoader);
@@ -47,9 +49,9 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
             layoutLoader.setVisibility(View.VISIBLE);
             cpProgress.show();
             WebSettings webSettings = mywebview.getSettings();
-//            webSettings.setJavaScriptEnabled(true);
-            mywebview.setListener(this, this);
-            mywebview.setMixedContentAllowed(false);
+            webSettings.setJavaScriptEnabled(true);
+//            mywebview.setListener(this, this);
+//            mywebview.setMixedContentAllowed(false);
             String strLogin_acct_id = "", strAcct_id = "", strInvocation_mode = "", strReturn_url = "", strError_url = "";
             if (signOnData != null && signOnData.getUrl() != null) {
                 if (!objMyApplication.getResolveUrl()) {
