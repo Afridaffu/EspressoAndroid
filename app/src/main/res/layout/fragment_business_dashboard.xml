@@ -42,22 +42,20 @@
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_24sdp">
 
-
-
-                            <ImageView
-                                android:id="@+id/iv_user_icon"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:contentDescription="@string/user_details"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/acct_profile"
-                                android:visibility="visible" />
+                        <ImageView
+                            android:id="@+id/iv_user_icon"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/user_details"
+                            android:padding="2dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/acct_profile"
+                            android:visibility="visible" />
 
                         <TextView
                             android:id="@+id/tv_user_icon_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
                             android:layout_gravity="center"
                             android:fontFamily="@font/opensans_bold"
                             android:textColor="@color/primary_black"
@@ -110,8 +108,12 @@
                     </androidx.cardview.widget.CardView>
 
                     <ImageView
+                        android:id="@+id/iv_notifications"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:scaleType="fitEnd"
                         android:src="@drawable/ic_notifications" />
 
                 </RelativeLayout>

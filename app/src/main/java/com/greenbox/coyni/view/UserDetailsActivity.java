@@ -79,8 +79,8 @@ import okhttp3.RequestBody;
 
 public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
 
-    ImageView editProfileIV, userProfileIV,mIvUserIcon;
-    private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV ,defualtAccountDialogPersonalNameTV,
+    ImageView editProfileIV, userProfileIV, mIvUserIcon;
+    private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV, defualtAccountDialogPersonalNameTV,
             mTvUserIconText;
     private TextInputLayout business_defaultAccTIL;
     private TextInputEditText business_defaultaccountET;
@@ -91,7 +91,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
 
-    LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL,businessPersonalProfileAccount;
+    LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL, businessPersonalProfileAccount;
     @SuppressLint("StaticFieldLeak")
     public static UserDetailsActivity userDetailsActivity;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
@@ -100,12 +100,12 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
     Long mLastClickTime = 0L;
-    String emailId="",address="",phoneNo="";
+    String emailId = "", address = "", phoneNo = "";
 
     //Business
     ImageView business_userProfileIV;
-    TextView business_imageTextTV,business_userNameTV,business_emailIdTV,business_userPhneNoTV,business_userAddreTV;
-    LinearLayout business_emailLL,business_PhoneNumLL,business_AddreLL;
+    TextView business_imageTextTV, business_userNameTV, business_emailIdTV, business_userPhneNoTV, business_userAddreTV;
+    LinearLayout business_emailLL, business_PhoneNumLL, business_AddreLL;
 
     static SQLiteDatabase mydatabase;
     static Cursor dsPermanentToken, dsFacePin, dsTouchID;
@@ -153,18 +153,17 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             userNameTV = findViewById(R.id.userNameTV);
 
             //Business ID's
-            business_userProfileIV=findViewById(R.id.b_userProfileIV);
-            business_imageTextTV=findViewById(R.id.b_imageTextTV);
-            business_userAddreTV=findViewById(R.id.b_userAddressTV);
-            business_userNameTV=findViewById(R.id.b_userNameTV);
-            business_emailIdTV=findViewById(R.id.b_userEmailIdTV);
-            business_userPhneNoTV=findViewById(R.id.b_userPhoneNumTV);
-            business_emailLL=findViewById(R.id.b_emailLL);
-            business_PhoneNumLL=findViewById(R.id.b_phoneLL);
-            business_AddreLL=findViewById(R.id.b_addressLL);
-            business_defaultAccTIL=findViewById(R.id.b_accountTIL);
-            business_defaultaccountET=findViewById(R.id.b_accountET);
-
+            business_userProfileIV = findViewById(R.id.b_userProfileIV);
+            business_imageTextTV = findViewById(R.id.b_imageTextTV);
+            business_userAddreTV = findViewById(R.id.b_userAddressTV);
+            business_userNameTV = findViewById(R.id.b_userNameTV);
+            business_emailIdTV = findViewById(R.id.b_userEmailIdTV);
+            business_userPhneNoTV = findViewById(R.id.b_userPhoneNumTV);
+            business_emailLL = findViewById(R.id.b_emailLL);
+            business_PhoneNumLL = findViewById(R.id.b_phoneLL);
+            business_AddreLL = findViewById(R.id.b_addressLL);
+            business_defaultAccTIL = findViewById(R.id.b_accountTIL);
+            business_defaultaccountET = findViewById(R.id.b_accountET);
 
 
             business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -286,10 +285,10 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 mLastClickTime = SystemClock.elapsedRealtime();
 
                 authenticateType = "EMAIL";
-                String face=String.valueOf(isFaceLock);
-                String touch=String.valueOf(isTouchId);
+                String face = String.valueOf(isFaceLock);
+                String touch = String.valueOf(isTouchId);
 
-                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",emailId).putExtra("touch",touch).putExtra("face",face));
+                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", emailId).putExtra("touch", touch).putExtra("face", face));
             });
 
             business_AddreLL.setOnClickListener(view -> {
@@ -300,10 +299,10 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
 
                 authenticateType = "ADDRESS";
-                String face=String.valueOf(isFaceLock);
-                String touch=String.valueOf(isTouchId);
+                String face = String.valueOf(isFaceLock);
+                String touch = String.valueOf(isTouchId);
 
-                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",address).putExtra("touch",touch).putExtra("face",face));
+                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", address).putExtra("touch", touch).putExtra("face", face));
 
 
             });
@@ -315,10 +314,10 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 mLastClickTime = SystemClock.elapsedRealtime();
 
                 authenticateType = "PHONE";
-                String face=String.valueOf(isFaceLock);
-                String touch=String.valueOf(isTouchId);
+                String face = String.valueOf(isFaceLock);
+                String touch = String.valueOf(isTouchId);
 
-                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen","UserDetails").putExtra("title",authenticateType).putExtra("value",phoneFormat).putExtra("touch",touch).putExtra("face",face));
+                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", phoneFormat).putExtra("touch", touch).putExtra("face", face));
 
             });
 
@@ -337,7 +336,12 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                 userPhoneNumTV.setText(phoneFormat);
                 business_userPhneNoTV.setText(phoneFormat);
-                business_defaultaccountET.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                if (fullname.length() > 30) {
+                    business_defaultaccountET.setText(fullname.substring(0, 30).trim() + "...");
+                } else {
+                    business_defaultaccountET.setText(fullname);
+                }
 
                 String addressFormatted = "";
                 if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
@@ -369,11 +373,10 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
             }
 
-            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 findViewById(R.id.businessUserDetailsLL).setVisibility(View.VISIBLE);
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.GONE);
-            }
-            else if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
+            } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 findViewById(R.id.businessUserDetailsLL).setVisibility(View.GONE);
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
             }
@@ -390,7 +393,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     DisplayMetrics mertics = getApplicationContext().getResources().getDisplayMetrics();
 //                    int width = mertics.widthPixels;
 
-                    CardView doneButton=dialog.findViewById(R.id.default_DoneBtn);
+                    CardView doneButton = dialog.findViewById(R.id.default_DoneBtn);
                     brandsGV = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
                     mIvUserIcon = dialog.findViewById(R.id.profile_img);
                     mTvUserIconText = dialog.findViewById(R.id.b_imageTextTV);
@@ -407,7 +410,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
 
-                    if(businessAccountList.size()!=0) {
+                    if (businessAccountList.size() != 0) {
                         brandsGV.setVisibility(View.VISIBLE);
 //                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
 //                        brandsGV.setAdapter(listAdapter);
@@ -415,7 +418,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         brandsGV.setVisibility(View.GONE);
                     }
 
-                    if(personalAccountList.size()!=0) {
+                    if (personalAccountList.size() != 0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
                         String iconText = "";
                         if (personalAccountList.get(0).getCompanyName() != null
@@ -425,7 +428,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                             String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
 
                         }
-                        if (personalAccountList.get(0).getImage()!= null) {
+                        if (personalAccountList.get(0).getImage() != null) {
                             mTvUserIconText.setVisibility(View.GONE);
                             mIvUserIcon.setVisibility(View.VISIBLE);
                             Glide.with(UserDetailsActivity.this)
@@ -446,7 +449,6 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
-
 
 
                     doneButton.setOnClickListener(view1 -> dialog.dismiss());
@@ -511,7 +513,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         strFileName = myApplicationObj.getMyProfile().getData().getImage();
                         userEmailIdTV.setText(profile.getData().getEmail());
                         business_emailIdTV.setText(profile.getData().getEmail());
-                        emailId=profile.getData().getEmail();
+                        emailId = profile.getData().getEmail();
                         userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         userPhoneNumTV.setText(phoneFormat);
@@ -538,11 +540,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                             addressFormatted = addressFormatted + "United States";
                             userAddressTV.setText(addressFormatted);
                             business_userAddreTV.setText(addressFormatted);
-                            address=addressFormatted;
+                            address = addressFormatted;
                         } else {
                             userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
                             business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                            address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+                            address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
                         }
 
                     }
@@ -573,8 +575,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 if (profilesResponse != null) {
                     filterList = profilesResponse.getData();
 
-                    for(ProfilesResponse.Profiles c: filterList){
-                        if(c.getAccountType().equals(Utils.BUSINESS)){
+                    for (ProfilesResponse.Profiles c : filterList) {
+                        if (c.getAccountType().equals(Utils.BUSINESS)) {
                             businessAccountList.add(c);
                         } else {
                             personalAccountList.add(c);
@@ -907,9 +909,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     protected void onResume() {
         super.onResume();
         dashboardViewModel.meProfile();
-       if (Utils.isKeyboardVisible){
-           Utils.hideKeypad(UserDetailsActivity.this);
-       }
+        if (Utils.isKeyboardVisible) {
+            Utils.hideKeypad(UserDetailsActivity.this);
+        }
     }
 
     public static void showImagePickerDialog(Activity activity) {

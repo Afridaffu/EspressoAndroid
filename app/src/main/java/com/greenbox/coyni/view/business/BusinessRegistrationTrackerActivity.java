@@ -239,15 +239,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
-                        if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() == 0) {
-                            dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-                        } else if (dbaInfoResponse != null && dbaInfoResponse.getData().getId() != 0) {
-                            Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
-                            intent.putExtra("FROM", "TRACKER");
-                            intent.putExtra("TYPE", "EXIST");
-                            startActivity(intent);
+                    try {
+                        if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
+                            if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
+                                dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+                            } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
+                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                                intent.putExtra("FROM", "TRACKER");
+                                intent.putExtra("TYPE", "EXIST");
+                                startActivity(intent);
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -365,6 +369,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(btResp);
                             businessTrackerResponse = btResp;
+                            businessIdentityVerificationViewModel.getCompanyInfo();
+                            businessIdentityVerificationViewModel.getDBAInfo();
                             reloadTrackerDashboard(btResp);
 
                         }
@@ -539,8 +545,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
     private void reloadTrackerDashboard(BusinessTrackerResponse businessTrackerResponse) {
 
-        businessIdentityVerificationViewModel.getCompanyInfo();
-        businessIdentityVerificationViewModel.getDBAInfo();
+
         boAPICallFrom = "RESUME";
         businessIdentityVerificationViewModel.getBeneficialOwners();
         LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + new Gson().toJson(businessTrackerResponse));

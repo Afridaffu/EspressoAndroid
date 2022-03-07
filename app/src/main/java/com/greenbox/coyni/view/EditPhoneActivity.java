@@ -202,6 +202,14 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             });
 
+            b_editPhoneCloseLL .setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                    Utils.hideKeypad(EditPhoneActivity.this);
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -341,6 +349,8 @@ public class EditPhoneActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 
     @Override
     protected void onPause() {
