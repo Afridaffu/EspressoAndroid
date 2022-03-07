@@ -845,7 +845,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 try {
                     int perc = Integer.parseInt(ownershipET.getText().toString());
                     if (perc > 100) {
-                        ownershipET.setText(String.valueOf(perc).substring(0,String.valueOf(perc).length()-1));
+                        ownershipET.setText(String.valueOf(perc).substring(0, String.valueOf(perc).length() - 1));
                         ownershipET.setSelection(ownershipET.getText().length());
                     }
                 } catch (Exception ex) {
@@ -1298,6 +1298,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         zipcodeErrorTV.setText("Field Required");
                     }
                 } else {
+                    zipcodeET.requestFocus();
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
                     zipcodeET.setHint("Zipcode");
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));

@@ -811,6 +811,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             zipcodeErrorTV.setText("Field Required");
                         }
                     } else {
+                        zipcodeET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(DBAInfoAcivity.this);
+
                         zipcodeET.setHint("Zip Code");
                         zipcodetil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(zipcodetil, getColor(R.color.primary_green));
@@ -1165,7 +1169,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     viewPager.setPagingEnabled(false);
                 }
             } else {
-                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite &&  isMPV
+                if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
                         && isHighTkt && isAvgTkt && isTimeZone && isDBAFiling) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
@@ -1418,19 +1422,19 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
 
 
-                if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("")) {
+                if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Integer.parseInt(cir.getMonthlyProcessingVolume()) > 0) {
                     mpvOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getMonthlyProcessingVolume())));
                     isMPV = true;
                     mpvOET.setSelection();
                 }
 
-                if (cir.getHighTicket() != null && !cir.getHighTicket().equals("")) {
+                if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Integer.parseInt(cir.getHighTicket()) > 0) {
                     highTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getHighTicket())));
                     isHighTkt = true;
                     highTicketOET.setSelection();
                 }
 
-                if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("")) {
+                if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Integer.parseInt(cir.getAverageTicket()) > 0) {
                     avgTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getAverageTicket())));
                     isAvgTkt = true;
                     avgTicketOET.setSelection();
