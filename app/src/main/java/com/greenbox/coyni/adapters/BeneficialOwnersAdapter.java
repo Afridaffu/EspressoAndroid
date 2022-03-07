@@ -49,7 +49,7 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
         try {
 
             if (boResp.getData().get(pos).isDraft())
-                holder.draftTV.setVisibility(View.VISIBLE);
+                holder.draftTV.setVisibility(View.GONE);
             else
                 holder.draftTV.setVisibility(View.GONE);
 

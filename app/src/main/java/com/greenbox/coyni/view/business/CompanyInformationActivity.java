@@ -896,6 +896,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             zipcodeErrorTV.setText("Field Required");
                         }
                     } else {
+                        zipcodeET.requestFocus();
+                        if(!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+
                         zipcodeET.setHint("Zip Code");
                         zipcodetil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(zipcodetil, getColor(R.color.primary_green));
