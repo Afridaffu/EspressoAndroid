@@ -1,30 +1,29 @@
 package com.greenbox.coyni.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.utils.MyApplication;
 
-import im.delight.android.webview.AdvancedWebView;
-
-public class WebViewActivity extends AppCompatActivity implements AdvancedWebView.Listener {
+public class WebViewActivity extends AppCompatActivity {
     Boolean isFirst = true, isReturn = false, isBackPress = false;
     MyApplication objMyApplication;
     String strURL = "";
     RelativeLayout layoutLoader;
     CircularProgressIndicator cpProgress;
-    AdvancedWebView mywebview;
+    WebView mywebview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +31,7 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
             super.onCreate(savedInstanceState);
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
             setContentView(R.layout.activity_web_view);
-            mywebview = (AdvancedWebView) findViewById(R.id.webView);
+            mywebview = (WebView) findViewById(R.id.webView);
             SignOnData signOnData;
             objMyApplication = (MyApplication) getApplicationContext();
             layoutLoader = findViewById(R.id.layoutLoader);
@@ -47,9 +46,9 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
             layoutLoader.setVisibility(View.VISIBLE);
             cpProgress.show();
             WebSettings webSettings = mywebview.getSettings();
-//            webSettings.setJavaScriptEnabled(true);
-            mywebview.setListener(this, this);
-            mywebview.setMixedContentAllowed(false);
+            webSettings.setJavaScriptEnabled(true);
+//            mywebview.setListener(this, this);
+//            mywebview.setMixedContentAllowed(false);
             String strLogin_acct_id = "", strAcct_id = "", strInvocation_mode = "", strReturn_url = "", strError_url = "";
             if (signOnData != null && signOnData.getUrl() != null) {
                 if (!objMyApplication.getResolveUrl()) {
@@ -91,6 +90,40 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
                         " </html>";
             }
             mywebview.loadData(html, "text/html", null);
+            mywebview.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    super.onPageStarted(view, url, favicon);
+                    try {
+                        if (!isReturn && (url.contains("http://localhost:3000/?fiLoginAcctId") || url.contains("http://localhost:3000/?&action=cancel"))) {
+                            String string = url.replace("#", "?");
+                            String action = Uri.parse(string).getQueryParameter("action");
+                            objMyApplication.setStrFiservError(action);
+                            isBackPress = true;
+                            onBackPressed();
+                            finish();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                public void onPageFinished(WebView view, String url) {
+                    try {
+                        if (!isFirst && url.contains(strURL)) {
+                            findViewById(R.id.webView).setVisibility(View.VISIBLE);
+                            findViewById(R.id.layoutLoader).setVisibility(View.GONE);
+                        } else if (!isReturn && url.contains("http://localhost:3000/?fiLoginAcctId")) {
+                            isReturn = true;
+                        } else {
+                            mywebview.loadUrl("javascript:document.getElementById('submit-btn').click()");
+                            isFirst = false;
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -111,53 +144,53 @@ public class WebViewActivity extends AppCompatActivity implements AdvancedWebVie
         }
     }
 
-    @Override
-    public void onPageStarted(String url, Bitmap favicon) {
-        try {
-            if (!isReturn && (url.contains("http://localhost:3000/?fiLoginAcctId") || url.contains("http://localhost:3000/?&action=cancel"))) {
-                String string = url.replace("#", "?");
-                String action = Uri.parse(string).getQueryParameter("action");
-                objMyApplication.setStrFiservError(action);
-                isBackPress = true;
-                onBackPressed();
-                finish();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    public void onPageStarted(String url, Bitmap favicon) {
+//        try {
+//            if (!isReturn && (url.contains("http://localhost:3000/?fiLoginAcctId") || url.contains("http://localhost:3000/?&action=cancel"))) {
+//                String string = url.replace("#", "?");
+//                String action = Uri.parse(string).getQueryParameter("action");
+//                objMyApplication.setStrFiservError(action);
+//                isBackPress = true;
+//                onBackPressed();
+//                finish();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    @Override
-    public void onPageFinished(String url) {
-        try {
-            if (!isFirst && url.contains(strURL)) {
-                findViewById(R.id.webView).setVisibility(View.VISIBLE);
-                findViewById(R.id.layoutLoader).setVisibility(View.GONE);
-            } else if (!isReturn && url.contains("http://localhost:3000/?fiLoginAcctId")) {
-                isReturn = true;
-            } else {
-                mywebview.loadUrl("javascript:document.getElementById('submit-btn').click()");
-                isFirst = false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//    @Override
+//    public void onPageFinished(String url) {
+//        try {
+//            if (!isFirst && url.contains(strURL)) {
+//                findViewById(R.id.webView).setVisibility(View.VISIBLE);
+//                findViewById(R.id.layoutLoader).setVisibility(View.GONE);
+//            } else if (!isReturn && url.contains("http://localhost:3000/?fiLoginAcctId")) {
+//                isReturn = true;
+//            } else {
+//                mywebview.loadUrl("javascript:document.getElementById('submit-btn').click()");
+//                isFirst = false;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
-    }
-
-    @Override
-    public void onPageError(int errorCode, String description, String failingUrl) {
+//    @Override
+//    public void onPageError(int errorCode, String description, String failingUrl) {
 //        Toast.makeText(this, "Error Occured", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
-
-    }
-
-    @Override
-    public void onExternalPageRequest(String url) {
-
-    }
+//    }
+//
+//    @Override
+//    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
+//
+//    }
+//
+//    @Override
+//    public void onExternalPageRequest(String url) {
+//
+//    }
 
 }

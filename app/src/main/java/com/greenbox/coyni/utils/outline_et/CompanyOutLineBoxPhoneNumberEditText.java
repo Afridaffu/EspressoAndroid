@@ -126,11 +126,13 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
                     comAct.iscompPhoneNumber = phnET.getText().toString().trim().length() > 13;
 
+                    comAct.enableOrDisableNext();
                 } else if (FROM.equals("DbaInfo")) {
                     DBAInfoAcivity dba = (DBAInfoAcivity) mContext;
                     if (charSequence.length() == 14)
                         dba.customerphonenumLL.setVisibility(GONE);
                     dba.iscustPhoneNumber = phnET.getText().toString().trim().length() > 13;
+                    dba.enableOrDisableNext();
                 }
 
             }

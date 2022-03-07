@@ -47,13 +47,21 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
 
         try {
+
+            if (boResp.getData().get(pos).isDraft())
+                holder.draftTV.setVisibility(View.GONE);
+            else
+                holder.draftTV.setVisibility(View.GONE);
+
             try {
-                if ((boResp.getData().get(pos).getFirstName() != null || !boResp.getData().get(pos).getFirstName().equals(""))
-                        && (boResp.getData().get(pos).getLastName() != null && !boResp.getData().get(pos).getLastName().equals(""))) {
+                if (!boResp.getData().get(pos).getFirstName().equals("")
+                        && !boResp.getData().get(pos).getLastName().equals("")) {
                     holder.ownerNameTV.setText(boResp.getData().get(pos).getFirstName() + " " + boResp.getData().get(pos).getLastName());
-                } else if ((boResp.getData().get(pos).getFirstName() != null || !boResp.getData().get(pos).getFirstName().equals("")) && (boResp.getData().get(pos).getLastName() == null || boResp.getData().get(pos).getLastName().equals(""))) {
+                } else if (!boResp.getData().get(pos).getFirstName().equals("")
+                        && boResp.getData().get(pos).getLastName().equals("")) {
                     holder.ownerNameTV.setText(boResp.getData().get(pos).getFirstName());
-                } else if ((boResp.getData().get(pos).getFirstName() == null || boResp.getData().get(pos).getFirstName().equals("")) && (boResp.getData().get(pos).getLastName() != null || !boResp.getData().get(pos).getLastName().equals(""))) {
+                } else if (boResp.getData().get(pos).getFirstName().equals("")
+                        && !boResp.getData().get(pos).getLastName().equals("")) {
                     holder.ownerNameTV.setText(boResp.getData().get(pos).getLastName());
                 } else {
                     holder.ownerNameTV.setText("No name");
@@ -69,6 +77,7 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
             holder.itemView.setOnClickListener(view -> {
                 activity.chooseEditORDelete(boResp.getData().get(pos).getId());
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,7 +97,7 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView ownerNameTV, ownershipTV;
+        TextView ownerNameTV, ownershipTV, draftTV;
         ImageView moreIV;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -97,6 +106,7 @@ public class BeneficialOwnersAdapter extends RecyclerView.Adapter<BeneficialOwne
                 ownerNameTV = itemView.findViewById(R.id.ownerNameTV);
                 ownershipTV = itemView.findViewById(R.id.ownershipTV);
                 moreIV = itemView.findViewById(R.id.moreIV);
+                draftTV = itemView.findViewById(R.id.draftTV);
             } catch (Exception e) {
                 e.printStackTrace();
             }
