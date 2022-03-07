@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -53,6 +54,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     private String boAPICallFrom = "RESUME";
     private CardView mReviewCv;
     private boolean review = false;
+    private ImageView bagIV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +144,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             addBankStartTV = findViewById(R.id.addBankStartTV);
             aggrementsStartTV = findViewById(R.id.aggrementsStartTV);
             businessTrackerCloseIV = findViewById(R.id.businessTrackerCloseIV);
+            bagIV = findViewById(R.id.bagIV);
 
             if (getIntent().getStringExtra("FROM").equalsIgnoreCase("login"))
                 businessTrackerCloseIV.setVisibility(GONE);
@@ -540,7 +543,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
         businessIdentityVerificationViewModel.getDBAInfo();
         boAPICallFrom = "RESUME";
         businessIdentityVerificationViewModel.getBeneficialOwners();
-        LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + businessTrackerResponse);
+        LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + new Gson().toJson(businessTrackerResponse));
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
             dbaInProgressIV.setVisibility(GONE);
@@ -613,7 +616,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
             mReviewCv.setVisibility(VISIBLE);
             appFinishedTV.setVisibility(VISIBLE);
             infoTV.setVisibility(GONE);
-
+            bagIV.setImageDrawable(getResources().getDrawable(R.drawable.idve_completed));
         }
     }
 
