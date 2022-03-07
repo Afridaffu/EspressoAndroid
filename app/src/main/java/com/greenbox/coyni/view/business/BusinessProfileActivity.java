@@ -41,6 +41,7 @@ import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
+import com.greenbox.coyni.view.GiftCardBindingLayoutActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -467,14 +468,14 @@ public class BusinessProfileActivity extends AppCompatActivity {
                         if (enablePopup != null) {
                             enablePopup.dismiss();
                         }
-                        //                    dialog.dismiss();
                         if (biometricResponse != null) {
                             saveToken(biometricResponse.getData().getToken());
-                            Utils.generateUUID(BusinessProfileActivity.this);
+//                            Utils.generateUUID(BusinessProfileActivity.this);
+                            if (!myApplication.isDeviceID()) {
+                                Utils.generateUUID(BusinessProfileActivity.this);
+                            }
                             if (!isSwitchEnabled) {
                                 if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-                                    //                                saveFace("false");
-                                    //                                saveThumb("true");
                                     if (!isLoggedOut) {
                                         saveFace("false");
                                         saveThumb("true");

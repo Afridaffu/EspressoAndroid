@@ -309,7 +309,10 @@ public class EnableAuthID extends AppCompatActivity {
                     if (biometricResponse != null) {
                         Log.e("bio resp", new Gson().toJson(biometricResponse));
                         saveToken(biometricResponse.getData().getToken());
-                        Utils.generateUUID(EnableAuthID.this);
+//                        Utils.generateUUID(EnableAuthID.this);
+                        if (!objMyApplication.isDeviceID()) {
+                            Utils.generateUUID(EnableAuthID.this);
+                        }
                         if (enableType.equals("FACE")) {
                             saveFace("true");
                             saveThumb("false");

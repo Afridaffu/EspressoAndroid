@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -1001,4 +1002,15 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
     }
+
+    public Boolean isDeviceID() {
+        Boolean value = false;
+        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+        value = prefs.getBoolean("isDevice", false);
+        if (value) {
+            Utils.setDeviceID(prefs.getString("deviceId", ""));
+        }
+        return value;
+    }
+
 }
