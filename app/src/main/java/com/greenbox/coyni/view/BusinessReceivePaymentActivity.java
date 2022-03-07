@@ -51,7 +51,7 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class BusinessReceivePaymentActivity extends AppCompatActivity implements TextWatcher {
+public class BusinessReceivePaymentActivity extends BaseActivity implements TextWatcher {
 
     TextView scanMeSetAmountTV, saveToAlbum, userNameTV, scanMeRequestAmount;
     LinearLayout imageSaveAlbumLL, scanAmountLL, setAmountLL;
@@ -89,6 +89,7 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_receive_payment);
 
+        showProgressDialog();
         initialization();
         listeners();
         initObservers();
@@ -199,12 +200,12 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumBindImage();
-            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
-            if (walletResponse != null) {
-                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
-                generateQRCode(strWallet);
-                tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
-            }
+//            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
+//            if (walletResponse != null) {
+//                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
+//                generateQRCode(strWallet);
+//                tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -339,7 +340,7 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
     protected void onResume() {
         try {
             super.onResume();
-            dashboardViewModel.meMerchantWallet();
+            dashboardViewModel.meMerchantWallet(Utils.MERCHANT);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -546,9 +547,11 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
     private void initObservers() {
         dashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, businessWalletResponse -> {
             if (businessWalletResponse != null) {
-                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                dismissDialog();
+                //objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                 strWallet = businessWalletResponse.getData().getWalletNames().get(0).getWalletId();
                 generateQRCode(strWallet);
+                tvWalletAddress.setText(businessWalletResponse.getData().getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
             }
         });
 

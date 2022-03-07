@@ -1,42 +1,18 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
-import com.greenbox.coyni.model.preferences.ProfilesResponse;
-import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
-import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
-import com.greenbox.coyni.model.wallet.WalletInfo;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class WebViewActivity extends BaseActivity {
 

@@ -132,9 +132,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         case "buy tokens":
                             switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
                                 case "credit card":
-                                    ControlMethod("buytoken");
-                                    buyTokenCreditDebit(transactionDetails.getData());
-                                    break;
                                 case "debit card":
                                     ControlMethod("buytoken");
                                     buyTokenCreditDebit(transactionDetails.getData());

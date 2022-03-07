@@ -290,16 +290,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
-            @Override
-            public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                    getBalance(businessWalletResponse);
-                }
-            }
-        });
-
         mDashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
@@ -385,7 +375,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
-                businessDashboardViewModel.meMerchantWallet();
                 mDashboardViewModel.getLatestTxns();
 //                notificationsViewModel.getNotifications();
             } catch (Exception ex) {

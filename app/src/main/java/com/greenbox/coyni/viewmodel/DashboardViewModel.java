@@ -14,7 +14,6 @@ import com.greenbox.coyni.model.APIError;
 //import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
-import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
@@ -25,22 +24,16 @@ import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.profile.Profile;
-import com.greenbox.coyni.model.templates.TemplateRequest;
-import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.model.wallet.UserDetailsData;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -52,7 +45,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<Profile> profileMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ImageResponse> imageResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<WalletResponse> walletResponseMutableLiveData = new MutableLiveData<>();
+//    private MutableLiveData<WalletResponse> walletResponseMutableLiveData = new MutableLiveData<>();
 
     private MutableLiveData<ChangePassword> changePasswordMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Agreements> agreementsMutableLiveData = new MutableLiveData<>();
@@ -123,9 +116,9 @@ public class DashboardViewModel extends AndroidViewModel {
         return profileMutableLiveData;
     }
 
-    public MutableLiveData<WalletResponse> getWalletResponseMutableLiveData() {
-        return walletResponseMutableLiveData;
-    }
+//    public MutableLiveData<WalletResponse> getWalletResponseMutableLiveData() {
+//        return walletResponseMutableLiveData;
+//    }
 
     public MutableLiveData<Preferences> getPreferenceMutableLiveData() {
         return preferenceMutableLiveData;
@@ -363,40 +356,40 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void meWallet() {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<WalletResponse> mCall = apiService.meWallet();
-            mCall.enqueue(new Callback<WalletResponse>() {
-                @Override
-                public void onResponse(Call<WalletResponse> call, Response<WalletResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            WalletResponse obj = response.body();
-                            walletResponseMutableLiveData.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
-                            }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            apiErrorMutableLiveData.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        apiErrorMutableLiveData.setValue(null);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<WalletResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    apiErrorMutableLiveData.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void meWallet() {
+//        try {
+//            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+//            Call<WalletResponse> mCall = apiService.meWallet();
+//            mCall.enqueue(new Callback<WalletResponse>() {
+//                @Override
+//                public void onResponse(Call<WalletResponse> call, Response<WalletResponse> response) {
+//                    try {
+//                        if (response.isSuccessful()) {
+//                            WalletResponse obj = response.body();
+//                            walletResponseMutableLiveData.setValue(obj);
+//                        } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            apiErrorMutableLiveData.setValue(errorResponse);
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                        apiErrorMutableLiveData.setValue(null);
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<WalletResponse> call, Throwable t) {
+//                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+//                    apiErrorMutableLiveData.setValue(null);
+//                }
+//            });
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public void meChangePassword(ChangePasswordRequest changePasswordRequest) {
         try {
