@@ -1,7 +1,6 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -42,7 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WebViewShowFileActivity extends AppCompatActivity {
+public class WebViewShowFileActivity extends BaseActivity {
 
     private WebView webView;
     private ImageView imageView;
@@ -78,44 +76,23 @@ public class WebViewShowFileActivity extends AppCompatActivity {
             layoutLoader.setVisibility(View.VISIBLE);
             cpProgress.show();
 
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
 
             String extension = fileURL.substring(fileURL.lastIndexOf(".") + 1);
 
             LogUtils.d("extension","extension"+extension);
             LogUtils.d("extension","fillee"+fileURL.replaceAll(" ","%20"));
 
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                    super.onPageStarted(view, url, favicon);
-                    try {
-                        if(extension.equalsIgnoreCase("pdf")){
-                            webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL.replaceAll(" ","%20"));
-                            layoutLoader.setVisibility(View.GONE);
-                        } else {
-                            final String html = String.format(HTML_FORMAT, fileURL);
-                            webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
-                            layoutLoader.setVisibility(View.GONE);
-                        }
-                            onBackPressed();
-                            finish();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                public void onPageFinished(WebView view, String url) {
-                    try {
-
-                            findViewById(R.id.webView).setVisibility(View.VISIBLE);
-                            findViewById(R.id.layoutLoader).setVisibility(View.GONE);
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+            if(extension.equalsIgnoreCase("pdf")){
+                webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL.replaceAll(" ","%20"));
+                layoutLoader.setVisibility(View.GONE);
+            } else {
+                final String html = String.format(HTML_FORMAT, fileURL);
+                webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
+                layoutLoader.setVisibility(View.GONE);
+            }
+            
 
             btnClose.setOnClickListener(new View.OnClickListener() {
                 @Override
