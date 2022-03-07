@@ -74,15 +74,44 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp" />
 
-            <ImageView
-                android:id="@+id/iv_notifications"
+            <RelativeLayout
+                android:id="@+id/notificationsRL"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/b_countCV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:scaleType="fitEnd"
-                android:src="@drawable/ic_notifications" />
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/primary_green"
+                app:cardCornerRadius="@dimen/_10sdp">
+            <TextView
+                android:id="@+id/b_countTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+            </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/iv_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/ic_notifications" />
+            </RelativeLayout>
         </LinearLayout>
+
 
     </LinearLayout>
 

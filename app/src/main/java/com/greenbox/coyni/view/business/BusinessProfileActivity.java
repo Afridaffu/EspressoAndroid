@@ -77,6 +77,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private Long mLastClickTime = 0L;
     TextView tvVersion;
     ScrollView profileSV;
+    MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,7 +305,6 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 }
             });
 
-
             findViewById(R.id.b_cpChangePassword).setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
@@ -382,6 +382,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
+            
 
             if (myApplication.getMyProfile().getData().getAccountStatus() != null) {
                 try {
@@ -405,6 +406,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
                     String fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
                     userFullname.setText(fullname);
+
                 } catch (Resources.NotFoundException e) {
                     e.printStackTrace();
                 }
@@ -554,6 +556,12 @@ public class BusinessProfileActivity extends AppCompatActivity {
                                             account_id.setText("Account ID M-" + profile.getData().getId());
                                             String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
                                             userFullname.setText(fullname);
+
+                                            if (userFullname != null && userFullname.length() > 22) {
+                                                userFullname.setText(fullname.substring(0, 22) + " ");
+                                            } else {
+                                                userFullname.setText(fullname);
+                                            }
                                         } catch (Resources.NotFoundException e) {
                                             e.printStackTrace();
                                         }
