@@ -259,7 +259,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
 
                 try {
                     objMyApplication.getBeneficialOwnersResponse().getData().get(i).setDraft(bo.getFirstName().equals("") || bo.getLastName().equals("") || bo.getDob().equals("")
-                            || bo.getOwnershipParcentage() <= 0 || bo.getAddressLine1().equals("") || bo.getAddressLine2().equals("")
+                            || bo.getOwnershipParcentage() <= 0 || bo.getAddressLine1().equals("")
                             || bo.getCity().equals("") || bo.getState().equals("") || bo.getZipCode().equals("")
                             || bo.getSsn().equals("") || bo.getRequiredDocuments().size() <= 0);
                 } catch (Exception e) {
