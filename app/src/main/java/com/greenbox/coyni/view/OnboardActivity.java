@@ -104,7 +104,8 @@ public class OnboardActivity extends BaseActivity {
             isBiometric = Utils.checkBiometric(OnboardActivity.this);
             Utils.setIsBiometric(isBiometric);
 
-            if (!isDeviceID()) {
+//            if (!isDeviceID()) {
+            if (!objMyApplication.isDeviceID()) {
                 Utils.generateUUID(OnboardActivity.this);
             }
             strDeviceID = Utils.getDeviceID();
@@ -432,15 +433,15 @@ public class OnboardActivity extends BaseActivity {
         }
     }
 
-    private Boolean isDeviceID() {
-        Boolean value = false;
-        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
-        value = prefs.getBoolean("isDevice", false);
-        if (value) {
-            Utils.setDeviceID(prefs.getString("deviceId", ""));
-        }
-        return value;
-    }
+//    private Boolean isDeviceID() {
+//        Boolean value = false;
+//        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+//        value = prefs.getBoolean("isDevice", false);
+//        if (value) {
+//            Utils.setDeviceID(prefs.getString("deviceId", ""));
+//        }
+//        return value;
+//    }
 
     private void getVersionName() {
         try {
