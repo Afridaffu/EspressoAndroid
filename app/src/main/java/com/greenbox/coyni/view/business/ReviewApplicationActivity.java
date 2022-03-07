@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,20 +25,14 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.AddNewBusinessAccountDBAAdapter;
-import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
-import com.greenbox.coyni.adapters.PastAgreeListAdapter;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
-import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
@@ -60,10 +52,7 @@ import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.ConfirmPasswordActivity;
-import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
 import com.greenbox.coyni.viewmodel.BusinessApplicationSummaryViewModel;
@@ -848,7 +837,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private void showFile(String fileUrl) {
         if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
             //Call the activity here
-            Intent intent = new Intent(ReviewApplicationActivity.this, WebViewActivity.class);
+            Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
             intent.putExtra("FILEURL", fileUrl);
             startActivity(intent);
         } else {

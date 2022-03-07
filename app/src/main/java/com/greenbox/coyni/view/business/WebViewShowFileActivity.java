@@ -38,7 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WebViewActivity extends BaseActivity {
+public class WebViewShowFileActivity extends BaseActivity {
 
     private WebView webView;
     private ImageView imageView;
