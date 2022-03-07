@@ -32,7 +32,7 @@ public class ApplicationSubmissionViewModel extends AndroidViewModel {
             return postApplicationSubmissionData;
         }
 
-        public void postApplicationData(ApplicationSubmitRequest applicationSubmitRequest) {
+        public void postApplicationData() {
             try {
                 ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
                 Call<ApplicationSubmitResponseModel> mCall = apiService.postApplicationSubmissionData();

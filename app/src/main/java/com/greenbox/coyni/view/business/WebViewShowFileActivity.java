@@ -69,7 +69,6 @@ public class WebViewShowFileActivity extends BaseActivity {
             llClose =(LinearLayout)findViewById(R.id.layoutClose);
             btnClose =(ImageView)findViewById(R.id.closeBtn);
 
-           // webView.setBackgroundColor(getResources().getColor(R.color.background_color));
             layoutLoader = findViewById(R.id.layoutLoader);
             cpProgress = findViewById(R.id.cpProgress);
 
@@ -90,7 +89,7 @@ public class WebViewShowFileActivity extends BaseActivity {
             } else {
                 final String html = String.format(HTML_FORMAT, fileURL);
                 webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
-                layoutLoader.setVisibility(View.GONE);
+               layoutLoader.setVisibility(View.GONE);
             }
             
 

@@ -67,7 +67,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
                         if (banks.size() > 1) {
                             addBankAccount.deleteBankAPICall(objData.getId());
                         } else if (banks.size() == 1) {
-                            addBankAccount.showPopup();
+                            addBankAccount.showBankDeleteCOnfirmationDialog();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

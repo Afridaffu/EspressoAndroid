@@ -41,7 +41,7 @@ public class CustomConfirmationDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (getOnDialogClickListener() != null) {
-                    getOnDialogClickListener().onDialogClicked("", "");
+                    getOnDialogClickListener().onDialogClicked(dialogAttributes.getPositiveBtn(), "");
                 }
                 dismiss();
             }
@@ -51,7 +51,7 @@ public class CustomConfirmationDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 if (getOnDialogClickListener() != null) {
-                    getOnDialogClickListener().onDialogClicked("", "");
+                    getOnDialogClickListener().onDialogClicked(dialogAttributes.getNegativeBtn(), "");
                 }
                 dismiss();
             }

@@ -31,8 +31,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
+import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
+import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
@@ -53,6 +56,7 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
 import com.greenbox.coyni.viewmodel.BusinessApplicationSummaryViewModel;
@@ -105,12 +109,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private Boolean isBank = false;
     private Boolean isCPwdEye = false;
     SignOnData signOnData;
-
     private ImageView llEin;
     private PaymentMethodsViewModel paymentMethodsViewModel;
     private TextView tosTV, prTv;
     private CompanyInfo cir;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,70 +126,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     }
 
-    private void saveApplicationData() {
-
-        mCompanyName = mCompanyNameTx.getText().toString().trim();
-        mBusinessEntity = mBusinessEntityTx.getText().toString().trim();
-        mEIN = mEINTx.getText().toString().trim();
-        mEmail = mEmailTx.getText().toString().trim();
-        mPhoneNumber = mPhoneNumberTx.getText().toString().trim();
-
-        mDbName = mDbNameTx.getText().toString().trim();
-        mBusinessType = mBusinessTypeTx.getText().toString().trim();
-        mWebsite = mWebsiteTx.getText().toString().trim();
-        mTimeZone = mTimeZoneTx.getText().toString().trim();
-        mMonthlyProcVolume = mMonthlyProcVolumeTx.getText().toString().trim();
-        mHighTicket = mHighTicketTx.getText().toString().trim();
-        mAverageTicket = mAverageTicketTx.getText().toString().trim();
-        mCustomerServiceEmail = mCustomerServiceEmailTx.getText().toString().trim();
-        mCustomerServicePhone = mCustomerServicePhoneTx.getText().toString().trim();
-        mAddress = mAddressTx.getText().toString().trim();
-
-        ApplicationSubmitRequest request = new ApplicationSubmitRequest();
-        request.setCompanyName(mCompanyName);
-        request.setCompanyBusinessEntity(mBusinessEntity);
-        request.setCompanySsnOrEin(mEIN);
-        request.setCompanyEmail(mEmail);
-        PhNoWithCountryCode phone = new PhNoWithCountryCode();
-        phone.setCountryCode(Utils.strCCode);
-        phone.setPhoneNumber(mPhoneNumber);
-        request.setCompanyPhoneNumberDto(phone);
-        request.setRequiredDocuments(companyReqDocList);
-
-        request.setDbName(mDbName);
-        request.setDbBusinessType(mBusinessType);
-        request.setDbWebsite(mWebsite);
-        request.setDbTimezone(mTimeZone);
-        request.setDbMonthlyProcessingVolume(mMonthlyProcVolume);
-        request.setDbHighTicket(mHighTicket);
-        request.setDbAverageTicket(mAverageTicket);
-        request.setDbEmail(mCustomerServiceEmail);
-        PhNoWithCountryCode phone1 = new PhNoWithCountryCode();
-        phone1.setCountryCode(Utils.strCCode);
-        phone1.setPhoneNumber(mCustomerServicePhone);
-        request.setDbPhoneNumberDto(phone1);
-        request.setCompanyAddressLine1(mAddress);
-        //request.setRequiredDocuments1(dbReqDocList);
-
-        //
-        Bankaccount bankAccountsDataModel = new Bankaccount();
-        bankAccountsDataModel.setItems(bankItems);
-        request.setData(bankAccountsDataModel);
-        //
-
-        request.setBeneficialOwnerInfo(beneficialOwnerList);
-        //
-        Agreements agreementsData = new Agreements();
-        agreementsData.setItems(agreements);
-        request.setData(agreementsData);
-        //
-        request.setAgree(isAgree);
-        applicationSubmissionViewModel.postApplicationData(request);
-    }
-
     private void initFields() {
         objMyApplication = (MyApplication) getApplicationContext();
-        applicationSubmissionViewModel = new ViewModelProvider(this).get(ApplicationSubmissionViewModel.class);
 
 
         edit1 = findViewById(R.id.edit1);
@@ -279,7 +219,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
                     loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                 } else {
-                    saveApplicationData();
+                    applicationSubmissionViewModel.postApplicationData();
                 }
             }
         });
@@ -339,7 +279,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-
         mTermsImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -348,23 +287,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-//        mAgreementsImg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
-        businessIdentityVerificationViewModel.getCompanyInfo();
-        businessIdentityVerificationViewModel.getDBAInfo();
-        businessIdentityVerificationViewModel.getBeneficialOwners();
         businessIdentityVerificationViewModel.getBusinessType();
 
-        bankAccountsViewModel = new ViewModelProvider(this).get(BankAccountsViewModel.class);
-        bankAccountsViewModel.getBankAccountsData();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         dashboardViewModel.meAgreementsById();
+
         applicationSubmissionViewModel = new ViewModelProvider(this).get(ApplicationSubmissionViewModel.class);
         paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
 
@@ -390,27 +318,24 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         paymentMethodsViewModel.deleteBanks(id);
     }
 
-    public void showPopup() {
-        try {
-            final Dialog dialog = new Dialog(ReviewApplicationActivity.this);
-            dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.bankdeleteconfirmation);
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-            DisplayMetrics mertics = getResources().getDisplayMetrics();
-            int width = mertics.widthPixels;
+    public void showBankDeleteCOnfirmationDialog() {
+        DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.bank_delete_title),
+                getString(R.string.bankdeletemsg),
+                getString(R.string.bank_delete_keep),getString(R.string.bank_delete_relink));
+        CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
+                (ReviewApplicationActivity.this, dialogAttributes);
 
-            TextView tvRelink = dialog.findViewById(R.id.tvRelink);
-            TextView tvKeep = dialog.findViewById(R.id.tvKeep);
-
-            tvRelink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                LogUtils.d("onclickkk","onclickkk"+action+value);
+                if(action.equalsIgnoreCase(getString(R.string.bank_delete_relink))){
                     try {
                         dialog.dismiss();
                         if (objMyApplication.getStrSignOnError().equals("") && objMyApplication.getSignOnData() != null && objMyApplication.getSignOnData().getUrl() != null) {
                             isBank = true;
-                            Intent i = new Intent(ReviewApplicationActivity.this, com.greenbox.coyni.view.WebViewActivity.class);
+                            Intent i = new Intent(ReviewApplicationActivity.this, WebViewActivity.class);
                             i.putExtra("signon", objMyApplication.getSignOnData());
                             startActivityForResult(i, 1);
                         } else {
@@ -419,30 +344,13 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }
-            });
-            tvKeep.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                } else {
                     dialog.dismiss();
                 }
-            });
-            Window window = dialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            }
+        });
 
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-            dialog.setCanceledOnTouchOutside(true);
-            dialog.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        customConfirmationDialog.show();
     }
 
     public void initObservers() {
@@ -745,21 +653,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-//        try {
-//            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
-//                @Override
-//                public void onChanged(ApplicationSubmitResponseModel applicationSubmitResponseModel) {
-//                    progressDialog.dismiss();
-//                    if (applicationSubmitResponseModel != null && applicationSubmitResponseModel.getStatus().toString().toLowerCase().equals("success")) {
-//                        saveApplicationData();
-//                    } else {
-//
-//                    }
-//                }
-//            });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         try {
             loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
@@ -801,7 +694,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
             @Override
@@ -847,11 +739,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     @Override
     public void selectedItem(String file) {
-
         LogUtils.d("file", "file" + file);
-
         showFile(file);
-
     }
 
     @Override
@@ -865,7 +754,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 @Override
                 public void run() {
                     summaryViewModel.getApplicationSummaryData();
-                    summaryViewModel.fees();
                 }
             }, 2000);
         } catch (Exception e) {
