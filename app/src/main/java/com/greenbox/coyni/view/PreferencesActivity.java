@@ -82,6 +82,8 @@ public class PreferencesActivity extends AppCompatActivity {
             timezonetext = findViewById(R.id.timezoneTextTV);
             defaultaccLL = findViewById(R.id.defaultaccLL);
 
+            timeZoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            Utils.setUpperHintColor(currencyTIL, getColor(R.color.et_bg_gray));
 
             currencyTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
             Utils.setUpperHintColor(currencyTIL, getColor(R.color.xdark_gray));
