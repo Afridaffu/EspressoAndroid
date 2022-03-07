@@ -69,7 +69,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner , BankAccountsRecyclerAdapter.OnSelectListner {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -317,7 +317,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
         paymentMethodsViewModel.deleteBanks(id);
     }
-
 
     public void showBankDeleteCOnfirmationDialog() {
         DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.bank_delete_title),
@@ -594,7 +593,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     Log.d("BankItems", bankItems.toString());
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
 
-                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems);
+                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems,ReviewApplicationActivity.this);
 
                                     bankRecyclerView.setLayoutManager(layoutManager);
                                     bankRecyclerView.setAdapter(accountsRecyclerAdapter);
@@ -741,6 +740,17 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     public void selectedItem(String file) {
         LogUtils.d("file", "file" + file);
         showFile(file);
+    }
+
+    @Override
+    public void selectedBankItem(int id) {
+        LogUtils.d("selectedBankItem", "selectedBankItem" + id);
+         if(id==0){
+             showBankDeleteCOnfirmationDialog();
+         } else {
+             deleteBankAPICall(id);
+         }
+
     }
 
     @Override
