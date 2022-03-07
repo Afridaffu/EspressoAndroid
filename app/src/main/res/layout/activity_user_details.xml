@@ -401,6 +401,7 @@
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center_vertical"
                 android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 android:textSize="@dimen/_14ssp"
                 />
         </LinearLayout>

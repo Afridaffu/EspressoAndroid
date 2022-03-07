@@ -150,7 +150,10 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 if (biometricResponse != null) {
                     Log.e("bio resp", new Gson().toJson(biometricResponse));
                     saveToken(biometricResponse.getData().getToken());
-                    Utils.generateUUID(GiftCardBindingLayoutActivity.this);
+//                    Utils.generateUUID(GiftCardBindingLayoutActivity.this);
+                    if (!objMyApplication.isDeviceID()) {
+                        Utils.generateUUID(GiftCardBindingLayoutActivity.this);
+                    }
                     if (enableType.equals("FACE")) {
                         saveFace("true");
                         saveThumb("false");
