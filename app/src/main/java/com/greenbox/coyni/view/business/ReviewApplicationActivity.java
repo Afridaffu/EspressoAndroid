@@ -328,7 +328,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                LogUtils.d("onclickkk","onclickkk"+action+value);
+                LogUtils.d(TAG,"onclickkk"+action+value);
                 if(action.equalsIgnoreCase(getString(R.string.bank_delete_relink))){
                     try {
                         dialog.dismiss();
@@ -500,7 +500,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
                                 if (dbaInfo.getTimeZone() != null) {
                                     ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
-                                    LogUtils.d("TimeZoneModel", "TimeZoneModel" + arrZonesList);
+                                    LogUtils.d(TAG, "TimeZoneModel" + arrZonesList);
                                     if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("3")) {
                                         mTimeZoneTx.setText(R.string.EST);
                                     } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("2")) {
@@ -660,7 +660,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     dialog.dismiss();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
-                            LogUtils.d("btResp", "btResp" + btResp);
+                            LogUtils.d(TAG, "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             //finish();
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
@@ -697,7 +697,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
             @Override
             public void onChanged(AgreementsPdf agreementsPdf) {
-                LogUtils.d("pdfff", "pdf" + agreementsPdf);
+                LogUtils.d(TAG, "pdf" + agreementsPdf);
                 if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
                     if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
                         showFile(agreementsPdf.getData().getAgreementFileRefPath());
@@ -744,13 +744,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     @Override
     public void selectedBankItem(int id) {
-        LogUtils.d("selectedBankItem", "selectedBankItem" + id);
+        LogUtils.d(TAG, "selectedBankItem" + id);
          if(id==0){
              showBankDeleteCOnfirmationDialog();
          } else {
              deleteBankAPICall(id);
          }
-
     }
 
     @Override
@@ -759,11 +758,13 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             super.onResume();
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
-            showProgressDialog();
+                showProgressDialog();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     summaryViewModel.getApplicationSummaryData();
+                    //temporary API Call to proceed further,not required response
+                    summaryViewModel.fees();
                 }
             }, 2000);
         } catch (Exception e) {

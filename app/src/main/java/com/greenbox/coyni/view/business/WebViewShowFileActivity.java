@@ -80,18 +80,17 @@ public class WebViewShowFileActivity extends BaseActivity {
 
             String extension = fileURL.substring(fileURL.lastIndexOf(".") + 1);
 
-            LogUtils.d("extension","extension"+extension);
-            LogUtils.d("extension","fillee"+fileURL.replaceAll(" ","%20"));
+            LogUtils.d(TAG,"extension"+extension);
+            LogUtils.d(TAG,"fillee"+fileURL.replaceAll(" ","%20"));
+
 
             if(extension.equalsIgnoreCase("pdf")){
                 webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL.replaceAll(" ","%20"));
-                layoutLoader.setVisibility(View.GONE);
             } else {
                 final String html = String.format(HTML_FORMAT, fileURL);
                 webView.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
-               layoutLoader.setVisibility(View.GONE);
             }
-            
+            layoutLoader.setVisibility(View.GONE);
 
             btnClose.setOnClickListener(new View.OnClickListener() {
                 @Override
