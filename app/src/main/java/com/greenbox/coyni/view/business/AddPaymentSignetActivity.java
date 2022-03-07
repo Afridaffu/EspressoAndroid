@@ -416,6 +416,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             zipErrorTV.setText("Field Required");
                         }
                     } else {
+                        Utils.shwForcedKeypad(AddPaymentSignetActivity.this);
                         etZipCode.setHint("Zip Code");
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
@@ -763,4 +764,14 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        try {
+            super.onResume();
+            etName.requestFocus();
+            Utils.shwForcedKeypad(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

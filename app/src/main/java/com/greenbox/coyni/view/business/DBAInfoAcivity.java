@@ -90,7 +90,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public CardView dbaNextCV, addressNextCV;
     public static DBAInfoAcivity dbaInfoAcivity;
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
-            isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false;
+            isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L;
@@ -405,6 +405,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     isECommerce = true;
                     isRetail = false;
                     identificationType = 9;
+                    isIDVESelected = true;
 
 //                    dbaFillingLL.setVisibility(GONE);
                 }
@@ -420,6 +421,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     isECommerce = false;
                     isRetail = true;
                     identificationType = 8;
+                    isIDVESelected = true;
 //                    dbaFillingLL.setVisibility(VISIBLE);
                     retailIV.setImageResource(R.drawable.ic_rb_selected);
                     eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
@@ -1159,7 +1161,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             if (isCopyCompanyInfo) {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone) {
+                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1170,7 +1172,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             } else {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isDBAFiling) {
+                        && isHighTkt && isAvgTkt && isTimeZone && isDBAFiling && isIDVESelected) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1393,6 +1395,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     retailIV.setImageResource(R.drawable.ic_rb_selected);
                     eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
                     isWebsite = true;
+                    isIDVESelected = true;
                 } else if (cir.getIdentificationType().equals("9")) {
                     eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
                     retailIV.setImageResource(R.drawable.ic_rb_unselected);
@@ -1401,6 +1404,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     isRetail = false;
                     identificationType = 9;
                     isWebsite = isValidUrl(cir.getWebsite());
+                    isIDVESelected = true;
                 }
 
                 if (cir.getRequiredDocuments().size() > 0) {
@@ -1422,19 +1426,19 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
 
 
-                if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Integer.parseInt(cir.getMonthlyProcessingVolume()) > 0) {
+                if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Double.parseDouble(cir.getMonthlyProcessingVolume()) > 0) {
                     mpvOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getMonthlyProcessingVolume())));
                     isMPV = true;
                     mpvOET.setSelection();
                 }
 
-                if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Integer.parseInt(cir.getHighTicket()) > 0) {
+                if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Double.parseDouble(cir.getHighTicket()) > 0) {
                     highTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getHighTicket())));
                     isHighTkt = true;
                     highTicketOET.setSelection();
                 }
 
-                if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Integer.parseInt(cir.getAverageTicket()) > 0) {
+                if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Double.parseDouble(cir.getAverageTicket()) > 0) {
                     avgTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getAverageTicket())));
                     isAvgTkt = true;
                     avgTicketOET.setSelection();

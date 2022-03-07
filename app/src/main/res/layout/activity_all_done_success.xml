@@ -57,7 +57,8 @@
                 android:layout_height="@dimen/_43sdp"
                 android:gravity="center"
                 app:cardBackgroundColor="@color/primary_green"
-                app:cardCornerRadius="@dimen/_22sdp">
+                app:cardCornerRadius="@dimen/_22sdp"
+                android:layout_marginBottom="@dimen/_25sdp">
 
                 <TextView
                     android:layout_width="wrap_content"
