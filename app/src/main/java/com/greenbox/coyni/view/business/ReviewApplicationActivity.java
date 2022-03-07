@@ -865,6 +865,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 @Override
                 public void run() {
                     summaryViewModel.getApplicationSummaryData();
+                    summaryViewModel.fees();
                 }
             }, 2000);
         } catch (Exception e) {
