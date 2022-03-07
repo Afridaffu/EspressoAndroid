@@ -986,12 +986,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             companyaddressET.setText("");
                             companyaddressET.setSelection(companyaddressET.getText().length());
                             address1ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            companyaddressET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             companyaddressET.setText("");
                             companyaddressET.setSelection(companyaddressET.getText().length());
                             address1ErrorLL.setVisibility(GONE);
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1025,6 +1026,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             companyaddress2ET.setText("");
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
                             address2ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            companyaddress2ET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             companyaddress2ET.setText("");
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
@@ -1069,19 +1072,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             cityET.setText("");
                             cityET.setSelection(cityET.getText().length());
                             cityErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            cityET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             cityET.setText("");
                             cityET.setSelection(cityET.getText().length());
                             cityErrorLL.setVisibility(GONE);
-                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
-                            cityET.setText(cityET.getText().toString().replaceAll(".", ""));
-                            cityET.setSelection(cityET.getText().length());
-                            cityErrorLL.setVisibility(GONE);
-                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                            cityET.setText("");
-                            cityET.setSelection(cityET.getText().length());
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
