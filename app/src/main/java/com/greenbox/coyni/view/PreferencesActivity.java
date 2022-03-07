@@ -82,13 +82,13 @@ public class PreferencesActivity extends AppCompatActivity {
             timezonetext = findViewById(R.id.timezoneTextTV);
             defaultaccLL = findViewById(R.id.defaultaccLL);
 
-            timeZoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            timeZoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             Utils.setUpperHintColor(currencyTIL, getColor(R.color.et_bg_gray));
 
-            currencyTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            currencyTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             Utils.setUpperHintColor(currencyTIL, getColor(R.color.xdark_gray));
 
-            accountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            accountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
 
             timeZoneRL.setOnClickListener(new View.OnClickListener() {
