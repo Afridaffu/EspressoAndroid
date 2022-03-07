@@ -69,7 +69,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner , BankAccountsRecyclerAdapter.OnSelectListner {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListner {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -321,15 +321,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     public void showBankDeleteCOnfirmationDialog() {
         DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.bank_delete_title),
                 getString(R.string.bankdeletemsg),
-                getString(R.string.bank_delete_keep),getString(R.string.bank_delete_relink));
+                getString(R.string.bank_delete_keep), getString(R.string.bank_delete_relink));
         CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
                 (ReviewApplicationActivity.this, dialogAttributes);
 
         customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                LogUtils.d(TAG,"onclickkk"+action+value);
-                if(action.equalsIgnoreCase(getString(R.string.bank_delete_relink))){
+                LogUtils.d(TAG, "onclickkk" + action + value);
+                if (action.equalsIgnoreCase(getString(R.string.bank_delete_relink))) {
                     try {
                         dialog.dismiss();
                         if (objMyApplication.getStrSignOnError().equals("") && objMyApplication.getSignOnData() != null && objMyApplication.getSignOnData().getUrl() != null) {
@@ -593,7 +593,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     Log.d("BankItems", bankItems.toString());
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
 
-                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems,ReviewApplicationActivity.this);
+                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems, ReviewApplicationActivity.this);
 
                                     bankRecyclerView.setLayoutManager(layoutManager);
                                     bankRecyclerView.setAdapter(accountsRecyclerAdapter);
@@ -745,11 +745,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     @Override
     public void selectedBankItem(int id) {
         LogUtils.d(TAG, "selectedBankItem" + id);
-         if(id==0){
-             showBankDeleteCOnfirmationDialog();
-         } else {
-             deleteBankAPICall(id);
-         }
+        if (id == 0) {
+            showBankDeleteCOnfirmationDialog();
+        } else {
+            deleteBankAPICall(id);
+        }
     }
 
     @Override
@@ -758,7 +758,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             super.onResume();
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
-                showProgressDialog();
+            showProgressDialog();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
