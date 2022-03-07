@@ -498,26 +498,29 @@ public interface ApiService {
     @GET("api/v2/business/beneficial-owners-validate")
     Call<BOValidateResp> validateBeneficailOwners();
 
-    @GET("/api/v2/banks/me")
+    @GET("api/v2/banks/me")
     Call<BanksResponseModel> getBankAccountsData();
 
-    @POST("/api/v2/business/submit")
+    @POST("api/v2/business/submit")
     Call<ApplicationSubmitResponseModel> postApplicationSubmissionData();
 
-    @POST("/api/v2/team/retrieve")
+    @POST("api/v2/team/retrieve")
     Call<TeamResponseModel> getTeamData(@Body TeamRequest request);
 
-    @PATCH("/api/v2/team/{teamMemberId}")
+    @PATCH("api/v2/team/{teamMemberId}")
     Call<TeamResponseModel> updateTeamData(@Body TeamRequest request,@Query("teamMemberId") Integer teamMemberId);
 
-    @DELETE("/api/v2/team/{teamMemberId}")
+    @DELETE("api/v2/team/{teamMemberId}")
     Call<TeamDeleteModel> deleteTeam(@Query("teamMemberId") Integer teamMemberId);
 
-    @POST("/api/v2/team/send-invitation")
+    @POST("api/v2/team/send-invitation")
     Call<TeamInfoAddModel> addTeamMember(@Body TeamRequest request);
 
-    @GET("/api/v2/business/summary")
+    @GET("api/v2/business/summary")
     Call<ApplicationSummaryModelResponse> getApplicationSummaryData();
+
+    @POST("api/v2/business/fees")
+    Call<CompanyInfoUpdateResp> fees();
 
 }
 
