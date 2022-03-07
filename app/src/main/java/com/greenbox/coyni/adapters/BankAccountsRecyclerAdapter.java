@@ -22,6 +22,8 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     List<Item> banks;
     Context mContext;
     MyApplication objMyApplication;
+    private OnSelectListner listener;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView bankNameTx, accountNumberTx;
@@ -38,10 +40,12 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     }
 
 
-    public BankAccountsRecyclerAdapter(Context context, List<Item> list) {
+    public BankAccountsRecyclerAdapter(Context context, List<Item> list , OnSelectListner listener) {
         this.mContext = context;
         this.banks = list;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
+        this.listener = listener;
+
     }
 
     @Override
@@ -63,11 +67,10 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
                 @Override
                 public void onClick(View view) {
                     try {
-                        ReviewApplicationActivity addBankAccount = (ReviewApplicationActivity) mContext;
                         if (banks.size() > 1) {
-                            addBankAccount.deleteBankAPICall(objData.getId());
+                            listener.selectedBankItem(objData.getId());
                         } else if (banks.size() == 1) {
-                            addBankAccount.showPopup();
+                            listener.selectedBankItem(0);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -89,6 +92,9 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
         return R.id.swipeLayout;
     }
 
+    public interface OnSelectListner{
+        void selectedBankItem(int id );
+    }
 
 }
 

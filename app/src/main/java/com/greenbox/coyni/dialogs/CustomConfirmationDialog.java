@@ -7,21 +7,15 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.DialogAttributes;
-import com.greenbox.coyni.utils.OnDialogButtonClickListener;
 
 public class CustomConfirmationDialog extends BaseDialog {
 
     private DialogAttributes dialogAttributes;
     private TextView mTvTitle, mTvMessage, mTvPositiveBtn, mTvNegativeBtn;
-    private OnDialogButtonClickListener onButtonClickLister;
 
     public CustomConfirmationDialog(Context context, DialogAttributes dialogAttributes) {
         super(context);
         this.dialogAttributes = dialogAttributes;
-    }
-
-    public void setOnButtonClickLister(OnDialogButtonClickListener onButtonClickLister) {
-        this.onButtonClickLister = onButtonClickLister;
     }
 
     @Override
@@ -46,8 +40,8 @@ public class CustomConfirmationDialog extends BaseDialog {
         mTvPositiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onButtonClickLister != null) {
-                    onButtonClickLister.onPositiveButtonClicked();
+                if (getOnDialogClickListener() != null) {
+                    getOnDialogClickListener().onDialogClicked(dialogAttributes.getPositiveBtn(), "");
                 }
                 dismiss();
             }
@@ -56,8 +50,8 @@ public class CustomConfirmationDialog extends BaseDialog {
         mTvNegativeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onButtonClickLister != null) {
-                    onButtonClickLister.onNegativeButtonClicked();
+                if (getOnDialogClickListener() != null) {
+                    getOnDialogClickListener().onDialogClicked(dialogAttributes.getNegativeBtn(), "");
                 }
                 dismiss();
             }
