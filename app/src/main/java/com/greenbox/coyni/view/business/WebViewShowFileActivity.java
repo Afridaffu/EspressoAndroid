@@ -54,7 +54,7 @@ public class WebViewShowFileActivity extends BaseActivity {
             super.onCreate(savedInstanceState);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            setContentView(R.layout.activity_web_view);
+            setContentView(R.layout.activity_review_application_web_view);
 
             Bundle bundle=getIntent().getExtras();
             if(bundle.getString("FILEURL")!=null) {
@@ -64,6 +64,8 @@ public class WebViewShowFileActivity extends BaseActivity {
             webView =(WebView)findViewById(R.id.webView);
             llClose =(LinearLayout)findViewById(R.id.layoutClose);
             btnClose =(ImageView)findViewById(R.id.closeBtn);
+
+           // webView.setBackgroundColor(getResources().getColor(R.color.background_color));
 
             String extension = fileURL.substring(fileURL.lastIndexOf(".") + 1);
 
