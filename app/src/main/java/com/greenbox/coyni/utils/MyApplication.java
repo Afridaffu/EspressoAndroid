@@ -2,6 +2,7 @@ package com.greenbox.coyni.utils;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -40,7 +41,7 @@ import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
-import com.greenbox.coyni.model.wallet.WalletResponse;
+//import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.view.DashboardActivity;
