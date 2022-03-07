@@ -78,6 +78,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     TextView tvVersion;
     ScrollView profileSV;
     MyApplication objMyApplication;
+    String fullname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,6 +291,25 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 }
             });
 
+            userFullname.setOnClickListener(view -> {
+                if (userFullname.getText().toString().contains("...")) {
+                    if (fullname.length() == 21 || fullname.length() > 21) {
+                        userFullname.setText(fullname.substring(0, 20));
+                    } else {
+                        userFullname.setText(fullname);
+                    }
+                } else {
+                    if (fullname.length() == 21) {
+                        userFullname.setText(fullname.substring(0, 20) + "...");
+                    } else if (fullname.length() > 22) {
+                        userFullname.setText(fullname.substring(0, 22) + "...");
+                    } else {
+                        userFullname.setText(fullname);
+                    }
+                }
+            });
+
+
             findViewById(R.id.business_UserDetailsLL).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -404,7 +424,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     //                    }
                     account_status.setText(myApplication.getMyProfile().getData().getAccountStatus());
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
-                    String fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
+                    fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
                     userFullname.setText(fullname);
 
                 } catch (Resources.NotFoundException e) {
