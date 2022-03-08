@@ -224,6 +224,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
                                                 i.putExtra("screen", getIntent().getStringExtra("screen"));
                                                 startActivity(i);
+                                                finish();
                                                 break;
                                             case "login":
                                                 if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
@@ -505,6 +506,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
                                                 i.putExtra("screen", getIntent().getStringExtra("screen"));
                                                 startActivity(i);
+                                                finish();
                                                 break;
                                             case "login":
                                                 if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
