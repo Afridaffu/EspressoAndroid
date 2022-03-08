@@ -41,8 +41,7 @@
                 android:fontFamily="@font/opensans_bold"
                 android:text="Create Account"
                 android:textColor="@color/primary_black"
-                android:textSize="@dimen/_16ssp"
-                />
+                android:textSize="@dimen/_16ssp" />
         </LinearLayout>
 
         <ScrollView
@@ -74,7 +73,7 @@
                         android:id="@+id/firstNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"

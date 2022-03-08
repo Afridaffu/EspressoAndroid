@@ -534,6 +534,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
     protected void onResume() {
         try {
             super.onResume();
+            Utils.hideKeypad(this);
             showProgressDialog();
             businessIdentityVerificationViewModel.getBusinessTracker();
 //            businessIdentityVerificationViewModel.getCompanyInfo();

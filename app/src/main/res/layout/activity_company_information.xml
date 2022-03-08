@@ -117,6 +117,7 @@
                         android:id="@+id/companynameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -187,7 +188,8 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_12ssp"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -293,7 +295,8 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textIsSelectable="true"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -474,7 +477,7 @@
                         android:id="@+id/companyaddressET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -533,7 +536,7 @@
                         android:id="@+id/companyaddress2ET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -593,7 +596,7 @@
                         android:id="@+id/cityET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -675,7 +678,7 @@
                             android:id="@+id/stateET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autofillHints="creditCardSecurityCode"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:cursorVisible="false"
                             android:editable="false"
                             android:focusable="false"
@@ -736,7 +739,7 @@
                         android:id="@+id/zipcodeET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionDone"
                         android:inputType="number"

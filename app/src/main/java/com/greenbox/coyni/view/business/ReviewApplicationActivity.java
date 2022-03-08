@@ -214,12 +214,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         submitCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
-                if (addbusiness) {
-                    loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
-                    loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                } else {
-                    applicationSubmissionViewModel.postApplicationData();
+                if (isAgree) {
+                    showProgressDialog();
+                    if (addbusiness) {
+                        loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
+                        loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                    } else {
+                        applicationSubmissionViewModel.postApplicationData();
+                    }
                 }
             }
         });
