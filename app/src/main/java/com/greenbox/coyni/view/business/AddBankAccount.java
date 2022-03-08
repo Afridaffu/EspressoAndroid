@@ -396,6 +396,11 @@ public class AddBankAccount extends BaseActivity {
                 public void onClick(View v) {
                     try {
                         dialog.dismiss();
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
                             Intent i = new Intent(AddBankAccount.this, WebViewActivity.class);
