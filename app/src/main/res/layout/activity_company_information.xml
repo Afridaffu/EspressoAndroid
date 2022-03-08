@@ -220,6 +220,7 @@
                 <com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
                     android:id="@+id/CompanyphoneNumberOET"
                     android:layout_width="match_parent"
+                    android:digits="0123456789"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp" />
 
