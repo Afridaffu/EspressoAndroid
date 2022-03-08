@@ -110,8 +110,18 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        objMyApplication.setStrRetrEmail("");
+        try {
+            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                Intent i = new Intent(LoginActivity.this, OnboardActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } else {
+                super.onBackPressed();
+                objMyApplication.setStrRetrEmail("");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -226,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
 
-            if (getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")) {
+            if ((getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")||((getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry"))))) {
                 layoutClose.setVisibility(GONE);
             } else {
                 layoutClose.setVisibility(VISIBLE);

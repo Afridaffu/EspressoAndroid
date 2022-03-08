@@ -40,7 +40,7 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 public class AddPaymentSignetActivity extends AppCompatActivity {
     TextInputLayout etlName, etlWalletId, etlAddress1, etlAddress2, etlCity, etlState, etlZipCode;
     TextInputEditText etName, etWalletId, etAddress1, etAddress2, etCity, etState, etZipCode;
-    LinearLayout nameErrorLL, walletErrorLL, address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutClose;
+    LinearLayout nameErrorLL, walletErrorLL, address1ErrorLL,address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutClose;
     MyApplication objMyApplication;
     CardView cvAdd;
     ConstraintLayout clStates;
@@ -74,6 +74,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
             nameErrorLL = findViewById(R.id.nameErrorLL);
             walletErrorLL = findViewById(R.id.walletErrorLL);
             address1ErrorLL = findViewById(R.id.address1ErrorLL);
+            address2ErrorLL = findViewById(R.id.address2ErrorLL);
             cityErrorLL = findViewById(R.id.cityErrorLL);
             stateErrorLL = findViewById(R.id.stateErrorLL);
             zipErrorLL = findViewById(R.id.zipErrorLL);
@@ -416,6 +417,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             zipErrorTV.setText("Field Required");
                         }
                     } else {
+                        Utils.shwForcedKeypad(AddPaymentSignetActivity.this);
                         etZipCode.setHint("Zip Code");
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
@@ -468,6 +470,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                     if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etName.setText("");
                         etName.setSelection(etName.getText().length());
+                    }else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        etName.setText(str.trim());
                     } else if (str.length() > 0 && str.contains(".")) {
                         etName.setText(etName.getText().toString().replaceAll("\\.", ""));
                         etName.setSelection(etName.getText().length());
@@ -520,7 +524,9 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                     if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etWalletId.setText("");
                         etWalletId.setSelection(etWalletId.getText().length());
-                    } else if (str.length() > 0 && str.contains(".")) {
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        etWalletId.setText(str.trim());
+                    }else if (str.length() > 0 && str.contains(".")) {
                         etWalletId.setText(etWalletId.getText().toString().replaceAll("\\.", ""));
                         etWalletId.setSelection(etWalletId.getText().length());
                     } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
@@ -563,11 +569,13 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                     if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
-                        address1ErrorLL.setVisibility(GONE);
+                        address2ErrorLL.setVisibility(GONE);
+                    }else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        etAddress1.setText(str.trim());
                     } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
-                        address1ErrorLL.setVisibility(GONE);
+                        address2ErrorLL.setVisibility(GONE);
                     }
 
                 } catch (Exception ex) {
@@ -575,6 +583,44 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                 }
             }
         });
+        etAddress2.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    try {
+                        if (charSequence.length() > 0) {
+                            Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = etAddress2.getText().toString();
+                        if (str.substring(0).equals(" ")) {
+                            etAddress2.setText("");
+                            etAddress2.setSelection(etAddress2.getText().length());
+                            address1ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            etAddress2.setText(str.trim());
+                        } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                            etAddress2.setText("");
+                            etAddress2.setSelection(etAddress2.getText().length());
+                            address1ErrorLL.setVisibility(GONE);
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
         etCity.addTextChangedListener(new TextWatcher() {
             @Override
@@ -606,7 +652,9 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                     if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etCity.setText("");
                         etCity.setSelection(etCity.getText().length());
-                    } else if (str.length() > 0 && str.contains(".")) {
+                    }else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        etCity.setText(str.trim());
+                    }  else if (str.length() > 0 && str.contains(".")) {
                         etCity.setText(etCity.getText().toString().replaceAll("\\.", ""));
                         etCity.setSelection(etCity.getText().length());
                     } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
@@ -763,4 +811,14 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        try {
+            super.onResume();
+            etName.requestFocus();
+            Utils.shwForcedKeypad(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
