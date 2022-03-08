@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,6 +34,7 @@ import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DialogAttributes;
@@ -69,7 +71,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner , BankAccountsRecyclerAdapter.OnSelectListner {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListner {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -90,7 +92,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private int monthlyProcVolume = 0;
     private List<Item1> agreements = new ArrayList<>();
     private List<RequiredDocument> companyReqDocList = new ArrayList<>();
-    private List<Object> dbReqDocList = new ArrayList<>();
+    private List<RequiredDocument> dbReqDocList = new ArrayList<>();
     private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
@@ -113,6 +115,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private PaymentMethodsViewModel paymentMethodsViewModel;
     private TextView tosTV, prTv;
     private CompanyInfo cir;
+    Long mLastClickTimeQA = 0L;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +132,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     private void initFields() {
         objMyApplication = (MyApplication) getApplicationContext();
-
-
         edit1 = findViewById(R.id.edit1);
         edit2 = findViewById(R.id.edit2TV);
         edit3 = findViewById(R.id.edit3TV);
@@ -214,12 +216,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         submitCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
-                if (addbusiness) {
-                    loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
-                    loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                } else {
-                    applicationSubmissionViewModel.postApplicationData();
+                if (isAgree) {
+                    showProgressDialog();
+                    if (addbusiness) {
+                        loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
+                        loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                    } else {
+                        applicationSubmissionViewModel.postApplicationData();
+                    }
                 }
             }
         });
@@ -321,15 +325,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     public void showBankDeleteCOnfirmationDialog() {
         DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.bank_delete_title),
                 getString(R.string.bankdeletemsg),
-                getString(R.string.bank_delete_keep),getString(R.string.bank_delete_relink));
+                getString(R.string.bank_delete_keep), getString(R.string.bank_delete_relink));
         CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
                 (ReviewApplicationActivity.this, dialogAttributes);
 
         customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                LogUtils.d(TAG,"onclickkk"+action+value);
-                if(action.equalsIgnoreCase(getString(R.string.bank_delete_relink))){
+                LogUtils.d(TAG, "onclickkk" + action + value);
+                if (action.equalsIgnoreCase(getString(R.string.bank_delete_relink))) {
                     try {
                         dialog.dismiss();
                         if (objMyApplication.getStrSignOnError().equals("") && objMyApplication.getSignOnData() != null && objMyApplication.getSignOnData().getUrl() != null) {
@@ -562,8 +566,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                         llDBADocuments.setVisibility(View.VISIBLE);
-                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        dbaFillingLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        dbaFillingLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
                                         dbaFillingLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -572,6 +576,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         });
                                     }
                                 }
+
                                 List<BeneficialOwnerInfo> boList = summaryModelResponse.getData().getBeneficialOwnerInfo();
                                 Log.d("BOWData", boList.toString());
                                 if (boList.size() > 0) {
@@ -593,7 +598,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     Log.d("BankItems", bankItems.toString());
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
 
-                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems,ReviewApplicationActivity.this);
+                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems, ReviewApplicationActivity.this);
 
                                     bankRecyclerView.setLayoutManager(layoutManager);
                                     bankRecyclerView.setAdapter(accountsRecyclerAdapter);
@@ -726,14 +731,24 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     }
 
     private void showFile(String fileUrl) {
-        if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
-            //Call the activity here
-            Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
-            intent.putExtra("FILEURL", fileUrl);
-            startActivity(intent);
-        } else {
-            LogUtils.v(TAG, "fileUrl is null or empty");
+        try {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
+                    //Call the activity here
+                    Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
+                    intent.putExtra("FILEURL", fileUrl);
+                    startActivity(intent);
+                } else {
+                    LogUtils.v(TAG, "fileUrl is null or empty");
+                }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
     }
 
     @Override
@@ -745,11 +760,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     @Override
     public void selectedBankItem(int id) {
         LogUtils.d(TAG, "selectedBankItem" + id);
-         if(id==0){
-             showBankDeleteCOnfirmationDialog();
-         } else {
-             deleteBankAPICall(id);
-         }
+        if (id == 0) {
+            showBankDeleteCOnfirmationDialog();
+        } else {
+            deleteBankAPICall(id);
+        }
     }
 
     @Override
@@ -758,7 +773,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             super.onResume();
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
-                showProgressDialog();
+            showProgressDialog();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

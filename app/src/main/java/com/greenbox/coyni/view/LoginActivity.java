@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     LoginViewModel loginViewModel;
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
-    Boolean isFaceLock = false, isTouchId = false, isPwdEye = false;
+    Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
     ImageView loginBGIV, endIconIV;
     CheckBox chkRemember;
     MyApplication objMyApplication;
@@ -110,8 +110,12 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        objMyApplication.setStrRetrEmail("");
+        try {
+            super.onBackPressed();
+            objMyApplication.setStrRetrEmail("");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -122,26 +126,52 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         }
         isPwdEye = false;
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0) {
-                String value = cursor.getString(1);
-                etEmail.setText(value);
-                if (isEmailValid(etEmail.getText().toString().trim())) {
-                    Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                    layoutEmailError.setVisibility(GONE);
+            if (!isExpiry) {
+                mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+                Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
+                cursor.moveToFirst();
+                if (cursor.getCount() > 0) {
+                    String value = cursor.getString(1);
+                    etEmail.setText(value);
+                    if (isEmailValid(etEmail.getText().toString().trim())) {
+                        Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                        etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        layoutEmailError.setVisibility(GONE);
+                    }
+//                    etPassword.setText("");
+//                    etPassword.setHint("");
+//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                    clearPwdControl();
+                } else {
+//                    etPassword.setText("");
+//                    etPassword.setHint("");
+//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                    clearPwdControl();
                 }
-                etPassword.setText("");
-                etPassword.setHint("");
-                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
+                    if (chkRemember.isChecked()) {
+                        etPassword.setText("");
+                        chkRemember.setChecked(false);
+//                        etEmail.setText("");
+//                        Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
+//                        etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        clearEmailControl();
+                        Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+                        etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    }
+                    etEmail.setText(objMyApplication.getStrRetrEmail());
+                    if (isEmailValid(etEmail.getText().toString().trim())) {
+                        etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        layoutEmailError.setVisibility(GONE);
+                    }
+                }
             } else {
-                etPassword.setText("");
-                etPassword.setHint("");
-                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                layoutClose.setVisibility(GONE);
+                clearEmailControl();
+                clearPwdControl();
+                isExpiry = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,25 +179,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etPassword.setHint("");
             Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
-        }
-        if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
-            if (chkRemember.isChecked()) {
-                etEmail.setText("");
-                etPassword.setText("");
-                chkRemember.setChecked(false);
-                Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
-                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
-
-                Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-                etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            }
-            etEmail.setText(objMyApplication.getStrRetrEmail());
-            if (isEmailValid(etEmail.getText().toString().trim())) {
-//                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.light_gray));
-                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                layoutEmailError.setVisibility(GONE);
-            }
-
         }
     }
 
@@ -196,7 +207,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
     private void initialization() {
         try {
-
             setKeyboardVisibilityListener(this);
             etlPassword = findViewById(R.id.etlPassword);
             etlEmail = findViewById(R.id.etlEmail);
@@ -226,7 +236,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
 
 
-            if (getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel")) {
+            if ((getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel"))) {
                 layoutClose.setVisibility(GONE);
             } else {
                 layoutClose.setVisibility(VISIBLE);
@@ -660,6 +670,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
 //                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (login.getData().getPasswordExpired()) {
+                                    isExpiry = true;
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
                                     i.putExtra("TYPE", "ENTER");
@@ -1026,6 +1037,27 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         etPassword.clearFocus();
         if (Utils.isKeyboardVisible)
             Utils.hideKeypad(LoginActivity.this);
+    }
+
+    private void clearEmailControl() {
+        try {
+            etEmail.setText("");
+            Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
+            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void clearPwdControl() {
+        try {
+            etPassword.setText("");
+            etPassword.setHint("");
+            Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
