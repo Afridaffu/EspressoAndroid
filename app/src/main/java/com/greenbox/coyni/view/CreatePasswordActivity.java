@@ -170,15 +170,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
-                        Intent i = new Intent(CreatePasswordActivity.this, LoginActivity.class);
-                        i.putExtra("screen", "loginExpiry");
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
-                    } else {
-                        onBackPressed();
-                        finish();
-                    }
+                    onBackPressed();
+                    finish();
                 }
             });
 
@@ -592,14 +585,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!isSuccessLayout) {
-            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
-                Intent i = new Intent(CreatePasswordActivity.this, LoginActivity.class);
-                i.putExtra("screen", "loginExpiry");
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-            } else {
-                super.onBackPressed();
-            }
+            super.onBackPressed();
         }
     }
 
