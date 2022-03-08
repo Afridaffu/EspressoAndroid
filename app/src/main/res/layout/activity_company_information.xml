@@ -339,7 +339,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:clickable="false"
-                    android:visibility="gone">
+                    android:visibility="invisible">
 
                     <ImageButton
                         android:id="@+id/timezoneButton"
@@ -413,7 +413,7 @@
                     android:id="@+id/basicNextCV"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_44sdp"
-                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_50sdp"
                     android:layout_marginBottom="@dimen/_39sdp"
                     app:cardBackgroundColor="@color/inactive_color"
                     app:cardCornerRadius="@dimen/_22sdp">

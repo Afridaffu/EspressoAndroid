@@ -477,7 +477,7 @@
                         android:id="@+id/nextcv"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_42sdp"
-                        android:layout_marginTop="@dimen/_31sdp"
+                        android:layout_marginTop="@dimen/_50sdp"
                         android:layout_marginBottom="@dimen/_35sdp"
                         app:cardBackgroundColor="@color/bg_inactive"
                         app:cardCornerRadius="@dimen/_21sdp">
@@ -911,7 +911,7 @@
                         android:id="@+id/doneCV"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_42sdp"
-                        android:layout_marginTop="@dimen/_26sdp"
+                        android:layout_marginTop="@dimen/_50sdp"
                         android:layout_marginBottom="@dimen/_35sdp"
                         app:cardBackgroundColor="@color/bg_inactive"
                         app:cardCornerRadius="@dimen/_21sdp">
