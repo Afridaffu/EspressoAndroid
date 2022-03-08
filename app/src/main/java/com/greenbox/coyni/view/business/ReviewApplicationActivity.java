@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,6 +34,7 @@ import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DialogAttributes;
@@ -113,6 +115,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private PaymentMethodsViewModel paymentMethodsViewModel;
     private TextView tosTV, prTv;
     private CompanyInfo cir;
+    Long mLastClickTimeQA = 0L;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -574,6 +578,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         });
                                     }
                                 }
+
                                 List<BeneficialOwnerInfo> boList = summaryModelResponse.getData().getBeneficialOwnerInfo();
                                 Log.d("BOWData", boList.toString());
                                 if (boList.size() > 0) {
@@ -728,14 +733,24 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     }
 
     private void showFile(String fileUrl) {
-        if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
-            //Call the activity here
-            Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
-            intent.putExtra("FILEURL", fileUrl);
-            startActivity(intent);
-        } else {
-            LogUtils.v(TAG, "fileUrl is null or empty");
+        try {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
+                    //Call the activity here
+                    Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
+                    intent.putExtra("FILEURL", fileUrl);
+                    startActivity(intent);
+                } else {
+                    LogUtils.v(TAG, "fileUrl is null or empty");
+                }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
     }
 
     @Override

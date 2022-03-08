@@ -293,7 +293,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
                 percentageTV.setVisibility(View.GONE);
             } else {
                 addNewBOLL.setVisibility(View.VISIBLE);
-                percentageTV.setVisibility(View.VISIBLE);
+//                percentageTV.setVisibility(View.VISIBLE);
             }
         } else {
             addNewBOLL.setVisibility(View.VISIBLE);

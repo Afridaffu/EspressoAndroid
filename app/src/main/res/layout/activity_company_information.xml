@@ -175,6 +175,7 @@
                         android:id="@+id/companyemailET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
@@ -188,8 +189,7 @@
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
                         android:textIsSelectable="false"
-                        android:textSize="@dimen/_12ssp"
-                        android:autofillHints="AUTOFILL_HINT_SMS_OTP" />
+                        android:textSize="@dimen/_12ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
