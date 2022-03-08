@@ -371,6 +371,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                             businessTrackerResponse = btResp;
                             businessIdentityVerificationViewModel.getCompanyInfo();
                             businessIdentityVerificationViewModel.getDBAInfo();
+
+//                            if(!btResp.getData().isCompanyInfo() || !btResp.getData().isDbaInfo()) {
+//                                businessIdentityVerificationViewModel.getCompanyInfo();
+//                            } else if(btResp.getData().isCompanyInfo() || !btResp.getData().isDbaInfo()) {
+//                                businessIdentityVerificationViewModel.getDBAInfo();
+//                            }
                             reloadTrackerDashboard(btResp);
 
                         }
@@ -428,7 +434,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                             dbaStartTV.setVisibility(GONE);
                             dbaInProgressIV.setVisibility(VISIBLE);
 
-                        }
+                        } else {
+                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
+                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
+                        dbaIncompleteTV.setText("Incomplete");
+                        dbaStartTV.setVisibility(VISIBLE);
+                        dbaInProgressIV.setVisibility(GONE);
+
+                    }
                     }
                 }
             });
@@ -447,11 +460,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
 
                                 objMyApplication.setCompanyInfoResp(companyInfoResp);
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
+
                                 if (cir.getName() != null && !cir.getName().equals("")
                                         || cir.getEmail() != null && !cir.getEmail().equals("")
                                         || cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
                                         || cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")
-                                        || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")
+                                        || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")&& !cir.getIdentificationType().equals("0")
                                         || cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")
                                         || cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")
                                         || cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")
@@ -466,6 +480,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity {
                                     caStartTV.setVisibility(GONE);
                                     caInProgressIV.setVisibility(VISIBLE);
 
+                                } else {
+                                    caTV.setTextColor(getResources().getColor(R.color.primary_black));
+                                    caIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
+                                    caIncompleteTV.setText("Incomplete");
+                                    caStartTV.setVisibility(VISIBLE);
+                                    caInProgressIV.setVisibility(GONE);
 
                                 }
                             } catch (Exception e) {

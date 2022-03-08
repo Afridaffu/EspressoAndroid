@@ -92,7 +92,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private int monthlyProcVolume = 0;
     private List<Item1> agreements = new ArrayList<>();
     private List<RequiredDocument> companyReqDocList = new ArrayList<>();
-    private List<Object> dbReqDocList = new ArrayList<>();
+    private List<RequiredDocument> dbReqDocList = new ArrayList<>();
     private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
@@ -132,8 +132,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     private void initFields() {
         objMyApplication = (MyApplication) getApplicationContext();
-
-
         edit1 = findViewById(R.id.edit1);
         edit2 = findViewById(R.id.edit2TV);
         edit3 = findViewById(R.id.edit3TV);
@@ -568,8 +566,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                         llDBADocuments.setVisibility(View.VISIBLE);
-                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        dbaFillingLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        dbaFillingLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
                                         dbaFillingLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
