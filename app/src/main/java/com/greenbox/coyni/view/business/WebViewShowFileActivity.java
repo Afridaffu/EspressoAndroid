@@ -83,7 +83,6 @@ public class WebViewShowFileActivity extends BaseActivity {
             LogUtils.d(TAG,"extension"+extension);
             LogUtils.d(TAG,"fillee"+fileURL.replaceAll(" ","%20"));
 
-
             if(extension.equalsIgnoreCase("pdf")){
                 webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL.replaceAll(" ","%20"));
             } else {
