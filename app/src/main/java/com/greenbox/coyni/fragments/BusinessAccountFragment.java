@@ -23,8 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
-import com.greenbox.coyni.model.businesswallet.WalletName;
-import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -136,7 +135,7 @@ public class BusinessAccountFragment extends BaseFragment {
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 if (businessWalletResponse != null) {
                     try {
-                        List<WalletName> walletInfo = businessWalletResponse.getData().getWalletNames();
+                        List<WalletInfo> walletInfo = businessWalletResponse.getData().getWalletNames();
                         if (walletInfo != null && walletInfo.size() > 0) {
                             String strAmount;
                             strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(0).getExchangeAmount()));

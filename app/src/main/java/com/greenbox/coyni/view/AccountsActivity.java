@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.businesswallet.WalletName;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -84,7 +84,7 @@ public class AccountsActivity extends AppCompatActivity {
     private void setUserBalance(WalletResponseData walletResponse) {
         try {
             String strAmount = "";
-            List<WalletName> walletInfo = walletResponse.getWalletNames();
+            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {

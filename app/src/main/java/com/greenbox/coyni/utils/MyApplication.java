@@ -21,7 +21,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
-import com.greenbox.coyni.model.businesswallet.WalletName;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
@@ -134,7 +134,7 @@ public class MyApplication extends Application {
         return agreementsPdf;
     }
 
-    WalletName gbtWallet;
+    WalletInfo gbtWallet;
     Double GBTBalance = 0.0;
 
     public void setAgreementsPdf(AgreementsPdf agreementsPdf) {
@@ -346,11 +346,11 @@ public class MyApplication extends Application {
         this.strPreference = strPreference;
     }
 
-    public WalletName getGbtWallet() {
+    public WalletInfo getGbtWallet() {
         return gbtWallet;
     }
 
-    public void setGbtWallet(WalletName gbtWallet) {
+    public void setGbtWallet(WalletInfo gbtWallet) {
         this.gbtWallet = gbtWallet;
     }
 

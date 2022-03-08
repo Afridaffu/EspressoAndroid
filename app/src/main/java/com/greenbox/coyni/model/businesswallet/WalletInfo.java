@@ -1,6 +1,6 @@
 package com.greenbox.coyni.model.businesswallet;
 
-public class WalletName {
+public class WalletInfo {
     private String createdAt;
     private String walletId;
     private String walletName;

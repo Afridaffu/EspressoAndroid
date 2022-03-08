@@ -241,7 +241,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             saveToAlbumbindImage();
             WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
             if (walletResponse != null && walletResponse.getWalletNames() != null
-                    && walletResponse.getWalletNames().get(0) != null && walletResponse.getWalletNames().size() > 0
+                    && walletResponse.getWalletNames().get(0) != null
                     && walletResponse.getWalletNames().get(0).getWalletId() != null) {
                 strWallet = walletResponse.getWalletNames().get(0).getWalletId();
                 generateQRCode(strWallet);

@@ -36,7 +36,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
-import com.greenbox.coyni.model.businesswallet.WalletName;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -75,7 +75,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV;
     TransactionLimitResponse objResponse;
     float fontSize, dollarFont;
-    WalletName cynWallet;
+    WalletInfo cynWallet;
     Boolean isFaceLock = false, isTouchId = false;
     String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "", strToken = "";
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;

@@ -92,7 +92,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         showProgressDialog();
         initialization();
         listeners();
-        initObservers();
 
 
     }
@@ -206,6 +205,10 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
 //                generateQRCode(strWallet);
 //                tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
 //            }
+
+            strWallet = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
+            generateQRCode(strWallet);
+            tvWalletAddress.setText(objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -544,18 +547,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         }
     }
 
-    private void initObservers() {
-        dashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, businessWalletResponse -> {
-            if (businessWalletResponse != null) {
-                dismissDialog();
-                //objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                strWallet = businessWalletResponse.getData().getWalletNames().get(0).getWalletId();
-                generateQRCode(strWallet);
-                tvWalletAddress.setText(businessWalletResponse.getData().getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
-            }
-        });
-
-    }
 
 
 

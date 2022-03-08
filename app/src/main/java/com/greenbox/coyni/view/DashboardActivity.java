@@ -38,7 +38,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
-import com.greenbox.coyni.model.businesswallet.WalletName;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
@@ -904,7 +904,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void getBalance(WalletResponseData walletResponse) {
         try {
             String strAmount = "";
-            List<WalletName> walletInfo = walletResponse.getWalletNames();
+            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
