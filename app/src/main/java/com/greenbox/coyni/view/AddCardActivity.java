@@ -88,7 +88,7 @@ public class AddCardActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     MyApplication objMyApplication;
     RelativeLayout layoutCard, layoutAddress;
-    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv;
+    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv, llError;
     LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
     public LinearLayout cardErrorLL;
     View divider1, divider2;
@@ -98,7 +98,7 @@ public class AddCardActivity extends AppCompatActivity {
     String strName = "", strCardNo = "", strExpiry = "", strCvv = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
     TextInputEditText etName, etCVV, etAddress1, etAddress2, etCity, etState, etZipCode, etCountry, etPreAmount;
     CardNumberEditText etCardNumber;
-    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode;
+    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode, etlAmount;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
@@ -573,7 +573,7 @@ public class AddCardActivity extends AppCompatActivity {
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
                             double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
-                            tvError.setVisibility(VISIBLE);
+                            llError.setVisibility(VISIBLE);
                             if (attempt != 3) {
                                 if (3 - attempt == 1) {
                                     tvError.setText("Incorrect amount " + (3 - attempt) + " try left.");
@@ -584,7 +584,7 @@ public class AddCardActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         try {
-                                            tvError.setVisibility(GONE);
+                                            llError.setVisibility(GONE);
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -1395,7 +1395,9 @@ public class AddCardActivity extends AppCompatActivity {
             preAuthDialog.show();
             layoutPClose = preAuthDialog.findViewById(R.id.layoutPClose);
             tvMessage = preAuthDialog.findViewById(R.id.tvMessage);
+            llError = preAuthDialog.findViewById(R.id.llError);
             tvError = preAuthDialog.findViewById(R.id.tvError);
+            etlAmount = preAuthDialog.findViewById(R.id.etlAmuont);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
             ctKey = preAuthDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify", this);
