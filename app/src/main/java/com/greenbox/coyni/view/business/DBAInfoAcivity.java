@@ -90,7 +90,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public CardView dbaNextCV, addressNextCV;
     public static DBAInfoAcivity dbaInfoAcivity;
     public boolean isdbaName = false, isdbaEmail = false, iscustPhoneNumber = false, isBusinessType = false, isECommerce = false, isRetail = false,
-            isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false;
+            isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
     Long mLastClickTime = 0L;
@@ -405,6 +405,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     isECommerce = true;
                     isRetail = false;
                     identificationType = 9;
+                    isIDVESelected = true;
 
 //                    dbaFillingLL.setVisibility(GONE);
                 }
@@ -420,6 +421,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     isECommerce = false;
                     isRetail = true;
                     identificationType = 8;
+                    isIDVESelected = true;
 //                    dbaFillingLL.setVisibility(VISIBLE);
                     retailIV.setImageResource(R.drawable.ic_rb_selected);
                     eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
@@ -984,12 +986,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             companyaddressET.setText("");
                             companyaddressET.setSelection(companyaddressET.getText().length());
                             address1ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            companyaddressET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             companyaddressET.setText("");
                             companyaddressET.setSelection(companyaddressET.getText().length());
                             address1ErrorLL.setVisibility(GONE);
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1023,6 +1026,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             companyaddress2ET.setText("");
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
                             address2ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            companyaddress2ET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             companyaddress2ET.setText("");
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
@@ -1067,19 +1072,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             cityET.setText("");
                             cityET.setSelection(cityET.getText().length());
                             cityErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            cityET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             cityET.setText("");
                             cityET.setSelection(cityET.getText().length());
                             cityErrorLL.setVisibility(GONE);
-                        } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
-                            cityET.setText(cityET.getText().toString().replaceAll(".", ""));
-                            cityET.setSelection(cityET.getText().length());
-                            cityErrorLL.setVisibility(GONE);
-                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                            cityET.setText("");
-                            cityET.setSelection(cityET.getText().length());
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1159,7 +1158,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             if (isCopyCompanyInfo) {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone) {
+                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1170,7 +1169,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             } else {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isDBAFiling) {
+                        && isHighTkt && isAvgTkt && isTimeZone && isDBAFiling && isIDVESelected) {
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);
@@ -1393,6 +1392,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     retailIV.setImageResource(R.drawable.ic_rb_selected);
                     eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
                     isWebsite = true;
+                    isIDVESelected = true;
                 } else if (cir.getIdentificationType().equals("9")) {
                     eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
                     retailIV.setImageResource(R.drawable.ic_rb_unselected);
@@ -1401,6 +1401,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     isRetail = false;
                     identificationType = 9;
                     isWebsite = isValidUrl(cir.getWebsite());
+                    isIDVESelected = true;
                 }
 
                 if (cir.getRequiredDocuments().size() > 0) {
@@ -1422,19 +1423,19 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
 
 
-                if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Integer.parseInt(cir.getMonthlyProcessingVolume()) > 0) {
+                if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Double.parseDouble(cir.getMonthlyProcessingVolume()) > 0) {
                     mpvOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getMonthlyProcessingVolume())));
                     isMPV = true;
                     mpvOET.setSelection();
                 }
 
-                if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Integer.parseInt(cir.getHighTicket()) > 0) {
+                if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Double.parseDouble(cir.getHighTicket()) > 0) {
                     highTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getHighTicket())));
                     isHighTkt = true;
                     highTicketOET.setSelection();
                 }
 
-                if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Integer.parseInt(cir.getAverageTicket()) > 0) {
+                if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Double.parseDouble(cir.getAverageTicket()) > 0) {
                     avgTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getAverageTicket())));
                     isAvgTkt = true;
                     avgTicketOET.setSelection();

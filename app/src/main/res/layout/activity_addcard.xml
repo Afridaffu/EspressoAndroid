@@ -412,7 +412,7 @@
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="textVisiblePassword|textNoSuggestions"
+                            android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="100"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
@@ -438,8 +438,9 @@
                         android:visibility="gone">
 
                         <ImageView
-                            android:layout_width="@dimen/_12sdp"
-                            android:layout_height="@dimen/_12sdp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/name"
                             android:src="@drawable/ic_erro" />
 
                         <TextView
@@ -472,7 +473,7 @@
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890/-#&amp;(),:.;"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="textVisiblePassword|textNoSuggestions"
+                            android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="100"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
@@ -485,7 +486,30 @@
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:id="@+id/address2ErrorLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/etlName"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
+                        <ImageView
+                            android:layout_width="@dimen/_12sdp"
+                            android:layout_height="@dimen/_12sdp"
+                            android:src="@drawable/ic_erro" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10ssp" />
+                    </LinearLayout>
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/etlCity"
                         style="@style/TextInputLayout.OutlinedBox"
@@ -507,7 +531,7 @@
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
-                            android:inputType="textVisiblePassword|textNoSuggestions"
+                            android:inputType="text|textCapSentences|textNoSuggestions"
                             android:maxLength="50"
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
