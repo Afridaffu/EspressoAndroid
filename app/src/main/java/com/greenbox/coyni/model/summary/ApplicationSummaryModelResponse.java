@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.summary;
 
+import com.greenbox.coyni.model.Error;
+
 public class ApplicationSummaryModelResponse {
 
 
@@ -9,7 +11,7 @@ public class ApplicationSummaryModelResponse {
 
     private Data data;
 
-    private Object error;
+    private Error error;
 
     public String getStatus() {
         return status;
@@ -35,11 +37,11 @@ public class ApplicationSummaryModelResponse {
         this.data = data;
     }
 
-    public Object getError() {
+    public Error getError() {
         return error;
     }
 
-    public void setError(Object error) {
+    public void setError(Error error) {
         this.error = error;
     }
 
