@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.zxing.Reader;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
@@ -63,9 +64,9 @@ import com.google.zxing.common.HybridBinarizer;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.PayToMerchantActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import org.json.JSONException;
@@ -238,11 +239,11 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumbindImage();
-            WalletResponse walletResponse = objMyApplication.getWalletResponse();
-            if (walletResponse != null && walletResponse.getData() != null
-                    && walletResponse.getData().getWalletInfo() != null && walletResponse.getData().getWalletInfo().size() > 0
-                    && walletResponse.getData().getWalletInfo().get(0).getWalletId() != null) {
-                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
+            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
+            if (walletResponse != null && walletResponse.getWalletNames() != null
+                    && walletResponse.getWalletNames().get(0) != null
+                    && walletResponse.getWalletNames().get(0).getWalletId() != null) {
+                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
                 generateQRCode(strWallet);
                 tvWalletAddress.setText(strWallet.substring(0, 16) + "...");
             }
@@ -326,7 +327,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                         ClipData myClip;
-                        String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
+                        String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
 
@@ -500,18 +501,56 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 }
                 try {
                     if (userDetails.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        if (strQRAmount.equals("")) {
-                            Intent i = new Intent(ScanActivity.this, PayRequestActivity.class);
-                            i.putExtra("walletId", strScanWallet);
-                            i.putExtra("amount", strQRAmount);
-                            i.putExtra("screen", "scan");
-                            startActivity(i);
-                        } else {
-                            Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
-                            i.putExtra("walletId", strScanWallet);
-                            i.putExtra("amount", strQRAmount);
-                            i.putExtra("screen", "scan");
-                            startActivity(i);
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            if (strQRAmount.equals("")) {
+                                try {
+                                    Intent i = new Intent(ScanActivity.this, PayRequestActivity.class);
+                                    i.putExtra("walletId", strScanWallet);
+                                    i.putExtra("amount", strQRAmount);
+                                    i.putExtra("screen", "scan");
+                                    startActivity(i);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                try {
+                                    Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
+                                    i.putExtra("walletId", strScanWallet);
+                                    i.putExtra("amount", strQRAmount);
+                                    i.putExtra("screen", "scan");
+                                    startActivity(i);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        else if ((objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT || objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) && userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT){
+                            if (strQRAmount.equals("")) {
+                                try {
+                                    Intent i = new Intent(ScanActivity.this, PayToMerchantActivity.class);
+                                    i.putExtra("walletId", strScanWallet);
+                                    i.putExtra("amount", strQRAmount);
+                                    i.putExtra("screen", "scan");
+                                    startActivity(i);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+//                            else {
+//                                Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
+//                                i.putExtra("walletId", strScanWallet);
+//                                i.putExtra("amount", strQRAmount);
+//                                i.putExtra("screen", "scan");
+//                                startActivity(i);
+//                            }
+                        }
+                        else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT){
+                            //ERROR MESSAGE DIsPLAY
+                            try {
+                                displayAlert("Sorry, we detected this is a personal account address, please scan a business QR code or switch to your personal account to complete the transaction. ","Invalid QR code");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -863,8 +902,6 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        //Change Not Updated
-        //Accept yours
     }
 
     @Override
@@ -1041,51 +1078,61 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void displayAlert(String msg, String headerText) {
         // custom dialog
-        errorDialog = new Dialog(ScanActivity.this);
-        errorDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        errorDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
-        errorDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        try {
+            errorDialog = new Dialog(ScanActivity.this);
+            errorDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            errorDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+            errorDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        DisplayMetrics mertics = getResources().getDisplayMetrics();
-        int width = mertics.widthPixels;
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
 
-        TextView header = errorDialog.findViewById(R.id.tvHead);
-        TextView message = errorDialog.findViewById(R.id.tvMessage);
-        CardView actionCV = errorDialog.findViewById(R.id.cvAction);
-        TextView actionText = errorDialog.findViewById(R.id.tvAction);
+            TextView header = errorDialog.findViewById(R.id.tvHead);
+            TextView message = errorDialog.findViewById(R.id.tvMessage);
+            CardView actionCV = errorDialog.findViewById(R.id.cvAction);
+            TextView actionText = errorDialog.findViewById(R.id.tvAction);
 
-        if (!headerText.equals("")) {
-            header.setVisibility(View.VISIBLE);
-            header.setText(headerText);
-        }
-
-        actionCV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            if (!headerText.equals("")) {
                 try {
-                    errorDialog.dismiss();
-                    errorDialog = null;
-                    mcodeScanner.startPreview();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    header.setVisibility(View.VISIBLE);
+                    header.setText(headerText);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-        });
 
-        message.setText(msg);
-        Window window = errorDialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            actionCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        errorDialog.dismiss();
+                        errorDialog = null;
+                        isQRScan = false;
+                        mcodeScanner.startPreview();
+                        scannerLayout.setVisibility(View.VISIBLE);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
-        WindowManager.LayoutParams wlp = window.getAttributes();
+            message.setText(msg);
+            Window window = errorDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
+            WindowManager.LayoutParams wlp = window.getAttributes();
 
-        errorDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
 
-        errorDialog.setCanceledOnTouchOutside(false);
-        errorDialog.show();
+            errorDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            errorDialog.setCanceledOnTouchOutside(false);
+            errorDialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

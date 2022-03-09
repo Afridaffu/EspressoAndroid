@@ -589,6 +589,8 @@
 
     <string name="companyemail">Company’s Email</string>
     <string name="bankdeletemsg">Are you sure you want to delete bank account? To submit the application you have to have at least 1 bank account. Or use the button below to relink.</string>
+    <string name="pay_to_merchant">Pay to Merchant</string>
+    <string name="account_address">Account Address</string>
 
     <string name="ownership_percentage">\% Ownership"</string>
     <string name="ownership_title">Ownership"</string>

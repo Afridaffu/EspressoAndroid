@@ -242,7 +242,18 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
                 }
 
-                value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
+                if (addressFormatted.equals("")) {
+                    addressFormatted = addressFormatted + "United States";
+                    value.setText(addressFormatted);
+//                    business_userAddreTV.setText(addressFormatted);
+//                    address=addressFormatted;
+                } else {
+                    value.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//                    business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//                    address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+                }
+
+//                value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
             }
             if (getIntent().getStringExtra("title")!=null&&getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")){
                 value.setText(profile.getData().getEmail());
@@ -321,6 +332,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         try {
             dashboardViewModel.meProfile();
             businessIdentityVerificationViewModel.getDBAInfo();

@@ -2,7 +2,6 @@ package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -11,12 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.wallet.WalletInfo;
-import com.greenbox.coyni.model.wallet.WalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -52,7 +49,7 @@ public class AccountsActivity extends AppCompatActivity {
     public void bindImage(){
         try {
 
-            setUserBalance(objMyApplication.getWalletResponse());
+            setUserBalance(objMyApplication.getWalletResponseData());
 
             userNameTV.setText(objMyApplication.getStrUserName());
             imgProfile.setVisibility(View.GONE);
@@ -84,18 +81,18 @@ public class AccountsActivity extends AppCompatActivity {
         }
     }
 
-    private void setUserBalance(WalletResponse walletResponse) {
+    private void setUserBalance(WalletResponseData walletResponse) {
         try {
             String strAmount = "";
-            List<WalletInfo> walletInfo = walletResponse.getData().getWalletInfo();
+            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
-                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
+//                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
                         objMyApplication.setGbtWallet(walletInfo.get(i));
                         strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
                         userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
                         objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
-                    }
+//                    }
                 }
             }
         } catch (Exception ex) {

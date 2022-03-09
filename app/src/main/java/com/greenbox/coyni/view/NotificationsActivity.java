@@ -705,7 +705,7 @@ public class NotificationsActivity extends AppCompatActivity {
             } else {
                 requesterIDTV.setText(dataItem.getRequesterWalletId());
             }
-            balanceTV.setText("Available: " + objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + " CYN");
+            balanceTV.setText("Available: " + objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + " CYN");
 
             if (!dataItem.getRemarks().equals("")) {
                 messageLL.setVisibility(View.VISIBLE);
