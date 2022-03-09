@@ -63,7 +63,6 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
-import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Matcher;
@@ -780,11 +779,15 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     }
 
     public void focusWatchers() {
-        try {
+         try {
             firstNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
+
+                        if (firstNameET.getText().toString().length() > 0 && !firstNameET.getText().toString().substring(0, 1).equals(" ")) {
+                            firstNameET.setText(firstNameET.getText().toString().substring(0, 1).toUpperCase() + firstNameET.getText().toString().substring(1).toLowerCase());
+                        }
                         firstNameET.setHint("");
                         if (firstNameET.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
@@ -802,7 +805,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
-                    } else {
+                    }
+                    else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         firstNameErrorLL.setVisibility(GONE);
@@ -820,6 +824,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
+                        if (lastNameET.getText().toString().length() > 0 && !lastNameET.getText().toString().substring(0, 1).equals(" ")) {
+                            lastNameET.setText(lastNameET.getText().toString().substring(0, 1).toUpperCase() + lastNameET.getText().toString().substring(1).toLowerCase());
+                        }
                         lastNameET.setHint("");
                         if (lastNameET.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
