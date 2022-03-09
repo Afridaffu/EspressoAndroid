@@ -38,7 +38,7 @@ public class DbaInfo {
 
     private Integer timeZone;
 
-    private List<Object> requiredDocuments = null;
+    private List<RequiredDocument> requiredDocuments = null;
 
     private Boolean copyCompanyInfo;
 
@@ -178,11 +178,11 @@ public class DbaInfo {
         this.timeZone = timeZone;
     }
 
-    public List<Object> getRequiredDocuments() {
+    public List<RequiredDocument> getRequiredDocuments() {
         return requiredDocuments;
     }
 
-    public void setRequiredDocuments(List<Object> requiredDocuments) {
+    public void setRequiredDocuments(List<RequiredDocument> requiredDocuments) {
         this.requiredDocuments = requiredDocuments;
     }
 

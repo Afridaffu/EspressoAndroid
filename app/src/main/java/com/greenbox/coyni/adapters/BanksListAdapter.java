@@ -31,6 +31,7 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
     List<BankItem> listBanks;
     Context mContext;
     MyApplication objMyApplication;
+    Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankName, tvAccount;
@@ -73,6 +74,11 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
                         AddBankAccount addBankAccount = (AddBankAccount) mContext;
                         if (listBanks.size() > 1) {
                             addBankAccount.deleteBankAPICall(objData.getId());

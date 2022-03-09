@@ -7,14 +7,19 @@ import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewMod
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -35,6 +40,7 @@ import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.fragments.BusinessDashboardFragment;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DialogAttributes;
@@ -71,7 +77,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListner {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListner, OnKeyboardVisibilityListener {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -92,7 +98,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private int monthlyProcVolume = 0;
     private List<Item1> agreements = new ArrayList<>();
     private List<RequiredDocument> companyReqDocList = new ArrayList<>();
-    private List<Object> dbReqDocList = new ArrayList<>();
+    private List<RequiredDocument> dbReqDocList = new ArrayList<>();
     private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
     private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
@@ -123,6 +129,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_application);
 
+        setKeyboardVisibilityListener(ReviewApplicationActivity.this);
         objMyApplication = (MyApplication) getApplicationContext();
 
         initFields();
@@ -132,8 +139,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     private void initFields() {
         objMyApplication = (MyApplication) getApplicationContext();
-
-
         edit1 = findViewById(R.id.edit1);
         edit2 = findViewById(R.id.edit2TV);
         edit3 = findViewById(R.id.edit3TV);
@@ -218,12 +223,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         submitCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
-                if (addbusiness) {
-                    loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
-                    loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                } else {
-                    applicationSubmissionViewModel.postApplicationData();
+                if (isAgree) {
+                    showProgressDialog();
+                    if (addbusiness) {
+                        loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
+                        loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                    } else {
+                        applicationSubmissionViewModel.postApplicationData();
+                    }
                 }
             }
         });
@@ -566,8 +573,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 if (dbaInfo.getRequiredDocuments().size() > 0) {
                                     for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                         llDBADocuments.setVisibility(View.VISIBLE);
-                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        dbaFillingLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
+                                        dbaFillingLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
                                         dbaFillingLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -732,18 +739,18 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     private void showFile(String fileUrl) {
         try {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                    return;
-                }
-                mLastClickTimeQA = SystemClock.elapsedRealtime();
-                if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
-                    //Call the activity here
-                    Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
-                    intent.putExtra("FILEURL", fileUrl);
-                    startActivity(intent);
-                } else {
-                    LogUtils.v(TAG, "fileUrl is null or empty");
-                }
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
+                //Call the activity here
+                Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
+                intent.putExtra("FILEURL", fileUrl);
+                startActivity(intent);
+            } else {
+                LogUtils.v(TAG, "fileUrl is null or empty");
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -784,6 +791,45 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }, 2000);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            Utils.isKeyboardVisible = true;
+//            pageOneView.setVisibility(VISIBLE);
+//            pageTwoView.setVisibility(VISIBLE);
+        } else {
+//            pageOneView.setVisibility(GONE);
+//            pageTwoView.setVisibility(GONE);
+            Utils.isKeyboardVisible = false;
         }
     }
 }
