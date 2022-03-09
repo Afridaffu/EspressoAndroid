@@ -21,6 +21,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
@@ -39,9 +40,8 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.transaction.TransactionList;
-import com.greenbox.coyni.model.wallet.WalletResponse;
+//import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.view.DashboardActivity;
@@ -80,7 +80,7 @@ public class MyApplication extends Application {
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
-    WalletResponse walletResponse;
+//    WalletResponse walletResponse;
     String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "";
     int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
@@ -221,13 +221,13 @@ public class MyApplication extends Application {
         this.updatePhoneResponse = updatePhoneResponse;
     }
 
-    public WalletResponse getWalletResponse() {
-        return walletResponse;
-    }
+//    public WalletResponse getWalletResponse() {
+//        return walletResponse;
+//    }
 
-    public void setWalletResponse(WalletResponse walletResponse) {
-        this.walletResponse = walletResponse;
-    }
+//    public void setWalletResponse(WalletResponse walletResponse) {
+//        this.walletResponse = walletResponse;
+//    }
 
     public String getTimezone() {
         return timezone;
@@ -980,13 +980,15 @@ public class MyApplication extends Application {
             if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 BusinessTrackerResponse btr = getBusinessTrackerResponse();
                 if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
 
-                    if (btr.getData().isApplicationSummary() && btr.getData().isProfileVerified()) {
+                    if (btr.getData().isProfileVerified()) {
                         dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
-                    } else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
-                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
-                    } else {
+                    }
+//                    else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+//                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+//                    }
+                    else {
                         dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
                         dashboardIntent.putExtra("FROM", fromScreen);
                     }

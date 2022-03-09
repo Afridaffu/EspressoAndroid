@@ -1,6 +1,6 @@
 package com.greenbox.coyni.model.businesswallet;
 
-public class WalletName {
+public class WalletInfo {
     private String createdAt;
     private String walletId;
     private String walletName;
@@ -17,6 +17,8 @@ public class WalletName {
     private String amount;
     private String balance;
     private String updatedAt;
+    private String walletType;
+
 
     public String getCreatedAt() {
         return createdAt;
@@ -144,5 +146,13 @@ public class WalletName {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getWalletType() {
+        return walletType;
+    }
+
+    public void setWalletType(String walletType) {
+        this.walletType = walletType;
     }
 }
