@@ -557,6 +557,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         if (confirmPasswordET.getText().length() > 0) {
                             confirmPasswordET.setSelection(confirmPasswordET.getText().length());
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
