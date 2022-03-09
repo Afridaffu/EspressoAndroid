@@ -25,6 +25,7 @@
         android:paddingBottom="@dimen/_33sdp">
 
         <TextView
+            android:id="@+id/tv_today"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/opensans_semibold"
@@ -40,8 +41,9 @@
             android:background="@color/blue_light" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_yesterday"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fontFamily="@font/opensans_semibold"
             android:paddingTop="@dimen/_14sdp"
             android:paddingBottom="@dimen/_14sdp"
@@ -55,8 +57,9 @@
             android:background="@color/blue_light" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_month_to_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fontFamily="@font/opensans_semibold"
             android:paddingTop="@dimen/_14sdp"
             android:paddingBottom="@dimen/_14sdp"
@@ -70,8 +73,9 @@
             android:background="@color/blue_light" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_last_month"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fontFamily="@font/opensans_semibold"
             android:paddingTop="@dimen/_14sdp"
             android:paddingBottom="@dimen/_14sdp"
@@ -85,8 +89,9 @@
             android:background="@color/blue_light" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_custom_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:fontFamily="@font/opensans_semibold"
             android:paddingTop="@dimen/_14sdp"
             android:paddingBottom="@dimen/_14sdp"
