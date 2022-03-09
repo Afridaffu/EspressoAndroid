@@ -55,9 +55,6 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.QuickActionPayorReqActivity"
-            android:exported="true" />
-        <activity
             android:name=".view.business.PayingDBAFilterActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />

@@ -744,7 +744,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (companynameET.getText().toString().trim().length() > 1) {
                             companynameErrorLL.setVisibility(GONE);
                             companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
-                            companynameET.setHintTextColor(getColor(R.color.light_gray));
                             Utils.setUpperHintColor(companynametil, getColor(R.color.primary_black));
 
                         } else if (companynameET.getText().toString().trim().length() == 1) {
@@ -753,22 +752,24 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             companynameErrorLL.setVisibility(VISIBLE);
                             companynameerrorTV.setText("Minimum 2 Characters Required");
                         } else {
-                            Utils.setUpperHintColor(companynametil, getColor(R.color.light_gray));
+                             Utils.setUpperHintColor(companynametil, getColor(R.color.light_gray));
                             companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             companynameErrorLL.setVisibility(VISIBLE);
                             companynameerrorTV.setText("Field Required");
 
+                        }if (companynameET.getText().toString().length() > 0 && !companynameET.getText().toString().substring(0, 1).equals(" ")) {
+                            companynameET.setText(companynameET.getText().toString().substring(0, 1).toUpperCase() + companynameET.getText().toString().substring(1));
                         }
+
                     } else {
                         companynameET.setHint("Company’s Name");
-                        companynametil.setBoxStrokeColor(getColor(R.color.primary_green));
+                        companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         companynameET.setHintTextColor(getColor(R.color.light_gray));
                         companynameErrorLL.setVisibility(GONE);
                     }
 
                 }
             });
-
             companyemailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -817,6 +818,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             address1ErrorLL.setVisibility(VISIBLE);
                             address1ErrorTV.setText("Field Required");
                         }
+                        if (companyaddressET.getText().toString().length() > 0 && !companyaddressET.getText().toString().substring(0, 1).equals(" ")) {
+                            companyaddressET.setText(companyaddressET.getText().toString().substring(0, 1).toUpperCase() + companyaddressET.getText().toString().substring(1));
+                        }
                     } else {
                         companyaddressET.setHint(getResources().getString(R.string.company_address_line_1));
                         companyaddresstil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -838,6 +842,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             Utils.setUpperHintColor(companyaddress2til, getColor(R.color.light_gray));
                             companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
 
+                        }
+                        if (companyaddress2ET.getText().toString().length() > 0 && !companyaddress2ET.getText().toString().substring(0, 1).equals(" ")) {
+                            companyaddress2ET.setText(companyaddress2ET.getText().toString().substring(0, 1).toUpperCase() + companyaddress2ET.getText().toString().substring(1));
                         }
                     } else {
                         companyaddress2til.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -863,6 +870,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             Utils.setUpperHintColor(citytil, getColor(R.color.light_gray));
                             cityErrorLL.setVisibility(VISIBLE);
                             cityErrorTV.setText("Field Required");
+                        }
+                        if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
+                            cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
                         }
                     } else {
                         cityET.setHint("City");
@@ -927,7 +937,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (charSequence.toString().trim().length() > 1) {
                         iscompanyName = true;
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_black));
                     } else {
 //                        companynameerrorTV.setText("Field Required");
                         iscompanyName = false;

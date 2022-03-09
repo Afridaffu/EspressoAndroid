@@ -178,10 +178,10 @@ public class BusinessDashboardFragment extends BaseFragment {
             String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                 showIdentityVerificationReview();
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_DETAILS_REQUIRED.getStatus())) {
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                 showIdentityVerificationReview();
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.CANCELLED.getStatus())
-                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.FAILED.getStatus())) {
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
                 showIdentityVerificationFailed();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 showBusinessDashboardView();
@@ -249,6 +249,12 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     public void showProcessingVolumeDialog() {
         ProcessingVolumeDialog processingVolumeDialog = new ProcessingVolumeDialog(getActivity());
+        processingVolumeDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                mTvProcessingVolume.setText(action);
+            }
+        });
         processingVolumeDialog.show();
     }
 
@@ -262,7 +268,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                launchApplicationCancelledScreen();
+                if(action.equalsIgnoreCase(getString(R.string.yes))) {
+
+                    launchApplicationCancelledScreen();
+                }
             }
         });
 
