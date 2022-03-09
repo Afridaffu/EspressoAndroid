@@ -81,7 +81,6 @@ public class BusinessDashboardActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
-            showProgressDialog();
             mDashboardViewModel.meProfile();
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,7 +106,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onAccountTabSelected(View view) {
-        if(!isTabsEnabled) {
+        if (!isTabsEnabled) {
             return;
         }
         try {
@@ -127,7 +126,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onTransactionsTabSelected(View view) {
-        if(!isTabsEnabled) {
+        if (!isTabsEnabled) {
             return;
         }
         try {
@@ -163,7 +162,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onQuickMenuTabSelected(View view) {
-        if(!isTabsEnabled) {
+        if (!isTabsEnabled) {
             return;
         }
         try {
@@ -247,15 +246,25 @@ public class BusinessDashboardActivity extends BaseActivity {
         mTvProfile.setTextColor(isProfile ? selectedTextColor : unSelectedTextColor);
     }
 
-    private void setDisabledTabs() {
-        if(!isTabsEnabled) {
-            int disabledColor = getColor(R.color.cyn_color);
-            mTvAccount.setTextColor(disabledColor);
-            mTvTransactions.setTextColor(disabledColor);
-            mIvAccount.setImageResource(R.drawable.ic_account_disabled);
-            mIvTransactions.setImageResource(R.drawable.ic_transactions_disabled);
-            mIvMenu.setImageResource(R.drawable.quick_action_btn_disabled);
+    private void setEnabledTabs() {
+        int disabledColor = getColor(R.color.cyn_color);
+        int unSelectedTextColor = getColor(R.color.dark_grey);
+        int selectedTextColor = getColor(R.color.primary_green);
+        if(selectedTab == Tabs.ACCOUNT) {
+            mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_disabled);
+        } else {
+            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
         }
+        if(selectedTab == Tabs.TRANSACTIONS) {
+            mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_disabled);
+        } else {
+            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
+        }
+        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
     }
 
     private void pushFragment(BaseFragment fragment) {
@@ -305,7 +314,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 isTabsEnabled = true;
             }
         }
-        setDisabledTabs();
+        setEnabledTabs();
     }
 
     private void initObserver() {
@@ -340,7 +349,6 @@ public class BusinessDashboardActivity extends BaseActivity {
         mDashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
-                dismissDialog();
                 try {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
@@ -371,7 +379,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null){
+                if (businessWalletResponse != null) {
                     objMyApplication.setWalletResponseData(businessWalletResponse.getData());
 //                    getBalance(businessWalletResponse);
                 }
