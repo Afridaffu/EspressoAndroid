@@ -41,7 +41,6 @@ import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
-import com.greenbox.coyni.view.GiftCardBindingLayoutActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -57,29 +56,27 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
             businessResetPin, preferencesLL, beneficialOwnersLL;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private final int CODE_AUTHENTICATION_VERIFICATION = 251;
     boolean isTogleBtn = false;
-    CardView business_userProfileCV, statusDot;
-    DashboardViewModel dashboardViewModel;
-    MyApplication myApplication;
-    Boolean isSwitchEnabled = false;
-    CardView cvLogout;
-    CoyniViewModel coyniViewModel;
-    ImageView profileImage;
-    TextView profileText, account_status, account_id, userFullname, b_tvBMSetting;
-    Dialog enablePopup;
+    private CardView business_userProfileCV, statusDot, cardViewSetting, cvLogout;
+    private DashboardViewModel dashboardViewModel;
+    private MyApplication myApplication;
+    private Boolean isSwitchEnabled = false;
+    private CoyniViewModel coyniViewModel;
+    private ImageView profileImage;
+    private TextView profileText, account_status, account_id, userFullname, b_tvBMSetting;
+    private Dialog enablePopup;
     private DatabaseHandler dbHandler;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     boolean isLoggedOut = false;
     //    private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL, paymentMethodsLL;
     private Long mLastClickTime = 0L;
-    TextView tvVersion;
-    ScrollView profileSV;
-    MyApplication objMyApplication;
-    String fullname = "";
+    private TextView tvVersion;
+    private ScrollView profileSV;
+    private String fullname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +84,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_profile);
+
         try {
             initFields();
             initObservers();
@@ -107,6 +105,8 @@ public class BusinessProfileActivity extends AppCompatActivity {
             businessResetPin = findViewById(R.id.businessResetPin);
             dbainfoLL = findViewById(R.id.DBAInformationLL);
             profileSV = findViewById(R.id.profileSV);
+            cardViewSetting = findViewById(R.id.cardviewSetting);
+
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
             dbainfoLL.setOnClickListener(new View.OnClickListener() {
@@ -200,6 +200,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             setToken();
             setFaceLock();
             setTouchId();
+            enableDisableMerchantSettings();
 
             switchOffLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -403,7 +404,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-            
+
 
             if (myApplication.getMyProfile().getData().getAccountStatus() != null) {
                 try {
@@ -440,6 +441,33 @@ public class BusinessProfileActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void enableDisableMerchantSettings() {
+        boolean isEnable = false;
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                && myApplication.getMyProfile().getData().getAccountStatus() != null) {
+            String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                isEnable = false;
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                isEnable = true;
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+                isEnable = true;
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                isEnable = true;
+            }
+        }
+        disableLayout(companyinfoLL, isEnable);
+        disableLayout(dbainfoLL, isEnable);
+        disableLayout(beneficialOwnersLL, isEnable);
+        disableLayout(teamLL, isEnable);
+        disableLayout(paymentMethodsLL, isEnable);
+        disableLayout(preferencesLL, isEnable);
+        disableLayout(feesLL, isEnable);
+        disableLayout(accountlimitsLL, isEnable);
+        disableLayout(cpagreeementsLL, isEnable);
     }
 
     public void setToken() {
@@ -787,6 +815,14 @@ public class BusinessProfileActivity extends AppCompatActivity {
         myApplication.setStrMobileToken(value);
         dbHandler.clearPermanentTokenTable();
         dbHandler.insertPermanentToken(value);
+    }
+
+    private void disableLayout(LinearLayout layout, boolean isEnable) {
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            child.setEnabled(isEnable);
+        }
+        layout.setEnabled(isEnable);
     }
 
     public Dialog showFaceTouchEnabledDialog(final Context context, String type) {
