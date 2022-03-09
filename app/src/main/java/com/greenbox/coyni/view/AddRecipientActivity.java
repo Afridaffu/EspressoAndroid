@@ -12,12 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
@@ -48,8 +45,6 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +111,7 @@ public class AddRecipientActivity extends AppCompatActivity {
             imgScan = findViewById(R.id.imgScan);
             etSearch = findViewById(R.id.etSearch);
             if (Utils.checkInternet(AddRecipientActivity.this)) {
-                payViewModel.recentUsers();
+//                payViewModel.recentUsers();
                 TemplateRequest request = new TemplateRequest();
                 request.setBody1("[body1]");
                 request.setBody2(objMyApplication.getStrUserName());
@@ -326,12 +321,6 @@ public class AddRecipientActivity extends AppCompatActivity {
         usersList = new ArrayList<>();
         try {
             if (users != null && users.size() > 0) {
-//                for (int i = 0; i < users.size(); i++) {
-//                    if (!users.get(i).getWalletAddress().equals(objMyApplication.getGbtWallet().getWalletId())) {
-//                        usersList.add(users.get(i));
-//                    }
-//                }
-
                 if (users.size() > 5) {
                     for (int i = 0; i < users.size(); i++) {
                         if (i < 5) {
@@ -413,22 +402,6 @@ public class AddRecipientActivity extends AppCompatActivity {
                     String image_uri = cur
                             .getString(cur
                                     .getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
-//                    Bitmap photo = null;
-//
-//                    try {
-//                        InputStream inputStream = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(),
-//                                ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.valueOf(id)));
-//
-//                        if (inputStream != null) {
-//                            photo = BitmapFactory.decodeStream(inputStream);
-//                        }
-//
-//                        if (inputStream != null) inputStream.close();
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    objContact.setPhoto(objMyApplication.convertBitMapToString(photo));
                     objContact.setPhoto(image_uri);
                     listContacts.add(objContact);
                 }
@@ -461,13 +434,13 @@ public class AddRecipientActivity extends AppCompatActivity {
                         } else {
                             strCCode = "US";
                         }
-//                        strPhone = mobileArray.get(i).getNumber().get(0).replace("+91", "").replace("+1", "").replace("-", "");
                         strPhone = mobileArray.get(i).getNumber().get(0).replace("-", "");
                         obj.setCountryCode(strCCode);
                         obj.setPhoneNumber(strPhone);
                         obj.setUserName(mobileArray.get(i).getName());
                         obj.setImagePath(mobileArray.get(i).getPhoto());
                         listUsers.add(obj);
+                        objUsers.put(obj.getPhoneNumber(), obj);
                     } else if (mobileArray.get(i).getNumber() != null) {
                         for (int j = 0; j < mobileArray.get(i).getNumber().size(); j++) {
                             obj = new RegisteredUsersRequest();
@@ -480,20 +453,20 @@ public class AddRecipientActivity extends AppCompatActivity {
                             } else {
                                 strCCode = "US";
                             }
-//                            strPhone = mobileArray.get(i).getNumber().get(j).replace("+91", "").replace("+1", "").replace("-", "");
                             strPhone = mobileArray.get(i).getNumber().get(j).replace("-", "");
                             obj.setCountryCode(strCCode);
                             obj.setPhoneNumber(strPhone);
                             obj.setUserName(mobileArray.get(i).getName());
                             obj.setImagePath(mobileArray.get(i).getPhoto());
                             listUsers.add(obj);
-
+                            objUsers.put(obj.getPhoneNumber(), obj);
                         }
                     }
                 }
+                objMyApplication.setObjPhContacts(objUsers);
+                payViewModel.recentUsers();
                 if (listUsers != null && listUsers.size() > 0) {
                     if (Utils.checkInternet(AddRecipientActivity.this)) {
-//                        dialog = Utils.showProgressDialog(AddRecipientActivity.this);
                         payViewModel.registeredUsers(listUsers);
                     } else {
                         Utils.displayAlert(getString(R.string.internet), AddRecipientActivity.this, "", "");
