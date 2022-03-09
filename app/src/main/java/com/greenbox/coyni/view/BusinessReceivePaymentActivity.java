@@ -1,7 +1,6 @@
 package com.greenbox.coyni.view;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,7 +36,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -51,7 +49,7 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class BusinessReceivePaymentActivity extends AppCompatActivity implements TextWatcher {
+public class BusinessReceivePaymentActivity extends BaseActivity implements TextWatcher {
 
     TextView scanMeSetAmountTV, saveToAlbum, userNameTV, scanMeRequestAmount;
     LinearLayout imageSaveAlbumLL, scanAmountLL, setAmountLL;
@@ -91,7 +89,6 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
 
         initialization();
         listeners();
-        initObservers();
 
 
     }
@@ -199,12 +196,16 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumBindImage();
-            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
-            if (walletResponse != null) {
-                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
-                generateQRCode(strWallet);
-                tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
-            }
+//            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
+//            if (walletResponse != null) {
+//                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
+//                generateQRCode(strWallet);
+//                tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
+//            }
+
+            strWallet = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
+            generateQRCode(strWallet);
+            tvWalletAddress.setText(objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -339,7 +340,7 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
     protected void onResume() {
         try {
             super.onResume();
-            dashboardViewModel.meMerchantWallet();
+            dashboardViewModel.meMerchantWallet(Utils.MERCHANT);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -543,16 +544,6 @@ public class BusinessReceivePaymentActivity extends AppCompatActivity implements
         }
     }
 
-    private void initObservers() {
-        dashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, businessWalletResponse -> {
-            if (businessWalletResponse != null) {
-                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                strWallet = businessWalletResponse.getData().getWalletNames().get(0).getWalletId();
-                generateQRCode(strWallet);
-            }
-        });
-
-    }
 
 
 

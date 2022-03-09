@@ -102,7 +102,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     TextInputEditText companyaddressET, companyaddress2ET, cityET, stateET, zipcodeET;
     LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipcodeErrorLL;
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, stateErrorTV, zipcodeErrorTV;
-    public boolean isCompanyAdress1 = false, isCity = false, isState = false, isZipcode = false, isAddressNextEnabled = false, isCopyCompanyInfo = false;
+    public boolean isCompanyAdress1 = false, isCity = false, isState = false,
+            isZipcode = false, isAddressNextEnabled = false, isCopyCompanyInfo = false, isPostSuccess = false;
     ImageView statedropdownIV;
 
     DBAPager dbaPager;
@@ -151,7 +152,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onDestroy() {
         try {
             super.onDestroy();
-            dbaInfoAPICall(prepareRequest());
+            if (!isPostSuccess)
+                dbaInfoAPICall(prepareRequest());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -594,8 +596,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         dismissDialog();
                     if (dbaInfoUpdateResp != null) {
                         if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
+                            isPostSuccess = true;
                             finish();
                         } else {
+                            isPostSuccess = false;
                             Utils.displayAlert(dbaInfoUpdateResp.getError().getErrorDescription(),
                                     DBAInfoAcivity.this, "", dbaInfoUpdateResp.getError().getFieldErrors().get(0));
                         }
@@ -669,13 +673,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbanameLL.setVisibility(VISIBLE);
                             dbanameTV.setText("Field Required");
                             Utils.setUpperHintColor(dbanameTIL, getColor(R.color.light_gray));
-                        }if (dbanameET.getText().toString().length() > 0 && !dbanameET.getText().toString().substring(0, 1).equals(" ")) {
+                        }
+                        if (dbanameET.getText().toString().length() > 0 && !dbanameET.getText().toString().substring(0, 1).equals(" ")) {
                             dbanameET.setText(dbanameET.getText().toString().substring(0, 1).toUpperCase() + dbanameET.getText().toString().substring(1));
                         }
                     } else {
                         dbanameET.setHint("DBA Name");
                         dbanameTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                        dbanameET.setHintTextColor(getColor(R.color.primary_green));
+                        dbanameET.setHintTextColor(getColor(R.color.light_gray));
                         dbanameLL.setVisibility(GONE);
                     }
 
@@ -736,7 +741,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             Utils.setUpperHintColor(companyaddresstil, getColor(R.color.light_gray));
                             address1ErrorLL.setVisibility(VISIBLE);
                             address1ErrorTV.setText("Field Required");
-                        }if (companyaddressET.getText().toString().length() > 0 && !companyaddressET.getText().toString().substring(0, 1).equals(" ")) {
+                        }
+                        if (companyaddressET.getText().toString().length() > 0 && !companyaddressET.getText().toString().substring(0, 1).equals(" ")) {
                             companyaddressET.setText(companyaddressET.getText().toString().substring(0, 1).toUpperCase() + companyaddressET.getText().toString().substring(1));
                         }
                     } else {
@@ -760,7 +766,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             Utils.setUpperHintColor(companyaddress2til, getColor(R.color.light_gray));
                             companyaddress2til.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
 
-                        }if (companyaddress2ET.getText().toString().length() > 0 && !companyaddress2ET.getText().toString().substring(0, 1).equals(" ")) {
+                        }
+                        if (companyaddress2ET.getText().toString().length() > 0 && !companyaddress2ET.getText().toString().substring(0, 1).equals(" ")) {
                             companyaddress2ET.setText(companyaddress2ET.getText().toString().substring(0, 1).toUpperCase() + companyaddress2ET.getText().toString().substring(1));
                         }
                     } else {
@@ -787,7 +794,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             Utils.setUpperHintColor(citytil, getColor(R.color.light_gray));
                             cityErrorLL.setVisibility(VISIBLE);
                             cityErrorTV.setText("Field Required");
-                        }if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
+                        }
+                        if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
                             cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
                         }
                     } else {

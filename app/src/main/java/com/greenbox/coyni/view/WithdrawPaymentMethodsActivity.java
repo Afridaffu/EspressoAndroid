@@ -33,10 +33,10 @@ import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.AddPaymentSignetActivity;
@@ -48,15 +48,13 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.internal.Util;
-
 public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
-    WalletResponse walletResponse;
+    WalletResponseData walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false;
@@ -179,7 +177,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            walletResponse = objMyApplication.getWalletResponse();
+            walletResponse = objMyApplication.getWalletResponseData();
             walletBalance = objMyApplication.getGBTBalance();
             if (paymentMethodsResponse != null) {
                 getPayments(paymentMethodsResponse.getData().getData());
