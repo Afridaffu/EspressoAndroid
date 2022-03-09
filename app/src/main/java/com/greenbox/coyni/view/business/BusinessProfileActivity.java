@@ -60,6 +60,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private final int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private final int CODE_AUTHENTICATION_VERIFICATION_RESET_PIN = 252;
     boolean isTogleBtn = false;
     private CardView business_userProfileCV, statusDot, cardViewSetting, cvLogout;
     private DashboardViewModel dashboardViewModel;
@@ -108,78 +109,9 @@ public class BusinessProfileActivity extends AppCompatActivity {
             cardViewSetting = findViewById(R.id.cardviewSetting);
 
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
-
-            dbainfoLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent(BusinessProfileActivity.this, DBAInfoDetails.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
             companyinfoLL = findViewById(R.id.companyInformationLL);
-            companyinfoLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent(BusinessProfileActivity.this, CompanyInfoDetails.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
             cpagreeementsLL = findViewById(R.id.cpAgreementsLL);
-            cpagreeementsLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
             preferencesLL = findViewById(R.id.PreferencesLL);
-            preferencesLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent(BusinessProfileActivity.this, PreferencesActivity.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            beneficialOwnersLL = findViewById(R.id.beneficialOwnersLL);
-            beneficialOwnersLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent(BusinessProfileActivity.this, MerchantSettingsBeneficialOwnersActivity.class);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            businessResetPin.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                startActivity(new Intent(BusinessProfileActivity.this, PINActivity.class)
-                        .putExtra("TYPE", "ENTER")
-                        .putExtra("screen", "ResetPIN"));
-            });
 
             switchOffLL = findViewById(R.id.switchOff);
             profileImage = findViewById(R.id.b_profileIV);
@@ -201,6 +133,76 @@ public class BusinessProfileActivity extends AppCompatActivity {
             setFaceLock();
             setTouchId();
             enableDisableMerchantSettings();
+
+            preferencesLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, PreferencesActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            businessResetPin.setOnClickListener(view -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(BusinessProfileActivity.this)) {
+                    if (isBiometric && ((isTouchId && Utils.isFingerPrint(BusinessProfileActivity.this)) || (isFaceLock))) {
+                        Utils.checkAuthentication(BusinessProfileActivity.this, CODE_AUTHENTICATION_VERIFICATION_RESET_PIN);
+                    } else {
+                        startActivity(new Intent(BusinessProfileActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "ResetPIN"));
+                    }
+                } else {
+                    startActivity(new Intent(BusinessProfileActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "ResetPIN"));
+                }
+
+            });
+
+            cpagreeementsLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, AgreementsActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            companyinfoLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, CompanyInfoDetails.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            dbainfoLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, DBAInfoDetails.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             switchOffLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -565,6 +567,10 @@ public class BusinessProfileActivity extends AppCompatActivity {
                                 Log.e("isTouch1", isTouchEnabled() + "");
                             }
 
+                            setToken();
+                            setFaceLock();
+                            setTouchId();
+
                         }
                     } catch (
                             Exception e) {
@@ -719,6 +725,18 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     Intent i = new Intent(BusinessProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
                             .putExtra("screen", "ChangePassword");
+                    startActivity(i);
+                }
+            } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION_RESET_PIN) {
+                if (resultCode == RESULT_OK) {
+                    Intent i = new Intent(BusinessProfileActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "CHOOSE")
+                            .putExtra("screen", "ResetPIN");
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(BusinessProfileActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "ResetPIN");
                     startActivity(i);
                 }
             }

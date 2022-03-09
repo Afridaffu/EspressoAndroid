@@ -45,7 +45,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
     LinearLayout addNewBOLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     CardView validateCV;
-    boolean isValidateEnabled = false;
+    boolean isValidateEnabled = false, isPostSuccess = false;
     Long mLastClickTime = 0L;
     boolean hasDrafts = false;
 
