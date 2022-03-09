@@ -786,14 +786,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             showProgressDialog();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    summaryViewModel.getApplicationSummaryData();
-                    //temporary API Call to proceed further,not required response
-                    summaryViewModel.fees();
-                }
-            }, 2000);
+            summaryViewModel.getApplicationSummaryData();
+            //temporary API Call to proceed further,not required response
+            summaryViewModel.fees();
         } catch (Exception e) {
             e.printStackTrace();
         }

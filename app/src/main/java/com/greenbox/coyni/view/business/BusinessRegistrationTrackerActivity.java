@@ -39,6 +39,7 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -60,7 +61,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private LoginViewModel loginViewModel;
     private String boAPICallFrom = "RESUME";
     private CardView mReviewCv;
-    private boolean review = false, isPostSuccess = false;
+    private boolean review = false;
     private ImageView bagIV;
 
     @Override
@@ -154,8 +155,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             bagIV = findViewById(R.id.bagIV);
             setKeyboardVisibilityListener(BusinessRegistrationTrackerActivity.this);
 
-            if (getIntent().getStringExtra("FROM").equalsIgnoreCase("login"))
-                businessTrackerCloseIV.setVisibility(GONE);
+//            if (getIntent().getStringExtra("FROM").equalsIgnoreCase("login"))
+//                businessTrackerCloseIV.setVisibility(GONE);
 
             objMyApplication = (MyApplication) getApplicationContext();
             businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
@@ -209,7 +210,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     if (addBusiness.equalsIgnoreCase("true")) {
                         loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                     } else {
-                        finish();
+                        Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
+                        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(dashboardIntent);
                     }
                 }
             });
@@ -442,14 +445,15 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             dbaStartTV.setVisibility(GONE);
                             dbaInProgressIV.setVisibility(VISIBLE);
 
-                        } else {
-                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
-                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
-                        dbaIncompleteTV.setText("Incomplete");
-                        dbaStartTV.setVisibility(VISIBLE);
-                        dbaInProgressIV.setVisibility(GONE);
-
-                    }
+                        }
+//                        else {
+//                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
+//                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
+//                            dbaIncompleteTV.setText("Incomplete");
+//                            dbaStartTV.setVisibility(VISIBLE);
+//                            dbaInProgressIV.setVisibility(GONE);
+//
+//                        }
                     }
                 }
             });
@@ -466,14 +470,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             try {
 //                                businessIdentityVerificationViewModel.getDBAInfo();
 
-                                    objMyApplication.setCompanyInfoResp(companyInfoResp);
+                                objMyApplication.setCompanyInfoResp(companyInfoResp);
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
 
                                 if (cir.getName() != null && !cir.getName().equals("")
                                         || cir.getEmail() != null && !cir.getEmail().equals("")
                                         || cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")
                                         || cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")
-                                        || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("")&& !cir.getIdentificationType().equals("0")
+                                        || cir.getIdentificationType() != null && !cir.getIdentificationType().equals("") && !cir.getIdentificationType().equals("0")
                                         || cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")
                                         || cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")
                                         || cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")
