@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.Service;
@@ -204,6 +205,9 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                 if (signetResponse != null) {
                     if (signetResponse.getStatus().toUpperCase().equals("SUCCESS")) {
                         displaySuccess();
+                    }else{
+                        Utils.displayAlert(signetResponse.getError().getErrorDescription(),
+                                AddPaymentSignetActivity.this, "", signetResponse.getError().getFieldErrors().get(0));
                     }
                 }
             }
