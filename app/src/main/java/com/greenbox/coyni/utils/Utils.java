@@ -959,6 +959,7 @@ public class Utils {
                 dialog.dismiss();
                 try {
                     if (from.equals("PREFERENCES")) {
+
                         UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
                         userPreferenceModel.setLocalCurrency(0);
                         userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
@@ -966,6 +967,7 @@ public class Utils {
 
                         PreferencesActivity preferencesActivity = (PreferencesActivity) context;
                         preferencesActivity.customerProfileViewModel.updatePreferences(userPreferenceModel);
+
                     } else if (from.equals("COMPANY_INFO")) {
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());

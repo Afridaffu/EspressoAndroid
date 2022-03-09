@@ -52,7 +52,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BusinessCreateAccountsActivity extends BaseActivity {
+public class BusinessCreateAccountsActivity extends BaseActivity implements BusinessProfileRecyclerAdapter.OnSelectListner {
 
     private TextView userShortInfoTV, userNameTV, userBalanceTV,businessPersonalAccountNameTv,mTvUserIconText;
     private ImageView imgProfile, accountsCloseIV,mIvUserIcon;
@@ -254,7 +254,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     if(businessAccountList.size()!=0) {
                         brandsGV.setVisibility(View.VISIBLE);
                         LogUtils.d(TAG,"subSet"+subSet);
-                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, subSet);
+                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, subSet,BusinessCreateAccountsActivity.this);
                         brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);
@@ -314,4 +314,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         return groupPosition;
     }
 
+    @Override
+    public void selectedItem(int id) {
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -53,18 +54,22 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
+import com.greenbox.coyni.dialogs.BaseDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
 import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
+import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -81,7 +86,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener , BusinessProfileRecyclerAdapter.OnSelectListner{
 
     ImageView editProfileIV, userProfileIV, mIvUserIcon;
     private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV, defualtAccountDialogPersonalNameTV,
@@ -122,6 +127,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     String authenticateType = "";
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
+    private CustomerProfileViewModel customerProfileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +152,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             setKeyboardVisibilityListener(UserDetailsActivity.this);
 
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
+
             myApplicationObj = (MyApplication) getApplicationContext();
             userDetailsActivity = this;
             editProfileIV = findViewById(R.id.editProfileIV);
@@ -389,8 +397,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 findViewById(R.id.personalUserDetailsCV).setVisibility(View.VISIBLE);
             }
 
-            business_defaultaccountET.setOnClickListener(view -> {
 
+            business_defaultaccountET.setOnClickListener(view -> {
 
                 try {
                     final Dialog dialog = new Dialog(UserDetailsActivity.this);
@@ -420,7 +428,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     if(businessAccountList.size()!=0) {
                         brandsGV.setVisibility(View.VISIBLE);
                         LogUtils.d("TAG","subSet"+subSet);
-                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet);
+                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet,UserDetailsActivity.this);
                         brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);
@@ -471,6 +479,18 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void selectedItem(int id) {
+        LogUtils.d("profilesss","profiles"+id);
+
+        UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
+        userPreferenceModel.setLocalCurrency(0);
+        userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
+        userPreferenceModel.setPreferredAccount(id);
+        customerProfileViewModel.updatePreferences(userPreferenceModel);
+
     }
 
     public void initObservers() {
@@ -579,6 +599,36 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             }
         });
 
+        customerProfileViewModel.getUserPreferenceMutableLiveData().observe(this, new Observer<UserPreference>() {
+            @Override
+            public void onChanged(UserPreference userPreference) {
+                if (userPreference != null) {
+                    if (!userPreference.getStatus().toLowerCase().equals("success")) {
+                        Utils.displayAlert(userPreference.getError().getErrorDescription(), UserDetailsActivity.this, "", userPreference.getError().getFieldErrors().get(0));
+                    } else {
+                        myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
+                        myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
+                        if (myApplicationObj.getTempTimezoneID() == 0) {
+                            myApplicationObj.setStrPreference("PST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 1) {
+                            myApplicationObj.setStrPreference("America/Denver");
+                        } else if (myApplicationObj.getTempTimezoneID() == 2) {
+                            myApplicationObj.setStrPreference("CST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 3) {
+                            myApplicationObj.setStrPreference("America/New_York");
+                        } else if (myApplicationObj.getTempTimezoneID() == 4) {
+                            myApplicationObj.setStrPreference("HST");
+                        } else if (myApplicationObj.getTempTimezoneID() == 5) {
+                            myApplicationObj.setStrPreference("AST");
+                        }
+                       // timeZoneET.setText(myApplicationObj.getTimezone());
+                        Utils.showCustomToast(UserDetailsActivity.this, "Timezone has been updated", R.drawable.ic_custom_tick, "authid");
+
+                    }
+                }
+            }
+        });
+
         dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
@@ -588,7 +638,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     for (ProfilesResponse.Profiles c : filterList) {
                         if(c.getAccountType().equals(Utils.BUSINESS)){
                             businessAccountList.add(c);
-                            addDetails(String.valueOf(c.getCompanyName()),c.getDbaOwner());
+                            addDetails(String.valueOf(c.getCompanyName()),c.getDbaName(),c.getImage(),c.getId());
                         } else {
                             personalAccountList.add(c);
                         }
@@ -602,23 +652,35 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
     }
 
-    private int addDetails(String mainSet, String subSet) {
+    private int addDetails(String mainSet, String subSet ,String image ,int id) {
+
+        LogUtils.d("ADDDETAILS","adddetails"+mainSet+subSet+id);
         int groupPosition = 0;
         BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
+
         if (headerInfo == null) {
+
             headerInfo = new BusinessAccountsListInfo();
             headerInfo.setName(mainSet);
+            headerInfo.setMainImage(image);
+
             this.mainSet.put(mainSet, headerInfo);
             this.subSet.add(headerInfo);
         }
+
         ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
         int listSize = subList.size();
         listSize++;
+
         BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
         detailInfo.setName(subSet);
+        detailInfo.setDbaImage(image);
+        detailInfo.setId(id);
         subList.add(detailInfo);
+
         headerInfo.setSubsetName(subList);
         groupPosition = this.subSet.indexOf(headerInfo);
+
         return groupPosition;
     }
 

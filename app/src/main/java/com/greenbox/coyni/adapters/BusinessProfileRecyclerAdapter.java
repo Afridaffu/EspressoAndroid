@@ -167,10 +167,14 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private ArrayList<BusinessAccountsListInfo> mainSetName;
+    private OnSelectListner listener;
 
-    public BusinessProfileRecyclerAdapter(Context context, ArrayList<BusinessAccountsListInfo> deptList) {
+
+    public BusinessProfileRecyclerAdapter(Context context, ArrayList<BusinessAccountsListInfo> deptList,OnSelectListner listener) {
         this.context = context;
         this.mainSetName = deptList;
+        this.listener = listener;
+
     }
 
     @Override
@@ -194,12 +198,58 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             view = infalInflater.inflate(R.layout.business_profile_accounts_item_child, null);
         }
         TextView childItem = (TextView) view.findViewById(R.id.title);
+        TextView profileImageText = (TextView) view.findViewById(R.id.b_imageTextTV);
+        ImageView profileImage = (ImageView) view.findViewById(R.id.profile_img);
+        ImageView imvTickIcon = (ImageView) view.findViewById(R.id.tickIcon);
+
         if(detailInfo.getName()!=null) {
             childItem.setText(detailInfo.getName().trim());
         } else {
-            childItem.setText("Dba Name");
-
+            childItem.setText("Not Available");
         }
+
+        if (detailInfo.getIsSelected()) {
+           imvTickIcon.setVisibility(View.VISIBLE);
+        } else {
+           imvTickIcon.setVisibility(View.GONE);
+        }
+
+        if (detailInfo.getDbaImage() != null && !detailInfo.getDbaImage().trim().equals("")) {
+
+            profileImageText.setVisibility(View.GONE);
+            profileImage.setVisibility(View.VISIBLE);
+
+            Glide.with(context)
+                    .load(detailInfo.getDbaImage())
+                    .placeholder(R.drawable.ic_profile_male_user)
+                    .into(profileImage);
+        } else {
+            profileImage.setVisibility(View.GONE);
+            profileImageText.setVisibility(View.VISIBLE);
+
+            String imageText = "";
+            if(detailInfo.getName()!=null) {
+                imageText = imageText + detailInfo.getName().toUpperCase() +
+                        detailInfo.getName().toUpperCase();
+                profileImageText.setText(imageText);
+            }
+        }
+
+        childItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    LogUtils.d("position","postion  "+childPosition +"......"+ detailInfo.getId());
+
+                            detailInfo.setIsSelected(true);
+                            listener.selectedItem(detailInfo.getId());
+
+                    notifyDataSetChanged();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         return view;
     }
@@ -238,10 +288,32 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         }
 
         TextView heading = (TextView) view.findViewById(R.id.title);
+        TextView profileImageText = (TextView) view.findViewById(R.id.b_imageTextTV);
+        ImageView profileImage = (ImageView) view.findViewById(R.id.profile_img);
+
         if(headerInfo.getName()!=null) {
             heading.setText(headerInfo.getName());
         } else {
-            heading.setText("comapny Name");
+            heading.setText("Not Available");
+        }
+
+        if (headerInfo.getMainImage() != null && !headerInfo.getMainImage().trim().equals("")) {
+
+            profileImageText.setVisibility(View.GONE);
+            profileImage.setVisibility(View.VISIBLE);
+
+            Glide.with(context)
+                    .load(headerInfo.getMainImage())
+                    .placeholder(R.drawable.ic_profile_male_user)
+                    .into(profileImage);
+        } else {
+            profileImage.setVisibility(View.GONE);
+            profileImageText.setVisibility(View.VISIBLE);
+
+            String imageText = "";
+            imageText = imageText + headerInfo.getName().substring(0, 1).toUpperCase() +
+                    headerInfo.getName().substring(0, 1).toUpperCase();
+            profileImageText.setText(imageText);
         }
 
         return view;
@@ -256,6 +328,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+    public interface OnSelectListner{
+        void selectedItem(int id);
+    }
+
 
 }
 
