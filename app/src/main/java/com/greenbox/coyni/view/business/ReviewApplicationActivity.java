@@ -458,7 +458,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     sbCompany.append(cir.getAddressLine1());
                                 }
                                 if (cir.getAddressLine2() != null) {
-                                    sbCompany.append(",").append(cir.getAddressLine1());
+                                    sbCompany.append(",").append(cir.getAddressLine2());
                                 }
                                 if (cir.getCity() != null) {
                                     sbCompany.append(",").append(cir.getCity());
@@ -580,7 +580,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     sb.append(dbaInfo.getAddressLine1());
                                 }
                                 if (dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    sb.append(",").append(dbaInfo.getAddressLine1());
+                                    sb.append(",").append(dbaInfo.getAddressLine2());
                                 }
                                 if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
                                     sb.append(",").append(dbaInfo.getCity());
