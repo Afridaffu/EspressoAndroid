@@ -29,6 +29,7 @@
     <color name="primary_color">#00A6A2</color>
     <color name="inactive_color">#B5E2E0</color>
     <color name="primary_black">#151515</color>
+    <color name="primary_black_30">#4D151515</color>
     <color name="error_red">#E72222</color>
     <color name="dark_grey">#767676</color>
     <color name="viewcolor">#e8e8e8</color>

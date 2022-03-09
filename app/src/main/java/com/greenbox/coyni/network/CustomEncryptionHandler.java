@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.util.ArrayUtils;
 import com.greenbox.coyni.BuildConfig;
-import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 
 import org.json.JSONException;
@@ -84,7 +83,7 @@ public class CustomEncryptionHandler implements Interceptor {
             response = chain.proceed(request);
         }
         MediaType mediaType = MediaType.parse(APPLICATION_JSON);
-        if (response.code() == 400 && response.body() != null) {
+        if (response.body() != null) {
             String errorResponse = response.peekBody(2048).string();
             if (!Utils.isValidJson(errorResponse)) {
                 response = response.newBuilder()

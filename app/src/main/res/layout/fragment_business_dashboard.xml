@@ -140,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -256,11 +256,11 @@
 
                                     <LinearLayout
                                         android:id="@+id/ll_buy_tokens_first_time"
-                                        android:paddingTop="@dimen/_10sdp"
-                                        android:paddingBottom="@dimen/_10sdp"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:orientation="horizontal">
+                                        android:orientation="horizontal"
+                                        android:paddingTop="@dimen/_10sdp"
+                                        android:paddingBottom="@dimen/_10sdp">
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -385,9 +385,9 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
                                     android:layout_centerVertical="true"
                                     android:layout_marginStart="@dimen/_10sdp"
-                                    android:layout_alignParentLeft="true"
                                     android:layout_toStartOf="@+id/ll_processing_volume"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:text="@string/processing_volume"
@@ -399,10 +399,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
-                                    android:layout_marginEnd="@dimen/_13sdp"
                                     android:layout_centerVertical="true"
-                                    android:gravity="end"
+                                    android:layout_marginEnd="@dimen/_13sdp"
                                     android:background="@drawable/corner_bg_grey"
+                                    android:gravity="end"
                                     android:orientation="horizontal"
                                     android:padding="@dimen/_8sdp"
                                     android:paddingTop="@dimen/_4sdp"
@@ -795,10 +795,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
+                                android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
                                 android:paddingTop="@dimen/_18sdp"
                                 android:paddingBottom="@dimen/_18sdp"
-                                android:fontFamily="@font/opensans_bold"
                                 android:text="@string/view_m_transactions"
                                 android:textColor="@color/primary_green"
                                 android:textSize="@dimen/_11sdp" />
@@ -1787,8 +1787,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_30sdp"
-                                android:padding="@dimen/_10sdp"
                                 android:fontFamily="@font/opensans_regular"
+                                android:padding="@dimen/_10sdp"
                                 android:text="@string/identity_review_cancel_message"
                                 android:textAlignment="center"
                                 android:textColor="@color/dark_grey"
@@ -1953,6 +1953,88 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_get_started_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        app:cardCornerRadius="@dimen/_10sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgHead"
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_90sdp"
+                                android:layout_marginTop="@dimen/_47sdp"
+                                android:contentDescription="@string/additional_action_required"
+                                android:src="@drawable/ic_ssn_fail" />
+
+                            <View
+                                android:id="@+id/divider"
+                                android:layout_width="159.8564453125dp"
+                                android:layout_height="5.4189453125dp"
+                                android:background="#1c567675" />
+
+                            <TextView
+                                android:id="@+id/tvHead"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_28sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:padding="@dimen/_5sdp"
+                                android:text="@string/cp_almost"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:fontFamily="@font/opensans_regular"
+                                android:gravity="center"
+                                android:padding="@dimen/_5sdp"
+                                android:text="@string/complete_application_step_by_step"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_12ssp" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cv_app_get_started"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_42sdp"
+                                android:layout_marginLeft="@dimen/_12sdp"
+                                android:layout_marginTop="@dimen/_25sdp"
+                                android:layout_marginRight="@dimen/_12sdp"
+                                android:layout_marginBottom="@dimen/_10sdp"
+                                app:cardBackgroundColor="@color/primary_green"
+                                app:cardCornerRadius="@dimen/_21sdp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="@string/cp_getstarted"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_12ssp" />
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
 
             </LinearLayout>
         </ScrollView>

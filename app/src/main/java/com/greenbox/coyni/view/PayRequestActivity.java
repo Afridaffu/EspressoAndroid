@@ -504,16 +504,13 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     }
                 }
             });
-//            SetToken();
             SetFaceLock();
             SetTouchId();
-//            enableButtons();
             calculateFee("10");
             if (Utils.checkInternet(PayRequestActivity.this)) {
                 TransactionLimitRequest obj = new TransactionLimitRequest();
                 obj.setTransactionType(Integer.parseInt(Utils.payType));
                 obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
-//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 pDialog = Utils.showProgressDialog(PayRequestActivity.this);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
@@ -669,12 +666,46 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             userProfile = findViewById(R.id.imgProfile);
             userWalletAddre = findViewById(R.id.accAddress);
             requestedToUserId = userDetails.getData().getUserId();
-            if (userDetails.getData().getFullName().length() > 20) {
-                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
-            } else {
-                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
-            }
-//            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+//            if (userDetails.getData().getFullName().length() > 20) {
+//                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
+//            } else {
+//                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+//            }
+
+//            String strPhContact = "", strEcoSysName = "";
+//            if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
+//                if (userDetails.getData().getFullName().length() > 20) {
+//                    strEcoSysName = userDetails.getData().getFullName().substring(0, 20) + "...";
+//                } else {
+//                    strEcoSysName = userDetails.getData().getFullName();
+//                }
+//            } else {
+//                strEcoSysName = "";
+//            }
+//            if (objMyApplication.getObjPhContacts().containsKey(userDetails.getData().getPhoneNumber().replace("(1)", ""))) {
+//                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
+//                } else {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
+//                }
+//            } else {
+//                strPhContact = "";
+//            }
+//            if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
+//                holder.tvUserName.setText(Utils.capitalize(strPhContact));
+//                holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+//            } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
+//                holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
+//                holder.tvWalletAddress.setVisibility(View.GONE);
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
+//            } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
+//                holder.tvUserName.setText(Utils.capitalize(strPhContact));
+//                holder.tvWalletAddress.setVisibility(View.GONE);
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+//            }
+
+
             strUserName = Utils.capitalize(userDetails.getData().getFullName());
             String imageTextNew = "";
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
