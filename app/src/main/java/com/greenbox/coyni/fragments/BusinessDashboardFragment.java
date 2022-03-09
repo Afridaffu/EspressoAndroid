@@ -151,7 +151,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showUserData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
-        if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
+        if (!getActivity().getIntent().getBooleanExtra("showGetStarted", false) &&
+                myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
                 && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
             showGetStartedView();
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null

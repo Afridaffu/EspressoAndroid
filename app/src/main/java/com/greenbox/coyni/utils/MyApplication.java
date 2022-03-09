@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.reguser.Contacts;
 import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
@@ -105,6 +106,7 @@ public class MyApplication extends Application {
     BuyTokenRequest buyRequest;
     BOResp beneficialOwnersResponse;
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
+    ApplicationSubmitResponseModel submitResponseModel;
 
     public LatestTxnResponse getListLatestTxn() {
         return listLatestTxn;
@@ -949,6 +951,14 @@ public class MyApplication extends Application {
 
     public void setObjPhContacts(HashMap<String, RegisteredUsersRequest> objPhContacts) {
         this.objPhContacts = objPhContacts;
+    }
+
+    public ApplicationSubmitResponseModel getSubmitResponseModel() {
+        return submitResponseModel;
+    }
+
+    public void setSubmitResponseModel(ApplicationSubmitResponseModel submitResponseModel) {
+        this.submitResponseModel = submitResponseModel;
     }
 
     public Date getDate(String date) {

@@ -715,7 +715,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (submissionViewModel != null) {
                         dismissDialog();
                         if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            objMyApplication.setSubmitResponseModel(submissionViewModel);
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            intent.putExtra("showGetStarted", true);
                             startActivity(intent);
                         } else {
                             Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
