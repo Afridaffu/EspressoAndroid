@@ -61,7 +61,7 @@
             android:fontFamily="@font/opensans_semibold"
             android:digits="0123456789"
             android:imeOptions="actionNext"
-            android:autofillHints="creditCardSecurityCode"/>
+            android:autofillHints="AUTOFILL_HINT_SMS_OTP"/>
 
 
     </LinearLayout>
