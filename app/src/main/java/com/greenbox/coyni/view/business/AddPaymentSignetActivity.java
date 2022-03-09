@@ -128,8 +128,6 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(AddPaymentSignetActivity.this);
                     Utils.populateStates(AddPaymentSignetActivity.this, etState, objMyApplication);
                 }
             });
@@ -137,6 +135,9 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
             etlState.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddPaymentSignetActivity.this);
+
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -235,7 +236,6 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             nameErrorLL.setVisibility(VISIBLE);
                             nameErrorTV.setText("Field Required");
                         }
-
                         if (etName.getText().toString().length() > 0 && !etName.getText().toString().substring(0, 1).equals(" ")) {
                             etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1));
                         }
@@ -261,7 +261,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                 try {
                     if (!b) {
                         etWalletId.setHint("");
-                        if (etWalletId.getText().toString().trim().length() > 1) {
+                        if (etWalletId.getText().toString().trim().length() > 0) {
                             isWallet = true;
                             walletErrorLL.setVisibility(GONE);
                             etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState());
@@ -301,6 +301,9 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                             address1ErrorLL.setVisibility(VISIBLE);
                             address1ErrorTV.setText("Field Required");
+                        }if (etAddress1.getText().toString().length() > 0 && !etAddress1.getText().toString().substring(0, 1).equals(" ")) {
+                            etAddress1.setText(etAddress1.getText().toString().substring(0, 1).toUpperCase() + etAddress1.getText().toString().substring(1));
+                            Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_black));
                         }
                     } else {
                         etAddress1.setHint("Billing Address Line 1");
@@ -327,6 +330,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         } else {
                             etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                        }if (etAddress2.getText().toString().length() > 0 && !etAddress2.getText().toString().substring(0, 1).equals(" ")) {
+                            etAddress2.setText(etAddress2.getText().toString().substring(0, 1).toUpperCase() + etAddress2.getText().toString().substring(1));
                         }
                     } else {
                         etAddress2.setHint("Billing Address Line 2(Optional)");
@@ -355,6 +360,9 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                             cityErrorLL.setVisibility(VISIBLE);
                             cityErrorTV.setText("Field Required");
+                        }if (etCity.getText().toString().length() > 0 && !etCity.getText().toString().substring(0, 1).equals(" ")) {
+                            etCity.setText(etCity.getText().toString().substring(0, 1).toUpperCase() + etCity.getText().toString().substring(1));
+                            Utils.setUpperHintColor(etlCity, getColor(R.color.primary_black));
                         }
                     } else {
                         etCity.setHint("City");
