@@ -57,8 +57,11 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
+import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
@@ -71,6 +74,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -100,6 +104,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
     Long mLastClickTime = 0L;
+    private String personalAccountExist;
+
     String emailId = "", address = "", phoneNo = "";
 
     //Business
@@ -114,6 +120,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
     String authenticateType = "";
+    private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
+    private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -400,7 +408,6 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     businessPersonalProfileAccount = dialog.findViewById(R.id.profileLL);
                     defualtAccountDialogPersonalNameTV = dialog.findViewById(R.id.defualt_account_dialog_personal_name);
 
-
                     Window window = dialog.getWindow();
                     window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.75));
 
@@ -410,16 +417,18 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
 
-                    if (businessAccountList.size() != 0) {
+                    if(businessAccountList.size()!=0) {
                         brandsGV.setVisibility(View.VISIBLE);
-//                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, businessAccountList);
-//                        brandsGV.setAdapter(listAdapter);
+                        LogUtils.d("TAG","subSet"+subSet);
+                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet);
+                        brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);
                     }
 
-                    if (personalAccountList.size() != 0) {
+                    if(personalAccountList.size()!=0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
+                        personalAccountExist = "true";
                         String iconText = "";
                         if (personalAccountList.get(0).getCompanyName() != null
                         ) {
@@ -428,7 +437,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                             String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
 
                         }
-                        if (personalAccountList.get(0).getImage() != null) {
+                        if (personalAccountList.get(0).getImage()!= null) {
                             mTvUserIconText.setVisibility(View.GONE);
                             mIvUserIcon.setVisibility(View.VISIBLE);
                             Glide.with(UserDetailsActivity.this)
@@ -440,8 +449,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                             mIvUserIcon.setVisibility(View.GONE);
                             mTvUserIconText.setText(iconText);
                         }
-                        defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getCompanyName());
+                        defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getFullName());
                     } else {
+                        personalAccountExist = "false";
                         businessPersonalProfileAccount.setVisibility(View.GONE);
                     }
 
@@ -576,8 +586,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     filterList = profilesResponse.getData();
 
                     for (ProfilesResponse.Profiles c : filterList) {
-                        if (c.getAccountType().equals(Utils.BUSINESS)) {
+                        if(c.getAccountType().equals(Utils.BUSINESS)){
                             businessAccountList.add(c);
+                            addDetails(String.valueOf(c.getCompanyName()),c.getDbaOwner());
                         } else {
                             personalAccountList.add(c);
                         }
@@ -589,6 +600,26 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             }
         });
 
+    }
+
+    private int addDetails(String mainSet, String subSet) {
+        int groupPosition = 0;
+        BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
+        if (headerInfo == null) {
+            headerInfo = new BusinessAccountsListInfo();
+            headerInfo.setName(mainSet);
+            this.mainSet.put(mainSet, headerInfo);
+            this.subSet.add(headerInfo);
+        }
+        ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
+        int listSize = subList.size();
+        listSize++;
+        BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+        detailInfo.setName(subSet);
+        subList.add(detailInfo);
+        headerInfo.setSubsetName(subList);
+        groupPosition = this.subSet.indexOf(headerInfo);
+        return groupPosition;
     }
 
     private void bindImage(String imageString) {
