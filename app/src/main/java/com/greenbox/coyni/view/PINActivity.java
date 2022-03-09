@@ -224,6 +224,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
                                                 i.putExtra("screen", getIntent().getStringExtra("screen"));
                                                 startActivity(i);
+                                                finish();
                                                 break;
                                             case "login":
                                                 if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
@@ -505,6 +506,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 Intent i = new Intent(PINActivity.this, CreatePasswordActivity.class);
                                                 i.putExtra("screen", getIntent().getStringExtra("screen"));
                                                 startActivity(i);
+                                                finish();
                                                 break;
                                             case "login":
                                                 if (objMyApplication.getBiometric() && objMyApplication.getLocalBiometric()) {
@@ -1023,23 +1025,26 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void launchDashboard() {
-        try {
-            Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-                    dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
-                } else {
-                    dashboardIntent = new Intent(PINActivity.this, BusinessRegistrationTrackerActivity.class);
-                    dashboardIntent.putExtra("FROM",strScreen);
-                }
-            }
-            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PINActivity.this.startActivity(dashboardIntent);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+
+        objMyApplication.launchDashboard(this, strScreen);
+
+//        try {
+//            Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
+//            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+//                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+//                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
+//                    dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
+//                } else {
+//                    dashboardIntent = new Intent(PINActivity.this, BusinessRegistrationTrackerActivity.class);
+//                    dashboardIntent.putExtra("FROM", strScreen);
+//                }
+//            }
+//            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            PINActivity.this.startActivity(dashboardIntent);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     private void WithdrawMethod() {

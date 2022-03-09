@@ -52,8 +52,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessTypeListAdapter;
@@ -77,7 +75,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -86,6 +83,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -96,14 +94,20 @@ import java.util.regex.Pattern;
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
+
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
-    public static enum BUSINESS_ACCOUNT_STATUS
-    {
+    public static enum BUSINESS_ACCOUNT_STATUS {
+        UNDER_REVIEW("Under Review"),
+        ACTIVE("Active"),
+        DEACTIVE("DeActivated"),
+        ACTION_REQUIRED("Action Required"),
+        REGISTRATION_CANCELED("Canceled"),
         UNVERIFIED("Unverified"),
-        ADDITIONAL_DETAILS_REQUIRED("AdditionalDetailsRequired"),
-        CANCELLED("Cancelled"),
-        FAILED("Failed"),
-        ACTIVE("Active");
+        INFO_SHARED("Info Shared"),
+        EXPIRED("Expired"),
+        PENDING("Pending"),
+        TERMINATED("Terminated"),
+        DECLINED("Declined");
 
         private String status;
 
@@ -115,6 +119,7 @@ public class Utils {
             return status;
         }
     }
+
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strDesc = "abcd";
@@ -224,15 +229,24 @@ public class Utils {
 
     public static final int boTargetPercentage = 51;
 
-    public static final String teamFirstName="TeamMemberFirstName";
-    public static final String teamLastName="TeamMemberLastName";
-    public static final String teamImageName="ImageName";
-    public static final String teamRoleName="RoleName";
-    public static final String teamRole="Role";
-    public static final String teamStatus="Status";
-    public static final String teamEmailAddress="TeamEmailAddress";
-    public static final String teamPhoneNumber="TeamPhoneNumber";
-    public static final String teamMemberId="TeamMemberId";
+    public static final String teamFirstName = "TeamMemberFirstName";
+    public static final String teamLastName = "TeamMemberLastName";
+    public static final String teamImageName = "ImageName";
+    public static final String teamRoleName = "RoleName";
+    public static final String teamRole = "Role";
+    public static final String teamStatus = "Status";
+    public static final String teamEmailAddress = "TeamEmailAddress";
+    public static final String teamPhoneNumber = "TeamPhoneNumber";
+    public static final String teamMemberId = "TeamMemberId";
+
+    public static final String boName="BOName";
+    public static final int boOwnershipPercentage=50;
+    public static final String boAddress="BoAddress";
+    public static final String boDob="BoDob";
+    public static final String boSSN="BoSSN";
+
+    public static final int position=0;
+
 
 
     public static String getStrLang() {
@@ -415,7 +429,7 @@ public class Utils {
         try {
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MMM dd, yyyy");
+            spf = new SimpleDateFormat("dd/MM/yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -617,6 +631,12 @@ public class Utils {
     public static String convertToUSFormat(String strPhone) {
         String strNumber = "";
         strNumber = "(" + strPhone.substring(0, 3) + ") " + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
+        return strNumber;
+    }
+
+    public static String convertToUSFormatNew(String strPhone) {
+        String strNumber = "";
+        strNumber = strPhone.substring(0, 3) + "-" + strPhone.substring(3, 6) + "-" + strPhone.substring(6, strPhone.length());
         return strNumber;
     }
 
@@ -1220,6 +1240,19 @@ public class Utils {
         return strDate;
     }
 
+    public static String convertTxnDatebusiness(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MMM dd,yyyy");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public static String convertTwoDecimalPoints(Double value) {
         return df.format(value);
     }
@@ -1314,6 +1347,20 @@ public class Utils {
         dialog.show();
     }
 
+    public static String getBusinessName(MyApplication myApplicationObj, String key) {
+        LogUtils.d("key","key"+key);
+        LogUtils.d("myApplicationObj","myApplicationObj"+myApplicationObj);
+        if (myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
+            List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
+            for(BusinessType businessType : listBT) {
+                if(businessType.getKey().equalsIgnoreCase(key)) {
+                    return businessType.getValue();
+                }
+            }
+        }
+        return key;
+    }
+
     public static void populateBusinessTypes(Context context, EditText editText, MyApplication myApplicationObj, String from) {
         try {
             final Dialog dialog = new Dialog(context);
@@ -1356,6 +1403,7 @@ public class Utils {
             }
 
             BusinessTypeListAdapter finalBTListAdapter = businessTypeListAdapter;
+            Collections.sort(listBT);
             List<BusinessType> finalListBT = listBT;
             searchET.addTextChangedListener(new TextWatcher() {
                 @Override

@@ -40,7 +40,6 @@ import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
-import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -105,7 +104,8 @@ public class OnboardActivity extends BaseActivity {
             isBiometric = Utils.checkBiometric(OnboardActivity.this);
             Utils.setIsBiometric(isBiometric);
 
-            if (!isDeviceID()) {
+//            if (!isDeviceID()) {
+            if (!objMyApplication.isDeviceID()) {
                 Utils.generateUUID(OnboardActivity.this);
             }
             strDeviceID = Utils.getDeviceID();
@@ -320,17 +320,19 @@ public class OnboardActivity extends BaseActivity {
                         if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
 
-                            Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
-                            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-                            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-                                dashboardIntent = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
-                            } else {
-                                dashboardIntent = new Intent(OnboardActivity.this, BusinessRegistrationTrackerActivity.class);
-                                dashboardIntent.putExtra("FROM","login");
-                            }
-                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(dashboardIntent);
+                            objMyApplication.launchDashboard(OnboardActivity.this, "login");
+
+//                            Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
+//                            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+//                            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+//                                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
+//                                dashboardIntent = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
+//                            } else {
+//                                dashboardIntent = new Intent(OnboardActivity.this, BusinessRegistrationTrackerActivity.class);
+//                                dashboardIntent.putExtra("FROM","login");
+//                            }
+//                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(dashboardIntent);
                         }
                     }
                 }
@@ -431,15 +433,15 @@ public class OnboardActivity extends BaseActivity {
         }
     }
 
-    private Boolean isDeviceID() {
-        Boolean value = false;
-        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
-        value = prefs.getBoolean("isDevice", false);
-        if (value) {
-            Utils.setDeviceID(prefs.getString("deviceId", ""));
-        }
-        return value;
-    }
+//    private Boolean isDeviceID() {
+//        Boolean value = false;
+//        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+//        value = prefs.getBoolean("isDevice", false);
+//        if (value) {
+//            Utils.setDeviceID(prefs.getString("deviceId", ""));
+//        }
+//        return value;
+//    }
 
     private void getVersionName() {
         try {

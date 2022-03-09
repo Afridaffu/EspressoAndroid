@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.bank.BanksResponseModel;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
 import com.greenbox.coyni.network.ApiService;
@@ -26,12 +27,16 @@ public class BusinessApplicationSummaryViewModel extends AndroidViewModel {
         super(application);
     }
     private MutableLiveData<ApplicationSummaryModelResponse> summaryMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<CompanyInfoUpdateResp> feesMutableLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<ApplicationSummaryModelResponse> getSummaryMutableLiveData() {
         return summaryMutableLiveData;
     }
 
+    public MutableLiveData<CompanyInfoUpdateResp> getFeesMutableLiveData() {
+        return feesMutableLiveData;
+    }
 
     public void getApplicationSummaryData() {
         try {
@@ -67,5 +72,37 @@ public class BusinessApplicationSummaryViewModel extends AndroidViewModel {
         }
     }
 
+    public void fees() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CompanyInfoUpdateResp> mCall = apiService.fees();
+            mCall.enqueue(new Callback<CompanyInfoUpdateResp>() {
+                @Override
+                public void onResponse(Call<CompanyInfoUpdateResp> call, Response<CompanyInfoUpdateResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            CompanyInfoUpdateResp obj = response.body();
+                            feesMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CompanyInfoUpdateResp>() {}.getType();
+                            CompanyInfoUpdateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            feesMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        feesMutableLiveData.setValue(null);
+                    }
+                }
+                @Override
+                public void onFailure(Call<CompanyInfoUpdateResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    feesMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 }

@@ -169,17 +169,18 @@
                             android:layout_marginBottom="@dimen/_7sdp"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
 
                         <ImageView
+                            android:id="@+id/llEIN"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:paddingTop="@dimen/_3sdp"
+                            android:background="@drawable/ic_eyeclose"
                             android:paddingBottom="@dimen/_3sdp"
-                            android:src="@drawable/ic_eyeopen" />
+                            />
                     </LinearLayout>
 
                     <View
@@ -542,7 +543,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Restaurant"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -592,7 +592,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Http://www.firebbq.com"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -619,7 +618,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="$ 80,000.00"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -646,7 +644,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="$ 6,000.00"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -673,7 +670,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="$ 35.00"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -700,7 +696,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Jonathanjostar@gmail.com"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -727,7 +722,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="123-456-7890"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -754,7 +748,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_7sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="3131 Camino Del Rio, San Diego,\nCA, 92108"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -1136,7 +1129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
-                    android:text=" Terms of Service"
+                    android:text="@string/termsservice"
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_11ssp" />
 

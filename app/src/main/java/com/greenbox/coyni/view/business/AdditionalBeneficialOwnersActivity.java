@@ -47,6 +47,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
     CardView validateCV;
     boolean isValidateEnabled = false;
     Long mLastClickTime = 0L;
+    boolean hasDrafts = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +83,28 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
             backIV.setOnClickListener(v -> finish());
 
             addNewBOLL.setOnClickListener(view -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
+                try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    if (hasDrafts) {
+                        Utils.displayAlert("Please complete draft beneficial owner information.", this, "", "");
+                    } else {
+                        try {
+                            if (objMyApplication.getBeneficialOwnersResponse().getData().size() < 20) {
+                                businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                            } else {
+                                Utils.showCustomToast(this, "You are exceeded your benificial accounts max limit.", 0, "");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                businessIdentityVerificationViewModel.postBeneficialOwnersID();
             });
 
             validateCV.setOnClickListener(view -> {
@@ -133,8 +151,12 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
                             loadBeneficialOwners();
                         } else {
-                            notFoundTV.setVisibility(View.VISIBLE);
+                            notFoundTV.setVisibility(View.GONE);
+                            percentageTV.setVisibility(View.VISIBLE);
+                            addNewBOLL.setVisibility(View.VISIBLE);
                             beneficialOwnersRV.setVisibility(View.GONE);
+                            isValidateEnabled = false;
+                            validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         }
                     }
                 }
@@ -229,35 +251,53 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
             notFoundTV.setVisibility(View.GONE);
             beneficialOwnersRV.setVisibility(View.VISIBLE);
 
+            int totalPercentage = 0;
+
+            for (int i = 0; i < objMyApplication.getBeneficialOwnersResponse().getData().size(); i++) {
+                totalPercentage = totalPercentage + objMyApplication.getBeneficialOwnersResponse().getData().get(i).getOwnershipParcentage();
+                BOResp.BeneficialOwner bo = objMyApplication.getBeneficialOwnersResponse().getData().get(i);
+
+                try {
+                    objMyApplication.getBeneficialOwnersResponse().getData().get(i).setDraft(bo.getFirstName().equals("") || bo.getLastName().equals("") || bo.getDob().equals("")
+                            || bo.getOwnershipParcentage() <= 0 || bo.getAddressLine1().equals("")
+                            || bo.getCity().equals("") || bo.getState().equals("") || bo.getZipCode().equals("")
+                            || bo.getSsn().equals("") || bo.getRequiredDocuments().size() <= 0);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    objMyApplication.getBeneficialOwnersResponse().getData().get(i).setDraft(true);
+                }
+
+                if (objMyApplication.getBeneficialOwnersResponse().getData().get(i).isDraft())
+                    hasDrafts = true;
+            }
+
             BeneficialOwnersAdapter beneficialOwnersAdapter = new BeneficialOwnersAdapter(this, objMyApplication.getBeneficialOwnersResponse());
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
             beneficialOwnersRV.setLayoutManager(mLayoutManager);
             beneficialOwnersRV.setItemAnimator(new DefaultItemAnimator());
             beneficialOwnersRV.setAdapter(beneficialOwnersAdapter);
 
-            if (objMyApplication.getBeneficialOwnersResponse().getData().size() == 5) {
+
+            if (totalPercentage >= Utils.boTargetPercentage && !hasDrafts) {
+                percentageTV.setVisibility(View.GONE);
+                isValidateEnabled = true;
+                validateCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+            } else {
+                percentageTV.setVisibility(View.VISIBLE);
+                isValidateEnabled = false;
+                validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+            }
+
+            if (totalPercentage >= 100) {
                 addNewBOLL.setVisibility(View.GONE);
                 percentageTV.setVisibility(View.GONE);
             } else {
                 addNewBOLL.setVisibility(View.VISIBLE);
-                percentageTV.setVisibility(View.VISIBLE);
-            }
-
-            int totalPercentage = 0;
-            for (int i = 0; i < objMyApplication.getBeneficialOwnersResponse().getData().size(); i++) {
-                totalPercentage = totalPercentage + objMyApplication.getBeneficialOwnersResponse().getData().get(i).getOwnershipParcentage();
-            }
-
-            if (totalPercentage >= Utils.boTargetPercentage) {
-                isValidateEnabled = true;
-                validateCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-            } else {
-                isValidateEnabled = false;
-                validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                percentageTV.setVisibility(View.VISIBLE);
             }
         } else {
-            notFoundTV.setVisibility(View.VISIBLE);
-            beneficialOwnersRV.setVisibility(View.GONE);
+            addNewBOLL.setVisibility(View.VISIBLE);
+            percentageTV.setVisibility(View.VISIBLE);
 
             isValidateEnabled = false;
             validateCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));

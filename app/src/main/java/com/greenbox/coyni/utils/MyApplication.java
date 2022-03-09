@@ -4,18 +4,15 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.greenbox.coyni.model.Agreements;
-import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
@@ -27,8 +24,6 @@ import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
-import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
-import com.greenbox.coyni.model.cards.CardsDataItem;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -47,13 +42,14 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.wallet.WalletResponse;
-import com.greenbox.coyni.model.users.AccountLimitsData;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.WebViewActivity;
-import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -976,6 +972,45 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return objResponse;
+    }
+
+    public void launchDashboard(Context context, String fromScreen) {
+        try {
+            Intent dashboardIntent = new Intent(context, DashboardActivity.class);
+            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                BusinessTrackerResponse btr = getBusinessTrackerResponse();
+                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+
+                    if (btr.getData().isApplicationSummary() && btr.getData().isProfileVerified()) {
+                        dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
+                    } else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+                    } else {
+                        dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+                        dashboardIntent.putExtra("FROM", fromScreen);
+                    }
+
+                } else {
+                    dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+                    dashboardIntent.putExtra("FROM", fromScreen);
+                }
+            }
+            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(dashboardIntent);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Boolean isDeviceID() {
+        Boolean value = false;
+        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+        value = prefs.getBoolean("isDevice", false);
+        if (value) {
+            Utils.setDeviceID(prefs.getString("deviceId", ""));
+        }
+        return value;
     }
 
 }

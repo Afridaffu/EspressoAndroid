@@ -176,6 +176,7 @@
     <string name="learn_more1"> <u>Learn More</u></string>
     <string name="learn"><u>Learn More</u></string>
     <string name="privay_policy"><u>Privay Policy</u></string>
+    <string name="termsservice"><u> Terms of Service</u></string>
 
     <string name="EST">Eastern (EST)</string>
     <string name="CST">Central (CST)</string>
@@ -193,6 +194,9 @@
     <string name="view_less"><u>View less</u></string>
     <string name="bank_exhausthead">Too Many Bank Accounts</string>
     <string name="bank_exhaust">There is an account limit of 4 total bank accounts, and it looks like you surpassed that number via the Fiserv bank account verification process. Please try again or remove one or more of your current bank account payment methods.</string>
+    <string name="bank_delete_relink">Relink</string>
+    <string name="bank_delete_keep">Keep</string>
+    <string name="bank_delete_title">Delete Bank Account</string>
 
     <string name="currency">CYN</string>
     <string name="edit"><u>Edit</u></string>
@@ -245,8 +249,9 @@
     <string name="AB_owners">Additional Beneficial Owner(s)</string>
     <string name="Beneficialownership">Beneficial ownership you have added is less\nthan 51%, you will need to add an additional</string>
     <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
-    <string name="percentage"> 51% or</string>
+    <string name="percentage">\%</string>
     <string name="greater">greater.</string>
+    <string name="percentageSymbol">%</string>
     <string name="no_beneficial_owner_is_found">No Beneficial Owner is found</string>
     <string name="ownership">Ownership(%)</string>
     <string name="beneficialnreach">Please add an additional beneficial owner below\n to reach 51%</string>
@@ -584,5 +589,10 @@
 
     <string name="companyemail">Company’s Email</string>
     <string name="bankdeletemsg">Are you sure you want to delete bank account? To submit the application you have to have at least 1 bank account. Or use the button below to relink.</string>
+
+    <string name="ownership_percentage">\% Ownership"</string>
+    <string name="ownership_title">Ownership"</string>
+    <string name="primary">Primary</string>
+    <string name="arrow_right">ArrowRight</string>
 
 </resources>

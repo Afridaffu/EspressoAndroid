@@ -24,7 +24,6 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.fragments.BaseFragment;
 import com.greenbox.coyni.fragments.BusinessAccountFragment;
 import com.greenbox.coyni.fragments.BusinessDashboardFragment;
-import com.greenbox.coyni.fragments.BusinessTransactionsFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletName;
@@ -51,6 +50,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile;
     private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile;
+    private String userName = "";
 
     private enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
 
@@ -82,14 +82,13 @@ public class BusinessDashboardActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        pushFragment(new BusinessDashboardFragment());
 
     }
 
     public void onDashboardTabSelected(View view) {
         try {
             if (selectedTab != Tabs.DASHBOARD) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
@@ -106,7 +105,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onAccountTabSelected(View view) {
         try {
             if (selectedTab != Tabs.ACCOUNT) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
@@ -123,15 +122,17 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void onTransactionsTabSelected(View view) {
         try {
             if (selectedTab != Tabs.TRANSACTIONS) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                     return;
                 }
 
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                selectedTab = Tabs.TRANSACTIONS;
-                setSelectedTab(false, false, true, false);
-                LogUtils.d(TAG, "onTransactionsTabSelected");
-                pushFragment(new BusinessTransactionsFragment());
+                startActivity(new Intent(BusinessDashboardActivity.this, MerchantTransactionListActivity.class));
+
+//                selectedTab = Tabs.TRANSACTIONS;
+//                setSelectedTab(false, false, true, false);
+//                LogUtils.d(TAG, "onTransactionsTabSelected");
+//                pushFragment(new BusinessTransactionsFragment());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -140,7 +141,7 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void onProfileTabSelected(View view) {
         try {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
             }
 
@@ -350,14 +351,20 @@ public class BusinessDashboardActivity extends BaseActivity {
                 && objMyApplication.getMyProfile().getData().getFirstName() != null) {
             String firstName = objMyApplication.getMyProfile().getData().getFirstName();
             iconText = firstName.substring(0, 1).toUpperCase();
-            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+            userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
             if (objMyApplication.getMyProfile().getData().getLastName() != null) {
                 String lastName = objMyApplication.getMyProfile().getData().getLastName();
                 iconText = iconText + lastName.substring(0, 1).toUpperCase();
-                username = username + " ";
-                username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                userName = userName + " ";
+                userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
             }
-            mTvUserName.setText(getResources().getString(R.string.dba_name, username));
+            mTvUserName.setText(getResources().getString(R.string.dba_name, userName));
+
+            if (userName != null && userName.length() > 21) {
+                mTvUserName.setText(userName.substring(0, 21) + " ");
+            } else {
+                mTvUserName.setText(userName);
+            }
         }
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getImage() != null) {
@@ -372,6 +379,25 @@ public class BusinessDashboardActivity extends BaseActivity {
             mIvUserIcon.setVisibility(View.GONE);
             mTvUserIconText.setText(iconText);
         }
+
+        mTvUserName.setOnClickListener(view -> {
+            //String name = mTvUserName.getText().toString();
+            if (mTvUserName.getText().toString().contains("...")) {
+                if (userName.length() == 21 || userName.length() > 21) {
+                    mTvUserName.setText(userName.substring(0, 20));
+                } else {
+                    mTvUserName.setText(userName);
+                }
+            } else {
+                if (userName.length() == 21) {
+                    mTvUserName.setText(userName.substring(0, 20) + "...");
+                } else if (userName.length() > 22) {
+                    mTvUserName.setText(userName.substring(0, 22) + "...");
+                } else {
+                    mTvUserName.setText(userName);
+                }
+            }
+        });
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {
@@ -399,6 +425,5 @@ public class BusinessDashboardActivity extends BaseActivity {
 
         }
     }
-
 
 }

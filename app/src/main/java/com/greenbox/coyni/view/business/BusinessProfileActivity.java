@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -42,6 +41,7 @@ import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
+import com.greenbox.coyni.view.GiftCardBindingLayoutActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -56,7 +56,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
-            businessResetPin, preferencesLL;
+            businessResetPin, preferencesLL, beneficialOwnersLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -78,6 +78,8 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private Long mLastClickTime = 0L;
     TextView tvVersion;
     ScrollView profileSV;
+    MyApplication objMyApplication;
+    String fullname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +159,18 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-
+            beneficialOwnersLL = findViewById(R.id.beneficialOwnersLL);
+            beneficialOwnersLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, MerchantSettingsBeneficialOwnersActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             businessResetPin.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
@@ -279,6 +292,25 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 }
             });
 
+            userFullname.setOnClickListener(view -> {
+                if (userFullname.getText().toString().contains("...")) {
+                    if (fullname.length() == 21 || fullname.length() > 21) {
+                        userFullname.setText(fullname.substring(0, 20));
+                    } else {
+                        userFullname.setText(fullname);
+                    }
+                } else {
+                    if (fullname.length() == 21) {
+                        userFullname.setText(fullname.substring(0, 20) + "...");
+                    } else if (fullname.length() > 22) {
+                        userFullname.setText(fullname.substring(0, 22) + "...");
+                    } else {
+                        userFullname.setText(fullname);
+                    }
+                }
+            });
+
+
             findViewById(R.id.business_UserDetailsLL).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -293,7 +325,6 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-
 
             findViewById(R.id.b_cpChangePassword).setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -372,6 +403,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
+            
 
             if (myApplication.getMyProfile().getData().getAccountStatus() != null) {
                 try {
@@ -393,8 +425,9 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     //                    }
                     account_status.setText(myApplication.getMyProfile().getData().getAccountStatus());
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
-                    String fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
+                    fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
                     userFullname.setText(fullname);
+
                 } catch (Resources.NotFoundException e) {
                     e.printStackTrace();
                 }
@@ -457,14 +490,14 @@ public class BusinessProfileActivity extends AppCompatActivity {
                         if (enablePopup != null) {
                             enablePopup.dismiss();
                         }
-                        //                    dialog.dismiss();
                         if (biometricResponse != null) {
                             saveToken(biometricResponse.getData().getToken());
-                            Utils.generateUUID(BusinessProfileActivity.this);
+//                            Utils.generateUUID(BusinessProfileActivity.this);
+                            if (!myApplication.isDeviceID()) {
+                                Utils.generateUUID(BusinessProfileActivity.this);
+                            }
                             if (!isSwitchEnabled) {
                                 if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
-                                    //                                saveFace("false");
-                                    //                                saveThumb("true");
                                     if (!isLoggedOut) {
                                         saveFace("false");
                                         saveThumb("true");
@@ -544,6 +577,12 @@ public class BusinessProfileActivity extends AppCompatActivity {
                                             account_id.setText("Account ID M-" + profile.getData().getId());
                                             String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
                                             userFullname.setText(fullname);
+
+                                            if (userFullname != null && userFullname.length() > 22) {
+                                                userFullname.setText(fullname.substring(0, 22) + " ");
+                                            } else {
+                                                userFullname.setText(fullname);
+                                            }
                                         } catch (Resources.NotFoundException e) {
                                             e.printStackTrace();
                                         }

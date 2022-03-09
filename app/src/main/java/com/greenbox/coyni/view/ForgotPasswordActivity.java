@@ -149,13 +149,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         mLastClickTime = SystemClock.elapsedRealtime();
                         Utils.hideKeypad(ForgotPasswordActivity.this, v);
                         if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
                             tvEmailError.setText("Please Enter a valid Email");
                             etEmail.clearFocus();
                         } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                             layoutEmailError.setVisibility(GONE);
                             etEmail.clearFocus();
@@ -165,13 +165,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             dialog.show();
                             loginViewModel.emailotpresend(etEmail.getText().toString().trim());
                         } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
                             tvEmailError.setText("Please Enter a valid Email");
                             etEmail.clearFocus();
                         } else {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
                             layoutEmailError.setVisibility(VISIBLE);
@@ -203,13 +203,17 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         startActivity(i);
                     } else {
                         if (emailResponse.getError().getErrorDescription().toLowerCase().contains("not found")) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
                             tvEmailError.setText("Incorrect information");
                             etEmail.clearFocus();
                         } else {
-                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", emailResponse.getError().getFieldErrors().get(0));
+                            String message = getString(R.string.something_went_wrong);
+                            if(emailResponse.getError().getFieldErrors().size() > 0) {
+                                message = emailResponse.getError().getFieldErrors().get(0);
+                            }
+                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", message);
                         }
 
                     }

@@ -33,7 +33,6 @@ import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -310,7 +309,10 @@ public class EnableAuthID extends AppCompatActivity {
                     if (biometricResponse != null) {
                         Log.e("bio resp", new Gson().toJson(biometricResponse));
                         saveToken(biometricResponse.getData().getToken());
-                        Utils.generateUUID(EnableAuthID.this);
+//                        Utils.generateUUID(EnableAuthID.this);
+                        if (!objMyApplication.isDeviceID()) {
+                            Utils.generateUUID(EnableAuthID.this);
+                        }
                         if (enableType.equals("FACE")) {
                             saveFace("true");
                             saveThumb("false");
@@ -501,22 +503,25 @@ public class EnableAuthID extends AppCompatActivity {
     }
 
     private void launchDashboard() {
-        try {
-            Intent dashboardIntent = new Intent(EnableAuthID.this, DashboardActivity.class);
-            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-                    dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
-                } else {
-                    dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
-                    dashboardIntent.putExtra("FROM",strScreen);
-                }
-            }
-            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(dashboardIntent);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+
+        objMyApplication.launchDashboard(this, strScreen);
+
+//        try {
+//            Intent dashboardIntent = new Intent(EnableAuthID.this, DashboardActivity.class);
+//            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
+//                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+//                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
+//                    dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
+//                } else {
+//                    dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
+//                    dashboardIntent.putExtra("FROM",strScreen);
+//                }
+//            }
+//            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(dashboardIntent);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 }

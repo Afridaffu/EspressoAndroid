@@ -48,7 +48,7 @@ public class BusinessTrackerResponse {
         private boolean isCompanyInfo = false;
         private boolean isDbaInfo = false;
         private boolean isBeneficialOwners = false;
-        private boolean isbankAccount = false;
+        private boolean isBankAccount = false;
         private boolean isAgreementSigned = false;
         private boolean isApplicationSummary = false;
         private boolean isFirstLogin = false;
@@ -88,11 +88,11 @@ public class BusinessTrackerResponse {
         }
 
         public boolean isIsbankAccount() {
-            return isbankAccount;
+            return isBankAccount;
         }
 
         public void setIsbankAccount(boolean isbankAccount) {
-            this.isbankAccount = isbankAccount;
+            this.isBankAccount = isbankAccount;
         }
 
         public boolean isAgreementSigned() {
