@@ -50,7 +50,7 @@ public class TeamViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<TeamResponseModel>() {
                 @Override
                 public void onResponse(Call<TeamResponseModel> call, Response<TeamResponseModel> response) {
-                    Log.d("CompanyInfo", response.toString());
+                    Log.d("TeamInfo", response.toString());
                     try {
                         if (response.isSuccessful()) {
                             TeamResponseModel obj = response.body();
@@ -85,7 +85,7 @@ public class TeamViewModel extends AndroidViewModel {
             mCall.enqueue(new Callback<TeamResponseModel>() {
                 @Override
                 public void onResponse(Call<TeamResponseModel> call, Response<TeamResponseModel> response) {
-                    Log.d("CompanyInfo", response.toString());
+                    Log.d("UpdateTeamInfo", response.toString());
                     try {
                         if (response.isSuccessful()) {
                             TeamResponseModel obj = response.body();
@@ -156,6 +156,7 @@ public class TeamViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
                     try {
+                        Log.d("TeamInfo",response.body().getStatus());
                         if (response.isSuccessful()) {
                             TeamInfoAddModel obj = response.body();
                             teamAddMutableLiveData.setValue(obj);

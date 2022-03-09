@@ -110,7 +110,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="AL"
+                                    android:text=""
                                     android:textSize="@dimen/_20sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:textColor="@color/white"/>
@@ -137,19 +137,21 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="Alison L"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
 
                         <TextView
+                            android:id="@+id/role"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_6sdp"
                             android:fontFamily="@font/opensans_regular"
-                            android:text="Administrator"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
@@ -162,7 +164,7 @@
                         android:background="@drawable/txn_pending_bg"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center"
-                        android:text="Pending"
+                        android:text=""
                         android:textColor="@color/orange"
                         android:textSize="@dimen/_7ssp" />
                 </LinearLayout>
@@ -224,7 +226,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="alison@gmail.com"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
@@ -268,7 +270,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="123-456-7890"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>

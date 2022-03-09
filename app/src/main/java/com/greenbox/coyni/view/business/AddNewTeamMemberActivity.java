@@ -36,6 +36,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
     private TeamViewModel teamViewModel;
     private LinearLayout backBtnLL;
+    private int roleId=19;
 
 
 
@@ -80,8 +81,8 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             public void onClick(View v) {
                 phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
                 teamInfoAddAPICall(prepareRequest());
-                Utils.showCustomToast(AddNewTeamMemberActivity.this, "Invitation has sent!", R.drawable.ic_custom_tick, "");
-                finish();
+               // Utils.showCustomToast(AddNewTeamMemberActivity.this, "Invitation has sent!", R.drawable.ic_custom_tick, "");
+               // finish();
             }
         });
 
@@ -99,10 +100,11 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
+            teamRequest.setPhoneNumber(phone);
             teamRequest.setFirstName(firstName);
             teamRequest.setLastName(lastName);
             teamRequest.setEmailAddress(emailAddress);
-
+            teamRequest.setRoleId(roleId);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,8 +1,6 @@
 package com.greenbox.coyni.model.team;
 
 
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
-
 public class TeamData {
 
 
@@ -14,7 +12,7 @@ public class TeamData {
 
     private Integer roleId;
 
-    private Object status;
+    private String status;
 
     private String roleName;
 
@@ -54,11 +52,11 @@ public class TeamData {
         this.roleId = roleId;
     }
 
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

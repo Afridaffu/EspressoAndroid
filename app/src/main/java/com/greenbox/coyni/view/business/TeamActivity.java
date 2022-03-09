@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -30,7 +31,7 @@ import com.greenbox.coyni.viewmodel.TeamViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamActivity extends BaseActivity implements TeamAdapter.TeamMemberClickListener {
+public class TeamActivity extends BaseActivity{
 
     private LinearLayout bpbackBtn, addTeamMemberL,clearTextLL;
     private TeamViewModel teamViewModel;
@@ -48,6 +49,7 @@ public class TeamActivity extends BaseActivity implements TeamAdapter.TeamMember
         setContentView(R.layout.activity_team);
         initFields();
         initObservers();
+        setOnClickListener();
 
     }
 
@@ -63,6 +65,7 @@ public class TeamActivity extends BaseActivity implements TeamAdapter.TeamMember
                 onBackPressed();
             }
         });
+        recyclerViewTeam=findViewById(R.id.rvTeam);
         addTeamMemberL.setVisibility(View.VISIBLE);
 
         addTeamMemberL.setOnClickListener(new View.OnClickListener() {
@@ -133,12 +136,10 @@ public class TeamActivity extends BaseActivity implements TeamAdapter.TeamMember
         });
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        Context context=view.getContext();
-        Intent intent=new Intent();
-        switch (position){
-            default:
+    private void setOnClickListener() {
+        try {
+
+            memberClickListener = (view, position) -> {
                 String firstName="",lastName="";
                 if(datumList.get(position).getFirstName()!=null&&!datumList.get(position).getFirstName().equals("")){
                     firstName=datumList.get(position).getFirstName();
@@ -146,19 +147,22 @@ public class TeamActivity extends BaseActivity implements TeamAdapter.TeamMember
                 if(datumList.get(position).getLastName()!=null&&!datumList.get(position).getLastName().equals("")){
                     lastName=datumList.get(position).getLastName();
                 }
-               String memberName=firstName.substring(0)+lastName.substring(0);
-                intent =  new Intent(context, TeamMember.class);
+                char ch=firstName.charAt(0);
+                char ch1=lastName.charAt(0);
+               Intent intent =  new Intent(this, TeamMember.class);
                 intent.putExtra(Utils.teamFirstName,datumList.get(position).getFirstName());
                 intent.putExtra(Utils.teamLastName,datumList.get(position).getLastName());
-                intent.putExtra(Utils.teamImageName, memberName);
+                intent.putExtra(Utils.teamImageName, ch+ch1);
                 intent.putExtra(Utils.teamRoleName,datumList.get(position).getRoleName());
-                intent.putExtra(Utils.teamStatus, (Parcelable) datumList.get(position).getStatus());
+                intent.putExtra(Utils.teamStatus,datumList.get(position).getStatus());
                 intent.putExtra(Utils.teamEmailAddress,datumList.get(position).getEmailAddress());
                 intent.putExtra(Utils.teamPhoneNumber, (Parcelable) datumList.get(position).getPhoneNumber());
                 intent.putExtra(Utils.teamMemberId,datumList.get(position).getId());
-                context.startActivity(intent);
-                break;
+                startActivity(intent);
 
+            };
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
     private void initObservers() {
