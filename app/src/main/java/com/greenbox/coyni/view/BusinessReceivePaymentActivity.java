@@ -1,7 +1,6 @@
 package com.greenbox.coyni.view;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,7 +36,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -89,7 +87,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_receive_payment);
 
-        showProgressDialog();
         initialization();
         listeners();
 
