@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".view.business.AddBankAccount">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
@@ -15,6 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
             android:orientation="vertical"
             android:paddingLeft="@dimen/_21sdp"
             android:paddingRight="@dimen/_21sdp">
@@ -56,27 +57,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvBanks"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvDone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_85sdp"
-                app:cardBackgroundColor="@color/primary_color"
-                app:cardCornerRadius="@dimen/_33sdp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_bold"
-                    android:gravity="center"
-                    android:paddingTop="@dimen/_13sdp"
-                    android:paddingBottom="@dimen/_13sdp"
-                    android:text="Done"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
-            </androidx.cardview.widget.CardView>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,8 +68,34 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="Saved automatically"
                 android:textColor="@color/dark_grey"
-                android:textSize="@dimen/_11ssp" />
+                android:textSize="@dimen/_11ssp"
+                android:visibility="gone" />
 
         </LinearLayout>
-    </ScrollView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvDone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/primary_color"
+            app:cardCornerRadius="@dimen/_33sdp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:layout_marginLeft="@dimen/_21sdp"
+            android:layout_marginRight="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_30sdp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_bold"
+                android:gravity="center"
+                android:paddingTop="@dimen/_13sdp"
+                android:paddingBottom="@dimen/_13sdp"
+                android:text="Done"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.summary.Item;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
+import com.greenbox.coyni.utils.swipelayout.SwipeLayout;
 import com.greenbox.coyni.view.business.AddBankAccount;
 import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
@@ -23,11 +25,12 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     Context mContext;
     MyApplication objMyApplication;
     private OnSelectListner listener;
-
+    Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView bankNameTx, accountNumberTx;
         public LinearLayout deleteLL;
+        SwipeLayout swipeLayout;
 
 
         public MyViewHolder(View view) {
@@ -35,6 +38,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
             bankNameTx = (TextView) view.findViewById(R.id.bankName);
             accountNumberTx = (TextView) view.findViewById(R.id.accountNumber);
             deleteLL = view.findViewById(R.id.deleteLL);
+            swipeLayout = itemView.findViewById(R.id.swipeLayout);
 
         }
     }
@@ -66,6 +70,12 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
             holder.deleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
+                    mItemManger.closeAllItems();
                     try {
                         if (banks.size() > 1) {
                             listener.selectedBankItem(objData.getId());
@@ -77,9 +87,39 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
                     }
                 }
             });
+
+            holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+                    mItemManger.closeAllExcept(layout);
+                }
+
+                @Override
+                public void onOpen(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onClose(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                }
+
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+        mItemManger.bind(holder.itemView, position);
     }
 
     @Override
