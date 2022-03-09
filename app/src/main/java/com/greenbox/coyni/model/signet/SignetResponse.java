@@ -1,4 +1,5 @@
 package com.greenbox.coyni.model.signet;
+import com.greenbox.coyni.model.Error;
 
 public class SignetResponse {
     private String status;
