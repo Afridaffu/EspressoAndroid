@@ -59,7 +59,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:text=""
-            android:textColor="@color/dark_grey"
+            android:textColor="@color/retake_bg_grey"
             android:textSize="@dimen/_9ssp"></TextView>
     </LinearLayout>
 
