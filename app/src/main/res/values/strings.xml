@@ -594,5 +594,6 @@
     <string name="ownership_title">Ownership"</string>
     <string name="primary">Primary</string>
     <string name="arrow_right">ArrowRight</string>
+    <string name="invitation_sent">Invitation has sent\!</string>
 
 </resources>
