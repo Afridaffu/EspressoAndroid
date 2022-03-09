@@ -3,13 +3,13 @@ package com.greenbox.coyni.model.businesswallet;
 import java.util.List;
 
 public class WalletResponseData {
-    private List<WalletName> walletNames;
+    private List<WalletInfo> walletInfo;
 
-    public List<WalletName> getWalletNames() {
-        return walletNames;
+    public List<WalletInfo> getWalletNames() {
+        return walletInfo;
     }
 
-    public void setWalletNames(List<WalletName> walletNames) {
-        this.walletNames = walletNames;
+    public void setWalletNames(List<WalletInfo> walletNames) {
+        this.walletInfo = walletNames;
     }
 }

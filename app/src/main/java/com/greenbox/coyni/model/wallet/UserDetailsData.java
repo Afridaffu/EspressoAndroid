@@ -9,6 +9,9 @@ public class UserDetailsData {
     private String email;
     private String walletCatagory;
     private String image;
+    private String walletType;
+    private int accountType;
+
 
     public String getImage() {
         return image;
@@ -67,5 +70,25 @@ public class UserDetailsData {
 
     public void setWalletCatagory(String walletCatagory) {
         this.walletCatagory = walletCatagory;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getWalletType() {
+        return walletType;
+    }
+
+    public void setWalletType(String walletType) {
+        this.walletType = walletType;
+    }
+
+    public int getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(int accountType) {
+        this.accountType = accountType;
     }
 }
