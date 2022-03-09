@@ -661,8 +661,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if (!getIntent().getStringExtra("FROM").equals("login"))
-            super.onBackPressed();
+//        if (!getIntent().getStringExtra("FROM").equals("login")) {
+//            super.onBackPressed();
+//        }
     }
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {

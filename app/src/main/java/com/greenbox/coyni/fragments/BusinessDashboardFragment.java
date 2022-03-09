@@ -136,6 +136,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void launchApplicationCancelledScreen() {
         Intent inCancelledApplication = new Intent(getActivity(), ApplicationCancelledActivity.class);
+        inCancelledApplication.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activityResultLauncher.launch(inCancelledApplication);
     }
 
@@ -150,8 +151,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showUserData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
-        if (myApplication.getTrackerResponse() != null && myApplication.getTrackerResponse().getData() != null
-                && !myApplication.getTrackerResponse().getData().isProfileVerified()) {
+        if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
+                && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
             showGetStartedView();
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getAccountStatus() != null) {
@@ -202,6 +203,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.GONE);
         mLlGetStartedView.setVisibility(View.VISIBLE);
+
     }
 
     private void setBusinessData() {

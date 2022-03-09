@@ -112,7 +112,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             companyinfoLL = findViewById(R.id.companyInformationLL);
             cpagreeementsLL = findViewById(R.id.cpAgreementsLL);
             preferencesLL = findViewById(R.id.PreferencesLL);
-
+            beneficialOwnersLL = findViewById(R.id.beneficialOwnersLL);
             switchOffLL = findViewById(R.id.switchOff);
             profileImage = findViewById(R.id.b_profileIV);
             profileText = findViewById(R.id.b_imageTextTV);
@@ -836,6 +836,9 @@ public class BusinessProfileActivity extends AppCompatActivity {
     }
 
     private void disableLayout(LinearLayout layout, boolean isEnable) {
+        if(layout == null) {
+            return;
+        }
         for (int i = 0; i < layout.getChildCount(); i++) {
             View child = layout.getChildAt(i);
             child.setEnabled(isEnable);

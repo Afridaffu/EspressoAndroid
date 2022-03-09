@@ -1958,6 +1958,8 @@
                     android:id="@+id/ll_get_started_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:layout_marginBottom="@dimen/_10sdp"
                     android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
@@ -1965,7 +1967,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_11sdp"
-                        android:visibility="visible"
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
@@ -1976,11 +1977,11 @@
 
                             <ImageView
                                 android:id="@+id/imgHead"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_90sdp"
                                 android:layout_marginTop="@dimen/_47sdp"
                                 android:contentDescription="@string/additional_action_required"
-                                android:src="@drawable/ic_additional_action_required" />
+                                android:src="@drawable/ic_ssn_fail" />
 
                             <View
                                 android:id="@+id/divider"
@@ -1997,8 +1998,7 @@
                                 android:padding="@dimen/_5sdp"
                                 android:text="@string/cp_almost"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_12ssp"
-                                android:textStyle="bold" />
+                                android:textSize="@dimen/_14ssp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -2009,7 +2009,7 @@
                                 android:padding="@dimen/_5sdp"
                                 android:text="@string/complete_application_step_by_step"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
+                                android:textSize="@dimen/_12ssp" />
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/cv_app_get_started"
