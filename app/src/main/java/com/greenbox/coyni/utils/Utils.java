@@ -98,11 +98,17 @@ public class Utils {
 
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
     public static enum BUSINESS_ACCOUNT_STATUS {
+        UNDER_REVIEW("Under Review"),
+        ACTIVE("Active"),
+        DEACTIVE("DeActivated"),
+        ACTION_REQUIRED("Action Required"),
+        REGISTRATION_CANCELED("Canceled"),
         UNVERIFIED("Unverified"),
-        ADDITIONAL_DETAILS_REQUIRED("AdditionalDetailsRequired"),
-        CANCELLED("Cancelled"),
-        FAILED("Failed"),
-        ACTIVE("Active");
+        INFO_SHARED("Info Shared"),
+        EXPIRED("Expired"),
+        PENDING("Pending"),
+        TERMINATED("Terminated"),
+        DECLINED("Declined");
 
         private String status;
 
