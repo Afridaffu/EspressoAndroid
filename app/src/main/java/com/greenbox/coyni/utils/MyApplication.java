@@ -36,6 +36,7 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.reguser.Contacts;
+import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
@@ -63,6 +64,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -80,7 +82,7 @@ public class MyApplication extends Application {
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
-//    WalletResponse walletResponse;
+    //    WalletResponse walletResponse;
     String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "";
     int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
@@ -102,6 +104,7 @@ public class MyApplication extends Application {
     DBAInfoResp dbaInfoResp;
     BuyTokenRequest buyRequest;
     BOResp beneficialOwnersResponse;
+    HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
 
     public LatestTxnResponse getListLatestTxn() {
         return listLatestTxn;
@@ -940,6 +943,14 @@ public class MyApplication extends Application {
         this.buyTokenResponse = buyTokenResponse;
     }
 
+    public HashMap<String, RegisteredUsersRequest> getObjPhContacts() {
+        return objPhContacts;
+    }
+
+    public void setObjPhContacts(HashMap<String, RegisteredUsersRequest> objPhContacts) {
+        this.objPhContacts = objPhContacts;
+    }
+
     public Date getDate(String date) {
         Date dtExpiry = null;
         try {
@@ -1013,6 +1024,32 @@ public class MyApplication extends Application {
             Utils.setDeviceID(prefs.getString("deviceId", ""));
         }
         return value;
+    }
+
+    public String setNameHead(String strName) {
+        String strNameHead = "";
+        try {
+            if (strName.contains(" ")) {
+                if (!strName.split(" ")[0].equals("")) {
+                    if (strName.split(" ").length > 2) {
+                        if (!strName.split(" ")[1].equals("")) {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                        } else {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[2].substring(0, 1).toUpperCase();
+                        }
+                    } else {
+                        strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                    }
+                } else {
+                    strNameHead = strName.split(" ")[0].toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                }
+            } else {
+                strNameHead = strName.substring(0, 1).toUpperCase();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strNameHead;
     }
 
 }
