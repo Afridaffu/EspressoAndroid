@@ -8,6 +8,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class WebViewActivity extends AppCompatActivity {
     RelativeLayout layoutLoader;
     CircularProgressIndicator cpProgress;
     WebView mywebview;
+    LinearLayout layoutClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class WebViewActivity extends AppCompatActivity {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
             setContentView(R.layout.activity_web_view);
             mywebview = (WebView) findViewById(R.id.webView);
+            layoutClose = findViewById(R.id.layoutClose);
+            layoutClose.setOnClickListener(view -> finish());
             SignOnData signOnData;
             objMyApplication = (MyApplication) getApplicationContext();
             layoutLoader = findViewById(R.id.layoutLoader);

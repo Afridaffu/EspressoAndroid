@@ -102,8 +102,8 @@ public class BenificialOwnersRecyclerAdapter extends
                 && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
                     holder.dateTx.setText(mContext.getString(R.string.uploaded_on)+" "+ Utils.convertDocUploadedDate(objData.getRequiredDocuments().
                                   get(0).getUpdatedAt()));
-                    holder.uploadeMethodTx.setText("Uploaded [ "+objData.getRequiredDocuments().
-                            get(0).getImgName()+"]");
+                    holder.uploadeMethodTx.setText("Uploaded "+objData.getRequiredDocuments().
+                            get(0).getImgName());
 
                     holder.llUploadDocument.setOnClickListener(new View.OnClickListener() {
                         @Override
