@@ -60,7 +60,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private LoginViewModel loginViewModel;
     private String boAPICallFrom = "RESUME";
     private CardView mReviewCv;
-    private boolean review = false;
+    private boolean review = false, isPostSuccess = false;
     private ImageView bagIV;
 
     @Override
@@ -466,7 +466,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             try {
 //                                businessIdentityVerificationViewModel.getDBAInfo();
 
-                                objMyApplication.setCompanyInfoResp(companyInfoResp);
+                                    objMyApplication.setCompanyInfoResp(companyInfoResp);
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
 
                                 if (cir.getName() != null && !cir.getName().equals("")

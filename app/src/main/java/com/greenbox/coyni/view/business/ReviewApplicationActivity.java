@@ -420,45 +420,47 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             try {
                                 cir = summaryModelResponse.getData().getCompanyInfo();
                                 companyReqDocList = cir.getRequiredDocuments();
-                                if (cir.getName() != null && !cir.getName().equals("")) {
+                                if (cir.getName() != null) {
                                     mCompanyNameTx.setText(cir.getName());
                                 }
 
-                                if (cir.getEmail() != null && !cir.getEmail().equals("")) {
+                                if (cir.getEmail() != null) {
                                     mEmailTx.setText(cir.getEmail());
                                 }
 
-                                if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
+                                if (cir.getPhoneNumberDto().getPhoneNumber() != null) {
                                     mPhoneNumberTx.setText(Utils.convertToUSFormatNew(cir.getPhoneNumberDto().getPhoneNumber()));
                                 }
 
-                                if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
+                                if (cir.getBusinessEntity() != null) {
                                     mBusinessEntityTx.setText(cir.getBusinessEntity());
                                 }
 
-                                if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
-                                    isCPwdEye = true;
-                                    String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                    String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
-                                    //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
-                                    mEINTx.setText(hifened);
+                                if (cir.getSsnOrEin() != null) {
+                                    if (!cir.getSsnOrEin().equals("")) {
+                                        isCPwdEye = true;
+                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                                        //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                                        mEINTx.setText(hifened);
+                                    }
 
                                 }
 
                                 StringBuilder sbCompany = new StringBuilder();
-                                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
+                                if (cir.getAddressLine1() != null) {
                                     sbCompany.append(cir.getAddressLine1());
                                 }
-                                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                if (cir.getAddressLine2() != null) {
                                     sbCompany.append(",").append(cir.getAddressLine1());
                                 }
-                                if (cir.getCity() != null && !cir.getCity().equals("")) {
+                                if (cir.getCity() != null) {
                                     sbCompany.append(",").append(cir.getCity());
                                 }
-                                if (cir.getState() != null && !cir.getState().equals("")) {
+                                if (cir.getState() != null) {
                                     sbCompany.append(",").append(cir.getState());
                                 }
-                                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                                if (cir.getZipCode() != null) {
                                     sbCompany.append(",").append(cir.getZipCode());
                                 }
                                 mAddressTx.setText(sbCompany.toString());
@@ -501,11 +503,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
                                 DbaInfo dbaInfo = summaryModelResponse.getData().getDbaInfo();
                                 dbReqDocList = dbaInfo.getRequiredDocuments();
-                                if (dbaInfo.getName() != null && !dbaInfo.getName().equals("")) {
+                                if (dbaInfo.getName() != null) {
                                     mDbNameTx.setText(dbaInfo.getName());
                                 }
 
-                                if (dbaInfo.getBusinessType() != null && !dbaInfo.getBusinessType().equals("")) {
+                                if (dbaInfo.getBusinessType() != null) {
                                     mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()));
                                     // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
                                 }
@@ -526,30 +528,33 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         mTimeZoneTx.setText(R.string.HST);
                                     }
                                 }
-                                if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
-                                    mWebsiteTx.setText(dbaInfo.getWebsite().toString());
-                                } else {
-                                    mWebsiteTx.setText("");
-
+                                if (dbaInfo.getWebsite() != null) {
+                                    mWebsiteTx.setText(dbaInfo.getWebsite());
                                 }
 
-                                if (dbaInfo.getMonthlyProcessingVolume() != null && !dbaInfo.getMonthlyProcessingVolume().equals("")) {
+                                if (dbaInfo.getMonthlyProcessingVolume() != null) {
                                     // monthlyProcVolume=cir.getMonthlyProcessingVolume();
-                                    mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
+                                    if (Integer.parseInt(dbaInfo.getMonthlyProcessingVolume().toString()) != 0)
+                                        mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
                                 }
 
-                                if (dbaInfo.getHighTicket() != null && !dbaInfo.getHighTicket().equals("")) {
-                                    mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
+                                if (dbaInfo.getHighTicket() != null) {
+                                    if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                        mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
                                 }
 
-                                if (dbaInfo.getAverageTicket() != null && !dbaInfo.getAverageTicket().equals("")) {
-                                    mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
+                                if (dbaInfo.getAverageTicket() != null) {
+                                    if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                        mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
                                 }
-                                if (dbaInfo.getEmail() != null && !dbaInfo.getEmail().equals("")) {
-                                    mCustomerServiceEmailTx.setText(dbaInfo.getEmail().toString());
+
+                                if (dbaInfo.getEmail() != null) {
+                                    mCustomerServiceEmailTx.setText(dbaInfo.getEmail());
                                 }
-                                if (dbaInfo.getPhoneNumberDto() != null && !dbaInfo.getPhoneNumberDto().equals("")) {
-                                    mCustomerServicePhoneTx.setText(Utils.convertToUSFormatNew(dbaInfo.getPhoneNumberDto().getPhoneNumber()));
+
+                                if (dbaInfo.getPhoneNumberDto() != null) {
+                                    if (!dbaInfo.getPhoneNumberDto().equals(""))
+                                        mCustomerServicePhoneTx.setText(Utils.convertToUSFormatNew(dbaInfo.getPhoneNumberDto().getPhoneNumber()));
                                 }
 
                                 StringBuilder sb = new StringBuilder();

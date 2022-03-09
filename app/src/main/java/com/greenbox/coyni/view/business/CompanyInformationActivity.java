@@ -897,7 +897,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                     } else {
                         zipcodeET.requestFocus();
-                        if(!Utils.isKeyboardVisible)
+                        if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
 
                         zipcodeET.setHint("Zip Code");

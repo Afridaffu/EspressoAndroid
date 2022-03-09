@@ -980,13 +980,15 @@ public class MyApplication extends Application {
             if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 BusinessTrackerResponse btr = getBusinessTrackerResponse();
                 if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
 
-                    if (btr.getData().isApplicationSummary() && btr.getData().isProfileVerified()) {
+                    if (btr.getData().isProfileVerified()) {
                         dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
-                    } else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
-                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
-                    } else {
+                    }
+//                    else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+//                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+//                    }
+                    else {
                         dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
                         dashboardIntent.putExtra("FROM", fromScreen);
                     }
