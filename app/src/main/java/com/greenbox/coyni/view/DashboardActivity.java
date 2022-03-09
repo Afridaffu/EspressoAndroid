@@ -36,8 +36,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
-import com.greenbox.coyni.adapters.NotificationsAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
@@ -45,11 +47,10 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
-import com.greenbox.coyni.model.wallet.WalletInfo;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
+import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
@@ -57,8 +58,6 @@ import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -67,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
     LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
     RelativeLayout notificationsLL;
     DashboardViewModel dashboardViewModel;
+    BusinessDashboardViewModel businessDashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
     public NotificationsViewModel notificationsViewModel;
@@ -166,6 +166,7 @@ public class DashboardActivity extends AppCompatActivity {
 
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
@@ -343,7 +344,7 @@ public class DashboardActivity extends AppCompatActivity {
                         if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
                                 && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
                             dashboardViewModel.getLatestTxns();
-                            dashboardViewModel.meWallet();
+                            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                             transactionsNSV.smoothScrollTo(0, 0);
                         } else {
                             latestTxnRefresh.setRefreshing(false);
@@ -461,12 +462,21 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
+//        dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
+//            @Override
+//            public void onChanged(WalletResponse walletResponse) {
+//                if (walletResponse != null) {
+//                    objMyApplication.setWalletResponse(walletResponse);
+//                    getBalance(walletResponse);
+//                }
+//            }
+//        });
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
-            public void onChanged(WalletResponse walletResponse) {
-                if (walletResponse != null) {
-                    objMyApplication.setWalletResponse(walletResponse);
-                    getBalance(walletResponse);
+            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                if (businessWalletResponse != null){
+                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                    getBalance(businessWalletResponse.getData());
                 }
             }
         });
@@ -814,7 +824,8 @@ public class DashboardActivity extends AppCompatActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
-                dashboardViewModel.meWallet();
+//                dashboardViewModel.meWallet();
+                businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                 notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -890,18 +901,18 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    private void getBalance(WalletResponse walletResponse) {
+    private void getBalance(WalletResponseData walletResponse) {
         try {
             String strAmount = "";
-            List<WalletInfo> walletInfo = walletResponse.getData().getWalletInfo();
+            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
-                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
-                        objMyApplication.setGbtWallet(walletInfo.get(i));
+//                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
+                        objMyApplication.setWalletResponseData(walletResponse);
                         strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
                         tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
                         objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
-                    }
+//                    }
                 }
             }
         } catch (Exception ex) {

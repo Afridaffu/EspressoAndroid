@@ -26,12 +26,13 @@ import com.greenbox.coyni.fragments.BusinessAccountFragment;
 import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
-import com.greenbox.coyni.model.businesswallet.WalletName;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ScanActivity;
@@ -255,6 +256,9 @@ public class BusinessDashboardActivity extends BaseActivity {
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+
+            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
+
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -290,16 +294,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
-            @Override
-            public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                    getBalance(businessWalletResponse);
-                }
-            }
-        });
-
         mDashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
@@ -328,11 +322,21 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
+            @Override
+            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                if (businessWalletResponse != null){
+                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+//                    getBalance(businessWalletResponse);
+                }
+            }
+        });
     }
 
     private void getBalance(BusinessWalletResponse walletResponse) {
         try {
-            List<WalletName> walletInfo = walletResponse.getData().getWalletNames();
+            List<WalletInfo> walletInfo = walletResponse.getData().getWalletNames();
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
                     if (walletInfo.get(i).getWalletCategory().equals(getString(R.string.currency))) {
@@ -410,7 +414,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
-                businessDashboardViewModel.meMerchantWallet();
                 mDashboardViewModel.getLatestTxns();
 //                notificationsViewModel.getNotifications();
             } catch (Exception ex) {

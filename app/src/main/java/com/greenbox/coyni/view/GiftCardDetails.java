@@ -459,7 +459,7 @@ public class GiftCardDetails extends AppCompatActivity {
                             Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
                             Double walletAmount = 0.0;
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                walletAmount = Double.parseDouble(objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getExchangeAmount() + "".replace(",", ""));
+                                walletAmount = Double.parseDouble(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             } else {
                                 walletAmount = Double.parseDouble(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             }

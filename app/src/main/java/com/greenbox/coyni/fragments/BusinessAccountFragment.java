@@ -23,8 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
-import com.greenbox.coyni.model.businesswallet.WalletName;
-import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -74,8 +73,8 @@ public class BusinessAccountFragment extends BaseFragment {
             }
         });
         try {
-            getBalance(objMyApplication.getWalletResponseData());
-            getLatestTxns(objMyApplication.getListLatestTxn());
+//            getBalance(objMyApplication.getWalletResponseData());
+//            getLatestTxns(objMyApplication.getListLatestTxn());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,8 +84,8 @@ public class BusinessAccountFragment extends BaseFragment {
             try {
 //                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
 //                            && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                ((BusinessDashboardActivity) getActivity()).showProgressDialog();
                 dashboardViewModel.getLatestTxns();
-                dashboardViewModel.meWallet();
                 transactionsNSV.smoothScrollTo(0, 0);
 //                    } else {
                 latestTxnRefresh.setRefreshing(false);
@@ -136,9 +135,11 @@ public class BusinessAccountFragment extends BaseFragment {
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 if (businessWalletResponse != null) {
                     try {
-                        List<WalletName> walletInfo = businessWalletResponse.getData().getWalletNames();
+                        List<WalletInfo> walletInfo = businessWalletResponse.getData().getWalletNames();
                         if (walletInfo != null && walletInfo.size() > 0) {
-                            objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                            String strAmount;
+                            strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(0).getExchangeAmount()));
+                            tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -150,7 +151,6 @@ public class BusinessAccountFragment extends BaseFragment {
 
         dashboardViewModel.getGetUserLatestTxns().observe(getViewLifecycleOwner(), latestTxnResponse -> {
             latestTxnRefresh.setRefreshing(false);
-
             objMyApplication.setListLatestTxn(latestTxnResponse);
             if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
 //                    cvHeaderRL.setVisibility(View.VISIBLE);
@@ -189,6 +189,7 @@ public class BusinessAccountFragment extends BaseFragment {
                 }
 
             }
+            ((BusinessDashboardActivity) getActivity()).dismissDialog();
         });
     }
 
@@ -196,30 +197,31 @@ public class BusinessAccountFragment extends BaseFragment {
         startActivity(new Intent(requireActivity().getApplication(), BusinessTransactionListActivity.class));
     }
 
-    private void getBalance(WalletResponseData walletResponse) {
-        try {
-            String strAmount;
-            if (walletResponse.getWalletNames() != null && walletResponse.getWalletNames().size() > 0) {
-                for (int i = 0; i < walletResponse.getWalletNames().size(); i++) {
-                    if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
-                        strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
-                        tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void getBalance(WalletResponseData walletResponse) {
+//        try {
+//            String strAmount;
+//            if (walletResponse.getWalletNames() != null && walletResponse.getWalletNames().size() > 0) {
+//                for (int i = 0; i < walletResponse.getWalletNames().size(); i++) {
+//                    if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
+//                        strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
+//                        tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+//
+//                    }
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     @Override
     public void onResume() {
         super.onResume();
         if (Utils.checkInternet(requireContext().getApplicationContext())) {
 //            progressDialog = Utils.showProgressDialog(this);
-            businessDashboardViewModel.meMerchantWallet();
+            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
             dashboardViewModel.getLatestTxns();
+            ((BusinessDashboardActivity) getActivity()).showProgressDialog();
             transactionsNSV.smoothScrollTo(0, 0);
         } else {
             Utils.displayAlert(getString(R.string.internet), requireActivity(), "", "");
