@@ -205,7 +205,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         if(detailInfo.getName()!=null) {
             childItem.setText(detailInfo.getName().trim());
         } else {
-            childItem.setText("Not Available");
+            childItem.setText("");
         }
 
         if (detailInfo.getIsSelected()) {
@@ -235,21 +235,25 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             }
         }
 
-        childItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    LogUtils.d("position","postion  "+childPosition +"......"+ detailInfo.getId());
-
-                            detailInfo.setIsSelected(true);
-                            listener.selectedItem(detailInfo.getId());
-
-                    notifyDataSetChanged();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//        childItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    LogUtils.d("position","postion  "+childPosition +"......"+ detailInfo.getId());
+//
+////                            if(detailInfo.getId()==detailInfo.getId()) {
+////                                detailInfo.setIsSelected(true);
+////                                listener.selectedItem(detailInfo.getId());
+////                            } else {
+//
+//                            }
+//
+//                    notifyDataSetChanged();
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
 
         return view;
     }
@@ -294,7 +298,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         if(headerInfo.getName()!=null) {
             heading.setText(headerInfo.getName());
         } else {
-            heading.setText("Not Available");
+            heading.setText("");
         }
 
         if (headerInfo.getMainImage() != null && !headerInfo.getMainImage().trim().equals("")) {

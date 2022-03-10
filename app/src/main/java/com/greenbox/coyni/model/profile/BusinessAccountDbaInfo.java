@@ -46,8 +46,9 @@ public class BusinessAccountDbaInfo {
     public String toString() {
         return "BusinessAccountDbaInfo{" +
                 "name='" + name + '\'' +
-                "image='" + dbaImage + '\'' +
-                "id='" + id + '\'' +
+                ", dbaImage='" + dbaImage + '\'' +
+                ", id=" + id +
+                ", isSelected=" + isSelected +
                 '}';
     }
 }

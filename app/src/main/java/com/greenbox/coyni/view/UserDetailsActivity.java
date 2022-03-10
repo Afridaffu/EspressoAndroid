@@ -58,6 +58,7 @@ import com.greenbox.coyni.dialogs.BaseDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
+import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
@@ -86,7 +87,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener , BusinessProfileRecyclerAdapter.OnSelectListner{
+public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener, BusinessProfileRecyclerAdapter.OnSelectListner {
 
     ImageView editProfileIV, userProfileIV, mIvUserIcon;
     private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV, defualtAccountDialogPersonalNameTV,
@@ -128,6 +129,11 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private CustomerProfileViewModel customerProfileViewModel;
+    private String accountTypeId = "";
+    private int childid;
+    private String SelectedDBAName;
+    private BusinessProfileRecyclerAdapter listAdapter;
+    private ImageView businessPersonalProfileTickIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +146,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
             initFields();
             initObservers();
-            dashboardViewModel.getProfiles();
+            dashboardViewModel.mePreferences();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -180,7 +186,6 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             business_AddreLL = findViewById(R.id.b_addressLL);
             business_defaultAccTIL = findViewById(R.id.b_accountTIL);
             business_defaultaccountET = findViewById(R.id.b_accountET);
-
 
             business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
@@ -291,9 +296,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
                 }
             });
-
             //Business setOnClick's
-
             business_emailLL.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
@@ -341,7 +344,9 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
 
             if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
+
                 Profile profile = myApplicationObj.getMyProfile();
+
                 phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
                 phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
                 bindImage(myApplicationObj.getMyProfile().getData().getImage());
@@ -352,12 +357,16 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                 userPhoneNumTV.setText(phoneFormat);
                 business_userPhneNoTV.setText(phoneFormat);
-                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                if (fullname.length() > 30) {
-                    business_defaultaccountET.setText(fullname.substring(0, 30).trim() + "...");
-                } else {
-                    business_defaultaccountET.setText(fullname);
-                }
+
+                LogUtils.d("TAG","profiledata"+profile);
+
+//                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+//
+//                if (fullname.length() > 30) {
+//                    business_defaultaccountET.setText(fullname.substring(0, 30).trim() + "...");
+//                } else {
+//                    business_defaultaccountET.setText(fullname);
+//                }
 
                 String addressFormatted = "";
                 if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
@@ -414,6 +423,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     mIvUserIcon = dialog.findViewById(R.id.profile_img);
                     mTvUserIconText = dialog.findViewById(R.id.b_imageTextTV);
                     businessPersonalProfileAccount = dialog.findViewById(R.id.profileLL);
+                    businessPersonalProfileTickIcon = dialog.findViewById(R.id.tickIcon);
                     defualtAccountDialogPersonalNameTV = dialog.findViewById(R.id.defualt_account_dialog_personal_name);
 
                     Window window = dialog.getWindow();
@@ -425,16 +435,47 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
 
-                    if(businessAccountList.size()!=0) {
+                    if(personalAccountList.get(0).isSelected()){
+                        businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        businessPersonalProfileTickIcon.setVisibility(View.GONE);
+
+                    }
+
+                    brandsGV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                        @Override
+                        public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+                            businessPersonalProfileTickIcon.setVisibility(View.GONE);
+                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+                            LogUtils.d("TAG", "GroupChildClick" + i + "....." + i1 + "....." + l);
+                            childid = subSet.get(i).getSubsetName().get(i1).getId();
+                            SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
+                            for(int k=0;k<subSet.size();k++) {
+                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
+                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
+                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
+                                    } else {
+                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
+                                    }
+                                }
+                            }
+                            LogUtils.d("TAG", "subSetChildClick" + subSet);
+                            listAdapter.notifyDataSetChanged();
+                            return true;
+                        }
+                    });
+
+                    if (businessAccountList.size() != 0) {
                         brandsGV.setVisibility(View.VISIBLE);
-                        LogUtils.d("TAG","subSet"+subSet);
-                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet,UserDetailsActivity.this);
+                        LogUtils.d("TAG", "subSet" + subSet);
+
+                        listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
                         brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);
                     }
 
-                    if(personalAccountList.size()!=0) {
+                    if (personalAccountList.size() != 0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
                         personalAccountExist = "true";
                         String iconText = "";
@@ -445,7 +486,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                             String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
 
                         }
-                        if (personalAccountList.get(0).getImage()!= null) {
+                        if (personalAccountList.get(0).getImage() != null) {
                             mTvUserIconText.setVisibility(View.GONE);
                             mIvUserIcon.setVisibility(View.VISIBLE);
                             Glide.with(UserDetailsActivity.this)
@@ -463,13 +504,49 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         businessPersonalProfileAccount.setVisibility(View.GONE);
                     }
 
+                    businessPersonalProfileAccount.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+                            businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
+                            childid = personalAccountList.get(0).getId();
+                            SelectedDBAName = personalAccountList.get(0).getFullName();
+                            for(int k=0;k<subSet.size();k++) {
+                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
+                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
+                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
+                                    } else {
+                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
+                                    }
+                                }
+                            }
+                            LogUtils.d("TAG", "subSetChildClick" + subSet);
+                            listAdapter.notifyDataSetChanged();
+
+                        }
+                    });
+
                     dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
 
 
-                    doneButton.setOnClickListener(view1 -> dialog.dismiss());
+                    doneButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            LogUtils.d("profilesss", "childid" + childid);
+                            UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
+                            userPreferenceModel.setLocalCurrency(0);
+                            userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
+                            userPreferenceModel.setPreferredAccount(childid);
+                            customerProfileViewModel.updatePreferences(userPreferenceModel);
+                            dialog.dismiss();
+
+                        }
+                    });
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -483,8 +560,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
     @Override
     public void selectedItem(int id) {
-        LogUtils.d("profilesss","profiles"+id);
-
+        LogUtils.d("profilesss", "profiles" + id);
         UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
         userPreferenceModel.setLocalCurrency(0);
         userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
@@ -528,6 +604,49 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 if (imageResponse != null) {
                     Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "", imageResponse.getError().getFieldErrors().get(0));
                 }
+            }
+        });
+
+
+        dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
+            @Override
+            public void onChanged(Preferences preferences) {
+
+                try {
+                    if (preferences != null) {
+                        myApplicationObj.setTimezoneID(preferences.getData().getTimeZone());
+                        if (preferences.getData().getTimeZone() == 0) {
+                            myApplicationObj.setTempTimezone(getString(R.string.PST));
+                            myApplicationObj.setTempTimezoneID(0);
+                            myApplicationObj.setStrPreference("PST");
+                        } else if (preferences.getData().getTimeZone() == 1) {
+                            myApplicationObj.setTempTimezone(getString(R.string.MST));
+                            myApplicationObj.setTempTimezoneID(1);
+                            myApplicationObj.setStrPreference("America/Denver");
+                        } else if (preferences.getData().getTimeZone() == 2) {
+                            myApplicationObj.setTempTimezone(getString(R.string.CST));
+                            myApplicationObj.setTempTimezoneID(2);
+                            myApplicationObj.setStrPreference("CST");
+                        } else if (preferences.getData().getTimeZone() == 3) {
+                            myApplicationObj.setTempTimezone(getString(R.string.EST));
+                            myApplicationObj.setTempTimezoneID(3);
+                            myApplicationObj.setStrPreference("America/New_York");
+                        } else if (preferences.getData().getTimeZone() == 4) {
+                            myApplicationObj.setTempTimezone(getString(R.string.HST));
+                            myApplicationObj.setTempTimezoneID(4);
+                            myApplicationObj.setStrPreference("HST");
+                        } else if (preferences.getData().getTimeZone() == 5) {
+                            myApplicationObj.setTempTimezone(getString(R.string.AST));
+                            myApplicationObj.setTempTimezoneID(5);
+                            myApplicationObj.setStrPreference("AST");
+                        }
+                    }
+                    accountTypeId = preferences.getData().getPreferredAccount();
+                    dashboardViewModel.getProfiles();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 
@@ -606,6 +725,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), UserDetailsActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
+                        business_defaultaccountET.setText(SelectedDBAName);
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -621,8 +741,8 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         } else if (myApplicationObj.getTempTimezoneID() == 5) {
                             myApplicationObj.setStrPreference("AST");
                         }
-                       // timeZoneET.setText(myApplicationObj.getTimezone());
-                        Utils.showCustomToast(UserDetailsActivity.this, "Timezone has been updated", R.drawable.ic_custom_tick, "authid");
+                        // timeZoneET.setText(myApplicationObj.getTimezone());
+                        Utils.showCustomToast(UserDetailsActivity.this, userPreference.getData().getMessage(), R.drawable.ic_custom_tick, "authid");
 
                     }
                 }
@@ -634,17 +754,25 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
                     filterList = profilesResponse.getData();
-
                     for (ProfilesResponse.Profiles c : filterList) {
-                        if(c.getAccountType().equals(Utils.BUSINESS)){
+                        if (c.getAccountType().equals(Utils.BUSINESS)) {
                             businessAccountList.add(c);
-                            addDetails(String.valueOf(c.getCompanyName()),c.getDbaName(),c.getImage(),c.getId());
+                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId());
                         } else {
                             personalAccountList.add(c);
+                            for(int i=0;i<personalAccountList.size();i++){
+                                if(personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)){
+                                    personalAccountList.get(i).setSelected(true);
+                                    business_defaultaccountET.setText(personalAccountList.get(i).getFullName());
+
+                                } else {
+                                    personalAccountList.get(i).setSelected(false);
+
+                                }
+                            }
                         }
 
                     }
-
 
                 }
             }
@@ -652,18 +780,16 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
     }
 
-    private int addDetails(String mainSet, String subSet ,String image ,int id) {
+    private int addDetails(String mainSet, String subSet, String image, int id) {
 
-        LogUtils.d("ADDDETAILS","adddetails"+mainSet+subSet+id);
+        LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
         int groupPosition = 0;
         BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
 
         if (headerInfo == null) {
-
             headerInfo = new BusinessAccountsListInfo();
             headerInfo.setName(mainSet);
             headerInfo.setMainImage(image);
-
             this.mainSet.put(mainSet, headerInfo);
             this.subSet.add(headerInfo);
         }
@@ -676,6 +802,15 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
         detailInfo.setName(subSet);
         detailInfo.setDbaImage(image);
         detailInfo.setId(id);
+
+        if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
+            detailInfo.setIsSelected(true);
+            business_defaultaccountET.setText(subSet);
+
+        } else {
+            detailInfo.setIsSelected(false);
+        }
+
         subList.add(detailInfo);
 
         headerInfo.setSubsetName(subList);
