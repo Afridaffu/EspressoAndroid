@@ -74,7 +74,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             dba.customerphonenumLL.setVisibility(VISIBLE);
-                            dba.customernumTV.setText("Please Enter a Valid Phone Number");
+                            dba.customernumTV.setText("Please enter a valid Phone Number");
                         } else if ((phnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -90,7 +90,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             comp.compphoneNumberErrorLL.setVisibility(VISIBLE);
-                            comp.compphonenumberTV.setText("Please Enter a Valid Phone Number");
+                            comp.compphonenumberTV.setText("Please enter a valid Phone Number");
                         } else if ((phnET.getText().length() == 0)) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));

@@ -165,7 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:hint="@string/company_s_email"
+                    android:hint="Company’s Email"
                     android:textColorHint="@color/light_gray"
                     app:boxStrokeColor="@color/primary_green"
                     app:errorIconDrawable="@null"
@@ -220,9 +220,9 @@
                 <com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText
                     android:id="@+id/CompanyphoneNumberOET"
                     android:layout_width="match_parent"
-                    android:digits="0123456789"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp" />
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:digits="0123456789" />
 
                 <LinearLayout
                     android:id="@+id/CompanyphoneNumberErrorLL"
@@ -286,6 +286,7 @@
                             android:id="@+id/businessET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:cursorVisible="false"
                             android:editable="false"
                             android:focusable="false"
@@ -296,8 +297,7 @@
                             android:textColor="@color/text_color"
                             android:textColorHint="@color/light_gray"
                             android:textIsSelectable="true"
-                            android:textSize="@dimen/_12ssp"
-                            android:autofillHints="AUTOFILL_HINT_SMS_OTP" />
+                            android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

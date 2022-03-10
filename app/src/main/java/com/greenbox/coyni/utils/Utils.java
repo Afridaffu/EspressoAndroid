@@ -1250,7 +1250,7 @@ public class Utils {
         try {
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MMM dd,yyyy");
+            spf = new SimpleDateFormat("MMMM dd, yyyy");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();

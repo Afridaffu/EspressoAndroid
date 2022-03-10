@@ -77,10 +77,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.UUID;
 
 public class AddCardActivity extends AppCompatActivity {
@@ -88,7 +86,7 @@ public class AddCardActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     MyApplication objMyApplication;
     RelativeLayout layoutCard, layoutAddress;
-    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv;
+    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv, llError;
     LinearLayout address1ErrorLL,address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
     public LinearLayout cardErrorLL;
     View divider1, divider2;
@@ -267,15 +265,15 @@ public class AddCardActivity extends AppCompatActivity {
                 layoutCvv.setVisibility(VISIBLE);
             }
 
-            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
 
-            etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            etlState.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
             clStates.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -574,7 +572,7 @@ public class AddCardActivity extends AppCompatActivity {
                         if (!((LinkedTreeMap) apiError.getData()).get("attempts").toString().equals("")) {
                             double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
-                            tvError.setVisibility(VISIBLE);
+                            llError.setVisibility(VISIBLE);
                             if (attempt != 3) {
                                 if (3 - attempt == 1) {
                                     tvError.setText("Incorrect amount " + (3 - attempt) + " try left.");
@@ -585,7 +583,7 @@ public class AddCardActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         try {
-                                            tvError.setVisibility(GONE);
+                                            llError.setVisibility(GONE);
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -634,11 +632,11 @@ public class AddCardActivity extends AppCompatActivity {
                 return value = false;
             } else if (!etExpiry.getText().toString().matches("(?:0[1-9]|1[0-2])/[0-9]{2}")) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!validateExpiry()) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && etCVV.getText().toString().equals("")) {
                 etCVV.requestFocus();
@@ -658,7 +656,7 @@ public class AddCardActivity extends AppCompatActivity {
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
-                Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
@@ -722,17 +720,17 @@ public class AddCardActivity extends AppCompatActivity {
                             if (etName.getText().toString().trim().length() > 1) {
                                 isName = true;
                                 nameErrorLL.setVisibility(GONE);
-                                etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlName.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
                             } else if (etName.getText().toString().trim().length() == 1) {
                                 isName = false;
-                                etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlName.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlName, getColor(R.color.error_red));
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Minimum 2 Characters Required");
                             } else {
                                 isName = false;
-                                etlName.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlName.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlName, getColor(R.color.light_gray));
                                 nameErrorLL.setVisibility(VISIBLE);
                                 nameErrorTV.setText("Field Required");
@@ -767,18 +765,18 @@ public class AddCardActivity extends AppCompatActivity {
                                 if (validateExpiry()) {
                                     isExpiry = true;
                                     expiryErrorLL.setVisibility(GONE);
-                                    etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_black));
                                 } else {
                                     isExpiry = false;
-                                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                     expiryErrorLL.setVisibility(VISIBLE);
-                                    expiryErrorTV.setText("Please enter valid Expiry Date");
+                                    expiryErrorTV.setText("Please enter a valid Expiry Date");
                                 }
                             } else {
                                 isExpiry = false;
-                                etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
                                 expiryErrorLL.setVisibility(VISIBLE);
@@ -805,7 +803,7 @@ public class AddCardActivity extends AppCompatActivity {
                             etCVV.setHint("");
                             if (etCVV.getText().toString().trim().length() < 3) {
                                 isCvv = false;
-                                etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 cvvErrorLL.setVisibility(VISIBLE);
                                 if (etCVV.getText().toString().trim().length() == 0) {
                                     cvvErrorTV.setText("Field Required");
@@ -817,7 +815,7 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 isCvv = true;
                                 cvvErrorLL.setVisibility(GONE);
-                                etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_black));
                             }
                         } else {
@@ -841,11 +839,11 @@ public class AddCardActivity extends AppCompatActivity {
                             etAddress1.setHint("");
                             if (etAddress1.getText().toString().trim().length() > 0) {
                                 address1ErrorLL.setVisibility(GONE);
-                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_black));
 
                             } else {
-                                etlAddress1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                                 address1ErrorLL.setVisibility(VISIBLE);
                                 address1ErrorTV.setText("Field Required");
@@ -869,11 +867,11 @@ public class AddCardActivity extends AppCompatActivity {
                         if (!b) {
                             etAddress2.setHint("");
                             if (etAddress2.getText().toString().trim().length() > 0) {
-                                etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
 
                             } else {
-                                etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
                             }
                         } else {
@@ -895,11 +893,11 @@ public class AddCardActivity extends AppCompatActivity {
                             etCity.setHint("");
                             if (etCity.getText().toString().trim().length() > 0) {
                                 cityErrorLL.setVisibility(GONE);
-                                etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.primary_black));
 
                             } else {
-                                etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
                                 cityErrorTV.setText("Field Required");
@@ -923,11 +921,11 @@ public class AddCardActivity extends AppCompatActivity {
                         if (!b) {
                             if (etState.getText().toString().trim().length() > 0) {
                                 stateErrorLL.setVisibility(GONE);
-                                etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlState.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
 
                             } else {
-                                etlState.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlState.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlState, getColor(R.color.error_red));
                                 stateErrorLL.setVisibility(VISIBLE);
                                 stateErrorTV.setText("Field Required");
@@ -951,16 +949,16 @@ public class AddCardActivity extends AppCompatActivity {
                             etZipCode.setHint("");
                             if (etZipCode.getText().toString().trim().length() == 5) {
                                 zipErrorLL.setVisibility(GONE);
-                                etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
 
                             } else if (etZipCode.getText().toString().trim().length() > 0 && etZipCode.getText().toString().trim().length() < 5) {
-                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Minimum 5 Characters Required");
                             } else if (etZipCode.getText().toString().trim().length() == 0) {
-                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
@@ -1018,7 +1016,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     if (!etName.hasFocus() && etName.getText().toString().trim().length() > 1) {
-                        etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        etlName.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(etlName, getColor(R.color.primary_black));
                     }
                     String str = etName.getText().toString();
@@ -1058,7 +1056,7 @@ public class AddCardActivity extends AppCompatActivity {
                         isExpiry = false;
                         if (charSequence.toString().trim().length() == 0 && isCardClear) {
                             expiryErrorLL.setVisibility(GONE);
-                            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlExpiry, getResources().getColor(R.color.light_gray));
                         }
                     }
@@ -1108,7 +1106,7 @@ public class AddCardActivity extends AppCompatActivity {
                         if (charSequence.toString().trim().length() == 0 && isCardClear) {
                             isCardClear = false;
                             cvvErrorLL.setVisibility(GONE);
-                            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.light_gray));
                         }
                     }
@@ -1440,6 +1438,7 @@ public class AddCardActivity extends AppCompatActivity {
             preAuthDialog.show();
             layoutPClose = preAuthDialog.findViewById(R.id.layoutPClose);
             tvMessage = preAuthDialog.findViewById(R.id.tvMessage);
+            llError = preAuthDialog.findViewById(R.id.llError);
             tvError = preAuthDialog.findViewById(R.id.tvError);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
             ctKey = preAuthDialog.findViewById(R.id.ckb);
