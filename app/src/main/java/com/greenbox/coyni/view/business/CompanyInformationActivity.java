@@ -277,6 +277,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 2) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
                         enableOrDisableDocsDone();
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
