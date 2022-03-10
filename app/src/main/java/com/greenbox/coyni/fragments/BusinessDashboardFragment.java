@@ -32,6 +32,7 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
@@ -39,6 +40,7 @@ import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessAdditonalActionRequired;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
@@ -52,13 +54,13 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mTvUserName, mTvUserIconText;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView,
-            mLlBuyTokensFirstTimeView, mLlProcessingVolume;
+            mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView;
     private TextView mTvIdentityReviewCancelMessage, mTvProcessingVolume;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions;
-    private CardView mCvBatchNow;
+    private CardView mCvBatchNow, mCvGetStarted;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityVerificationReview = mCurrentView.findViewById(R.id.ll_identity_verification_review);
         mLlIdentityVerificationFailedView = mCurrentView.findViewById(R.id.ll_identity_verification_failed);
         mLlBuyTokensFirstTimeView = mCurrentView.findViewById(R.id.ll_buy_tokens_first_time);
+        mLlGetStartedView = mCurrentView.findViewById(R.id.ll_get_started_view);
         mTvIdentityReviewCancelMessage = mCurrentView.findViewById(R.id.tv_identity_review_cancel_text);
         notificationsRL = mCurrentView.findViewById(R.id.notificationsRL);
         mTvOfficiallyVerified = mCurrentView.findViewById(R.id.tv_officially_verified);
@@ -94,56 +97,25 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvProcessingVolume = mCurrentView.findViewById(R.id.tv_processing_volume);
         mTvMerchantTransactions = mCurrentView.findViewById(R.id.tv_merchant_transactions);
         mCvBatchNow = mCurrentView.findViewById(R.id.cv_batch_now);
+        mCvGetStarted = mCurrentView.findViewById(R.id.cv_app_get_started);
+
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
 
-        notificationsRL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), NotificationsActivity.class));
-            }
-        });
+        notificationsRL.setOnClickListener(view -> startActivity(new Intent(getActivity(), NotificationsActivity.class)));
 
-        mLlBuyTokensFirstTimeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((BusinessDashboardActivity) getActivity()).launchBuyTokens();
-            }
-        });
+        mLlBuyTokensFirstTimeView.setOnClickListener(v -> ((BusinessDashboardActivity) getActivity()).launchBuyTokens());
 
-        mLlProcessingVolume.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showProcessingVolumeDialog();
-            }
-        });
+        mLlProcessingVolume.setOnClickListener(v -> showProcessingVolumeDialog());
 
-        mUserIconRelativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
-            }
-        });
+        mUserIconRelativeLayout.setOnClickListener(view -> startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class)));
 
-        mCvAdditionalDataContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), BusinessAdditonalActionRequired.class));
-            }
-        });
+        mCvAdditionalDataContinue.setOnClickListener(view -> startActivity(new Intent(getActivity(), BusinessAdditonalActionRequired.class)));
 
-        mTvMerchantTransactions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MerchantTransactionListActivity.class));
-            }
-        });
+        mTvMerchantTransactions.setOnClickListener(v -> startActivity(new Intent(getActivity(), MerchantTransactionListActivity.class)));
 
-        mCvBatchNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showBatchNowDialog();
-            }
-        });
+        mCvBatchNow.setOnClickListener(v -> showBatchNowDialog());
+
+        mCvGetStarted.setOnClickListener(v -> startTracker());
     }
 
     private void initObservers() {
@@ -157,8 +129,14 @@ public class BusinessDashboardFragment extends BaseFragment {
         });
     }
 
+    private void startTracker() {
+        Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
+        startActivity(inTracker);
+    }
+
     private void launchApplicationCancelledScreen() {
         Intent inCancelledApplication = new Intent(getActivity(), ApplicationCancelledActivity.class);
+        inCancelledApplication.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activityResultLauncher.launch(inCancelledApplication);
     }
 
@@ -173,7 +151,11 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showUserData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+        if (!getActivity().getIntent().getBooleanExtra("showGetStarted", false) &&
+                myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
+                && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
+            showGetStartedView();
+        } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getAccountStatus() != null) {
             String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
@@ -186,6 +168,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 showBusinessDashboardView();
             }
+        } else {
+            LogUtils.v(TAG, "myProfile is null");
         }
     }
 
@@ -194,6 +178,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlBusinessDashboardView.setVisibility(View.GONE);
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
+        mLlGetStartedView.setVisibility(View.GONE);
     }
 
     private void showBusinessDashboardView() {
@@ -201,6 +186,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlBusinessDashboardView.setVisibility(View.VISIBLE);
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+        mLlGetStartedView.setVisibility(View.GONE);
         setBusinessData();
     }
 
@@ -209,11 +195,20 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlBusinessDashboardView.setVisibility(View.GONE);
         mLlIdentityAdditionDataRequired.setVisibility(View.VISIBLE);
         mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+        mLlGetStartedView.setVisibility(View.GONE);
+    }
+
+    private void showGetStartedView() {
+        mLlIdentityVerificationReview.setVisibility(View.GONE);
+        mLlBusinessDashboardView.setVisibility(View.GONE);
+        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
+        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+        mLlGetStartedView.setVisibility(View.VISIBLE);
+
     }
 
     private void setBusinessData() {
         mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
-
     }
 
     private void showIdentityVerificationReview() {
@@ -221,6 +216,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlBusinessDashboardView.setVisibility(View.GONE);
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+        mLlGetStartedView.setVisibility(View.GONE);
         String message = getString(R.string.identity_review_cancel_message);
         SpannableString spannableString = new SpannableString(message);
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -268,8 +264,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                if(action.equalsIgnoreCase(getString(R.string.yes))) {
-
+                if (action.equalsIgnoreCase(getString(R.string.yes))) {
                     launchApplicationCancelledScreen();
                 }
             }

@@ -294,39 +294,33 @@
                         android:layout_marginEnd="14dp"
                         android:background="@color/white"
                         android:orientation="vertical"
-
                         android:paddingStart="@dimen/_11sdp"
                         android:paddingTop="@dimen/_11sdp">
 
                         <LinearLayout
                             android:id="@+id/companyInformationLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/company_information"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/company_information"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_marginTop="3dp"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
 
                         <View
@@ -336,31 +330,26 @@
 
                         <LinearLayout
                             android:id="@+id/DBAInformationLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/dba_information"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/dba_information"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
 
 
@@ -371,33 +360,27 @@
 
                         <LinearLayout
                             android:id="@+id/beneficialOwnersLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/beneficial_owners"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/beneficial_owners"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
-
 
                         <View
                             android:layout_width="match_parent"
@@ -406,33 +389,27 @@
 
                         <LinearLayout
                             android:id="@+id/teamLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/team"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/team"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
-
 
                         <View
                             android:layout_width="match_parent"
@@ -441,31 +418,26 @@
 
                         <LinearLayout
                             android:id="@+id/paymentMethodsLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/setting_payment"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/setting_payment"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
 
                         <View
@@ -475,33 +447,27 @@
 
                         <LinearLayout
                             android:id="@+id/PreferencesLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/setting_pref"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/setting_pref"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
-
 
                         <View
                             android:layout_width="match_parent"
@@ -510,31 +476,26 @@
 
                         <LinearLayout
                             android:id="@+id/feesLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/fees"
+                                android:layout_weight="1"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/fees"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
 
                         <View
@@ -544,31 +505,27 @@
 
                         <LinearLayout
                             android:id="@+id/cpAccountLimitsLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/account_limits"
+                                android:layout_weight="1"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/account_limits"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
 
                         <View
@@ -578,40 +535,33 @@
 
                         <LinearLayout
                             android:id="@+id/cpAgreementsLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/account_agree"
+                                android:layout_weight="1"
+                                android:textColor="@drawable/text_enable_disable"
+                                android:textSize="@dimen/_12ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/account_agree"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_right_arrow_ed" />
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:src="@drawable/ic_rightarrow" />
-
-                            </RelativeLayout>
                         </LinearLayout>
-
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginBottom="@dimen/_22sdp"
                             android:background="@color/viewcolor" />
-
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

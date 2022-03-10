@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.util.ArrayUtils;
 import com.greenbox.coyni.BuildConfig;
-import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 
 import org.json.JSONException;

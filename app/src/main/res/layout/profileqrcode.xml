@@ -96,7 +96,6 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Jonathan Joestar"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_13ssp" />
 
@@ -176,7 +175,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="f4184fc596403b9d6…"
                         android:textColor="#404040"
                         android:textSize="@dimen/_10ssp" />
 

@@ -97,8 +97,29 @@ public class AccountLimitsData{
     @SerializedName("transactionHighTicketTxnLimit")
     @Expose
     private String transactionHighTicketTxnLimit;
+    @SerializedName("transactionSaleOrderTokenMinLimit")
+    @Expose
+    private String transactionSaleOrderTokenMinLimit;
+    @SerializedName("transactionSaleOrderTokenType")
+    @Expose
+    private int transactionSaleOrderTokenType;
+    @SerializedName("transactionSaleOrderTokenTxnLimit")
+    @Expose
+    private String transactionSaleOrderTokenTxnLimit;
 
     public AccountLimitsData() {
+    }
+
+    public String getTransactionSaleOrderTokenMinLimit() {
+        return transactionSaleOrderTokenMinLimit;
+    }
+
+    public int getTransactionSaleOrderTokenType() {
+        return transactionSaleOrderTokenType;
+    }
+
+    public String getTransactionSaleOrderTokenTxnLimit() {
+        return transactionSaleOrderTokenTxnLimit;
     }
 
     public String getTransactionHighTicketMinLimit() {

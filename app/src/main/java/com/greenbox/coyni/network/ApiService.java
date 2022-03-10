@@ -106,7 +106,6 @@ import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
-import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
 import com.greenbox.coyni.model.team.TeamDeleteModel;
@@ -131,7 +130,6 @@ import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 
@@ -246,8 +244,8 @@ public interface ApiService {
     @DELETE("api/v2/profile/me/removeImage")
     Call<ImageResponse> removeImage(@Query("filename") String filename);
 
-    @GET("api/v2/profile/me/wallets")
-    Call<WalletResponse> meWallet();
+//    @GET("api/v2/profile/me/wallets")
+//    Call<WalletResponse> meWallet();
 
     @GET("api/v2/profile/me/preferences")
     Call<Preferences> mePreferences();
@@ -454,8 +452,8 @@ public interface ApiService {
     @PATCH("api/v2/coyni-pin/stepup")
     Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);
 
-    @GET("api/v2/business/me/wallets")
-    Call<BusinessWalletResponse> meMerchantWallet();
+    @GET("api/v2/profile/me/{walletType}")
+    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
 
     @GET("api/v2/lov/BT")
     Call<BusinessTypeResp> getBusinessType();
@@ -508,7 +506,7 @@ public interface ApiService {
     Call<TeamResponseModel> getTeamData(@Body TeamRequest request);
 
     @PATCH("api/v2/team/{teamMemberId}")
-    Call<TeamResponseModel> updateTeamData(@Body TeamRequest request,@Query("teamMemberId") Integer teamMemberId);
+    Call<TeamResponseModel> updateTeamData(@Body TeamRequest request, @Query("teamMemberId") Integer teamMemberId);
 
     @DELETE("api/v2/team/{teamMemberId}")
     Call<TeamDeleteModel> deleteTeam(@Query("teamMemberId") Integer teamMemberId);

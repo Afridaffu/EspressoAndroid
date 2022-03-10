@@ -5,5 +5,6 @@ import androidx.fragment.app.Fragment;
 
 public abstract class BaseFragment extends Fragment {
 
+    public final String TAG = getClass().getName();
     public abstract void updateData();
 }
