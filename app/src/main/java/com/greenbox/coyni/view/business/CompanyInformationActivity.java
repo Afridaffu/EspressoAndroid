@@ -114,7 +114,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     LinearLayout aoiLL, einLetterLL, w9FormLL, aoiUploadedLL, einLetterUploadedLL, w9FormUploadedLL;
     TextView aoiUploadTV, aoiUpdatedOnTV, einLetterUploadTV, einLetterUpdatedOnTV, w9FormUploadTV, w9FormUpdatedOnTV;
     CardView doneCV;
-    public boolean isAOIUploaded = false, isEINLetterUploaded = false, isW9FormUploaded = false, isDocsDoneEnabled = false;
+    public boolean isAOIUploaded = false, isEINLetterUploaded = false, isW9FormUploaded = false, isDocsDoneEnabled = false, isPostSuccess = false;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     private static final int ACTIVITY_CHOOSE_FILE = 3;
     private static final int PICK_IMAGE_REQUEST = 4;
@@ -718,8 +718,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         dismissDialog();
                     if (companyInfoResponse != null) {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            isPostSuccess = true;
                             finish();
                         } else {
+                            isPostSuccess = false;
                             Utils.displayAlert(companyInfoResponse.getError().getErrorDescription(),
                                     CompanyInformationActivity.this, "", companyInfoResponse.getError().getFieldErrors().get(0));
                         }
@@ -741,23 +743,26 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     if (!hasFocus) {
                         companynameET.setHint("");
-                        if (companynameET.getText().toString().trim().length() > 1) {
+                        if (companynameET.getText().toString().trim().length() > 0) {
                             companynameErrorLL.setVisibility(GONE);
                             companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(companynametil, getColor(R.color.primary_black));
 
-                        } else if (companynameET.getText().toString().trim().length() == 1) {
-                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                            Utils.setUpperHintColor(companynametil, getColor(R.color.error_red));
-                            companynameErrorLL.setVisibility(VISIBLE);
-                            companynameerrorTV.setText("Minimum 2 Characters Required");
-                        } else {
-                             Utils.setUpperHintColor(companynametil, getColor(R.color.light_gray));
+                        }
+//                        else if (companynameET.getText().toString().trim().length() == 1) {
+//                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+//                            Utils.setUpperHintColor(companynametil, getColor(R.color.error_red));
+//                            companynameErrorLL.setVisibility(VISIBLE);
+//                            companynameerrorTV.setText("Minimum 2 Characters Required");
+//                        }
+                        else {
+                            Utils.setUpperHintColor(companynametil, getColor(R.color.light_gray));
                             companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             companynameErrorLL.setVisibility(VISIBLE);
                             companynameerrorTV.setText("Field Required");
 
-                        }if (companynameET.getText().toString().length() > 0 && !companynameET.getText().toString().substring(0, 1).equals(" ")) {
+                        }
+                        if (companynameET.getText().toString().length() > 0 && !companynameET.getText().toString().substring(0, 1).equals(" ")) {
                             companynameET.setText(companynameET.getText().toString().substring(0, 1).toUpperCase() + companynameET.getText().toString().substring(1));
                         }
 
@@ -934,7 +939,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 1) {
+                    if (charSequence.toString().trim().length() > 0) {
                         iscompanyName = true;
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_black));
@@ -1557,7 +1562,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 //            }else{
 //
 //            }
-            companyInfoAPICall(prepareRequest());
+            if (!isPostSuccess)
+                companyInfoAPICall(prepareRequest());
         } catch (Exception e) {
             e.printStackTrace();
         }

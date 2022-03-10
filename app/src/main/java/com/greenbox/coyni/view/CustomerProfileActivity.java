@@ -5,7 +5,7 @@ import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRON
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
-import com.greenbox.coyni.model.login.BiometricLoginRequest;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 
@@ -50,7 +50,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
-import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -516,7 +515,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
             }
 
 
-            WalletResponse walletResponse = objMyApplication.getWalletResponse();
+            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
 
             try {
                 imgProfile.setVisibility(View.GONE);
@@ -547,12 +546,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 ex.printStackTrace();
             }
 
-            if (walletResponse != null && walletResponse.getData().getWalletInfo().size() > 0) {
-                strWallet = walletResponse.getData().getWalletInfo().get(0).getWalletId();
+            if (walletResponse != null && walletResponse.getWalletNames().size() > 0) {
+                strWallet = walletResponse.getWalletNames().get(0).getWalletId();
                 generateQRCode(strWallet);
                 meQrCode.setImageBitmap(bitmap);
                 savedImageView.setImageBitmap(bitmap);
-                walletAddress.setText(walletResponse.getData().getWalletInfo().get(0).getWalletId().substring(0, 16) + "...");
+                walletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
             }
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -600,7 +599,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                     myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                     ClipData myClip;
-                    String text = objMyApplication.getWalletResponse().getData().getWalletInfo().get(0).getWalletId();
+                    String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
                     myClip = ClipData.newPlainText("text", text);
                     myClipboard.setPrimaryClip(myClip);
 //                    showToast();

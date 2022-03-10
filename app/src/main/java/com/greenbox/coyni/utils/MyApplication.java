@@ -21,6 +21,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
@@ -35,13 +36,14 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.reguser.Contacts;
+import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
+import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.model.wallet.WalletInfo;
 import com.greenbox.coyni.model.transaction.TransactionList;
-import com.greenbox.coyni.model.wallet.WalletResponse;
+//import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.view.DashboardActivity;
@@ -63,6 +65,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -80,7 +83,7 @@ public class MyApplication extends Application {
     //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
-    WalletResponse walletResponse;
+    //    WalletResponse walletResponse;
     String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "";
     int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
@@ -102,6 +105,8 @@ public class MyApplication extends Application {
     DBAInfoResp dbaInfoResp;
     BuyTokenRequest buyRequest;
     BOResp beneficialOwnersResponse;
+    HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
+    ApplicationSubmitResponseModel submitResponseModel;
 
     public LatestTxnResponse getListLatestTxn() {
         return listLatestTxn;
@@ -221,13 +226,13 @@ public class MyApplication extends Application {
         this.updatePhoneResponse = updatePhoneResponse;
     }
 
-    public WalletResponse getWalletResponse() {
-        return walletResponse;
-    }
+//    public WalletResponse getWalletResponse() {
+//        return walletResponse;
+//    }
 
-    public void setWalletResponse(WalletResponse walletResponse) {
-        this.walletResponse = walletResponse;
-    }
+//    public void setWalletResponse(WalletResponse walletResponse) {
+//        this.walletResponse = walletResponse;
+//    }
 
     public String getTimezone() {
         return timezone;
@@ -940,6 +945,22 @@ public class MyApplication extends Application {
         this.buyTokenResponse = buyTokenResponse;
     }
 
+    public HashMap<String, RegisteredUsersRequest> getObjPhContacts() {
+        return objPhContacts;
+    }
+
+    public void setObjPhContacts(HashMap<String, RegisteredUsersRequest> objPhContacts) {
+        this.objPhContacts = objPhContacts;
+    }
+
+    public ApplicationSubmitResponseModel getSubmitResponseModel() {
+        return submitResponseModel;
+    }
+
+    public void setSubmitResponseModel(ApplicationSubmitResponseModel submitResponseModel) {
+        this.submitResponseModel = submitResponseModel;
+    }
+
     public Date getDate(String date) {
         Date dtExpiry = null;
         try {
@@ -980,13 +1001,15 @@ public class MyApplication extends Application {
             if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 BusinessTrackerResponse btr = getBusinessTrackerResponse();
                 if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned()) {
+                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
 
-                    if (btr.getData().isApplicationSummary() && btr.getData().isProfileVerified()) {
+                    if (btr.getData().isProfileVerified()) {
                         dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
-                    } else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
-                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
-                    } else {
+                    }
+//                    else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+//                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+//                    }
+                    else {
                         dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
                         dashboardIntent.putExtra("FROM", fromScreen);
                     }
@@ -1011,6 +1034,32 @@ public class MyApplication extends Application {
             Utils.setDeviceID(prefs.getString("deviceId", ""));
         }
         return value;
+    }
+
+    public String setNameHead(String strName) {
+        String strNameHead = "";
+        try {
+            if (strName.contains(" ")) {
+                if (!strName.split(" ")[0].equals("")) {
+                    if (strName.split(" ").length > 2) {
+                        if (!strName.split(" ")[1].equals("")) {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                        } else {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[2].substring(0, 1).toUpperCase();
+                        }
+                    } else {
+                        strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                    }
+                } else {
+                    strNameHead = strName.split(" ")[0].toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                }
+            } else {
+                strNameHead = strName.substring(0, 1).toUpperCase();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strNameHead;
     }
 
 }

@@ -1,11 +1,14 @@
 package com.greenbox.coyni.view.business;
 
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -277,14 +280,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         tosTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dashboardViewModel.agreementsByType("0");
+                dashboardViewModel.agreementsByType("1");
 
             }
         });
         prTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dashboardViewModel.agreementsByType("1");
+                dashboardViewModel.agreementsByType("0");
 
 
             }
@@ -370,6 +373,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
 
+                    showProgressDialog();
+                    summaryViewModel.getApplicationSummaryData();
+
                     Utils.showCustomToast(ReviewApplicationActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
 
                 }
@@ -420,45 +426,47 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             try {
                                 cir = summaryModelResponse.getData().getCompanyInfo();
                                 companyReqDocList = cir.getRequiredDocuments();
-                                if (cir.getName() != null && !cir.getName().equals("")) {
+                                if (cir.getName() != null) {
                                     mCompanyNameTx.setText(cir.getName());
                                 }
 
-                                if (cir.getEmail() != null && !cir.getEmail().equals("")) {
+                                if (cir.getEmail() != null) {
                                     mEmailTx.setText(cir.getEmail());
                                 }
 
-                                if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
+                                if (cir.getPhoneNumberDto().getPhoneNumber() != null) {
                                     mPhoneNumberTx.setText(Utils.convertToUSFormatNew(cir.getPhoneNumberDto().getPhoneNumber()));
                                 }
 
-                                if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
+                                if (cir.getBusinessEntity() != null) {
                                     mBusinessEntityTx.setText(cir.getBusinessEntity());
                                 }
 
-                                if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
-                                    isCPwdEye = true;
-                                    String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                    String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
-                                    //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
-                                    mEINTx.setText(hifened);
+                                if (cir.getSsnOrEin() != null) {
+                                    if (!cir.getSsnOrEin().equals("")) {
+                                        isCPwdEye = true;
+                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                                        //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                                        mEINTx.setText(hifened);
+                                    }
 
                                 }
 
                                 StringBuilder sbCompany = new StringBuilder();
-                                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
+                                if (cir.getAddressLine1() != null) {
                                     sbCompany.append(cir.getAddressLine1());
                                 }
-                                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
-                                    sbCompany.append(",").append(cir.getAddressLine1());
+                                if (cir.getAddressLine2() != null) {
+                                    sbCompany.append(",").append(cir.getAddressLine2());
                                 }
-                                if (cir.getCity() != null && !cir.getCity().equals("")) {
+                                if (cir.getCity() != null) {
                                     sbCompany.append(",").append(cir.getCity());
                                 }
-                                if (cir.getState() != null && !cir.getState().equals("")) {
+                                if (cir.getState() != null) {
                                     sbCompany.append(",").append(cir.getState());
                                 }
-                                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                                if (cir.getZipCode() != null) {
                                     sbCompany.append(",").append(cir.getZipCode());
                                 }
                                 mAddressTx.setText(sbCompany.toString());
@@ -499,13 +507,25 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         }
                                     }
                                 }
+
+                                if (cir.getIdentificationType() == 10) {
+                                    uploadArticlesLL.setVisibility(View.VISIBLE);
+                                    uploadEINLL.setVisibility(View.VISIBLE);
+                                    uploadW9LL.setVisibility(View.VISIBLE);
+                                } else if (cir.getIdentificationType() == 11) {
+                                    uploadArticlesLL.setVisibility(GONE);
+                                    uploadEINLL.setVisibility(GONE);
+                                    uploadW9LL.setVisibility(View.VISIBLE);
+                                }
+
+
                                 DbaInfo dbaInfo = summaryModelResponse.getData().getDbaInfo();
                                 dbReqDocList = dbaInfo.getRequiredDocuments();
-                                if (dbaInfo.getName() != null && !dbaInfo.getName().equals("")) {
+                                if (dbaInfo.getName() != null) {
                                     mDbNameTx.setText(dbaInfo.getName());
                                 }
 
-                                if (dbaInfo.getBusinessType() != null && !dbaInfo.getBusinessType().equals("")) {
+                                if (dbaInfo.getBusinessType() != null) {
                                     mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()));
                                     // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
                                 }
@@ -526,30 +546,33 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         mTimeZoneTx.setText(R.string.HST);
                                     }
                                 }
-                                if (dbaInfo.getWebsite() != null && !dbaInfo.getWebsite().equals("")) {
-                                    mWebsiteTx.setText(dbaInfo.getWebsite().toString());
-                                } else {
-                                    mWebsiteTx.setText("");
-
+                                if (dbaInfo.getWebsite() != null) {
+                                    mWebsiteTx.setText(dbaInfo.getWebsite());
                                 }
 
-                                if (dbaInfo.getMonthlyProcessingVolume() != null && !dbaInfo.getMonthlyProcessingVolume().equals("")) {
+                                if (dbaInfo.getMonthlyProcessingVolume() != null) {
                                     // monthlyProcVolume=cir.getMonthlyProcessingVolume();
-                                    mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
+                                    if (Integer.parseInt(dbaInfo.getMonthlyProcessingVolume().toString()) != 0)
+                                        mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
                                 }
 
-                                if (dbaInfo.getHighTicket() != null && !dbaInfo.getHighTicket().equals("")) {
-                                    mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
+                                if (dbaInfo.getHighTicket() != null) {
+                                    if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                        mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
                                 }
 
-                                if (dbaInfo.getAverageTicket() != null && !dbaInfo.getAverageTicket().equals("")) {
-                                    mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
+                                if (dbaInfo.getAverageTicket() != null) {
+                                    if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                        mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
                                 }
-                                if (dbaInfo.getEmail() != null && !dbaInfo.getEmail().equals("")) {
-                                    mCustomerServiceEmailTx.setText(dbaInfo.getEmail().toString());
+
+                                if (dbaInfo.getEmail() != null) {
+                                    mCustomerServiceEmailTx.setText(dbaInfo.getEmail());
                                 }
-                                if (dbaInfo.getPhoneNumberDto() != null && !dbaInfo.getPhoneNumberDto().equals("")) {
-                                    mCustomerServicePhoneTx.setText(Utils.convertToUSFormatNew(dbaInfo.getPhoneNumberDto().getPhoneNumber()));
+
+                                if (dbaInfo.getPhoneNumberDto() != null) {
+                                    if (!dbaInfo.getPhoneNumberDto().equals(""))
+                                        mCustomerServicePhoneTx.setText(Utils.convertToUSFormatNew(dbaInfo.getPhoneNumberDto().getPhoneNumber()));
                                 }
 
                                 StringBuilder sb = new StringBuilder();
@@ -557,7 +580,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     sb.append(dbaInfo.getAddressLine1());
                                 }
                                 if (dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    sb.append(",").append(dbaInfo.getAddressLine1());
+                                    sb.append(",").append(dbaInfo.getAddressLine2());
                                 }
                                 if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
                                     sb.append(",").append(dbaInfo.getCity());
@@ -692,7 +715,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (submissionViewModel != null) {
                         dismissDialog();
                         if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            objMyApplication.setSubmitResponseModel(submissionViewModel);
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            intent.putExtra("showGetStarted", true);
                             startActivity(intent);
                         } else {
                             Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
@@ -712,7 +737,19 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 LogUtils.d(TAG, "pdf" + agreementsPdf);
                 if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
                     if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
-                        showFile(agreementsPdf.getData().getAgreementFileRefPath());
+                        //new code for showing pdf , modify later
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf"))
+                            browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
+                        else
+                            browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+                        try {
+                            startActivity(browserIntent);
+                        } catch (ActivityNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+//                        showFile(agreementsPdf.getData().getAgreementFileRefPath());
                     }
                 }
             }
@@ -748,6 +785,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
                 intent.putExtra("FILEURL", fileUrl);
                 startActivity(intent);
+
             } else {
                 LogUtils.v(TAG, "fileUrl is null or empty");
             }
@@ -781,14 +819,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             showProgressDialog();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    summaryViewModel.getApplicationSummaryData();
-                    //temporary API Call to proceed further,not required response
-                    summaryViewModel.fees();
-                }
-            }, 2000);
+            summaryViewModel.getApplicationSummaryData();
+            //temporary API Call to proceed further,not required response
+            summaryViewModel.fees();
         } catch (Exception e) {
             e.printStackTrace();
         }

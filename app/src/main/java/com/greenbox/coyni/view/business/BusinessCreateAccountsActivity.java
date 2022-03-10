@@ -1,9 +1,7 @@
 package com.greenbox.coyni.view.business;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
@@ -11,40 +9,22 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.collection.LongSparseArray;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
-import com.greenbox.coyni.adapters.GiftCardsRecyclerAdapter;
-import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.giftcard.Brand;
-import com.greenbox.coyni.model.preferences.Preferences;
+import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
-import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
 import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
-import com.greenbox.coyni.model.wallet.WalletInfo;
-import com.greenbox.coyni.model.wallet.WalletResponse;
-import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.BindingLayoutActivity;
-import com.greenbox.coyni.view.CreatePasswordActivity;
-import com.greenbox.coyni.view.GiftCardActivity;
-import com.greenbox.coyni.view.PINActivity;
-import com.greenbox.coyni.view.PreferencesActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -158,7 +138,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             userShortInfoTV.setText(iconText);
         }
 
-        setUserBalance(myApplication.getWalletResponse());
+        setUserBalance(myApplication.getWalletResponseData());
 
 //        Double bal = myApplication.getGBTBalance();
 //        String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
@@ -166,18 +146,18 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
     }
 
-    private void setUserBalance(WalletResponse walletResponse) {
+    private void setUserBalance(WalletResponseData walletResponse) {
         try {
             String strAmount = "";
-            List<WalletInfo> walletInfo = walletResponse.getData().getWalletInfo();
+            List<WalletInfo> walletInfo = walletResponse.getWalletNames();
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
-                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
+//                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
                         myApplication.setGbtWallet(walletInfo.get(i));
                         strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
                         userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
                         myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
-                    }
+//                    }
                 }
             }
         } catch (Exception ex) {

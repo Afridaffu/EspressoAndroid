@@ -18,6 +18,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
+import com.greenbox.coyni.utils.swipelayout.SwipeLayout;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
@@ -32,16 +33,19 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
     Context mContext;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
+    SwipeLayout swipeLayout;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvBankName, tvAccount;
         public LinearLayout deleteLL;
+        SwipeLayout swipeLayout;
 
         public MyViewHolder(View view) {
             super(view);
             tvBankName = view.findViewById(R.id.tvBankName);
             tvAccount = view.findViewById(R.id.tvAccount);
             deleteLL = view.findViewById(R.id.deleteLL);
+            swipeLayout = itemView.findViewById(R.id.swipeLayout);
         }
     }
 
@@ -79,6 +83,8 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
 
+                        mItemManger.closeAllItems();
+
                         AddBankAccount addBankAccount = (AddBankAccount) mContext;
                         if (listBanks.size() > 1) {
                             addBankAccount.deleteBankAPICall(objData.getId());
@@ -88,6 +94,34 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+                    mItemManger.closeAllExcept(layout);
+                }
+
+                @Override
+                public void onOpen(SwipeLayout layout) {
+
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onClose(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                }
+
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
                 }
             });
         } catch (Exception ex) {
