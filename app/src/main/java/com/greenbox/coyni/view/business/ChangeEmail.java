@@ -19,18 +19,19 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 public class ChangeEmail extends BaseActivity {
-    private TextView emailTx,titleTx,currentTitleTx;
-    private String companyEmail="",companyPhone="";
-    private int changeEmail=0;
+    private TextView emailTx, titleTx, currentTitleTx;
+    private String companyEmail = "", companyPhone = "";
+    private int changeEmail = 0;
     private CardView mChange;
     private LinearLayout closeLL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle=getIntent().getExtras();
-        companyEmail=bundle.getString("CompanyEmail");
+        Bundle bundle = getIntent().getExtras();
+        companyEmail = bundle.getString("CompanyEmail");
         companyPhone = bundle.getString("CompanyPhone");
-        changeEmail=bundle.getInt("ChangeEmail");
+        changeEmail = bundle.getInt("ChangeEmail");
         setContentView(R.layout.activity_change_email);
         initFields();
 
@@ -38,24 +39,16 @@ public class ChangeEmail extends BaseActivity {
 
     private void initFields() {
         closeLL = findViewById(R.id.bpCloseLL);
-        closeLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChangeEmail.this, CompanyInfoDetails.class);
-
-                startActivity(intent);
-            }
-        });
+        closeLL.setOnClickListener(v -> finish());
         emailTx = (TextView) findViewById(R.id.company_email);
-        titleTx=(TextView)findViewById(R.id.title);
-        currentTitleTx=(TextView)findViewById(R.id.currentTitle);
+        titleTx = (TextView) findViewById(R.id.title);
+        currentTitleTx = (TextView) findViewById(R.id.currentTitle);
         mChange = (CardView) findViewById(R.id.nextCV);
         if (changeEmail == 1) {
             emailTx.setText(companyEmail);
             titleTx.setText("Email");
             currentTitleTx.setText("Current Email");
-        }
-        else{
+        } else {
             emailTx.setText(companyPhone);
             titleTx.setText("Phone Number");
             currentTitleTx.setText("Current Phone Number");
@@ -66,9 +59,9 @@ public class ChangeEmail extends BaseActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(ChangeEmail.this, EditEmail.class);
-                intent.putExtra("CompanyEmail",companyEmail);
-                intent.putExtra("CompanyPhone",companyPhone);
-                intent.putExtra("ChangeEmail",changeEmail);
+                intent.putExtra("CompanyEmail", companyEmail);
+                intent.putExtra("CompanyPhone", companyPhone);
+                intent.putExtra("ChangeEmail", changeEmail);
                 startActivity(intent);
             }
         });
