@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_60sdp"
-                android:src="@drawable/aplica_mdpi" />
+                android:src="@drawable/ic_appl_inprogress" />
         </RelativeLayout>
 
         <TextView
