@@ -3,10 +3,16 @@ package com.greenbox.coyni.view.business;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -25,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.adapters.BeneficialOwnersAdapter;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
@@ -36,7 +43,7 @@ import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
-public class AdditionalBeneficialOwnersActivity extends BaseActivity {
+public class AdditionalBeneficialOwnersActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     ImageView backIV;
     RecyclerView beneficialOwnersRV;
@@ -70,6 +77,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+            setKeyboardVisibilityListener(AdditionalBeneficialOwnersActivity.this);
 
             backIV = findViewById(R.id.backIV);
             beneficialOwnersRV = findViewById(R.id.beneficialOwnersRV);
@@ -129,6 +137,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
 
                     if (deleteBOResp != null) {
                         if (deleteBOResp.getStatus().toLowerCase().toString().equals("success")) {
+                            hasDrafts = false;
                             businessIdentityVerificationViewModel.getBeneficialOwners();
                         } else {
                             Utils.displayAlert(deleteBOResp.getError().getErrorDescription(),
@@ -149,7 +158,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
                     if (boResp != null) {
                         if (boResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
-                            loadBeneficialOwners();
+                            loadBeneficialOwners(boResp);
                         } else {
                             notFoundTV.setVisibility(View.GONE);
                             percentageTV.setVisibility(View.VISIBLE);
@@ -245,33 +254,34 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
         }
     }
 
-    public void loadBeneficialOwners() {
+    public void loadBeneficialOwners(BOResp boResp) {
 
-        if (objMyApplication.getBeneficialOwnersResponse().getData().size() > 0) {
+        if (boResp.getData().size() > 0) {
             notFoundTV.setVisibility(View.GONE);
             beneficialOwnersRV.setVisibility(View.VISIBLE);
 
             int totalPercentage = 0;
 
-            for (int i = 0; i < objMyApplication.getBeneficialOwnersResponse().getData().size(); i++) {
-                totalPercentage = totalPercentage + objMyApplication.getBeneficialOwnersResponse().getData().get(i).getOwnershipParcentage();
-                BOResp.BeneficialOwner bo = objMyApplication.getBeneficialOwnersResponse().getData().get(i);
+            for (int i = 0; i < boResp.getData().size(); i++) {
+                totalPercentage = totalPercentage + boResp.getData().get(i).getOwnershipParcentage();
+                BOResp.BeneficialOwner bo = boResp.getData().get(i);
 
                 try {
-                    objMyApplication.getBeneficialOwnersResponse().getData().get(i).setDraft(bo.getFirstName().equals("") || bo.getLastName().equals("") || bo.getDob().equals("")
+                    boResp.getData().get(i).setDraft(bo.getFirstName().equals("") || bo.getLastName().equals("") || bo.getDob().equals("")
                             || bo.getOwnershipParcentage() <= 0 || bo.getAddressLine1().equals("")
                             || bo.getCity().equals("") || bo.getState().equals("") || bo.getZipCode().equals("")
                             || bo.getSsn().equals("") || bo.getRequiredDocuments().size() <= 0);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    objMyApplication.getBeneficialOwnersResponse().getData().get(i).setDraft(true);
+                    boResp.getData().get(i).setDraft(true);
                 }
 
-                if (objMyApplication.getBeneficialOwnersResponse().getData().get(i).isDraft())
+                if (boResp.getData().get(i).isDraft())
                     hasDrafts = true;
+
             }
 
-            BeneficialOwnersAdapter beneficialOwnersAdapter = new BeneficialOwnersAdapter(this, objMyApplication.getBeneficialOwnersResponse());
+            BeneficialOwnersAdapter beneficialOwnersAdapter = new BeneficialOwnersAdapter(this, boResp);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
             beneficialOwnersRV.setLayoutManager(mLayoutManager);
             beneficialOwnersRV.setItemAnimator(new DefaultItemAnimator());
@@ -308,9 +318,47 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
             businessIdentityVerificationViewModel.getBeneficialOwners();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            Utils.isKeyboardVisible = true;
+        } else {
+            Utils.isKeyboardVisible = false;
+        }
+    }
+
 }

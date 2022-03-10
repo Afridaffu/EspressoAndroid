@@ -79,7 +79,7 @@
     <string name="exitbtn">Exit</string>
     <string name="addNewbusinessaccountdba">Select the Company you wish to add the new DBA below.You will need to complete a new Merchant Application for each DBA you add.</string>
     <string name="addDBAButton">Add DBA</string>
-
+    <string name="complete_application_step_by_step">Complete the merchant application step by step in 5 min</string>
     <string name="businessProfileAccountItemChildImage">Business Profile account Sub Profile Image</string>
     <string name="businessProfileAccountItemImage">Business Profile account Profile Image</string>
     <string name="businessProfileAccountExpandDownArrow">Business Profile account Profile Expand Down Arrow</string>

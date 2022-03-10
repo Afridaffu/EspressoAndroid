@@ -1,11 +1,14 @@
 package com.greenbox.coyni.view.business;
 
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -277,14 +280,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         tosTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dashboardViewModel.agreementsByType("0");
+                dashboardViewModel.agreementsByType("1");
 
             }
         });
         prTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dashboardViewModel.agreementsByType("1");
+                dashboardViewModel.agreementsByType("0");
 
 
             }
@@ -370,6 +373,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
 
+                    showProgressDialog();
+                    summaryViewModel.getApplicationSummaryData();
+
                     Utils.showCustomToast(ReviewApplicationActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
 
                 }
@@ -452,7 +458,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     sbCompany.append(cir.getAddressLine1());
                                 }
                                 if (cir.getAddressLine2() != null) {
-                                    sbCompany.append(",").append(cir.getAddressLine1());
+                                    sbCompany.append(",").append(cir.getAddressLine2());
                                 }
                                 if (cir.getCity() != null) {
                                     sbCompany.append(",").append(cir.getCity());
@@ -501,6 +507,18 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         }
                                     }
                                 }
+
+                                if (cir.getIdentificationType() == 10) {
+                                    uploadArticlesLL.setVisibility(View.VISIBLE);
+                                    uploadEINLL.setVisibility(View.VISIBLE);
+                                    uploadW9LL.setVisibility(View.VISIBLE);
+                                } else if (cir.getIdentificationType() == 11) {
+                                    uploadArticlesLL.setVisibility(GONE);
+                                    uploadEINLL.setVisibility(GONE);
+                                    uploadW9LL.setVisibility(View.VISIBLE);
+                                }
+
+
                                 DbaInfo dbaInfo = summaryModelResponse.getData().getDbaInfo();
                                 dbReqDocList = dbaInfo.getRequiredDocuments();
                                 if (dbaInfo.getName() != null) {
@@ -562,7 +580,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     sb.append(dbaInfo.getAddressLine1());
                                 }
                                 if (dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    sb.append(",").append(dbaInfo.getAddressLine1());
+                                    sb.append(",").append(dbaInfo.getAddressLine2());
                                 }
                                 if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
                                     sb.append(",").append(dbaInfo.getCity());
@@ -697,7 +715,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (submissionViewModel != null) {
                         dismissDialog();
                         if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            objMyApplication.setSubmitResponseModel(submissionViewModel);
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            intent.putExtra("showGetStarted", true);
                             startActivity(intent);
                         } else {
                             Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
@@ -717,7 +737,19 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 LogUtils.d(TAG, "pdf" + agreementsPdf);
                 if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
                     if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
-                        showFile(agreementsPdf.getData().getAgreementFileRefPath());
+                        //new code for showing pdf , modify later
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf"))
+                            browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
+                        else
+                            browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+                        try {
+                            startActivity(browserIntent);
+                        } catch (ActivityNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+//                        showFile(agreementsPdf.getData().getAgreementFileRefPath());
                     }
                 }
             }
@@ -753,6 +785,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
                 intent.putExtra("FILEURL", fileUrl);
                 startActivity(intent);
+
             } else {
                 LogUtils.v(TAG, "fileUrl is null or empty");
             }

@@ -656,19 +656,21 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus) {
                         dbanameET.setHint("");
-                        if (dbanameET.getText().toString().trim().length() > 1) {
+                        if (dbanameET.getText().toString().trim().length() > 0) {
                             dbanameLL.setVisibility(GONE);
                             dbanameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             dbanameET.setHintTextColor(getColor(R.color.light_gray));
                             Utils.setUpperHintColor(dbanameTIL, getColor(R.color.primary_black));
 
-                        } else if (dbanameET.getText().toString().trim().length() == 1) {
-                            dbanameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                            Utils.setUpperHintColor(dbanameTIL, getColor(R.color.error_red));
-                            dbanameET.setHintTextColor(getColor(R.color.light_gray));
-                            dbanameLL.setVisibility(VISIBLE);
-                            dbanameTV.setText("Minimum 2 Characters Required");
-                        } else {
+                        }
+//                        else if (dbanameET.getText().toString().trim().length() == 1) {
+//                            dbanameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+//                            Utils.setUpperHintColor(dbanameTIL, getColor(R.color.error_red));
+//                            dbanameET.setHintTextColor(getColor(R.color.light_gray));
+//                            dbanameLL.setVisibility(VISIBLE);
+//                            dbanameTV.setText("Minimum 2 Characters Required");
+//                        }
+                        else {
                             dbanameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             dbanameLL.setVisibility(VISIBLE);
                             dbanameTV.setText("Field Required");
@@ -858,7 +860,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 1) {
+                    if (charSequence.toString().trim().length() > 0) {
                         isdbaName = true;
                         dbanameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(dbanameTIL, getResources().getColor(R.color.primary_black));

@@ -59,53 +59,89 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             RegUsersResponseData objData = listUsers.get(position);
+//            if (objData.getUserName() != null && !objData.getUserName().equals("")) {
+//                if (objData.getUserName().contains(" ")) {
+//                    if (!objData.getUserName().split(" ")[0].equals("")) {
+//                        if (objData.getUserName().split(" ").length > 2) {
+//                            if (!objData.getUserName().split(" ")[1].equals("")) {
+//                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
+//                            } else {
+//                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[2].substring(0, 1).toUpperCase());
+//                            }
+//                        } else {
+//                            holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
+//                        }
+//                    } else {
+//                        holder.tvNameHead.setText(objData.getUserName().split(" ")[0].toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
+//                    }
+//                } else {
+//                    holder.tvNameHead.setText(objData.getUserName().substring(0, 1).toUpperCase());
+//                }
+//                holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
+//                if (objData.getWalletAddress() != null && !objData.getWalletAddress().equals("")) {
+//                    if (objData.getWalletAddress().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
+//                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
+//                    } else {
+//                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
+//                    }
+//                    holder.imgInvite.setVisibility(View.GONE);
+//                } else {
+//                    //holder.tvWalletAddress.setVisibility(View.INVISIBLE);
+//                    holder.tvWalletAddress.setText("");
+//                    holder.imgInvite.setVisibility(View.VISIBLE);
+//                }
+            String strPhContact = "", strEcoSysName = "";
             if (objData.getUserName() != null && !objData.getUserName().equals("")) {
-                if (objData.getUserName().contains(" ")) {
-                    if (!objData.getUserName().split(" ")[0].equals("")) {
-                        if (objData.getUserName().split(" ").length > 2) {
-                            if (!objData.getUserName().split(" ")[1].equals("")) {
-                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-                            } else {
-                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[2].substring(0, 1).toUpperCase());
-                            }
-                        } else {
-                            holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-                        }
-                    } else {
-                        holder.tvNameHead.setText(objData.getUserName().split(" ")[0].toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-                    }
+                if (objData.getUserName().length() > 24) {
+                    strPhContact = objData.getUserName().substring(0, 24) + "...";
                 } else {
-                    holder.tvNameHead.setText(objData.getUserName().substring(0, 1).toUpperCase());
+                    strPhContact = objData.getUserName();
                 }
-                holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
-                if (objData.getWalletAddress() != null && !objData.getWalletAddress().equals("")) {
-                    if (objData.getWalletAddress().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
-                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
-                    } else {
-                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
-                    }
-                    holder.imgInvite.setVisibility(View.GONE);
-                } else {
-                    //holder.tvWalletAddress.setVisibility(View.INVISIBLE);
-                    holder.tvWalletAddress.setText("");
-                    holder.imgInvite.setVisibility(View.VISIBLE);
-                }
-                if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
-                    holder.imgUser.setVisibility(View.VISIBLE);
-                    holder.tvNameHead.setVisibility(View.GONE);
-                    if (objData.getImage().contains("https://")) {
-                        Glide.with(mContext)
-                                .load(objData.getImage())
-                                .placeholder(R.drawable.ic_profilelogo)
-                                .into(holder.imgUser);
-                    } else {
-                        holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
-                    }
-                } else {
-                    holder.imgUser.setVisibility(View.GONE);
-                    holder.tvNameHead.setVisibility(View.VISIBLE);
-                }
+            } else {
+                strPhContact = "";
             }
+            if (objData.getFullName() != null && !objData.getFullName().equals("")) {
+                if (objData.getFullName().length() > 24) {
+                    strEcoSysName = objData.getFullName().substring(0, 24) + "...";
+                } else {
+                    strEcoSysName = objData.getFullName();
+                }
+            } else {
+                strEcoSysName = "";
+            }
+            if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
+                holder.tvUserName.setText(Utils.capitalize(strPhContact));
+                holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
+                holder.imgInvite.setVisibility(View.GONE);
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+            } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
+                holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
+                holder.tvWalletAddress.setVisibility(View.GONE);
+                holder.imgInvite.setVisibility(View.GONE);
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
+            } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
+                holder.tvUserName.setText(Utils.capitalize(strPhContact));
+                holder.tvWalletAddress.setVisibility(View.GONE);
+                holder.imgInvite.setVisibility(View.VISIBLE);
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+            }
+
+            if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
+                holder.imgUser.setVisibility(View.VISIBLE);
+                holder.tvNameHead.setVisibility(View.GONE);
+                if (objData.getImage().contains("https://")) {
+                    Glide.with(mContext)
+                            .load(objData.getImage())
+                            .placeholder(R.drawable.ic_profilelogo)
+                            .into(holder.imgUser);
+                } else {
+                    holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
+                }
+            } else {
+                holder.imgUser.setVisibility(View.GONE);
+                holder.tvNameHead.setVisibility(View.VISIBLE);
+            }
+//            }
 
             holder.imgInvite.setOnClickListener(new View.OnClickListener() {
                 @Override
