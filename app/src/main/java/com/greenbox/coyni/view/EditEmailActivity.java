@@ -37,6 +37,7 @@ import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -82,7 +83,7 @@ public class EditEmailActivity extends AppCompatActivity {
                 findViewById(R.id.b_topLL).setVisibility(VISIBLE);
                 findViewById(R.id.editEmailSV).setVisibility(GONE);
                     if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
-                            Log.e("This is ","DBA Info  Edit");
+                            LogUtils.e("This is ","DBA Info  Edit");
                     }
             }
             initObservers();

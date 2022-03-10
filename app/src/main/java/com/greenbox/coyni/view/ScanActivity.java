@@ -1138,7 +1138,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void showPayToMerchantWithAmountDialog( String amount, UserDetails userDetails) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails) {
         isQRScan = false;
         mcodeScanner.stopPreview();
         PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails);

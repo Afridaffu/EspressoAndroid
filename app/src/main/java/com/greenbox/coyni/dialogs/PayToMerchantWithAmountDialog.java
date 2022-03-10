@@ -8,25 +8,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.ScanActivity;
-import com.greenbox.coyni.view.business.PayToMerchantActivity;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class PayToMerchantWithAmountDialog extends BaseDialog {
 
-    private DashboardViewModel dashboardViewModel;
     private LinearLayout copyAddressLL;
     private String amount;
     UserDetails userDetails;
-    private TextView payAmount,recipientAddressTV;
-    private String recipientAddress="";
+    private TextView payAmount, recipientAddressTV;
+    private String recipientAddress = "";
 
 
     public PayToMerchantWithAmountDialog(Context context) {
@@ -34,11 +29,13 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     }
 
 
-    public PayToMerchantWithAmountDialog(Context context,String strAmount,UserDetails userDetails) {
+    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails) {
         super(context);
         amount = strAmount;
         this.userDetails = userDetails;
     }
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +56,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 //        });
         bindUserInfo(userDetails);
 
-        if (amount != null){
+        if (amount != null) {
             payAmount.setText(amount);
         }
         if (recipientAddress.length() > 13) {
@@ -69,9 +66,8 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         }
 
 
-
-
     }
+
     @SuppressLint("SetTextI18n")
     private void bindUserInfo(UserDetails userDetails) {
         try {
@@ -113,12 +109,12 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
                 userName.setVisibility(View.VISIBLE);
             }
             recipientAddress = "";
-            recipientAddress = userDetails.getData().getWalletId().toString();
+            recipientAddress = userDetails.getData().getWalletId();
 
             copyAddressLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.copyText(recipientAddress,ScanActivity.scanActivity);
+                    Utils.copyText(recipientAddress, ScanActivity.scanActivity);
                 }
             });
 
