@@ -76,6 +76,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:imeOptions="actionNext"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                     android:inputType="text|textNoSuggestions"
                     android:maxLength="30"
                     android:maxLines="1"
