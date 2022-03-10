@@ -32,18 +32,45 @@
             android:fontFamily="@font/opensans_semibold"
             android:layout_marginStart="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_12sdp"/>
-        <ImageView
-            android:layout_width="@dimen/_37sdp"
-            android:layout_height="@dimen/_37sdp"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:contentDescription="@string/done"
-            android:layout_gravity="center"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_account_profile_image"
+            android:layout_width="@dimen/_54sdp"
+            android:layout_height="@dimen/_54sdp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_22sdp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/_27sdp"
+            app:layout_constraintStart_toEndOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/userProfileIV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/businessProfileAccountItemChildImage"
+                android:scaleType="fitXY"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/userProfileTextTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/opensans_bold"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_20sdp"
+                android:visibility="gone" />
+        </androidx.cardview.widget.CardView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center">
             <TextView
+                android:id="@+id/payingDbaNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_1sdp"
@@ -52,6 +79,7 @@
                 android:fontFamily="@font/opensans_semibold"
                 android:textColor="@color/primary_black"/>
             <TextView
+                android:id="@+id/businessTypeTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/retail"
@@ -61,6 +89,7 @@
                 android:fontFamily="@font/opensans_semibold"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/accountAddressTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/account_address_hsdj89378"
@@ -76,7 +105,7 @@
             android:background="@color/blue_light"
             android:layout_marginStart="@dimen/_4sdp"
             android:layout_marginEnd="@dimen/_2sdp"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,9 +114,10 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:gravity="center">
             <TextView
+                android:id="@+id/amountPayTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="160.00"
+                android:text="0.00"
                 android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_35ssp"/>
@@ -96,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/cyn"
                 android:textSize="@dimen/_11ssp"
-                android:textColor="@color/primary_green"
+                android:textColor="@color/cyn_color"
                 android:fontFamily="@font/opensans_bold"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_7sdp"/>
@@ -106,16 +136,8 @@
                 android:layout_marginStart="@dimen/_13sdp"
                 android:src="@drawable/ic_exchange_range"
                 android:contentDescription="@string/done"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/blue_light"
-            android:layout_marginTop="@dimen/_15sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_2sdp"
-            android:visibility="visible"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -170,7 +192,13 @@
                 android:fontFamily="@font/opensans_regular"
                 android:textColor="@color/dark_grey"
                 android:layout_weight="1"/>
+            <LinearLayout
+                android:id="@+id/copyRecipientLL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             <TextView
+                android:id="@+id/recipientAddTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hgj34239274"
@@ -184,7 +212,7 @@
                 android:contentDescription="@string/cyn"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:src="@drawable/ic_copy"/>
-
+            </LinearLayout>
         </LinearLayout>
 
         <androidx.constraintlayout.motion.widget.MotionLayout

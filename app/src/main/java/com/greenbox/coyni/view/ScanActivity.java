@@ -11,7 +11,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.zxing.Reader;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
@@ -27,6 +30,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -523,8 +527,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                     e.printStackTrace();
                                 }
                             }
-                        }
-                        else if ((objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT || objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) && userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT){
+                        } else if ((objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT || objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) && userDetails.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
                             if (strQRAmount.equals("")) {
                                 try {
                                     Intent i = new Intent(ScanActivity.this, PayToMerchantActivity.class);
@@ -535,19 +538,18 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                            }
-//                            else {
+                            } else {
 //                                Intent i = new Intent(ScanActivity.this, PayToPersonalActivity.class);
 //                                i.putExtra("walletId", strScanWallet);
 //                                i.putExtra("amount", strQRAmount);
 //                                i.putExtra("screen", "scan");
 //                                startActivity(i);
-//                            }
-                        }
-                        else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT){
+                                showPayToMerchantWithAmountDialog(strQRAmount, userDetails);
+                            }
+                        } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             //ERROR MESSAGE DIsPLAY
                             try {
-                                displayAlert("Sorry, we detected this is a personal account address, please scan a business QR code or switch to your personal account to complete the transaction. ","Invalid QR code");
+                                displayAlert("Sorry, we detected this is a personal account address, please scan a business QR code or switch to your personal account to complete the transaction. ", "Invalid QR code");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -599,6 +601,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             }
         });
     }
+
 
     private void saveToGallery() {
         try {
@@ -768,7 +771,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     protected void onPause() {
         try {
             super.onPause();
-            if(mcodeScanner != null) {
+            if (mcodeScanner != null) {
                 mcodeScanner.releaseResources();
             }
         } catch (Exception e) {
@@ -1135,4 +1138,26 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
+    private void showPayToMerchantWithAmountDialog( String amount, UserDetails userDetails) {
+        isQRScan = false;
+        mcodeScanner.stopPreview();
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails);
+        payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                LogUtils.v("Scan", "onDialog Clicked " + action);
+
+            }
+        });
+        payToMerchantWithAmountDialog.show();
+
+        payToMerchantWithAmountDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                mcodeScanner.startPreview();
+                scannerLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
 }
