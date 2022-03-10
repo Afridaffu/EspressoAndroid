@@ -166,7 +166,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     finish();
                 }
             });
-
+            Utils.setCustomSelectionActionModeCallback(passwordET);
             passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -223,6 +223,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     }
                 }
             });
+
 
             confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -692,4 +693,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
+
+
 }
