@@ -391,7 +391,7 @@ public class EditEmailActivity extends AppCompatActivity {
                             newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
                             newEmailErrorLL.setVisibility(VISIBLE);
-                            newEmailErrorTV.setText("Please Enter a valid Email");
+                            newEmailErrorTV.setText("Please enter a valid Email");
                         } else if (newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(newEmailET.getText().toString().trim())) {
                             newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
@@ -421,7 +421,7 @@ public class EditEmailActivity extends AppCompatActivity {
                             b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
                             b_newEmailErrorLL.setVisibility(VISIBLE);
-                            b_newEmailErrorTV.setText("Please Enter a valid Email");
+                            b_newEmailErrorTV.setText("Please enter a valid Email");
                         } else if (b_newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(b_newEmailET.getText().toString().trim())) {
                             b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_black));

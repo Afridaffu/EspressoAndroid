@@ -98,7 +98,7 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 rea.phoneErrorLL.setVisibility(VISIBLE);
 //                                rea.phoneErrorTV.setText("Invalid Phone Number");
-                                rea.phoneErrorTV.setText("Please enter valid Phone Number");
+                                rea.phoneErrorTV.setText("Please enter a valid Phone Number");
                             } else if ((pnET.getText().length() == 0)) {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -120,7 +120,7 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                                 caa.phoneErrorLL.setVisibility(VISIBLE);
 //                                caa.phoneErrorTV.setText("Invalid Phone Number");
-                                caa.phoneErrorTV.setText("Please enter valid Phone Number");
+                                caa.phoneErrorTV.setText("Please enter a valid Phone Number");
                             } else if ((pnET.getText().length() == 0)) {
                                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));

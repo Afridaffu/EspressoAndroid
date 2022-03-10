@@ -1125,7 +1125,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(ssntil, getColor(R.color.error_red));
                         ssnLL.setVisibility(VISIBLE);
-                        ssnTV.setText("Please Enter valid SSN");
+                        ssnTV.setText("Please enter a valid SSN");
 
                     } else {
                         ssntil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
@@ -1158,7 +1158,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(ownershiptil, getColor(R.color.error_red));
                             ownershipLL.setVisibility(VISIBLE);
-                            ownershipTV.setText("Please Enter a Valid Ownership Percentage");
+                            ownershipTV.setText("Please enter a valid Ownership Percentage");
                         }
 
                         ownershipET.setText(ownershipET.getText().toString() + "%");
@@ -1198,7 +1198,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(ownershiptil, getColor(R.color.light_gray));
                             ownershipLL.setVisibility(VISIBLE);
-                            ownershipTV.setText("Please Enter a Valid Ownership Percentage");
+                            ownershipTV.setText("Please enter a valid Ownership Percentage");
                         }
 //                    ownershipET.setText(ownershipET.getText().toString()+"%");
                     } catch (NumberFormatException e) {

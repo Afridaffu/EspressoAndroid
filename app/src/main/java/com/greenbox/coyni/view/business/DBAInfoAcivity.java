@@ -699,7 +699,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbaemailLL.setVisibility(VISIBLE);
                             dbaemailET.setHintTextColor(getColor(R.color.error_red));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.error_red));
-                            dbaemailTV.setText("Please Enter a Valid Email");
+                            dbaemailTV.setText("Please enter a valid Email");
 
                         } else if (dbaemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(dbaemailET.getText().toString().trim())) {
                             dbaemailLL.setVisibility(GONE);
@@ -711,7 +711,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.error_red));
                             dbaemailLL.setVisibility(VISIBLE);
-                            dbaemailTV.setText("Please Enter a Valid Email");
+                            dbaemailTV.setText("Please enter a valid Email");
                         } else {
                             dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.light_gray));
@@ -1550,7 +1550,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             if (phone.getCountryCode() != null && phone.getPhoneNumber().length() == 10)
                 dbaInfoRequest.setPhoneNumberDto(phone);
             //Name
-            if (dbanameET.getText().toString().trim().length() > 1)
+            if (dbanameET.getText().toString().trim().length() > 0)
                 dbaInfoRequest.setName(dbanameET.getText().toString().trim());
             //Email
             if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))

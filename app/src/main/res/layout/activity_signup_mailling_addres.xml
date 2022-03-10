@@ -212,6 +212,7 @@
                   android:layout_marginTop="@dimen/_5sdp"
                   android:layout_gravity="center"
                   android:layout_marginBottom="@dimen/_2sdp"
+                  android:visibility="gone"
                   />
 
 
