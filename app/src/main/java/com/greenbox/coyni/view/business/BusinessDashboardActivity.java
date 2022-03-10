@@ -49,7 +49,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private CustomerProfileViewModel customerProfileViewModel;
     private MyApplication objMyApplication;
     private Tabs selectedTab = Tabs.DASHBOARD;
-    private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile;
+    private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu;
     private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile;
     private String userName = "";
 
@@ -58,6 +58,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private DashboardViewModel mDashboardViewModel;
     private BaseFragment mCurrentFragment;
     Long mLastClickTimeQA = 0L;
+    private boolean isTabsEnabled = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             setContentView(R.layout.activity_business_dashboard);
             initialization();
             initObserver();
+            enableDisableTabView();
             pushFragment(new BusinessDashboardFragment());
 
         } catch (Exception ex) {
@@ -104,6 +106,9 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onAccountTabSelected(View view) {
+        if (!isTabsEnabled) {
+            return;
+        }
         try {
             if (selectedTab != Tabs.ACCOUNT) {
                 if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -121,6 +126,9 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onTransactionsTabSelected(View view) {
+        if (!isTabsEnabled) {
+            return;
+        }
         try {
             if (selectedTab != Tabs.TRANSACTIONS) {
                 if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -154,6 +162,9 @@ public class BusinessDashboardActivity extends BaseActivity {
     }
 
     public void onQuickMenuTabSelected(View view) {
+        if (!isTabsEnabled) {
+            return;
+        }
         try {
             LogUtils.d(TAG, "onQuickMenuTabSelected");
             Dialog dialog = new Dialog(BusinessDashboardActivity.this);
@@ -235,6 +246,27 @@ public class BusinessDashboardActivity extends BaseActivity {
         mTvProfile.setTextColor(isProfile ? selectedTextColor : unSelectedTextColor);
     }
 
+    private void setEnabledTabs() {
+        int disabledColor = getColor(R.color.cyn_color);
+        int unSelectedTextColor = getColor(R.color.dark_grey);
+        int selectedTextColor = getColor(R.color.primary_green);
+        if(selectedTab == Tabs.ACCOUNT) {
+            mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_disabled);
+        } else {
+            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
+        }
+        if(selectedTab == Tabs.TRANSACTIONS) {
+            mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_disabled);
+        } else {
+            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
+        }
+        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
+    }
+
     private void pushFragment(BaseFragment fragment) {
         mCurrentFragment = fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -252,6 +284,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvAccount = findViewById(R.id.tv_account_text);
             mTvTransactions = findViewById(R.id.tv_transactions_text);
             mTvProfile = findViewById(R.id.tv_profile_text);
+            mIvMenu = findViewById(R.id.iv_menu_tab);
             objMyApplication = (MyApplication) getApplicationContext();
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
@@ -263,6 +296,25 @@ public class BusinessDashboardActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void enableDisableTabView() {
+        isTabsEnabled = false;
+        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+            String accountStatus = objMyApplication.getMyProfile().getData().getAccountStatus();
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                isTabsEnabled = false;
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                isTabsEnabled = true;
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+                isTabsEnabled = true;
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                isTabsEnabled = true;
+            }
+        }
+        setEnabledTabs();
     }
 
     private void initObserver() {
@@ -300,6 +352,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 try {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
+                        enableDisableTabView();
                         if (mCurrentFragment != null) {
                             mCurrentFragment.updateData();
                         }
@@ -326,7 +379,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null){
+                if (businessWalletResponse != null) {
                     objMyApplication.setWalletResponseData(businessWalletResponse.getData());
 //                    getBalance(businessWalletResponse);
                 }

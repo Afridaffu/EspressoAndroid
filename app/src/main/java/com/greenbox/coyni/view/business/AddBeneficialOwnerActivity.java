@@ -1057,7 +1057,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         Utils.setUpperHintColor(fnametil, getColor(R.color.light_gray));
                         fnameLL.setVisibility(VISIBLE);
                         fnameTV.setText("Field Required");
-                    }if (fnameET.getText().toString().length() > 0 && !fnameET.getText().toString().substring(0, 1).equals(" ")) {
+                    }
+                    if (fnameET.getText().toString().length() > 0 && !fnameET.getText().toString().substring(0, 1).equals(" ")) {
                         fnameET.setText(fnameET.getText().toString().substring(0, 1).toUpperCase() + fnameET.getText().toString().substring(1));
                     }
                 } else {
@@ -1149,7 +1150,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     ownershipET.setHint("");
                     if (ownershipET.getText().toString().trim().replace("%", "").length() > 0) {
                         int allowPerc = 100 - totalOwnerShipPerc;
-                        if (Integer.parseInt(ownershipET.getText().toString().trim()) <= allowPerc) {
+                        if (Integer.parseInt(ownershipET.getText().toString().trim()) <= allowPerc && Integer.parseInt(ownershipET.getText().toString().trim()) > 0) {
                             ownershipLL.setVisibility(GONE);
                             ownershiptil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_black));
@@ -1224,7 +1225,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.light_gray));
                         address1ErrorLL.setVisibility(VISIBLE);
                         address1ErrorTV.setText("Field Required");
-                    }if (address1ET.getText().toString().length() > 0 && !address1ET.getText().toString().substring(0, 1).equals(" ")) {
+                    }
+                    if (address1ET.getText().toString().length() > 0 && !address1ET.getText().toString().substring(0, 1).equals(" ")) {
                         address1ET.setText(address1ET.getText().toString().substring(0, 1).toUpperCase() + address1ET.getText().toString().substring(1));
                     }
                 } else {
@@ -1247,7 +1249,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     } else {
                         address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         Utils.setUpperHintColor(address2TIL, getColor(R.color.light_gray));
-                    }if (address2ET.getText().toString().length() > 0 && !address2ET.getText().toString().substring(0, 1).equals(" ")) {
+                    }
+                    if (address2ET.getText().toString().length() > 0 && !address2ET.getText().toString().substring(0, 1).equals(" ")) {
                         address2ET.setText(address2ET.getText().toString().substring(0, 1).toUpperCase() + address2ET.getText().toString().substring(1));
                     }
 
@@ -1275,7 +1278,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
                         cityErrorLL.setVisibility(VISIBLE);
                         cityErrorTV.setText("Field Required");
-                    }if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
+                    }
+                    if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
                         cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
                     }
                 } else {

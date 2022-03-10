@@ -506,7 +506,7 @@ public interface ApiService {
     Call<TeamResponseModel> getTeamData(@Body TeamRequest request);
 
     @PATCH("api/v2/team/{teamMemberId}")
-    Call<TeamResponseModel> updateTeamData(@Body TeamRequest request,@Query("teamMemberId") Integer teamMemberId);
+    Call<TeamResponseModel> updateTeamData(@Body TeamRequest request, @Query("teamMemberId") Integer teamMemberId);
 
     @DELETE("api/v2/team/{teamMemberId}")
     Call<TeamDeleteModel> deleteTeam(@Query("teamMemberId") Integer teamMemberId);

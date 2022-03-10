@@ -656,13 +656,20 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             appFinishedTV.setVisibility(VISIBLE);
             infoTV.setVisibility(GONE);
             bagIV.setImageDrawable(getResources().getDrawable(R.drawable.idve_completed));
+        } else {
+            review = false;
+            mReviewCv.setVisibility(GONE);
+            appFinishedTV.setVisibility(GONE);
+            infoTV.setVisibility(VISIBLE);
+            bagIV.setImageDrawable(getResources().getDrawable(R.drawable.aplica_mdpi));
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (!getIntent().getStringExtra("FROM").equals("login"))
-            super.onBackPressed();
+//        if (!getIntent().getStringExtra("FROM").equals("login")) {
+//            super.onBackPressed();
+//        }
     }
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {

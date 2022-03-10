@@ -277,6 +277,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 2) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
                         enableOrDisableDocsDone();
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
@@ -743,17 +745,19 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     if (!hasFocus) {
                         companynameET.setHint("");
-                        if (companynameET.getText().toString().trim().length() > 1) {
+                        if (companynameET.getText().toString().trim().length() > 0) {
                             companynameErrorLL.setVisibility(GONE);
                             companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(companynametil, getColor(R.color.primary_black));
 
-                        } else if (companynameET.getText().toString().trim().length() == 1) {
-                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
-                            Utils.setUpperHintColor(companynametil, getColor(R.color.error_red));
-                            companynameErrorLL.setVisibility(VISIBLE);
-                            companynameerrorTV.setText("Minimum 2 Characters Required");
-                        } else {
+                        }
+//                        else if (companynameET.getText().toString().trim().length() == 1) {
+//                            companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
+//                            Utils.setUpperHintColor(companynametil, getColor(R.color.error_red));
+//                            companynameErrorLL.setVisibility(VISIBLE);
+//                            companynameerrorTV.setText("Minimum 2 Characters Required");
+//                        }
+                        else {
                             Utils.setUpperHintColor(companynametil, getColor(R.color.light_gray));
                             companynametil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             companynameErrorLL.setVisibility(VISIBLE);
@@ -937,7 +941,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().trim().length() > 1) {
+                    if (charSequence.toString().trim().length() > 0) {
                         iscompanyName = true;
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_black));
