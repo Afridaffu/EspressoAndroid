@@ -221,16 +221,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        try {
-//            etEmail.requestFocus();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            etEmail.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
