@@ -152,6 +152,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     onBackPressed();
+                    Utils.hideKeypad(AddPaymentSignetActivity.this);
                 }
             });
 
