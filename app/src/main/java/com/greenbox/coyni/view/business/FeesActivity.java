@@ -19,10 +19,11 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 public class
 FeesActivity extends BaseActivity {
     private LinearLayout bpbackBtn;
-    TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
+    private TextView salesOrderDollTV, salesOrderPerTV, refundDollTV, refundPerTV, tvEBADoll, tvEBAPer, instantPayDollTV, instantPayPerTV, signetAccDollTV, signetAccPerTV,
             giftCardDollTV, giftCardPerTV, fdwDollTV, fdwPerTV, buyTokenEBADollTV, buyTokenEBAPerTV, buytokenSignetDollTV, buytokenSignetPerTV, monthlyFeeDollTV, monthlyFeePerTV;
-    BusinessDashboardViewModel viewModel;
-    MyApplication objMyApplication;
+    private BusinessDashboardViewModel viewModel;
+    private MyApplication objMyApplication;
+    private int feeStructure_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +58,11 @@ FeesActivity extends BaseActivity {
             viewModel=new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
 
-            long user_id = objMyApplication.getLoginUserId();
-
+            feeStructure_id = objMyApplication.getAccountType();
             bpbackBtn.setOnClickListener(v -> finish());
             showProgressDialog();
             try {
-                viewModel.meFees(user_id);
+                viewModel.meFees(feeStructure_id);
                 initObserver();
             } catch (Exception e) {
                 e.printStackTrace();
