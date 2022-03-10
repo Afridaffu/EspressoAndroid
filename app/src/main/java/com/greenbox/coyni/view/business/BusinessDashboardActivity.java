@@ -134,14 +134,8 @@ public class BusinessDashboardActivity extends BaseActivity {
                 if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                     return;
                 }
-
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
                 startActivity(new Intent(BusinessDashboardActivity.this, MerchantTransactionListActivity.class));
-
-//                selectedTab = Tabs.TRANSACTIONS;
-//                setSelectedTab(false, false, true, false);
-//                LogUtils.d(TAG, "onTransactionsTabSelected");
-//                pushFragment(new BusinessTransactionsFragment());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -250,14 +244,14 @@ public class BusinessDashboardActivity extends BaseActivity {
         int disabledColor = getColor(R.color.cyn_color);
         int unSelectedTextColor = getColor(R.color.dark_grey);
         int selectedTextColor = getColor(R.color.primary_green);
-        if(selectedTab == Tabs.ACCOUNT) {
+        if (selectedTab == Tabs.ACCOUNT) {
             mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
             mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_disabled);
         } else {
             mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
             mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
         }
-        if(selectedTab == Tabs.TRANSACTIONS) {
+        if (selectedTab == Tabs.TRANSACTIONS) {
             mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
             mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_disabled);
         } else {
@@ -291,6 +285,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
             businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
+            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
 
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
@@ -379,27 +374,19 @@ public class BusinessDashboardActivity extends BaseActivity {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-//                    getBalance(businessWalletResponse);
+                try {
+                    if (businessWalletResponse != null) {
+                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                        if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0 &&
+                                businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
+                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         });
-    }
-
-    private void getBalance(BusinessWalletResponse walletResponse) {
-        try {
-            List<WalletInfo> walletInfo = walletResponse.getData().getWalletNames();
-            if (walletInfo != null && walletInfo.size() > 0) {
-                for (int i = 0; i < walletInfo.size(); i++) {
-                    if (walletInfo.get(i).getWalletCategory().equals(getString(R.string.currency))) {
-                        objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
@@ -438,7 +425,6 @@ public class BusinessDashboardActivity extends BaseActivity {
         }
 
         mTvUserName.setOnClickListener(view -> {
-            //String name = mTvUserName.getText().toString();
             if (mTvUserName.getText().toString().contains("...")) {
                 if (userName.length() == 21 || userName.length() > 21) {
                     mTvUserName.setText(userName.substring(0, 20));
@@ -467,8 +453,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
-                mDashboardViewModel.getLatestTxns();
-//                notificationsViewModel.getNotifications();
+                //mDashboardViewModel.getLatestTxns();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -481,5 +466,4 @@ public class BusinessDashboardActivity extends BaseActivity {
 
         }
     }
-
 }
