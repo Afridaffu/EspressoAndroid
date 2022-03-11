@@ -18,6 +18,7 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
+import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.BanksResponseModel;
@@ -302,6 +303,9 @@ public interface ApiService {
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
                                                   @Part("agreementType") int agreementType);
 
+    @POST("api/v2/business/agreements")
+    Call<UpdateSignAgreementsResponse> updateSignAgreemets();
+
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
 
@@ -464,8 +468,8 @@ public interface ApiService {
     @POST("api/v2/node/cancel-buytoken/{gbxTxnId}")
     Call<CancelBuyTokenResponse> cancelBuyToken(@Path("gbxTxnId") String gbxTxnId);
 
-    @GET("api/v2/fees/{UserID}")
-    Call<Fees> meFees(@Path("UserID") long UserID);
+    @GET("/api/v2/profile/fee-type/{feeStructureId}")
+    Call<Fees> meFees(@Path("feeStructureId") int feeStructureId);
 
     @POST("api/v2/cards/merchant/addcard")
     Call<BusinessCardResponse> saveBusinessCards(@Body BusinessCardRequest request);

@@ -184,7 +184,7 @@ public class EditTeamMember extends BaseActivity {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.error_red));
                             editEmailLL.setVisibility(VISIBLE);
-                            editEmailTV.setText("Please Enter a valid Email");
+                            editEmailTV.setText("Please enter a valid Email");
                         } else if (editEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(editEmailET.getText().toString().trim())) {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_black));
