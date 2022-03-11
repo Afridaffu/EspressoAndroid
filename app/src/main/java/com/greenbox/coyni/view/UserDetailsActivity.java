@@ -764,7 +764,6 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                                 if(personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)){
                                     personalAccountList.get(i).setSelected(true);
                                     business_defaultaccountET.setText(personalAccountList.get(i).getFullName());
-
                                 } else {
                                     personalAccountList.get(i).setSelected(false);
 
