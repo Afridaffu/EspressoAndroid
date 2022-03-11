@@ -152,7 +152,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
-                            tvEmailError.setText("Please Enter a valid Email");
+                            tvEmailError.setText("Please enter a valid Email");
                             etEmail.clearFocus();
                         } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
                             etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
@@ -168,7 +168,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                             layoutEmailError.setVisibility(VISIBLE);
-                            tvEmailError.setText("Please Enter a valid Email");
+                            tvEmailError.setText("Please enter a valid Email");
                             etEmail.clearFocus();
                         } else {
                             etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

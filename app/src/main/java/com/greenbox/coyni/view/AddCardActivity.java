@@ -632,11 +632,11 @@ public class AddCardActivity extends AppCompatActivity {
                 return value = false;
             } else if (!etExpiry.getText().toString().matches("(?:0[1-9]|1[0-2])/[0-9]{2}")) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!validateExpiry()) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && etCVV.getText().toString().equals("")) {
                 etCVV.requestFocus();
@@ -656,7 +656,7 @@ public class AddCardActivity extends AppCompatActivity {
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
-                Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
@@ -772,7 +772,7 @@ public class AddCardActivity extends AppCompatActivity {
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                     expiryErrorLL.setVisibility(VISIBLE);
-                                    expiryErrorTV.setText("Please enter valid Expiry Date");
+                                    expiryErrorTV.setText("Please enter a valid Expiry Date");
                                 }
                             } else {
                                 isExpiry = false;

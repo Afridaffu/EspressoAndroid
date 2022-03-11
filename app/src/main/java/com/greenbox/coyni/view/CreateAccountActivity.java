@@ -959,7 +959,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Please Enter a valid Email");
+                            emailErrorTV.setText("Please enter a valid Email");
                         } else if (emailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
@@ -969,7 +969,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Please Enter a valid Email");
+                            emailErrorTV.setText("Please enter a valid Email");
                         } else {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));

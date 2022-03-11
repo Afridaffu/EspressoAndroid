@@ -454,7 +454,8 @@
             android:name=".view.business.BusinessRegistrationTrackerActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".view.business.CompanyInformationActivity"
             android:exported="false"
@@ -471,7 +472,8 @@
             android:name=".view.business.ReviewApplicationActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".view.business.DBAinfoBtmSheetActivity"
             android:exported="false"

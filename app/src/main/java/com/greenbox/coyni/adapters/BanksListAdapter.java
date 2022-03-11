@@ -124,6 +124,8 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
                 public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
                 }
             });
+
+            mItemManger.bind(holder.itemView, position);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -608,11 +608,11 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                 return value = false;
             } else if (!etExpiry.getText().toString().matches("(?:0[1-9]|1[0-2])/[0-9]{2}")) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", BusinessAddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", BusinessAddCardActivity.this, "", "");
                 return value = false;
             } else if (!validateExpiry()) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", BusinessAddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", BusinessAddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getValid()) {
                 Utils.displayAlert("Invalid request! Please check the card and try again.", BusinessAddCardActivity.this, "", "");
@@ -751,7 +751,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                     expiryErrorLL.setVisibility(VISIBLE);
-                                    expiryErrorTV.setText("Please enter valid Expiry Date");
+                                    expiryErrorTV.setText("Please enter a valid Expiry Date");
                                 }
                             } else {
                                 isExpiry = false;

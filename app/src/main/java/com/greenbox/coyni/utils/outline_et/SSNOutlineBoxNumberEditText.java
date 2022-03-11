@@ -61,7 +61,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                         if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 9)) {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             comp.ssnErrorLL.setVisibility(VISIBLE);
-                            comp.ssnErrorTV.setText("Enter a Valid " + getSSNTypeText());
+                            comp.ssnErrorTV.setText("Please enter a valid " + getSSNTypeText());
                         } else if ((ssnET.getText().length() == 0)) {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                             comp.ssnErrorLL.setVisibility(VISIBLE);
