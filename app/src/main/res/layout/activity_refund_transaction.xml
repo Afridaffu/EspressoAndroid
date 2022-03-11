@@ -76,26 +76,45 @@
                         android:background="@color/white"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_12sdp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
+                            android:background="@color/white"
+                            android:paddingStart="@dimen/_20sdp"
+                            android:paddingEnd="@dimen/_30sdp">
 
+                            <TextView
+                                android:id="@+id/refundCurrencyTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center"
+                                android:layout_toLeftOf="@+id/lyAmount"
+                                android:fontFamily="@font/opensans_bold"
+                                android:paddingTop="@dimen/_9sdp"
+                                android:paddingBottom="@dimen/_7sdp"
+                                android:text="$"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_40ssp"
+                                android:visibility="gone" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:id="@+id/lyAmount"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_toLeftOf="@+id/imageConvertIV"
                                 android:orientation="horizontal">
 
                                 <EditText
+                                    android:id="@+id/refundAmountET"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:background="@color/white"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:gravity="center_vertical|right"
+                                    android:gravity="center_vertical|end"
                                     android:hint="0.00"
                                     android:inputType="numberDecimal"
                                     android:maxLength="@string/maxlength"
@@ -104,27 +123,29 @@
                                     android:textCursorDrawable="@drawable/cursorcolor"
                                     android:textSize="@dimen/_53ssp" />
 
-                                <View
-                                    android:layout_width="@dimen/_1sdp"
-                                    android:layout_height="@dimen/_42sdp"
-                                    android:layout_centerVertical="true"
-                                    android:layout_gravity="center"
-                                    android:background="@color/light_gray"
-                                    android:visibility="visible" />
 
                                 <TextView
+                                    android:id="@+id/tvCYN"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_15sdp"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:text="@string/currency"
+                                    android:text=" CYN"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp"
                                     android:visibility="visible" />
                             </LinearLayout>
 
 
-                        </LinearLayout>
+                            <ImageView
+                                android:id="@+id/imageConvertIV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/_7sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:src="@drawable/ic_download" />
+                        </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -201,6 +222,11 @@
                             android:layout_marginTop="@dimen/_21sdp"
                             android:layout_marginRight="@dimen/_15sdp"
                             android:background="@color/blue_light" />
+                        <LinearLayout
+                            android:id="@+id/remarksLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/eTremarks"
@@ -216,10 +242,12 @@
                             android:textColor="@color/primary_black"
                             android:textColorHint="@color/light_gray"
                             android:textSize="@dimen/_10ssp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
                 <com.greenbox.coyni.utils.keyboards.CustomKeyboard
+                    android:id="@+id/ckbrefund"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp" />
