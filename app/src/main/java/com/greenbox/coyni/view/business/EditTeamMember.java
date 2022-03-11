@@ -8,16 +8,20 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
+import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
@@ -25,39 +29,48 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class EditTeamMember extends BaseActivity {
-    private TextInputLayout editFNameTil,editLNameTil,editEmailTil,editPhoneTil;
-    private TextInputEditText editFNameET,editLNameET,editEmailET;
+    private TextInputLayout editFNameTil, editLNameTil, editEmailTil, editPhoneTil;
+    private TextInputEditText editFNameET, editLNameET, editEmailET;
     private OutLineBoxPhoneNumberEditText editPhoneET;
-    private LinearLayout editFNameLL,editLNameLL,editEmailLL,editPhoneLL;
-    private TextView editFNameTV,editLNameTV,editEmailTV,editPhoneTV;
+    private LinearLayout editFNameLL, editLNameLL, editEmailLL, editPhoneLL;
+    private TextView editFNameTV, editLNameTV, editEmailTV, editPhoneTV;
     public static int focusedID = 0;
     private CardView sendCV;
-    private boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
-    private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
+    private boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false, isNextEnabled = false;
+    private String firstName = "", lastName = "", role = "", status = "", emailAddress = "", phoneNumber = "", imageName = "";
     private TeamViewModel teamViewModel;
-    private int teamMemberId=0;
+    private int teamMemberId = 0;
+    private ImageView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_team_member);
 
-        Bundle bundle=getIntent().getExtras();
-        firstName= bundle.getString(Utils.teamFirstName,firstName);
-        lastName=bundle.getString(Utils.teamLastName,lastName);
-        role=bundle.getString(Utils.teamRoleName,role);
-        status=bundle.getString(Utils.teamStatus,status);
-        emailAddress=bundle.getString(Utils.teamEmailAddress,emailAddress);
-        phoneNumber=bundle.getString(Utils.teamPhoneNumber,phoneNumber);
-        imageName=bundle.getString(Utils.teamImageName,imageName);
-        teamMemberId=bundle.getInt(Utils.teamMemberId,teamMemberId);
+        Bundle bundle = getIntent().getExtras();
+        firstName = bundle.getString(Utils.teamFirstName, firstName);
+        lastName = bundle.getString(Utils.teamLastName, lastName);
+        role = bundle.getString(Utils.teamRoleName, role);
+        status = bundle.getString(Utils.teamStatus, status);
+        emailAddress = bundle.getString(Utils.teamEmailAddress, emailAddress);
+        phoneNumber = bundle.getString(Utils.teamPhoneNumber, phoneNumber);
+        imageName = bundle.getString(Utils.teamImageName, imageName);
+        teamMemberId = bundle.getInt(Utils.teamMemberId, teamMemberId);
         initFields();
+        initObservers();
         focusWatchers();
         textWatchers();
 
     }
 
     private void initFields() {
+        backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         editFNameTil = findViewById(R.id.edit_fName_til);
         editLNameTil = findViewById(R.id.edit_lName_til);
         editEmailTil = findViewById(R.id.edit_email_til);
@@ -66,7 +79,7 @@ public class EditTeamMember extends BaseActivity {
         editFNameET = findViewById(R.id.editFNameET);
         editLNameET = findViewById(R.id.editLNameET);
         editEmailET = findViewById(R.id.editEmailET);
-        editPhoneET=findViewById(R.id.phoneNumberOET);
+        editPhoneET = findViewById(R.id.phoneNumberOET);
 
         editFNameLL = findViewById(R.id.editfirstNameErrorLL);
         editLNameLL = findViewById(R.id.editlastNameErrorLL);
@@ -82,6 +95,7 @@ public class EditTeamMember extends BaseActivity {
         editLNameET.setText(lastName);
         editEmailET.setText(emailAddress);
         editPhoneET.setText(phoneNumber);
+        teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
 
         sendCV = findViewById(R.id.sendCV);
         sendCV.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +107,7 @@ public class EditTeamMember extends BaseActivity {
 
 
     }
+
     private void focusWatchers() {
         try {
 
@@ -196,10 +211,11 @@ public class EditTeamMember extends BaseActivity {
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void textWatchers() {
         editFNameET.addTextChangedListener(new TextWatcher() {
 
@@ -333,11 +349,11 @@ public class EditTeamMember extends BaseActivity {
 
     private void enableOrDisableNext() {
         try {
-            if (isFirstName && isLastName && isEmail ) {
+            if (isFirstName && isLastName && isEmail) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
-                Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " );
+                Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " ");
             } else {
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " + isPhoneNumber + " ");
@@ -350,25 +366,52 @@ public class EditTeamMember extends BaseActivity {
         }
 
     }
+
     public void teamInfoAPICall(TeamRequest teamRequest) {
-        teamViewModel.updateTeamInfo(teamRequest,teamMemberId);
+        teamViewModel.updateTeamInfo(teamRequest, teamMemberId);
     }
+
     public TeamRequest prepareRequest() {
         TeamRequest teamRequest = new TeamRequest();
         try {
-                PhoneNumberTeam phone = new PhoneNumberTeam();
-                phone.setCountryCode(Utils.strCCode);
-                phone.setPhoneNumber(editPhoneET.getText().toString());
-                teamRequest.setFirstName(editFNameET.getText().toString());
-                teamRequest.setFirstName(editLNameET.getText().toString());
-                teamRequest.setFirstName(editEmailET.getText().toString());
-                teamRequest.setFirstName(editPhoneET.getText().toString());
+            String emailAddress = editEmailET.getText().toString();
+            String phoneNumber = editPhoneET.getText().toString();
+            PhoneNumberTeam phone = new PhoneNumberTeam();
+            phone.setCountryCode(Utils.strCCode);
+            phone.setPhoneNumber(phoneNumber);
+            teamRequest.setEmailAddress(emailAddress);
+            teamRequest.setRoleId(19);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return teamRequest;
+    }
+
+    private void initObservers() {
+        teamViewModel.getTeamUpdateMutableLiveData().observe(this, new Observer<TeamInfoAddModel>() {
+            @Override
+            public void onChanged(TeamInfoAddModel teamInfoAddModel) {
+                dismissDialog();
+                try {
+                    if (teamInfoAddModel != null) {
+                        if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "PHONE");
+
+                        } else {
+                            Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), EditTeamMember.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
+                        }
+                    } else {
+                        Toast.makeText(EditTeamMember.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
 }

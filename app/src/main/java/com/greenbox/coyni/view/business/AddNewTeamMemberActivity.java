@@ -4,7 +4,6 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,15 +19,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
-import com.greenbox.coyni.view.EditPhoneActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class AddNewTeamMemberActivity extends BaseActivity {
@@ -60,13 +56,18 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         teamViewModel.getTeamAddMutableLiveData().observe(this, new Observer<TeamInfoAddModel>() {
             @Override
             public void onChanged(TeamInfoAddModel teamInfoAddModel) {
-                dialog.dismiss();
+                dismissDialog();
                 try {
-                    if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent), R.drawable.additional_action, "PHONE");
+                    if (teamInfoAddModel != null) {
+                        if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "PHONE");
 
+                        } else {
+                            Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), AddNewTeamMemberActivity.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
+                        }
                     } else {
                         Toast.makeText(AddNewTeamMemberActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -107,7 +108,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
             public void onClick(View v) {
                 showProgressDialog();
-                phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
+                //  phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
                 teamInfoAddAPICall(prepareRequest());
             }
         });
@@ -380,6 +381,16 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
     public void teamInfoAddAPICall(TeamRequest teamRequest) {
         teamViewModel.addTeam(teamRequest);
+    }
+
+    public void addTeam() {
+        teamInfoAddAPICall(prepareRequest());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        addTeam();
     }
 
     private void enableOrDisableNext() {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
-    tools:context=".view.business.TeamMember">
+    tools:context=".view.business.TeamMemberActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
         android:paddingTop="@dimen/_20sdp">
 
         <LinearLayout
+            android:id="@+id/bpbackBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -188,7 +189,7 @@
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_130sdp"
+                android:layout_marginBottom="@dimen/_60sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
@@ -231,11 +232,6 @@
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_rightarrow" />
                     </LinearLayout>
 
                     <View
@@ -275,12 +271,6 @@
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:contentDescription="Screen Navigation"
-                            android:src="@drawable/ic_rightarrow" />
                     </LinearLayout>
 
                     <View

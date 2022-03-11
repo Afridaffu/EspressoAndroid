@@ -1,10 +1,7 @@
 package com.greenbox.coyni.view.business;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -12,7 +9,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,16 +27,16 @@ import com.greenbox.coyni.viewmodel.TeamViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamActivity extends BaseActivity{
+public class TeamActivity extends BaseActivity {
 
-    private LinearLayout bpbackBtn, addTeamMemberL,clearTextLL;
+    private LinearLayout bpbackBtn, addTeamMemberL, clearTextLL;
     private TeamViewModel teamViewModel;
     private RecyclerView recyclerViewTeam;
     private TeamAdapter teamAdapter;
     private List<TeamData> datumList = new ArrayList<>();
-    private TextView noBrandsTV;
     private EditText searchET;
     private TeamAdapter.TeamMemberClickListener memberClickListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +54,13 @@ public class TeamActivity extends BaseActivity{
         addTeamMemberL = findViewById(R.id.addTeamMemberL);
         searchET = findViewById(R.id.searchET);
         clearTextLL = findViewById(R.id.clearTextLL);
-        noBrandsTV = findViewById(R.id.noBrandsTV);
         bpbackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        recyclerViewTeam=findViewById(R.id.rvTeam);
-        addTeamMemberL.setVisibility(View.VISIBLE);
+        recyclerViewTeam = findViewById(R.id.rvTeam);
 
         addTeamMemberL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,10 +68,10 @@ public class TeamActivity extends BaseActivity{
                 startActivity(new Intent(TeamActivity.this, AddNewTeamMemberActivity.class));
             }
         });
-        TeamRequest request = new TeamRequest();
+
         searchET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(60)});
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
-        teamViewModel.getTeamInfo(request);
+
 
         searchET.addTextChangedListener(new TextWatcher() {
 
@@ -88,7 +82,6 @@ public class TeamActivity extends BaseActivity{
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                addTeamMemberL.setVisibility(View.GONE);
                 if (charSequence.toString().length() > 0) {
                     clearTextLL.setVisibility(View.VISIBLE);
                 } else {
@@ -99,22 +92,23 @@ public class TeamActivity extends BaseActivity{
                 int pindex = 0, poindex = 0;
                 if (datumList.size() > 0) {
                     for (int iteration = 0; iteration < datumList.size(); iteration++) {
-                        pindex = datumList.get(iteration).getFirstName().toLowerCase().indexOf(search_key.toLowerCase());
-                        if (pindex == 0) {
+
+                        if(datumList.get(iteration).getFirstName().toLowerCase().contains(search_key.toLowerCase())) {
+//                        if (pindex == 0) {
                             filterList.add(datumList.get(iteration));
                         }
+//                        }
                     }
                 }
 
                 if (filterList.size() > 0) {
-                    noBrandsTV.setVisibility(View.GONE);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
-                    teamAdapter = new TeamAdapter(TeamActivity.this, filterList,memberClickListener);
+                    teamAdapter = new TeamAdapter(TeamActivity.this, filterList, memberClickListener);
                     recyclerViewTeam.setLayoutManager(layoutManager);
                     recyclerViewTeam.setAdapter(teamAdapter);
-
-                } else {
-                    noBrandsTV.setVisibility(View.VISIBLE);
+                }
+                else {
+                   // recyclerViewTeam.setVisibility(View.GONE);
                 }
             }
 
@@ -129,8 +123,7 @@ public class TeamActivity extends BaseActivity{
             public void onClick(View view) {
                 searchET.setText("");
                 searchET.clearFocus();
-                noBrandsTV.setVisibility(View.GONE);
-                addTeamMemberL.setVisibility(View.VISIBLE);
+               // addTeamMemberL.setVisibility(View.VISIBLE);
                 Utils.hideKeypad(TeamActivity.this);
             }
         });
@@ -140,30 +133,37 @@ public class TeamActivity extends BaseActivity{
         try {
 
             memberClickListener = (view, position) -> {
-                String firstName="",lastName="";
-                if(datumList.get(position).getFirstName()!=null&&!datumList.get(position).getFirstName().equals("")){
-                    firstName=datumList.get(position).getFirstName();
+                String firstName = "", lastName = "";
+                if (datumList.get(position).getFirstName() != null && !datumList.get(position).getFirstName().equals("")) {
+                    firstName = datumList.get(position).getFirstName();
                 }
-                if(datumList.get(position).getLastName()!=null&&!datumList.get(position).getLastName().equals("")){
-                    lastName=datumList.get(position).getLastName();
+                if (datumList.get(position).getLastName() != null && !datumList.get(position).getLastName().equals("")) {
+                    lastName = datumList.get(position).getLastName();
                 }
-                char ch=firstName.charAt(0);
-                char ch1=lastName.charAt(0);
-               Intent intent =  new Intent(this, TeamMember.class);
-                intent.putExtra(Utils.teamFirstName,datumList.get(position).getFirstName());
-                intent.putExtra(Utils.teamLastName,datumList.get(position).getLastName());
-                intent.putExtra(Utils.teamImageName, ch+ch1);
-                intent.putExtra(Utils.teamRoleName,datumList.get(position).getRoleName());
-                intent.putExtra(Utils.teamStatus,datumList.get(position).getStatus());
-                intent.putExtra(Utils.teamEmailAddress,datumList.get(position).getEmailAddress());
-                intent.putExtra(Utils.teamPhoneNumber, (Parcelable) datumList.get(position).getPhoneNumber());
-                intent.putExtra(Utils.teamMemberId,datumList.get(position).getId());
+                char first = firstName.charAt(0);
+                char lastname = lastName.charAt(0);
+                String imageName=String.valueOf(first) + String.valueOf(lastname);
+                Intent intent = new Intent(this, TeamMemberActivity.class);
+                intent.putExtra(Utils.teamFirstName, datumList.get(position).getFirstName());
+                intent.putExtra(Utils.teamLastName, datumList.get(position).getLastName());
+                intent.putExtra(Utils.teamImageName, imageName);
+                intent.putExtra(Utils.teamRoleName, datumList.get(position).getRoleName());
+                intent.putExtra(Utils.teamStatus, datumList.get(position).getStatus());
+                intent.putExtra(Utils.teamEmailAddress, datumList.get(position).getEmailAddress());
+                intent.putExtra(Utils.teamPhoneNumber, datumList.get(position).getPhoneNumber());
+                intent.putExtra(Utils.teamMemberId, datumList.get(position).getId());
                 startActivity(intent);
 
             };
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TeamRequest request = new TeamRequest();
+        teamViewModel.getTeamInfo(request);
     }
     private void initObservers() {
 
@@ -174,17 +174,18 @@ public class TeamActivity extends BaseActivity{
                     if (teamResponseModel != null) {
                         if (teamResponseModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                             if (teamResponseModel.getData().size() > 0) {
-                                datumList=teamResponseModel.getData();
+                                datumList = teamResponseModel.getData();
 
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
                                 recyclerViewTeam.setLayoutManager(layoutManager);
-                                teamAdapter = new TeamAdapter(TeamActivity.this, datumList,memberClickListener);
+                                teamAdapter = new TeamAdapter(TeamActivity.this, datumList, memberClickListener);
                                 recyclerViewTeam.setAdapter(teamAdapter);
 
                             } else {
+                                recyclerViewTeam.setVisibility(View.GONE);
                             }
                         } else {
-                           // Utils.displayAlert(teamResponseModel.getError().getErrorDescription(), GiftCardActivity.this, "", brandsResponse.getError().getFieldErrors().get(0));
+                             Utils.displayAlert(teamResponseModel.getError().getErrorDescription(), TeamActivity.this, "", teamResponseModel.getError().getFieldErrors().get(0));
                         }
                     }
                 }
@@ -193,6 +194,6 @@ public class TeamActivity extends BaseActivity{
             e.printStackTrace();
         }
 
-        }
+    }
 
 }

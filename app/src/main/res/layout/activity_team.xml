@@ -153,18 +153,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
-        <TextView
-            android:id="@+id/noBrandsTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_34sdp"
-            android:layout_marginBottom="@dimen/_100sdp"
-            android:fontFamily="@font/opensans_regular"
-            android:gravity="center"
-            android:text="No Team Members Found"
-            android:textColor="@color/light_gray"
-            android:textSize="@dimen/_10ssp"
-            android:visibility="gone" />
     </androidx.cardview.widget.CardView>
 
 

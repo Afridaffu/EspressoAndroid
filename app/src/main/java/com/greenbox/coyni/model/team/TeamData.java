@@ -16,9 +16,19 @@ public class TeamData {
 
     private String roleName;
 
-    private String emailAddress;
+    private String email;
 
-    private PhoneNumberTeam phoneNumber;
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    private String phoneNumber;
+
+    private String countryCode;
 
     public int getId() {
         return id;
@@ -69,18 +79,18 @@ public class TeamData {
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        return email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmailAddress(String email) {
+        this.email = email;
     }
 
-    public PhoneNumberTeam getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(PhoneNumberTeam phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

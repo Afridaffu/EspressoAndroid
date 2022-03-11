@@ -8,7 +8,8 @@ public class TeamInfoAddModel {
     private String status;
 
     private String timestamp;
-    private List<TeamData> data = null;
+
+    private Data data;
 
     private Error error;
 
@@ -28,15 +29,15 @@ public class TeamInfoAddModel {
         this.timestamp = timestamp;
     }
 
-    public List<TeamData> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<TeamData> data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
-    public Object getError() {
+    public Error getError() {
         return error;
     }
 
