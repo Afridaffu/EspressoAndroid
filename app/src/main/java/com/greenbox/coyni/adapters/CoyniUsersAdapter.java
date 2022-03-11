@@ -55,31 +55,65 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             CoyniUsersData objData = listUsers.get(position);
+//            if (objData.getFullName() != null && !objData.getFullName().equals("")) {
+//                if (objData.getFullName().contains(" ")) {
+//                    if (!objData.getFullName().split(" ")[0].equals("")) {
+//                        if (objData.getFullName().split(" ").length > 2) {
+//                            if (!objData.getFullName().split(" ")[1].equals("")) {
+//                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
+//                            } else {
+//                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[2].substring(0, 1).toUpperCase());
+//                            }
+//                        } else {
+//                            holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
+//                        }
+//                    } else {
+//                        holder.tvNameHead.setText(objData.getFullName().split(" ")[0].toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
+//                    }
+//                } else {
+//                    holder.tvNameHead.setText(objData.getFullName().substring(0, 1).toUpperCase());
+//                }
+//                holder.tvUserName.setText(Utils.capitalize(objData.getFullName()));
+//                if (objData.getWalletId().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
+//                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
+//                } else {
+//                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId());
+//                }
+            String strPhContact = "", strEcoSysName = "";
             if (objData.getFullName() != null && !objData.getFullName().equals("")) {
-                if (objData.getFullName().contains(" ")) {
-                    if (!objData.getFullName().split(" ")[0].equals("")) {
-                        if (objData.getFullName().split(" ").length > 2) {
-                            if (!objData.getFullName().split(" ")[1].equals("")) {
-                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
-                            } else {
-                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[2].substring(0, 1).toUpperCase());
-                            }
-                        } else {
-                            holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
-                        }
-                    } else {
-                        holder.tvNameHead.setText(objData.getFullName().split(" ")[0].toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
-                    }
+                if (objData.getFullName().length() > 24) {
+                    strEcoSysName = objData.getFullName().substring(0, 24) + "...";
                 } else {
-                    holder.tvNameHead.setText(objData.getFullName().substring(0, 1).toUpperCase());
+                    strEcoSysName = objData.getFullName();
                 }
-                holder.tvUserName.setText(Utils.capitalize(objData.getFullName()));
-                if (objData.getWalletId().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
-                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
+            } else {
+                strEcoSysName = "";
+            }
+            if (objMyApplication.getObjPhContacts().containsKey(objData.getPhoneNumber().replace("(1)", ""))) {
+                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
+                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
                 } else {
-                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId());
+                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
                 }
-                if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
+            } else {
+                strPhContact = "";
+            }
+            if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
+                holder.tvUserName.setText(Utils.capitalize(strPhContact));
+                holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+            } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
+                holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
+                holder.tvWalletAddress.setVisibility(View.GONE);
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
+            } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
+                holder.tvUserName.setText(Utils.capitalize(strPhContact));
+                holder.tvWalletAddress.setVisibility(View.GONE);
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+            }
+
+
+            if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
                     holder.imgUser.setVisibility(View.VISIBLE);
                     holder.tvNameHead.setVisibility(View.GONE);
                     Glide.with(mContext)
@@ -90,7 +124,7 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
                     holder.imgUser.setVisibility(View.GONE);
                     holder.tvNameHead.setVisibility(View.VISIBLE);
                 }
-            }
+//            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,6 +133,7 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
                         Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletId());
                         i.putExtra("name", objData.getFullName());
+                        i.putExtra("phone", objData.getPhoneNumber());
                         mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();

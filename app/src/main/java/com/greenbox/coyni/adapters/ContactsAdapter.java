@@ -174,6 +174,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                             Intent i = new Intent(mContext, PayRequestActivity.class);
                             i.putExtra("walletId", objData.getWalletAddress());
                             i.putExtra("name", objData.getUserName());
+                            i.putExtra("phone", objData.getPhoneNumber());
                             mContext.startActivity(i);
                         } else {
                             Utils.displayAlert("You can only invite this contact.", ((AddRecipientActivity) mContext), "", "");
