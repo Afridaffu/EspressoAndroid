@@ -34,18 +34,18 @@ import com.greenbox.coyni.view.PayRequestActivity;
 public class RefundTransactionActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
     private ImageView refundBackIV;
-    private TextView etremarksTV,refundtV;
-   private EditText refundET,addNoteET;
-   private TextView refundcurrencyTV;
-  private LinearLayout remarksll;
-    Dialog cvvDialog, prevDialog;
+    private TextView etremarksTV, refundtV;
+    private EditText refundET, addNoteET;
+    private TextView refundcurrencyTV;
+    private LinearLayout remarksll;
+    private Dialog cvvDialog, prevDialog;
 
-    Long mLastClickTime = 0L;
+    private Long mLastClickTime = 0L;
 
-    CustomKeyboard cKey;
+    private CustomKeyboard cKey;
     float fontSize, dollarFont;
-    Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
-    Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
+    private Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
+    private Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
 
     @Override
@@ -62,6 +62,7 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
             }
         });
     }
+
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         if (start == 0 && after == 0) {
             refundET.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, fontSize));
@@ -166,6 +167,7 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
         });
 
     }
+
     private void displayComments() {
         try {
             cvvDialog = new Dialog(RefundTransactionActivity.this);
@@ -250,7 +252,8 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
                 @Override
                 public void onClick(View view) {
                     try {
-                        etremarksTV.setText(addNoteET.getText().toString().trim());                        cvvDialog.dismiss();
+                        etremarksTV.setText(addNoteET.getText().toString().trim());
+                        cvvDialog.dismiss();
                         Utils.hideKeypad(RefundTransactionActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -278,6 +281,7 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
         }
         return strReturn;
     }
+
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
@@ -304,6 +308,7 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
             ex.printStackTrace();
         }
     }
+
     private void disableButtons(Boolean value) {
         try {
             if (value) {
