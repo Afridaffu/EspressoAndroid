@@ -71,6 +71,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -1508,9 +1509,21 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(WithdrawTokenActivity.this, DashboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+//                    Intent i = new Intent(WithdrawTokenActivity.this, DashboardActivity.class);
+//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(i);
+                    try {
+                        Intent i;
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            i = new Intent(WithdrawTokenActivity.this, DashboardActivity.class);
+                        } else {
+                            i = new Intent(WithdrawTokenActivity.this, BusinessDashboardActivity.class);
+                        }
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             layoutReference.setOnClickListener(new View.OnClickListener() {

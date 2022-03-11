@@ -4,39 +4,32 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.icu.util.UniversalTimeScale;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.ChangePassword;
@@ -45,7 +38,6 @@ import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
-import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -174,7 +166,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     finish();
                 }
             });
-
+//            Utils.setCustomSelectionActionModeCallback(passwordET);
             passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -231,6 +223,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     }
                 }
             });
+
 
             confirmPasswordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
@@ -700,4 +693,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
+
+
 }
