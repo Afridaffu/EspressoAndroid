@@ -84,7 +84,7 @@ public class MyApplication extends Application {
     Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
     PaymentMethodsResponse paymentMethodsResponse;
     //    WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "";
+    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
     int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
     TransactionList transactionList;
     PaymentsList selectedCard;
@@ -959,6 +959,14 @@ public class MyApplication extends Application {
 
     public void setSubmitResponseModel(ApplicationSubmitResponseModel submitResponseModel) {
         this.submitResponseModel = submitResponseModel;
+    }
+
+    public String getStrRegisToken() {
+        return strRegisToken;
+    }
+
+    public void setStrRegisToken(String strRegisToken) {
+        this.strRegisToken = strRegisToken;
     }
 
     public Date getDate(String date) {

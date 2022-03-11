@@ -341,6 +341,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     if (custRegisterResponse != null) {
                         if (custRegisterResponse.getStatus().toLowerCase().equals("success")) {
                             try {
+                                objMyApplication.setStrRegisToken(custRegisterResponse.getData().getToken());
                                 Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
                                 if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                                     i.putExtra("screen", "SignUp");
@@ -779,7 +780,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     }
 
     public void focusWatchers() {
-         try {
+        try {
             firstNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -805,8 +806,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
-                    }
-                    else {
+                    } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         firstNameErrorLL.setVisibility(GONE);
