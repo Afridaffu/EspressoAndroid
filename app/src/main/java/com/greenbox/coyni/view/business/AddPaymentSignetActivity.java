@@ -3,13 +3,6 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.Service;
@@ -28,6 +21,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
@@ -35,7 +34,6 @@ import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 public class AddPaymentSignetActivity extends AppCompatActivity {
@@ -404,6 +402,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             stateErrorTV.setText("Field Required");
                         }
                     } else {
+                        Utils.hideKeypad(AddPaymentSignetActivity.this);
                         etlState.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlState, getColor(R.color.primary_green));
                         stateErrorLL.setVisibility(GONE);
