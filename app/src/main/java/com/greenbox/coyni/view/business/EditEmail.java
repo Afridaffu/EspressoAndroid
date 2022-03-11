@@ -125,8 +125,10 @@ public class EditEmail extends BaseActivity {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             if (changeEmail == 1) {
                                 Utils.showCustomToast(EditEmail.this, "Email Updated.", R.drawable.ic_custom_tick, "");
+                                finish();
                             } else {
                                 Utils.showCustomToast(EditEmail.this, "Phone Number Updated.", R.drawable.ic_custom_tick, "");
+                                finish();
                             }
                         } else {
                             Utils.displayAlert(companyInfoResponse.getError().getErrorDescription(),
