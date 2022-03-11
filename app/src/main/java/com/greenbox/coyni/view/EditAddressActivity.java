@@ -1080,7 +1080,9 @@ public class EditAddressActivity extends AppCompatActivity {
                         b_zipcodeErrorTV.setText("Field Required");
                     }
                 } else {
-                    Utils.shwForcedKeypad(EditAddressActivity.this);
+                    b_zipcodeET.requestFocus();
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(EditAddressActivity.this);
                     b_zipcodeET.setHint("Zip Code");
                     b_zipcodeErrorLL.setVisibility(GONE);
                     b_zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
