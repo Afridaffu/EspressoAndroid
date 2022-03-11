@@ -151,7 +151,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
-                        android:maxLength="30"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -292,6 +292,7 @@
                             android:textIsSelectable="false"
                             android:textSize="@dimen/_12ssp" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <LinearLayout
                         android:id="@+id/address2ErrorLL"
                         android:layout_width="match_parent"
