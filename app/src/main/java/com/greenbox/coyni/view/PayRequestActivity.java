@@ -123,6 +123,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     payRequestET.setHint("");
                     convertUSDValue();
+
                     if (editable.length() > 8) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
@@ -672,50 +673,55 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 //                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            }
 
-//            String strPhContact = "", strEcoSysName = "";
-//            if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
-//                if (userDetails.getData().getFullName().length() > 20) {
-//                    strEcoSysName = userDetails.getData().getFullName().substring(0, 20) + "...";
-//                } else {
-//                    strEcoSysName = userDetails.getData().getFullName();
-//                }
-//            } else {
-//                strEcoSysName = "";
-//            }
-//            if (objMyApplication.getObjPhContacts().containsKey(userDetails.getData().getPhoneNumber().replace("(1)", ""))) {
-//                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
-//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
-//                } else {
-//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
-//                }
-//            } else {
-//                strPhContact = "";
-//            }
-//            if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
-//                holder.tvUserName.setText(Utils.capitalize(strPhContact));
-//                holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
-//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
-//            } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
-//                holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
-//                holder.tvWalletAddress.setVisibility(View.GONE);
-//                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
-//            } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
-//                holder.tvUserName.setText(Utils.capitalize(strPhContact));
-//                holder.tvWalletAddress.setVisibility(View.GONE);
-//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
-//            }
+            String strPhContact = "", strEcoSysName = "", strPhone = "";
+            if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
+                if (userDetails.getData().getFullName().length() > 20) {
+                    strEcoSysName = userDetails.getData().getFullName().substring(0, 20) + "...";
+                } else {
+                    strEcoSysName = userDetails.getData().getFullName();
+                }
+            } else {
+                strEcoSysName = "";
+            }
+            if (getIntent().getStringExtra("phone") != null && !getIntent().getStringExtra("phone").equals("")) {
+                strPhone = getIntent().getStringExtra("phone").replace("(1)", "");
+            } else {
+                strPhone = "";
+            }
+            if (!strPhone.equals("") && objMyApplication.getObjPhContacts().containsKey(strPhone)) {
+                if (objMyApplication.getObjPhContacts().get(strPhone).getUserName().length() > 24) {
+                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName().substring(0, 24) + "...";
+                } else {
+                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName();
+                }
+            } else {
+                strPhContact = "";
+            }
+            if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
+                tvName.setText(Utils.capitalize(strPhContact));
+                userWalletAddre.setText("@" + Utils.capitalize(strEcoSysName));
+                userName.setText(objMyApplication.setNameHead(strPhContact));
+            } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
+                tvName.setText(Utils.capitalize(strEcoSysName));
+                userWalletAddre.setVisibility(View.GONE);
+                userName.setText(objMyApplication.setNameHead(strEcoSysName));
+            } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
+                tvName.setText(Utils.capitalize(strPhContact));
+                userWalletAddre.setVisibility(View.GONE);
+                userName.setText(objMyApplication.setNameHead(strPhContact));
+            }
 
 
             strUserName = Utils.capitalize(userDetails.getData().getFullName());
-            String imageTextNew = "";
-            imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
-                    userDetails.getData().getLastName().substring(0, 1).toUpperCase();
-            userName.setText(imageTextNew);
-            if (userDetails.getData().getWalletId().length() > Integer.parseInt(getString(R.string.waddress_length))) {
-                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-            } else {
-                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
-            }
+//            String imageTextNew = "";
+//            imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
+//                    userDetails.getData().getLastName().substring(0, 1).toUpperCase();
+//            userName.setText(imageTextNew);
+//            if (userDetails.getData().getWalletId().length() > Integer.parseInt(getString(R.string.waddress_length))) {
+//                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+//            } else {
+//                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
+//            }
             userName.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {

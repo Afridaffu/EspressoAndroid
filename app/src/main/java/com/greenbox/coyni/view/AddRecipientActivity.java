@@ -250,6 +250,9 @@ public class AddRecipientActivity extends AppCompatActivity {
         payViewModel.getRecentUsersMutableLiveData().observe(this, new Observer<RecentUsers>() {
             @Override
             public void onChanged(RecentUsers recentUsers) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
                 if (recentUsers != null) {
                     if (recentUsers.getData() != null && recentUsers.getData().size() > 0) {
                         lyRecentUsers.setVisibility(View.VISIBLE);
@@ -464,7 +467,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                     }
                 }
                 objMyApplication.setObjPhContacts(objUsers);
-                payViewModel.recentUsers();
+//                payViewModel.recentUsers();
                 if (listUsers != null && listUsers.size() > 0) {
                     if (Utils.checkInternet(AddRecipientActivity.this)) {
                         payViewModel.registeredUsers(listUsers);
@@ -473,6 +476,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                     }
                 }
             }
+            payViewModel.recentUsers();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -632,11 +632,11 @@ public class AddCardActivity extends AppCompatActivity {
                 return value = false;
             } else if (!etExpiry.getText().toString().matches("(?:0[1-9]|1[0-2])/[0-9]{2}")) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!validateExpiry()) {
                 etExpiry.requestFocus();
-                Utils.displayAlert("Please enter valid Expiry Date", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid Expiry Date", AddCardActivity.this, "", "");
                 return value = false;
             } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT && etCVV.getText().toString().equals("")) {
                 etCVV.requestFocus();
@@ -656,7 +656,7 @@ public class AddCardActivity extends AppCompatActivity {
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
-                Utils.displayAlert("Please enter valid CVV/CVC.", AddCardActivity.this, "", "");
+                Utils.displayAlert("Please enter a valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
                 Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
@@ -772,7 +772,7 @@ public class AddCardActivity extends AppCompatActivity {
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                     expiryErrorLL.setVisibility(VISIBLE);
-                                    expiryErrorTV.setText("Please enter valid Expiry Date");
+                                    expiryErrorTV.setText("Please enter a valid Expiry Date");
                                 }
                             } else {
                                 isExpiry = false;
@@ -847,6 +847,8 @@ public class AddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                                 address1ErrorLL.setVisibility(VISIBLE);
                                 address1ErrorTV.setText("Field Required");
+                            }  if (etAddress1.getText().toString().length() > 0 && !etAddress1.getText().toString().substring(0, 1).equals(" ")) {
+                                etAddress1.setText(etAddress1.getText().toString().substring(0, 1).toUpperCase() + etAddress1.getText().toString().substring(1));
                             }
                         } else {
                             etAddress1.setHint("Billing Address Line 1");
@@ -873,6 +875,8 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                            }  if (etAddress2.getText().toString().length() > 0 && !etAddress2.getText().toString().substring(0, 1).equals(" ")) {
+                                etAddress2.setText(etAddress2.getText().toString().substring(0, 1).toUpperCase() + etAddress2.getText().toString().substring(1));
                             }
                         } else {
                             etAddress2.setHint("Billing Address Line 2(Optional)");
@@ -901,6 +905,8 @@ public class AddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
                                 cityErrorTV.setText("Field Required");
+                            }if (etCity.getText().toString().length() > 0 && !etCity.getText().toString().substring(0, 1).equals(" ")) {
+                                etCity.setText(etCity.getText().toString().substring(0, 1).toUpperCase() + etCity.getText().toString().substring(1));
                             }
                         } else {
                             etCity.setHint("City");
@@ -1150,7 +1156,7 @@ public class AddCardActivity extends AppCompatActivity {
                         isAddress1 = true;
                         address1ErrorLL.setVisibility(GONE);
                         etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_black));
                     } else {
                         isAddress1 = false;
                     }
@@ -1191,7 +1197,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_black));
+                            Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1233,7 +1239,7 @@ public class AddCardActivity extends AppCompatActivity {
                         isCity = true;
                         cityErrorLL.setVisibility(GONE);
                         etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_black));
                     } else {
                         isCity = false;
                     }
