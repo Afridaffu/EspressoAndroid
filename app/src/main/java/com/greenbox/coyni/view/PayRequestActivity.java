@@ -123,6 +123,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     payRequestET.setHint("");
                     convertUSDValue();
+
                     if (editable.length() > 8) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
