@@ -145,6 +145,17 @@ public class BusinessProfileActivity extends AppCompatActivity {
                     }
                 }
             });
+            beneficialOwnersLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(BusinessProfileActivity.this, MerchantSettingsBeneficialOwnersActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
             businessResetPin.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -836,7 +847,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     }
 
     private void disableLayout(LinearLayout layout, boolean isEnable) {
-        if(layout == null) {
+        if (layout == null) {
             return;
         }
         for (int i = 0; i < layout.getChildCount(); i++) {

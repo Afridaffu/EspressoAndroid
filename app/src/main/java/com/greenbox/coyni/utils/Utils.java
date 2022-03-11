@@ -94,7 +94,7 @@ import java.util.regex.Pattern;
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
-    public static final String TOKEN = "TOKEN",MERCHANT = "MERCHANT";
+    public static final String TOKEN = "TOKEN", MERCHANT = "MERCHANT";
 
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
     public static enum BUSINESS_ACCOUNT_STATUS {
@@ -240,14 +240,21 @@ public class Utils {
     public static final String teamPhoneNumber = "TeamPhoneNumber";
     public static final String teamMemberId = "TeamMemberId";
 
-    public static final String boName="BOName";
-    public static final int boOwnershipPercentage=50;
-    public static final String boAddress="BoAddress";
-    public static final String boDob="BoDob";
-    public static final String boSSN="BoSSN";
+    public static final String boName = "BOName";
+    public static final int boOwnershipPercentage = 50;
+    public static final String boAddress = "BoAddress";
+    public static final String boDob = "BoDob";
+    public static final String boSSN = "BoSSN";
 
-    public static final int position=0;
+    public static final String companyName = "CompanyName";
+    public static final String companyEmail = "CompanyEmail";
+    public static final String companyNumber = "CompanyNumber";
+    public static final String changeEdit = "ChangeEdit";
+    public static final String comCountryCode = "CompanyCountryCode";
+    public static final int companyId=0;
 
+
+    public static final int position = 0;
 
 
     public static String getStrLang() {
@@ -1349,12 +1356,12 @@ public class Utils {
     }
 
     public static String getBusinessName(MyApplication myApplicationObj, String key) {
-        LogUtils.d("key","key"+key);
-        LogUtils.d("myApplicationObj","myApplicationObj"+myApplicationObj);
+        LogUtils.d("key", "key" + key);
+        LogUtils.d("myApplicationObj", "myApplicationObj" + myApplicationObj);
         if (myApplicationObj.getBusinessTypeResp() != null && myApplicationObj.getBusinessTypeResp().getData() != null) {
             List<BusinessType> listBT = myApplicationObj.getBusinessTypeResp().getData();
-            for(BusinessType businessType : listBT) {
-                if(businessType.getKey().equalsIgnoreCase(key)) {
+            for (BusinessType businessType : listBT) {
+                if (businessType.getKey().equalsIgnoreCase(key)) {
                     return businessType.getValue();
                 }
             }

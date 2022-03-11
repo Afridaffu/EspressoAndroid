@@ -1,13 +1,11 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -18,10 +16,12 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 public class CompanyInfoDetails extends BaseActivity {
-    LinearLayout closeLL,emailLL,phoneLL;
-    TextView mEmailTx,mPhoneNumberTx,mAddressTx;
-    private String companyEmail="",companyPhone="";
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private LinearLayout closeLL, emailLL, phoneLL;
+    private TextView mEmailTx, mPhoneNumberTx, mAddressTx, nameTX;
+    private String companyEmail = "", companyPhone = "", companyCountryCode = "";
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private int companyId = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,29 +34,32 @@ public class CompanyInfoDetails extends BaseActivity {
 
     private void initFields() {
         closeLL = findViewById(R.id.bpCloseLL);
-        mEmailTx=(TextView) findViewById(R.id.emailTx);
-        mPhoneNumberTx=(TextView) findViewById(R.id.phoneNumberTx);
-        mAddressTx=(TextView) findViewById(R.id.addressTx);
-        emailLL=(LinearLayout)findViewById(R.id.emailLL);
-        phoneLL=(LinearLayout)findViewById(R.id.phoneLL);
+        mEmailTx = (TextView) findViewById(R.id.emailTx);
+        mPhoneNumberTx = (TextView) findViewById(R.id.phoneNumberTx);
+        mAddressTx = (TextView) findViewById(R.id.addressTx);
+        nameTX = (TextView) findViewById(R.id.name_id);
+        emailLL = (LinearLayout) findViewById(R.id.emailLL);
+        phoneLL = (LinearLayout) findViewById(R.id.phoneLL);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessIdentityVerificationViewModel.getCompanyInfo();
 
-        closeLL.setOnClickListener(v -> {
-            try {
-                finish();
-            } catch (Exception e) {
-                e.printStackTrace();
+        closeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
+
 
         emailLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CompanyInfoDetails.this, ChangeEmail.class);
-                intent.putExtra("CompanyEmail",companyEmail);
-                intent.putExtra("CompanyPhone",companyPhone);
-                intent.putExtra("ChangeEmail",1);
+                intent.putExtra(Utils.companyEmail, companyEmail);
+                intent.putExtra(Utils.companyNumber, companyPhone);
+                intent.putExtra(Utils.comCountryCode, companyCountryCode);
+                intent.putExtra(String.valueOf(Utils.companyId), companyId);
+                intent.putExtra(Utils.changeEdit, 1);
                 startActivity(intent);
             }
         });
@@ -64,9 +67,11 @@ public class CompanyInfoDetails extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CompanyInfoDetails.this, ChangeEmail.class);
-                intent.putExtra("CompanyEmail",companyEmail);
-                intent.putExtra("CompanyPhone",companyPhone);
-                intent.putExtra("ChangeEmail",2);
+                intent.putExtra(Utils.companyEmail, companyEmail);
+                intent.putExtra(Utils.companyNumber, companyPhone);
+                intent.putExtra(Utils.comCountryCode, companyCountryCode);
+                intent.putExtra(String.valueOf(Utils.companyId), companyId);
+                intent.putExtra(Utils.changeEdit, 2);
                 startActivity(intent);
             }
         });
@@ -82,19 +87,27 @@ public class CompanyInfoDetails extends BaseActivity {
                             try {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
 
+                                if (cir.getName() != null && !cir.getName().equals("")) {
+                                    nameTX.setText(cir.getName());
+                                }
+
                                 if (cir.getEmail() != null && !cir.getEmail().equals("")) {
                                     mEmailTx.setText(cir.getEmail());
-                                    companyEmail=cir.getEmail();
+                                    companyEmail = cir.getEmail();
                                 }
 
                                 if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
                                     mPhoneNumberTx.setText(cir.getPhoneNumberDto().getPhoneNumber());
-                                    companyPhone=cir.getPhoneNumberDto().getPhoneNumber();
+                                    companyPhone = cir.getPhoneNumberDto().getPhoneNumber();
                                 }
 
-                                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
-                                    mAddressTx.setText(cir.getAddressLine1());
+                                if (cir.getPhoneNumberDto().getCountryCode() != null && !cir.getPhoneNumberDto().getCountryCode().equals("")) {
+                                    companyCountryCode = cir.getPhoneNumberDto().getCountryCode();
                                 }
+                                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("") || cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                    mAddressTx.setText(cir.getAddressLine1() + cir.getAddressLine2());
+                                }
+                                companyId = cir.getId();
 
                             } catch (Exception e) {
                                 e.printStackTrace();
