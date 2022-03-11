@@ -17,6 +17,7 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
+import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.BanksResponseModel;
@@ -301,6 +302,9 @@ public interface ApiService {
     @POST("api/v2/business/sign-agreement")
     Call<SignedAgreementResponse> signedAgreement(@Part MultipartBody.Part file,
                                                   @Part("agreementType") int agreementType);
+
+    @POST("api/v2/business/agreements")
+    Call<UpdateSignAgreementsResponse> updateSignAgreemets();
 
     @DELETE("api/v2/profile/me/remove-identity")
     Call<RemoveIdentityResponse> removeIdentityImage(@Query("identityType") String identityType);
