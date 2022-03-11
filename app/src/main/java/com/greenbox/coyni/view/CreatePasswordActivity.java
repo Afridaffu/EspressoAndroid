@@ -166,7 +166,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     finish();
                 }
             });
-            Utils.setCustomSelectionActionModeCallback(passwordET);
+//            Utils.setCustomSelectionActionModeCallback(passwordET);
             passwordET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
