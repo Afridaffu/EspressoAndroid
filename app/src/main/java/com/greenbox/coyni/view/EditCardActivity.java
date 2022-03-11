@@ -475,11 +475,14 @@ public class EditCardActivity extends AppCompatActivity {
                                 etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.primary_black));
 
-                            } else {
+                            }  else {
                                 etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
                                 cityErrorTV.setText("Field Required");
+                            }
+                            if (etCity.getText().toString().length() > 0 && !etCity.getText().toString().substring(0, 1).equals(" ")) {
+                                etCity.setText(etCity.getText().toString().substring(0, 1).toUpperCase() + etCity.getText().toString().substring(1));
                             }
                         } else {
                             etCity.setHint("City");
@@ -639,6 +642,8 @@ public class EditCardActivity extends AppCompatActivity {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
                         address1ErrorLL.setVisibility(GONE);
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        etAddress1.setText(str.trim());
                     } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                         etAddress1.setText("");
                         etAddress1.setSelection(etAddress1.getText().length());
@@ -672,6 +677,8 @@ public class EditCardActivity extends AppCompatActivity {
                 if (str.substring(0).equals(" ")) {
                     etAddress2.setText("");
                     etAddress2.setSelection(etAddress2.getText().length());
+                } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                    etAddress2.setText(str.trim());
                 }
             }
         });
@@ -706,6 +713,8 @@ public class EditCardActivity extends AppCompatActivity {
                     if (str.length() > 0 && str.substring(0).equals(" ")) {
                         etCity.setText("");
                         etCity.setSelection(etCity.getText().length());
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        etCity.setText(str.trim());
                     } else if (str.length() > 0 && str.contains(".")) {
                         etCity.setText(etCity.getText().toString().replaceAll("\\.", ""));
                         etCity.setSelection(etCity.getText().length());
