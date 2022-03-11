@@ -132,19 +132,20 @@ public class TeamMemberActivity extends BaseActivity {
         if (status.equalsIgnoreCase("Active")) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
-            mResendInvitation.setVisibility(View.VISIBLE);
+            mResendInvitation.setVisibility(View.GONE);
             mRemoveCv.setVisibility(View.VISIBLE);
             txStatus.setTextColor(getResources().getColor(R.color.active_green));
             mStatusIcon.setBackgroundResource(R.drawable.active_dot);
             txStatus.setBackgroundResource(R.drawable.txn_active_bg);
-        } else if (status.equalsIgnoreCase("Resend Invitation")) {
+        } else if (status.equalsIgnoreCase("Canceled")) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
-            mResendInvitation.setVisibility(View.GONE);
+            mResendInvitation.setVisibility(View.VISIBLE);
             mRemoveCv.setVisibility(View.VISIBLE);
             txStatus.setTextColor(getResources().getColor(R.color.error_red));
             mStatusIcon.setBackgroundResource(R.drawable.resend_invitation_bg);
             txStatus.setBackgroundResource(R.drawable.txn_resend_invitation_bg);
+            txStatus.setText("Expired");
         } else if (status.equalsIgnoreCase("Inactive")) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);

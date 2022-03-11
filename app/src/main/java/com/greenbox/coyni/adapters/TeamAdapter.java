@@ -66,8 +66,25 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             if (objData.getRoleName() != null && !objData.getRoleName().equals("")) {
                 holder.txRole.setText(objData.getRoleName());
             }
+
             if (objData.getStatus() != null && !objData.getStatus().equals("")) {
                 holder.txStatus.setText(objData.getStatus().toString());
+                if(objData.getStatus().equalsIgnoreCase("Pending")) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.pending_color));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                }
+                else if(objData.getStatus().equalsIgnoreCase("Active")) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
+                }
+                else if(objData.getStatus().equalsIgnoreCase("Inactive")) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
+                }
+                else{
+                    holder.txStatus.setText("Resend Invitation");
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
+                }
             }
 
 
