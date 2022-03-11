@@ -266,12 +266,18 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                 try {
                     if (!b) {
                         etWalletId.setHint("");
-                        if (etWalletId.getText().toString().trim().length() > 0) {
+                        if (etWalletId.getText().toString().trim().length() > 1) {
                             isWallet = true;
                             walletErrorLL.setVisibility(GONE);
                             etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
-                        } else {
+                        }  else if (etWalletId.getText().toString().trim().length() == 1) {
+                            isWallet = false;
+                            etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            Utils.setUpperHintColor(etlWalletId, getColor(R.color.error_red));
+                            walletErrorLL.setVisibility(VISIBLE);
+                            walletErrorTV.setText("Minimum 2 Characters Required");
+                        }else {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.light_gray));

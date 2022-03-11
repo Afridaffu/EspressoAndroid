@@ -29,24 +29,25 @@ import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.PayRequestActivity;
+import com.greenbox.coyni.view.WithdrawTokenActivity;
 
-public class RefundTransactionActivity extends AppCompatActivity implements TextWatcher {
+public class RefundTransactionActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     private ImageView refundBackIV;
-    private TextView etremarksTV, refundtV;
+    private TextView etremarksTV;
     private EditText refundET, addNoteET;
     private TextView refundcurrencyTV;
     private LinearLayout remarksll;
-    private Dialog cvvDialog, prevDialog;
-
-    private Long mLastClickTime = 0L;
-
     private CustomKeyboard cKey;
-    float fontSize, dollarFont;
+    private Long mLastClickTime = 0L, bankId, cardId;
+    private float fontSize, dollarFont;
+    private Dialog payDialog, prevDialog, cvvDialog;
     private Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     private Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
+    public static RefundTransactionActivity refundTransactionActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,68 +64,21 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
         });
     }
 
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        if (start == 0 && after == 0) {
-            refundET.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, fontSize));
-            refundcurrencyTV.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, dollarFont));
-        }
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (s != null) {
-
-        }
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-        if (editable == refundET.getEditableText()) {
-            try {
-                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
-                    refundET.setHint("");
-                    convertUSDValue();
-                    if (editable.length() > 8) {
-                        refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                        refundcurrencyTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if (editable.length() > 5) {
-                        refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                        refundcurrencyTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                    } else {
-                        refundET.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, fontSize));
-                        refundcurrencyTV.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, dollarFont));
-                    }
-                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
-                        disableButtons(false);
-                    } else {
-                        disableButtons(true);
-                    }
-                    //payRequestET.setSelection(payRequestET.getText().length());
-                } else if (editable.toString().equals(".")) {
-                    refundET.setText("");
-                    disableButtons(true);
-                } else if (editable.length() == 0) {
-                    refundET.setHint("0.00");
-                    cynValue = 0.0;
-                    usdValue = 0.0;
-                    cynValidation = 0.0;
-                    disableButtons(true);
-                    cKey.clearData();
-                } else {
-                    refundET.setText("");
-                    cynValue = 0.0;
-                    usdValue = 0.0;
-                    cynValidation = 0.0;
-                    disableButtons(true);
-                    cKey.clearData();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-
+    //    private void setRefundAmountClick() {
+//        try {
+//            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                return;
+//            }
+//            cynValue = Double.parseDouble(refundET.getText().toString().trim());
+//            mLastClickTime = SystemClock.elapsedRealtime();
+////            isButtonClick = true;
+////            convertUSDtoCYN();
+////            calculateFee(Utils.USNumberFormat(cynValue));
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//    }
     private void initialization() {
 
         objMyApplication = (MyApplication) getApplicationContext();
@@ -134,14 +88,15 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
         refundcurrencyTV = findViewById(R.id.refundCurrencyTV);
         remarksll = findViewById(R.id.remarksLL);
 
-
         cKey = findViewById(R.id.ckbrefund);
         InputConnection ic = refundET.onCreateInputConnection(new EditorInfo());
         cKey.setInputConnection(ic);
+        cKey.setKeyAction("Refund", RefundTransactionActivity.this);
+        cKey.setScreenName("refundables");
 //        refundET.addTextChangedListener(this);
         if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
             refundET.setText(getIntent().getStringExtra("amount"));
-            USFormat(refundET);
+//            USFormat(refundET);
             refundET.setEnabled(false);
         } else {
             //enableButtons();
@@ -152,9 +107,9 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
         refundET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.hideSoftKeypad(RefundTransactionActivity.this, v);
             }
         });
+
         remarksll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,6 +123,22 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
 
     }
 
+    protected void onResume() {
+        try {
+            if (cvvDialog != null && addNoteET.hasFocus()) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        addNoteET.requestFocus();
+                    }
+                }, 100);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        super.onResume();
+    }
+
     private void displayComments() {
         try {
             cvvDialog = new Dialog(RefundTransactionActivity.this);
@@ -178,18 +149,31 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            etremarksTV = cvvDialog.findViewById(R.id.addNoteET);
+            addNoteET = cvvDialog.findViewById(R.id.addNoteET);
             CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
             TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    addNoteET.requestFocus();
-                    Utils.openKeyPad(RefundTransactionActivity.this, addNoteET);
 
+
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cvvDialog.dismiss();
+                    Utils.hideKeypad(RefundTransactionActivity.this);
                 }
-            }, 100);
+            });
+            doneBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        etremarksTV.setText(addNoteET.getText().toString().trim());
+                        cvvDialog.dismiss();
+                        Utils.hideKeypad(RefundTransactionActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             addNoteET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -241,46 +225,24 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
             cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
             cvvDialog.show();
-            cancelBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    cvvDialog.dismiss();
-                    Utils.hideKeypad(RefundTransactionActivity.this);
-                }
-            });
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        etremarksTV.setText(addNoteET.getText().toString().trim());
-                        cvvDialog.dismiss();
-                        Utils.hideKeypad(RefundTransactionActivity.this);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private String USFormat(EditText etAmount) {
-        String strAmount = "", strReturn = "";
-        try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
-            etAmount.removeTextChangedListener(RefundTransactionActivity.this);
-            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-            etAmount.addTextChangedListener(RefundTransactionActivity.this);
-            etAmount.setSelection(etAmount.getText().toString().length());
-            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
-            changeTextSize(strReturn);
-            setDefaultLength();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strReturn;
-    }
+//    private String USFormat(EditText etAmount) {
+//        String strAmount = "", strReturn = "";
+//        try {
+//            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+//            strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
+//            changeTextSize(strReturn);
+//            setDefaultLength();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return strReturn;
+//    }
 
     private void changeTextSize(String editable) {
         try {
@@ -309,39 +271,31 @@ public class RefundTransactionActivity extends AppCompatActivity implements Text
         }
     }
 
-    private void disableButtons(Boolean value) {
-        try {
-            if (value) {
-//                payRequestLL.setBackgroundResource(R.drawable.payrequest_bgcolor);
-                isPayClickable = false;
-                isReqClickable = false;
-            } else {
-//                payRequestLL.setBackgroundResource(R.drawable.payrequest_activebg);
-                isPayClickable = true;
-                isReqClickable = true;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void disableButtons(Boolean value) {
+//        try {
+//            if (value) {
+////                payRequestLL.setBackgroundResource(R.drawable.payrequest_bgcolor);
+//                isPayClickable = false;
+//                isReqClickable = false;
+//            } else {
+////                payRequestLL.setBackgroundResource(R.drawable.payrequest_activebg);
+//                isPayClickable = true;
+//                isReqClickable = true;
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
-    private void setDefaultLength() {
-        try {
-            InputFilter[] FilterArray = new InputFilter[1];
-            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
-            refundET.setFilters(FilterArray);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void setDefaultLength() {
+//        try {
+//            InputFilter[] FilterArray = new InputFilter[1];
+//            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+//            refundET.setFilters(FilterArray);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
-    private void convertUSDValue() {
-        try {
-            usdValue = Double.parseDouble(refundET.getText().toString().trim().replace(",", ""));
-            cynValue = (usdValue + (usdValue * (feeInPercentage / 100))) + feeInAmount;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
 }
