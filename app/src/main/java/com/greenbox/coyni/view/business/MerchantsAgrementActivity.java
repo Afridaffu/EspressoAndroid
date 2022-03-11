@@ -64,13 +64,11 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webSettings.setJavaScriptEnabled(true);
         webView.setVerticalScrollBarEnabled(true);
         String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
-//      webView.loadUrl("https://docs.google.com/gview?embedded=false&url=" + fileURL);
         webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
 
         canceledIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                webView.clearHistory();
                 onBackPressed();
             }
         });
@@ -93,14 +91,6 @@ public class MerchantsAgrementActivity extends BaseActivity {
             }
         });
 
-    }
-
-    public class WebViewController extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
     }
 
     private void launchSignature() {
