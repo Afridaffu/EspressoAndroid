@@ -213,10 +213,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     }
 
-    public void meFees(long UserID) {
+    public void meFees(int feeStructureId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<Fees> mCall = apiService.meFees(UserID);
+            Call<Fees> mCall = apiService.meFees(feeStructureId);
             mCall.enqueue(new Callback<Fees>() {
                 @Override
                 public void onResponse(Call<Fees> call, Response<Fees> response) {

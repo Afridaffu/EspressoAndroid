@@ -140,6 +140,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                         Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletAddress());
                         i.putExtra("name", objData.getUserName());
+                        i.putExtra("phone", objData.getPhoneNumber());
                         mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();

@@ -2,28 +2,31 @@ package com.greenbox.coyni.view.business;
 
 
 import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
-import android.util.DisplayMetrics;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -42,7 +45,6 @@ import com.greenbox.coyni.adapters.BankAccountsRecyclerAdapter;
 import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
-import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
@@ -51,12 +53,9 @@ import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
-import com.greenbox.coyni.model.register.PhNoWithCountryCode;
-import com.greenbox.coyni.model.submit.ApplicationSubmitRequest;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.Agreements;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
-import com.greenbox.coyni.model.summary.Bankaccount;
 import com.greenbox.coyni.model.summary.BeneficialOwnerInfo;
 import com.greenbox.coyni.model.summary.CompanyInfo;
 import com.greenbox.coyni.model.summary.DbaInfo;
@@ -67,6 +66,7 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
@@ -93,7 +93,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
-    private TextView noBanksTv, noBoTV;
+    private TextView noBanksTv, noBoTV, ssnEinTV;
     private LinearLayout banksLL, boLL, CloseLL;
     private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
@@ -122,16 +122,16 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     SignOnData signOnData;
     private ImageView llEin;
     private PaymentMethodsViewModel paymentMethodsViewModel;
-    private TextView tosTV, prTv;
+    private TextView tosTV, prTv, spannableTV;
     private CompanyInfo cir;
     Long mLastClickTimeQA = 0L;
-
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_application);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setKeyboardVisibilityListener(ReviewApplicationActivity.this);
         objMyApplication = (MyApplication) getApplicationContext();
 
@@ -160,6 +160,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         llDBADocuments = findViewById(R.id.llDBADocuments);
         llEin = findViewById(R.id.llEIN);
         CloseLL = findViewById(R.id.CloseLL);
+        ssnEinTV = findViewById(R.id.ssnEinTV);
+        spannableTV = findViewById(R.id.spannableTV);
+
+        setSpannableText();
 
         edit1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -444,6 +448,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
                                 if (cir.getSsnOrEin() != null) {
                                     if (!cir.getSsnOrEin().equals("")) {
+                                        if (cir.getIdentificationType() == 11) {
+                                            ssnEinTV.setText("SSN");
+                                        } else {
+                                            ssnEinTV.setText("EIN/TIN");
+                                        }
                                         isCPwdEye = true;
                                         String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
                                         String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
@@ -457,17 +466,17 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 if (cir.getAddressLine1() != null) {
                                     sbCompany.append(cir.getAddressLine1());
                                 }
-                                if (cir.getAddressLine2() != null) {
-                                    sbCompany.append(",").append(cir.getAddressLine2());
+                                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                    sbCompany.append(", ").append(cir.getAddressLine2());
                                 }
                                 if (cir.getCity() != null) {
-                                    sbCompany.append(",").append(cir.getCity());
+                                    sbCompany.append(", ").append(cir.getCity());
                                 }
                                 if (cir.getState() != null) {
-                                    sbCompany.append(",").append(cir.getState());
+                                    sbCompany.append(", ").append(cir.getState());
                                 }
                                 if (cir.getZipCode() != null) {
-                                    sbCompany.append(",").append(cir.getZipCode());
+                                    sbCompany.append(", ").append(cir.getZipCode());
                                 }
                                 mAddressTx.setText(sbCompany.toString());
 
@@ -580,16 +589,16 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     sb.append(dbaInfo.getAddressLine1());
                                 }
                                 if (dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    sb.append(",").append(dbaInfo.getAddressLine2());
+                                    sb.append(", ").append(dbaInfo.getAddressLine2());
                                 }
                                 if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
-                                    sb.append(",").append(dbaInfo.getCity());
+                                    sb.append(", ").append(dbaInfo.getCity());
                                 }
                                 if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
-                                    sb.append(",").append(dbaInfo.getState());
+                                    sb.append(", ").append(dbaInfo.getState());
                                 }
                                 if (dbaInfo.getZipCode() != null && !dbaInfo.getZipCode().equals("")) {
-                                    sb.append(",").append(dbaInfo.getZipCode());
+                                    sb.append(", ").append(dbaInfo.getZipCode());
                                 }
                                 mDbAddressLineTx.setText(sb.toString());
 
@@ -615,6 +624,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
                                     benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList, ReviewApplicationActivity.this);
                                     beneficialOwnerList = boList;
+                                    boRecyclerView.setNestedScrollingEnabled(false);
                                     boRecyclerView.setLayoutManager(layoutManager);
                                     boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
                                 } else {
@@ -630,6 +640,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
                                     accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems, ReviewApplicationActivity.this);
 
+                                    bankRecyclerView.setNestedScrollingEnabled(false);
                                     bankRecyclerView.setLayoutManager(layoutManager);
                                     bankRecyclerView.setAdapter(accountsRecyclerAdapter);
 
@@ -781,10 +792,22 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
-                //Call the activity here
-                Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
-                intent.putExtra("FILEURL", fileUrl);
-                startActivity(intent);
+                if (fileUrl.contains(".pdf")) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setDataAndType(Uri.parse(fileUrl), "application/pdf");
+                    try {
+                        startActivity(browserIntent);
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    //Call the activity here
+                    Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
+                    intent.putExtra("FILEURL", fileUrl);
+                    startActivity(intent);
+
+                }
+
 
             } else {
                 LogUtils.v(TAG, "fileUrl is null or empty");
@@ -864,5 +887,73 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //            pageTwoView.setVisibility(GONE);
             Utils.isKeyboardVisible = false;
         }
+    }
+
+    public void setSpannableText() {
+
+        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy");
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Log.e("Click", "click");
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                dashboardViewModel.agreementsByType("1");
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+//                try {
+//                    startActivity(browserIntent);
+//                } catch (ActivityNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
+
+        ClickableSpan clickableSpan2 = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Log.e("Click", "click");
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                dashboardViewModel.agreementsByType("0");
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+//                try {
+//                    startActivity(browserIntent);
+//                } catch (ActivityNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
+
+        ss.setSpan(clickableSpan, 64, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 64, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+        spannableTV.setText(ss);
+        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableTV.setHighlightColor(Color.TRANSPARENT);
     }
 }
