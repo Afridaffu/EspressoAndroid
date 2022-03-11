@@ -101,6 +101,7 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
             if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
                 holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
+                holder.tvWalletAddress.setVisibility(View.VISIBLE);
                 holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
@@ -114,16 +115,16 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
 
 
             if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
-                    holder.imgUser.setVisibility(View.VISIBLE);
-                    holder.tvNameHead.setVisibility(View.GONE);
-                    Glide.with(mContext)
-                            .load(objData.getImage())
-                            .placeholder(R.drawable.ic_profilelogo)
-                            .into(holder.imgUser);
-                } else {
-                    holder.imgUser.setVisibility(View.GONE);
-                    holder.tvNameHead.setVisibility(View.VISIBLE);
-                }
+                holder.imgUser.setVisibility(View.VISIBLE);
+                holder.tvNameHead.setVisibility(View.GONE);
+                Glide.with(mContext)
+                        .load(objData.getImage())
+                        .placeholder(R.drawable.ic_profilelogo)
+                        .into(holder.imgUser);
+            } else {
+                holder.imgUser.setVisibility(View.GONE);
+                holder.tvNameHead.setVisibility(View.VISIBLE);
+            }
 //            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
