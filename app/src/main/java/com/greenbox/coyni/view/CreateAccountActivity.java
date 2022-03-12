@@ -1056,7 +1056,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
     private void callRegisterAPI() {
         try {
-
             PhNoWithCountryCode phone = new PhNoWithCountryCode();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
@@ -1071,6 +1070,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             regisRequest.setAccountType(objMyApplication.getAccountType());
             regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim() + " " + lastNameET.getText().toString().trim());
+            regisRequest.setToken(objMyApplication.getStrRegisToken());
             if (Singleton.getCustRegisterResponse().getData().getUserId().equals("")) {
                 loginViewModel.customerRegistration(regisRequest, "POST");
             } else {
