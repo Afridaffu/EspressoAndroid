@@ -1447,6 +1447,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         businessET.setText(textView.getText().toString());
         isBusinessEntity = true;
         enableOrDisableNext();
+        setUI_IdentificationType();
 
         dialog.dismiss();
     }
