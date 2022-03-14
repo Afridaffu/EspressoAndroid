@@ -1,16 +1,11 @@
-package com.greenbox.coyni.model.summary;
+package com.greenbox.coyni.model.UpdateSignAgree;
 
 import com.greenbox.coyni.model.Error;
 
-public class ApplicationSummaryModelResponse {
-
-
+public class UpdateSignAgreementsResponse {
     private String status;
-
     private String timestamp;
-
-    private Data data;
-
+    private UpdateSignAgreementsResponseData data;
     private Error error;
 
     public String getStatus() {
@@ -29,11 +24,11 @@ public class ApplicationSummaryModelResponse {
         this.timestamp = timestamp;
     }
 
-    public Data getData() {
+    public UpdateSignAgreementsResponseData getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(UpdateSignAgreementsResponseData data) {
         this.data = data;
     }
 

@@ -385,7 +385,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 } else {
                                     isExpiry = false;
                                     expiryErrorLL.setVisibility(VISIBLE);
-                                    expiryErrorTV.setText("Please enter valid Expiry Date");
+                                    expiryErrorTV.setText("Please enter a valid Expiry Date");
                                     etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                 }
@@ -578,7 +578,7 @@ public class EditCardActivity extends AppCompatActivity {
                         } else {
                             isExpiry = false;
                             expiryErrorLL.setVisibility(VISIBLE);
-                            expiryErrorTV.setText("Please enter valid Expiry Date");
+                            expiryErrorTV.setText("Please enter a valid Expiry Date");
                         }
                     } else {
                         isExpiry = false;

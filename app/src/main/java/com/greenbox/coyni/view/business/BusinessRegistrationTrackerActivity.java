@@ -70,7 +70,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             super.onCreate(savedInstanceState);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
             setContentView(R.layout.activity_business_tracker_account);
+
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
             TextView dashboardTV = findViewById(R.id.dashboardTV);
 
@@ -661,7 +664,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             mReviewCv.setVisibility(GONE);
             appFinishedTV.setVisibility(GONE);
             infoTV.setVisibility(VISIBLE);
-            bagIV.setImageDrawable(getResources().getDrawable(R.drawable.aplica_mdpi));
+            bagIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_appl_inprogress));
         }
     }
 
