@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.team;
 
+import com.greenbox.coyni.model.Error;
+
 public class TeamRequest {
 
     private String firstName;
@@ -8,7 +10,7 @@ public class TeamRequest {
 
     private Integer roleId;
 
-    private Object status;
+    private Error status;
 
     private String roleName;
 
@@ -49,11 +51,11 @@ public class TeamRequest {
         this.roleId = roleId;
     }
 
-    public Object getStatus() {
+    public Error getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(Error status) {
         this.status = status;
     }
 
@@ -68,6 +70,7 @@ public class TeamRequest {
     public String getEmailAddress() {
         return emailAddress;
     }
+
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }

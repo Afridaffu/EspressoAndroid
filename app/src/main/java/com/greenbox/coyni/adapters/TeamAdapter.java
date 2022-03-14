@@ -1,93 +1,74 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.giftcard.Brand;
-import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.team.TeamData;
-import com.greenbox.coyni.model.team.TeamResponseModel;
-import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.BuyTokenActivity;
-import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
-import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
-import com.greenbox.coyni.view.WithdrawTokenActivity;
-import com.greenbox.coyni.view.business.TeamMember;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
+import java.util.Locale;
 
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> {
+
     List<TeamData> listTeam;
     Context mContext;
-    MyApplication objMyApplication;
-    String memberName="";
     private TeamAdapter.TeamMemberClickListener memberClickListener;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView txName, txRole, txStatus, txImageName;
-        public LinearLayout teamLL;
-
-        public MyViewHolder(View view) {
-            super(view);
-            txName=view.findViewById(R.id.name);
-            txRole=view.findViewById(R.id.role);
-            txStatus=view.findViewById(R.id.status);
-            txImageName=view.findViewById(R.id.imageTextTV);
-
-        }
-    }
-
-
-    public TeamAdapter(Context context,List<TeamData> listTeam,TeamAdapter.TeamMemberClickListener memberClickListener) {
+    public TeamAdapter(Context context, List<TeamData> listTeam, TeamAdapter.TeamMemberClickListener memberClickListener) {
         this.mContext = context;
-        this.objMyApplication = (MyApplication) context.getApplicationContext();
-        this.listTeam= listTeam;
-        this.memberClickListener=memberClickListener;
+        this.listTeam = listTeam;
+        this.memberClickListener = memberClickListener;
     }
 
+    public Context getContext() {
+        return mContext;
+    }
+
+    public void setContext(Context context) {
+        this.mContext = context;
+    }
+
+
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_team, parent, false);
         return new MyViewHolder(itemView);
     }
-    public interface TeamMemberClickListener {
-        void onItemClick(View view, int position);
-    }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
         try {
-            TeamData objData = listTeam.get(position);
-            String firstName="",lastName="";
-            if(objData.getFirstName()!=null&&!objData.getFirstName().equals("")){
-                 firstName=objData.getFirstName();
+            TeamData objData = listTeam.get(pos);
+            String firstName = "", lastName = "";
+            if (objData.getFirstName() != null && !objData.getFirstName().equals("")) {
+                firstName = objData.getFirstName();
             }
-            if(objData.getLastName()!=null&&!objData.getLastName().equals("")){
-                lastName=objData.getLastName();
+            if (objData.getLastName() != null && !objData.getLastName().equals("")) {
+                lastName = objData.getLastName();
             }
-            memberName=firstName.substring(0)+lastName.substring(0);
-            holder.txImageName.setText(memberName);
-            holder.txName.setText(firstName+""+lastName);
-            if(objData.getRoleName()!=null&&!objData.getRoleName().equals("")){
+            char first = firstName.charAt(0);
+            char last = lastName.charAt(0);
+            String imageName = String.valueOf(first) + String.valueOf(last);
+            holder.txImageName.setText(imageName);
+            holder.txName.setText(firstName + lastName);
+            if (objData.getRoleName() != null && !objData.getRoleName().equals("")) {
                 holder.txRole.setText(objData.getRoleName());
             }
-            if(objData.getStatus()!=null&&!objData.getStatus().equals("")){
+            if (objData.getStatus() != null && !objData.getStatus().equals("")) {
                 holder.txStatus.setText(objData.getStatus().toString());
             }
-
 
 
         } catch (Exception ex) {
@@ -97,7 +78,33 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return listTeam.size();
+        if (this.listTeam != null) {
+            return listTeam.size();
+        }
+        return 0;
     }
 
+    public interface TeamMemberClickListener {
+        void click(View view, int position);
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public TextView txName, txRole, txStatus, txImageName;
+
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txName = itemView.findViewById(R.id.name);
+            txRole = itemView.findViewById(R.id.role);
+            txStatus = itemView.findViewById(R.id.status);
+            txImageName = itemView.findViewById(R.id.imageTextTV);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            memberClickListener.click(view, getAdapterPosition());
+        }
+    }
 }

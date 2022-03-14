@@ -13,6 +13,7 @@ import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
+import com.greenbox.coyni.model.CompanyInfo.ContactInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -109,7 +110,6 @@ import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
-import com.greenbox.coyni.model.team.TeamDeleteModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
@@ -434,6 +434,9 @@ public interface ApiService {
     @PATCH("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> updateCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
 
+    @PATCH("/api/v2/business/contact-info")
+    Call<CompanyInfoUpdateResp> updateContactInforamtion(@Body ContactInfoRequest contactInfoRequest);
+
     @PATCH("api/v2/business/dba-info")
     Call<DBAInfoUpdateResp> updateDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
 
@@ -513,10 +516,13 @@ public interface ApiService {
     Call<TeamResponseModel> updateTeamData(@Body TeamRequest request, @Query("teamMemberId") Integer teamMemberId);
 
     @DELETE("api/v2/team/{teamMemberId}")
-    Call<TeamDeleteModel> deleteTeam(@Query("teamMemberId") Integer teamMemberId);
+    Call<TeamInfoAddModel> deleteTeam(@Path("teamMemberId") Integer teamMemberId);
 
     @POST("api/v2/team/send-invitation")
     Call<TeamInfoAddModel> addTeamMember(@Body TeamRequest request);
+
+    @PATCH("/api/v2/team/cancel")
+    Call<TeamInfoAddModel> cancelTeam(@Query("userId") Integer teamMemberId);
 
     @GET("api/v2/business/summary")
     Call<ApplicationSummaryModelResponse> getApplicationSummaryData();
