@@ -367,35 +367,44 @@
                             android:textSize="@dimen/_10ssp" />
                     </LinearLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/SsnTIL"
-                        style="@style/TextInputLayout.OutlinedBox"
+                    <!--                    <com.google.android.material.textfield.TextInputLayout-->
+                    <!--                        android:id="@+id/SsnTIL"-->
+                    <!--                        style="@style/TextInputLayout.OutlinedBox"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginTop="@dimen/_14sdp"-->
+                    <!--                        android:hint="@string/ssnout"-->
+                    <!--                        android:textColorHint="@color/light_gray"-->
+                    <!--                        app:boxStrokeColor="@color/primary_green"-->
+                    <!--                        app:endIconDrawable="@drawable/ic_eyeclose"-->
+                    <!--                        app:endIconMode="custom"-->
+                    <!--                        app:endIconTint="@color/xdark_gray"-->
+                    <!--                        app:errorIconDrawable="@null"-->
+                    <!--                        app:hintTextColor="@color/primary_green">-->
+
+                    <!--                        <com.google.android.material.textfield.TextInputEditText-->
+                    <!--                            android:id="@+id/SsnET"-->
+                    <!--                            android:layout_width="match_parent"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"-->
+                    <!--                            android:fontFamily="@font/opensans_semibold"-->
+                    <!--                            android:imeOptions="actionNext"-->
+                    <!--                            android:inputType="numberPassword"-->
+                    <!--                            android:maxLength="9"-->
+                    <!--                            android:paddingVertical="@dimen/_12sdp"-->
+                    <!--                            android:singleLine="true"-->
+                    <!--                            android:textColor="@color/text_color"-->
+                    <!--                            android:textColorHint="@color/light_gray"-->
+                    <!--                            android:textCursorDrawable="@drawable/cursor_green"-->
+                    <!--                            android:textSize="@dimen/_12ssp" />-->
+                    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+                    <com.greenbox.coyni.utils.outline_et.SSNBOEditText
+                        android:id="@+id/ssnOutLineBoxET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_14sdp"
-                        android:hint="@string/ssnout"
-                        android:textColorHint="@color/light_gray"
-                        app:boxStrokeColor="@color/primary_green"
-
-                        app:hintTextColor="@color/primary_green">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/SsnET"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:imeOptions="actionNext"
-                            android:inputType="numberPassword"
-                            android:maxLength="9"
-
-                            android:paddingVertical="@dimen/_12sdp"
-                            android:singleLine="true"
-                            android:textColor="@color/text_color"
-                            android:textColorHint="@color/light_gray"
-                            android:textCursorDrawable="@drawable/cursor_green"
-                            android:textSize="@dimen/_12ssp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/_8sdp" />
 
                     <LinearLayout
                         android:id="@+id/SsnErrorLL"

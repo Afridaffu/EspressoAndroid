@@ -239,7 +239,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
                 startActivity(new Intent(this, AddBeneficialOwnerActivity.class)
                         .putExtra("FROM", "EDIT_BO")
                         .putExtra("ID", boID));
-                //finish();
+                finish();
             });
 
             deleteLL.setOnClickListener(view -> {
