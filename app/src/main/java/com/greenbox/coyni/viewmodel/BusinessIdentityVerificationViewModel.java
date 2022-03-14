@@ -20,6 +20,7 @@ import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
+import com.greenbox.coyni.model.CompanyInfo.ContactInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -56,6 +57,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
     private MutableLiveData<IdentityImageResponse> uploadBODocResponse = new MutableLiveData<>();
     private MutableLiveData<RemoveIdentityResponse> removeBODocResponse = new MutableLiveData<>();
     private MutableLiveData<BOValidateResp> validateBOResponse = new MutableLiveData<>();
+    private MutableLiveData<CompanyInfoUpdateResp> getContactInfoUpdate=new MutableLiveData<>();
 
 
     public BusinessIdentityVerificationViewModel(@NonNull Application application) {
@@ -121,6 +123,10 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
 
     public MutableLiveData<BusinessTrackerResponse> getGetBusinessTrackerResponse() {
         return getBusinessTrackerResponse;
+    }
+
+    public MutableLiveData<CompanyInfoUpdateResp> getContactInfoUpdateResponse() {
+        return getContactInfoUpdate;
     }
 
     //ID Verification Tracker
@@ -189,6 +195,41 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                 public void onFailure(Call<CompanyInfoResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     getCompanyInfoResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateCompanyInfo(ContactInfoRequest contactInfoRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CompanyInfoUpdateResp> mCall = apiService.updateContactInforamtion(contactInfoRequest);
+            mCall.enqueue(new Callback<CompanyInfoUpdateResp>() {
+                @Override
+                public void onResponse(Call<CompanyInfoUpdateResp> call, Response<CompanyInfoUpdateResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            CompanyInfoUpdateResp obj = response.body();
+                            getContactInfoUpdate.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CompanyInfoUpdateResp>() {
+                            }.getType();
+                            CompanyInfoUpdateResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            getContactInfoUpdate.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        getContactInfoUpdate.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CompanyInfoUpdateResp> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    getContactInfoUpdate.setValue(null);
                 }
             });
         } catch (Exception ex) {

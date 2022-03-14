@@ -15,6 +15,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.giftcard.Brand;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.GiftCardDetails;
 import com.greenbox.coyni.view.LoginActivity;
 

@@ -75,12 +75,13 @@
                         android:src="@drawable/ic_xmlid_1" />
 
                     <TextView
+                        android:id="@+id/name_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_bold"
-                        android:text="Greenboxpos"
+                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_24ssp" />
 
@@ -151,7 +152,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="Jonathanjostar@gmail.com"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
@@ -197,7 +198,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="123-456-7890"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
@@ -242,7 +243,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="3131 Camino Del Rio, San Diego,\nCA, 92108"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
