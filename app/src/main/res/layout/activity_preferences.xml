@@ -174,7 +174,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
     <TextView
         android:layout_width="wrap_content"
@@ -210,13 +210,12 @@
                 android:layout_marginTop="@dimen/_23sdp"
                 android:layout_marginBottom="@dimen/_35sdp">
 
-
-                <View
-                    android:id="@+id/disableView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_39sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:background="@drawable/disable_bg" />
+<!--                <View-->
+<!--                    android:id="@+id/disableView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/_39sdp"-->
+<!--                    android:layout_marginTop="@dimen/_6sdp"-->
+<!--                    android:background="@drawable/disable_bg" />-->
 
                 <RelativeLayout
                     android:id="@+id/accountCL"
@@ -231,7 +230,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="@dimen/_15sdp"
                         android:src="@drawable/ic_down"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/accountTIL"
@@ -239,30 +238,41 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Account"
-                        android:textColorHint="@color/xdark_gray"
+                        android:textColorHint="@color/black"
                         app:boxCornerRadiusBottomEnd="@dimen/_10sdp"
                         app:boxCornerRadiusBottomStart="@dimen/_10sdp"
                         app:boxCornerRadiusTopEnd="@dimen/_10sdp"
+                        android:clickable="true"
                         app:boxCornerRadiusTopStart="@dimen/_10sdp"
                         app:boxStrokeColor="@color/primary_color"
+
                         app:expandedHintEnabled="false"
-                        app:hintTextColor="@color/black">
+                        app:hintTextColor="@color/primary_color"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/accountET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:clickable="false"
+                            android:autofillHints="creditCardSecurityCode"
                             android:cursorVisible="false"
-                            android:enabled="false"
+                            android:editable="false"
+                            android:clickable="true"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
-                            android:inputType="text"
-                            android:padding="@dimen/_12sdp"
-                            android:text=""
-                            android:textColor="@color/xdark_gray"
-                            android:textSize="@dimen/_12ssp"
-                            android:autofillHints="creditCardSecurityCode"/>
+                            android:imeOptions="actionNext"
+                            android:importantForAutofill="no"
+                            android:inputType="textEmailAddress|textNoSuggestions"
+                            android:maxLines="1"
+                            android:padding="@dimen/_14sdp"
+                            android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                            android:singleLine="true"
+                            android:textColor="@color/text_color"
+                            android:textColorHint="@color/light_gray"
+                            android:textCursorDrawable="@drawable/cursor_color"
+                            android:textSize="@dimen/_12ssp"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </RelativeLayout>

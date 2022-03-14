@@ -87,7 +87,7 @@ public class BenificialOwnersRecyclerAdapter extends
             if (objData.getSsn() != null && !objData.getSsn().equals("")) {
                 isCPwdEye = true;
                 String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-                String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
                 //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                 holder.ssnTx.setText(hifened);
             }
@@ -126,17 +126,16 @@ public class BenificialOwnersRecyclerAdapter extends
                                     isCPwdEye = true;
                                     holder.llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                                     String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-                                    String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                                    String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
                                     //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                                     holder.ssnTx.setText(hifened);
                                 } else {
                                     isCPwdEye = false;
                                     holder.llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                                    String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-                                    String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
-                                    //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                                    String converted = objData.getSsn();
+                                    String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
                                     holder.ssnTx.setText(hifened);
-                                    holder.ssnTx.setText(objData.getSsn().substring(0, 2) + "-" + objData.getSsn().substring(2));
+                                   // holder.ssnTx.setText(objData.getSsn().substring(0, 2) + "-" + objData.getSsn().substring(2));
                                 }
 
                             } catch (Exception ex) {

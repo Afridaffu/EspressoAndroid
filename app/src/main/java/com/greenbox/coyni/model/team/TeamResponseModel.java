@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.team;
 
+import com.greenbox.coyni.model.Error;
+
 import java.util.List;
 public class TeamResponseModel {
 
@@ -8,7 +10,7 @@ public class TeamResponseModel {
     private String timestamp;
     private List<TeamData> data = null;
 
-    private Object error;
+    private Error error;
 
     public String getStatus() {
         return status;
@@ -34,11 +36,11 @@ public class TeamResponseModel {
         this.data = data;
     }
 
-    public Object getError() {
+    public Error getError() {
         return error;
     }
 
-    public void setError(Object error) {
+    public void setError(Error error) {
         this.error = error;
     }
 
