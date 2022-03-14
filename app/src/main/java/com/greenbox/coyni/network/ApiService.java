@@ -13,6 +13,7 @@ import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
+import com.greenbox.coyni.model.CompanyInfo.ContactInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -432,6 +433,9 @@ public interface ApiService {
 
     @PATCH("api/v2/business/company-info")
     Call<CompanyInfoUpdateResp> updateCompanyInforamtion(@Body CompanyInfoRequest companyInfoRequest);
+
+    @PATCH("/api/v2/business/contact-info")
+    Call<CompanyInfoUpdateResp> updateContactInforamtion(@Body ContactInfoRequest contactInfoRequest);
 
     @PATCH("api/v2/business/dba-info")
     Call<DBAInfoUpdateResp> updateDBAInforamtion(@Body DBAInfoRequest dbaInfoRequest);
