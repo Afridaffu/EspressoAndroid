@@ -15,6 +15,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
+import com.greenbox.coyni.view.business.AddNewTeamMemberActivity;
 
 public class
 
@@ -88,6 +89,10 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
                             caa.phoneErrorLL.setVisibility(GONE);
                         }
+                        else if (FROM.equals("Add_Team_Member")) {
+                            AddNewTeamMemberActivity caa = AddNewTeamMemberActivity.addNewTeamMemberActivity;
+                            caa.editPhoneLL.setVisibility(GONE);
+                        }
                     }
 //                    if (FROM.equals("Retrieve") && !b) {
                     if (FROM.equals("Retrieve")) {
@@ -132,6 +137,28 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             }
                         } else {
                             caa.phoneErrorLL.setVisibility(GONE);
+                        }
+                    }
+                    else if (FROM.equals("Add_Team_Member")) {
+                        AddNewTeamMemberActivity caa = AddNewTeamMemberActivity.addNewTeamMemberActivity;
+                        if (!b) {
+                            if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
+                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                                caa.editPhoneLL.setVisibility(VISIBLE);
+//                                caa.phoneErrorTV.setText("Invalid Phone Number");
+                                caa.editPhoneTV.setText("Please enter a valid Phone Number");
+                            } else if ((pnET.getText().length() == 0)) {
+                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                                caa.editPhoneLL.setVisibility(VISIBLE);
+                                caa.editPhoneTV.setText("Field Required");
+                            } else {
+                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            }
+                        } else {
+                            caa.editPhoneLL.setVisibility(GONE);
                         }
                     }
                 } catch (Exception ex) {
@@ -185,6 +212,16 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 //                        rea.phoneErrorLL.setVisibility(VISIBLE);
 //                        rea.phoneErrorTV.setText("Field Required");
 //                    }
+                }
+                else if (FROM.equals("Add_Team_Member")) {
+                    AddNewTeamMemberActivity atm = AddNewTeamMemberActivity.addNewTeamMemberActivity;
+                    if (charSequence.length() == 14) {
+                        isPhoneError = false;
+                        atm.editPhoneLL.setVisibility(GONE);
+                    }
+                    atm.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
+                    atm.enableOrDisableNext();
+
                 }
 
             }

@@ -41,6 +41,7 @@ public class EditTeamMember extends BaseActivity {
     private TeamViewModel teamViewModel;
     private int teamMemberId = 0;
     private ImageView backBtn;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +99,15 @@ public class EditTeamMember extends BaseActivity {
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
 
         sendCV = findViewById(R.id.sendCV);
-        sendCV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                teamInfoAPICall(prepareRequest());
-            }
-        });
+
+            sendCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isNextEnabled) {
+                        teamInfoAPICall(prepareRequest());
+                    }
+                }
+            });
 
 
     }
@@ -349,7 +353,7 @@ public class EditTeamMember extends BaseActivity {
 
     private void enableOrDisableNext() {
         try {
-            if (isFirstName && isLastName && isEmail) {
+            if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
