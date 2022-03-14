@@ -1,16 +1,14 @@
 package com.greenbox.coyni.view.business;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,11 +20,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.io.File;
 
@@ -35,15 +35,17 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class MerchantsAgrementActivity extends BaseActivity {
-    public CardView doneCV;
+    public CardView doneCV,signaturDoneCV;
     LinearLayout signatureEditLl;
-    ImageView mIVSignature,canceledIV;
+    ImageView mIVSignature, canceledIV;
     TextView savedText;
     BusinessDashboardViewModel businessDashboardViewModel;
+    DashboardViewModel dashboardViewModel;
     private String filePath = null;
     private boolean isSignatureCaptured = false;
     private WebView webView;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
         initObservers();
 
         doneCV = findViewById(R.id.AgreeDoneCv);
+        signaturDoneCV = findViewById(R.id.tv_signature_done);
         signatureEditLl = findViewById(R.id.signatureEditLL);
         mIVSignature = findViewById(R.id.signatureEditIV);
         savedText = findViewById(R.id.savedtextTV);
@@ -73,6 +76,8 @@ public class MerchantsAgrementActivity extends BaseActivity {
             }
         });
 
+
+
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +90,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
         signatureEditLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isSignatureCaptured) {
+                if (!isSignatureCaptured) {
                     launchSignature();
                 }
             }
@@ -118,6 +123,8 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
                 isSignatureCaptured = true;
+//                showProgressDialog();
+//                sendSignatureRequest();
             }
         }
     }
@@ -137,7 +144,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
     private void deleteTemporarySignatureFile() {
         if (filePath != null) {
             File file = new File(filePath);
-            if(file.exists()) {
+            if (file.exists()) {
                 file.delete();
             }
             filePath = null;
@@ -152,14 +159,16 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 try {
                     deleteTemporarySignatureFile();
                     dismissDialog();
-                    if(signedAgreementResponse != null) {
+                    businessDashboardViewModel.updateSignedAgree();
+                    if (signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null
                                 && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
                             //If require need to show the Toast to the User.
-                            finish();
+                            //finish();
+                            //businessDashboardViewModel.updateSignedAgree();
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
-                            if(signedAgreementResponse.getError() != null
+                            if (signedAgreementResponse.getError() != null
                                     && signedAgreementResponse.getError().getErrorDescription() != null) {
                                 errorMessage = signedAgreementResponse.getError().getErrorDescription();
                             }
@@ -167,12 +176,37 @@ public class MerchantsAgrementActivity extends BaseActivity {
                                     MerchantsAgrementActivity.this, "", signedAgreementResponse.getError().getFieldErrors().get(0));
                         }
                     } else {
-                         LogUtils.v(TAG, "signedAgreementResponse is null");
+                        LogUtils.v(TAG, "signedAgreementResponse is null");
                     }
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        businessDashboardViewModel.getUpdateSignAgreementsResponseMutableLiveData().observe(this, new Observer<UpdateSignAgreementsResponse>() {
+            @Override
+            public void onChanged(UpdateSignAgreementsResponse updateSignAgreementsResponse) {
+            try{
+                if(updateSignAgreementsResponse!= null){
+                    if(updateSignAgreementsResponse!= null && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess"));
+                    finish();
+                }
+                else {
+                    String errorMessage = getString(R.string.something_went_wrong);
+                    if (updateSignAgreementsResponse.getError() != null
+                            && updateSignAgreementsResponse.getError().getErrorDescription() != null) {
+                        errorMessage = updateSignAgreementsResponse.getError().getErrorDescription();
+                    }
+                    Utils.displayAlert(errorMessage,
+                            MerchantsAgrementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             }
         });
     }
