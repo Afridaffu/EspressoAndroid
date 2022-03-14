@@ -87,7 +87,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UserDetailsActivity extends AppCompatActivity implements OnKeyboardVisibilityListener, BusinessProfileRecyclerAdapter.OnSelectListner {
+public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisibilityListener, BusinessProfileRecyclerAdapter.OnSelectListner {
 
     ImageView editProfileIV, userProfileIV, mIvUserIcon;
     private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV, defualtAccountDialogPersonalNameTV,
@@ -358,7 +358,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                 userPhoneNumTV.setText(phoneFormat);
                 business_userPhneNoTV.setText(phoneFormat);
 
-                LogUtils.d("TAG","profiledata"+profile);
+                LogUtils.d(TAG,"profiledata"+profile);
 
 //                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
 //
@@ -447,7 +447,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                         public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                             businessPersonalProfileTickIcon.setVisibility(View.GONE);
                             BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-                            LogUtils.d("TAG", "GroupChildClick" + i + "....." + i1 + "....." + l);
+                            LogUtils.d(TAG, "GroupChildClick" + i + "....." + i1 + "....." + l);
                             childid = subSet.get(i).getSubsetName().get(i1).getId();
                             SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
                             for(int k=0;k<subSet.size();k++) {
@@ -459,7 +459,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                                     }
                                 }
                             }
-                            LogUtils.d("TAG", "subSetChildClick" + subSet);
+                            LogUtils.d(TAG, "subSetChildClick" + subSet);
                             listAdapter.notifyDataSetChanged();
                             return true;
                         }
@@ -467,7 +467,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
 
                     if (businessAccountList.size() != 0) {
                         brandsGV.setVisibility(View.VISIBLE);
-                        LogUtils.d("TAG", "subSet" + subSet);
+                        LogUtils.d(TAG, "subSet" + subSet);
 
                         listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
                         brandsGV.setAdapter(listAdapter);
@@ -520,7 +520,7 @@ public class UserDetailsActivity extends AppCompatActivity implements OnKeyboard
                                     }
                                 }
                             }
-                            LogUtils.d("TAG", "subSetChildClick" + subSet);
+                            LogUtils.d(TAG, "subSetChildClick" + subSet);
                             listAdapter.notifyDataSetChanged();
 
                         }
