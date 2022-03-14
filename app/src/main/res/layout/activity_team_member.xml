@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
-    tools:context=".view.business.TeamMember">
+    tools:context=".view.business.TeamMemberActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
         android:paddingTop="@dimen/_20sdp">
 
         <LinearLayout
+            android:id="@+id/bpbackBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -110,7 +111,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="AL"
+                                    android:text=""
                                     android:textSize="@dimen/_20sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:textColor="@color/white"/>
@@ -137,19 +138,21 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
-                            android:text="Alison L"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
 
                         <TextView
+                            android:id="@+id/role"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_6sdp"
                             android:fontFamily="@font/opensans_regular"
-                            android:text="Administrator"
+                            android:text=""
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp" />
                     </LinearLayout>
@@ -162,7 +165,7 @@
                         android:background="@drawable/txn_pending_bg"
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center"
-                        android:text="Pending"
+                        android:text=""
                         android:textColor="@color/orange"
                         android:textSize="@dimen/_7ssp" />
                 </LinearLayout>
@@ -186,7 +189,7 @@
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_130sdp"
+                android:layout_marginBottom="@dimen/_60sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
@@ -224,16 +227,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="alison@gmail.com"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_rightarrow" />
                     </LinearLayout>
 
                     <View
@@ -268,17 +266,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/_7sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="123-456-7890"
+                                android:text=""
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:contentDescription="Screen Navigation"
-                            android:src="@drawable/ic_rightarrow" />
                     </LinearLayout>
 
                     <View
