@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -61,7 +62,14 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     if (teamInfoAddModel != null) {
                         if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                             Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "PHONE");
+                            new Handler().postDelayed(() -> {
+                                try {
+                                    finish();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                            }, 2000);
                         } else {
                             Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), AddNewTeamMemberActivity.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
                         }

@@ -3,6 +3,7 @@ package com.greenbox.coyni.view.business;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,7 +61,14 @@ public class TeamMemberActivity extends BaseActivity {
                         if (teamInfoAddModel != null) {
                             if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                                 Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.invitation_canceled), R.drawable.ic_custom_tick, "PHONE");
+                                new Handler().postDelayed(() -> {
+                                    try {
+                                        finish();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 
+                                }, 2000);
                             } else {
                                 Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), TeamMemberActivity.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
                             }
@@ -85,7 +93,14 @@ public class TeamMemberActivity extends BaseActivity {
                         if (teamInfoAddModel != null) {
                             if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                                 Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.Removed_success), R.drawable.ic_custom_tick, "PHONE");
+                                new Handler().postDelayed(() -> {
+                                    try {
+                                        finish();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 
+                                }, 2000);
                             } else {
                                 Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), TeamMemberActivity.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
                             }
@@ -206,7 +221,6 @@ public class TeamMemberActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    showProgressDialog();
                     showRemoveMemberDialog();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -219,12 +233,11 @@ public class TeamMemberActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initObservers();
     }
 
 
     private void showRemoveMemberDialog() {
-        DialogAttributes dialogAttributes = new DialogAttributes(getResources().getString(R.string.remove_team_members), getString(R.string.account_permissions, firstName + lastName), getString(R.string.yes), getString(R.string.no));
+        DialogAttributes dialogAttributes = new DialogAttributes(getResources().getString(R.string.remove_team_members), getString(R.string.account_permissions, firstName +""+ lastName), getString(R.string.yes), getString(R.string.no));
         CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
                 (TeamMemberActivity.this, dialogAttributes);
 
