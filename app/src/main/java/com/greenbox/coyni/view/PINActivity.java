@@ -37,9 +37,11 @@ import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
@@ -65,6 +67,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     PayViewModel payViewModel;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     Dialog prevDialog;
+    private DatabaseHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +167,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             backActionIV = (ImageView) findViewById(R.id.backActionIV);
             imgBack = (ImageView) findViewById(R.id.imgBack);
             objMyApplication = (MyApplication) getApplicationContext();
+            dbHandler = DatabaseHandler.getInstance(PINActivity.this);
             if (getIntent().getStringExtra("screen") != null && (getIntent().getStringExtra("screen").equals("login") ||
                     getIntent().getStringExtra("screen").equals("EditEmail") || getIntent().getStringExtra("screen").equals("EditPhone")
                     || getIntent().getStringExtra("screen").equals("EditAddress") || getIntent().getStringExtra("screen").equals("ResetPIN")
@@ -344,7 +348,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                     @Override
                                     public void run() {
                                         try {
-                                            launchDashboard();
+//                                            launchDashboard();
+                                            dbHandler.clearAllTables();
+                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(i);
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }

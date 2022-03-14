@@ -328,7 +328,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         if (charSequence.length() == 0) {
                             otpPV.setLineColor(getResources().getColor(R.color.line_colors));
                         } else {
-                            if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd")) {
+                            if (strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin"))) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
                                     SmsRequest smsRequest = new SmsRequest();
@@ -659,8 +659,20 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 @Override
                                 public void run() {
                                     try {
-                                        startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
-                                        finish();
+//                                        startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
+//                                        finish();
+                                        if (strScreen != null && !strScreen.equals("")) {
+                                            switch (strScreen) {
+                                                case "ForgotPwd":
+                                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
+                                                    break;
+                                                case "ForgotPin":
+                                                    startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
+                                                            .putExtra("screen", getIntent().getStringExtra("screen")));
+                                                    break;
+                                            }
+                                            finish();
+                                        }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
                                     }
