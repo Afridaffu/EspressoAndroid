@@ -6,6 +6,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -50,6 +51,7 @@ public class AccountTypeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     startCreateAccountActivity(Utils.BUSINESS_ACCOUNT);
+//                    Toast.makeText(getApplication(), "Coming soon.", Toast.LENGTH_LONG).show();
                 }
             });
 
