@@ -356,12 +356,16 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
 
     public void setSSNTypeText(String text) {
         if (text.equals("SSN")) {
+            ssnET.setVisibility(VISIBLE);
+            einET.setVisibility(GONE);
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                     LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT,
                     (float) 2);
             weightRL.setLayoutParams(param);
         } else {
+            ssnET.setVisibility(GONE);
+            einET.setVisibility(VISIBLE);
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                     LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT,
