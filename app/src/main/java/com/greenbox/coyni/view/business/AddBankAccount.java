@@ -202,9 +202,7 @@ public class AddBankAccount extends BaseActivity {
             customerProfileViewModel.getBankResponseMutableLiveData().observe(this, new Observer<BankResponse>() {
                 @Override
                 public void onChanged(BankResponse bankResponse) {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+                    dismissDialog();
                     if (bankResponse != null) {
                         if (bankResponse.getStatus().toLowerCase().equals("success")) {
                             ControlMethod("banksuccess");
@@ -224,6 +222,7 @@ public class AddBankAccount extends BaseActivity {
             paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
                 @Override
                 public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
+                    dismissDialog();
                     if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
                         Utils.showCustomToast(AddBankAccount.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
                         customerProfileViewModel.meBanks();
@@ -375,7 +374,12 @@ public class AddBankAccount extends BaseActivity {
     }
 
     public void deleteBankAPICall(int id) {
-        paymentMethodsViewModel.deleteBanks(id);
+        try {
+            showProgressDialog();
+            paymentMethodsViewModel.deleteBanks(id);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void showPopup() {
