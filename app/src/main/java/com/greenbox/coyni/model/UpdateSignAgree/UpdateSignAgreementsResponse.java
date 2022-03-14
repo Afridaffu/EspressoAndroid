@@ -1,11 +1,11 @@
-package com.greenbox.coyni.model.profile;
+package com.greenbox.coyni.model.UpdateSignAgree;
 
 import com.greenbox.coyni.model.Error;
 
-public class Profile {
+public class UpdateSignAgreementsResponse {
     private String status;
     private String timestamp;
-    private ProfileData data;
+    private UpdateSignAgreementsResponseData data;
     private Error error;
 
     public String getStatus() {
@@ -24,11 +24,11 @@ public class Profile {
         this.timestamp = timestamp;
     }
 
-    public ProfileData getData() {
+    public UpdateSignAgreementsResponseData getData() {
         return data;
     }
 
-    public void setData(ProfileData data) {
+    public void setData(UpdateSignAgreementsResponseData data) {
         this.data = data;
     }
 
@@ -40,13 +40,4 @@ public class Profile {
         this.error = error;
     }
 
-    @Override
-    public String toString() {
-        return "Profile{" +
-                "status='" + status + '\'' +
-                ", timestamp='" + timestamp + '\'' +
-                ", data=" + data +
-                ", error=" + error +
-                '}';
-    }
 }

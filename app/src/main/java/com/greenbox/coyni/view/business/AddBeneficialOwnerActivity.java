@@ -59,6 +59,8 @@ import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 import java.io.File;
@@ -312,7 +314,21 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             }
         });
 
-        closeIV.setOnClickListener(v -> finish());
+//        closeIV.setOnClickListener(v -> finish());
+        closeIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
+                        confirmationAlert();
+                    } else {
+                        finish();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
         backIV.setOnClickListener(v -> {
             if (selectedPage == 1) {
@@ -1620,7 +1636,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
     protected void onDestroy() {
         try {
             super.onDestroy();
-            businessIdentityVerificationViewModel.patchBeneficialOwner(boID, prepareRequest());
+            //businessIdentityVerificationViewModel.patchBeneficialOwner(boID, prepareRequest());
 
             isfname = false;
             islname = false;
@@ -1645,6 +1661,52 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             e.printStackTrace();
         }
     }
+
+    private void confirmationAlert() {
+        // custom dialog
+        final Dialog dialog = new Dialog(AddBeneficialOwnerActivity.this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_confirmation_alert);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView tvNo = dialog.findViewById(R.id.tvNo);
+        TextView tvYes = dialog.findViewById(R.id.tvYes);
+
+        tvYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
+                    businessIdentityVerificationViewModel.deleteBeneficialOwner(boID);
+                    finish();
+                }
+            }
+        });
+
+        tvNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
 }
 
 

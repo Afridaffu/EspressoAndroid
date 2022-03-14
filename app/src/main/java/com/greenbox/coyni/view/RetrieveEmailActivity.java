@@ -199,6 +199,10 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
             lastNameErrorTV = findViewById(R.id.lastNameErrorTV);
             phoneErrorTV = findViewById(R.id.phoneErrorTV);
 
+            firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
+
             phoneNumberET.setFrom("Retrieve");
             nextBtn.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
@@ -242,7 +246,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         String strFirstName = firstName.getText().toString().trim();
                         if (firstName.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
-                            firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
                         } else if (firstName.getText().toString().trim().length() == 1) {
                             firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -251,10 +255,12 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
-                            firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.light_gray));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
+                        }  if (firstName.getText().toString().length() > 0 && !firstName.getText().toString().substring(0, 1).equals(" ")) {
+                            firstName.setText(firstName.getText().toString().substring(0, 1).toUpperCase() + firstName.getText().toString().substring(1));
                         }
                     } else {
                         firstNameErrorLL.setVisibility(GONE);
@@ -288,6 +294,8 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.light_gray));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
+                        }  if (lastName.getText().toString().length() > 0 && !lastName.getText().toString().substring(0, 1).equals(" ")) {
+                            lastName.setText(lastName.getText().toString().substring(0, 1).toUpperCase() + lastName.getText().toString().substring(1));
                         }
                     } else {
                         lastNameErrorLL.setVisibility(GONE);

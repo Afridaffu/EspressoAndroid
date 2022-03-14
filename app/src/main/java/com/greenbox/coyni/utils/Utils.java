@@ -32,7 +32,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -50,6 +53,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -960,6 +964,7 @@ public class Utils {
                 dialog.dismiss();
                 try {
                     if (from.equals("PREFERENCES")) {
+
                         UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
                         userPreferenceModel.setLocalCurrency(0);
                         userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
@@ -967,6 +972,7 @@ public class Utils {
 
                         PreferencesActivity preferencesActivity = (PreferencesActivity) context;
                         preferencesActivity.customerProfileViewModel.updatePreferences(userPreferenceModel);
+
                     } else if (from.equals("COMPANY_INFO")) {
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
@@ -1469,4 +1475,27 @@ public class Utils {
         }
     }
 
+
+    public static void setCustomSelectionActionModeCallback(TextInputEditText editText) {
+        editText.setLongClickable(false);
+        editText.setTextIsSelectable(false);
+        editText.setClickable(false);
+        editText.setPressed(false);
+        editText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
+                return false;
+            }
+
+            public void onDestroyActionMode(ActionMode actionMode) {
+            }
+        });
+    }
 }

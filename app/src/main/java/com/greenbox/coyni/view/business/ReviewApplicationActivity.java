@@ -197,13 +197,29 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (!isCPwdEye) {
                         isCPwdEye = true;
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
-                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
-                        mEINTx.setText(hifened);
+                        if (cir.getIdentificationType() == 11) {
+                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
+                            mEINTx.setText(hifened);
+                        } else {
+                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                            String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                            mEINTx.setText(hifened);
+                        }
+//                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+//                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+//                        mEINTx.setText(hifened);
                     } else {
                         isCPwdEye = false;
+                        if (cir.getIdentificationType() == 11) {
+                            mEINTx.setText(cir.getSsnOrEin().substring(0, 3) + "-" +cir.getSsnOrEin().substring(3, 5) + "-" + cir.getSsnOrEin().substring(5,cir.getSsnOrEin().length()));
+
+                        } else {
+                            mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
+
+                        }
                         llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                        mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
+                       // mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
                     }
 
                 } catch (Exception ex) {
@@ -450,14 +466,19 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     if (!cir.getSsnOrEin().equals("")) {
                                         if (cir.getIdentificationType() == 11) {
                                             ssnEinTV.setText("SSN");
+                                            isCPwdEye = true;
+                                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                                            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
+                                            mEINTx.setText(hifened);
                                         } else {
                                             ssnEinTV.setText("EIN/TIN");
+                                            isCPwdEye = true;
+                                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                                            String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                                            mEINTx.setText(hifened);
                                         }
-                                        isCPwdEye = true;
-                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
-//                                        String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
-                                        mEINTx.setText(hifened);
+
+
                                     }
 
                                 }
