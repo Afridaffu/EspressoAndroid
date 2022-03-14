@@ -184,7 +184,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
                             startActivity(new Intent(AdditionalBeneficialOwnersActivity.this, AddBeneficialOwnerActivity.class)
                                     .putExtra("FROM", "ADD_BO")
                                     .putExtra("ID", boIdResp.getData().getId()));
-                            //finish();
+                            finish();
                         } else {
 
                         }

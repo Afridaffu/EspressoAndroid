@@ -880,7 +880,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void afterTextChanged(Editable s) {
                 try {
                     int perc = Integer.parseInt(ownershipET.getText().toString());
-                    if (perc > 100) {
+                    if (perc > 100 || perc == 0) {
                         ownershipET.setText(String.valueOf(perc).substring(0, String.valueOf(perc).length() - 1));
                         ownershipET.setSelection(ownershipET.getText().length());
                     }
@@ -1233,7 +1233,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(ownershiptil, getColor(R.color.error_red));
                             ownershipLL.setVisibility(VISIBLE);
-                            ownershipTV.setText("Please enter a valid Ownership Percentage");
+//                            ownershipTV.setText("Please enter a valid Ownership Percentage");
+//                            ownershipTV.setText("Please enter value from 1% to " + allowPerc+"%");
+                            ownershipTV.setText("Please enter less than or equal to " + allowPerc + "%");
                         }
 
                         ownershipET.setText(ownershipET.getText().toString() + "%");
@@ -1273,7 +1275,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                             ownershiptil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(ownershiptil, getColor(R.color.light_gray));
                             ownershipLL.setVisibility(VISIBLE);
-                            ownershipTV.setText("Please enter a valid Ownership Percentage");
+//                            ownershipTV.setText("Please enter a valid Ownership Percentage");
+                            ownershipTV.setText("Please enter less than or equal to " + allowPerc + "%");
+//                            ownershipTV.setText("Please enter value from 1% to " + allowPerc+"%");
                         }
 //                    ownershipET.setText(ownershipET.getText().toString()+"%");
                     } catch (NumberFormatException e) {
