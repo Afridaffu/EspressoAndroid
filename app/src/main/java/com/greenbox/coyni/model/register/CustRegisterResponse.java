@@ -52,6 +52,7 @@ public class CustRegisterResponse {
         private String sendSmsCodeAttempts;
         private boolean smsVerified;
         private boolean emailVerified;
+        private String token;
 
         public String getAccountStatus() {
             return accountStatus;
@@ -131,6 +132,14 @@ public class CustRegisterResponse {
 
         public void setEmailOtp(String emailOtp) {
             this.emailOtp = emailOtp;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
         }
     }
 

@@ -104,6 +104,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
             if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
                 holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
+                holder.tvWalletAddress.setVisibility(View.VISIBLE);
                 holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
