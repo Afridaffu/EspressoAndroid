@@ -10,14 +10,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
+import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
@@ -25,18 +28,18 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class AddNewTeamMemberActivity extends BaseActivity {
-    private TextInputLayout editFNameTil,editLNameTil,editEmailTil,editPhoneTil;
-    private TextInputEditText editFNameET,editLNameET,editEmailET;
+    private TextInputLayout editFNameTil, editLNameTil, editEmailTil, editPhoneTil;
+    private TextInputEditText editFNameET, editLNameET, editEmailET;
     private OutLineBoxPhoneNumberEditText phoneNumberET;
-    private LinearLayout editFNameLL,editLNameLL,editEmailLL,editPhoneLL;
-    private TextView editFNameTV,editLNameTV,editEmailTV,editPhoneTV;
+    private LinearLayout editFNameLL, editLNameLL, editEmailLL, editPhoneLL;
+    private TextView editFNameTV, editLNameTV, editEmailTV, editPhoneTV;
     private static int focusedID = 0;
     private CardView sendCV;
-    private boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false,isNextEnabled=false;
-    private String firstName="",lastName="",role="",status="",emailAddress="",phoneNumber="",imageName="";
+    private boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false, isNextEnabled = false;
+    private String firstName = "", lastName = "", role = "", status = "", emailAddress = "", phoneNumber = "", imageName = "";
     private TeamViewModel teamViewModel;
     private LinearLayout backBtnLL;
-
+    private int roleId = 19;
 
 
     @Override
@@ -44,8 +47,34 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_team_member);
         initFields();
+        initObservers();
         focusWatchers();
         textWatchers();
+    }
+
+    private void initObservers() {
+        teamViewModel.getTeamAddMutableLiveData().observe(this, new Observer<TeamInfoAddModel>() {
+            @Override
+            public void onChanged(TeamInfoAddModel teamInfoAddModel) {
+                dismissDialog();
+                try {
+                    if (teamInfoAddModel != null) {
+                        if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "PHONE");
+
+                        } else {
+                            Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), AddNewTeamMemberActivity.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
+                        }
+                    } else {
+                        Toast.makeText(AddNewTeamMemberActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     private void initFields() {
@@ -59,7 +88,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         editFNameET = findViewById(R.id.editFNameET);
         editLNameET = findViewById(R.id.lNameET);
         editEmailET = findViewById(R.id.emailIdET);
-        phoneNumberET=findViewById(R.id.phoneNoET);
+        phoneNumberET = findViewById(R.id.phoneNoET);
 
         editFNameLL = findViewById(R.id.fNameLL);
         editLNameLL = findViewById(R.id.lNameLL);
@@ -78,10 +107,9 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             @Override
 
             public void onClick(View v) {
-                phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
+                showProgressDialog();
+                //  phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
                 teamInfoAddAPICall(prepareRequest());
-                Utils.showCustomToast(AddNewTeamMemberActivity.this, "Invitation has sent!", R.drawable.ic_custom_tick, "");
-                finish();
             }
         });
 
@@ -91,18 +119,19 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     public TeamRequest prepareRequest() {
         TeamRequest teamRequest = new TeamRequest();
         try {
-            firstName=editFNameET.getText().toString().trim();
-            phoneNumber=phoneNumberET.getText().toString().trim();
-            lastName=editLNameET.getText().toString().trim();
-            emailAddress=editEmailET.getText().toString().trim();
+            firstName = editFNameET.getText().toString().trim();
+            phoneNumber = phoneNumberET.getText().toString().trim();
+            lastName = editLNameET.getText().toString().trim();
+            emailAddress = editEmailET.getText().toString().trim();
             phoneNumberET.getText().toString().trim();
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
+            teamRequest.setPhoneNumber(phone);
             teamRequest.setFirstName(firstName);
             teamRequest.setLastName(lastName);
             teamRequest.setEmailAddress(emailAddress);
-
+            teamRequest.setRoleId(roleId);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,6 +139,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
         return teamRequest;
     }
+
     private void focusWatchers() {
         try {
 
@@ -213,10 +243,11 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void textWatchers() {
         editFNameET.addTextChangedListener(new TextWatcher() {
 
@@ -347,16 +378,28 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
 
     }
+
     public void teamInfoAddAPICall(TeamRequest teamRequest) {
         teamViewModel.addTeam(teamRequest);
     }
+
+    public void addTeam() {
+        teamInfoAddAPICall(prepareRequest());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        addTeam();
+    }
+
     private void enableOrDisableNext() {
         try {
-            if (isFirstName && isLastName && isEmail ) {
+            if (isFirstName && isLastName && isEmail) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
-                Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " );
+                Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " ");
             } else {
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " + isPhoneNumber + " ");
