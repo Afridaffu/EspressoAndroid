@@ -166,7 +166,6 @@ public class TeamMemberActivity extends BaseActivity {
         mEditCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog();
                 Intent intent = new Intent(TeamMemberActivity.this, EditTeamMember.class);
                 intent.putExtra(Utils.teamFirstName, firstName);
                 intent.putExtra(Utils.teamLastName, lastName);
