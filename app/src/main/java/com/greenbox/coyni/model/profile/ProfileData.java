@@ -145,4 +145,26 @@ public class ProfileData {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "ProfileData{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", addressLine1='" + addressLine1 + '\'' +
+                ", addressLine2='" + addressLine2 + '\'' +
+                ", country='" + country + '\'' +
+                ", state='" + state + '\'' +
+                ", city='" + city + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", message='" + message + '\'' +
+                ", addressType=" + addressType +
+                ", image='" + image + '\'' +
+                ", accountStatus='" + accountStatus + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
