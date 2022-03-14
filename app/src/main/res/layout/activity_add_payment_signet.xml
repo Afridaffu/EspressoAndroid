@@ -153,6 +153,7 @@
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
                         android:maxLines="1"
+                       android:maxLength="50"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"
