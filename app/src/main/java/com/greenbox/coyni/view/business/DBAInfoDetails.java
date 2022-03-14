@@ -56,7 +56,7 @@ import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends AppCompatActivity {
     private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
-    private LinearLayout closeLL;
+    private LinearLayout closeLL,webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
     ImageView dba_userProfileIV,editProfileIV;
@@ -91,6 +91,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             nameTV = findViewById(R.id.nameTV);
             emailTV = findViewById(R.id.emailIDTV);
             webSiteTV = findViewById(R.id.websiteTV);
+            webLL = findViewById(R.id.webIdLL);
             phoneNumberTV = findViewById(R.id.phoneNumberTV);
             addressTV = findViewById(R.id.addressTV);
             businessType = findViewById(R.id.businessTypeTV);
@@ -168,8 +169,10 @@ public class DBAInfoDetails extends AppCompatActivity {
                 emailTV.setText("");
             }
             if (dbaInfoResp.getData().getWebsite() != null) {
+                webLL.setVisibility(View.VISIBLE);
                 webSiteTV.setText(dbaInfoResp.getData().getWebsite());
             } else {
+                webLL.setVisibility(View.GONE);
                 webSiteTV.setText("");
             }
             if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {

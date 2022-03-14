@@ -376,10 +376,13 @@ public class BusinessDashboardActivity extends BaseActivity {
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 try {
                     if (businessWalletResponse != null) {
-                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                        if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0 &&
-                                businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
-                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+//                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                        if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
+                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else {
+                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                            }
                         }
                     }
                 } catch (Exception ex) {
