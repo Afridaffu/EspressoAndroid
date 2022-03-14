@@ -76,7 +76,11 @@ public class CompanyInfoDetails extends BaseActivity {
             }
         });
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        businessIdentityVerificationViewModel.getCompanyInfo();
+    }
     private void initObservers() {
         try {
             businessIdentityVerificationViewModel.getGetCompanyInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
