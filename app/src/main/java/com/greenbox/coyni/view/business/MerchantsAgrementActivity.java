@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +42,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
     BusinessDashboardViewModel businessDashboardViewModel;
     private String filePath = null;
     private boolean isSignatureCaptured = false;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +58,18 @@ public class MerchantsAgrementActivity extends BaseActivity {
         savedText = findViewById(R.id.savedtextTV);
         canceledIV = findViewById(R.id.canceledIV);
 
+        webView =(WebView)findViewById(R.id.webView);
+        WebSettings webSettings = webView.getSettings();
+        webView.invalidate();
+        webSettings.setJavaScriptEnabled(true);
+        webView.setVerticalScrollBarEnabled(true);
+        String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
+        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
+
         canceledIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    onBackPressed();
+                onBackPressed();
             }
         });
 

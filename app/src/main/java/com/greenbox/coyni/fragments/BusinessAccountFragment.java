@@ -72,24 +72,14 @@ public class BusinessAccountFragment extends BaseFragment {
                 goToTransact();
             }
         });
-        try {
-//            getBalance(objMyApplication.getWalletResponseData());
-//            getLatestTxns(objMyApplication.getListLatestTxn());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         latestTxnRefresh.setColorSchemeColors(getResources().getColor(R.color.primary_green, null));
         latestTxnRefresh.setOnRefreshListener(() -> {
             try {
-//                    if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
-//                            && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
                 ((BusinessDashboardActivity) getActivity()).showProgressDialog();
                 dashboardViewModel.getLatestTxns();
                 transactionsNSV.smoothScrollTo(0, 0);
-//                    } else {
                 latestTxnRefresh.setRefreshing(false);
-//                    }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -124,12 +114,6 @@ public class BusinessAccountFragment extends BaseFragment {
     }
 
     private void initObservers() {
-//        dashboardViewModel.getWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), walletResponse -> {
-//            if (walletResponse != null) {
-//                objMyApplication.setWalletResponse(walletResponse);
-//                getBalance(walletResponse);
-//            }
-//        });
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
@@ -153,20 +137,10 @@ public class BusinessAccountFragment extends BaseFragment {
             latestTxnRefresh.setRefreshing(false);
             objMyApplication.setListLatestTxn(latestTxnResponse);
             if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
-//                    cvHeaderRL.setVisibility(View.VISIBLE);
-//                    cvSmallHeaderRL.setVisibility(View.GONE);
-//                    getStartedCV.setVisibility(View.GONE);
                 transactionsNSV.setVisibility(View.VISIBLE);
-//
-//                    welcomeCoyniCV.setVisibility(View.GONE);
-//                    underReviewCV.setVisibility(View.GONE);
-//                    additionalActionCV.setVisibility(View.GONE);
-
                 if (latestTxnResponse.getData().size() == 0) {
                     txnRV.setVisibility(View.GONE);
                     noTxnTV.setVisibility(View.VISIBLE);
-//                        buyTokensCV.setVisibility(View.VISIBLE);
-
                 } else if (latestTxnResponse.getData().size() > 4) {
                     txnRV.setVisibility(View.VISIBLE);
                     viewMoreLL.setVisibility(View.VISIBLE);
@@ -177,7 +151,6 @@ public class BusinessAccountFragment extends BaseFragment {
                     txnRV.setItemAnimator(new DefaultItemAnimator());
                     txnRV.setAdapter(latestTxnAdapter);
                 } else if (latestTxnResponse.getData().size() <= 4) {
-//                        buyTokensCV.setVisibility(View.GONE);
                     txnRV.setVisibility(View.VISIBLE);
                     viewMoreLL.setVisibility(View.GONE);
                     noTxnTV.setVisibility(View.GONE);
@@ -187,7 +160,6 @@ public class BusinessAccountFragment extends BaseFragment {
                     txnRV.setItemAnimator(new DefaultItemAnimator());
                     txnRV.setAdapter(latestTxnAdapter);
                 }
-
             }
             ((BusinessDashboardActivity) getActivity()).dismissDialog();
         });
@@ -197,28 +169,10 @@ public class BusinessAccountFragment extends BaseFragment {
         startActivity(new Intent(requireActivity().getApplication(), BusinessTransactionListActivity.class));
     }
 
-//    private void getBalance(WalletResponseData walletResponse) {
-//        try {
-//            String strAmount;
-//            if (walletResponse.getWalletNames() != null && walletResponse.getWalletNames().size() > 0) {
-//                for (int i = 0; i < walletResponse.getWalletNames().size(); i++) {
-//                    if (walletResponse.getWalletNames().get(i).getWalletCategory().equals(getString(R.string.currency))) {
-//                        strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletResponse.getWalletNames().get(i).getExchangeAmount()));
-//                        tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-//
-//                    }
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     @Override
     public void onResume() {
         super.onResume();
         if (Utils.checkInternet(requireContext().getApplicationContext())) {
-//            progressDialog = Utils.showProgressDialog(this);
             businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
             dashboardViewModel.getLatestTxns();
             ((BusinessDashboardActivity) getActivity()).showProgressDialog();
@@ -259,8 +213,5 @@ public class BusinessAccountFragment extends BaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-
 }

@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
@@ -126,11 +126,12 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/et_bg_gray"
                 android:orientation="vertical">
 
@@ -1959,15 +1960,17 @@
                     android:id="@+id/ll_get_started_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_11sdp"
+                        android:layout_marginBottom="@dimen/_11sdp"
+                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
@@ -1984,11 +1987,6 @@
                                 android:contentDescription="@string/additional_action_required"
                                 android:src="@drawable/ic_ssn_fail" />
 
-                            <View
-                                android:id="@+id/divider"
-                                android:layout_width="159.8564453125dp"
-                                android:layout_height="5.4189453125dp"
-                                android:background="#1c567675" />
 
                             <TextView
                                 android:id="@+id/tvHead"
@@ -2036,10 +2034,7 @@
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
-
             </LinearLayout>
         </ScrollView>
-
-
     </LinearLayout>
 </RelativeLayout>

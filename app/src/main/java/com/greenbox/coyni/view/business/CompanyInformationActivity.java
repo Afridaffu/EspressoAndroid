@@ -786,7 +786,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             companyemailtil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.error_red));
                             companyemailErrorLL.setVisibility(VISIBLE);
-                            companyemailerrorTV.setText("Please Enter a Valid Email");
+                            companyemailerrorTV.setText("Please enter a valid Email");
                         } else if (companyemailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(companyemailET.getText().toString().trim())) {
                             companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_black));
@@ -799,8 +799,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
 
                     } else {
-                        companyemailET.setHint("Company’s Name");
-                        companyemailET.setHint(getResources().getString(R.string.company_s_email));
+                        companyemailET.setHint("Company’s Email");
                         companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
                         companyemailErrorLL.setVisibility(GONE);
@@ -1513,7 +1512,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             if (phone.getCountryCode() != null && phone.getPhoneNumber().length() == 10)
                 companyInfoRequest.setPhoneNumberDto(phone);
             //name
-            if (companynameET.getText().toString().trim().length() > 1)
+            if (companynameET.getText().toString().trim().length() > 0)
                 companyInfoRequest.setName(companynameET.getText().toString().trim());
             //Email
             if (Utils.isValidEmail(companyemailET.getText().toString().trim()))

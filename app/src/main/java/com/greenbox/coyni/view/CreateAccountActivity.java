@@ -341,6 +341,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     if (custRegisterResponse != null) {
                         if (custRegisterResponse.getStatus().toLowerCase().equals("success")) {
                             try {
+                                if (custRegisterResponse.getData().getToken() != null) {
+                                    objMyApplication.setStrRegisToken(custRegisterResponse.getData().getToken());
+                                }
                                 Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
                                 if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                                     i.putExtra("screen", "SignUp");
@@ -779,7 +782,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     }
 
     public void focusWatchers() {
-         try {
+        try {
             firstNameET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -805,8 +808,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
                         }
-                    }
-                    else {
+                    } else {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         firstNameErrorLL.setVisibility(GONE);
@@ -959,7 +961,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Please Enter a valid Email");
+                            emailErrorTV.setText("Please enter a valid Email");
                         } else if (emailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(emailET.getText().toString().trim())) {
                             emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
@@ -969,7 +971,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
-                            emailErrorTV.setText("Please Enter a valid Email");
+                            emailErrorTV.setText("Please enter a valid Email");
                         } else {
                             emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));
@@ -1056,7 +1058,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
     private void callRegisterAPI() {
         try {
-
             PhNoWithCountryCode phone = new PhNoWithCountryCode();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
@@ -1071,6 +1072,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             regisRequest.setAccountType(objMyApplication.getAccountType());
             regisRequest.setParentAccount(0);
             regisRequest.setEntityName(firstNameET.getText().toString().trim() + " " + lastNameET.getText().toString().trim());
+            regisRequest.setToken(objMyApplication.getStrRegisToken());
             if (Singleton.getCustRegisterResponse().getData().getUserId().equals("")) {
                 loginViewModel.customerRegistration(regisRequest, "POST");
             } else {

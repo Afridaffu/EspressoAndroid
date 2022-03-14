@@ -30,28 +30,28 @@ public class BenificialOwnersRecyclerAdapter extends
     private List<BeneficialOwnerInfo> beneficialOwnerList;
     private Context mContext;
     private MyApplication objMyApplication;
-    private int count=0;
+    private int count = 0;
     private OnSelectListner listener;
     Boolean isCPwdEye = false;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView firstNameTx,lastnameTx,ssnTx,dobTx,ownershipTx,dateTx,numberTx,uploadeMethodTx;
+        TextView firstNameTx, lastnameTx, ssnTx, dobTx, ownershipTx, dateTx, numberTx, uploadeMethodTx;
         LinearLayout llUploadDocument;
         ImageView llEin;
 
         public MyViewHolder(View view) {
             super(view);
-            numberTx=(TextView)view.findViewById(R.id.number_bo);
+            numberTx = (TextView) view.findViewById(R.id.number_bo);
             firstNameTx = (TextView) view.findViewById(R.id.firstname_bo);
-            lastnameTx=(TextView) view.findViewById(R.id.lastname_bo);
-            ssnTx=(TextView) view.findViewById(R.id.ssn_bo);
-            dobTx=(TextView) view.findViewById(R.id.dob_bo);
-            ownershipTx=(TextView) view.findViewById(R.id.ownership_bo);
-            dateTx=(TextView) view.findViewById(R.id.bo_uploaded_date);
-            llUploadDocument=(LinearLayout) view.findViewById(R.id.llUploadDocument);
-            uploadeMethodTx=(TextView) view.findViewById(R.id.bo_uploaded_method);
-            llEin = (ImageView)view.findViewById(R.id.llEIN);
+            lastnameTx = (TextView) view.findViewById(R.id.lastname_bo);
+            ssnTx = (TextView) view.findViewById(R.id.ssn_bo);
+            dobTx = (TextView) view.findViewById(R.id.dob_bo);
+            ownershipTx = (TextView) view.findViewById(R.id.ownership_bo);
+            dateTx = (TextView) view.findViewById(R.id.bo_uploaded_date);
+            llUploadDocument = (LinearLayout) view.findViewById(R.id.llUploadDocument);
+            uploadeMethodTx = (TextView) view.findViewById(R.id.bo_uploaded_method);
+            llEin = (ImageView) view.findViewById(R.id.llEIN);
 
         }
     }
@@ -76,33 +76,33 @@ public class BenificialOwnersRecyclerAdapter extends
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             BeneficialOwnerInfo objData = beneficialOwnerList.get(position);
-            count=position+1;
-            holder.numberTx.setText("Beneficial Owner "+count);
-            if(objData.getFirstName()!=null&&!objData.getFirstName().equals("")) {
+            count = position + 1;
+            holder.numberTx.setText("Beneficial Owner " + count);
+            if (objData.getFirstName() != null && !objData.getFirstName().equals("")) {
                 holder.firstNameTx.setText(objData.getFirstName());
             }
-            if(objData.getLastName()!=null&&!objData.getLastName().equals("")) {
+            if (objData.getLastName() != null && !objData.getLastName().equals("")) {
                 holder.lastnameTx.setText(objData.getLastName());
             }
-            if(objData.getSsn()!=null&&!objData.getSsn().equals("")) {
+            if (objData.getSsn() != null && !objData.getSsn().equals("")) {
                 isCPwdEye = true;
                 String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-                String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
                 //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                 holder.ssnTx.setText(hifened);
             }
-            if(objData.getDob()!=null&&!objData.getDob().equals("")) {
+            if (objData.getDob() != null && !objData.getDob().equals("")) {
                 holder.dobTx.setText(Utils.convertTxnDatebusiness(objData.getDob()));
             }
-            if(objData.getOwnershipParcentage()!=0) {
-                holder.ownershipTx.setText(objData.getOwnershipParcentage().toString()+""+mContext.getString(R.string.percentageSymbol));
+            if (objData.getOwnershipParcentage() != 0) {
+                holder.ownershipTx.setText(objData.getOwnershipParcentage().toString() + "" + mContext.getString(R.string.percentageSymbol));
             }
             if (objData.getRequiredDocuments() != null && objData.getRequiredDocuments().size() > 0) {
                 if (objData.getRequiredDocuments().get(0).getUpdatedAt() != null
-                && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
-                    holder.dateTx.setText(mContext.getString(R.string.uploaded_on)+" "+ Utils.convertDocUploadedDate(objData.getRequiredDocuments().
-                                  get(0).getUpdatedAt()));
-                    holder.uploadeMethodTx.setText("Uploaded "+objData.getRequiredDocuments().
+                        && !objData.getRequiredDocuments().get(0).getUpdatedAt().equals("")) {
+                    holder.dateTx.setText(mContext.getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(objData.getRequiredDocuments().
+                            get(0).getUpdatedAt()));
+                    holder.uploadeMethodTx.setText("Uploaded " + objData.getRequiredDocuments().
                             get(0).getImgName());
 
                     holder.llUploadDocument.setOnClickListener(new View.OnClickListener() {
@@ -126,17 +126,16 @@ public class BenificialOwnersRecyclerAdapter extends
                                     isCPwdEye = true;
                                     holder.llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                                     String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-                                    String hifened = converted.substring(0,2) + "-" + converted.substring(2);
+                                    String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
                                     //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                                     holder.ssnTx.setText(hifened);
                                 } else {
                                     isCPwdEye = false;
                                     holder.llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                                    String converted = objData.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-                                    String hifened = converted.substring(0,2) + "-" + converted.substring(2);
-                                    //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+                                    String converted = objData.getSsn();
+                                    String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
                                     holder.ssnTx.setText(hifened);
-                                    holder.ssnTx.setText(objData.getSsn().substring(0,2) + "-" + objData.getSsn().substring(2));
+                                   // holder.ssnTx.setText(objData.getSsn().substring(0, 2) + "-" + objData.getSsn().substring(2));
                                 }
 
                             } catch (Exception ex) {
@@ -157,7 +156,7 @@ public class BenificialOwnersRecyclerAdapter extends
         return beneficialOwnerList.size();
     }
 
-    public interface OnSelectListner{
+    public interface OnSelectListner {
         void selectedItem(String file);
     }
 
