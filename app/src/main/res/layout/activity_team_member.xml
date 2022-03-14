@@ -27,8 +27,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_back"
-                android:contentDescription="Back Button"/>
+                android:contentDescription="Back Button"
+                android:src="@drawable/ic_back" />
         </LinearLayout>
 
         <TextView
@@ -104,17 +104,18 @@
                                     android:id="@+id/userProfileIV"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:visibility="visible"
-                                    android:scaleType="fitXY" />
+                                    android:scaleType="fitXY"
+                                    android:visibility="visible" />
+
                                 <TextView
                                     android:id="@+id/imageTextTV"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text=""
-                                    android:textSize="@dimen/_20sdp"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:textColor="@color/white"/>
+                                    android:text=""
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_20sdp" />
                             </androidx.cardview.widget.CardView>
 
 
@@ -370,6 +371,7 @@
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/removeCv"
                 android:layout_width="match_parent"
@@ -398,7 +400,6 @@
                         android:textSize="@dimen/_12ssp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
 
 
         </LinearLayout>

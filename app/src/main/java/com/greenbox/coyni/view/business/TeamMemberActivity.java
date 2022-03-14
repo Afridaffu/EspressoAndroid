@@ -163,8 +163,6 @@ public class TeamMemberActivity extends BaseActivity {
             mStatusIcon.setBackgroundResource(R.drawable.pending_dot);
             txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
         }
-
-
         mEditCv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
