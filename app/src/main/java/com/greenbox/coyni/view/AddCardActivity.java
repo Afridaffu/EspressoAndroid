@@ -87,7 +87,7 @@ public class AddCardActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     RelativeLayout layoutCard, layoutAddress;
     LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv, llError;
-    LinearLayout address1ErrorLL,address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
+    LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
     public LinearLayout cardErrorLL;
     View divider1, divider2;
     TextView tvCardHead, nameErrorTV, expiryErrorTV, cvvErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
@@ -847,7 +847,8 @@ public class AddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                                 address1ErrorLL.setVisibility(VISIBLE);
                                 address1ErrorTV.setText("Field Required");
-                            }  if (etAddress1.getText().toString().length() > 0 && !etAddress1.getText().toString().substring(0, 1).equals(" ")) {
+                            }
+                            if (etAddress1.getText().toString().length() > 0 && !etAddress1.getText().toString().substring(0, 1).equals(" ")) {
                                 etAddress1.setText(etAddress1.getText().toString().substring(0, 1).toUpperCase() + etAddress1.getText().toString().substring(1));
                             }
                         } else {
@@ -875,7 +876,8 @@ public class AddCardActivity extends AppCompatActivity {
                             } else {
                                 etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
-                            }  if (etAddress2.getText().toString().length() > 0 && !etAddress2.getText().toString().substring(0, 1).equals(" ")) {
+                            }
+                            if (etAddress2.getText().toString().length() > 0 && !etAddress2.getText().toString().substring(0, 1).equals(" ")) {
                                 etAddress2.setText(etAddress2.getText().toString().substring(0, 1).toUpperCase() + etAddress2.getText().toString().substring(1));
                             }
                         } else {
@@ -905,7 +907,8 @@ public class AddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
                                 cityErrorTV.setText("Field Required");
-                            }if (etCity.getText().toString().length() > 0 && !etCity.getText().toString().substring(0, 1).equals(" ")) {
+                            }
+                            if (etCity.getText().toString().length() > 0 && !etCity.getText().toString().substring(0, 1).equals(" ")) {
                                 etCity.setText(etCity.getText().toString().substring(0, 1).toUpperCase() + etCity.getText().toString().substring(1));
                             }
                         } else {
@@ -1029,7 +1032,7 @@ public class AddCardActivity extends AppCompatActivity {
                     if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etName.setText("");
                         etName.setSelection(etName.getText().length());
-                    }else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
                         etName.setText(str.trim());
                     } else if (str.length() > 0 && str.contains(".")) {
                         etName.setText(etName.getText().toString().replaceAll("\\.", ""));
@@ -1188,43 +1191,43 @@ public class AddCardActivity extends AppCompatActivity {
             }
         });
         etAddress2.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                }
+            }
 
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    try {
-                        if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    if (charSequence.length() > 0) {
+                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
+            }
 
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    try {
-                        String str = etAddress2.getText().toString();
-                        if (str.substring(0).equals(" ")) {
-                            etAddress2.setText("");
-                            etAddress2.setSelection(etAddress2.getText().length());
-                            address2ErrorLL.setVisibility(GONE);
-                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
-                            etAddress2.setText(str.trim());
-                        } else if (str.length() > 0 && str.substring(0).equals(" ")) {
-                            etAddress2.setText("");
-                            etAddress2.setSelection(etAddress2.getText().length());
-                            address2ErrorLL.setVisibility(GONE);
-                        }
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    String str = etAddress2.getText().toString();
+                    if (str.substring(0).equals(" ")) {
+                        etAddress2.setText("");
+                        etAddress2.setSelection(etAddress2.getText().length());
+                        address2ErrorLL.setVisibility(GONE);
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        etAddress2.setText(str.trim());
+                    } else if (str.length() > 0 && str.substring(0).equals(" ")) {
+                        etAddress2.setText("");
+                        etAddress2.setSelection(etAddress2.getText().length());
+                        address2ErrorLL.setVisibility(GONE);
                     }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
+            }
+        });
 
         etCity.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1256,9 +1259,9 @@ public class AddCardActivity extends AppCompatActivity {
                     if (str.length() > 0 && str.toString().trim().length() == 0) {
                         etCity.setText("");
                         etCity.setSelection(etCity.getText().length());
-                    }  else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
                         etCity.setText(str.trim());
-                    }else if (str.length() > 0 && str.contains(".")) {
+                    } else if (str.length() > 0 && str.contains(".")) {
                         etCity.setText(etCity.getText().toString().replaceAll("\\.", ""));
                         etCity.setSelection(etCity.getText().length());
                     } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
@@ -1713,7 +1716,6 @@ public class AddCardActivity extends AppCompatActivity {
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onBackPressed();
                     finish();
                 }
             });
@@ -1746,7 +1748,9 @@ public class AddCardActivity extends AppCompatActivity {
         try {
             isCardClear = true;
             etExpiry.setText("");
-            etCVV.setText("");
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                etCVV.setText("");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
