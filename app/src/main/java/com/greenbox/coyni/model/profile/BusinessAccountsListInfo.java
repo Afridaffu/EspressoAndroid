@@ -7,6 +7,9 @@ import java.util.ArrayList;
 public class BusinessAccountsListInfo {
 
     private String mainSetName;
+    private String mainImage;
+
+
     private ArrayList<BusinessAccountDbaInfo> list = new ArrayList<BusinessAccountDbaInfo>();
 
     public String getName() {
@@ -15,6 +18,15 @@ public class BusinessAccountsListInfo {
 
     public void setName(String mainSetName) {
         this.mainSetName = mainSetName;
+    }
+
+
+    public String getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(String mainImage) {
+        this.mainImage = mainImage;
     }
 
     public ArrayList<BusinessAccountDbaInfo> getSubsetName() {
