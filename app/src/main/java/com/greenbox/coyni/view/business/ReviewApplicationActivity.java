@@ -456,7 +456,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                         isCPwdEye = true;
                                         String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
                                         String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
-                                        //String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
+//                                        String mEintext = cir.getSsnOrEin().substring(0,2).replaceAll("\\w(?=\\w{2})", ".")+ "-"+ cir.getSsnOrEin().substring(2).replaceAll("\\w(?=\\w{2})", ".");
                                         mEINTx.setText(hifened);
                                     }
 

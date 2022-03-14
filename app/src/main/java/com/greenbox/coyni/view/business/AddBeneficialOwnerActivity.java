@@ -304,8 +304,10 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                ssnET.clearFocus();
-                showIdentityTypePopup(AddBeneficialOwnerActivity.this);
+                if (checkAndRequestPermissions(AddBeneficialOwnerActivity.this)) {
+                    ssnET.clearFocus();
+                    showIdentityTypePopup(AddBeneficialOwnerActivity.this);
+                }
 
             }
         });

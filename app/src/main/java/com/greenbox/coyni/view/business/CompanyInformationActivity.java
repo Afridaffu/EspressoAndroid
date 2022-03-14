@@ -289,16 +289,16 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(CompanyInformationActivity.this);
 
-                        if (SSNTYPE.equals("SSN")) {
-                            aoiLL.setVisibility(GONE);
-                            einLetterLL.setVisibility(GONE);
-                            w9FormLL.setVisibility(VISIBLE);
-
-                        } else {
-                            aoiLL.setVisibility(VISIBLE);
-                            einLetterLL.setVisibility(VISIBLE);
-                            w9FormLL.setVisibility(VISIBLE);
-                        }
+//                        if (SSNTYPE.equals("SSN")) {
+//                            aoiLL.setVisibility(GONE);
+//                            einLetterLL.setVisibility(GONE);
+//                            w9FormLL.setVisibility(VISIBLE);
+//
+//                        } else {
+//                            aoiLL.setVisibility(VISIBLE);
+//                            einLetterLL.setVisibility(VISIBLE);
+//                            w9FormLL.setVisibility(VISIBLE);
+//                        }
                     }
                 }
 
@@ -525,6 +525,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     identificationType = Integer.parseInt(cir.getIdentificationType());
                                     ssnET.setSSNTypeText(SSNTYPE);
                                     ssnET.setVisibility(VISIBLE);
+
+                                    if (SSNTYPE.equals("SSN")) {
+                                        aoiLL.setVisibility(GONE);
+                                        einLetterLL.setVisibility(GONE);
+                                        w9FormLL.setVisibility(VISIBLE);
+
+                                    } else {
+                                        aoiLL.setVisibility(VISIBLE);
+                                        einLetterLL.setVisibility(VISIBLE);
+                                        w9FormLL.setVisibility(VISIBLE);
+                                    }
                                 }
 
                                 if (cir.getSsnOrEin() != null && !cir.getSsnOrEin().equals("")) {
@@ -702,7 +713,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             idFile = MultipartBody.Part.createFormData("identityFile", w9FormFile.getName(), requestBody);
                         }
                         RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), docTypeID + "");
-                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText());
+                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), ssnET.getText().trim().toString().replace("-", ""));
                         identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
                     }
                 }
@@ -766,6 +777,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                         if (companynameET.getText().toString().length() > 0 && !companynameET.getText().toString().substring(0, 1).equals(" ")) {
                             companynameET.setText(companynameET.getText().toString().substring(0, 1).toUpperCase() + companynameET.getText().toString().substring(1));
+                            companynameET.setSelection(companynameET.getText().toString().length());
                         }
 
                     } else {
@@ -826,6 +838,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                         if (companyaddressET.getText().toString().length() > 0 && !companyaddressET.getText().toString().substring(0, 1).equals(" ")) {
                             companyaddressET.setText(companyaddressET.getText().toString().substring(0, 1).toUpperCase() + companyaddressET.getText().toString().substring(1));
+                            companyaddressET.setSelection(companyaddressET.getText().toString().length());
                         }
                     } else {
                         companyaddressET.setHint(getResources().getString(R.string.company_address_line_1));
@@ -1430,10 +1443,16 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     private void setBusinessEntity(String type, TextView textView, Dialog dialog) {
         ssnET.setVisibility(VISIBLE);
         ssnET.setText("");
-        ssnET.setSSNTypeText(type);
+        ssnET.setSSNTypeText("SSN");
         businessET.setText(textView.getText().toString());
         isBusinessEntity = true;
         enableOrDisableNext();
+
+        dialog.dismiss();
+    }
+
+    public void setUI_IdentificationType() {
+
         SSNTYPE = ssnET.getSSNTypeText();
         if (SSNTYPE.equals("SSN")) {
             identificationType = 11;
@@ -1456,7 +1475,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         einLetterUpdatedOnTV.setVisibility(GONE);
         isEINLetterUploaded = false;
 
-        dialog.dismiss();
+        if (SSNTYPE.equals("SSN")) {
+            aoiLL.setVisibility(GONE);
+            einLetterLL.setVisibility(GONE);
+            w9FormLL.setVisibility(VISIBLE);
+
+        } else {
+            aoiLL.setVisibility(VISIBLE);
+            einLetterLL.setVisibility(VISIBLE);
+            w9FormLL.setVisibility(VISIBLE);
+        }
+
     }
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
@@ -1525,8 +1554,16 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 companyInfoRequest.setIdentificationType(identificationType);
             }
 
-            if (ssnET.getText().trim().length() == 9)
-                companyInfoRequest.setSsnOrEin(ssnET.getText().trim());
+            if (ssnET.getUnmaskedText().trim().length() == 9)
+                companyInfoRequest.setSsnOrEin(ssnET.getUnmaskedText().trim());
+
+//            if (ssnET.getSSNTypeText().equals("SSN")) {
+//                if (ssnET.getUnmaskedText().trim().length() == 11)
+//                    companyInfoRequest.setSsnOrEin(ssnET.getText().trim());
+//            } else {
+//                if (ssnET.getText().trim().length() == 10)
+//                    companyInfoRequest.setSsnOrEin(ssnET.getText().trim());
+//            }
 //            }
 
             //Address
@@ -1609,10 +1646,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 listPermissionsNeeded
                         .add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
-            if (internalStorage != PackageManager.PERMISSION_GRANTED) {
-                listPermissionsNeeded
-                        .add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
+//            if (internalStorage != PackageManager.PERMISSION_GRANTED) {
+//                listPermissionsNeeded
+//                        .add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+//            }
             if (!listPermissionsNeeded.isEmpty()) {
                 ActivityCompat.requestPermissions(context, listPermissionsNeeded
                                 .toArray(new String[listPermissionsNeeded.size()]),
@@ -1646,17 +1683,17 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     } else {
 //                        startActivity(new Intent(this, CameraActivity.class));
-//                        chooseFilePopup(this, selectedDocType);
+                        chooseFilePopup(this, selectedDocType);
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(CompanyInformationActivity.this);
 
-                        if (selectedDocType.equals("CI-AOI")) {
-                            aoiClick(findViewById(R.id.aoiLL).getRootView());
-                        } else if (selectedDocType.equals("CI-EINLETTER")) {
-                            einLetterClick(findViewById(R.id.einLetterLL).getRootView());
-                        } else if (selectedDocType.equals("CI-W9")) {
-                            w9FormClick(findViewById(R.id.w9FormLL).getRootView());
-                        }
+//                        if (selectedDocType.equals("CI-AOI")) {
+//                            aoiClick(findViewById(R.id.aoiLL).getRootView());
+//                        } else if (selectedDocType.equals("CI-EINLETTER")) {
+//                            einLetterClick(findViewById(R.id.einLetterLL).getRootView());
+//                        } else if (selectedDocType.equals("CI-W9")) {
+//                            w9FormClick(findViewById(R.id.w9FormLL).getRootView());
+//                        }
                     }
                     break;
             }
@@ -1779,12 +1816,12 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     }
 
     public void aoiClick(View view) {
+        selectedDocType = "CI-AOI";
         if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            selectedDocType = "CI-AOI";
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             chooseFilePopup(this, selectedDocType);
@@ -1792,12 +1829,13 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     }
 
     public void einLetterClick(View view) {
+        selectedDocType = "CI-EINLETTER";
         if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            selectedDocType = "CI-EINLETTER";
+
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             chooseFilePopup(this, selectedDocType);
@@ -1805,12 +1843,12 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     }
 
     public void w9FormClick(View view) {
+        selectedDocType = "CI-W9";
         if (checkAndRequestPermissions(CompanyInformationActivity.this)) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            selectedDocType = "CI-W9";
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             chooseFilePopup(this, selectedDocType);

@@ -924,7 +924,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_39sdp"
+                        android:layout_height="@dimen/_41sdp"
                         android:layout_marginTop="@dimen/_6sdp"
                         android:background="@drawable/disable_bg" />
 
