@@ -5,10 +5,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +24,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.utils.LogUtils;
@@ -29,6 +34,8 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -44,6 +51,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
     private String filePath = null;
     private boolean isSignatureCaptured = false;
     private WebView webView;
+    Long mLastClickTimeQA = 0L;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -67,7 +75,9 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webSettings.setJavaScriptEnabled(true);
         webView.setVerticalScrollBarEnabled(true);
         String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
-        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
+        webView.loadUrl("https://docs.google.com/viewer?url=" + fileURL);
+
+        //reloadWebView();
 
         canceledIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +108,31 @@ public class MerchantsAgrementActivity extends BaseActivity {
 
     }
 
+    public void reloadWebView() {
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//¸                LogUtils.d(TAG,"webview"+webView);
+//                String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
+//                webView.loadUrl("https://docs.google.com/viewer?url=" + fileURL);
+//            }
+//        }, 1000);
+
+//        Timer timer=new Timer();
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                if(webView!=null)
+//                    LogUtils.d(TAG,"webview"+webView);
+//
+//                // reload your webview
+//            }
+//        };
+//        timer.scheduleAtFixedRate(timerTask,0,1000);
+
+    }
+
     private void launchSignature() {
         Intent inSignature = new Intent(MerchantsAgrementActivity.this, SignatureActivity.class);
         activityResultLauncher.launch(inSignature);
@@ -119,7 +154,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 this.filePath = filePath;
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
                 doneCV.setVisibility(View.VISIBLE);
-                savedText.setVisibility(View.VISIBLE);
+                savedText.setVisibility(View.GONE);
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
                 isSignatureCaptured = true;
