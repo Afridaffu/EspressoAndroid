@@ -49,6 +49,7 @@ public class RefundTransactionActivity extends AppCompatActivity {
     boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
     public static RefundTransactionActivity refundTransactionActivity;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
