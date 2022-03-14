@@ -13,6 +13,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 public class CompanyInfoDetails extends BaseActivity {
@@ -50,29 +51,17 @@ public class CompanyInfoDetails extends BaseActivity {
             }
         });
 
-
         emailLL.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CompanyInfoDetails.this, ChangeEmail.class);
-                intent.putExtra(Utils.companyEmail, companyEmail);
-                intent.putExtra(Utils.companyNumber, companyPhone);
-                intent.putExtra(Utils.comCountryCode, companyCountryCode);
-                intent.putExtra(String.valueOf(Utils.companyId), companyId);
-                intent.putExtra(Utils.changeEdit, 1);
-                startActivity(intent);
+            public void onClick(View view) {
+                startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen","CompanyInfo").putExtra("action","EditEmailCompany").putExtra("value",companyEmail));
             }
         });
+
         phoneLL.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CompanyInfoDetails.this, ChangeEmail.class);
-                intent.putExtra(Utils.companyEmail, companyEmail);
-                intent.putExtra(Utils.companyNumber, companyPhone);
-                intent.putExtra(Utils.comCountryCode, companyCountryCode);
-                intent.putExtra(String.valueOf(Utils.companyId), companyId);
-                intent.putExtra(Utils.changeEdit, 2);
-                startActivity(intent);
+            public void onClick(View view) {
+                startActivity(new Intent(CompanyInfoDetails.this,BusinessUserDetailsPreviewActivity.class).putExtra("screen","CompanyInfo").putExtra("action","EditPhoneCompany").putExtra("value",companyPhone));
             }
         });
     }
