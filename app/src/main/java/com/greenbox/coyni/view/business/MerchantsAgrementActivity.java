@@ -5,13 +5,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -86,7 +83,6 @@ public class MerchantsAgrementActivity extends BaseActivity {
             public void onClick(View v) {
                 showProgressDialog();
                 sendSignatureRequest();
-               businessDashboardViewModel.updateSignedAgree();
             }
         });
 
@@ -163,11 +159,13 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 try {
                     deleteTemporarySignatureFile();
                     dismissDialog();
+                    businessDashboardViewModel.updateSignedAgree();
                     if (signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null
                                 && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
                             //If require need to show the Toast to the User.
-                            finish();
+                            //finish();
+                            //businessDashboardViewModel.updateSignedAgree();
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
                             if (signedAgreementResponse.getError() != null
@@ -193,6 +191,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
             try{
                 if(updateSignAgreementsResponse!= null){
                     if(updateSignAgreementsResponse!= null && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess"));
+                    finish();
                 }
                 else {
                     String errorMessage = getString(R.string.something_went_wrong);
