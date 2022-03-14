@@ -14,6 +14,7 @@ import com.google.zxing.Reader;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.bumptech.glide.Glide;
@@ -102,6 +103,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     private CodeScanner mcodeScanner;
     private CodeScannerView mycodeScannerView;
     MyApplication objMyApplication;
+    private DatabaseHandler dbHandler;
     DashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
     boolean isTorchOn = true, isQRScan = false;
@@ -120,6 +122,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     TextView tvSaveUserName, saveProfileTitle, saveSetAmount;
     ImageView savedImageView;
     CircleImageView saveProfileIV;
+
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    boolean isAuthenticationCalled = false;
+    Boolean isFaceLock = false, isTouchId = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +190,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     private void initialization() {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            dbHandler = DatabaseHandler.getInstance(ScanActivity.this);
             objMyApplication = (MyApplication) getApplicationContext();
             closeBtnScanCode = findViewById(R.id.closeBtnSC);
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
@@ -221,6 +228,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             saveSetAmount = findViewById(R.id.tvsaveSetAmount);
             scanMeScanCodeLL = findViewById(R.id.scanMeScanCodeLL);
 
+            setTouchId();
+            setFaceLock();
+
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 scanMeScanCodeLL.setVisibility(View.VISIBLE);
             }
@@ -228,11 +238,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 scanMeScanCodeLL.setVisibility(View.GONE);
             }
 
-            String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
-            if (strName != null && strName.length() > 22) {
-                tvName.setText(strName.substring(0, 22) + "...");
-            } else {
-                tvName.setText(strName);
+            if (objMyApplication.getMyProfile().getData().getFirstName()!=null&& objMyApplication.getMyProfile().getData().getLastName() != null) {
+                String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+                if (strName != null && strName.length() > 22) {
+                    tvName.setText(strName.substring(0, 22) + "...");
+                } else {
+                    tvName.setText(strName);
+                }
             }
             bindImage();
             String savedStrName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
@@ -544,7 +556,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 //                                i.putExtra("amount", strQRAmount);
 //                                i.putExtra("screen", "scan");
 //                                startActivity(i);
-                                showPayToMerchantWithAmountDialog(strQRAmount, userDetails);
+                                String amount = strQRAmount;
+                                showPayToMerchantWithAmountDialog(amount, userDetails);
                             }
                         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             //ERROR MESSAGE DIsPLAY
@@ -911,58 +924,60 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            if (requestCode == 101) {
                 try {
-                    Bitmap bMap = selectedImage;
-                    int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
-                    bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
-                    LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
-                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-//                    Reader reader = new QRCodeReader();
-                    Reader reader = new MultiFormatReader();
-
-                    Result result = reader.decode(bitmap);
-
-                    //strScanWallet = result.getText();
-                    strScanWallet = "";
-                    strQRAmount = "";
-                    if (isJSONValid(result.toString())) {
-                        JSONObject jsonObject = new JSONObject(result.toString());
-                        strScanWallet = jsonObject.get("referenceID").toString();
-                        strQRAmount = jsonObject.get("cynAmount").toString();
-                    } else {
-                        strScanWallet = result.toString();
-                    }
-                    Log.e("Image Text :- ", strScanWallet);
-//                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
-
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                     try {
-                        if (!strScanWallet.equals(strWallet)) {
-                            getUserDetails(strScanWallet);
+                        Bitmap bMap = selectedImage;
+                        int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
+                        bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
+                        LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+    //                    Reader reader = new QRCodeReader();
+                        Reader reader = new MultiFormatReader();
+
+                        Result result = reader.decode(bitmap);
+
+                        //strScanWallet = result.getText();
+                        strScanWallet = "";
+                        strQRAmount = "";
+                        if (isJSONValid(result.toString())) {
+                            JSONObject jsonObject = new JSONObject(result.toString());
+                            strScanWallet = jsonObject.get("referenceID").toString();
+                            strQRAmount = jsonObject.get("cynAmount").toString();
                         } else {
-//                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
-                            if (errorDialog == null) {
-                                displayAlert(getString(R.string.tokens_msg), "");
-                            }
+                            strScanWallet = result.toString();
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                        Log.e("Image Text :- ", strScanWallet);
+    //                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
+
+                        try {
+                            if (!strScanWallet.equals(strWallet)) {
+                                getUserDetails(strScanWallet);
+                            } else {
+    //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
+                                if (errorDialog == null) {
+                                    displayAlert(getString(R.string.tokens_msg), "");
+                                }
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
 
 
-                } catch (Exception e) {
-                    if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
-                        displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                    } catch (Exception e) {
+                        if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
+                            displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                        }
+                        e.printStackTrace();
                     }
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         } else {
             //Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
@@ -1141,11 +1156,28 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails) {
         isQRScan = false;
         mcodeScanner.stopPreview();
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails,false);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
                 LogUtils.v("Scan", "onDialog Clicked " + action);
+
+                if (action.equalsIgnoreCase(""))
+
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
+                        if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        } else {
+                            startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "Pay"));
+
+                        }
+                    } else {
+                        startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "Pay"));
+                    }
 
             }
         });
@@ -1159,5 +1191,40 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             }
         });
 
+    }
+
+
+        private void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

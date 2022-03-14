@@ -8,10 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.ScanActivity;
 
@@ -20,19 +24,26 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private LinearLayout copyAddressLL;
     private String amount;
     UserDetails userDetails;
-    private TextView payAmount, recipientAddressTV;
+    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance;
     private String recipientAddress = "";
-
+    private boolean screenCheck;
+    Boolean isFaceLock = false, isTouchId = false;
+    private MotionLayout slideToConfirm;
+    private DatabaseHandler dbHandler;
+    private CardView im_lock_;
+    boolean isAuthenticationCalled = false;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private String pay = "payTransaction";
 
     public PayToMerchantWithAmountDialog(Context context) {
         super(context);
     }
 
-
-    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails) {
+    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon) {
         super(context);
         amount = strAmount;
         this.userDetails = userDetails;
+        this.screenCheck = isShowIcon;
     }
 
     @SuppressLint("SetTextI18n")
@@ -41,8 +52,17 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_pay_merchant_with_amount);
         payAmount = findViewById(R.id.amountPayTV);
+        accountType = findViewById(R.id.accountType);
+        availableBalance = findViewById(R.id.availBalTV);
         recipientAddressTV = findViewById(R.id.recipientAddTV);
         copyAddressLL = findViewById(R.id.copyRecipientLL);
+        slideToConfirm = findViewById(R.id.slideToConfirmML);
+        tv_lable = findViewById(R.id.tv_lable);
+        dbHandler = DatabaseHandler.getInstance(ScanActivity.scanActivity);
+        im_lock_ = findViewById(R.id.im_lock_);
+
+//        setTouchId();
+//        setFaceLock();
 //        dashboardViewModel = new ViewModelProvider(ScanActivity.scanActivity).get(DashboardViewModel.class);
 //        dashboardViewModel.getUserDetail(walletId);
 //
@@ -65,6 +85,41 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             recipientAddressTV.setText(recipientAddress);
         }
 
+        slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
+            @Override
+            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+                LogUtils.v("TAG", "onTransitionStarted");
+            }
+
+            @Override
+            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+                LogUtils.v("TAG", progress + " progress percent " + Utils.slidePercentage);
+                try {
+                    if (progress > Utils.slidePercentage) {
+                        im_lock_.setAlpha(1.0f);
+                        motionLayout.setTransition(R.id.middle, R.id.end);
+                        motionLayout.transitionToState(motionLayout.getEndState());
+                        slideToConfirm.setInteractionEnabled(false);
+                        tv_lable.setText("Verifying");
+                        dismiss();
+                        getOnDialogClickListener().onDialogClicked(pay, null);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                LogUtils.v("TAG", "onTransitionCompleted");
+            }
+
+            @Override
+            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+                LogUtils.v("TAG", "onTransitionTrigger");
+            }
+        });
+
 
     }
 
@@ -78,11 +133,21 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             userProfile = findViewById(R.id.userProfileIV);
             userWalletAddre = findViewById(R.id.accountAddressTV);
 
+            if (screenCheck) {
+
+                findViewById(R.id.profile_account_profile_image).setVisibility(View.GONE);
+                findViewById(R.id.merchantNameLL).setVisibility(View.GONE);
+                userWalletAddre.setVisibility(View.GONE);
+                findViewById(R.id.viewLineV).setVisibility(View.GONE);
+
+            }
 //            requestedToUserId = userDetails.getData().getUserId();
-            if (userDetails.getData().getFullName().length() > 20) {
-                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
-            } else {
-                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+            if (userDetails.getData().getFullName() != null) {
+                if (userDetails.getData().getFullName().length() > 20) {
+                    tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
+                } else {
+                    tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+                }
             }
 //            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            strUserName = Utils.capitalize(userDetails.getData().getFullName());
@@ -115,6 +180,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
                 @Override
                 public void onClick(View view) {
                     Utils.copyText(recipientAddress, ScanActivity.scanActivity);
+//                    listener.onDialogClicked();
                 }
             });
 
@@ -122,5 +188,38 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             ex.printStackTrace();
         }
     }
+//    private void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
+//                myApplication.setLocalBiometric(false);
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+//    private void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                myApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+//                myApplication.setLocalBiometric(false);
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 }

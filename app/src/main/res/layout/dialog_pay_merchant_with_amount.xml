@@ -65,6 +65,7 @@
                 android:visibility="gone" />
         </androidx.cardview.widget.CardView>
         <LinearLayout
+            android:id="@+id/merchantNameLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -100,6 +101,7 @@
             android:layout_marginTop="@dimen/_1sdp"
             android:layout_marginBottom="@dimen/_16sdp"/>
         <View
+            android:id="@+id/viewLineV"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/blue_light"
@@ -163,6 +165,7 @@
                 android:gravity="end"
                 android:layout_marginEnd="@dimen/_11sdp">
                     <TextView
+                        android:id="@+id/accountType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/business_token_account"
@@ -170,6 +173,7 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:textColor="@color/primary_black"/>
                     <TextView
+                        android:id="@+id/availBalTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/available_balance"
@@ -216,7 +220,7 @@
         </LinearLayout>
 
         <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/slideToConfirm"
+            android:id="@+id/slideToConfirmML"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_48sdp"
             android:layout_marginStart="@dimen/_20sdp"

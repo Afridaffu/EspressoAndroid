@@ -2,14 +2,15 @@ package com.greenbox.coyni.view.business;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -30,6 +31,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -42,6 +45,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -80,6 +84,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     int requestedToUserId = 0;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomKeyboard cKey;
+    public static PayToMerchantActivity payToMerchantActivity;
+    UserDetails details;
+    boolean value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,9 +183,14 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             }
             break;
             case 0:
-                startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
-                        .putExtra("TYPE", "ENTER")
-                        .putExtra("screen", "Pay"));
+                try {
+                    payTransaction();
+                    startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "Pay"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
@@ -201,39 +213,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         super.onResume();
     }
 
-    public void setFaceLock() {
-        try {
-            isFaceLock = false;
-            String value = dbHandler.getFacePinLock();
-            if (value != null && value.equals("true")) {
-                isFaceLock = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isFaceLock = false;
-                objMyApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void setTouchId() {
-        try {
-            isTouchId = false;
-            String value = dbHandler.getThumbPinLock();
-            if (value != null && value.equals("true")) {
-                isTouchId = true;
-                objMyApplication.setLocalBiometric(true);
-            } else {
-                isTouchId = false;
-                objMyApplication.setLocalBiometric(false);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     private void initialization() {
         try {
@@ -263,6 +242,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             cynWallet = objMyApplication.getGbtWallet();
             payET.requestFocus();
             payET.setShowSoftInputOnFocus(false);
+            payToMerchantActivity = this;
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
@@ -283,6 +263,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 cKey = (CustomKeyboard) findViewById(R.id.ckb);
                 InputConnection ic = payET.onCreateInputConnection(new EditorInfo());
                 cKey.setInputConnection(ic);
+                cKey.setScreenName("payToMerch");
             }
             payET.setOnClickListener(v -> Utils.hideSoftKeypad(PayToMerchantActivity.this, v));
 
@@ -369,6 +350,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         dashboardViewModel.getUserDetailsMutableLiveData().observe(this, userDetails -> {
             if (userDetails != null) {
                 bindUserInfo(userDetails);
+                details = userDetails;
+
             }
         });
 
@@ -429,40 +412,40 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             }
         });
 
-        payViewModel.getTemplateResponseMutableLiveData().observe(this, templateResponse -> {
-            if (templateResponse != null) {
-                if (Utils.checkInternet(PayToMerchantActivity.this)) {
-                    UserRequest request = new UserRequest();
-                    request.setAmount(Double.parseDouble(payET.getText().toString().replace(",", "")));
-                    request.setContent(templateResponse.getData().getInviteBody());
-                    request.setPortalType(Utils.portal);
-                    request.setRemarks(addNoteTV.getText().toString().trim());
-                    request.setRequestedToUserId(requestedToUserId);
-                    request.setRequesterWalletId(cynWallet.getWalletId());
-                    request.setRequestType(Utils.request);
-                    request.setSubject(Utils.requestSub);
-                    payViewModel.userRequests(request);
-                } else {
-                    Utils.displayAlert(getString(R.string.internet), PayToMerchantActivity.this, "", "");
-                }
-            }
-        });
+//        payViewModel.getTemplateResponseMutableLiveData().observe(this, templateResponse -> {
+//            if (templateResponse != null) {
+//                if (Utils.checkInternet(PayToMerchantActivity.this)) {
+//                    UserRequest request = new UserRequest();
+//                    request.setAmount(Double.parseDouble(payET.getText().toString().replace(",", "")));
+//                    request.setContent(templateResponse.getData().getInviteBody());
+//                    request.setPortalType(Utils.portal);
+//                    request.setRemarks(addNoteTV.getText().toString().trim());
+//                    request.setRequestedToUserId(requestedToUserId);
+//                    request.setRequesterWalletId(cynWallet.getWalletId());
+//                    request.setRequestType(Utils.request);
+//                    request.setSubject(Utils.requestSub);
+//                    payViewModel.userRequests(request);
+//                } else {
+//                    Utils.displayAlert(getString(R.string.internet), PayToMerchantActivity.this, "", "");
+//                }
+//            }
+//        });
 
-        payViewModel.getUserRequestResponseMutableLiveData().observe(this, userRequestResponse -> {
-            if (prevDialog != null) {
-                prevDialog.dismiss();
-            }
-            if (userRequestResponse.getStatus().equalsIgnoreCase("success")) {
-                startActivity(new Intent(PayToMerchantActivity.this, GiftCardBindingLayoutActivity.class)
-                        .putExtra("status", "success")
-                        .putExtra("subtype", "request"));
-
-            } else {
-                startActivity(new Intent(PayToMerchantActivity.this, GiftCardBindingLayoutActivity.class)
-                        .putExtra("status", "failed")
-                        .putExtra("subtype", "request"));
-            }
-        });
+//        payViewModel.getUserRequestResponseMutableLiveData().observe(this, userRequestResponse -> {
+//            if (prevDialog != null) {
+//                prevDialog.dismiss();
+//            }
+//            if (userRequestResponse.getStatus().equalsIgnoreCase("success")) {
+//                startActivity(new Intent(PayToMerchantActivity.this, GiftCardBindingLayoutActivity.class)
+//                        .putExtra("status", "success")
+//                        .putExtra("subtype", "request"));
+//
+//            } else {
+//                startActivity(new Intent(PayToMerchantActivity.this, GiftCardBindingLayoutActivity.class)
+//                        .putExtra("status", "failed")
+//                        .putExtra("subtype", "request"));
+//            }
+//        });
 
         coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, biometricTokenResponse -> {
             if (biometricTokenResponse != null) {
@@ -605,10 +588,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         try {
             if (value) {
 //                payRequestLL.setBackgroundResource(R.drawable.payrequest_bgcolor);
+                cKey.disableButton();
                 isPayClickable = false;
                 isReqClickable = false;
             } else {
 //                payRequestLL.setBackgroundResource(R.drawable.payrequest_activebg);
+                cKey.enableButton();
                 isPayClickable = true;
                 isReqClickable = true;
             }
@@ -673,7 +658,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         try {
             TransferPayRequest request = new TransferPayRequest();
             request.setTokens(payET.getText().toString().trim().replace(",", ""));
-            request.setRemarks(addNoteTV.getText().toString().trim());
+            request.setRemarks("");
             request.setRecipientWalletId(recipientAddress);
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
@@ -919,110 +904,250 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void payPreview() {
         try {
-            prevDialog = new Dialog(PayToMerchantActivity.this);
-            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            prevDialog.setContentView(R.layout.pay_order_preview);
-            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//            prevDialog = new Dialog(PayToMerchantActivity.this);
+//            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+//            prevDialog.setContentView(R.layout.pay_order_preview);
+//            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-            DisplayMetrics mertics = getResources().getDisplayMetrics();
-            int width = mertics.widthPixels;
+//            DisplayMetrics mertics = getResources().getDisplayMetrics();
+//            int width = mertics.widthPixels;
 
-            TextView amountPayTV = prevDialog.findViewById(R.id.amountPayTV);
-            TextView userNamePayTV = prevDialog.findViewById(R.id.userNamePayTV);
-            TextView tvProcessingFee = prevDialog.findViewById(R.id.tvProcessingFee);
-            TextView recipAddreTV = prevDialog.findViewById(R.id.recipAddreTV);
-            TextView tvTotal = prevDialog.findViewById(R.id.tvTotal);
-            TextView messageNoteTV = prevDialog.findViewById(R.id.messageNoteTV);
-            LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
-            LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
-            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
-            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
-            userNamePayTV.setText(strUserName);
-            String strPFee = "";
-            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-            if (recipientAddress.length() > 13) {
-                recipAddreTV.setText(recipientAddress.substring(0, 13) + "...");
-            } else {
-                recipAddreTV.setText(recipientAddress);
-            }
-            String enteredAmount = Utils.convertBigDecimalUSDC(payET.getText().toString().replace(",", ""));
-            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
-            total = cynValue + Double.parseDouble(strPFee);
-            tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
+//            TextView amountPayTV = prevDialog.findViewById(R.id.amountPayTV);
+//            TextView userNamePayTV = prevDialog.findViewById(R.id.userNamePayTV);
+//            TextView tvProcessingFee = prevDialog.findViewById(R.id.tvProcessingFee);
+//            TextView recipAddreTV = prevDialog.findViewById(R.id.recipAddreTV);
+//            TextView tvTotal = prevDialog.findViewById(R.id.tvTotal);
+//            TextView messageNoteTV = prevDialog.findViewById(R.id.messageNoteTV);
+//            LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
+//            LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
+//            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
+//            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+//            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
+//            userNamePayTV.setText(strUserName);
+//            String strPFee = "";
+//            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
+//            if (recipientAddress.length() > 13) {
+//                recipAddreTV.setText(recipientAddress.substring(0, 13) + "...");
+//            } else {
+//                recipAddreTV.setText(recipientAddress);
+//            }
+//            String enteredAmount = Utils.convertBigDecimalUSDC(payET.getText().toString().replace(",", ""));
+//            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
+//            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
+//            total = cynValue + Double.parseDouble(strPFee);
+//            tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
+//
+//            isAuthenticationCalled = false;
+//            if (!addNoteTV.getText().toString().trim().equals("")) {
+//                lyMessage.setVisibility(View.VISIBLE);
+//                messageNoteTV.setText(addNoteTV.getText().toString());
+//            } else {
+//                lyMessage.setVisibility(View.INVISIBLE);
+//            }
+//            payTransactionRequest();
+//            copyRecipientLL.setOnClickListener(view -> Utils.copyText(recipientAddress, PayToMerchantActivity.this));
+//            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
+//                @Override
+//                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+//
+//                }
+//
+//                @Override
+//                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+//
+//                    if (progress > Utils.slidePercentage) {
+//                        im_lock_.setAlpha(1.0f);
+//                        motionLayout.setTransition(R.id.middle, R.id.end);
+//                        motionLayout.transitionToState(motionLayout.getEndState());
+//                        slideToConfirm.setInteractionEnabled(false);
+//                        tv_lable.setText("Verifying");
+//
+//                        prevDialog.dismiss();
+//                        if (!isAuthenticationCalled) {
+//                            isAuthenticationCalled = true;
+//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToMerchantActivity.this)) {
+//                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayToMerchantActivity.this)) || (isFaceLock))) {
+//                                    Utils.checkAuthentication(PayToMerchantActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                                } else {
+//                                    startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
+//                                            .putExtra("TYPE", "ENTER")
+//                                            .putExtra("screen", "Pay"));
+//                                }
+//                            } else {
+//                                startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("screen", "Pay"));
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+//
+//                }
+//
+//                @Override
+//                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+//
+//                }
+//            });
+//
+//            Window window = prevDialog.getWindow();
+//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+//
+//            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//
+//            prevDialog.setCanceledOnTouchOutside(true);
+//            prevDialog.show();
+            value = true;
 
-            isAuthenticationCalled = false;
-            if (!addNoteTV.getText().toString().trim().equals("")) {
-                lyMessage.setVisibility(View.VISIBLE);
-                messageNoteTV.setText(addNoteTV.getText().toString());
-            } else {
-                lyMessage.setVisibility(View.INVISIBLE);
-            }
-            payTransactionRequest();
-            copyRecipientLL.setOnClickListener(view -> Utils.copyText(recipientAddress, PayToMerchantActivity.this));
-            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
-                @Override
-                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
-
-                }
-
-                @Override
-                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-
-                    if (progress > Utils.slidePercentage) {
-                        im_lock_.setAlpha(1.0f);
-                        motionLayout.setTransition(R.id.middle, R.id.end);
-                        motionLayout.transitionToState(motionLayout.getEndState());
-                        slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-
-                        prevDialog.dismiss();
-                        if (!isAuthenticationCalled) {
-                            isAuthenticationCalled = true;
-                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToMerchantActivity.this)) {
-                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayToMerchantActivity.this)) || (isFaceLock))) {
-                                    Utils.checkAuthentication(PayToMerchantActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                                } else {
-                                    startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
-                                            .putExtra("TYPE", "ENTER")
-                                            .putExtra("screen", "Pay"));
-                                }
-                            } else {
-                                startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "Pay"));
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-
-                }
-
-                @Override
-                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
-
-                }
-            });
-
-            Window window = prevDialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-
-            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-            prevDialog.setCanceledOnTouchOutside(true);
-            prevDialog.show();
+            showPayToMerchantWithAmountDialog(String.valueOf(cynValue), details, value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+    public void payAmountClick() {
+        if (isPayClickable) {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            convertDecimal();
+            if (payValidation()) {
+                isPayClick = true;
+                pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+                cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+                calculateFee(Utils.USNumberFormat(cynValue));
+//                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+//                                    isPayClick = true;
+//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
+//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+//                                    calculateFee(Utils.USNumberFormat(cynValue));
+//                                } else {
+//                                    objMyApplication.setStrScreen("payRequest");
+//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                                    i.putExtra("screen", "payRequest");
+//                                    startActivity(i);
+//                                }
+            }
+        }
+
+    }
+
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, boolean isPayToMerchantActivity) {
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(PayToMerchantActivity.this, amount, userDetails, isPayToMerchantActivity);
+        payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                if (action.equalsIgnoreCase("payTransaction")) {
+
+                    if (!isAuthenticationCalled) {
+                        isAuthenticationCalled = true;
+                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToMerchantActivity.this)) {
+                            if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayToMerchantActivity.this)) || (isFaceLock))) {
+                                Utils.checkAuthentication(PayToMerchantActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+                                payTransaction();
+                                startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("screen", "Pay"));
+
+                            }
+                        } else {
+                            payTransaction();
+                            startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
+                                    .putExtra("TYPE", "ENTER")
+                                    .putExtra("screen", "Pay"));
+                        }
+                    }
+                    LogUtils.v("Scan", "onDialog Clicked " + action);
+                }
+            }
+        });
+        payToMerchantWithAmountDialog.show();
+
+        payToMerchantWithAmountDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+            }
+        });
+
+    }
+
+//        private void setFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            String value = dbHandler.getFacePinLock();
+//            if (value != null && value.equals("true")) {
+//                isFaceLock = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isFaceLock = false;
+//                objMyApplication.setLocalBiometric(false);
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void setTouchId() {
+//        try {
+//            isTouchId = false;
+//            String value = dbHandler.getThumbPinLock();
+//            if (value != null && value.equals("true")) {
+//                isTouchId = true;
+//                objMyApplication.setLocalBiometric(true);
+//            } else {
+//                isTouchId = false;
+//                objMyApplication.setLocalBiometric(false);
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+    private void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
