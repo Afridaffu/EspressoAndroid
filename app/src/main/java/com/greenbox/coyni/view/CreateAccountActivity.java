@@ -341,7 +341,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     if (custRegisterResponse != null) {
                         if (custRegisterResponse.getStatus().toLowerCase().equals("success")) {
                             try {
-                                objMyApplication.setStrRegisToken(custRegisterResponse.getData().getToken());
+                                if (custRegisterResponse.getData().getToken() != null) {
+                                    objMyApplication.setStrRegisToken(custRegisterResponse.getData().getToken());
+                                }
                                 Intent i = new Intent(CreateAccountActivity.this, OTPValidation.class);
                                 if (!custRegisterResponse.getData().isSmsVerified() && !custRegisterResponse.getData().isEmailVerified()) {
                                     i.putExtra("screen", "SignUp");
