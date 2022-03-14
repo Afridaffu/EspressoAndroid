@@ -331,10 +331,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             if (strScreen != null && !strScreen.equals("") && strScreen.equals("ForgotPwd")) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
                                     SmsRequest smsRequest = new SmsRequest();
                                     smsRequest.setEmail(EMAIL.trim());
                                     smsRequest.setOtp(charSequence.toString().trim());
@@ -417,25 +413,19 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {
                                         Utils.hideKeypad(OTPValidation.this);
-//                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                        dialog.setIndeterminate(false);
-//                                        dialog.setMessage("Please wait...");
-//                                        dialog.show();
                                         SmsRequest smsRequest = new SmsRequest();
                                         smsRequest.setEmail(EMAIL.trim());
                                         smsRequest.setOtp(charSequence.toString().trim());
+                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
                                         loginViewModel.smsotp(smsRequest);
                                     }
                                 } else if (OTP_TYPE.equals("EMAIL")) {
                                     if (charSequence.length() == 6) {
                                         Utils.hideKeypad(OTPValidation.this);
-//                                        dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                        dialog.setIndeterminate(false);
-//                                        dialog.setMessage("Please wait...");
-//                                        dialog.show();
                                         SmsRequest smsRequest = new SmsRequest();
                                         smsRequest.setEmail(EMAIL.trim());
                                         smsRequest.setOtp(charSequence.toString().trim());
+                                        smsRequest.setToken(objMyApplication.getStrRegisToken());
                                         loginViewModel.emailotp(smsRequest);
                                     }
                                 }
@@ -935,8 +925,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                         }
                                     }
                                 }, Utils.duration);
-                            }
-                           else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                            } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {

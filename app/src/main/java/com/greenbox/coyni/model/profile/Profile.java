@@ -39,4 +39,14 @@ public class Profile {
     public void setError(Error error) {
         this.error = error;
     }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "status='" + status + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", data=" + data +
+                ", error=" + error +
+                '}';
+    }
 }
