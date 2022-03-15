@@ -13,7 +13,7 @@ import android.view.View;
 
 public class CustomSignatureView extends View {
     // set the stroke width
-    private static final float STROKE_WIDTH = 5f;
+    private static final float STROKE_WIDTH = 7f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
     private Paint paint = new Paint();
     private Path path = new Path();

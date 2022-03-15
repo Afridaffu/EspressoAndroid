@@ -19,10 +19,14 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -35,7 +39,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class MerchantsAgrementActivity extends BaseActivity {
-    public CardView doneCV,signaturDoneCV;
+    public CardView doneCV, signaturDoneCV;
     LinearLayout signatureEditLl;
     ImageView mIVSignature, canceledIV;
     TextView savedText;
@@ -44,6 +48,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
     private String filePath = null;
     private boolean isSignatureCaptured = false;
     private WebView webView;
+    private MyApplication objMyApplication;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -51,6 +56,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchants_agrement);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
         initObservers();
 
@@ -61,7 +67,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
         savedText = findViewById(R.id.savedtextTV);
         canceledIV = findViewById(R.id.canceledIV);
 
-        webView =(WebView)findViewById(R.id.webView);
+        webView = (WebView) findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webView.invalidate();
         webSettings.setJavaScriptEnabled(true);
@@ -77,12 +83,11 @@ public class MerchantsAgrementActivity extends BaseActivity {
         });
 
 
-
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showProgressDialog();
-                sendSignatureRequest();
+                businessDashboardViewModel.updateSignedAgree();
             }
         });
 
@@ -96,6 +101,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
             }
         });
 
+        dashboardViewModel.meAgreementsById();
     }
 
     private void launchSignature() {
@@ -123,8 +129,8 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
                 isSignatureCaptured = true;
-//                showProgressDialog();
-//                sendSignatureRequest();
+                showProgressDialog();
+                sendSignatureRequest();
             }
         }
     }
@@ -159,13 +165,11 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 try {
                     deleteTemporarySignatureFile();
                     dismissDialog();
-                    businessDashboardViewModel.updateSignedAgree();
                     if (signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null
                                 && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
-                            //If require need to show the Toast to the User.
-                            //finish();
-                            //businessDashboardViewModel.updateSignedAgree();
+//                            businessDashboardViewModel.updateSignedAgree();
+
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
                             if (signedAgreementResponse.getError() != null
@@ -188,27 +192,55 @@ public class MerchantsAgrementActivity extends BaseActivity {
         businessDashboardViewModel.getUpdateSignAgreementsResponseMutableLiveData().observe(this, new Observer<UpdateSignAgreementsResponse>() {
             @Override
             public void onChanged(UpdateSignAgreementsResponse updateSignAgreementsResponse) {
-            try{
-                if(updateSignAgreementsResponse!= null){
-                    if(updateSignAgreementsResponse!= null && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess"));
-                    finish();
-                }
-                else {
-                    String errorMessage = getString(R.string.something_went_wrong);
-                    if (updateSignAgreementsResponse.getError() != null
-                            && updateSignAgreementsResponse.getError().getErrorDescription() != null) {
-                        errorMessage = updateSignAgreementsResponse.getError().getErrorDescription();
+                try {
+                    dismissDialog();
+                    if (updateSignAgreementsResponse != null) {
+                        if (updateSignAgreementsResponse.getStatus() != null
+                                && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess")) {
+                            finish();
+                        } else {
+                            String errorMessage = getString(R.string.something_went_wrong);
+                            if (updateSignAgreementsResponse.getError() != null
+                                    && updateSignAgreementsResponse.getError().getErrorDescription() != null) {
+                                errorMessage = updateSignAgreementsResponse.getError().getErrorDescription();
+                            }
+                            Utils.displayAlert(errorMessage,
+                                    MerchantsAgrementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
+
+                        }
+                    } else {
+                        LogUtils.v(TAG, "updateSignAgreementsResponse is null");
                     }
-                    Utils.displayAlert(errorMessage,
-                            MerchantsAgrementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
 
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        });
+
+        dashboardViewModel.getAgreementsMutableLiveData().observe(this, new Observer<Agreements>() {
+            @Override
+            public void onChanged(Agreements agreements) {
+                LogUtils.v(TAG, agreements + "");
+                if (agreements.getStatus() != null && agreements.getStatus().equalsIgnoreCase("Success")) {
+                    for (int i = 0; i < agreements.getData().getItems().size(); i++) {
+                        if (agreements.getData().getItems().get(i).getSignatureType() == 5
+                                && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
+                            Glide.with(MerchantsAgrementActivity.this)
+                                    .load(agreements.getData().getItems().get(i).getSignature())
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                                    .placeholder(R.drawable.ic_sign)
+                                    .into(mIVSignature);
+                            doneCV.setVisibility(View.VISIBLE);
+                        } else {
+                            doneCV.setVisibility(View.GONE);
+                        }
+                    }
+                } else {
+                    LogUtils.v(TAG, "Agreements Response is null");
+                }
             }
         });
     }
 }
-

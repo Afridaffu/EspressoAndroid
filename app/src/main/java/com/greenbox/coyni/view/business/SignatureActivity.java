@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.BitmapUtils;
 import com.greenbox.coyni.utils.CustomSignatureView;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
@@ -144,7 +145,8 @@ public class SignatureActivity extends BaseActivity {
         String filePath = null;
         try {
             Bitmap bmp = mCustomSignatureView.getSignature();
-            Bitmap bitmap = Bitmap.createScaledBitmap(bmp, 300, 100, false);
+//            Bitmap bitmap = Bitmap.createScaledBitmap(bmp, 300, 100, false);
+            Bitmap bitmap = BitmapUtils.getScaledDownBitmap(bmp, 400, false);
             String destFolder = getCacheDir().getAbsolutePath();
             File f = new File(destFolder, mSignatureFile);
             if (f.exists()) {
