@@ -4,19 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.team.TeamData;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
-import java.util.Locale;
 
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> {
 
@@ -66,8 +62,22 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             if (objData.getRoleName() != null && !objData.getRoleName().equals("")) {
                 holder.txRole.setText(objData.getRoleName());
             }
+
             if (objData.getStatus() != null && !objData.getStatus().equals("")) {
                 holder.txStatus.setText(objData.getStatus().toString());
+                if (objData.getStatus().equalsIgnoreCase("Pending")) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.pending_color));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                } else if (objData.getStatus().equalsIgnoreCase("Active")) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
+                } else if (objData.getStatus().equalsIgnoreCase("Inactive")) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
+                } else {
+                    holder.txStatus.setText("Resend Invitation");
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
+                }
             }
 
 

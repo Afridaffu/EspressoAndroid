@@ -11,6 +11,7 @@ public class CustRegisRequest {
     private int accountType;
     private int parentAccount;
     private String entityName;
+    private String token;
     private PhNoWithCountryCode phoneNumberWithCountryCode;
 
     public String getEmail() {
@@ -91,5 +92,13 @@ public class CustRegisRequest {
 
     public void setCreatePassword(String createPassword) {
         this.createPassword = createPassword;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

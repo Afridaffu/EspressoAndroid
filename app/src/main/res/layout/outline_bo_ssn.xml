@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/ssnhintdHolderLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/outline_box_unfocused"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+
+        <com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText
+            android:id="@+id/ssnET"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+            android:background="@android:color/transparent"
+            android:digits="0123456789"
+            android:fontFamily="@font/opensans_semibold"
+            android:hint="SSN"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="noExcludeDescendants"
+            android:inputType="numberPassword"
+            android:maxLines="1"
+            android:padding="14dp"
+            android:singleLine="true"
+            android:textColor="@color/primary_black"
+            android:textColorHint="@color/light_gray"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="@dimen/_12ssp"
+            app:mask="___-__-____" />
+
+        <ImageView
+            android:id="@+id/viewSSNIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@drawable/ic_eyeclose"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingBottom="@dimen/_3sdp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ssnhintTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white"
+        android:fontFamily="@font/opensans_semibold"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:text="SSN"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/text_size_11sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/ssnhintdHolderLL"
+        app:layout_constraintStart_toStartOf="@+id/ssnhintdHolderLL"
+        app:layout_constraintTop_toTopOf="@+id/ssnhintdHolderLL" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
