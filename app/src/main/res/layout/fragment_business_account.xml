@@ -24,26 +24,25 @@
 
             <RelativeLayout
                 android:id="@+id/rl_user_icon_layout"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/circle_bg"
+                android:padding="@dimen/_2sdp"
                 android:gravity="center">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/iv_user_icon_CV"
-                    android:layout_width="@dimen/_48sdp"
-                    android:layout_height="@dimen/_48sdp"
-                    android:background="@color/white"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/_24sdp">
+                    app:cardCornerRadius="@dimen/_18sdp">
 
                     <ImageView
                         android:id="@+id/iv_user_icon"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/user_details"
-                        android:padding="2dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/acct_profile"
                         android:visibility="visible" />

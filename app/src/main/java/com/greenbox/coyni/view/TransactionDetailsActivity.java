@@ -101,6 +101,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     case "signet":
                         txnSubType = Integer.parseInt(Utils.signetType);
                         break;
+                    case "transfer":
+                        txnSubType = Integer.parseInt(Utils.transferType);
+                        break;
                 }
             }
 
