@@ -153,6 +153,7 @@ public class Utils {
     public static final String signetType = "7";
     public static final String payType = "12";
     public static final String businessType = "19";
+    public static final String transferType = "10";
     public static final String paySubType = "8";
     public static final String requestSubType = "9";
     public static final String eventTypeId = "0";
@@ -166,6 +167,7 @@ public class Utils {
     public static final String complete = "Completed";
     public static final String cancel = "Cancelled";
     public static final String requestSub = "REQUEST TOKEN";
+    public static final String SUCCESS = "SUCCESS";
     public static final int inviteId = 74;
     public static final int requestId = 75;
     public static final int remindId = 76;

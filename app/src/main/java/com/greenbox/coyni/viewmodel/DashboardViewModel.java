@@ -517,12 +517,21 @@ public class DashboardViewModel extends AndroidViewModel {
                             UserDetails obj = response.body();
                             userDetailsMutableLiveData.setValue(obj);
                         } else {
+//                            Gson gson = new Gson();
+//                            Type type = new TypeToken<APIError>() {
+//                            }.getType();
+//                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                            if (errorResponse != null) {
+//                                apiErrorMutableLiveData.setValue(errorResponse);
+//                            } else {
+//                                errorMutableLiveData.setValue("Wallet data not found.");
+//                            }
                             Gson gson = new Gson();
-                            Type type = new TypeToken<APIError>() {
+                            Type type = new TypeToken<UserDetails>() {
                             }.getType();
-                            APIError errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            UserDetails errorResponse = gson.fromJson(response.errorBody().string(), type);
                             if (errorResponse != null) {
-                                apiErrorMutableLiveData.setValue(errorResponse);
+                                userDetailsMutableLiveData.setValue(errorResponse);
                             } else {
                                 errorMutableLiveData.setValue("Wallet data not found.");
                             }

@@ -29,6 +29,7 @@ import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
@@ -508,6 +509,9 @@ public interface ApiService {
 
     @POST("api/v2/business/submit")
     Call<ApplicationSubmitResponseModel> postApplicationSubmissionData();
+
+    @PATCH("/api/v2/business/cancel")
+    Call<CancelApplicationResponse> cancelMerchant();
 
     @POST("api/v2/team/retrieve")
     Call<TeamResponseModel> getTeamData(@Body TeamRequest request);

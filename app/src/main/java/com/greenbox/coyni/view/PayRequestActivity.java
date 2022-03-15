@@ -65,7 +65,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     EditText payRequestET, addNoteET;
     Dialog cvvDialog, prevDialog;
     SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID, dsPermanentToken;
+    Cursor dsFacePin, dsTouchID;
     DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
@@ -88,6 +88,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     int requestedToUserId = 0;
     PaymentMethodsResponse paymentMethodsResponse;
     PayRequestCustomKeyboard cKey;
+    private LinearLayout llValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,17 +124,31 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     payRequestET.setHint("");
                     convertUSDValue();
+                    if (editable.length() == 5 || editable.length() == 6) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT);
+                        layoutParams.setMargins(0, 25, 0, 0);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() == 7 || editable.length() == 8) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
 
-                    if (editable.length() > 8) {
-                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if (editable.length() > 5) {
-                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                    } else {
-                        payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
-                        tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
+                    } else if (editable.length() == 9) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
+//                    if (editable.length() > 8) {
+//                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//                    } else if (editable.length() > 5) {
+//                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                    } else {
+//                        payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
+//                        tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
+//                    }
                     if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
                         disableButtons(false);
                     } else {
@@ -369,19 +384,6 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-//    private void SetToken() {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-//            dsPermanentToken.moveToFirst();
-//            if (dsPermanentToken.getCount() > 0) {
-//                strToken = dsPermanentToken.getString(1);
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -401,6 +403,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             lyBalance = findViewById(R.id.lyBalance);
             payRequestLL = findViewById(R.id.payRequestLL);
             addNoteClickLL = findViewById(R.id.addNoteClickLL);
+            llValues = findViewById(R.id.ll_values);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
@@ -454,7 +457,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                             }
                         } else {
                             InputFilter[] FilterArray = new InputFilter[1];
-                            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+                            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
                             payRequestET.setFilters(FilterArray);
                         }
                     } catch (Exception ex) {
@@ -529,7 +532,15 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onChanged(UserDetails userDetails) {
                 if (userDetails != null) {
-                    bindUserInfo(userDetails);
+                    if (userDetails.getStatus().toLowerCase().equals("success")) {
+                        bindUserInfo(userDetails);
+                    } else {
+                        if (!userDetails.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(userDetails.getError().getErrorDescription(), PayRequestActivity.this, "", userDetails.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(userDetails.getError().getFieldErrors().get(0), PayRequestActivity.this, "", "");
+                        }
+                    }
                 }
             }
         });
@@ -886,23 +897,32 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 12) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 8) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 5) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-            } else {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
-                payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
-                tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
+            if (editable.length() == 5 || editable.length() == 6) {
+                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+            } else if (editable.length() == 7 || editable.length() == 8) {
+                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+
+            } else if (editable.length() == 9) {
+                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
             }
+
+//            if (editable.length() > 12) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+//                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 8) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 5) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//            } else {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
+//                payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
+//                //tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
+//            }
             payRequestET.setFilters(FilterArray);
             payRequestET.setSelection(payRequestET.getText().length());
         } catch (Exception ex) {
@@ -913,7 +933,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     private void setDefaultLength() {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
             payRequestET.setFilters(FilterArray);
         } catch (Exception ex) {
             ex.printStackTrace();
