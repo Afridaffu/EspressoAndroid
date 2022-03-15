@@ -77,7 +77,7 @@
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
-                        android:inputType="textVisiblePassword|textNoSuggestions|textCapSentences"
+                        android:inputType="textVisiblePassword|textCapSentences|textNoSuggestions"
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="@dimen/_14sdp"
@@ -89,40 +89,6 @@
                         android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/firstNameTIL"-->
-<!--                    style="@style/TextInputLayout.OutlinedBox"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/_14sdp"-->
-<!--                    android:hint="First Name"-->
-<!--                    android:textColorHint="@color/light_gray"-->
-<!--                    app:boxStrokeColor="@color/primary_green"-->
-<!--                    app:errorIconDrawable="@null"-->
-<!--                    app:hintTextColor="@color/primary_green">-->
-
-<!--                    <com.google.android.material.textfield.TextInputEditText-->
-<!--                        android:id="@+id/firstNameET"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"-->
-<!--                        android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"-->
-<!--                        android:fontFamily="@font/opensans_semibold"-->
-<!--                        android:imeOptions="actionNext"-->
-<!--                        android:inputType="textVisiblePassword|textCapSentences|textNoSuggestions"-->
-<!--                        android:maxLength="30"-->
-<!--                        android:maxLines="1"-->
-<!--                        android:padding="@dimen/_14sdp"-->
-<!--                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"-->
-<!--                        android:singleLine="true"-->
-<!--                        android:textColor="@color/text_color"-->
-<!--                        android:textColorHint="@color/light_gray"-->
-<!--                        android:textCursorDrawable="@drawable/cursor_color"-->
-<!--                        android:textSize="@dimen/_12ssp" />-->
-
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
 
                 <LinearLayout
                     android:id="@+id/firstNameErrorLL"

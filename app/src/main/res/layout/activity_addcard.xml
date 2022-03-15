@@ -392,7 +392,6 @@
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/etlAddress1"
                         style="@style/TextInputLayout.OutlinedBox"
@@ -665,7 +664,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_14sdp"
                         android:hint="Zip Code"
-
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
@@ -680,7 +678,6 @@
                             android:imeOptions="actionDone"
                             android:inputType="number|textNoSuggestions"
                             android:maxLength="5"
-
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -698,7 +695,6 @@
                         android:id="@+id/zipErrorLL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/etlName"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:gravity="center"
