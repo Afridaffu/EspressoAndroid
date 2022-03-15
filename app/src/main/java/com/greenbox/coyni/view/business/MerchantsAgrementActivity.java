@@ -41,7 +41,6 @@ public class MerchantsAgrementActivity extends BaseActivity {
     ImageView mIVSignature, canceledIV;
     TextView savedText;
     BusinessDashboardViewModel businessDashboardViewModel;
-    DashboardViewModel dashboardViewModel;
     private String filePath = null;
     private boolean isSignatureCaptured = false;
     private WebView webView;
