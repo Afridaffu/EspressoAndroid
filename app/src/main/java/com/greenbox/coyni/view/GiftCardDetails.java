@@ -3,7 +3,6 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,13 +10,10 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
@@ -57,7 +53,6 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.GiftCardFixedAmountsAdapter;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
-import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.giftcard.Brand;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.giftcard.Items;
@@ -75,7 +70,6 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.GiftCardsViewModel;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,10 +169,10 @@ public class GiftCardDetails extends AppCompatActivity {
             lastNameET.setFilters(new InputFilter[]{acceptonlyAlphabetValuesnotNumbersMethod()});
             lastNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
 
-            amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
 //            if (amountET.requestFocus()==true){
 //                amountET.setHint("Coyni@example.com");
@@ -290,7 +284,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         if (isNextEnabled) {
-//                            Utils.hideKeypad(GiftCardDetails.this, view);
+                            Utils.hideKeypad(GiftCardDetails.this, view);
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
@@ -518,7 +512,7 @@ public class GiftCardDetails extends AppCompatActivity {
                                 amountErrorLL.setVisibility(GONE);
                             }
                         } else if (amountET.getText().toString().trim().length() == 0) {
-//                            amountErrorLL.setVisibility(VISIBLE);
+                            amountErrorLL.setVisibility(GONE);
 //                            amountErrorTV.setText("Field Required");
                             isAmount = false;
                         }
@@ -579,6 +573,8 @@ public class GiftCardDetails extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            firstNameET.setText(str.trim());
                         } else if (str.length() > 0 && str.contains(".")) {
                             firstNameET.setText(firstNameET.getText().toString().replaceAll("\\.", ""));
                             firstNameET.setSelection(firstNameET.getText().length());
@@ -623,6 +619,8 @@ public class GiftCardDetails extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0).equals(" ")) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            lastNameET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(".", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
@@ -686,6 +684,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         USFormat(amountET);
+                        Utils.hideKeypad(GiftCardDetails.this);
                         amountET.setHint("");
                         if (amountET.getText().toString().trim().length() > 0) {
                             if (amountErrorLL.getVisibility() == VISIBLE) {
@@ -693,15 +692,15 @@ public class GiftCardDetails extends AppCompatActivity {
                             } else {
                                 amountErrorLL.setVisibility(GONE);
                             }
-                            amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
 
                             if (amountErrorLL.getVisibility() == VISIBLE) {
-                                amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
                             }
                         } else {
-                            amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            amountTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                            Utils.setUpperHintColor(amountTIL, getColor(R.color.error_red));
                             Utils.setUpperHintColor(amountTIL, getColor(R.color.light_gray));
 //                            amountTIL.setHint("");
@@ -729,20 +728,23 @@ public class GiftCardDetails extends AppCompatActivity {
                         firstNameET.setHint("");
                         if (firstNameET.getText().toString().trim().length() > 1) {
                             firstNameErrorLL.setVisibility(GONE);
-                            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            firstNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_black));
 
                         } else if (firstNameET.getText().toString().trim().length() == 1) {
-                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
-                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            firstNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                            Utils.setUpperHintColor(firstNameTIL, getColor(R.color.error_red));
                             Utils.setUpperHintColor(firstNameTIL, getColor(R.color.light_gray));
                             firstNameErrorLL.setVisibility(VISIBLE);
                             firstNameErrorTV.setText("Field Required");
+                        }
+                        if (firstNameET.getText().toString().length() > 0 && !firstNameET.getText().toString().substring(0, 1).equals(" ")) {
+                            firstNameET.setText(firstNameET.getText().toString().substring(0, 1).toUpperCase() + firstNameET.getText().toString().substring(1));
                         }
                     } else {
                         firstNameET.setHint("First Name");
@@ -761,21 +763,23 @@ public class GiftCardDetails extends AppCompatActivity {
                         lastNameET.setHint("");
                         if (lastNameET.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
-                            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            lastNameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_black));
 
                         } else if (lastNameET.getText().toString().trim().length() == 1) {
-                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
-                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            lastNameTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             //Utils.setUpperHintColor(lastNameTIL, getColor(R.color.error_red));
                             Utils.setUpperHintColor(lastNameTIL, getColor(R.color.light_gray));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");
-
+                        }
+                        if (lastNameET.getText().toString().length() > 0 && lastNameET.getText().toString().charAt(0) != ' ') {
+                            lastNameET.setText(lastNameET.getText().toString().substring(0, 1).toUpperCase() + lastNameET.getText().toString().substring(1));
                         }
                     } else {
                         lastNameET.setHint("Last Name");
@@ -793,16 +797,16 @@ public class GiftCardDetails extends AppCompatActivity {
                     if (!b) {
                         emailET.setHint("");
                         if (emailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(emailET.getText().toString().trim())) {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Please enter a valid Email");
                         } else if (emailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(emailET.getText().toString().trim())) {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
                             emailErrorLL.setVisibility(GONE);
                         } else if (emailET.getText().toString().trim().length() == 0) {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                            Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.light_gray));
 //                            emailTIL.setHint("Coyni@example.com");
@@ -810,7 +814,7 @@ public class GiftCardDetails extends AppCompatActivity {
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Field Required");
                         } else {
-                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            emailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(emailTIL, getColor(R.color.error_red));
                             emailErrorLL.setVisibility(VISIBLE);
                             emailErrorTV.setText("Please enter a valid Email");
@@ -957,7 +961,7 @@ public class GiftCardDetails extends AppCompatActivity {
                 dialog.dismiss();
                 try {
                     amountET.setText(Utils.USNumberFormat(Double.parseDouble(selectedFixedAmount)));
-                    amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    amountTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                     Utils.setUpperHintColor(amountTIL, getColor(R.color.primary_black));
                 } catch (NumberFormatException e) {
                     e.printStackTrace();

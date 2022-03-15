@@ -91,6 +91,7 @@
                 android:id="@+id/editFNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"
@@ -148,6 +149,8 @@
                 android:id="@+id/editLNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"
@@ -206,6 +209,8 @@
                 android:id="@+id/editEmailET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"
                 android:inputType="text|textNoSuggestions"

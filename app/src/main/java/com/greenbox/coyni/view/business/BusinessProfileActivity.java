@@ -421,23 +421,27 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
             if (myApplication.getMyProfile().getData().getAccountStatus() != null) {
                 try {
-                    if (myApplication.getMyProfile().getData().getAccountStatus().equals("Active")) {
+                    String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
+                    if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.active_green));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                    } else if (myApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.orange));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                    } else if (myApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
+                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
-                    } else {
+                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                            || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+                        account_status.setTextColor(getResources().getColor(R.color.error_red));
+                        statusDot.setCardBackgroundColor(getResources().getColor(R.color.error_red));
                     }
                     //                    if (myApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
                     //                        cardviewYourAccount.setVisibility(View.VISIBLE);
                     //                    } else {
                     //                        cardviewYourAccount.setVisibility(View.GONE);
                     //                    }
-                    account_status.setText(myApplication.getMyProfile().getData().getAccountStatus());
+                    account_status.setText(accountStatus);
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
                     fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
                     userFullname.setText(fullname);
@@ -467,7 +471,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 isEnable = true;
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-                isEnable = true;
+                isEnable = false;
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isEnable = true;
             }

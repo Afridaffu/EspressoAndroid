@@ -624,25 +624,34 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 12) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 8) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 5) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                tvAmount.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, fontSize));
-                tvCurrency.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, dollarFont));
-            } else {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
-                tvAmount.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, fontSize));
-                tvCurrency.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, dollarFont));
+            if(editable.length()==5 || editable.length()==6){
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+            } else if(editable.length()==7 || editable.length()==8){
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+
+            }else if(editable.length()==9){
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
             }
+
+//            if (editable.length() > 12) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 8) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 5) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+////                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+////                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                tvAmount.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, fontSize));
+//                tvCurrency.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, dollarFont));
+//            } else {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+//                tvAmount.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, fontSize));
+//                tvCurrency.setTextSize(Utils.pixelsToSp(PayToPersonalActivity.this, dollarFont));
+//            }
             tvAmount.setFilters(FilterArray);
             tvAmount.setText(Utils.USNumberFormat(Double.parseDouble(editable.replace(",", ""))));
         } catch (Exception ex) {

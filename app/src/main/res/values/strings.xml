@@ -204,6 +204,8 @@
     <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
     <string name="maxlength">8</string>
+    <string name="maxlengthValue">11</string>
+    <string name="maxlengthamount">8</string>
     <string name="maxlendecimal">13</string>
     <string name="payrequestMaxAmt">1000000</string>
 
@@ -554,6 +556,7 @@
     <string name="total_available_funds">Total Available Funds</string>
     <string name="recent_token_transactions">Recent Token Transactions</string>
     <string name="identify_verification_under_review">Identify Verification\nUnder Review</string>
+    <string name="name_on_signet_account">Name on Signet Account</string>
 
     <string name="purchase_amount_processing_fee">(Purchase Amount + Processing Fee)</string>
     <string name="dollor">$</string>
