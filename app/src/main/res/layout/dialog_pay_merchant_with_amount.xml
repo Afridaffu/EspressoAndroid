@@ -23,6 +23,7 @@
                 android:layout_marginBottom="@dimen/_36sdp"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/userNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/paying_dba_name"
@@ -179,7 +180,7 @@
                         android:text="@string/available_balance"
                         android:textSize="@dimen/_9ssp"
                         android:textColor="@color/dark_grey"
-                        android:fontFamily="@font/opensans_semibold"/>
+                        android:fontFamily="@font/opensans_regular"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout

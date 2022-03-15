@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -106,12 +108,11 @@ public class DBAInfoDetails extends AppCompatActivity {
 
             editProfileIV.setOnClickListener(view -> {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     if (checkAndRequestPermissions(this)) {
-        //                    chooseImage(this);
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
                         try {
                             showImagePickerDialog(this);
                         } catch (Exception e) {
@@ -626,4 +627,39 @@ public class DBAInfoDetails extends AppCompatActivity {
         }
         return true;
     }
-}
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            try {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                switch (requestCode) {
+                    case REQUEST_ID_MULTIPLE_PERMISSIONS:
+
+                        if (ContextCompat.checkSelfPermission(this,
+                                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.displayAlert("Requires Access to Camera.", DBAInfoDetails.this, "", "");
+
+                        } else if (ContextCompat.checkSelfPermission(this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
+
+                        } else if (ContextCompat.checkSelfPermission(this,
+                                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
+
+                        } else {
+//                        startActivity(new Intent(this, CameraActivity.class));
+//                        chooseFilePopup(this, selectedDocType);
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(DBAInfoDetails.this);
+                            showImagePickerDialog(this);
+                        }
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }

@@ -557,7 +557,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 //                                i.putExtra("screen", "scan");
 //                                startActivity(i);
                                 String amount = strQRAmount;
-                                showPayToMerchantWithAmountDialog(amount, userDetails);
+                                showPayToMerchantWithAmountDialog(amount, userDetails,0.00);
                             }
                         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             //ERROR MESSAGE DIsPLAY
@@ -1153,10 +1153,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails,double balance) {
         isQRScan = false;
         mcodeScanner.stopPreview();
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails,false);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails,false,balance);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {

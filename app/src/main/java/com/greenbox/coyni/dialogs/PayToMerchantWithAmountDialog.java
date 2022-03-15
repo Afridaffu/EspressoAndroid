@@ -24,26 +24,26 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private LinearLayout copyAddressLL;
     private String amount;
     UserDetails userDetails;
-    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance;
+    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance,userName;
     private String recipientAddress = "";
     private boolean screenCheck;
     Boolean isFaceLock = false, isTouchId = false;
     private MotionLayout slideToConfirm;
-    private DatabaseHandler dbHandler;
     private CardView im_lock_;
-    boolean isAuthenticationCalled = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
-    private String pay = "payTransaction";
+    private final String pay = "payTransaction";
+    private double balance;
 
     public PayToMerchantWithAmountDialog(Context context) {
         super(context);
     }
 
-    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon) {
+    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon,double balance) {
         super(context);
         amount = strAmount;
         this.userDetails = userDetails;
         this.screenCheck = isShowIcon;
+        this.balance = balance;
     }
 
     @SuppressLint("SetTextI18n")
@@ -57,8 +57,8 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         recipientAddressTV = findViewById(R.id.recipientAddTV);
         copyAddressLL = findViewById(R.id.copyRecipientLL);
         slideToConfirm = findViewById(R.id.slideToConfirmML);
+        userName = findViewById(R.id.userNameTV);
         tv_lable = findViewById(R.id.tv_lable);
-        dbHandler = DatabaseHandler.getInstance(ScanActivity.scanActivity);
         im_lock_ = findViewById(R.id.im_lock_);
 
 //        setTouchId();
@@ -77,12 +77,20 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         bindUserInfo(userDetails);
 
         if (amount != null) {
-            payAmount.setText(amount);
+            payAmount.setText(Utils.USNumberFormat(Double.parseDouble(amount)));
         }
         if (recipientAddress.length() > 13) {
             recipientAddressTV.setText(recipientAddress.substring(0, 13) + "...");
         } else {
             recipientAddressTV.setText(recipientAddress);
+        }
+
+        if (availableBalance !=null){
+            availableBalance.setText("Available: "+Utils.USNumberFormat(balance)+"CYN");
+        }
+
+        if (userDetails.getData().getFullName() != null){
+            userName.setText("Paying "+userDetails.getData().getFullName());
         }
 
         slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {

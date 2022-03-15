@@ -377,7 +377,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 if (!payET.getText().toString().equals("") && !payET.getText().toString().equals("0") && Double.parseDouble(payET.getText().toString()) > 0) {
                     if (isPayClick) {
                         isPayClick = false;
-                        Log.e("payRequestET", payET.getText().toString());
+                        LogUtils.e("payRequestET", payET.getText().toString());
                         payPreview();
                     }
                 } else {
@@ -904,111 +904,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void payPreview() {
         try {
-//            prevDialog = new Dialog(PayToMerchantActivity.this);
-//            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-//            prevDialog.setContentView(R.layout.pay_order_preview);
-//            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-//            DisplayMetrics mertics = getResources().getDisplayMetrics();
-//            int width = mertics.widthPixels;
-
-//            TextView amountPayTV = prevDialog.findViewById(R.id.amountPayTV);
-//            TextView userNamePayTV = prevDialog.findViewById(R.id.userNamePayTV);
-//            TextView tvProcessingFee = prevDialog.findViewById(R.id.tvProcessingFee);
-//            TextView recipAddreTV = prevDialog.findViewById(R.id.recipAddreTV);
-//            TextView tvTotal = prevDialog.findViewById(R.id.tvTotal);
-//            TextView messageNoteTV = prevDialog.findViewById(R.id.messageNoteTV);
-//            LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
-//            LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
-//            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-//            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
-//            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
-//            userNamePayTV.setText(strUserName);
-//            String strPFee = "";
-//            strPFee = Utils.convertBigDecimalUSDC(String.valueOf(pfee));
-//            if (recipientAddress.length() > 13) {
-//                recipAddreTV.setText(recipientAddress.substring(0, 13) + "...");
-//            } else {
-//                recipAddreTV.setText(recipientAddress);
-//            }
-//            String enteredAmount = Utils.convertBigDecimalUSDC(payET.getText().toString().replace(",", ""));
-//            amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
-//            tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
-//            total = cynValue + Double.parseDouble(strPFee);
-//            tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
-//
-//            isAuthenticationCalled = false;
-//            if (!addNoteTV.getText().toString().trim().equals("")) {
-//                lyMessage.setVisibility(View.VISIBLE);
-//                messageNoteTV.setText(addNoteTV.getText().toString());
-//            } else {
-//                lyMessage.setVisibility(View.INVISIBLE);
-//            }
-//            payTransactionRequest();
-//            copyRecipientLL.setOnClickListener(view -> Utils.copyText(recipientAddress, PayToMerchantActivity.this));
-//            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
-//                @Override
-//                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
-//
-//                }
-//
-//                @Override
-//                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-//
-//                    if (progress > Utils.slidePercentage) {
-//                        im_lock_.setAlpha(1.0f);
-//                        motionLayout.setTransition(R.id.middle, R.id.end);
-//                        motionLayout.transitionToState(motionLayout.getEndState());
-//                        slideToConfirm.setInteractionEnabled(false);
-//                        tv_lable.setText("Verifying");
-//
-//                        prevDialog.dismiss();
-//                        if (!isAuthenticationCalled) {
-//                            isAuthenticationCalled = true;
-//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToMerchantActivity.this)) {
-//                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayToMerchantActivity.this)) || (isFaceLock))) {
-//                                    Utils.checkAuthentication(PayToMerchantActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                                } else {
-//                                    startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
-//                                            .putExtra("TYPE", "ENTER")
-//                                            .putExtra("screen", "Pay"));
-//                                }
-//                            } else {
-//                                startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
-//                                        .putExtra("TYPE", "ENTER")
-//                                        .putExtra("screen", "Pay"));
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-//
-//                }
-//
-//                @Override
-//                public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
-//
-//                }
-//            });
-//
-//            Window window = prevDialog.getWindow();
-//            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//
-//            WindowManager.LayoutParams wlp = window.getAttributes();
-//
-//            wlp.gravity = Gravity.BOTTOM;
-//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//            window.setAttributes(wlp);
-//
-//            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//
-//            prevDialog.setCanceledOnTouchOutside(true);
-//            prevDialog.show();
             value = true;
 
-            showPayToMerchantWithAmountDialog(String.valueOf(cynValue), details, value);
+            showPayToMerchantWithAmountDialog(String.valueOf(cynValue), details, value,avaBal);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1042,8 +940,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, boolean isPayToMerchantActivity) {
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(PayToMerchantActivity.this, amount, userDetails, isPayToMerchantActivity);
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, boolean isPayToMerchantActivity,Double balance) {
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(PayToMerchantActivity.this, amount, userDetails, isPayToMerchantActivity,balance);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
@@ -1077,6 +975,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         payToMerchantWithAmountDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
+                isAuthenticationCalled = false;
             }
         });
 
