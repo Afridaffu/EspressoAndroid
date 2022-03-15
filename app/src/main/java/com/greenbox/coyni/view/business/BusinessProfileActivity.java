@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;

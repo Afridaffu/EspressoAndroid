@@ -1080,6 +1080,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 Log.e("filename", "" + filename);
                 dashboardViewModel.removeImage(filename);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

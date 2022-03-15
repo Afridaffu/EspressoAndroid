@@ -1102,6 +1102,30 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     e.printStackTrace();
                 }
             }
+            else  if(requestCode ==  251) {
+                try {
+                    //payTransaction();
+                    dialog = Utils.showProgressDialog(ScanActivity.this);
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+//                    request.setMobileToken(strToken);
+                    request.setMobileToken(objMyApplication.getStrMobileToken());
+                    request.setActionType(Utils.sendActionType);
+                    coyniViewModel.biometricToken(request);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else if (requestCode == 0) {
+                try {
+                    payTransaction();
+                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "Pay"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             //Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
         }
