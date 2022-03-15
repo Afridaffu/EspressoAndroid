@@ -293,8 +293,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         mPrivacyImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyURL));
-                startActivity(browserIntent);
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(privacyURL));
+//                startActivity(browserIntent);
             }
         });
         tosTV.setOnClickListener(new View.OnClickListener() {
@@ -316,8 +316,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         mTermsImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(tosURL));
-                startActivity(browserIntent);
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(tosURL));
+//                startActivity(browserIntent);
             }
         });
 
@@ -672,37 +672,56 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 }
                                 agreements = summaryModelResponse.getData().getAgreements().getItems();
                                 Agreements agreements1 = summaryModelResponse.getData().getAgreements();
+                                llPrivacy.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dashboardViewModel.agreementsByType("0");
+                                    }
+                                });
+                                llTerms.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dashboardViewModel.agreementsByType("1");
 
+                                    }
+                                });
+                                llMerchant.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dashboardViewModel.agreementsByType("5");
+
+                                    }
+                                });
                                 if (agreements != null && agreements1.getItems().size() > 0) {
                                     for (int i = 0; i < agreements1.getItems().size(); i++) {
                                         if (agreements1.getItems().get(i).getSignatureType() == 0) {
                                             mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-                                            llPrivacy.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    dashboardViewModel.agreementsByType("0");
-                                                }
-                                            });
+//                                            llPrivacy.setOnClickListener(new View.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(View v) {
+//                                                    dashboardViewModel.agreementsByType("0");
+//                                                }
+//                                            });
                                         }
                                         if (agreements1.getItems().get(i).getSignatureType() == 1) {
                                             mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-                                            llTerms.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    dashboardViewModel.agreementsByType("1");
-
-                                                }
-                                            });
+//                                            llTerms.setOnClickListener(new View.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(View v) {
+//                                                    dashboardViewModel.agreementsByType("1");
+//
+//                                                }
+//                                            });
                                         }
                                         if (agreements1.getItems().get(i).getSignatureType() == 5) {
                                             mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-                                            llMerchant.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    dashboardViewModel.agreementsByType("5");
-
-                                                }
-                                            });
+//                                            llMerchant.setOnClickListener(new View.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(View v) {
+//                                                    dashboardViewModel.agreementsByType("5");
+//
+//                                                }
+//                                            });
 
                                         }
                                     }

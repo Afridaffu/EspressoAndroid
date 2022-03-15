@@ -29,23 +29,23 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_user_icon_layout"
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/circle_bg"
                     android:gravity="center">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/iv_user_icon_CV"
-                        android:layout_width="@dimen/_48sdp"
-                        android:layout_height="@dimen/_48sdp"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_24sdp">
 
                         <ImageView
                             android:id="@+id/iv_user_icon"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
                             android:contentDescription="@string/user_details"
                             android:padding="2dp"
                             android:scaleType="fitXY"

@@ -1,14 +1,17 @@
 package com.greenbox.coyni.model.team;
 
+import com.greenbox.coyni.model.Error;
+
 import java.util.List;
 public class TeamInfoAddModel {
 
     private String status;
 
     private String timestamp;
-    private List<TeamData> data = null;
 
-    private Object error;
+    private Data data;
+
+    private Error error;
 
     public String getStatus() {
         return status;
@@ -26,19 +29,19 @@ public class TeamInfoAddModel {
         this.timestamp = timestamp;
     }
 
-    public List<TeamData> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<TeamData> data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
-    public Object getError() {
+    public Error getError() {
         return error;
     }
 
-    public void setError(Object error) {
+    public void setError(Error error) {
         this.error = error;
     }
 
