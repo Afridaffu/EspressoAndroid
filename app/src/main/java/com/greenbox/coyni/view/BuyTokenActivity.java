@@ -124,7 +124,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        if (start == 0 && after == 0) {
+            etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+            tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+        }
     }
 
     @Override
@@ -147,16 +150,33 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         isUSD = true;
                         convertUSDValue();
                     }
-                    if (editable.length() > 8) {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if (editable.length() > 5) {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                    } else {
-                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
-                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+
+                    if(editable.length()==5 || editable.length()==6){
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams. MATCH_PARENT ,
+                                LinearLayout.LayoutParams. WRAP_CONTENT ) ;
+                        layoutParams.setMargins( 0 , 25 , 0 , 0 ) ;
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if(editable.length()==7 || editable.length()==8){
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+
+                    }else if(editable.length()==9){
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
+
+//                    if (editable.length() > 8) {
+//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//                    } else if (editable.length() > 5) {
+//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                    } else {
+//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+//                    }
 
                     if (validation()) {
                         ctKey.enableButton();
@@ -309,7 +329,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             }
                         } else {
                             InputFilter[] FilterArray = new InputFilter[1];
-                            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+                            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
                             etAmount.setFilters(FilterArray);
                         }
                     } catch (Exception ex) {
@@ -1612,23 +1632,33 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if (editable.length() > 12) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 8) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-            } else if (editable.length() > 5) {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-            } else {
-                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
-                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
-                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+
+            if(editable.length()==5 || editable.length()==6){
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+            } else if(editable.length()==7 || editable.length()==8){
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+
+            }else if(editable.length()==9){
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
             }
+
+//            if (editable.length() > 12) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 8) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//            } else if (editable.length() > 5) {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+//                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+//                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+//            } else {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
+//                etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
+//                tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
+//            }
             etAmount.setFilters(FilterArray);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1638,7 +1668,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     private void setDefaultLength() {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
             etAmount.setFilters(FilterArray);
         } catch (Exception ex) {
             ex.printStackTrace();
