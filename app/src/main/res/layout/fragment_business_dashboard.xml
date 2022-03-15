@@ -76,7 +76,6 @@
                     android:layout_marginStart="@dimen/_9sdp"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/dba_name"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
@@ -1913,7 +1912,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_10sdp"
                                 android:contentDescription="@string/identify_verification_failed"
                                 android:src="@drawable/ic_failed" />
 

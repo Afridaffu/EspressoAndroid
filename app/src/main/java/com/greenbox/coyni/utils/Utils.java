@@ -166,6 +166,7 @@ public class Utils {
     public static final String complete = "Completed";
     public static final String cancel = "Cancelled";
     public static final String requestSub = "REQUEST TOKEN";
+    public static final String SUCCESS = "SUCCESS";
     public static final int inviteId = 74;
     public static final int requestId = 75;
     public static final int remindId = 76;
