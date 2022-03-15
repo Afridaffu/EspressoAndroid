@@ -45,6 +45,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
     private String filePath = null;
     private boolean isSignatureCaptured = false;
     private WebView webView;
+    Long mLastClickTimeQA = 0L;
 
     @SuppressLint("WrongViewCast")
     @Override
