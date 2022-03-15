@@ -130,8 +130,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             public void onClick(View v) {
                 showProgressDialog();
                 //  phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
-                    teamInfoAddAPICall(prepareRequest());
-
+                teamInfoAddAPICall(prepareRequest());
             }
         });
 

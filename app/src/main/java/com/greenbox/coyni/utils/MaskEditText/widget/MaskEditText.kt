@@ -30,10 +30,15 @@ class MaskEditText @JvmOverloads constructor(
     val isDone: Boolean
         get() = maskChangedListener?.isDone ?: false
 
+    companion object {
+        val isOther = true;
+    }
+
     init {
         context.obtainStyledAttributes(attrs, R.styleable.MaskEditText).apply {
             val style = getInteger(R.styleable.MaskEditText_maskStyle, 0)
             val value = getString(R.styleable.MaskEditText_mask).orEmpty()
+
             val character = getString(R.styleable.MaskEditText_maskCharacter).orEmpty()
 
             if (value.isNotEmpty()) {
