@@ -173,13 +173,13 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 try {
                     deleteTemporarySignatureFile();
                     dismissDialog();
-                    businessDashboardViewModel.updateSignedAgree();
+                    //businessDashboardViewModel.updateSignedAgree();
                     if (signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null
                                 && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
                             //If require need to show the Toast to the User.
                             //finish();
-                            //businessDashboardViewModel.updateSignedAgree();
+                            businessDashboardViewModel.updateSignedAgree();
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
                             if (signedAgreementResponse.getError() != null
@@ -215,9 +215,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                         }
                         Utils.displayAlert(errorMessage,
                                 MerchantsAgrementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
-
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
