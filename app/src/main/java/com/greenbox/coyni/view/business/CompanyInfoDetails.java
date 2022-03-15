@@ -90,8 +90,8 @@ public class CompanyInfoDetails extends BaseActivity {
                                 }
 
                                 if (cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equals("")) {
-                                    mPhoneNumberTx.setText(cir.getPhoneNumberDto().getPhoneNumber());
-                                    companyPhone = cir.getPhoneNumberDto().getPhoneNumber();
+                                    mPhoneNumberTx.setText("(" + cir.getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + cir.getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + cir.getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+                                    companyPhone = mPhoneNumberTx.getText().toString();
                                 }
 
                                 if (cir.getPhoneNumberDto().getCountryCode() != null && !cir.getPhoneNumberDto().getCountryCode().equals("")) {

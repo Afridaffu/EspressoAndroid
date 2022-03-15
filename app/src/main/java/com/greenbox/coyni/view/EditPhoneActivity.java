@@ -155,19 +155,20 @@ public class EditPhoneActivity extends AppCompatActivity {
                             }
                         } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyChangePhone")) {
                             try {
-                                ContactInfoRequest contactInfoRequest=new ContactInfoRequest();
-                                contactInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getDbaInfoResp().getData().getEmail()));
 
-                                PhNoWithCountryCode phNoWithCountryCode=new PhNoWithCountryCode();
+                                ContactInfoRequest contactInfoRequest = new ContactInfoRequest();
+                                contactInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getCompanyInfoResp().getData().getEmail()));
+                                PhNoWithCountryCode phNoWithCountryCode = new PhNoWithCountryCode();
                                 phNoWithCountryCode.setCountryCode(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getCountryCode());
-                                phNoWithCountryCode.setPhoneNumber(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
+                                newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
+                                phNoWithCountryCode.setPhoneNumber(newPhoneNumber);
                                 contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
                                 contactInfoRequest.setId(myApplicationObj.getCompanyInfoResp().getData().getId());
                                 businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
-                        }else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT || myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT || myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                             try {
                                 callSendPhoneOTPAPI();
                             } catch (Exception e) {
@@ -218,7 +219,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             });
 
-            b_editPhoneCloseLL .setOnClickListener(new View.OnClickListener() {
+            b_editPhoneCloseLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
@@ -390,7 +391,6 @@ public class EditPhoneActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
 
     @Override
