@@ -3,12 +3,18 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,28 +26,34 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class AddNewTeamMemberActivity extends BaseActivity {
+
     private TextInputLayout editFNameTil, editLNameTil, editEmailTil, editPhoneTil;
     private TextInputEditText editFNameET, editLNameET, editEmailET;
     private OutLineBoxPhoneNumberEditText phoneNumberET;
-    private LinearLayout editFNameLL, editLNameLL, editEmailLL, editPhoneLL;
-    private TextView editFNameTV, editLNameTV, editEmailTV, editPhoneTV;
+    private LinearLayout editFNameLL, editLNameLL, editEmailLL;
+    public LinearLayout editPhoneLL;
+    private TextView editFNameTV, editLNameTV, editEmailTV;
+    public TextView editPhoneTV;
+    private Long mLastClickTime = 0L;
     private static int focusedID = 0;
-    private CardView sendCV;
-    private boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false, isNextEnabled = false;
+    public CardView sendCV;
+    public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false, isNextEnabled = false;
     private String firstName = "", lastName = "", role = "", status = "", emailAddress = "", phoneNumber = "", imageName = "";
     private TeamViewModel teamViewModel;
     private LinearLayout backBtnLL;
     private int roleId = 19;
-
+    public static AddNewTeamMemberActivity addNewTeamMemberActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +99,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
     private void initFields() {
 
+        addNewTeamMemberActivity = this;
         backBtnLL = findViewById(R.id.backBtnLL);
         backBtnLL.setOnClickListener(v -> onBackPressed());
         editFNameTil = findViewById(R.id.fNameTIL);
@@ -97,6 +110,8 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         editLNameET = findViewById(R.id.lNameET);
         editEmailET = findViewById(R.id.emailIdET);
         phoneNumberET = findViewById(R.id.phoneNoET);
+        phoneNumberET.setFrom("ADD_TEAM_MEMBER");
+
 
         editFNameLL = findViewById(R.id.fNameLL);
         editLNameLL = findViewById(R.id.lNameLL);
@@ -108,16 +123,23 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         editEmailTV = findViewById(R.id.emailIdTV);
         editPhoneTV = findViewById(R.id.phoneNoTV);
 
+        editFNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        editLNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
         sendCV = findViewById(R.id.cvSend);
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View v) {
-                showProgressDialog();
-                //  phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
-                teamInfoAddAPICall(prepareRequest());
+                if(isNextEnabled==true) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    showProgressDialog();
+                    teamInfoAddAPICall(prepareRequest());
+                }
             }
         });
 
@@ -172,9 +194,12 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editFNameLL.setVisibility(VISIBLE);
                             editFNameTV.setText("Field Required");
                         }
+                        if (editFNameET.getText().toString().length() > 0 && !editFNameET.getText().toString().substring(0, 1).equals(" ")) {
+                            editFNameET.setText(editFNameET.getText().toString().substring(0, 1).toUpperCase() + editFNameET.getText().toString().substring(1));
+                        }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
+
+                        editFNameLL.setVisibility(GONE);
                         focusedID = editFNameET.getId();
                         editFNameET.setHint("First Name");
                         editFNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -204,10 +229,12 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editLNameLL.setVisibility(VISIBLE);
                             editLNameTV.setText("Field Required");
                         }
+                        if (editLNameET.getText().toString().length() > 0 && !editLNameET.getText().toString().substring(0, 1).equals(" ")) {
+                            editLNameET.setText(editLNameET.getText().toString().substring(0, 1).toUpperCase() + editLNameET.getText().toString().substring(1));
+                        }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
-                        focusedID = editLNameET.getId();
+
+                        editLNameLL.setVisibility(GONE);
                         editLNameET.setHint("Last Name");
                         editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(editLNameTil, getColor(R.color.primary_green));
@@ -241,9 +268,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editEmailTV.setText("Field Required");
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
-                        focusedID = editEmailET.getId();
+                        editEmailLL.setVisibility(GONE);
                         editEmailET.setHint("Email");
                         editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_green));
@@ -270,10 +295,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isFirstName = true;
                     editFNameLL.setVisibility(GONE);
                     editFNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_green));
-                } else if (editFNameET.getText().toString().trim().length() == 0) {
-                    editFNameLL.setVisibility(VISIBLE);
-                    editFNameTV.setText("Field Required");
+                    Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
                 } else {
                     isFirstName = false;
                 }
@@ -284,9 +306,11 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = editFNameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         editFNameET.setText("");
                         editFNameET.setSelection(editFNameET.getText().length());
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        editFNameET.setText(str.trim());
                     } else if (str.length() > 0 && str.contains(".")) {
                         editFNameET.setText(editFNameET.getText().toString().replaceAll("\\.", ""));
                         editFNameET.setSelection(editFNameET.getText().length());
@@ -314,10 +338,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isLastName = true;
                     editLNameLL.setVisibility(GONE);
                     editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_green));
-                } else if (editLNameET.getText().toString().trim().length() == 0) {
-                    editLNameLL.setVisibility(VISIBLE);
-                    editLNameTV.setText("Field Required");
+                    Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
                 } else {
                     isLastName = false;
                 }
@@ -328,13 +349,19 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             public void afterTextChanged(Editable editable) {
                 try {
                     String str = editLNameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ")) {
-                        editLNameET.setText(editLNameET.getText().toString().replaceAll(" ", ""));
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
+                        editLNameET.setText("");
                         editLNameET.setSelection(editLNameET.getText().length());
-                    } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
-                        editLNameET.setText(editLNameET.getText().toString().replaceAll(".", ""));
+                    } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                        editLNameET.setText(str.trim());
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        editLNameET.setText(editLNameET.getText().toString().replaceAll("\\.", ""));
+                        editLNameET.setSelection(editLNameET.getText().length());
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        editLNameET.setText("");
                         editLNameET.setSelection(editLNameET.getText().length());
                     }
+
 
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -358,8 +385,9 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     Utils.setUpperHintColor(editEmailTil, getResources().getColor(R.color.primary_green));
 
                 } else if (editEmailET.getText().toString().trim().length() == 0) {
-                    editEmailLL.setVisibility(VISIBLE);
-                    editEmailTV.setText("Field Required");
+//                    editEmailLL.setVisibility(VISIBLE);
+//                    editEmailTV.setText("Field Required");
+                    isEmail = false;
                 }
                 if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
                     isEmail = true;
@@ -391,9 +419,20 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         teamViewModel.addTeam(teamRequest);
     }
 
+    public void addTeam() {
+        teamInfoAddAPICall(prepareRequest());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        editFNameET.requestFocus();
+        Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
+    }
+
     private void enableOrDisableNext() {
         try {
-            if (isFirstName && isLastName && isEmail) {
+            if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 

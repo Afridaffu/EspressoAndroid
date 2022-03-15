@@ -256,10 +256,15 @@ public class Utils {
     public static final String companyNumber = "CompanyNumber";
     public static final String changeEdit = "ChangeEdit";
     public static final String comCountryCode = "CompanyCountryCode";
-    public static final int companyId=0;
+    public static final int companyId = 0;
 
 
     public static final int position = 0;
+    public static final int cPP = 0;
+    public static final int cTOS = 1;
+    public static final int mPP = 8;
+    public static final int mTOS = 7;
+    public static final int mAgmt = 5;
 
 
     public static String getStrLang() {
