@@ -89,15 +89,12 @@ public class TeamActivity extends BaseActivity {
                 }
                 String search_key = charSequence.toString();
                 List<TeamData> filterList = new ArrayList<>();
-                int pindex = 0, poindex = 0;
                 if (datumList.size() > 0) {
                     for (int iteration = 0; iteration < datumList.size(); iteration++) {
 
-                        if(datumList.get(iteration).getFirstName().toLowerCase().contains(search_key.toLowerCase())) {
-//                        if (pindex == 0) {
+                        if (datumList.get(iteration).getFirstName().toLowerCase().contains(search_key.toLowerCase())) {
                             filterList.add(datumList.get(iteration));
                         }
-//                        }
                     }
                 }
 
@@ -106,9 +103,6 @@ public class TeamActivity extends BaseActivity {
                     teamAdapter = new TeamAdapter(TeamActivity.this, filterList, memberClickListener);
                     recyclerViewTeam.setLayoutManager(layoutManager);
                     recyclerViewTeam.setAdapter(teamAdapter);
-                }
-                else {
-                   // recyclerViewTeam.setVisibility(View.GONE);
                 }
             }
 
@@ -123,7 +117,7 @@ public class TeamActivity extends BaseActivity {
             public void onClick(View view) {
                 searchET.setText("");
                 searchET.clearFocus();
-               // addTeamMemberL.setVisibility(View.VISIBLE);
+                // addTeamMemberL.setVisibility(View.VISIBLE);
                 Utils.hideKeypad(TeamActivity.this);
             }
         });
@@ -142,7 +136,7 @@ public class TeamActivity extends BaseActivity {
                 }
                 char first = firstName.charAt(0);
                 char lastname = lastName.charAt(0);
-                String imageName=String.valueOf(first) + String.valueOf(lastname);
+                String imageName = String.valueOf(first) + String.valueOf(lastname);
                 Intent intent = new Intent(this, TeamMemberActivity.class);
                 intent.putExtra(Utils.teamFirstName, datumList.get(position).getFirstName());
                 intent.putExtra(Utils.teamLastName, datumList.get(position).getLastName());
@@ -159,12 +153,14 @@ public class TeamActivity extends BaseActivity {
             ex.printStackTrace();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         TeamRequest request = new TeamRequest();
         teamViewModel.getTeamInfo(request);
     }
+
     private void initObservers() {
 
         try {
@@ -185,7 +181,7 @@ public class TeamActivity extends BaseActivity {
                                 recyclerViewTeam.setVisibility(View.GONE);
                             }
                         } else {
-                             Utils.displayAlert(teamResponseModel.getError().getErrorDescription(), TeamActivity.this, "", teamResponseModel.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(teamResponseModel.getError().getErrorDescription(), TeamActivity.this, "", teamResponseModel.getError().getFieldErrors().get(0));
                         }
                     }
                 }

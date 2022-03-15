@@ -68,6 +68,7 @@
 
     </LinearLayout>
 
+
     <com.greenbox.coyni.intro_slider.AutoScrollViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -344,7 +345,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_43sdp"
                         android:layout_below="@+id/layoutExpiry"
-                        android:layout_marginTop="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_200sdp"
                         android:gravity="center"
                         app:cardBackgroundColor="@color/inactive_color"
                         app:cardCornerRadius="@dimen/_22sdp"

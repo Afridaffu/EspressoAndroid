@@ -738,6 +738,7 @@ public class AddCardActivity extends AppCompatActivity {
 
                             if (etName.getText().toString().length() > 0 && !etName.getText().toString().substring(0, 1).equals(" ")) {
                                 etName.setText(etName.getText().toString().substring(0, 1).toUpperCase() + etName.getText().toString().substring(1));
+                                etName.setSelection(etName.getText().toString().length());
                             }
 
                         } else {
@@ -850,6 +851,7 @@ public class AddCardActivity extends AppCompatActivity {
                             }
                             if (etAddress1.getText().toString().length() > 0 && !etAddress1.getText().toString().substring(0, 1).equals(" ")) {
                                 etAddress1.setText(etAddress1.getText().toString().substring(0, 1).toUpperCase() + etAddress1.getText().toString().substring(1));
+                                etAddress1.setSelection(etAddress1.getText().toString().length());
                             }
                         } else {
                             etAddress1.setHint("Billing Address Line 1");
@@ -879,6 +881,7 @@ public class AddCardActivity extends AppCompatActivity {
                             }
                             if (etAddress2.getText().toString().length() > 0 && !etAddress2.getText().toString().substring(0, 1).equals(" ")) {
                                 etAddress2.setText(etAddress2.getText().toString().substring(0, 1).toUpperCase() + etAddress2.getText().toString().substring(1));
+                                etAddress2.setSelection(etAddress2.getText().toString().length());
                             }
                         } else {
                             etAddress2.setHint("Billing Address Line 2(Optional)");
@@ -910,6 +913,7 @@ public class AddCardActivity extends AppCompatActivity {
                             }
                             if (etCity.getText().toString().length() > 0 && !etCity.getText().toString().substring(0, 1).equals(" ")) {
                                 etCity.setText(etCity.getText().toString().substring(0, 1).toUpperCase() + etCity.getText().toString().substring(1));
+                                etCity.setSelection(etCity.getText().toString().length());
                             }
                         } else {
                             etCity.setHint("City");

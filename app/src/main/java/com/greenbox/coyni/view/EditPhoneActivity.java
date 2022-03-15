@@ -22,6 +22,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
+import com.greenbox.coyni.model.CompanyInfo.ContactInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
@@ -151,6 +153,21 @@ public class EditPhoneActivity extends AppCompatActivity {
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
+                        } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyChangePhone")) {
+                            try {
+
+                                ContactInfoRequest contactInfoRequest = new ContactInfoRequest();
+                                contactInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getCompanyInfoResp().getData().getEmail()));
+                                PhNoWithCountryCode phNoWithCountryCode = new PhNoWithCountryCode();
+                                phNoWithCountryCode.setCountryCode(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getCountryCode());
+                                newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
+                                phNoWithCountryCode.setPhoneNumber(newPhoneNumber);
+                                contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                contactInfoRequest.setId(myApplicationObj.getCompanyInfoResp().getData().getId());
+                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
                         } else if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT || myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                             try {
                                 callSendPhoneOTPAPI();
@@ -202,7 +219,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             });
 
-            b_editPhoneCloseLL .setOnClickListener(new View.OnClickListener() {
+            b_editPhoneCloseLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
@@ -333,6 +350,31 @@ public class EditPhoneActivity extends AppCompatActivity {
             }
         });
 
+        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
+            @Override
+            public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
+                dialog.dismiss();
+                try {
+                    if (companyInfoUpdateResp != null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
+                        new Handler().postDelayed(() -> {
+                            try {
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }, 2000);
+
+                    } else {
+                        Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -349,7 +391,6 @@ public class EditPhoneActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
 
     @Override
