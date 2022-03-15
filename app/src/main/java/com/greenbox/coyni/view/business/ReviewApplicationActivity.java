@@ -394,12 +394,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-
                     showProgressDialog();
                     summaryViewModel.getApplicationSummaryData();
-
                     Utils.showCustomToast(ReviewApplicationActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
-
                 }
             }
         });
