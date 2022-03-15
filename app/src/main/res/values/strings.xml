@@ -204,7 +204,7 @@
     <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
     <string name="maxlength">8</string>
-    <string name="maxlengthValue">11</string>
+    <string name="maxlengthValue">8</string>
     <string name="maxlengthamount">8</string>
     <string name="maxlendecimal">13</string>
     <string name="payrequestMaxAmt">1000000</string>
