@@ -220,6 +220,17 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
 
+    //Merchant Transaction Filter Type values
+    public static final int mSalesOrderToken=10;
+    public static final int mRefund=9;
+    public static final int merchantPayout=7;
+    public static final int monthlyServiceFee=17;
+
+    public static final int mCompleted=0;
+    public static final int msRefund=1;
+    public static final int mPartialRefund=2;
+
+
     public static final float slidePercentage = 0.3f;
 
     public static boolean isKeyboardVisible = false;

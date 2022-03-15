@@ -473,19 +473,19 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             if (transactionType.size() > 0) {
                 for (int i = 0; i < transactionType.size(); i++) {
                     switch (transactionType.get(i)) {
-                        case Utils.saleOrder:
+                        case Utils.mSalesOrderToken:
                             transTypeSalesOrderToken.setChecked(true);
                             break;
 
-                        case Utils.refund:
+                        case Utils.mRefund:
                             transTypeRefund.setChecked(true);
                             break;
 
-                        case Utils.withdraw:
+                        case Utils.merchantPayout:
                             transTypeMerchantPayout.setChecked(true);
                             break;
 
-                        case Utils.pending:
+                        case Utils.monthlyServiceFee:
                             transTypeMonthlyServiceFee.setChecked(true);
                             break;
 
@@ -498,15 +498,15 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             if (txnStatus.size() > 0) {
                 for (int i = 0; i < txnStatus.size(); i++) {
                     switch (txnStatus.get(i)) {
-                        case Utils.completed:
+                        case Utils.mCompleted:
                             transStatusCompleted.setChecked(true);
                             break;
 
-                        case Utils.pending:
+                        case Utils.msRefund:
                             transStatusRefund.setChecked(true);
                             break;
 
-                        case Utils.cancelled:
+                        case Utils.mPartialRefund:
                             transStatusPartialRefund.setChecked(true);
                             break;
 
@@ -614,10 +614,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    transactionType.add(Utils.payRequest);
+                    transactionType.add(Utils.mSalesOrderToken);
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.payRequest) {
+                        if (transactionType.get(i) == Utils.mSalesOrderToken) {
                             transactionType.remove(i);
                             break;
                         }
@@ -631,10 +631,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    transactionType.add(Utils.buyTokens);
+                    transactionType.add(Utils.mRefund);
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.buyTokens) {
+                        if (transactionType.get(i) == Utils.mRefund) {
                             transactionType.remove(i);
                             break;
                         }
@@ -648,10 +648,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    transactionType.add(Utils.saleOrder);
+                    transactionType.add(Utils.merchantPayout);
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.saleOrder) {
+                        if (transactionType.get(i) == Utils.merchantPayout) {
                             transactionType.remove(i);
                             break;
                         }
@@ -665,10 +665,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    transactionType.add(Utils.withdraw);
+                    transactionType.add(Utils.monthlyServiceFee);
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.withdraw) {
+                        if (transactionType.get(i) == Utils.monthlyServiceFee) {
                             transactionType.remove(i);
                             break;
                         }
@@ -681,10 +681,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    txnStatus.add(Utils.completed);
+                    txnStatus.add(Utils.mCompleted);
                 } else {
                     for (int i = 0; i < txnStatus.size(); i++) {
-                        if (txnStatus.get(i) == Utils.completed) {
+                        if (txnStatus.get(i) == Utils.mCompleted) {
                             txnStatus.remove(i);
                             break;
                         }
@@ -697,12 +697,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    txnStatus.add(Utils.cancelled);
-//                    transStatusCanceled.setChecked(false);
+                    txnStatus.add(Utils.msRefund);
                 } else {
-//                    transStatusCanceled.setChecked(false);
                     for (int i = 0; i < txnStatus.size(); i++) {
-                        if (txnStatus.get(i) == Utils.cancelled) {
+                        if (txnStatus.get(i) == Utils.msRefund) {
                             txnStatus.remove(i);
                             break;
                         }
@@ -715,10 +713,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    txnStatus.add(Utils.inProgress);
+                    txnStatus.add(Utils.mPartialRefund);
                 } else {
                     for (int i = 0; i < txnStatus.size(); i++) {
-                        if (txnStatus.get(i) == Utils.inProgress) {
+                        if (txnStatus.get(i) == Utils.mPartialRefund) {
                             txnStatus.remove(i);
                             break;
                         }
