@@ -156,6 +156,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"
                             android:layout_margin="@dimen/_10ssp"
+                            android:gravity="center"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -163,6 +164,7 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/ll_values"
                                 android:gravity="center_horizontal"
+                                android:layout_gravity="center_vertical"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -170,7 +172,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="top"
-                                    android:layout_marginTop="@dimen/_5sdp"
                                     android:layout_marginEnd="@dimen/_5sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="$"
@@ -182,10 +183,10 @@
                                     android:id="@+id/payrequestET"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="bottom"
+                                    android:layout_gravity="center_vertical"
                                     android:background="@color/white"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:gravity="bottom"
+                                    android:gravity="center_vertical"
                                     android:hint="0.00"
                                     android:inputType="numberDecimal"
                                     android:maxLength="@string/maxlengthamount"
