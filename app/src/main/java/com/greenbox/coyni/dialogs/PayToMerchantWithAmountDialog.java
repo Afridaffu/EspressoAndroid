@@ -23,7 +23,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 
     private LinearLayout copyAddressLL;
     private String amount;
-    UserDetails userDetails;
+    private UserDetails userDetails;
     private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance, userName;
     private String recipientAddress = "";
     private boolean screenCheck;
@@ -151,8 +151,8 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
                     userDetails.getData().getLastName().substring(0, 1).toUpperCase();
             userName.setText(imageTextNew);
-            if (userDetails.getData().getWalletId().length() > Integer.parseInt("10")) {
-                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, Integer.parseInt("10")) + "...");
+            if (userDetails.getData().getWalletId().length() > 10) {
+                userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 10) + "...");
             } else {
                 userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId());
             }
