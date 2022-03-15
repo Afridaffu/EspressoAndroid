@@ -24,7 +24,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private LinearLayout copyAddressLL;
     private String amount;
     UserDetails userDetails;
-    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance,userName;
+    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance, userName;
     private String recipientAddress = "";
     private boolean screenCheck;
     Boolean isFaceLock = false, isTouchId = false;
@@ -38,7 +38,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         super(context);
     }
 
-    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon,double balance) {
+    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon, double balance) {
         super(context);
         amount = strAmount;
         this.userDetails = userDetails;
@@ -61,22 +61,10 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         tv_lable = findViewById(R.id.tv_lable);
         im_lock_ = findViewById(R.id.im_lock_);
 
-//        setTouchId();
-//        setFaceLock();
-//        dashboardViewModel = new ViewModelProvider(ScanActivity.scanActivity).get(DashboardViewModel.class);
-//        dashboardViewModel.getUserDetail(walletId);
-//
-//        dashboardViewModel.getUserDetailsMutableLiveData().observe(ScanActivity.scanActivity, new Observer<UserDetails>() {
-//            @Override
-//            public void onChanged(UserDetails userDetails) {
-//                if (userDetails != null && userDetails.getStatus().equalsIgnoreCase("SUCCESS")){
-//                    dbaName.setText(userDetails.getData().getFullName());
-//                }
-//            }
-//        });
         bindUserInfo(userDetails);
 
         if (amount != null) {
+            amount=amount.replace(",","").trim();
             payAmount.setText(Utils.USNumberFormat(Double.parseDouble(amount)));
         }
         if (recipientAddress.length() > 13) {
@@ -85,12 +73,12 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             recipientAddressTV.setText(recipientAddress);
         }
 
-        if (availableBalance !=null){
-            availableBalance.setText("Available: "+Utils.USNumberFormat(balance)+"CYN");
+        if (availableBalance != null) {
+            availableBalance.setText("Available: " + Utils.USNumberFormat(balance) + "CYN");
         }
 
-        if (userDetails.getData().getFullName() != null){
-            userName.setText("Paying "+userDetails.getData().getFullName());
+        if (userDetails.getData().getFullName() != null) {
+            userName.setText("Paying " + userDetails.getData().getFullName());
         }
 
         slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
@@ -196,38 +184,4 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             ex.printStackTrace();
         }
     }
-//    private void setFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            String value = dbHandler.getFacePinLock();
-//            if (value != null && value.equals("true")) {
-//                isFaceLock = true;
-//                myApplication.setLocalBiometric(true);
-//            } else {
-//                isFaceLock = false;
-//                myApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
-//    private void setTouchId() {
-//        try {
-//            isTouchId = false;
-//            String value = dbHandler.getThumbPinLock();
-//            if (value != null && value.equals("true")) {
-//                isTouchId = true;
-//                myApplication.setLocalBiometric(true);
-//            } else {
-//                isTouchId = false;
-//                myApplication.setLocalBiometric(false);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
 }

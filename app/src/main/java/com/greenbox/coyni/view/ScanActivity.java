@@ -13,7 +13,13 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.zxing.Reader;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.payrequest.TransferPayRequest;
+import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
+import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -72,7 +78,10 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
+import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.PayViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -108,7 +117,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     TextView tvWalletAddress, tvName;
     boolean isTorchOn = true, isQRScan = false;
     ImageView toglebtn1;
-    String strWallet = "", strScanWallet = "", strQRAmount = "";
+    String strWallet = "", strScanWallet = "", strQRAmount = "", strLimit = "";
     ProgressDialog dialog;
     Dialog errorDialog;
     ConstraintLayout scannerLayout;
@@ -126,6 +135,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     boolean isAuthenticationCalled = false;
     Boolean isFaceLock = false, isTouchId = false;
+
+    Double cynValue = 0.0,avaBal = 0.0;
+    Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
+    BuyTokenViewModel buyTokenViewModel;
+    PayViewModel payViewModel;
+    CoyniViewModel coyniViewModel;
+    TransactionLimitResponse objResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,6 +244,26 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             saveSetAmount = findViewById(R.id.tvsaveSetAmount);
             scanMeScanCodeLL = findViewById(R.id.scanMeScanCodeLL);
 
+            // Merchant Scan QR
+            buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
+            payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
+            coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+
+            avaBal = objMyApplication.getGBTBalance();
+            calculateFee("10");
+
+            if (Utils.checkInternet(ScanActivity.this)) {
+                TransactionLimitRequest obj = new TransactionLimitRequest();
+                obj.setTransactionType(Integer.parseInt(Utils.payType));
+                obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
+//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                dialog = Utils.showProgressDialog(ScanActivity.this);
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                } else {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+                }
+            }
             setTouchId();
             setFaceLock();
 
@@ -557,7 +593,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 //                                i.putExtra("screen", "scan");
 //                                startActivity(i);
                                 String amount = strQRAmount;
-                                showPayToMerchantWithAmountDialog(amount, userDetails,0.00);
+                                dialog = Utils.showProgressDialog(ScanActivity.this);
+                                cynValue = Double.parseDouble(strQRAmount.toString().trim().replace(",", ""));
+                                calculateFee(Utils.USNumberFormat(cynValue));
+                                showPayToMerchantWithAmountDialog(amount, userDetails,avaBal);
                             }
                         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             //ERROR MESSAGE DIsPLAY
@@ -611,6 +650,66 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         }
                     }
                 }
+            }
+        });
+
+        buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, transferFeeResponse -> {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            if (transferFeeResponse != null) {
+                objMyApplication.setTransferFeeResponse(transferFeeResponse);
+                feeInAmount = transferFeeResponse.getData().getFeeInAmount();
+                feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
+                pfee = transferFeeResponse.getData().getFee();
+
+            }
+        });
+
+        payViewModel.getPayRequestResponseMutableLiveData().observe(this, payRequestResponse -> {
+            try {
+                if (payRequestResponse != null) {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                    Utils.setStrToken("");
+                    objMyApplication.setPayRequestResponse(payRequestResponse);
+                    if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                        startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "success")
+                                .putExtra("subtype", "pay"));
+
+                    } else {
+                        startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "failed")
+                                .putExtra("subtype", "pay"));
+                    }
+                } else {
+                    Utils.displayAlert("something went wrong", ScanActivity.this, "", "");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, biometricTokenResponse -> {
+            if (biometricTokenResponse != null) {
+                if (biometricTokenResponse.getStatus().equalsIgnoreCase("success")) {
+                    if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                    }
+                    payTransaction();
+                }
+            }
+        });
+
+        buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, transactionLimitResponse -> {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            if (transactionLimitResponse != null) {
+                objResponse = transactionLimitResponse;
+                setDailyWeekLimit(objResponse.getData());
             }
         });
     }
@@ -979,6 +1078,30 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
             }
+            else  if(requestCode ==  251) {
+                try {
+                    //payTransaction();
+                    dialog = Utils.showProgressDialog(ScanActivity.this);
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+//                    request.setMobileToken(strToken);
+                    request.setMobileToken(objMyApplication.getStrMobileToken());
+                    request.setActionType(Utils.sendActionType);
+                    coyniViewModel.biometricToken(request);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else if (requestCode == 0) {
+                try {
+                    payTransaction();
+                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("screen", "Pay"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             //Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
         }
@@ -1153,7 +1276,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails,double balance) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails,Double balance) {
         isQRScan = false;
         mcodeScanner.stopPreview();
         PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails,false,balance);
@@ -1161,23 +1284,29 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onDialogClicked(String action, Object value) {
                 LogUtils.v("Scan", "onDialog Clicked " + action);
+                if (action.equalsIgnoreCase("payTransaction")) {
 
-                if (action.equalsIgnoreCase(""))
+                    if (!isAuthenticationCalled && payValidation()) {
+                        isAuthenticationCalled = true;
+                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
+                            if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
+                                Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+                                payTransaction();
+                                startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("screen", "Pay"));
 
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
-                        if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            }
                         } else {
+                            payTransaction();
                             startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "Pay"));
-
                         }
-                    } else {
-                        startActivity(new Intent(ScanActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("screen", "Pay"));
                     }
+                    LogUtils.v("Scan", "onDialog Clicked " + action);
+                }
 
             }
         });
@@ -1186,6 +1315,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         payToMerchantWithAmountDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
+                isAuthenticationCalled = false;
                 mcodeScanner.startPreview();
                 scannerLayout.setVisibility(View.VISIBLE);
             }
@@ -1221,6 +1351,123 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             } else {
                 isTouchId = false;
                 objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void calculateFee(String strAmount) {
+        try {
+            TransferFeeRequest request = new TransferFeeRequest();
+            request.setTokens(strAmount.trim().replace(",", ""));
+            request.setTxnType(Utils.payType);
+            request.setTxnSubType(Utils.paySubType);
+            if (Utils.checkInternet(ScanActivity.this)) {
+                buyTokenViewModel.transferFee(request);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void payTransaction() {
+        try {
+            TransferPayRequest request = new TransferPayRequest();
+            request.setTokens(strQRAmount.trim().replace(",", ""));
+            request.setRemarks("");
+            request.setRecipientWalletId(strScanWallet);
+            objMyApplication.setTransferPayRequest(request);
+            objMyApplication.setWithdrawAmount(cynValue);
+            if (Utils.checkInternet(ScanActivity.this)) {
+                payViewModel.sendTokens(request);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    private Boolean payValidation() {
+        Boolean value = true;
+        try {
+            //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
+            String strPay = strQRAmount.toString().trim().replace("\"", "");
+//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
+//                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayToMerchantActivity.this, "", "");
+//                return value = false;
+//            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
+//                if (strLimit.equals("daily")) {
+//                    tvError.setText("Amount entered exceeds your daily limit");
+//                } else if (strLimit.equals("week")) {
+//                    tvError.setText("Amount entered exceeds your weekly limit");
+//                }
+//                tvError.setVisibility(View.VISIBLE);
+//                lyBalance.setVisibility(View.GONE);
+//                return value = false;
+//            } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
+//                Utils.displayAlert("Amount entered exceeds available balance", PayToMerchantActivity.this, "", "");
+//                return value = false;
+//            } else if (cynValue > avaBal) {
+//                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+//                return value = false;
+//            }
+//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() == 0) {
+//                objMyApplication.setStrScreen("payRequest");
+//                Intent i = new Intent(PayToMerchantActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                i.putExtra("screen", "payRequest");
+//                startActivity(i);
+//                value = false;
+//            } else
+            if (cynValue > avaBal) {
+                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+                value = false;
+            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                Utils.displayAlert("Amount entered exceeds transaction limit.", ScanActivity.this, "Oops!", "");
+                value = false;
+            }
+//            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
+//                Utils.displayAlert("Amount entered exceeds available balance", PayToMerchantActivity.this, "", "");
+//                value = false;
+//            }
+
+//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+//                                    isPayClick = true;
+//                                    pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
+//                                    calculateFee(Utils.USNumberFormat(cynValue));
+//                                } else {
+//                                    objMyApplication.setStrScreen("payRequest");
+//                                    Intent i = new Intent(PayToMerchantActivity.this, BuyTokenPaymentMethodsActivity.class);
+//                                    i.putExtra("screen", "payRequest");
+//                                    startActivity(i);
+//                                }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+    private void setDailyWeekLimit(LimitResponseData objLimit) {
+        try {
+            if (objLimit.getTokenLimitFlag()) {
+                Double week = 0.0, daily = 0.0;
+                if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("unlimited")) {
+                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                }
+                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
+                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
+                }
+                if ((week == 0 || week < 0) && daily > 0) {
+                    strLimit = "daily";
+                    maxValue = daily;
+                } else if ((daily == 0 || daily < 0) && week > 0) {
+                    strLimit = "week";
+                    maxValue = week;
+                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+                    strLimit = "unlimited";
+                } else {
+                    strLimit = "daily";
+                    maxValue = daily;
+                }
             }
 
         } catch (Exception ex) {
