@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -183,7 +184,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditEmailActivity.class).putExtra("screen","DBAChangeEmail").putExtra("action","EditEmailDBA"));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditEmailActivity.class).putExtra("screen","CompanyChangeEmail").putExtra("action","EditEmailCompany"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -210,6 +211,58 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
                         startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditPhoneActivity.class).putExtra("screen","DBAChangePhone").putExtra("action","EditPhoneDBA").putExtra("OLD_PHONE", phoneFormat));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")){
+            heading.setText(getString(R.string.email));
+            title.setText(getString(R.string.email_curr));
+            value.setText(getIntent().getStringExtra("value"));
+
+            if (myApplicationObj.getCompanyInfoResp()!=null){
+                value.setText(myApplicationObj.getCompanyInfoResp().getData().getEmail());
+            }
+
+
+            changeCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    try {
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditEmailActivity.class).putExtra("screen","CompanyChangeEmail").putExtra("action","EditEmailCompany"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")){
+            heading.setText(getString(R.string.phone));
+            title.setText(getString(R.string.phonenumber_curr));
+            value.setText(getIntent().getStringExtra("value"));
+            phoneFormat = getIntent().getStringExtra("value");
+
+            if (myApplicationObj.getCompanyInfoResp()!=null){
+                value.setText( "(" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+            }
+
+
+            changeCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    try {
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditPhoneActivity.class).putExtra("screen","CompanyChangePhone").putExtra("action","EditPhoneCompany").putExtra("OLD_PHONE", phoneFormat));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -281,6 +334,21 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                 }
             }
         });
+
+        businessIdentityVerificationViewModel.getGetCompanyInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
+            @Override
+            public void onChanged(CompanyInfoResp companyInfoResp) {
+                if (companyInfoResp!=null&&companyInfoResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                    myApplicationObj.setCompanyInfoResp(companyInfoResp);
+                    if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")) {
+                        value.setText(companyInfoResp.getData().getEmail());
+                    }
+                    else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")){
+                        value.setText("(" +companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -336,6 +404,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
         try {
             dashboardViewModel.meProfile();
             businessIdentityVerificationViewModel.getDBAInfo();
+            businessIdentityVerificationViewModel.getCompanyInfo();
             initObservers();
         } catch (Exception e) {
             e.printStackTrace();
