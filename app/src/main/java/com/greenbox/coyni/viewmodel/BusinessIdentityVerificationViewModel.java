@@ -229,7 +229,7 @@ public class BusinessIdentityVerificationViewModel extends AndroidViewModel {
                 @Override
                 public void onFailure(Call<CompanyInfoUpdateResp> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    updateBasicCompanyInfoResponse.setValue(null);
+                    getContactInfoUpdate.setValue(null);
                 }
             });
         } catch (Exception ex) {

@@ -74,6 +74,7 @@
                     android:layout_height="64dp"
                     app:boxStrokeColor="@color/primary_green"
                     app:hintEnabled="false"
+
                     app:prefixText="$   "
                     app:prefixTextAppearance="@style/prefix"
                     app:prefixTextColor="@color/primary_black">
@@ -88,8 +89,9 @@
                         android:hint="0.00"
                         android:imeOptions="actionDone"
                         android:maxLength="4"
+
                         android:maxLines="1"
-                        android:padding="@dimen/_14sdp"
+                        android:paddingBottom="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
@@ -99,6 +101,7 @@
                         android:textSize="@dimen/_19ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
 
                 <LinearLayout
                     android:id="@+id/llError"

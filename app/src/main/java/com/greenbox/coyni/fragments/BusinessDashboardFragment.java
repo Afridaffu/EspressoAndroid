@@ -3,7 +3,9 @@ package com.greenbox.coyni.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -55,12 +58,13 @@ public class BusinessDashboardFragment extends BaseFragment {
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView,
             mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView;
-    private TextView mTvIdentityReviewCancelMessage, mTvProcessingVolume;
+    private TextView mTvIdentityReviewCancelMessage, mTvProcessingVolume, mTvContactUs;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions;
     private CardView mCvBatchNow, mCvGetStarted;
+    private Long mLastClickTimeQA = 0L;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -98,32 +102,96 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvMerchantTransactions = mCurrentView.findViewById(R.id.tv_merchant_transactions);
         mCvBatchNow = mCurrentView.findViewById(R.id.cv_batch_now);
         mCvGetStarted = mCurrentView.findViewById(R.id.cv_app_get_started);
+        mTvContactUs = mCurrentView.findViewById(R.id.contactUSTV);
 
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
 
-        notificationsRL.setOnClickListener(view -> startActivity(new Intent(getActivity(), NotificationsActivity.class)));
+        notificationsRL.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            startActivity(new Intent(getActivity(), NotificationsActivity.class));
+        });
 
-        mLlBuyTokensFirstTimeView.setOnClickListener(v -> ((BusinessDashboardActivity) getActivity()).launchBuyTokens());
+        mLlBuyTokensFirstTimeView.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            ((BusinessDashboardActivity) getActivity()).launchBuyTokens();
+        });
 
-        mLlProcessingVolume.setOnClickListener(v -> showProcessingVolumeDialog());
+        mLlProcessingVolume.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            showProcessingVolumeDialog();
+        });
 
-        mUserIconRelativeLayout.setOnClickListener(view -> startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class)));
+        mUserIconRelativeLayout.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+        });
 
-        mCvAdditionalDataContinue.setOnClickListener(view -> startActivity(new Intent(getActivity(), BusinessAdditonalActionRequired.class)));
+        mCvAdditionalDataContinue.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            startActivity(new Intent(getActivity(), BusinessAdditonalActionRequired.class));
+        });
 
-        mTvMerchantTransactions.setOnClickListener(v -> startActivity(new Intent(getActivity(), MerchantTransactionListActivity.class)));
+        mTvMerchantTransactions.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            startActivity(new Intent(getActivity(), MerchantTransactionListActivity.class));
+        });
 
-        mCvBatchNow.setOnClickListener(v -> showBatchNowDialog());
+        mCvBatchNow.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            showBatchNowDialog();
+        });
 
-        mCvGetStarted.setOnClickListener(v -> startTracker());
+        mCvGetStarted.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            startTracker();
+        });
     }
 
     private void initObservers() {
         businessDashboardViewModel.getCancelApplicationResponseMutableLiveData().observe(getActivity(), new Observer<CancelApplicationResponse>() {
             @Override
             public void onChanged(CancelApplicationResponse cancelApplicationResponse) {
+                ((BusinessDashboardActivity) getActivity()).dismissDialog();
                 if (cancelApplicationResponse != null) {
-                    launchApplicationCancelledScreen();
+                    if (cancelApplicationResponse.getStatus() != null
+                            && cancelApplicationResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        launchApplicationCancelledScreen();
+                    } else {
+                        String msg = getString(R.string.something_went_wrong);
+                        if (cancelApplicationResponse.getError() != null
+                                && cancelApplicationResponse.getError().getErrorDescription() != null
+                                && !cancelApplicationResponse.getError().getErrorDescription().trim().equals("")) {
+                            msg = cancelApplicationResponse.getError().getErrorDescription();
+                        }
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    String msg = getString(R.string.something_went_wrong);
+                    Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -145,7 +213,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     //Display Identity Verification Failed Error
-                    showIdentityVerificationFailed();
+                    //showIdentityVerificationFailed();
                 }
             });
 
@@ -158,7 +226,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getAccountStatus() != null) {
             String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
-            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                 showIdentityVerificationReview();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                 showIdentityVerificationReview();
@@ -179,6 +247,16 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
         mLlGetStartedView.setVisibility(View.GONE);
+
+        mTvContactUs.setOnClickListener(v -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(Utils.mondayURL));
+            startActivity(i);
+        });
     }
 
     private void showBusinessDashboardView() {
@@ -222,6 +300,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 showCancelApplicationDialog();
             }
 
@@ -265,7 +347,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(getString(R.string.yes))) {
-                    launchApplicationCancelledScreen();
+                    ((BusinessDashboardActivity) getActivity()).showProgressDialog();
+                    businessDashboardViewModel.cancelMerchantApplication();
                 }
             }
         });

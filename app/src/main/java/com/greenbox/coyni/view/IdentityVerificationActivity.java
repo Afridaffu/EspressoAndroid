@@ -337,6 +337,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             mailAddr1.setText("");
                             mailAddr1.setSelection(mailAddr1.getText().length());
                             address1ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            mailAddr1.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             mailAddr1.setText("");
                             mailAddr1.setSelection(mailAddr1.getText().length());
@@ -382,6 +384,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             mailAddr2.setText("");
                             mailAddr2.setSelection(mailAddr2.getText().length());
                             address2ErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            mailAddr2.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(0).equals(" ")) {
                             mailAddr2.setText("");
                             mailAddr2.setSelection(mailAddr2.getText().length());
@@ -431,6 +435,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             cityET.setText("");
                             cityET.setSelection(cityET.getText().length());
                             cityErrorLL.setVisibility(GONE);
+                        } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
+                            cityET.setText(str.trim());
                         } else if (str.length() > 0 && str.substring(str.length() - 1).equals(".")) {
                             cityET.setText(cityET.getText().toString().replaceAll(".", ""));
                             cityET.setSelection(cityET.getText().length());
@@ -581,6 +587,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
                             cityErrorLL.setVisibility(VISIBLE);
                             cityErrorTV.setText("Field Required");
+                        }
+                        if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
+                            cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
                         }
                     } else {
                         cityET.setHint("City");

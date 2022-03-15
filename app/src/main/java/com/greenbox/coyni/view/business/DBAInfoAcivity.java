@@ -678,6 +678,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         }
                         if (dbanameET.getText().toString().length() > 0 && !dbanameET.getText().toString().substring(0, 1).equals(" ")) {
                             dbanameET.setText(dbanameET.getText().toString().substring(0, 1).toUpperCase() + dbanameET.getText().toString().substring(1));
+                            dbanameET.setSelection(dbanameET.getText().toString().length());
                         }
                     } else {
                         dbanameET.setHint("DBA Name");
@@ -746,6 +747,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         }
                         if (companyaddressET.getText().toString().length() > 0 && !companyaddressET.getText().toString().substring(0, 1).equals(" ")) {
                             companyaddressET.setText(companyaddressET.getText().toString().substring(0, 1).toUpperCase() + companyaddressET.getText().toString().substring(1));
+                            companyaddressET.setSelection(companyaddressET.getText().toString().length());
                         }
                     } else {
                         companyaddressET.setHint("Street Address");
@@ -771,6 +773,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         }
                         if (companyaddress2ET.getText().toString().length() > 0 && !companyaddress2ET.getText().toString().substring(0, 1).equals(" ")) {
                             companyaddress2ET.setText(companyaddress2ET.getText().toString().substring(0, 1).toUpperCase() + companyaddress2ET.getText().toString().substring(1));
+                            companyaddress2ET.setSelection(companyaddress2ET.getText().toString().length());
                         }
                     } else {
                         companyaddress2til.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -799,6 +802,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         }
                         if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
                             cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
+                            cityET.setSelection(cityET.getText().toString().length());
                         }
                     } else {
                         cityET.setHint("City");
