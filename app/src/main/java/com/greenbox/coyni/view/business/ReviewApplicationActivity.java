@@ -301,6 +301,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
 //                dashboardViewModel.agreementsByType("1");
+                showProgressDialog();
                 dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
 
             }
@@ -309,6 +310,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onClick(View v) {
 //                dashboardViewModel.agreementsByType("0");
+                showProgressDialog();
                 dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
             }
         });
@@ -932,6 +934,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                } catch (ActivityNotFoundException e) {
 //                    e.printStackTrace();
 //                }
+                showProgressDialog();
                 dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
             }
 
@@ -959,6 +962,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                } catch (ActivityNotFoundException e) {
 //                    e.printStackTrace();
 //                }
+                showProgressDialog();
                 dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
 
             }
