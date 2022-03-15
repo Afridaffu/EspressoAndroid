@@ -599,9 +599,9 @@
     <string name="ownership_title">Ownership"</string>
     <string name="primary">Primary</string>
     <string name="arrow_right">ArrowRight</string>
-    <string name="invitation_sent">Invitation has sent\!</string>
-    <string name="Removed_success">Removed Successfully\!</string>
-    <string name="invitation_canceled">Invitation Cancelled\!</string>
+    <string name="invitation_sent">Invitation has sent\</string>
+    <string name="Removed_success">Removed Successfully\</string>
+    <string name="invitation_canceled">Invitation Cancelled\</string>
     <string name="confirmation_msg">Do you want to discard the changes?</string>
 
 </resources>

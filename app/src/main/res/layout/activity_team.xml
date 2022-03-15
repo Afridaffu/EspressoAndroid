@@ -150,15 +150,10 @@
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_2sdp"
-                android:background="@color/viewcolor" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTeam"
+                android:layout_marginTop="@dimen/_13sdp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
