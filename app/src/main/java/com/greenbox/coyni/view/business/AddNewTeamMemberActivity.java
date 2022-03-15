@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,6 +45,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     public LinearLayout editPhoneLL;
     private TextView editFNameTV, editLNameTV, editEmailTV;
     public TextView editPhoneTV;
+    private Long mLastClickTime = 0L;
     private static int focusedID = 0;
     public CardView sendCV;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false, isNextEnabled = false;
@@ -121,16 +123,23 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         editEmailTV = findViewById(R.id.emailIdTV);
         editPhoneTV = findViewById(R.id.phoneNoTV);
 
+        editFNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        editLNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
         sendCV = findViewById(R.id.cvSend);
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View v) {
-                showProgressDialog();
-                //  phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
-                teamInfoAddAPICall(prepareRequest());
+                if(isNextEnabled==true) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    showProgressDialog();
+                    teamInfoAddAPICall(prepareRequest());
+                }
             }
         });
 
@@ -189,8 +198,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editFNameET.setText(editFNameET.getText().toString().substring(0, 1).toUpperCase() + editFNameET.getText().toString().substring(1));
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
+
                         editFNameLL.setVisibility(GONE);
                         focusedID = editFNameET.getId();
                         editFNameET.setHint("First Name");
@@ -225,8 +233,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editLNameET.setText(editLNameET.getText().toString().substring(0, 1).toUpperCase() + editLNameET.getText().toString().substring(1));
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
+
                         editLNameLL.setVisibility(GONE);
                         editLNameET.setHint("Last Name");
                         editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -261,8 +268,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editEmailTV.setText("Field Required");
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
                         editEmailLL.setVisibility(GONE);
                         editEmailET.setHint("Email");
                         editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -417,41 +422,17 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     public void addTeam() {
         teamInfoAddAPICall(prepareRequest());
     }
-    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
-        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            private boolean alreadyOpen;
-            private final int defaultKeyboardHeightDP = 100;
-            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
-            private final Rect rect = new Rect();
-
-            @Override
-            public void onGlobalLayout() {
-                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
-                parentView.getWindowVisibleDisplayFrame(rect);
-                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
-                boolean isShown = heightDiff >= estimatedKeyboardHeight;
-
-                if (isShown == alreadyOpen) {
-                    Log.i("Keyboard state", "Ignoring global layout change...");
-                    return;
-                }
-                alreadyOpen = isShown;
-                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
-            }
-        });
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
         editFNameET.requestFocus();
+        Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
     }
 
     private void enableOrDisableNext() {
         try {
-            if (isFirstName && isLastName && isEmail) {
+            if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 

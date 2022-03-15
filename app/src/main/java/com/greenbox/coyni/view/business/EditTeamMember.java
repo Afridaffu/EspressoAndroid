@@ -102,6 +102,11 @@ public class EditTeamMember extends BaseActivity {
         editEmailTV = findViewById(R.id.editemailErrorTV);
         editPhoneTV = findViewById(R.id.editphoneErrorTV);
 
+        editFNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        editLNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+        editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
+
         editFNameET.setText(firstName);
         editLNameET.setText(lastName);
         editEmailET.setText(emailAddress);
@@ -147,8 +152,6 @@ public class EditTeamMember extends BaseActivity {
                             editFNameET.setText(editFNameET.getText().toString().substring(0, 1).toUpperCase() + editFNameET.getText().toString().substring(1));
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(EditTeamMember.this);
                         editFNameLL.setVisibility(GONE);
                         focusedID = editFNameET.getId();
                         editFNameET.setHint("First Name");
@@ -183,8 +186,6 @@ public class EditTeamMember extends BaseActivity {
                             editLNameET.setText(editLNameET.getText().toString().substring(0, 1).toUpperCase() + editLNameET.getText().toString().substring(1));
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(EditTeamMember.this);
                         focusedID = editLNameET.getId();
                         editLNameLL.setVisibility(GONE);
                         editLNameET.setHint("Last Name");
@@ -220,9 +221,6 @@ public class EditTeamMember extends BaseActivity {
                             editEmailTV.setText("Field Required");
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(EditTeamMember.this);
-                        editEmailLL.setVisibility(GONE);
                         focusedID = editEmailET.getId();
                         editEmailET.setHint("Email");
                         editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -464,6 +462,7 @@ public class EditTeamMember extends BaseActivity {
     protected void onResume() {
         super.onResume();
         editFNameET.requestFocus();
+        Utils.shwForcedKeypad(EditTeamMember.this);
     }
 
 
