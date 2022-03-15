@@ -141,7 +141,6 @@ public class EditCardActivity extends AppCompatActivity {
             etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
 
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             etName.setEnabled(false);
@@ -150,7 +149,15 @@ public class EditCardActivity extends AppCompatActivity {
             etlCard.enableHint();
             etlCard.setFrom("EDIT_CARD");
             if (selectedCard != null) {
-                etName.setText(Utils.capitalize(selectedCard.getName().substring(0,20)+"..."));
+                String name = "";
+                if( selectedCard.getName() != null) {
+                    if (selectedCard.getName().length()>=21) {
+                        name = selectedCard.getName().substring(0, 21) + "...";
+                    } else {
+                        name = selectedCard.getName();
+                    }
+                }
+                etName.setText(Utils.capitalize(name));
                 etlCard.setText(selectedCard.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + selectedCard.getLastFour());
                 etExpiry.setText(selectedCard.getExpiryDate());
                 etAddress1.setText(selectedCard.getAddressLine1());
