@@ -527,6 +527,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:autofillHints="AUTOFILL_HINT_SMS_OTP"
+                                android:importantForAutofill="no"
                                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:imeOptions="actionNext"

@@ -955,6 +955,7 @@ public class AddCardActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     try {
                         if (!b) {
+                            Utils.hideKeypad(AddCardActivity.this);
                             etZipCode.setHint("");
                             if (etZipCode.getText().toString().trim().length() == 5) {
                                 zipErrorLL.setVisibility(GONE);
@@ -973,6 +974,7 @@ public class AddCardActivity extends AppCompatActivity {
                                 zipErrorTV.setText("Field Required");
                             }
                         } else {
+                            Utils.shwForcedKeypad(AddCardActivity.this);
                             etZipCode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));

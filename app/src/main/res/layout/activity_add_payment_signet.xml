@@ -148,7 +148,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="AUTOFILL_HINT_SMS_OTP"
-                        android:digits="abcdefghijklmnopqrstuvwxyz1234567890"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"

@@ -538,7 +538,8 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -663,6 +664,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_14sdp"
                         android:hint="Zip Code"
+
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"
@@ -677,6 +679,7 @@
                             android:imeOptions="actionDone"
                             android:inputType="number|textNoSuggestions"
                             android:maxLength="5"
+
                             android:maxLines="1"
                             android:padding="@dimen/_14sdp"
                             android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -685,6 +688,7 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
