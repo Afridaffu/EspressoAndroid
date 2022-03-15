@@ -258,6 +258,13 @@ public class Utils {
     public static final String comCountryCode = "CompanyCountryCode";
     public static final int companyId = 0;
 
+    public static final String active="Active";
+    public static final String inActive="Inactive";
+    public static final String teammemberpending="Pending";
+    public static final String resendInvitation="Resend Invitation";
+    public static final String canceled="Canceled";
+    public static final String expired="Expired";
+
 
     public static final int position = 0;
     public static final int cPP = 0;

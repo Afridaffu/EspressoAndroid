@@ -144,7 +144,7 @@ public class TeamMemberActivity extends BaseActivity {
         txImageName.setText(imageName);
         txEmailAddress.setText(emailAddress);
         txPhoneNumber.setText(phoneNumber);
-        if (status.equalsIgnoreCase("Active")) {
+        if (status.equalsIgnoreCase(Utils.active)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
             mResendInvitation.setVisibility(View.GONE);
@@ -152,7 +152,7 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.active_green));
             mStatusIcon.setBackgroundResource(R.drawable.active_dot);
             txStatus.setBackgroundResource(R.drawable.txn_active_bg);
-        } else if (status.equalsIgnoreCase("Canceled")) {
+        } else if (status.equalsIgnoreCase(Utils.canceled)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
             mResendInvitation.setVisibility(View.VISIBLE);
@@ -160,8 +160,8 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.error_red));
             mStatusIcon.setBackgroundResource(R.drawable.resend_invitation_bg);
             txStatus.setBackgroundResource(R.drawable.txn_resend_invitation_bg);
-            txStatus.setText("Expired");
-        } else if (status.equalsIgnoreCase("Inactive")) {
+            txStatus.setText(Utils.expired);
+        } else if (status.equalsIgnoreCase(Utils.inActive)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
             mResendInvitation.setVisibility(View.GONE);

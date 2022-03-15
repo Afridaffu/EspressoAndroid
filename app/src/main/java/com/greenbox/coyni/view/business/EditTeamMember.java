@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -44,6 +45,7 @@ public class EditTeamMember extends BaseActivity {
     public TextView editPhoneTV;
     public static int focusedID = 0;
     public CardView sendCV;
+    private Long mLastClickTime = 0L;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false, isNextEnabled = false;
     private String firstName = "", lastName = "", role = "", status = "", emailAddress = "", phoneNumber = "", imageName = "";
     private TeamViewModel teamViewModel;
@@ -106,7 +108,6 @@ public class EditTeamMember extends BaseActivity {
         editLNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
         editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
-
         editFNameET.setText(firstName);
         editLNameET.setText(lastName);
         editEmailET.setText(emailAddress);
@@ -117,7 +118,14 @@ public class EditTeamMember extends BaseActivity {
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                teamInfoAPICall(prepareRequest());
+                if(isNextEnabled==true) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    showProgressDialog();
+                    teamInfoAPICall(prepareRequest());                }
+
             }
         });
 
