@@ -1,6 +1,9 @@
 package com.greenbox.coyni.view.business;
 
 import android.annotation.SuppressLint;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.greenbox.coyni.model.Agreements;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,14 +22,10 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -44,10 +43,10 @@ public class MerchantsAgrementActivity extends BaseActivity {
     ImageView mIVSignature, canceledIV;
     TextView savedText;
     BusinessDashboardViewModel businessDashboardViewModel;
-    DashboardViewModel dashboardViewModel;
     private String filePath = null;
     private boolean isSignatureCaptured = false;
     private WebView webView;
+    Long mLastClickTimeQA = 0L;
     private MyApplication objMyApplication;
 
     @SuppressLint("WrongViewCast")
@@ -74,7 +73,21 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webView.setVerticalScrollBarEnabled(true);
         String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
         webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
-
+        showProgressDialog();
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                try {
+                    if (view.getTitle().equals("")) {
+                        view.reload();
+                    } else {
+                        dismissDialog();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
         canceledIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +138,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 this.filePath = filePath;
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
                 doneCV.setVisibility(View.VISIBLE);
-                savedText.setVisibility(View.VISIBLE);
+                savedText.setVisibility(View.INVISIBLE);
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
                 isSignatureCaptured = true;
@@ -165,11 +178,13 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 try {
                     deleteTemporarySignatureFile();
                     dismissDialog();
+                    //businessDashboardViewModel.updateSignedAgree();
                     if (signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null
                                 && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
-//                            businessDashboardViewModel.updateSignedAgree();
-
+                            //If require need to show the Toast to the User.
+                            //finish();
+                            businessDashboardViewModel.updateSignedAgree();
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
                             if (signedAgreementResponse.getError() != null
@@ -244,3 +259,4 @@ public class MerchantsAgrementActivity extends BaseActivity {
         });
     }
 }
+

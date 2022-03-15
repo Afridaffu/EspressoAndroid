@@ -31,6 +31,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
+import com.greenbox.coyni.model.CompanyInfo.ContactInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
@@ -84,6 +86,14 @@ public class EditEmailActivity extends AppCompatActivity {
                     if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
                             Log.e("This is ","DBA Info  Edit");
                     }
+            }
+            else
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                findViewById(R.id.b_topLL).setVisibility(VISIBLE);
+                findViewById(R.id.editEmailSV).setVisibility(GONE);
+                if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")){
+                    Log.e("This is ","Company Info  Edit");
+                }
             }
             initObservers();
             textWatchers();
@@ -180,6 +190,23 @@ public class EditEmailActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+
+                        else if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyChangeEmail")){
+                            try {
+                                ContactInfoRequest contactInfoRequest=new ContactInfoRequest();
+                                contactInfoRequest.setEmail(Objects.requireNonNull(b_newEmailET.getText()).toString());
+
+                                PhNoWithCountryCode phNoWithCountryCode=new PhNoWithCountryCode();
+                                phNoWithCountryCode.setCountryCode(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getCountryCode());
+                                phNoWithCountryCode.setPhoneNumber(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
+                                contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                contactInfoRequest.setId(myApplicationObj.getCompanyInfoResp().getData().getId());
+                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                         else if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT||myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
                             callSendEmailOTPAPI();
                         }
@@ -656,6 +683,33 @@ public class EditEmailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
+            @Override
+            public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
+                dialog.dismiss();
+                try {
+                    if (companyInfoUpdateResp !=null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                        Utils.showCustomToast(EditEmailActivity.this, "Email updated", R.drawable.ic_check, "EMAIL");
+                        new Handler().postDelayed(() -> {
+                            try {
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }, 2000);
+
+                    }
+                    else {
+                        Toast.makeText(EditEmailActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override

@@ -85,7 +85,6 @@ public class BusinessDashboardActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void onDashboardTabSelected(View view) {
@@ -304,7 +303,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 isTabsEnabled = true;
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-                isTabsEnabled = true;
+                isTabsEnabled = false;
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isTabsEnabled = true;
             }

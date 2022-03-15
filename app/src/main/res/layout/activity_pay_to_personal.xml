@@ -131,79 +131,150 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/opensans_semibold"
                         android:text="Paying"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp"></TextView>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_17sdp"
-                        android:background="@color/white"
-                        android:paddingLeft="@dimen/_20sdp"
-                        android:paddingRight="@dimen/_30sdp">
+<!--                    <RelativeLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="@dimen/_17sdp"-->
+<!--                        android:background="@color/white"-->
+<!--                        android:paddingLeft="@dimen/_20sdp"-->
+<!--                        android:paddingRight="@dimen/_30sdp">-->
 
-                        <TextView
-                            android:id="@+id/tvCurrency"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_gravity="center"
-                            android:layout_toLeftOf="@+id/lyAmount"
-                            android:fontFamily="@font/opensans_bold"
-                            android:paddingTop="@dimen/_9sdp"
-                            android:paddingBottom="@dimen/_7sdp"
-                            android:text="$"
-                            android:textColor="@color/primary_green"
-                            android:textSize="@dimen/_33ssp"
-                            android:visibility="gone" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/tvCurrency"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_centerVertical="true"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_toLeftOf="@+id/lyAmount"-->
+<!--                            android:fontFamily="@font/opensans_bold"-->
+<!--                            android:paddingTop="@dimen/_9sdp"-->
+<!--                            android:paddingBottom="@dimen/_7sdp"-->
+<!--                            android:text="$"-->
+<!--                            android:textColor="@color/primary_green"-->
+<!--                            android:textSize="@dimen/_33ssp"-->
+<!--                            android:visibility="gone" />-->
+
+<!--                        <LinearLayout-->
+<!--                            android:id="@+id/lyAmount"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_centerVertical="true"-->
+<!--                            android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                            android:layout_toLeftOf="@+id/imgConvert"-->
+<!--                            android:orientation="horizontal">-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvAmount"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:background="@color/white"-->
+<!--                                android:fontFamily="@font/opensans_bold"-->
+<!--                                android:gravity="center_vertical|right"-->
+<!--                                android:hint="0.00"-->
+<!--                                android:inputType="numberDecimal"-->
+<!--                                android:maxLength="@string/maxlength"-->
+<!--                                android:textColor="@color/primary_green"-->
+<!--                                android:textCursorDrawable="@drawable/cursorcolor"-->
+<!--                                android:textSize="@dimen/_43ssp" />-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvCYN"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:fontFamily="@font/opensans_bold"-->
+<!--                                android:text=" CYN"-->
+<!--                                android:textColor="@color/primary_green"-->
+<!--                                android:textSize="@dimen/_11ssp"-->
+<!--                                android:visibility="visible"></TextView>-->
+<!--                        </LinearLayout>-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/imgConvert"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_alignParentRight="true"-->
+<!--                            android:layout_centerVertical="true"-->
+<!--                            android:layout_marginLeft="@dimen/_7sdp"-->
+<!--                            android:layout_marginTop="@dimen/_8sdp"-->
+<!--                            android:src="@drawable/ic_download" />-->
+<!--                    </RelativeLayout>-->
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutnew"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_60sdp"
+                        android:layout_margin="@dimen/_10ssp"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/lyAmount"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_toLeftOf="@+id/imgConvert"
+                            android:id="@+id/ll_values"
+                            android:gravity="center_horizontal"
+                            android:layout_gravity="center_vertical"
                             android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvCurrency"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="top"
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text="$"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_15ssp"
+                                android:visibility="gone" />
 
                             <TextView
                                 android:id="@+id/tvAmount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="@dimen/_10ssp"
                                 android:background="@color/white"
                                 android:fontFamily="@font/opensans_bold"
-                                android:gravity="center_vertical|right"
+                                android:gravity="center_vertical"
                                 android:hint="0.00"
                                 android:inputType="numberDecimal"
-                                android:maxLength="@string/maxlength"
-                                android:textColor="@color/primary_green"
+                                android:maxLength="@string/maxlengthamount"
+                                android:textColor="@color/primary_black"
+                                android:textColorHint="@color/light_gray"
                                 android:textCursorDrawable="@drawable/cursorcolor"
-                                android:textSize="@dimen/_43ssp" />
+                                android:textSize="@dimen/_53sdp" />
 
                             <TextView
                                 android:id="@+id/tvCYN"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text=" CYN"
-                                android:textColor="@color/primary_green"
-                                android:textSize="@dimen/_11ssp"
-                                android:visibility="visible"></TextView>
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_12ssp"
+                                android:visibility="visible">
+
+                            </TextView>
+
+                            <ImageView
+                                android:id="@+id/imgConvert"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:src="@drawable/ic_download" />
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/imgConvert"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/_7sdp"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:src="@drawable/ic_download" />
-                    </RelativeLayout>
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
