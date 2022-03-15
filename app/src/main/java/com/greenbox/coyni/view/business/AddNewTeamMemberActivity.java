@@ -391,16 +391,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         teamViewModel.addTeam(teamRequest);
     }
 
-    public void addTeam() {
-        teamInfoAddAPICall(prepareRequest());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        addTeam();
-    }
-
     private void enableOrDisableNext() {
         try {
             if (isFirstName && isLastName && isEmail) {
