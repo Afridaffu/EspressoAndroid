@@ -199,7 +199,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                         if (cir.getIdentificationType() == 11) {
                             String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
+                            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
                             mEINTx.setText(hifened);
                         } else {
                             String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
@@ -212,14 +212,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     } else {
                         isCPwdEye = false;
                         if (cir.getIdentificationType() == 11) {
-                            mEINTx.setText(cir.getSsnOrEin().substring(0, 3) + "-" +cir.getSsnOrEin().substring(3, 5) + "-" + cir.getSsnOrEin().substring(5,cir.getSsnOrEin().length()));
+                            mEINTx.setText(cir.getSsnOrEin().substring(0, 3) + "-" + cir.getSsnOrEin().substring(3, 5) + "-" + cir.getSsnOrEin().substring(5, cir.getSsnOrEin().length()));
 
                         } else {
                             mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
 
                         }
                         llEin.setBackgroundResource(R.drawable.ic_eyeopen);
-                       // mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
+                        // mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
                     }
 
                 } catch (Exception ex) {
@@ -249,7 +249,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 if (isAgree) {
                     showProgressDialog();
                     if (addbusiness) {
-                        loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
+//                        loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
                         loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                     } else {
                         applicationSubmissionViewModel.postApplicationData();
@@ -300,16 +300,18 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         tosTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dashboardViewModel.agreementsByType("1");
+//                dashboardViewModel.agreementsByType("1");
+                showProgressDialog();
+                dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
 
             }
         });
         prTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dashboardViewModel.agreementsByType("0");
-
-
+//                dashboardViewModel.agreementsByType("0");
+                showProgressDialog();
+                dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
             }
         });
 
@@ -329,7 +331,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         applicationSubmissionViewModel = new ViewModelProvider(this).get(ApplicationSubmissionViewModel.class);
         paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-
+        loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
 
         mAgreementsImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -436,314 +438,298 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-        try {
-            summaryViewModel.getSummaryMutableLiveData().observe(this, new Observer<ApplicationSummaryModelResponse>() {
-                @Override
-                public void onChanged(ApplicationSummaryModelResponse summaryModelResponse) {
-                    dismissDialog();
-                    if (summaryModelResponse != null) {
-                        if (summaryModelResponse.getStatus().toLowerCase().toString().equals("success")) {
-                            try {
-                                cir = summaryModelResponse.getData().getCompanyInfo();
-                                companyReqDocList = cir.getRequiredDocuments();
-                                if (cir.getName() != null) {
-                                    mCompanyNameTx.setText(cir.getName());
-                                }
+        summaryViewModel.getSummaryMutableLiveData().observe(this, new Observer<ApplicationSummaryModelResponse>() {
+            @Override
+            public void onChanged(ApplicationSummaryModelResponse summaryModelResponse) {
+                dismissDialog();
+                if (summaryModelResponse != null) {
+                    if (summaryModelResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        try {
+                            cir = summaryModelResponse.getData().getCompanyInfo();
+                            companyReqDocList = cir.getRequiredDocuments();
+                            if (cir.getName() != null) {
+                                mCompanyNameTx.setText(cir.getName());
+                            }
 
-                                if (cir.getEmail() != null) {
-                                    mEmailTx.setText(cir.getEmail());
-                                }
+                            if (cir.getEmail() != null) {
+                                mEmailTx.setText(cir.getEmail());
+                            }
 
-                                if (cir.getPhoneNumberDto().getPhoneNumber() != null) {
-                                    mPhoneNumberTx.setText(Utils.convertToUSFormatNew(cir.getPhoneNumberDto().getPhoneNumber()));
-                                }
+                            if (cir.getPhoneNumberDto().getPhoneNumber() != null) {
+                                mPhoneNumberTx.setText(Utils.convertToUSFormatNew(cir.getPhoneNumberDto().getPhoneNumber()));
+                            }
 
-                                if (cir.getBusinessEntity() != null) {
-                                    mBusinessEntityTx.setText(cir.getBusinessEntity());
-                                }
+                            if (cir.getBusinessEntity() != null) {
+                                mBusinessEntityTx.setText(cir.getBusinessEntity());
+                            }
 
-                                if (cir.getSsnOrEin() != null) {
-                                    if (!cir.getSsnOrEin().equals("")) {
-                                        if (cir.getIdentificationType() == 11) {
-                                            ssnEinTV.setText("SSN");
-                                            isCPwdEye = true;
-                                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5,converted.length());
-                                            mEINTx.setText(hifened);
-                                        } else {
-                                            ssnEinTV.setText("EIN/TIN");
-                                            isCPwdEye = true;
-                                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                            String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
-                                            mEINTx.setText(hifened);
-                                        }
-
-
-                                    }
-
-                                }
-
-                                StringBuilder sbCompany = new StringBuilder();
-                                if (cir.getAddressLine1() != null) {
-                                    sbCompany.append(cir.getAddressLine1());
-                                }
-                                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
-                                    sbCompany.append(", ").append(cir.getAddressLine2());
-                                }
-                                if (cir.getCity() != null) {
-                                    sbCompany.append(", ").append(cir.getCity());
-                                }
-                                if (cir.getState() != null) {
-                                    sbCompany.append(", ").append(cir.getState());
-                                }
-                                if (cir.getZipCode() != null) {
-                                    sbCompany.append(", ").append(cir.getZipCode());
-                                }
-                                mAddressTx.setText(sbCompany.toString());
-
-
-                                if (cir.getRequiredDocuments().size() > 0) {
-                                    for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
-                                        if (cir.getRequiredDocuments().get(i).getIdentityId() == 5) {
-                                            uploadArticlesLL.setVisibility(View.VISIBLE);
-                                            uploadArticlesLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
-                                            uploadArticlesLL.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    showFile((String) v.getTag());
-                                                }
-                                            });
-                                            mArticleDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 6) {
-                                            uploadEINLL.setVisibility(View.VISIBLE);
-                                            uploadEINLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
-                                            uploadEINLL.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    showFile((String) v.getTag());
-                                                }
-                                            });
-                                            mEINDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7 || cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
-                                            uploadW9LL.setVisibility(View.VISIBLE);
-                                            uploadW9LL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
-                                            uploadW9LL.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    showFile((String) v.getTag());
-                                                }
-                                            });
-                                            mW9DateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        }
+                            if (cir.getSsnOrEin() != null) {
+                                if (!cir.getSsnOrEin().equals("")) {
+                                    if (cir.getIdentificationType() == 11) {
+                                        ssnEinTV.setText("SSN");
+                                        isCPwdEye = true;
+                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                                        String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
+                                        mEINTx.setText(hifened);
+                                    } else {
+                                        ssnEinTV.setText("EIN/TIN");
+                                        isCPwdEye = true;
+                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
+                                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                                        mEINTx.setText(hifened);
                                     }
                                 }
+                            }
 
-                                if (cir.getIdentificationType() == 10) {
-                                    uploadArticlesLL.setVisibility(View.VISIBLE);
-                                    uploadEINLL.setVisibility(View.VISIBLE);
-                                    uploadW9LL.setVisibility(View.VISIBLE);
-                                } else if (cir.getIdentificationType() == 11) {
-                                    uploadArticlesLL.setVisibility(GONE);
-                                    uploadEINLL.setVisibility(GONE);
-                                    uploadW9LL.setVisibility(View.VISIBLE);
-                                }
+                            StringBuilder sbCompany = new StringBuilder();
+                            if (cir.getAddressLine1() != null) {
+                                sbCompany.append(cir.getAddressLine1());
+                            }
+                            if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                sbCompany.append(", ").append(cir.getAddressLine2());
+                            }
+                            if (cir.getCity() != null) {
+                                sbCompany.append(", ").append(cir.getCity());
+                            }
+                            if (cir.getState() != null) {
+                                sbCompany.append(", ").append(cir.getState());
+                            }
+                            if (cir.getZipCode() != null) {
+                                sbCompany.append(", ").append(cir.getZipCode());
+                            }
+                            mAddressTx.setText(sbCompany.toString());
 
-
-                                DbaInfo dbaInfo = summaryModelResponse.getData().getDbaInfo();
-                                dbReqDocList = dbaInfo.getRequiredDocuments();
-                                if (dbaInfo.getName() != null) {
-                                    mDbNameTx.setText(dbaInfo.getName());
-                                }
-
-                                if (dbaInfo.getBusinessType() != null) {
-                                    mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()));
-                                    // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
-                                }
-                                if (dbaInfo.getTimeZone() != null) {
-                                    ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
-                                    LogUtils.d(TAG, "TimeZoneModel" + arrZonesList);
-                                    if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("3")) {
-                                        mTimeZoneTx.setText(R.string.EST);
-                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("2")) {
-                                        mTimeZoneTx.setText(R.string.CST);
-                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("1")) {
-                                        mTimeZoneTx.setText(R.string.MST);
-                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("0")) {
-                                        mTimeZoneTx.setText(R.string.PST);
-                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("5")) {
-                                        mTimeZoneTx.setText(R.string.AST);
-                                    } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("4")) {
-                                        mTimeZoneTx.setText(R.string.HST);
-                                    }
-                                }
-                                if (dbaInfo.getWebsite() != null) {
-                                    mWebsiteTx.setText(dbaInfo.getWebsite());
-                                }
-
-                                if (dbaInfo.getMonthlyProcessingVolume() != null) {
-                                    // monthlyProcVolume=cir.getMonthlyProcessingVolume();
-                                    if (Integer.parseInt(dbaInfo.getMonthlyProcessingVolume().toString()) != 0)
-                                        mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
-                                }
-
-                                if (dbaInfo.getHighTicket() != null) {
-                                    if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
-                                        mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
-                                }
-
-                                if (dbaInfo.getAverageTicket() != null) {
-                                    if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
-                                        mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
-                                }
-
-                                if (dbaInfo.getEmail() != null) {
-                                    mCustomerServiceEmailTx.setText(dbaInfo.getEmail());
-                                }
-
-                                if (dbaInfo.getPhoneNumberDto() != null) {
-                                    if (!dbaInfo.getPhoneNumberDto().equals(""))
-                                        mCustomerServicePhoneTx.setText(Utils.convertToUSFormatNew(dbaInfo.getPhoneNumberDto().getPhoneNumber()));
-                                }
-
-                                StringBuilder sb = new StringBuilder();
-                                if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("")) {
-                                    sb.append(dbaInfo.getAddressLine1());
-                                }
-                                if (dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
-                                    sb.append(", ").append(dbaInfo.getAddressLine2());
-                                }
-                                if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
-                                    sb.append(", ").append(dbaInfo.getCity());
-                                }
-                                if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
-                                    sb.append(", ").append(dbaInfo.getState());
-                                }
-                                if (dbaInfo.getZipCode() != null && !dbaInfo.getZipCode().equals("")) {
-                                    sb.append(", ").append(dbaInfo.getZipCode());
-                                }
-                                mDbAddressLineTx.setText(sb.toString());
-
-                                if (dbaInfo.getRequiredDocuments().size() > 0) {
-                                    for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
-                                        llDBADocuments.setVisibility(View.VISIBLE);
-                                        mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
-                                        dbaFillingLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
-                                        dbaFillingLL.setOnClickListener(new View.OnClickListener() {
+                            if (cir.getRequiredDocuments().size() > 0) {
+                                for (int i = 0; i < cir.getRequiredDocuments().size(); i++) {
+                                    if (cir.getRequiredDocuments().get(i).getIdentityId() == 5) {
+                                        uploadArticlesLL.setVisibility(View.VISIBLE);
+                                        uploadArticlesLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                        uploadArticlesLL.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
                                                 showFile((String) v.getTag());
                                             }
                                         });
+                                        mArticleDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                    } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 6) {
+                                        uploadEINLL.setVisibility(View.VISIBLE);
+                                        uploadEINLL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                        uploadEINLL.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                showFile((String) v.getTag());
+                                            }
+                                        });
+                                        mEINDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
+                                    } else if (cir.getRequiredDocuments().get(i).getIdentityId() == 7 || cir.getRequiredDocuments().get(i).getIdentityId() == 11) {
+                                        uploadW9LL.setVisibility(View.VISIBLE);
+                                        uploadW9LL.setTag(cir.getRequiredDocuments().get(i).getImgLink());
+                                        uploadW9LL.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                showFile((String) v.getTag());
+                                            }
+                                        });
+                                        mW9DateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(i).getUpdatedAt()));
                                     }
                                 }
-
-                                List<BeneficialOwnerInfo> boList = summaryModelResponse.getData().getBeneficialOwnerInfo();
-                                Log.d("BOWData", boList.toString());
-                                if (boList.size() > 0) {
-                                    boLL.setVisibility(View.VISIBLE);
-                                    noBoTV.setVisibility(View.GONE);
-                                    LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
-                                    benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList, ReviewApplicationActivity.this);
-                                    beneficialOwnerList = boList;
-                                    boRecyclerView.setNestedScrollingEnabled(false);
-                                    boRecyclerView.setLayoutManager(layoutManager);
-                                    boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
-                                } else {
-                                    noBoTV.setVisibility(View.VISIBLE);
-                                    boLL.setVisibility(View.GONE);
-                                }
-                                if (summaryModelResponse.getData().getBankaccount().getItems().size() > 0) {
-                                    banksLL.setVisibility(View.VISIBLE);
-                                    noBanksTv.setVisibility(View.GONE);
-                                    bankItems = summaryModelResponse.getData().getBankaccount().getItems();
-                                    Log.d("BankItems", bankItems.toString());
-                                    LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
-
-                                    accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems, ReviewApplicationActivity.this);
-
-                                    bankRecyclerView.setNestedScrollingEnabled(false);
-                                    bankRecyclerView.setLayoutManager(layoutManager);
-                                    bankRecyclerView.setAdapter(accountsRecyclerAdapter);
-
-
-                                } else {
-                                    banksLL.setVisibility(View.GONE);
-                                    noBanksTv.setVisibility(View.VISIBLE);
-                                }
-                                agreements = summaryModelResponse.getData().getAgreements().getItems();
-                                Agreements agreements1 = summaryModelResponse.getData().getAgreements();
-                                llPrivacy.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dashboardViewModel.agreementsByType("0");
-                                    }
-                                });
-                                llTerms.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dashboardViewModel.agreementsByType("1");
-
-                                    }
-                                });
-                                llMerchant.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dashboardViewModel.agreementsByType("5");
-
-                                    }
-                                });
-                                if (agreements != null && agreements1.getItems().size() > 0) {
-                                    for (int i = 0; i < agreements1.getItems().size(); i++) {
-                                        if (agreements1.getItems().get(i).getSignatureType() == 0) {
-                                            mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-//                                            llPrivacy.setOnClickListener(new View.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(View v) {
-//                                                    dashboardViewModel.agreementsByType("0");
-//                                                }
-//                                            });
-                                        }
-                                        if (agreements1.getItems().get(i).getSignatureType() == 1) {
-                                            mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-//                                            llTerms.setOnClickListener(new View.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(View v) {
-//                                                    dashboardViewModel.agreementsByType("1");
-//
-//                                                }
-//                                            });
-                                        }
-                                        if (agreements1.getItems().get(i).getSignatureType() == 5) {
-                                            mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
-//                                            llMerchant.setOnClickListener(new View.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(View v) {
-//                                                    dashboardViewModel.agreementsByType("5");
-//
-//                                                }
-//                                            });
-
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
 
+                            if (cir.getIdentificationType() == 10) {
+                                uploadArticlesLL.setVisibility(View.VISIBLE);
+                                uploadEINLL.setVisibility(View.VISIBLE);
+                                uploadW9LL.setVisibility(View.VISIBLE);
+                            } else if (cir.getIdentificationType() == 11) {
+                                uploadArticlesLL.setVisibility(GONE);
+                                uploadEINLL.setVisibility(GONE);
+                                uploadW9LL.setVisibility(View.VISIBLE);
+                            }
+
+                            DbaInfo dbaInfo = summaryModelResponse.getData().getDbaInfo();
+                            dbReqDocList = dbaInfo.getRequiredDocuments();
+                            if (dbaInfo.getName() != null) {
+                                mDbNameTx.setText(dbaInfo.getName());
+                            }
+
+                            if (dbaInfo.getBusinessType() != null) {
+                                mBusinessTypeTx.setText(Utils.getBusinessName(objMyApplication, dbaInfo.getBusinessType()));
+                                // Utils.getBusinessName(objMyApplication,dbaInfo.getBusinessType());
+                            }
+                            if (dbaInfo.getTimeZone() != null) {
+                                ArrayList<TimeZoneModel> arrZonesList = new ArrayList<>();
+                                LogUtils.d(TAG, "TimeZoneModel" + arrZonesList);
+                                if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("3")) {
+                                    mTimeZoneTx.setText(R.string.EST);
+                                } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("2")) {
+                                    mTimeZoneTx.setText(R.string.CST);
+                                } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("1")) {
+                                    mTimeZoneTx.setText(R.string.MST);
+                                } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("0")) {
+                                    mTimeZoneTx.setText(R.string.PST);
+                                } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("5")) {
+                                    mTimeZoneTx.setText(R.string.AST);
+                                } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("4")) {
+                                    mTimeZoneTx.setText(R.string.HST);
+                                }
+                            }
+                            if (dbaInfo.getWebsite() != null) {
+                                mWebsiteTx.setText(dbaInfo.getWebsite());
+                            }
+
+                            if (dbaInfo.getMonthlyProcessingVolume() != null) {
+                                // monthlyProcVolume=cir.getMonthlyProcessingVolume();
+                                if (Integer.parseInt(dbaInfo.getMonthlyProcessingVolume().toString()) != 0)
+                                    mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
+                            }
+
+                            if (dbaInfo.getHighTicket() != null) {
+                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                    mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
+                            }
+
+                            if (dbaInfo.getAverageTicket() != null) {
+                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                    mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
+                            }
+
+                            if (dbaInfo.getEmail() != null) {
+                                mCustomerServiceEmailTx.setText(dbaInfo.getEmail());
+                            }
+
+                            if (dbaInfo.getPhoneNumberDto() != null) {
+                                if (!dbaInfo.getPhoneNumberDto().equals(""))
+                                    mCustomerServicePhoneTx.setText(Utils.convertToUSFormatNew(dbaInfo.getPhoneNumberDto().getPhoneNumber()));
+                            }
+
+                            StringBuilder sb = new StringBuilder();
+                            if (dbaInfo.getAddressLine1() != null && !dbaInfo.getAddressLine1().equals("")) {
+                                sb.append(dbaInfo.getAddressLine1());
+                            }
+                            if (dbaInfo.getAddressLine2() != null && !dbaInfo.getAddressLine2().equals("")) {
+                                sb.append(", ").append(dbaInfo.getAddressLine2());
+                            }
+                            if (dbaInfo.getCity() != null && !dbaInfo.getCity().equals("")) {
+                                sb.append(", ").append(dbaInfo.getCity());
+                            }
+                            if (dbaInfo.getState() != null && !dbaInfo.getState().equals("")) {
+                                sb.append(", ").append(dbaInfo.getState());
+                            }
+                            if (dbaInfo.getZipCode() != null && !dbaInfo.getZipCode().equals("")) {
+                                sb.append(", ").append(dbaInfo.getZipCode());
+                            }
+                            mDbAddressLineTx.setText(sb.toString());
+
+                            if (dbaInfo.getRequiredDocuments().size() > 0) {
+                                for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
+                                    llDBADocuments.setVisibility(View.VISIBLE);
+                                    mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
+                                    dbaFillingLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
+                                    dbaFillingLL.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            showFile((String) v.getTag());
+                                        }
+                                    });
+                                }
+                            }
+
+                            List<BeneficialOwnerInfo> boList = summaryModelResponse.getData().getBeneficialOwnerInfo();
+                            Log.d("BOWData", boList.toString());
+                            if (boList.size() > 0) {
+                                boLL.setVisibility(View.VISIBLE);
+                                noBoTV.setVisibility(View.GONE);
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
+                                benificialOwnersRecyclerAdapter = new BenificialOwnersRecyclerAdapter(ReviewApplicationActivity.this, boList, ReviewApplicationActivity.this);
+                                beneficialOwnerList = boList;
+                                boRecyclerView.setNestedScrollingEnabled(false);
+                                boRecyclerView.setLayoutManager(layoutManager);
+                                boRecyclerView.setAdapter(benificialOwnersRecyclerAdapter);
+                            } else {
+                                noBoTV.setVisibility(View.VISIBLE);
+                                boLL.setVisibility(View.GONE);
+                            }
+                            if (summaryModelResponse.getData().getBankaccount().getItems().size() > 0) {
+                                banksLL.setVisibility(View.VISIBLE);
+                                noBanksTv.setVisibility(View.GONE);
+                                bankItems = summaryModelResponse.getData().getBankaccount().getItems();
+                                Log.d("BankItems", bankItems.toString());
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
+
+                                accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems, ReviewApplicationActivity.this);
+
+                                bankRecyclerView.setNestedScrollingEnabled(false);
+                                bankRecyclerView.setLayoutManager(layoutManager);
+                                bankRecyclerView.setAdapter(accountsRecyclerAdapter);
+
+                            } else {
+                                banksLL.setVisibility(View.GONE);
+                                noBanksTv.setVisibility(View.VISIBLE);
+                            }
+                            agreements = summaryModelResponse.getData().getAgreements().getItems();
+                            Agreements agreements1 = summaryModelResponse.getData().getAgreements();
+                            llPrivacy.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+//                                        dashboardViewModel.agreementsByType("0");
+                                    showProgressDialog();
+                                    dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
+                                }
+                            });
+                            llTerms.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+//                                        dashboardViewModel.agreementsByType("1");
+                                    showProgressDialog();
+                                    dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
+
+                                }
+                            });
+                            llMerchant.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    showProgressDialog();
+                                    dashboardViewModel.agreementsByType(String.valueOf(Utils.mAgmt));
+
+                                }
+                            });
+                            if (agreements != null && agreements1.getItems().size() > 0) {
+                                for (int i = 0; i < agreements1.getItems().size(); i++) {
+                                    switch (agreements1.getItems().get(i).getSignatureType()) {
+                                        case Utils.mPP:
+                                            mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            break;
+                                        case Utils.mTOS:
+                                            mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            break;
+                                        case Utils.mAgmt:
+                                            mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            break;
+                                    }
+//                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mPP) {
+//                                        mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+//                                    }
+//                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mTOS) {
+//                                        mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+//                                    }
+//                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mAgmt) {
+//                                        mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+//                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+
                     }
                 }
-            });
+            }
+        });
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        try {
-            loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
-                @Override
-                public void onChanged(AddBusinessUserResponse btResp) {
-                    dialog.dismiss();
+        loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+            @Override
+            public void onChanged(AddBusinessUserResponse btResp) {
+                try {
+                    dismissDialog();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d(TAG, "btResp" + btResp);
@@ -751,78 +737,77 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             //finish();
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                             startActivity(intent);
-
                         }
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
-                @Override
-                public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
-                    if (submissionViewModel != null) {
-                        dismissDialog();
-                        if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            objMyApplication.setSubmitResponseModel(submissionViewModel);
-                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                            intent.putExtra("showGetStarted", true);
-                            startActivity(intent);
-                        } else {
-                            Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
-                        }
+            }
+        });
+
+        applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
+            @Override
+            public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
+                if (submissionViewModel != null) {
+                    dismissDialog();
+                    if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        objMyApplication.setSubmitResponseModel(submissionViewModel);
+                        Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                        intent.putExtra("showGetStarted", true);
+                        startActivity(intent);
                     } else {
-
+                        Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
                     }
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
 
         dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
             @Override
             public void onChanged(AgreementsPdf agreementsPdf) {
                 LogUtils.d(TAG, "pdf" + agreementsPdf);
+                dismissDialog();
                 if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
                     if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
                         //new code for showing pdf , modify later
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                         if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf"))
                             browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
-                        else
-                            browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+                        else {
+                            switch (agreementsPdf.getData().getAgreementType()) {
+                                case Utils.mPP:
+                                    browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
+                                    break;
+                                case Utils.mTOS:
+                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+                                    break;
+                                case Utils.mAgmt:
+                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+                                    break;
+                            }
+//                            browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+                        }
                         try {
                             startActivity(browserIntent);
                         } catch (ActivityNotFoundException e) {
                             e.printStackTrace();
                         }
-
-//                        showFile(agreementsPdf.getData().getAgreementFileRefPath());
                     }
                 }
             }
         });
 
-        try {
-            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
-                @Override
-                public void onChanged(BusinessTypeResp businessTypeResp) {
-
-                    if (businessTypeResp != null) {
-                        if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
-                            objMyApplication.setBusinessTypeResp(businessTypeResp);
-                            businessIdentityVerificationViewModel.getDBAInfo();
-//                           loadCompanyInfo();
-                        }
+        businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+            @Override
+            public void onChanged(BusinessTypeResp businessTypeResp) {
+                if (businessTypeResp != null) {
+                    if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
+                        objMyApplication.setBusinessTypeResp(businessTypeResp);
+                        businessIdentityVerificationViewModel.getDBAInfo();
                     }
                 }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     private void showFile(String fileUrl) {
@@ -941,7 +926,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-                dashboardViewModel.agreementsByType("1");
+//                dashboardViewModel.agreementsByType("1");
 //                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
 //                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
 //                try {
@@ -949,7 +934,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                } catch (ActivityNotFoundException e) {
 //                    e.printStackTrace();
 //                }
-
+                showProgressDialog();
+                dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
             }
 
             @Override
@@ -968,7 +954,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-                dashboardViewModel.agreementsByType("0");
+//                dashboardViewModel.agreementsByType("0");
 //                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
 //                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
 //                try {
@@ -976,6 +962,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                } catch (ActivityNotFoundException e) {
 //                    e.printStackTrace();
 //                }
+                showProgressDialog();
+                dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
 
             }
 
