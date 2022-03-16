@@ -271,7 +271,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         mDbNameTx = (TextView) findViewById(R.id.db_name);
         mBusinessTypeTx = (TextView) findViewById(R.id.business_type);
         mWebsiteTx = (TextView) findViewById(R.id.website);
-        mWebsiteHeadTX = (TextView) findViewById(R.id.tvWebsiteHead);
+        mWebsiteHeadTX = (TextView) findViewById(R.id.tvWebHead);
         mMonthlyProcVolumeTx = (TextView) findViewById(R.id.monthly_process_volume);
         mHighTicketTx = (TextView) findViewById(R.id.high_ticket);
         mAverageTicketTx = (TextView) findViewById(R.id.average_ticket);

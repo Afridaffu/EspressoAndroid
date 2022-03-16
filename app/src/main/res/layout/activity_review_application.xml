@@ -576,12 +576,12 @@
                         android:background="@color/light_gray" />
 
                     <TextView
-                        android:id="@+id/tvWebsiteHead"
+                        android:id="@+id/tvWebHead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Website (Optional)"
+                        android:text=""
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_11ssp" />
 
