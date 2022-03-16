@@ -416,7 +416,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             cynWallet = objMyApplication.getGbtWallet();
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
-            payRequestET.setMovementMethod(null);
+           // payRequestET.setMovementMethod(null);
 
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
@@ -899,17 +899,11 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
     private void changeTextSize(String editable) {
         try {
-
             if (editable.length() == 5 || editable.length() == 6) {
-
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
             } else if (editable.length() == 7 || editable.length() == 8) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-
-            }else if(editable.length()==9){
-
             } else if (editable.length() == 9) {
-
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
             }
 //            if (editable.length() > 12) {
