@@ -24,7 +24,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private LinearLayout copyAddressLL;
     private String amount;
     private UserDetails userDetails;
-    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance, userName;
+    private TextView payAmount, recipientAddressTV, tv_lable, tv_lable_verify,accountType, availableBalance, userName;
     private String recipientAddress = "";
     private boolean screenCheck;
     Boolean isFaceLock = false, isTouchId = false;
@@ -59,6 +59,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         slideToConfirm = findViewById(R.id.slideToConfirmML);
         userName = findViewById(R.id.userNameTV);
         tv_lable = findViewById(R.id.tv_lable);
+        tv_lable_verify = findViewById(R.id.tv_lable_verify);
         im_lock_ = findViewById(R.id.im_lock_);
 
         bindUserInfo(userDetails);
@@ -96,7 +97,9 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
+//                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
                         dismiss();
                         getOnDialogClickListener().onDialogClicked(pay, null);
                     }

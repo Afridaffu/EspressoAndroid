@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginEnd="@dimen/_11sdp"
+        android:layout_marginBottom="@dimen/_13sdp"
         app:cardCornerRadius="@dimen/_10sdp">
 
         <RelativeLayout
@@ -52,8 +52,8 @@
                         android:layout_gravity="top"
                         android:layout_toRightOf="@+id/nameTx"
                         android:contentDescription="@string/primary"
-                        android:visibility="gone"
-                        android:src="@drawable/ic_icon_awesome_star" />
+                        android:src="@drawable/ic_icon_awesome_star"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/ownershipTx"

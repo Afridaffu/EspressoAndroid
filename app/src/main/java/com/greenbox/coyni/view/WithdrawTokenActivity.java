@@ -68,6 +68,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -933,7 +934,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             LinearLayout layoutCard = prevDialog.findViewById(R.id.layoutCard);
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
+
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             tvPaymentHead.setText("Withdraw to");
             tvPurchaseHead.setText("Withdraw Amount");
@@ -991,8 +994,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-
+//                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
                         if (!isAuthenticationCalled) {
                             isAuthenticationCalled = true;
                             prevDialog.dismiss();

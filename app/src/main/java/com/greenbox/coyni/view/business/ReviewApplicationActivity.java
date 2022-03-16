@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -66,7 +65,8 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.CreateAccountActivity;
+import com.greenbox.coyni.view.DashboardActivity;
+import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
@@ -86,7 +86,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private boolean isNextEnabled = false, isagreed = false;
     private CardView submitCv;
     private TextView mCompanyNameTx, mBusinessEntityTx, mEINTx, mEmailTx, mPhoneNumberTx, mAddressTx, mArticleDateTx, mEINDateTx, mW9DateTx;
-    private TextView mDbNameTx, mBusinessTypeTx, mTimeZoneTx, mWebsiteTx, mMonthlyProcVolumeTx, mHighTicketTx, mAverageTicketTx, mCustomerServiceEmailTx, mCustomerServicePhoneTx, mDbAddressLineTx, mDbFillingDateTx;
+    private TextView mDbNameTx, mBusinessTypeTx, mTimeZoneTx, mWebsiteTx, mMonthlyProcVolumeTx, mHighTicketTx, mAverageTicketTx, mCustomerServiceEmailTx, mCustomerServicePhoneTx, mDbAddressLineTx, mDbFillingDateTx, mWebsiteHeadTX;
     private TextView mPrivacyVno, mTermsVno, mMerchantsVno;
     private BankAccountsRecyclerAdapter accountsRecyclerAdapter;
     private List<com.greenbox.coyni.model.summary.Item> bankItems = new ArrayList<>();
@@ -112,7 +112,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private MyApplication objMyApplication;
     private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
     private String mDbName = "", mBusinessType = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
-    private boolean addbusiness = false;
+    private String addBusiness = "false";
+    private String addDBA = "false";
     private BankAccountsViewModel bankAccountsViewModel;
     private DashboardViewModel dashboardViewModel;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
@@ -133,7 +134,21 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         setContentView(R.layout.activity_review_application);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setKeyboardVisibilityListener(ReviewApplicationActivity.this);
+
         objMyApplication = (MyApplication) getApplicationContext();
+
+        if (getIntent().getStringExtra("ADDBUSINESS") != null) {
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            addBusiness = getIntent().getStringExtra("ADDBUSINESS");
+            LogUtils.d("addBusiness", "addBusiness" + addBusiness);
+        }
+
+        if (getIntent().getStringExtra("ADDDBA") != null) {
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            addDBA = getIntent().getStringExtra("ADDDBA");
+            LogUtils.d("addDBA", "addDBA" + addDBA);
+
+        }
 
         initFields();
         initObservers();
@@ -248,12 +263,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             public void onClick(View v) {
                 if (isAgree) {
                     showProgressDialog();
-                    if (addbusiness) {
-//                        loginViewModel = new ViewModelProvider(ReviewApplicationActivity.this).get(LoginViewModel.class);
-                        loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                    } else {
-                        applicationSubmissionViewModel.postApplicationData();
-                    }
+
+                    applicationSubmissionViewModel.postApplicationData();
+
                 }
             }
         });
@@ -271,6 +283,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         mDbNameTx = (TextView) findViewById(R.id.db_name);
         mBusinessTypeTx = (TextView) findViewById(R.id.business_type);
         mWebsiteTx = (TextView) findViewById(R.id.website);
+        mWebsiteHeadTX = (TextView) findViewById(R.id.tvWebHead);
         mMonthlyProcVolumeTx = (TextView) findViewById(R.id.monthly_process_volume);
         mHighTicketTx = (TextView) findViewById(R.id.high_ticket);
         mAverageTicketTx = (TextView) findViewById(R.id.average_ticket);
@@ -569,6 +582,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     mTimeZoneTx.setText(R.string.HST);
                                 }
                             }
+                            if (dbaInfo.getIdentificationType() == 8) {
+                                mWebsiteHeadTX.setText("Website (Optional)");
+                            } else if (dbaInfo.getIdentificationType() == 9) {
+                                mWebsiteHeadTX.setText("Website");
+                            }
                             if (dbaInfo.getWebsite() != null) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
                             }
@@ -732,8 +750,17 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             LogUtils.d(TAG, "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             //finish();
-                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                            startActivity(intent);
+                            if (objMyApplication.getAccountType() == 2) {
+                                Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                                intent.putExtra("showGetStarted", true);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            } else {
+                                Intent i = new Intent(ReviewApplicationActivity.this, DashboardActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                            }
+
                         }
                     }
                 } catch (Exception ex) {
@@ -742,16 +769,22 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-        applicationSubmissionViewModel.getPostCompanyInfoResponse().observe(this, new Observer<ApplicationSubmitResponseModel>() {
+        applicationSubmissionViewModel.getPostApplicationSubmissionData().observe(this, new Observer<ApplicationSubmitResponseModel>() {
             @Override
             public void onChanged(ApplicationSubmitResponseModel submissionViewModel) {
                 if (submissionViewModel != null) {
                     dismissDialog();
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
-                        Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                        intent.putExtra("showGetStarted", true);
-                        startActivity(intent);
+                        if (addBusiness.equalsIgnoreCase("true")) {
+                            loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+                        } else {
+                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            intent.putExtra("showGetStarted", true);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+
                     } else {
                         Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
                     }

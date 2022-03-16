@@ -246,11 +246,7 @@ public class Utils {
     public static final String teamPhoneNumber = "TeamPhoneNumber";
     public static final String teamMemberId = "TeamMemberId";
 
-    public static final String boName = "BOName";
-    public static final int boOwnershipPercentage = 50;
-    public static final String boAddress = "BoAddress";
-    public static final String boDob = "BoDob";
-    public static final String boSSN = "BoSSN";
+    public static final String boData = "BOData";
 
     public static final String companyName = "CompanyName";
     public static final String companyEmail = "CompanyEmail";
@@ -267,7 +263,7 @@ public class Utils {
     public static final String expired="Expired";
 
 
-    public static final int position = 0;
+    public static final String position = "Position";
     public static final int cPP = 0;
     public static final int cTOS = 1;
     public static final int mPP = 8;
