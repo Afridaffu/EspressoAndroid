@@ -286,16 +286,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                         dialog.dismiss();
                         try {
                             if (companyInfoUpdateResp != null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                                Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
-                                new Handler().postDelayed(() -> {
-                                    try {
-                                        finish();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }, 2000);
-
+                               finish();
                             } else {
                                 Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
                             }

@@ -739,6 +739,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             //finish();
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
                     }
@@ -757,6 +758,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
                         Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                         intent.putExtra("showGetStarted", true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                     } else {
                         Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
