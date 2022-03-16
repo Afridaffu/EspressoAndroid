@@ -239,8 +239,8 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 if (agreements.getStatus() != null && agreements.getStatus().equalsIgnoreCase("Success")) {
                     for (int i = 0; i < agreements.getData().getItems().size(); i++) {
                         if (agreements.getData().getItems().get(i).getSignatureType() == 5
-                                && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()
-                                && agreements.getData().getItems().get(i).getSignature()!=null) {
+                                && agreements.getData().getItems().get(i).getSignature()!=null
+                                && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
                             Glide.with(MerchantsAgrementActivity.this)
                                     .load(agreements.getData().getItems().get(i).getSignature())
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)

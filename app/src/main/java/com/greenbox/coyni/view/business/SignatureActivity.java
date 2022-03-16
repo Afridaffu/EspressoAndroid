@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.greenbox.coyni.R;
@@ -31,7 +31,7 @@ public class SignatureActivity extends BaseActivity {
     private CustomSignatureView mCustomSignatureView;
     private RelativeLayout mRlRotateMessageLayout;
     private LinearLayout mLlSignatureLayout;
-    private String mSignatureFile = "signature.jpeg";
+    private final String mSignatureFile = "signature.jpeg";
     private TextView mTvDone;
     private Handler mHandler;
     private Runnable mRunnable;
@@ -42,7 +42,8 @@ public class SignatureActivity extends BaseActivity {
         setContentView(R.layout.activity_signature);
 
         initialization();
-        handleOrientationChanges();
+        refreshOrientationChanges();
+        setOrientationListener();
 
         mCustomSignatureView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -51,12 +52,6 @@ public class SignatureActivity extends BaseActivity {
                 return false;
             }
         });
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        refreshOrientationChanges();
     }
 
     public void onDoneClicked(View view) {
@@ -111,22 +106,6 @@ public class SignatureActivity extends BaseActivity {
                 getResources().getColor(R.color.light_gray));
     }
 
-    private void handleOrientationChanges() {
-        if (getAutoRotationSetting() == 0) {
-            mRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    refreshOrientationChanges();
-                }
-            };
-            mHandler = new Handler();
-            mHandler.postDelayed(mRunnable, 2000);
-        } else {
-            refreshOrientationChanges();
-        }
-    }
-
     private void refreshOrientationChanges() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             LogUtils.v(TAG, "ORIENTATION_LANDSCAPE");
@@ -145,7 +124,6 @@ public class SignatureActivity extends BaseActivity {
         String filePath = null;
         try {
             Bitmap bmp = mCustomSignatureView.getSignature();
-//            Bitmap bitmap = Bitmap.createScaledBitmap(bmp, 300, 100, false);
             Bitmap bitmap = BitmapUtils.getScaledDownBitmap(bmp, 400, false);
             String destFolder = getCacheDir().getAbsolutePath();
             File f = new File(destFolder, mSignatureFile);
@@ -161,6 +139,29 @@ public class SignatureActivity extends BaseActivity {
             LogUtils.e(TAG, "Exception " + e.getMessage());
         }
         return filePath;
+    }
+
+    private void setOrientationListener() {
+
+        OrientationEventListener orientationEventListener =
+                new OrientationEventListener(this) {
+                    @Override
+                    public void onOrientationChanged(int orientation) {
+                        LogUtils.v(TAG, "orientation is " + orientation);
+                        int epsilon = 10;
+                        int leftLandscape = 90;
+                        int rightLandscape = 270;
+                        if (epsilonCheck(orientation, leftLandscape, epsilon) ||
+                                epsilonCheck(orientation, rightLandscape, epsilon)) {
+                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                        }
+                    }
+
+                    private boolean epsilonCheck(int a, int b, int epsilon) {
+                        return a > b - epsilon && a < b + epsilon;
+                    }
+                };
+        orientationEventListener.enable();
     }
 
 }
