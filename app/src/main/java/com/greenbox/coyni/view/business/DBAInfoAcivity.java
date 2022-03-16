@@ -1301,240 +1301,233 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     }
 
     private void loadCompanyInfo() {
-        if (type.equalsIgnoreCase("SAME")) {
-            isCopyCompanyInfo = true;
+        try {
+            if (type.equalsIgnoreCase("SAME")) {
+                isCopyCompanyInfo = true;
 
-            dbaFillingLL.setVisibility(GONE);
+                dbaFillingLL.setVisibility(GONE);
 
-            if (objMyApplication.getCompanyInfoResp() != null) {
-                CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
-                if (cir.getName() != null && !cir.getName().equals("")) {
-                    dbanameET.setText(cir.getName());
-                    dbanameET.setSelection(cir.getName().length());
-                    isdbaName = true;
-                }
-
-                if (cir.getEmail() != null && !cir.getEmail().equals("")) {
-                    dbaemailET.setText(cir.getEmail());
-                    isdbaEmail = true;
-                    dbaemailET.setSelection(cir.getEmail().length());
-                }
-
-                if (cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
-                    String pn = cir.getPhoneNumberDto().getPhoneNumber();
-                    String phoneNumber = "(" + pn.substring(0, 3) + ") " + pn.substring(3, 6) + "-" + pn.substring(6, pn.length());
-                    dbaPhoneOET.setText(phoneNumber);
-                    iscustPhoneNumber = true;
-                    dbaPhoneOET.setSelection();
-                }
-
-                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
-                    companyaddressET.setText(cir.getAddressLine1());
-                    isCompanyAdress1 = true;
-                    companyaddressET.setSelection(cir.getAddressLine1().length());
-                }
-
-                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
-                    companyaddress2ET.setText(cir.getAddressLine2());
-                    companyaddress2ET.setSelection(cir.getAddressLine2().length());
-                }
-
-                if (cir.getCity() != null && !cir.getCity().equals("")) {
-                    cityET.setText(cir.getCity());
-                    isCity = true;
-                    cityET.setSelection(cir.getCity().length());
-                }
-
-                if (cir.getState() != null && !cir.getState().equals("")) {
-                    stateET.setText(cir.getState());
-                    isState = true;
-                    stateET.setSelection(cir.getState().length());
-                }
-
-                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
-                    zipcodeET.setText(cir.getZipCode());
-                    isZipcode = true;
-                    zipcodeET.setSelection(cir.getZipCode().length());
-                }
-
-                enableOrDisableNext();
-                enableOrDisableAddressNext();
-            }
-        } else if (type.equalsIgnoreCase("DIFF")) {
-            isCopyCompanyInfo = false;
-            dbaFillingLL.setVisibility(VISIBLE);
-        } else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
-
-            if (objMyApplication.getDbaInfoResp() != null && objMyApplication.getDbaInfoResp().getStatus().equalsIgnoreCase("SUCCESS")) {
-                DBAInfoResp.Data cir = objMyApplication.getDbaInfoResp().getData();
-                isCopyCompanyInfo = cir.isCopyCompanyInfo();
-
-                if (cir.getName() != null && !cir.getName().equals("")) {
-                    dbanameET.setText(cir.getName());
-                    dbanameET.setSelection(cir.getName().length());
-                    isdbaName = true;
-                }
-
-                if (cir.getEmail() != null && !cir.getEmail().equals("")) {
-                    dbaemailET.setText(cir.getEmail());
-                    isdbaEmail = true;
-                    dbaemailET.setSelection(dbaemailET.getText().toString().length());
-                }
-
-                if (cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
-                    String pn = cir.getPhoneNumberDto().getPhoneNumber();
-                    String phoneNumber = "(" + pn.substring(0, 3) + ") " + pn.substring(3, 6) + "-" + pn.substring(6, pn.length());
-                    dbaPhoneOET.setText(phoneNumber);
-                    iscustPhoneNumber = true;
-                    dbaPhoneOET.setSelection();
-
-                }
-
-                if (cir.getBusinessType() != null && !cir.getBusinessType().equals("")) {
-                    selectedBTKey = cir.getBusinessType();
-                    for (int i = 0; i < btResponse.getData().size(); i++) {
-                        if (selectedBTKey.toLowerCase().trim().equals(btResponse.getData().get(i).getKey().toLowerCase())) {
-                            businessTypeET.setText(btResponse.getData().get(i).getValue());
-                            break;
-                        }
+                if (objMyApplication.getCompanyInfoResp() != null) {
+                    CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
+                    if (cir.getName() != null && !cir.getName().equals("")) {
+                        dbanameET.setText(cir.getName());
+                        dbanameET.setSelection(cir.getName().length());
+                        isdbaName = true;
                     }
-                    isBusinessType = true;
+
+                    if (cir.getEmail() != null && !cir.getEmail().equals("")) {
+                        dbaemailET.setText(cir.getEmail());
+                        isdbaEmail = true;
+                        dbaemailET.setSelection(cir.getEmail().length());
+                    }
+
+                    if (cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
+                        String pn = cir.getPhoneNumberDto().getPhoneNumber();
+                        String phoneNumber = "(" + pn.substring(0, 3) + ") " + pn.substring(3, 6) + "-" + pn.substring(6, pn.length());
+                        dbaPhoneOET.setText(phoneNumber);
+                        iscustPhoneNumber = true;
+                        dbaPhoneOET.setSelection();
+                    }
+
+                    if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
+                        companyaddressET.setText(cir.getAddressLine1());
+                        isCompanyAdress1 = true;
+                        companyaddressET.setSelection(cir.getAddressLine1().length());
+                    }
+
+                    if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                        companyaddress2ET.setText(cir.getAddressLine2());
+                        companyaddress2ET.setSelection(cir.getAddressLine2().length());
+                    }
+
+                    if (cir.getCity() != null && !cir.getCity().equals("")) {
+                        cityET.setText(cir.getCity());
+                        isCity = true;
+                        cityET.setSelection(cir.getCity().length());
+                    }
+
+                    if (cir.getState() != null && !cir.getState().equals("")) {
+                        stateET.setText(cir.getState());
+                        isState = true;
+                        stateET.setSelection(cir.getState().length());
+                    }
+
+                    if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                        zipcodeET.setText(cir.getZipCode());
+                        isZipcode = true;
+                        zipcodeET.setSelection(cir.getZipCode().length());
+                    }
+
+                    enableOrDisableNext();
+                    enableOrDisableAddressNext();
                 }
+            } else if (type.equalsIgnoreCase("DIFF")) {
+                isCopyCompanyInfo = false;
+                dbaFillingLL.setVisibility(VISIBLE);
+            } else if (getIntent().getStringExtra("TYPE").equalsIgnoreCase("EXIST")) {
+                if (objMyApplication.getDbaInfoResp() != null && objMyApplication.getDbaInfoResp().getStatus().equalsIgnoreCase("SUCCESS")) {
+                    DBAInfoResp.Data cir = objMyApplication.getDbaInfoResp().getData();
+                    isCopyCompanyInfo = cir.isCopyCompanyInfo();
 
-                if (cir.getWebsite() != null && !cir.getWebsite().equals("")) {
-                    websiteOET.setText(cir.getWebsite());
-                    websiteOET.setSelection();
+                    if (cir.getName() != null && !cir.getName().equals("")) {
+                        dbanameET.setText(cir.getName());
+                        dbanameET.setSelection(cir.getName().length());
+                        isdbaName = true;
+                    }
+
+                    if (cir.getEmail() != null && !cir.getEmail().equals("")) {
+                        dbaemailET.setText(cir.getEmail());
+                        isdbaEmail = true;
+                        dbaemailET.setSelection(dbaemailET.getText().toString().length());
+                    }
+
+                    if (cir.getPhoneNumberDto() != null && cir.getPhoneNumberDto().getPhoneNumber() != null && !cir.getPhoneNumberDto().getPhoneNumber().equalsIgnoreCase("")) {
+                        String pn = cir.getPhoneNumberDto().getPhoneNumber();
+                        String phoneNumber = "(" + pn.substring(0, 3) + ") " + pn.substring(3, 6) + "-" + pn.substring(6, pn.length());
+                        dbaPhoneOET.setText(phoneNumber);
+                        iscustPhoneNumber = true;
+                        dbaPhoneOET.setSelection();
+                    }
+
+                    if (cir.getBusinessType() != null && !cir.getBusinessType().equals("")) {
+                        selectedBTKey = cir.getBusinessType();
+                        for (int i = 0; i < btResponse.getData().size(); i++) {
+                            if (selectedBTKey.toLowerCase().trim().equals(btResponse.getData().get(i).getKey().toLowerCase())) {
+                                businessTypeET.setText(btResponse.getData().get(i).getValue());
+                                break;
+                            }
+                        }
+                        isBusinessType = true;
+                    }
+
+                    if (cir.getWebsite() != null && !cir.getWebsite().equals("")) {
+                        websiteOET.setText(cir.getWebsite());
+                        websiteOET.setSelection();
+                    }
+
+                    if (cir.getIdentificationType().equals("8")) {
+                        websiteOET.setHint("Website(Optional)");
+                        isECommerce = false;
+                        isRetail = true;
+                        identificationType = 8;
+                        retailIV.setImageResource(R.drawable.ic_rb_selected);
+                        eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
+                        isWebsite = true;
+                        isIDVESelected = true;
+                    } else if (cir.getIdentificationType().equals("9")) {
+                        eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+                        retailIV.setImageResource(R.drawable.ic_rb_unselected);
+                        websiteOET.setHint("Website");
+                        isECommerce = true;
+                        isRetail = false;
+                        identificationType = 9;
+                        isWebsite = isValidUrl(cir.getWebsite());
+                        isIDVESelected = true;
+                    }
+
+                    if (cir.getRequiredDocuments().size() > 0) {
+                        dbaFillingLL.setVisibility(VISIBLE);
+                        dbaFillinguploadTV.setVisibility(GONE);
+                        dbaFillingUploadedLL.setVisibility(VISIBLE);
+                        dbaFillingUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
+                        isDBAFiling = true;
+
+                    } else {
+                        dbaFillingLL.setVisibility(GONE);
+                        isDBAFiling = false;
+                    }
+
+                    if (isCopyCompanyInfo) {
+                        dbaFillingLL.setVisibility(GONE);
+                    } else {
+                        dbaFillingLL.setVisibility(VISIBLE);
+                    }
+
+                    if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Double.parseDouble(cir.getMonthlyProcessingVolume()) > 0) {
+                        mpvOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getMonthlyProcessingVolume())));
+                        isMPV = true;
+                        mpvOET.setSelection();
+                    }
+
+                    if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Double.parseDouble(cir.getHighTicket()) > 0) {
+                        highTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getHighTicket())));
+                        isHighTkt = true;
+                        highTicketOET.setSelection();
+                    }
+
+                    if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Double.parseDouble(cir.getAverageTicket()) > 0) {
+                        avgTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getAverageTicket())));
+                        isAvgTkt = true;
+                        avgTicketOET.setSelection();
+                    }
+
+                    if (cir.getTimeZone() == 0) {
+                        timeZoneET.setText(getString(R.string.PST));
+                        objMyApplication.setTempTimezone(getString(R.string.PST));
+                        objMyApplication.setTempTimezoneID(0);
+                        objMyApplication.setStrPreference("PST");
+                    } else if (cir.getTimeZone() == 1) {
+                        timeZoneET.setText(getString(R.string.MST));
+                        objMyApplication.setTempTimezone(getString(R.string.MST));
+                        objMyApplication.setTempTimezoneID(1);
+                        objMyApplication.setStrPreference("America/Denver");
+                    } else if (cir.getTimeZone() == 2) {
+                        timeZoneET.setText(getString(R.string.CST));
+                        objMyApplication.setTempTimezone(getString(R.string.CST));
+                        objMyApplication.setTempTimezoneID(2);
+                        objMyApplication.setStrPreference("CST");
+                    } else if (cir.getTimeZone() == 3) {
+                        timeZoneET.setText(getString(R.string.EST));
+                        objMyApplication.setTempTimezone(getString(R.string.EST));
+                        objMyApplication.setTempTimezoneID(3);
+                        objMyApplication.setStrPreference("America/New_York");
+                    } else if (cir.getTimeZone() == 4) {
+                        timeZoneET.setText(getString(R.string.HST));
+                        objMyApplication.setTempTimezone(getString(R.string.HST));
+                        objMyApplication.setTempTimezoneID(4);
+                        objMyApplication.setStrPreference("HST");
+                    } else if (cir.getTimeZone() == 5) {
+                        timeZoneET.setText(getString(R.string.AST));
+                        objMyApplication.setTempTimezone(getString(R.string.AST));
+                        objMyApplication.setTempTimezoneID(5);
+                        objMyApplication.setStrPreference("AST");
+                    }
+
+                    if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
+                        companyaddressET.setText(cir.getAddressLine1());
+                        isCompanyAdress1 = true;
+                        companyaddressET.setSelection(cir.getAddressLine1().length());
+                    }
+
+                    if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                        companyaddress2ET.setText(cir.getAddressLine2());
+                        companyaddress2ET.setSelection(cir.getAddressLine2().length());
+
+                    }
+                    if (cir.getCity() != null && !cir.getCity().equals("")) {
+                        cityET.setText(cir.getCity());
+                        isCity = true;
+                        cityET.setSelection(cir.getCity().length());
+                    }
+                    if (cir.getState() != null && !cir.getState().equals("")) {
+                        stateET.setText(cir.getState());
+                        isState = true;
+                        stateET.setSelection(cir.getState().length());
+                    }
+
+                    if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                        zipcodeET.setText(cir.getZipCode());
+                        isZipcode = true;
+                        zipcodeET.setSelection(cir.getZipCode().length());
+                    }
+
+                    enableOrDisableNext();
+                    enableOrDisableAddressNext();
                 }
-
-
-                if (cir.getIdentificationType().equals("8")) {
-                    websiteOET.setHint("Website(Optional)");
-                    isECommerce = false;
-                    isRetail = true;
-                    identificationType = 8;
-                    retailIV.setImageResource(R.drawable.ic_rb_selected);
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_unselected);
-                    isWebsite = true;
-                    isIDVESelected = true;
-                } else if (cir.getIdentificationType().equals("9")) {
-                    eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
-                    retailIV.setImageResource(R.drawable.ic_rb_unselected);
-                    websiteOET.setHint("Website");
-                    isECommerce = true;
-                    isRetail = false;
-                    identificationType = 9;
-                    isWebsite = isValidUrl(cir.getWebsite());
-                    isIDVESelected = true;
-                }
-
-                if (cir.getRequiredDocuments().size() > 0) {
-                    dbaFillingLL.setVisibility(VISIBLE);
-                    dbaFillinguploadTV.setVisibility(GONE);
-                    dbaFillingUploadedLL.setVisibility(VISIBLE);
-                    dbaFillingUpdatedOnTV.setText("Uploaded on " + Utils.convertDocUploadedDate(cir.getRequiredDocuments().get(0).getUpdatedAt()));
-                    isDBAFiling = true;
-
-                } else {
-                    dbaFillingLL.setVisibility(GONE);
-                    isDBAFiling = false;
-                }
-
-                if (isCopyCompanyInfo) {
-                    dbaFillingLL.setVisibility(GONE);
-                } else {
-                    dbaFillingLL.setVisibility(VISIBLE);
-                }
-
-
-                if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Double.parseDouble(cir.getMonthlyProcessingVolume()) > 0) {
-                    mpvOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getMonthlyProcessingVolume())));
-                    isMPV = true;
-                    mpvOET.setSelection();
-                }
-
-                if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Double.parseDouble(cir.getHighTicket()) > 0) {
-                    highTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getHighTicket())));
-                    isHighTkt = true;
-                    highTicketOET.setSelection();
-                }
-
-                if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Double.parseDouble(cir.getAverageTicket()) > 0) {
-                    avgTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getAverageTicket())));
-                    isAvgTkt = true;
-                    avgTicketOET.setSelection();
-                }
-
-
-                if (cir.getTimeZone() == 0) {
-                    timeZoneET.setText(getString(R.string.PST));
-                    objMyApplication.setTempTimezone(getString(R.string.PST));
-                    objMyApplication.setTempTimezoneID(0);
-                    objMyApplication.setStrPreference("PST");
-                } else if (cir.getTimeZone() == 1) {
-                    timeZoneET.setText(getString(R.string.MST));
-                    objMyApplication.setTempTimezone(getString(R.string.MST));
-                    objMyApplication.setTempTimezoneID(1);
-                    objMyApplication.setStrPreference("America/Denver");
-                } else if (cir.getTimeZone() == 2) {
-                    timeZoneET.setText(getString(R.string.CST));
-                    objMyApplication.setTempTimezone(getString(R.string.CST));
-                    objMyApplication.setTempTimezoneID(2);
-                    objMyApplication.setStrPreference("CST");
-                } else if (cir.getTimeZone() == 3) {
-                    timeZoneET.setText(getString(R.string.EST));
-                    objMyApplication.setTempTimezone(getString(R.string.EST));
-                    objMyApplication.setTempTimezoneID(3);
-                    objMyApplication.setStrPreference("America/New_York");
-                } else if (cir.getTimeZone() == 4) {
-                    timeZoneET.setText(getString(R.string.HST));
-                    objMyApplication.setTempTimezone(getString(R.string.HST));
-                    objMyApplication.setTempTimezoneID(4);
-                    objMyApplication.setStrPreference("HST");
-                } else if (cir.getTimeZone() == 5) {
-                    timeZoneET.setText(getString(R.string.AST));
-                    objMyApplication.setTempTimezone(getString(R.string.AST));
-                    objMyApplication.setTempTimezoneID(5);
-                    objMyApplication.setStrPreference("AST");
-                }
-
-
-                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
-                    companyaddressET.setText(cir.getAddressLine1());
-                    isCompanyAdress1 = true;
-                    companyaddressET.setSelection(cir.getAddressLine1().length());
-                }
-
-                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
-                    companyaddress2ET.setText(cir.getAddressLine2());
-                    companyaddress2ET.setSelection(cir.getAddressLine2().length());
-
-                }
-
-                if (cir.getCity() != null && !cir.getCity().equals("")) {
-                    cityET.setText(cir.getCity());
-                    isCity = true;
-                    cityET.setSelection(cir.getCity().length());
-
-                }
-
-                if (cir.getState() != null && !cir.getState().equals("")) {
-                    stateET.setText(cir.getState());
-                    isState = true;
-                    stateET.setSelection(cir.getState().length());
-
-                }
-
-                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
-                    zipcodeET.setText(cir.getZipCode());
-                    isZipcode = true;
-                    zipcodeET.setSelection(cir.getZipCode().length());
-                }
-
-                enableOrDisableNext();
-                enableOrDisableAddressNext();
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
     }
 
     public void dbaInfoAPICall(DBAInfoRequest dbaInfoRequest) {
