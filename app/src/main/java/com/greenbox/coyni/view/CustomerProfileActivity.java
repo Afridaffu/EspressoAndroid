@@ -70,7 +70,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
     CardView cvLogout;
     ConstraintLayout userProfile;
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L,mLastClickTimeShare = 0L;
     public static SQLiteDatabase mydatabase;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
@@ -574,10 +574,10 @@ public class CustomerProfileActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
 
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeShare < 2000) {
                             return;
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
+                        mLastClickTimeShare = SystemClock.elapsedRealtime();
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
                         sendIntent.putExtra(Intent.EXTRA_TEXT, strWallet);

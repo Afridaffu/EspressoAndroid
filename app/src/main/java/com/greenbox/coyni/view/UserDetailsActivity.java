@@ -231,25 +231,36 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
 //                            .putExtra("TYPE", "ENTER")
 //                            .putExtra("screen", "EditEmail"));
+//                    try {
+//                        authenticateType = "EMAIL";
+//
+//                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+//                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+//                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                            } else {
+//                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("screen", "EditEmail"));
+//                            }
+//                        } else {
+//                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                    .putExtra("TYPE", "ENTER")
+//                                    .putExtra("screen", "EditEmail"));
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+                    //New wireframe changes
                     try {
                         authenticateType = "EMAIL";
+                        String face = String.valueOf(isFaceLock);
+                        String touch = String.valueOf(isTouchId);
 
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                            } else {
-                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "EditEmail"));
-                            }
-                        } else {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "EditEmail"));
-                        }
+                        startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", emailId).putExtra("touch", touch).putExtra("face", face));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
                 }
             });
 
@@ -299,24 +310,34 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                            .putExtra("OLD_PHONE", phoneFormat)
 //                            .putExtra("screen", "EditPhone"));
 
+//                    try {
+//                        authenticateType = "PHONE";
+//
+//                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+//                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+//                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                            } else {
+//                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("OLD_PHONE", phoneFormat)
+//                                        .putExtra("screen", "EditPhone"));
+//                            }
+//                        } else {
+//                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                    .putExtra("TYPE", "ENTER")
+//                                    .putExtra("OLD_PHONE", phoneFormat)
+//                                    .putExtra("screen", "EditPhone"));
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+
                     try {
                         authenticateType = "PHONE";
+                        String face = String.valueOf(isFaceLock);
+                        String touch = String.valueOf(isTouchId);
 
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                            } else {
-                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                        .putExtra("TYPE", "ENTER")
-                                        .putExtra("OLD_PHONE", phoneFormat)
-                                        .putExtra("screen", "EditPhone"));
-                            }
-                        } else {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("OLD_PHONE", phoneFormat)
-                                    .putExtra("screen", "EditPhone"));
-                        }
+                        startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", phoneFormat).putExtra("touch", touch).putExtra("face", face));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

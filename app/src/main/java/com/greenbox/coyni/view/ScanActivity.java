@@ -107,7 +107,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     Bitmap bitmap;
     View divider;
     Dialog setAmountDialog;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L,mLastClickTimeQa = 0L;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     ImageView idIVQrcode, imageShare, copyRecipientAddress, albumIV;
     ImageView closeBtnScanCode, closeBtnScanMe, imgProfile;
@@ -401,10 +401,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQa < 2000) {
                             return;
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
+                        mLastClickTimeQa = SystemClock.elapsedRealtime();
 
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
@@ -1178,10 +1178,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     public void setAmountClick() {
         try {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQa < 2000) {
                 return;
             }
-            mLastClickTime = SystemClock.elapsedRealtime();
+            mLastClickTimeQa = SystemClock.elapsedRealtime();
             if (validation()) {
                 if (setAmountDialog != null) {
                     setAmountDialog.dismiss();
@@ -1201,15 +1201,18 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     }
 
     private Boolean validation() {
-        Boolean value = true;
+        Boolean value = false;
         try {
             String strPay = setAmount.getText().toString().trim().replace("\"", "");
             if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", ScanActivity.this, "Oops!", "");
-            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0.00) {
                 value = false;
-                Utils.displayAlert("Amount should be grater than zero.", ScanActivity.this, "Oops!", "");
+                Utils.displayAlert("Amount should be greater than zero.", ScanActivity.this, "Oops!", "");
+            }
+            else {
+                value = true;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1322,10 +1325,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance,String btypeValue) {
         isQRScan = false;
         mcodeScanner.stopPreview();
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance,btypeValue);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {

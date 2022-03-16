@@ -23,7 +23,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private LinearLayout copyAddressLL;
     private String amount;
     private UserDetails userDetails;
-    private TextView payAmount, recipientAddressTV, tv_lable, tv_lable_verify,accountType, availableBalance, userName;
+    private TextView payAmount, recipientAddressTV, tv_lable, tv_lable_verify,accountType, availableBalance, userName,bTypeValue;
     private String recipientAddress = "";
     private boolean screenCheck;
     Boolean isFaceLock = false, isTouchId = false;

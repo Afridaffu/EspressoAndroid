@@ -33,6 +33,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private Long mLastClickTime = 0L;
     private MyApplication myApplicationObj;
+    public static BusinessUserDetailsPreviewActivity businessUserDetailsPreviewActivity;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -47,6 +48,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
         title = findViewById(R.id.titleTV);
         value = findViewById(R.id.contentTV);
         changeCV = findViewById(R.id.changeCV);
+        businessUserDetailsPreviewActivity = this;
         myApplicationObj = (MyApplication) getApplicationContext();
         isBiometric = Utils.getIsBiometric();
 
