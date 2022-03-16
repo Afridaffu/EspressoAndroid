@@ -603,7 +603,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                 dialog = Utils.showProgressDialog(ScanActivity.this);
                                 cynValue = Double.parseDouble(strQRAmount.toString().trim().replace(",", ""));
                                 calculateFee(Utils.USNumberFormat(cynValue));
-                                showPayToMerchantWithAmountDialog(amount, userDetails,avaBal);
+                                businessIdentityVerificationViewModel.getBusinessType();
+                                showPayToMerchantWithAmountDialog(amount, userDetails,avaBal,businessTypeValue);
                             }
                         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             //ERROR MESSAGE DIsPLAY
@@ -1325,10 +1326,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails,Double balance) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails,Double balance,String bType) {
         isQRScan = false;
         mcodeScanner.stopPreview();
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails,false,balance,businessTypeValue);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails,false,balance,bType);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {

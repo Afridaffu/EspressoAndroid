@@ -40,7 +40,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         this.userDetails = userDetails;
         this.screenCheck = isShowIcon;
         this.balance = balance;
-        businessTypeValue = bType;
+        this.businessTypeValue = bType;
     }
 
     @SuppressLint("SetTextI18n")
@@ -79,7 +79,12 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             userName.setText("Paying " + userDetails.getData().getFullName());
         }
         if (businessTypeValue != null){
-           bTypeValue.setText(businessTypeValue);
+            if (businessTypeValue.length()>20) {
+                bTypeValue.setText(businessTypeValue.substring(0,21)+"...");
+            }
+            else {
+                bTypeValue.setText(businessTypeValue);
+            }
         }
 
         slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
