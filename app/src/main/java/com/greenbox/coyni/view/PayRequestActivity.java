@@ -50,6 +50,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
@@ -65,7 +66,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     EditText payRequestET, addNoteET;
     Dialog cvvDialog, prevDialog;
     SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID, dsPermanentToken;
+    Cursor dsFacePin, dsTouchID;
     DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
@@ -124,17 +125,14 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
                     payRequestET.setHint("");
                     convertUSDValue();
-                    if(editable.length()==5 || editable.length()==6){
+                    if (editable.length() == 5 || editable.length() == 6) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-//                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//                        lp.setMargins(0, 0, 0, 3);
-//                        coyniTV.setLayoutParams(lp);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if(editable.length()==7 || editable.length()==8){
+                    } else if (editable.length() == 7 || editable.length() == 8) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
 
-                    }else if(editable.length()==9){
+                    } else if (editable.length() == 9) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
@@ -387,19 +385,6 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-//    private void SetToken() {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-//            dsPermanentToken.moveToFirst();
-//            if (dsPermanentToken.getCount() > 0) {
-//                strToken = dsPermanentToken.getString(1);
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     private void initialization() {
         try {
             objMyApplication = (MyApplication) getApplicationContext();
@@ -550,7 +535,15 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onChanged(UserDetails userDetails) {
                 if (userDetails != null) {
-                    bindUserInfo(userDetails);
+                    if (userDetails.getStatus().toLowerCase().equals("success")) {
+                        bindUserInfo(userDetails);
+                    } else {
+                        if (!userDetails.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(userDetails.getError().getErrorDescription(), PayRequestActivity.this, "", userDetails.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(userDetails.getError().getFieldErrors().get(0), PayRequestActivity.this, "", "");
+                        }
+                    }
                 }
             }
         });
@@ -906,12 +899,17 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
     private void changeTextSize(String editable) {
         try {
-            //InputFilter[] FilterArray = new InputFilter[1];
-            if(editable.length()==5 || editable.length()==6){
+
+            if (editable.length() == 5 || editable.length() == 6) {
+
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-            } else if(editable.length()==7 || editable.length()==8){
+            } else if (editable.length() == 7 || editable.length() == 8) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+
             }else if(editable.length()==9){
+
+            } else if (editable.length() == 9) {
+
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
             }
 //            if (editable.length() > 12) {
@@ -1235,7 +1233,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
             LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
+
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             userNamePayTV.setText(strUserName);
             String strPFee = "";
@@ -1279,8 +1279,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-
+//                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
                         prevDialog.dismiss();
                         if (!isAuthenticationCalled) {
                             isAuthenticationCalled = true;
@@ -1350,7 +1351,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
             LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
+
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             if (strUserName.length() > 20) {
                 userNamePayTV.setText(strUserName.substring(0, 20) + "...");
@@ -1403,7 +1406,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
 
                         if (!isAuthenticationCalled) {
                             isAuthenticationCalled = true;

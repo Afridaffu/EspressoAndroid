@@ -1,6 +1,7 @@
 package com.greenbox.coyni.utils.outline_et;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -15,6 +16,8 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
+import com.greenbox.coyni.view.business.AddNewTeamMemberActivity;
+import com.greenbox.coyni.view.business.EditTeamMember;
 
 public class
 
@@ -87,6 +90,12 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         } else if (FROM.equals("CREATE_ACCOUNT")) {
                             CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
                             caa.phoneErrorLL.setVisibility(GONE);
+                        }else if (FROM.equals("ADD_TEAM_MEMBER")) {
+                            AddNewTeamMemberActivity atm = AddNewTeamMemberActivity.addNewTeamMemberActivity;
+                            atm.editPhoneLL.setVisibility(GONE);
+                        }else if (FROM.equals("EDIT_TEAM_MEMBER")) {
+                            EditTeamMember etm = EditTeamMember.editTeamMember;
+                            etm.editPhonLL.setVisibility(GONE);
                         }
                     }
 //                    if (FROM.equals("Retrieve") && !b) {
@@ -134,7 +143,52 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             caa.phoneErrorLL.setVisibility(GONE);
                         }
                     }
-                } catch (Exception ex) {
+                    else if (FROM.equals("ADD_TEAM_MEMBER")) {
+                        AddNewTeamMemberActivity atm = AddNewTeamMemberActivity.addNewTeamMemberActivity;
+                        if (!b) {
+                            if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
+                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                                atm.editPhoneLL.setVisibility(VISIBLE);
+//                                caa.phoneErrorTV.setText("Invalid Phone Number");
+                                atm.editPhoneTV.setText("Please enter a valid Phone Number");
+                            } else if ((pnET.getText().length() == 0)) {
+                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                                atm.editPhoneLL.setVisibility(VISIBLE);
+                                atm.editPhoneTV.setText("Field Required");
+                            } else {
+                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            }
+                        } else {
+                            atm.editPhoneLL.setVisibility(GONE);
+                        }
+                    }
+                    else if (FROM.equals("EDIT_TEAM_MEMBER")) {
+                        EditTeamMember etm = EditTeamMember.editTeamMember;
+                        if (!b) {
+                            if ((pnET.getText().length() > 0 && pnET.getText().length() < 14)) {
+                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                                etm.editPhonLL.setVisibility(VISIBLE);
+//                                caa.phoneErrorTV.setText("Invalid Phone Number");
+                                etm.editPhoneTV.setText("Please enter a valid Phone Number");
+                            } else if ((pnET.getText().length() == 0)) {
+                                hintName.setTextColor(getResources().getColor(R.color.error_red));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                                etm.editPhonLL.setVisibility(VISIBLE);
+                                etm.editPhoneTV.setText("Field Required");
+                            } else {
+                                hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                                hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            }
+                        } else {
+                            etm.editPhonLL.setVisibility(GONE);
+                        }
+                    }
+                }
+                catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -149,42 +203,97 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (FROM.equals("CREATE_ACCOUNT")) {
-                    CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
-                    if (charSequence.length() == 14) {
-                        isPhoneError = false;
-                        createAccountAct.phoneErrorLL.setVisibility(GONE);
+                try {
+                    if (FROM.equals("CREATE_ACCOUNT")) {
+                        CreateAccountActivity createAccountAct = CreateAccountActivity.createAccountActivity;
+                        if (charSequence.length() == 14) {
+                            isPhoneError = false;
+                            createAccountAct.phoneErrorLL.setVisibility(GONE);
+                        }
+
+                        createAccountAct.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
+
+                        if (createAccountAct.isFirstName && createAccountAct.isLastName &&
+                                createAccountAct.isEmail && createAccountAct.isPhoneNumber &&
+                                createAccountAct.isPassword && createAccountAct.isConfirmPassword) {
+                            createAccountAct.isNextEnabled = true;
+                            createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+
+                        } else {
+                            createAccountAct.isNextEnabled = false;
+                            createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+
+    //                    if ((pnET.getText().length() == 0)) {
+    //                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+    //                        caa.phoneErrorLL.setVisibility(VISIBLE);
+    //                        caa.phoneErrorTV.setText("Field Required");
+    //                    }
                     }
+                    else if (FROM.equals("ADD_TEAM_MEMBER")) {
+                        AddNewTeamMemberActivity addnewteammember = AddNewTeamMemberActivity.addNewTeamMemberActivity;
+                        if (charSequence.length() == 14) {
+                            isPhoneError = false;
+                            addnewteammember.editPhoneLL.setVisibility(GONE);
+                        }
 
-                    createAccountAct.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
+                        addnewteammember.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
 
-                    if (createAccountAct.isFirstName && createAccountAct.isLastName &&
-                            createAccountAct.isEmail && createAccountAct.isPhoneNumber &&
-                            createAccountAct.isPassword && createAccountAct.isConfirmPassword) {
-                        createAccountAct.isNextEnabled = true;
-                        createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                        if (addnewteammember.isFirstName && addnewteammember.isLastName &&
+                                addnewteammember.isEmail && addnewteammember.isPhoneNumber) {
+                            addnewteammember.isNextEnabled = true;
+                            addnewteammember.sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
-                    } else {
-                        createAccountAct.isNextEnabled = false;
-                        createAccountAct.nextCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        } else {
+                            addnewteammember.isNextEnabled = false;
+                            addnewteammember.sendCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        }
+
+    //                    if ((pnET.getText().length() == 0)) {
+    //                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+    //                        caa.phoneErrorLL.setVisibility(VISIBLE);
+    //                        caa.phoneErrorTV.setText("Field Required");
+    //                    }
                     }
+                    else if (FROM.equals("EDIT_TEAM_MEMBER")) {
+                        EditTeamMember editteammem = EditTeamMember.editTeamMember;
+                        if (charSequence.length() == 14) {
+                            isPhoneError = false;
+                            editteammem.editPhonLL.setVisibility(GONE);
+                        }
 
-//                    if ((pnET.getText().length() == 0)) {
-//                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
-//                        caa.phoneErrorLL.setVisibility(VISIBLE);
-//                        caa.phoneErrorTV.setText("Field Required");
-//                    }
-                } else if (FROM.equals("Retrieve")) {
-                    RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
-                    if (charSequence.length() == 14) {
-                        isPhoneError = false;
-                        rea.phoneErrorLL.setVisibility(GONE);
+                        editteammem.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
+
+                        editteammem.enableOrDisableNext();
+//                        if (editteammem.isFirstName && editteammem.isLastName &&
+//                                editteammem.isEmail && editteammem.isPhoneNumber) {
+//                            editteammem.isNextEnabled = true;
+//                            editteammem.sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+//
+//                        } else {
+//                            editteammem.isNextEnabled = false;
+//                            editteammem.sendCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+//                        }
+
+    //                    if ((pnET.getText().length() == 0)) {
+    //                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;
+    //                        caa.phoneErrorLL.setVisibility(VISIBLE);
+    //                        caa.phoneErrorTV.setText("Field Required");
+    //                    }
+                    } else if (FROM.equals("Retrieve")) {
+                        RetrieveEmailActivity rea = RetrieveEmailActivity.retrieveEmailActivity;
+                        if (charSequence.length() == 14) {
+                            isPhoneError = false;
+                            rea.phoneErrorLL.setVisibility(GONE);
+                        }
+
+    //                    if ((pnET.getText().length() == 0)) {
+    //                        rea.phoneErrorLL.setVisibility(VISIBLE);
+    //                        rea.phoneErrorTV.setText("Field Required");
+    //                    }
                     }
-
-//                    if ((pnET.getText().length() == 0)) {
-//                        rea.phoneErrorLL.setVisibility(VISIBLE);
-//                        rea.phoneErrorTV.setText("Field Required");
-//                    }
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
                 }
 
             }

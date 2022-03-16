@@ -65,6 +65,7 @@ import com.greenbox.coyni.model.withdraw.GiftCardWithDrawInfo;
 import com.greenbox.coyni.model.withdraw.RecipientDetail;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
@@ -1042,7 +1043,8 @@ public class GiftCardDetails extends AppCompatActivity {
             TextView subTotalTV = prevDialog.findViewById(R.id.subTotalTV);
             TextView feeTV = prevDialog.findViewById(R.id.feeTV);
             TextView totalTV = prevDialog.findViewById(R.id.totalTV);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
@@ -1073,7 +1075,8 @@ public class GiftCardDetails extends AppCompatActivity {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(GONE);
+                        tv_lable_verify.setVisibility(VISIBLE);
                         if (!isAuthenticationCalled) {
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {

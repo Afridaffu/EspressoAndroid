@@ -127,29 +127,15 @@ public class EditPhoneActivity extends AppCompatActivity {
                         dialog.show();
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangePhone")) {
                             try {
-                                DBAInfoRequest dbaInfoRequest = new DBAInfoRequest();
-                                dbaInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getDbaInfoResp().getData().getEmail()));
-                                dbaInfoRequest.setAddressLine1(myApplicationObj.getDbaInfoResp().getData().getAddressLine1());
-                                dbaInfoRequest.setAddressLine2(myApplicationObj.getDbaInfoResp().getData().getAddressLine2());
-                                dbaInfoRequest.setBusinessType(myApplicationObj.getDbaInfoResp().getData().getBusinessType());
-                                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getAverageTicket().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setCity(myApplicationObj.getDbaInfoResp().getData().getCity());
-                                dbaInfoRequest.setCopyCompanyInfo(myApplicationObj.getDbaInfoResp().getData().isCopyCompanyInfo());
-                                dbaInfoRequest.setCountry(myApplicationObj.getDbaInfoResp().getData().getCountry());
-                                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getHighTicket().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setIdentificationType(Integer.parseInt(myApplicationObj.getDbaInfoResp().getData().getIdentificationType()));
-                                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getMonthlyProcessingVolume().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setName(myApplicationObj.getDbaInfoResp().getData().getName());
+                                ContactInfoRequest contactInfoRequest = new ContactInfoRequest();
+                                contactInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getDbaInfoResp().getData().getEmail()));
+                                contactInfoRequest.setId(myApplicationObj.getDbaInfoResp().getData().getId());
                                 PhNoWithCountryCode phNoWithCountryCode = new PhNoWithCountryCode();
                                 phNoWithCountryCode.setCountryCode(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getCountryCode());
                                 newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
                                 phNoWithCountryCode.setPhoneNumber(newPhoneNumber);
-                                dbaInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
-                                dbaInfoRequest.setState(myApplicationObj.getDbaInfoResp().getData().getState());
-                                dbaInfoRequest.setTimeZone(myApplicationObj.getDbaInfoResp().getData().getTimeZone());
-                                dbaInfoRequest.setWebsite(myApplicationObj.getDbaInfoResp().getData().getWebsite());
-                                dbaInfoRequest.setZipCode(myApplicationObj.getDbaInfoResp().getData().getZipCode());
-                                businessIdentityVerificationViewModel.patchDBAInfo(dbaInfoRequest);
+                                contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
@@ -219,7 +205,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             });
 
-            b_editPhoneCloseLL.setOnClickListener(new View.OnClickListener() {
+            b_editPhoneCloseLL .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
@@ -325,56 +311,31 @@ public class EditPhoneActivity extends AppCompatActivity {
             }
         });
 
-        businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
-            @Override
-            public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
-                dialog.dismiss();
-                try {
-                    if (dbaInfoUpdateResp != null && dbaInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
-                        new Handler().postDelayed(() -> {
-                            try {
-                                finish();
-                            } catch (Exception e) {
-                                e.printStackTrace();
+        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this
+                , new Observer<CompanyInfoUpdateResp>() {
+                    @Override
+                    public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
+                        dialog.dismiss();
+                        try {
+                            if (companyInfoUpdateResp != null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
+                                Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
+                                new Handler().postDelayed(() -> {
+                                    try {
+                                        finish();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }, 2000);
+
+                            } else {
+                                Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
                             }
-
-                        }, 2000);
-
-                    } else {
-                        Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
-            @Override
-            public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
-                dialog.dismiss();
-                try {
-                    if (companyInfoUpdateResp != null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
-                        new Handler().postDelayed(() -> {
-                            try {
-                                finish();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }, 2000);
-
-                    } else {
-                        Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
+                });
     }
 
     @Override
