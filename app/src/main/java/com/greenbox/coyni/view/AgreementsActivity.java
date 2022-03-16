@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AgreementsActivity extends AppCompatActivity {
+public class AgreementsActivity extends BaseActivity {
     DashboardViewModel dashboardViewModel;
     LinearLayout backIV;
     RecyclerView recyclerView, recyclPastAgree;
@@ -52,7 +52,9 @@ public class AgreementsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        dashboardViewModel.agreementsByType("1");
+        showProgressDialog();
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        dashboardViewModel.agreementsByType("1");
         setContentView(R.layout.activity_agreements);
         recyclerView = findViewById(R.id.recyclerview);
         recyclPastAgree = findViewById(R.id.recyclPastAgree);
@@ -64,11 +66,8 @@ public class AgreementsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
-        initObserver();
         dashboardViewModel.meAgreementsById();
-
+        initObserver();
         objMyApplication = (MyApplication) getApplicationContext();
 
         setOnClickListener();
@@ -88,6 +87,7 @@ public class AgreementsActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(Agreements agreements) {
                     try {
+                        dismissDialog();
                         Log.e("act", agreements.getStatus());
                         if (agreements.getStatus().contains("SUCCESS")) {
                             List<Item> activeItems = new ArrayList<>();
@@ -165,10 +165,15 @@ public class AgreementsActivity extends AppCompatActivity {
                             adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, dashboardViewModel, listener);
                             recyclerView.setAdapter(adapter);
 
+                            if (activeItems != null && activeItems.size() > 0){
+                                findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
+                            }
+
                             if (pastItems != null && pastItems.size() > 0) {
                                 cvPast.setVisibility(View.VISIBLE);
                                 pastTV.setVisibility(View.VISIBLE);
                                 activeTV.setVisibility(View.VISIBLE);
+                                findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
                                 pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
                                 recyclPastAgree.setLayoutManager(mLayoutManager);
@@ -206,51 +211,47 @@ public class AgreementsActivity extends AppCompatActivity {
 
             listener = (view, position) -> {
                 if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                    try {
-                        if (position == 1) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            startActivity(inte);
+                    if (position == 1) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
 
-                        } else if (position == 0) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            startActivity(inte);
-
-                        } else if (position == 2) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(merchantagreeURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            startActivity(inte);
-
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                    try {
-                        if (position == 1) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            startActivity(inte);
+                    if (position == 0) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
 
-                        } else if (position == 0) {
-                            Intent inte = new Intent(Intent.ACTION_VIEW);
-                            inte.setDataAndType(
-                                    Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-                                    "application/pdf");
-                            startActivity(inte);
+                    }
+                    if (position == 2) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(merchantagreeURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
 
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    }
+                }
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    if (position == 1) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(tosURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
+
+                    }
+                    if (position == 0) {
+                        Intent inte = new Intent(Intent.ACTION_VIEW);
+                        inte.setDataAndType(
+                                Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
+                                "application/pdf");
+                        startActivity(inte);
+
                     }
 
                 }

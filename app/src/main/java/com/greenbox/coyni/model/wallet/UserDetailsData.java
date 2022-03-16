@@ -11,7 +11,15 @@ public class UserDetailsData {
     private String image;
     private String walletType;
     private int accountType;
+    private String businessType;
 
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
 
     public String getImage() {
         return image;
