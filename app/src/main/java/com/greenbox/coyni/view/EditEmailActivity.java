@@ -182,7 +182,6 @@ public class EditEmailActivity extends AppCompatActivity {
                             try {
                                 ContactInfoRequest contactInfoRequest=new ContactInfoRequest();
                                 contactInfoRequest.setEmail(Objects.requireNonNull(b_newEmailET.getText()).toString());
-
                                 PhNoWithCountryCode phNoWithCountryCode=new PhNoWithCountryCode();
                                 phNoWithCountryCode.setCountryCode(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getCountryCode());
                                 phNoWithCountryCode.setPhoneNumber(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
@@ -677,16 +676,7 @@ public class EditEmailActivity extends AppCompatActivity {
                 dialog.dismiss();
                 try {
                     if (companyInfoUpdateResp !=null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
-                        Utils.showCustomToast(EditEmailActivity.this, "Email updated", R.drawable.ic_check, "EMAIL");
-                        new Handler().postDelayed(() -> {
-                            try {
-                                finish();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }, 2000);
-
+                     finish();
                     }
                     else {
                         Toast.makeText(EditEmailActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
@@ -697,31 +687,6 @@ public class EditEmailActivity extends AppCompatActivity {
             }
         });
 
-        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
-            @Override
-            public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
-                dialog.dismiss();
-                try {
-                    if (companyInfoUpdateResp !=null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
-                        Utils.showCustomToast(EditEmailActivity.this, "Email updated", R.drawable.ic_check, "EMAIL");
-                        new Handler().postDelayed(() -> {
-                            try {
-                                finish();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }, 2000);
-
-                    }
-                    else {
-                        Toast.makeText(EditEmailActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
     }
 

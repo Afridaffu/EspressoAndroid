@@ -555,6 +555,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         } else {
                             if (boAPICallFrom.equals("INCOMPLETE"))
                                 businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                            boTV.setTextColor(getResources().getColor(R.color.primary_black));
+                            boIncompleteTV.setTextColor(getResources().getColor(R.color.dark_grey));
+                            boIncompleteTV.setText("Incomplete");
+                            boStartTV.setVisibility(VISIBLE);
+                            boInProgressIV.setVisibility(GONE);
                         }
                     }
                 }
