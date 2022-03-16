@@ -209,7 +209,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                     dismissDialog();
                     if (updateSignAgreementsResponse != null) {
                         if (updateSignAgreementsResponse.getStatus() != null
-                                && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess")) {
+                                && updateSignAgreementsResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                             finish();
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
@@ -238,7 +238,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 if (agreements.getStatus() != null && agreements.getStatus().equalsIgnoreCase("Success")) {
                     for (int i = 0; i < agreements.getData().getItems().size(); i++) {
                         if (agreements.getData().getItems().get(i).getSignatureType() == 5
-                                && agreements.getData().getItems().get(i).getSignature()!=null
+                                && agreements.getData().getItems().get(i).getSignature() != null
                                 && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
                             Glide.with(MerchantsAgrementActivity.this)
                                     .load(agreements.getData().getItems().get(i).getSignature())

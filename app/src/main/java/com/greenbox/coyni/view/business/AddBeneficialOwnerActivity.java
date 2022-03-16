@@ -1395,7 +1395,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     zipcodeET.requestFocus();
                     if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
-                    zipcodeET.setHint("Zipcode");
+                    zipcodeET.setHint("Zip Code");
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
                     zipcodeErrorLL.setVisibility(GONE);

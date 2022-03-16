@@ -516,7 +516,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
                                 } else {
                                     caTV.setTextColor(getResources().getColor(R.color.primary_black));
-                                    caIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
+                                    caIncompleteTV.setTextColor(getResources().getColor(R.color.dark_grey));
                                     caIncompleteTV.setText("Incomplete");
                                     caStartTV.setVisibility(VISIBLE);
                                     caInProgressIV.setVisibility(GONE);
