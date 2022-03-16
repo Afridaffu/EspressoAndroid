@@ -31,6 +31,22 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp" />
 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:src="@drawable/ic_no_token" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:text="Seems like no token available in your account. Please follow one of the prompts below to link an account."
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,23 +56,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_20sdp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_13sdp"
-                android:src="@drawable/ic_no_token" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="Seems like no token available in your account. Please follow one of the prompts below to link an account."
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_20sdp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPayMethods"
