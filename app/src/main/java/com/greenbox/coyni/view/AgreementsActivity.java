@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AgreementsActivity extends AppCompatActivity {
+public class AgreementsActivity extends BaseActivity {
     DashboardViewModel dashboardViewModel;
     LinearLayout backIV;
     RecyclerView recyclerView, recyclPastAgree;
@@ -52,7 +52,9 @@ public class AgreementsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        dashboardViewModel.agreementsByType("1");
+        showProgressDialog();
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        dashboardViewModel.agreementsByType("1");
         setContentView(R.layout.activity_agreements);
         recyclerView = findViewById(R.id.recyclerview);
         recyclPastAgree = findViewById(R.id.recyclPastAgree);
@@ -68,7 +70,7 @@ public class AgreementsActivity extends AppCompatActivity {
 
         initObserver();
         dashboardViewModel.meAgreementsById();
-
+        initObserver();
         objMyApplication = (MyApplication) getApplicationContext();
 
         setOnClickListener();
@@ -88,6 +90,7 @@ public class AgreementsActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(Agreements agreements) {
                     try {
+                        dismissDialog();
                         Log.e("act", agreements.getStatus());
                         if (agreements.getStatus().contains("SUCCESS")) {
                             List<Item> activeItems = new ArrayList<>();
@@ -165,10 +168,15 @@ public class AgreementsActivity extends AppCompatActivity {
                             adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, dashboardViewModel, listener);
                             recyclerView.setAdapter(adapter);
 
+                            if (activeItems != null && activeItems.size() > 0){
+                                findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
+                            }
+
                             if (pastItems != null && pastItems.size() > 0) {
                                 cvPast.setVisibility(View.VISIBLE);
                                 pastTV.setVisibility(View.VISIBLE);
                                 activeTV.setVisibility(View.VISIBLE);
+                                findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
                                 pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
                                 recyclPastAgree.setLayoutManager(mLayoutManager);
