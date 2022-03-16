@@ -39,6 +39,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
@@ -62,7 +63,8 @@ public class PayToPersonalActivity extends AppCompatActivity {
     String strUserName = "", strAddress = "";
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     Boolean isAuthenticationCalled = false, isPayCalled = false;
-    TextView tvCurrency, tvAmount, tvCYN, tvLable, tvBalance;
+    TextView tvCurrency, tvAmount, tvCYN, tvBalance, tv_lable_verify;
+    AnimatedGradientTextView tvLable;
     MotionLayout paySlideToConfirm;
     CardView cvLock, im_lock;
     float fontSize, dollarFont;
@@ -169,6 +171,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             tvAmount = findViewById(R.id.tvAmount);
             tvCYN = findViewById(R.id.tvCYN);
             tvLable = findViewById(R.id.tvLable);
+            tv_lable_verify = findViewById(R.id.tv_lable_verify);
             tvBalance = findViewById(R.id.tvBalance);
             paySlideToConfirm = findViewById(R.id.paySlideToConfirm);
             imgConvert = findViewById(R.id.imgConvert);
@@ -214,8 +217,9 @@ public class PayToPersonalActivity extends AppCompatActivity {
                             motionLayout.setTransition(R.id.middle, R.id.end);
                             motionLayout.transitionToState(motionLayout.getEndState());
                             paySlideToConfirm.setInteractionEnabled(false);
-                            tvLable.setText("Verifying");
-
+//                            tvLable.setText("Verifying");
+                            tvLable.setVisibility(View.GONE);
+                            tv_lable_verify.setVisibility(View.VISIBLE);
                             if (!isPayCalled) {
                                 isPayCalled = true;
                                 if (payValidation()) {
@@ -387,7 +391,8 @@ public class PayToPersonalActivity extends AppCompatActivity {
             LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
             LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             userNamePayTV.setText(strUserName);
             String strPFee = "";
@@ -427,8 +432,9 @@ public class PayToPersonalActivity extends AppCompatActivity {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-
+//                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
 //                        prevDialog.dismiss();
                         if (!isAuthenticationCalled) {
                             isAuthenticationCalled = true;
@@ -611,7 +617,9 @@ public class PayToPersonalActivity extends AppCompatActivity {
         try {
             paySlideToConfirm.setInteractionEnabled(true);
             paySlideToConfirm.setTransition(R.id.start, R.id.start);
-            tvLable.setText("Slide to Confirm");
+//            tvLable.setText("Slide to Confirm");
+            tvLable.setVisibility(View.VISIBLE);
+            tv_lable_verify.setVisibility(View.GONE);
             paySlideToConfirm.setProgress(0);
             im_lock.setAlpha(1.0f);
             isPayCalled = false;

@@ -43,6 +43,7 @@ import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.withdraw.GiftCardWithDrawInfo;
 import com.greenbox.coyni.model.withdraw.RecipientDetail;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -693,7 +694,9 @@ public class NotificationsActivity extends AppCompatActivity {
             TextView balanceTV = prevDialog.findViewById(R.id.balanceTV);
 
             TextView amountTV = prevDialog.findViewById(R.id.amountTV);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
+
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
@@ -737,7 +740,9 @@ public class NotificationsActivity extends AppCompatActivity {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
+//                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
                         userPayRequest = request;
                         if (!isAuthenticationCalled) {
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(NotificationsActivity.this)) {

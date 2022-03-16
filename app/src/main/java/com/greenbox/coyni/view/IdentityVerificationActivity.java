@@ -666,7 +666,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     } else {
                         ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
-                        ssnET.setHint(R.string.digits4);
+                        ssnET.setHint(R.string.ssnlast);
                         ssnErrorLL.setVisibility(GONE);
                     }
                 }

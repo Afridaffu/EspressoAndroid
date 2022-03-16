@@ -1,149 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
     android:padding="@dimen/_21sdp"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layoutKeypad"
+        android:scrollbars="none">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/layoutKeypad"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_20sdp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/_20sdp">
-
-                <LinearLayout
-                    android:id="@+id/layoutPClose"
-                    android:layout_width="30dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_14sdp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_chevron_left" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="Pre-Authorization"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_16ssp" />
+                android:id="@+id/layoutPClose"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:src="@drawable/ic_preauth"/>
+                    android:contentDescription="@string/back_button"
+                    android:src="@drawable/ic_back" />
+            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvMessage"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/pre_authorization"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:contentDescription="@string/pre_authorization"
+                android:src="@drawable/ic_preauth" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="start"
+                android:text="@string/preauth_description"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11ssp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlAmuont"
+                style="@style/TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxStrokeColor="@color/primary_green"
+                app:hintEnabled="false"
+                app:prefixText="$   "
+                app:prefixTextAppearance="@style/prefix"
+                app:prefixTextColor="@color/primary_black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAmount"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginBottom="@dimen/_10sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="left"
-                    android:text="A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from [Descriptor Name] and enter the amount below."
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                    android:layout_height="match_parent"
+                    android:autofillHints="creditCardSecurityCode"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:gravity="center_vertical"
+                    android:hint="0.00"
+                    android:imeOptions="actionDone"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:padding="@dimen/_14sdp"
+                    android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
+                    android:singleLine="true"
+                    android:textColor="@color/text_color"
+                    android:textColorHint="@color/light_gray"
+                    android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/_19ssp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/etlAmuont"
-                    style="@style/TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    app:boxStrokeColor="@color/primary_green"
-                    app:hintEnabled="false"
-
-                    app:prefixText="$   "
-                    app:prefixTextAppearance="@style/prefix"
-                    app:prefixTextColor="@color/primary_black">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etAmount"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:autofillHints="creditCardSecurityCode"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:gravity="center_vertical"
-                        android:hint="0.00"
-                        android:imeOptions="actionDone"
-                        android:maxLength="4"
-
-                        android:maxLines="1"
-                        android:paddingBottom="@dimen/_14sdp"
-                        android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
-                        android:singleLine="true"
-                        android:textColor="@color/text_color"
-                        android:textColorHint="@color/light_gray"
-                        android:textCursorDrawable="@drawable/cursor_color"
-                        android:textIsSelectable="false"
-                        android:textSize="@dimen/_19ssp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-                <LinearLayout
-                    android:id="@+id/llError"
+            <LinearLayout
+                android:id="@+id/llError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:visibility="gone">
+                    android:contentDescription="@string/default_error_msg"
+                    android:src="@drawable/ic_erro" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/default_error_msg"
-                        android:src="@drawable/ic_erro" />
-
-                    <TextView
-                        android:id="@+id/tvError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="Incorrect amount, 1 attempt left"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_12ssp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tvError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="@string/incorrect_amount_1_attempt_left"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_12ssp" />
             </LinearLayout>
-        </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/layoutKeypad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
-
-            <com.greenbox.coyni.utils.keyboards.CustomKeyboard
-                android:id="@+id/ckb"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/layoutKeypad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <com.greenbox.coyni.utils.keyboards.CustomKeyboard
+            android:id="@+id/ckb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>
 
 
