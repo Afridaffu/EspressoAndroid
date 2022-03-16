@@ -1096,6 +1096,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                     if (fnameET.getText().toString().length() > 0 && !fnameET.getText().toString().substring(0, 1).equals(" ")) {
                         fnameET.setText(fnameET.getText().toString().substring(0, 1).toUpperCase() + fnameET.getText().toString().substring(1));
+                        fnameET.setSelection(fnameET.getText().toString().length());
                     }
                 } else {
                     fnameLL.setVisibility(GONE);
@@ -1129,6 +1130,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                     if (lnameET.getText().toString().length() > 0 && !lnameET.getText().toString().substring(0, 1).equals(" ")) {
                         lnameET.setText(lnameET.getText().toString().substring(0, 1).toUpperCase() + lnameET.getText().toString().substring(1));
+                        lnameET.setSelection(lnameET.getText().toString().length());
                     }
                 } else {
                     lnameLL.setVisibility(GONE);
@@ -1307,6 +1309,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                     if (address1ET.getText().toString().length() > 0 && !address1ET.getText().toString().substring(0, 1).equals(" ")) {
                         address1ET.setText(address1ET.getText().toString().substring(0, 1).toUpperCase() + address1ET.getText().toString().substring(1));
+                        address1ET.setSelection(address1ET.getText().toString().length());
+
                     }
                 } else {
                     address1ET.setHint("Street Address");
@@ -1331,6 +1335,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                     if (address2ET.getText().toString().length() > 0 && !address2ET.getText().toString().substring(0, 1).equals(" ")) {
                         address2ET.setText(address2ET.getText().toString().substring(0, 1).toUpperCase() + address2ET.getText().toString().substring(1));
+                        address2ET.setSelection(address2ET.getText().toString().length());
                     }
 
                 } else {
@@ -1360,6 +1365,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                     if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
                         cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
+                        cityET.setSelection(cityET.getText().toString().length());
                     }
                 } else {
                     cityET.setHint("City");

@@ -544,7 +544,7 @@
     <string name="sender_email">Sender Email</string>
     <string name="original_transaction_information">Original Transaction Information</string>
     <string name="please_note_new_team_members">*Please Note: New team members get full administrator permission</string>
-    <string name="identity_verification_under_review">Identify Verification\nUnder Review</string>
+    <string name="identity_verification_under_review">Identity Verification\nUnder Review</string>
     <string name="thank_you_interest_in_coyni">Thank you for your interest in coyni. Please allow us up to 3 business days for further review of your account. Within that time you may receive a notification and/or email if further information is needed.</string>
     <string name="reference_id_name">Reference ID.</string>
     <string name="you_have_no_transactions">You have no transactions</string>
