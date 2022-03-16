@@ -28,7 +28,7 @@ public class ApplicationSubmissionViewModel extends AndroidViewModel {
         super(application);
     }
 
-        public MutableLiveData<ApplicationSubmitResponseModel> getPostCompanyInfoResponse() {
+        public MutableLiveData<ApplicationSubmitResponseModel> getPostApplicationSubmissionData() {
             return postApplicationSubmissionData;
         }
 
