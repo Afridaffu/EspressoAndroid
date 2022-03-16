@@ -14,7 +14,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.ScanActivity;
@@ -24,7 +23,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private LinearLayout copyAddressLL;
     private String amount;
     private UserDetails userDetails;
-    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance, userName;
+    private TextView payAmount, recipientAddressTV, tv_lable, accountType, availableBalance, userName,bTypeValue;
     private String recipientAddress = "";
     private boolean screenCheck;
     Boolean isFaceLock = false, isTouchId = false;
@@ -33,17 +32,15 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private final String pay = "payTransaction";
     private double balance;
+    private  String businessTypeValue;
 
-    public PayToMerchantWithAmountDialog(Context context) {
-        super(context);
-    }
-
-    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon, double balance) {
+    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon, double balance,String bType) {
         super(context);
         amount = strAmount;
         this.userDetails = userDetails;
         this.screenCheck = isShowIcon;
         this.balance = balance;
+        businessTypeValue = bType;
     }
 
     @SuppressLint("SetTextI18n")
@@ -60,6 +57,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         userName = findViewById(R.id.userNameTV);
         tv_lable = findViewById(R.id.tv_lable);
         im_lock_ = findViewById(R.id.im_lock_);
+        bTypeValue = findViewById(R.id.businessTypeTV);
 
         bindUserInfo(userDetails);
 
@@ -79,6 +77,9 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 
         if (userDetails.getData().getFullName() != null) {
             userName.setText("Paying " + userDetails.getData().getFullName());
+        }
+        if (businessTypeValue != null){
+           bTypeValue.setText(businessTypeValue);
         }
 
         slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
