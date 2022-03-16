@@ -90,7 +90,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
             }
 
-
             dashboardTV.setOnClickListener(view -> {
                 startActivity(new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class));
             });
@@ -254,16 +253,29 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
-                            if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
-                                dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-                            } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
-                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
-                                intent.putExtra("FROM", "TRACKER");
-                                intent.putExtra("TYPE", "EXIST");
-                                startActivity(intent);
+                        if(addDBA.equalsIgnoreCase("true")){
+                                if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
+                                    dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+                                } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
+                                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                                    intent.putExtra("FROM", "TRACKER");
+                                    intent.putExtra("TYPE", "EXIST");
+                                    startActivity(intent);
+                                }
+
+                        } else {
+                            if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
+                                if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
+                                    dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+                                } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
+                                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                                    intent.putExtra("FROM", "TRACKER");
+                                    intent.putExtra("TYPE", "EXIST");
+                                    startActivity(intent);
+                                }
                             }
                         }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -333,8 +345,16 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (review) {
-                        Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class);
-                        startActivity(intent);
+                        if(addDBA.equalsIgnoreCase("true")){
+                            startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
+                                    .putExtra("ADDBUSINESS", "true")
+                                    .putExtra("ADDDBA", "true"));
+                        } else {
+                            startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
+                                    .putExtra("ADDBUSINESS", "true")
+                                    .putExtra("ADDDBA", "false"));
+                        }
+
                     }
                 }
             });
@@ -385,7 +405,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             businessTrackerResponse = btResp;
                             businessIdentityVerificationViewModel.getCompanyInfo();
                             businessIdentityVerificationViewModel.getDBAInfo();
-
 //                            if(!btResp.getData().isCompanyInfo() || !btResp.getData().isDbaInfo()) {
 //                                businessIdentityVerificationViewModel.getCompanyInfo();
 //                            } else if(btResp.getData().isCompanyInfo() || !btResp.getData().isDbaInfo()) {
@@ -593,16 +612,25 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + new Gson().toJson(businessTrackerResponse));
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
+
             dbaInProgressIV.setVisibility(GONE);
             dbaStartTV.setVisibility(View.VISIBLE);
             dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
             caCompleteLL.setVisibility(View.VISIBLE);
             caIncompleteLL.setVisibility(View.GONE);
         } else {
-            dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
-            dbaStartTV.setVisibility(View.GONE);
-            caCompleteLL.setVisibility(View.GONE);
-            caIncompleteLL.setVisibility(View.VISIBLE);
+            if(addDBA.equalsIgnoreCase("true")){
+                caIncompleteLL.setVisibility(View.GONE);
+                dbaInProgressIV.setVisibility(GONE);
+                dbaStartTV.setVisibility(View.VISIBLE);
+                dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
+
+            } else {
+                dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
+                dbaStartTV.setVisibility(View.GONE);
+                caCompleteLL.setVisibility(View.GONE);
+                caIncompleteLL.setVisibility(View.VISIBLE);
+            }
         }
 
         if (addDBA.equalsIgnoreCase("true")) {
