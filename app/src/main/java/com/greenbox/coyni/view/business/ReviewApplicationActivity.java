@@ -86,7 +86,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private boolean isNextEnabled = false, isagreed = false;
     private CardView submitCv;
     private TextView mCompanyNameTx, mBusinessEntityTx, mEINTx, mEmailTx, mPhoneNumberTx, mAddressTx, mArticleDateTx, mEINDateTx, mW9DateTx;
-    private TextView mDbNameTx, mBusinessTypeTx, mTimeZoneTx, mWebsiteTx, mMonthlyProcVolumeTx, mHighTicketTx, mAverageTicketTx, mCustomerServiceEmailTx, mCustomerServicePhoneTx, mDbAddressLineTx, mDbFillingDateTx;
+    private TextView mDbNameTx, mBusinessTypeTx, mTimeZoneTx, mWebsiteTx, mMonthlyProcVolumeTx, mHighTicketTx, mAverageTicketTx, mCustomerServiceEmailTx, mCustomerServicePhoneTx, mDbAddressLineTx, mDbFillingDateTx, mWebsiteHeadTX;
     private TextView mPrivacyVno, mTermsVno, mMerchantsVno;
     private BankAccountsRecyclerAdapter accountsRecyclerAdapter;
     private List<com.greenbox.coyni.model.summary.Item> bankItems = new ArrayList<>();
@@ -271,6 +271,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         mDbNameTx = (TextView) findViewById(R.id.db_name);
         mBusinessTypeTx = (TextView) findViewById(R.id.business_type);
         mWebsiteTx = (TextView) findViewById(R.id.website);
+        mWebsiteHeadTX = (TextView) findViewById(R.id.tvWebsiteHead);
         mMonthlyProcVolumeTx = (TextView) findViewById(R.id.monthly_process_volume);
         mHighTicketTx = (TextView) findViewById(R.id.high_ticket);
         mAverageTicketTx = (TextView) findViewById(R.id.average_ticket);
@@ -568,6 +569,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 } else if (dbaInfo.getTimeZone().toString().equalsIgnoreCase("4")) {
                                     mTimeZoneTx.setText(R.string.HST);
                                 }
+                            }
+                            if (dbaInfo.getIdentificationType() == 8) {
+                                mWebsiteHeadTX.setText("Website (Optional)");
+                            } else if (dbaInfo.getIdentificationType() == 9) {
+                                mWebsiteHeadTX.setText("Website");
                             }
                             if (dbaInfo.getWebsite() != null) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
