@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 
@@ -21,9 +22,8 @@ public class BenificialOwnerDetails extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_benificial_owner_details);
-        Bundle bundle = getIntent().getExtras();
-        name = bundle.getString(Utils.boName, name);
-        position = bundle.getInt(Utils.position, position);
+        BOResp.BeneficialOwner beneficialOwner = (BOResp.BeneficialOwner) getIntent().getSerializableExtra(Utils.boName);
+       // position = bundle.getInt(Utils.position, position);
         initFields();
     }
 
