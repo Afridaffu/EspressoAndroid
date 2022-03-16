@@ -302,7 +302,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="change"
                         android:src="@drawable/ic_icon_awesome_pen" />
 

@@ -92,34 +92,34 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void updateTeamInfo(TeamRequest teamRequest, int teamMemberId) {
+    public void updateTeamMember(TeamRequest teamRequest, int teamMemberId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamResponseModel> mCall = apiService.updateTeamData(teamRequest, teamMemberId);
-            mCall.enqueue(new Callback<TeamResponseModel>() {
+            Call<TeamInfoAddModel> mCall = apiService.updateTeamMember(teamRequest, teamMemberId);
+            mCall.enqueue(new Callback<TeamInfoAddModel>() {
                 @Override
-                public void onResponse(Call<TeamResponseModel> call, Response<TeamResponseModel> response) {
+                public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
                     Log.d("UpdateTeamInfo", response.toString());
                     try {
                         if (response.isSuccessful()) {
-                            TeamResponseModel obj = response.body();
+                            TeamInfoAddModel obj = response.body();
 
-                            teamMutableLiveData.setValue(obj);
+                            teamUpdateMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<TeamResponseModel>() {
+                            Type type = new TypeToken<TeamInfoAddModel>() {
                             }.getType();
-                            TeamResponseModel errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            teamMutableLiveData.setValue(errorResponse);
+                            TeamInfoAddModel errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            teamUpdateMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        teamMutableLiveData.setValue(null);
+                        teamUpdateMutableLiveData.setValue(null);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<TeamResponseModel> call, Throwable t) {
+                public void onFailure(Call<TeamInfoAddModel> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     teamMutableLiveData.setValue(null);
                 }
@@ -129,10 +129,10 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void deleteTeam(Integer teamMemberId) {
+    public void deleteTeamMember(Integer teamMemberId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamInfoAddModel> mCall = apiService.deleteTeam(teamMemberId);
+            Call<TeamInfoAddModel> mCall = apiService.deleteTeamMember(teamMemberId);
             mCall.enqueue(new Callback<TeamInfoAddModel>() {
                 @Override
                 public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
@@ -165,10 +165,10 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void cancelTeam(Integer teamMemberId) {
+    public void cancelTeamMember(Integer teamMemberId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamInfoAddModel> mCall = apiService.cancelTeam(teamMemberId);
+            Call<TeamInfoAddModel> mCall = apiService.cancelTeamMember(teamMemberId);
             mCall.enqueue(new Callback<TeamInfoAddModel>() {
                 @Override
                 public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
@@ -200,7 +200,7 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void addTeam(TeamRequest teamRequest) {
+    public void addTeamMember(TeamRequest teamRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<TeamInfoAddModel> mCall = apiService.addTeamMember(teamRequest);

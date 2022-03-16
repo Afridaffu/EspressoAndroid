@@ -30,6 +30,7 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
@@ -108,10 +109,36 @@ public class EditTeamMember extends BaseActivity {
         editLNameTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
         editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
-        editFNameET.setText(firstName);
-        editLNameET.setText(lastName);
-        editEmailET.setText(emailAddress);
-        editPhoneET.setText(phoneNumber);
+
+        if (firstName != null
+                && !firstName.equals("")) {
+            editFNameET.setText(firstName);
+            Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
+            isFirstName = true;
+        } else {
+            isFirstName = false;
+        }
+        if (lastName != null
+                && !lastName.equals("")) {
+            editLNameET.setText(lastName);
+            Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
+            isLastName = true;
+        } else {
+            isLastName = false;
+        }
+        if (emailAddress != null
+                && !emailAddress.equals("")) {
+            editEmailET.setText(emailAddress);
+            Utils.setUpperHintColor(editEmailTil, getResources().getColor(R.color.primary_black));
+            isEmail = true;
+        } else {
+            isEmail = false;
+        }
+        if (phoneNumber != null
+                && !phoneNumber.equals("")) {
+            editPhoneET.setText(phoneNumber);
+        }
+
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
 
         sendCV = findViewById(R.id.sendCV);
@@ -397,7 +424,7 @@ public class EditTeamMember extends BaseActivity {
     }
 
     public void teamInfoAPICall(TeamRequest teamRequest) {
-        teamViewModel.updateTeamInfo(teamRequest, teamMemberId);
+        teamViewModel.updateTeamMember(teamRequest, teamMemberId);
     }
 
     public TeamRequest prepareRequest() {

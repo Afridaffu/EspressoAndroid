@@ -138,7 +138,7 @@ public class TeamMemberActivity extends BaseActivity {
             }
         });
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
-        txName.setText(firstName + "" + lastName);
+        txName.setText(firstName + " " + lastName);
         txRole.setText(role);
         txStatus.setText(status);
         txImageName.setText(imageName);
@@ -211,7 +211,7 @@ public class TeamMemberActivity extends BaseActivity {
             public void onClick(View v) {
                 try {
                     showProgressDialog();
-                    teamViewModel.cancelTeam(teamMemberId);
+                    teamViewModel.cancelTeamMember(teamMemberId);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -246,7 +246,7 @@ public class TeamMemberActivity extends BaseActivity {
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(getString(R.string.yes))) {
                     customConfirmationDialog.dismiss();
-                    teamViewModel.deleteTeam(teamMemberId);
+                    teamViewModel.deleteTeamMember(teamMemberId);
                 }
             }
         });

@@ -101,7 +101,13 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
         addNewTeamMemberActivity = this;
         backBtnLL = findViewById(R.id.backBtnLL);
-        backBtnLL.setOnClickListener(v -> onBackPressed());
+        backBtnLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.hideKeypad(AddNewTeamMemberActivity.this);
+                onBackPressed();
+            }
+        });
         editFNameTil = findViewById(R.id.fNameTIL);
         editLNameTil = findViewById(R.id.lNameTIL);
         editEmailTil = findViewById(R.id.emailIdTIL);
@@ -416,7 +422,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     }
 
     public void teamInfoAddAPICall(TeamRequest teamRequest) {
-        teamViewModel.addTeam(teamRequest);
+        teamViewModel.addTeamMember(teamRequest);
     }
 
     public void addTeam() {
