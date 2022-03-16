@@ -290,7 +290,9 @@
     <string name="dashboard"> Dashboard</string>
     <string name="profile"> Profile</string>
     <string name="quick_menu">Quick Menu</string>
-    <string name="reserverule"> Reserve Rule: [%] per Sale Order with a 90 day rolling\nperiod.</string>
+    <string name="reserverole">Reserve Rule:</string>
+    <string name="rollingperiod">rolling period.</string>
+    <string name="reserverule"> [%] per Sale Order with a 90 day</string>
     <string name="a_u_pay">Your active batch is set to automatically pay.</string>
     <string name="merchant_balance">Merchant Balance = Net volume processed since your\nlast batch + Reserve Balance</string>
     <string name="business_type">Business Type</string>

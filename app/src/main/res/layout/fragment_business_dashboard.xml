@@ -33,8 +33,8 @@
                     android:layout_height="@dimen/_38sdp"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/circle_bg"
-                    android:padding="@dimen/_2sdp"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:padding="@dimen/_2sdp">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/iv_user_icon_CV"
@@ -139,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -279,10 +279,10 @@
                                 </LinearLayout>
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="@dimen/_55sdp"
+                                    android:layout_height="@dimen/_60sdp"
                                     android:layout_gravity="center"
-                                    android:src="@drawable/ic_identity_verify" />
+                                    android:src="@drawable/aditional" />
 
                             </LinearLayout>
                         </LinearLayout>
@@ -315,9 +315,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_14sdp"
-                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginHorizontal="@dimen/_10sdp"
                                 android:background="@color/viewcolor" />
 
                             <LinearLayout
@@ -432,9 +431,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_14sdp"
-                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginHorizontal="@dimen/_10sdp"
                                 android:background="@color/viewcolor" />
 
                             <LinearLayout
@@ -524,7 +522,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_18sdp"
+                                android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
 
@@ -612,7 +610,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_18sdp"
+                                android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
 
@@ -698,7 +696,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_18sdp"
+                                android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
 
@@ -784,9 +782,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_18sdp"
-                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginHorizontal="@dimen/_10sdp"
                                 android:background="@color/viewcolor" />
 
                             <TextView
@@ -839,9 +836,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_14sdp"
-                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginHorizontal="@dimen/_10sdp"
                                 android:background="@color/viewcolor" />
 
                             <LinearLayout
@@ -1067,10 +1063,11 @@
                             </androidx.cardview.widget.CardView>
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_22sdp"
+                                android:layout_weight="1"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -1078,22 +1075,27 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:text="06/23/2021 @ 2:20am"
+
                                     android:textColor="@color/dark_grey"
                                     android:textSize="@dimen/_10ssp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_5sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:text="@string/manual"
-                                    android:layout_marginStart="@dimen/_5sdp"
                                     android:textColor="@color/primary_green"
                                     android:textSize="@dimen/_10ssp" />
-
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="right"
+                                    android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_43sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="76,000.00"
                                     android:textColor="@color/primary_black"
@@ -1106,21 +1108,22 @@
                                     android:text="@string/currency"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
+                                android:layout_weight="1"
                                 android:orientation="horizontal">
 
                                 <TextView
@@ -1130,12 +1133,17 @@
                                     android:text="06/23/2021 @ 6:00am"
                                     android:textColor="@color/dark_grey"
                                     android:textSize="@dimen/_10ssp" />
-
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="right"
+                                    android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_75sdp"
                                     android:fontFamily="@font/opensans_bold"
+                                    android:gravity="end"
                                     android:text="199,000.00"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11sdp" />
@@ -1147,20 +1155,21 @@
                                     android:text="@string/currency"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
+                                android:layout_weight="1"
                                 android:layout_marginTop="@dimen/_7sdp"
                                 android:orientation="horizontal">
 
@@ -1175,7 +1184,111 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_81sdp"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:text="@string/manual"
+                                    android:textColor="@color/primary_green"
+                                    android:textSize="@dimen/_10ssp" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:text="1,900.00"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_11ssp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="@string/currency"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_8ssp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_marginTop="@dimen/_7sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
+                                android:background="@color/blue_light" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
+                                android:layout_marginTop="@dimen/_7sdp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="06/23/2021 @ 11:59pm"
+                                    android:textColor="@color/dark_grey"
+                                    android:textSize="@dimen/_10ssp" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:text="20.00"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_11ssp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="@string/currency"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_8ssp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_1sdp"
+                                android:layout_marginTop="@dimen/_7sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
+                                android:background="@color/blue_light" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
+                                android:layout_marginTop="@dimen/_7sdp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_semibold"
+                                    android:text="06/23/2021 @ 11:59pm"
+                                    android:textColor="@color/dark_grey"
+                                    android:textSize="@dimen/_10ssp" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="3,300.00"
                                     android:textColor="@color/primary_black"
@@ -1189,106 +1302,13 @@
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="06/23/2021 @ 11:59pm"
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="@string/manual"
-                                    android:layout_marginStart="@dimen/_5sdp"
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_43sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text="1,900.00"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/currency"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
-
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="06/23/2021 @ 11:59pm"
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_96sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text="20.00"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="@string/currency"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_8ssp" />
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
+                                android:layout_marginHorizontal="@dimen/_10sdp"
+                                android:background="@color/viewcolor" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1372,13 +1392,40 @@
                                     android:textSize="@dimen/_10ssp" />
                             </LinearLayout>
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_11sdp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:fontFamily="@font/opensans_regular"
+                                    android:lineHeight="@dimen/_10sdp"
+                                    android:text="@string/reserverole"
+                                    android:textColor="@color/dark_grey"
+                                    android:textSize="@dimen/_10ssp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:lineHeight="@dimen/_10sdp"
+                                    android:text="@string/reserverule"
+                                    android:textColor="@color/dark_grey"
+                                    android:textSize="@dimen/_10ssp" />
+                            </LinearLayout>
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_10sdp"
-                                android:fontFamily="@font/opensans_regular"
+                                android:fontFamily="@font/opensans_bold"
                                 android:lineHeight="@dimen/_10sdp"
-                                android:text="@string/reserverule"
+                                android:text="@string/rollingperiod"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_10ssp" />
 
@@ -1499,9 +1546,9 @@
 
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_11sdp"
                                 android:orientation="horizontal">
 
@@ -1513,11 +1560,15 @@
                                     android:textColor="@color/dark_grey"
                                     android:textSize="@dimen/_10ssp" />
 
-
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_142sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="120.00"
                                     android:textColor="@color/primary_black"
@@ -1531,19 +1582,19 @@
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
+                            </LinearLayout>
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
                                 android:orientation="horizontal">
 
@@ -1554,11 +1605,15 @@
                                     android:text="06/23/2021"
                                     android:textColor="@color/dark_grey"
                                     android:textSize="@dimen/_10ssp" />
-
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_142sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="452.00"
                                     android:textColor="@color/primary_black"
@@ -1572,19 +1627,18 @@
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
-
+                            </LinearLayout>
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
                                 android:orientation="horizontal">
 
@@ -1595,11 +1649,15 @@
                                     android:text="06/23/2021"
                                     android:textColor="@color/dark_grey"
                                     android:textSize="@dimen/_10ssp" />
-
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_142sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="120.00"
                                     android:textColor="@color/primary_black"
@@ -1613,19 +1671,18 @@
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
-
+                            </LinearLayout>
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
                                 android:orientation="horizontal">
 
@@ -1640,17 +1697,21 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_5sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:text="@string/manual"
-                                    android:layout_marginStart="@dimen/_5sdp"
                                     android:textColor="@color/primary_green"
                                     android:textSize="@dimen/_10ssp" />
 
-
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_102sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="120.00"
                                     android:textColor="@color/primary_black"
@@ -1664,19 +1725,19 @@
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
+                            </LinearLayout>
 
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
 
                             <LinearLayout
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
                                 android:orientation="horizontal">
 
@@ -1687,11 +1748,15 @@
                                     android:text="06/23/2021"
                                     android:textColor="@color/dark_grey"
                                     android:textSize="@dimen/_10ssp" />
-
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_142sdp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="120.00"
                                     android:textColor="@color/primary_black"
@@ -1705,13 +1770,12 @@
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_8ssp" />
                             </LinearLayout>
-
+                            </LinearLayout>
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginEnd="@dimen/_11sdp"
+                                android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
 
                             <TextView
