@@ -152,75 +152,78 @@
                         android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/linearLayoutnew"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_60sdp"
-                            android:layout_margin="@dimen/_10ssp"
-                            android:gravity="center"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical">
 
                             <LinearLayout
+                                android:id="@+id/linearLayoutnew"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/ll_values"
-                                android:gravity="center_horizontal"
-                                android:layout_gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:layout_height="@dimen/_60sdp"
+                                android:background="@color/default_red"
+                                android:gravity="center_horizontal|bottom"
+                                android:orientation="vertical">
 
-                                <TextView
-                                    android:id="@+id/tvCurrency"
+                                <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="top"
-                                    android:layout_marginEnd="@dimen/_5sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text="$"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_15ssp"
-                                    android:visibility="gone" />
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/ll_large"
+                                    android:visibility="visible"
+                                    android:orientation="horizontal">
 
-                                <EditText
-                                    android:id="@+id/payrequestET"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:background="@color/white"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:gravity="center_vertical"
-                                    android:hint="0.00"
-                                    android:inputType="numberDecimal"
-                                    android:maxLength="@string/maxlengthamount"
-                                    android:textColor="@color/primary_black"
-                                    android:textColorHint="@color/light_gray"
-                                    android:textCursorDrawable="@drawable/cursorcolor"
-                                    android:textSize="@dimen/_53sdp" />
+                                    <TextView
+                                        android:id="@+id/tvCurrency"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="top"
+                                        android:layout_marginEnd="@dimen/_5sdp"
+                                        android:fontFamily="@font/opensans_bold"
+                                        android:text="$"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_15ssp"
+                                        android:visibility="visible" />
 
-                                <TextView
-                                    android:id="@+id/coyniTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="bottom"
-                                    android:layout_marginBottom="@dimen/_2sdp"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text=" CYN"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp"
-                                    android:visibility="visible">
+                                    <EditText
+                                        android:id="@+id/payrequestET"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:background="@color/default_red"
+                                        android:fontFamily="@font/opensans_bold"
+                                        android:gravity="center_vertical"
+                                        android:hint="0.00"
+                                        android:inputType="numberDecimal"
+                                        android:maxLength="@string/maxlengthamount"
+                                        android:textColor="@color/primary_black"
+                                        android:textColorHint="@color/light_gray"
+                                        android:textCursorDrawable="@drawable/cursorcolor"
+                                        android:textSize="@dimen/_43sdp"
+                                        android:visibility="visible"/>
 
-                                </TextView>
+                                    <TextView
+                                        android:id="@+id/coyniTV"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_gravity="bottom"
+                                        android:layout_toEndOf="@+id/payrequestET"
+                                        android:fontFamily="@font/opensans_bold"
+                                        android:text=" CYN"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_12ssp"
+                                        android:visibility="visible"/>
 
-                                <ImageView
-                                    android:id="@+id/imgConvert"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="bottom"
-                                    android:layout_marginStart="@dimen/_5sdp"
-                                    android:layout_marginBottom="@dimen/_5sdp"
-                                    android:src="@drawable/ic_download" />
+                                    <ImageView
+                                        android:id="@+id/imgConvert"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="bottom"
+                                        android:layout_marginStart="@dimen/_5sdp"
+                                        android:src="@drawable/ic_download" />
+                                </LinearLayout>
+
                             </LinearLayout>
-
                         </LinearLayout>
-
 
                         <!--                        <RelativeLayout-->
                         <!--                            android:id="@+id/payLL"-->

@@ -126,9 +126,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     convertUSDValue();
                     if(editable.length()==5 || editable.length()==6){
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                        lp.setMargins(0, 40, 0, 0);
-                        payRequestET.setLayoutParams(lp);
+//                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//                        lp.setMargins(0, 0, 0, 3);
+//                        coyniTV.setLayoutParams(lp);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if(editable.length()==7 || editable.length()==8){
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
@@ -906,16 +906,14 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
     private void changeTextSize(String editable) {
         try {
-            InputFilter[] FilterArray = new InputFilter[1];
+            //InputFilter[] FilterArray = new InputFilter[1];
             if(editable.length()==5 || editable.length()==6){
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
             } else if(editable.length()==7 || editable.length()==8){
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-
             }else if(editable.length()==9){
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
             }
-
 //            if (editable.length() > 12) {
 //                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
 //                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
