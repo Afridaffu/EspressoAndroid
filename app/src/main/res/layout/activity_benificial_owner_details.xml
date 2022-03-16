@@ -8,40 +8,40 @@
     android:orientation="vertical"
     tools:context=".view.business.BenificialOwnerDetails">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottomradius"
-        android:paddingLeft="@dimen/_21sdp"
-        android:paddingTop="@dimen/_20sdp">
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_21sdp"
+        android:paddingBottom="@dimen/_12sdp"
+        android:paddingTop="@dimen/_45sdp">
 
         <LinearLayout
             android:id="@+id/backLL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/_44sdp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/back_button"
                 android:src="@drawable/ic_back" />
+
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/intentName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/_20sdp"
             android:fontFamily="@font/opensans_semibold"
+            android:layout_marginEnd="@dimen/_50sdp"
+            android:textAlignment="center"
             android:text="Beneficial Owners"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
-    </RelativeLayout>
+
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -141,7 +141,7 @@
                         android:layout_centerVertical="true"
                         android:text="@string/ownership_title"
                         android:textColor="@color/dark_gray"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_11ssp" />
                 </LinearLayout>
 
             </RelativeLayout>
