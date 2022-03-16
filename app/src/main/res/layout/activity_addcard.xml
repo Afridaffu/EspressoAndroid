@@ -96,7 +96,7 @@
                         android:id="@+id/tvCardMsg"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_semibold"
+                        android:fontFamily="@font/opensans_regular"
                         android:text="Please enter card details"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
@@ -484,6 +484,7 @@
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <LinearLayout
                         android:id="@+id/address2ErrorLL"
                         android:layout_width="match_parent"
@@ -508,6 +509,7 @@
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10ssp" />
                     </LinearLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/etlCity"
                         style="@style/TextInputLayout.OutlinedBox"
@@ -525,6 +527,7 @@
                             android:id="@+id/etCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
@@ -538,8 +541,7 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp"
-                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"/>
+                            android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -673,6 +675,7 @@
                             android:id="@+id/etZipCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:digits="1234567890"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionDone"
@@ -686,7 +689,6 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>

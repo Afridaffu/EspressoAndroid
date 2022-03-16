@@ -23,6 +23,7 @@ public class ApplicationCancelledActivity extends BaseActivity {
         backLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_OK);
                 finish();
             }
         });
@@ -33,6 +34,11 @@ public class ApplicationCancelledActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
     private void initFields() {

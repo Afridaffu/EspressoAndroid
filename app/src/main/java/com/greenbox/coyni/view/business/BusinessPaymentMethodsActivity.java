@@ -566,15 +566,16 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                     tvSignetCount.setTextColor(getColor(R.color.light_gray));
                     tvSignetMsg.setTextColor(getColor(R.color.light_gray));
                     imgSignetArrow.setColorFilter(getColor(R.color.light_gray));
-                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
+                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
+                    imgSignetLogo.setColorFilter(getColor(R.color.dark_grey));
                 } else {
                     tvSignetError.setVisibility(View.GONE);
                     tvSignetHead.setTextColor(getColor(R.color.primary_black));
                     tvSignetCount.setTextColor(getColor(R.color.dark_grey));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
+                    imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
 //                    imgSignetArrow.clearColorFilter();
                     imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
-                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card);
 
                 }
             }
