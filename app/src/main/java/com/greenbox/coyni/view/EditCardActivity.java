@@ -149,7 +149,15 @@ public class EditCardActivity extends AppCompatActivity {
             etlCard.enableHint();
             etlCard.setFrom("EDIT_CARD");
             if (selectedCard != null) {
-                etName.setText(Utils.capitalize(selectedCard.getName()));
+                String name = "";
+                if( selectedCard.getName() != null) {
+                    if (selectedCard.getName().length()>=21) {
+                        name = selectedCard.getName().substring(0, 21) + "...";
+                    } else {
+                        name = selectedCard.getName();
+                    }
+                }
+                etName.setText(Utils.capitalize(name));
                 etlCard.setText(selectedCard.getFirstSix().replace(" ", "").replaceAll("(.{4})", "$1 ").trim() + " ****" + selectedCard.getLastFour());
                 etExpiry.setText(selectedCard.getExpiryDate());
                 etAddress1.setText(selectedCard.getAddressLine1());
@@ -547,6 +555,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 isZipcode = false;
                             }
                         } else {
+                            Utils.shwForcedKeypad(EditCardActivity.this);
                             etZipcode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
@@ -580,7 +589,7 @@ public class EditCardActivity extends AppCompatActivity {
                             expiryErrorLL.setVisibility(GONE);
                         } else {
                             isExpiry = false;
-                            expiryErrorLL.setVisibility(VISIBLE);
+                            expiryErrorLL.setVisibility(GONE);
                             expiryErrorTV.setText("Please enter a valid Expiry Date");
                         }
                     } else {

@@ -267,7 +267,7 @@ public class EditTeamMember extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     String str = editFNameET.getText().toString();
-                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                    if (str.length() > 0 && str.toString().trim().length() == 0) {
                         editFNameET.setText("");
                         editFNameET.setSelection(editFNameET.getText().length());
                     } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
@@ -279,6 +279,7 @@ public class EditTeamMember extends BaseActivity {
                         editFNameET.setText("");
                         editFNameET.setSelection(editFNameET.getText().length());
                     }
+
 
                 } catch (Exception ex) {
                     ex.printStackTrace();

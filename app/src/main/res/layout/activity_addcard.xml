@@ -392,7 +392,6 @@
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/etlAddress1"
                         style="@style/TextInputLayout.OutlinedBox"
@@ -539,7 +538,8 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/_12ssp"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -686,6 +686,7 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:textSize="@dimen/_12ssp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -694,7 +695,6 @@
                         android:id="@+id/zipErrorLL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/etlName"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:gravity="center"
