@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.zxing.Reader;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -78,6 +79,7 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -105,7 +107,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     Bitmap bitmap;
     View divider;
     Dialog setAmountDialog;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L,mLastClickTimeQa = 0L;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     ImageView idIVQrcode, imageShare, copyRecipientAddress, albumIV;
     ImageView closeBtnScanCode, closeBtnScanMe, imgProfile;
@@ -126,7 +128,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     CustomKeyboard ctKey;
     public static ScanActivity scanActivity;
     EditText setAmount;
-
+    private UserDetails details;
     //Saved To Album Layout Comp..
     TextView tvSaveUserName, saveProfileTitle, saveSetAmount;
     ImageView savedImageView;
@@ -142,6 +144,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     PayViewModel payViewModel;
     CoyniViewModel coyniViewModel;
     TransactionLimitResponse objResponse;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private String businessTypeValue="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +210,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     private void initialization() {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             dbHandler = DatabaseHandler.getInstance(ScanActivity.this);
             objMyApplication = (MyApplication) getApplicationContext();
             closeBtnScanCode = findViewById(R.id.closeBtnSC);
@@ -250,6 +255,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
             avaBal = objMyApplication.getGBTBalance();
+            businessIdentityVerificationViewModel.getBusinessType();
             calculateFee("10");
 
             if (Utils.checkInternet(ScanActivity.this)) {
@@ -395,10 +401,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeQa < 2000) {
                             return;
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
+                        mLastClickTimeQa = SystemClock.elapsedRealtime();
 
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
@@ -592,11 +598,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 //                                i.putExtra("amount", strQRAmount);
 //                                i.putExtra("screen", "scan");
 //                                startActivity(i);
+                                details=userDetails;
                                 String amount = strQRAmount;
                                 dialog = Utils.showProgressDialog(ScanActivity.this);
                                 cynValue = Double.parseDouble(strQRAmount.toString().trim().replace(",", ""));
                                 calculateFee(Utils.USNumberFormat(cynValue));
-                                showPayToMerchantWithAmountDialog(amount, userDetails, avaBal);
+                                businessIdentityVerificationViewModel.getBusinessType();
+                                showPayToMerchantWithAmountDialog(amount, userDetails,avaBal,businessTypeValue);
                             }
                         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT && userDetails.getData().getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             //ERROR MESSAGE DIsPLAY
@@ -710,6 +718,24 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             if (transactionLimitResponse != null) {
                 objResponse = transactionLimitResponse;
                 setDailyWeekLimit(objResponse.getData());
+            }
+        });
+
+        businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+            @Override
+            public void onChanged(BusinessTypeResp businessTypeResp) {
+                if (businessTypeResp != null && businessTypeResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                    for (int i = 0; i < businessTypeResp.getData().size(); i++) {
+                        try {
+                            if (details.getData().getBusinessType().toLowerCase().trim().equals(businessTypeResp.getData().get(i).getKey().toLowerCase().trim())) {
+                                businessTypeValue =businessTypeResp.getData().get(i).getValue();
+                                break;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
         });
     }
@@ -1152,10 +1178,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     public void setAmountClick() {
         try {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQa < 2000) {
                 return;
             }
-            mLastClickTime = SystemClock.elapsedRealtime();
+            mLastClickTimeQa = SystemClock.elapsedRealtime();
             if (validation()) {
                 if (setAmountDialog != null) {
                     setAmountDialog.dismiss();
@@ -1175,15 +1201,18 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     }
 
     private Boolean validation() {
-        Boolean value = true;
+        Boolean value = false;
         try {
             String strPay = setAmount.getText().toString().trim().replace("\"", "");
             if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", ScanActivity.this, "Oops!", "");
-            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) <= 0.00) {
                 value = false;
-                Utils.displayAlert("Amount should be grater than zero.", ScanActivity.this, "Oops!", "");
+                Utils.displayAlert("Amount should be greater than zero.", ScanActivity.this, "Oops!", "");
+            }
+            else {
+                value = true;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1296,10 +1325,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance,String btypeValue) {
         isQRScan = false;
         mcodeScanner.stopPreview();
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance,btypeValue);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {

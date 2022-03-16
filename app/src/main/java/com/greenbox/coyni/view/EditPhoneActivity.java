@@ -100,8 +100,8 @@ public class EditPhoneActivity extends AppCompatActivity {
             b_contactUsTV = findViewById(R.id.b_contactUsTV);
 
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                findViewById(R.id.editPhoneSV).setVisibility(View.VISIBLE);
-                findViewById(R.id.business_topLL).setVisibility(View.GONE);
+                findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
+                findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
             }
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
@@ -221,12 +221,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     private void callSendPhoneOTPAPI() {
         try {
             currentPhoneNumber = currentPhoneET.getText().toString().substring(1, 4) + currentPhoneET.getText().toString().substring(6, 9) + currentPhoneET.getText().toString().substring(10, currentPhoneET.getText().length());
-            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                newPhoneNumber = newPhoneET.getText().toString().substring(1, 4) + newPhoneET.getText().toString().substring(6, 9) + newPhoneET.getText().toString().substring(10, newPhoneET.getText().length());
-            }
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
-            }
             UpdatePhoneRequest updatePhoneRequest = new UpdatePhoneRequest();
             updatePhoneRequest.setCurrentPhoneNumber(currentPhoneNumber);
             updatePhoneRequest.setCurrentcountryCode(Utils.getStrCCode());
@@ -263,7 +258,6 @@ public class EditPhoneActivity extends AppCompatActivity {
             public void onChanged(UpdatePhoneResponse updatePhoneResponse) {
                 try {
                     dialog.dismiss();
-                    if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                         if (updatePhoneResponse != null && updatePhoneResponse.getStatus().toLowerCase().equals("success")) {
                             myApplicationObj.setUpdatePhoneResponse(updatePhoneResponse);
                             Utils.hideKeypad(EditPhoneActivity.this);
@@ -272,39 +266,13 @@ public class EditPhoneActivity extends AppCompatActivity {
                                     .putExtra("OTP_TYPE", "OTP")
                                     .putExtra("IS_OLD_PHONE", "true")
                                     .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
-                                    .putExtra("NEW_PHONE_MASKED", newPhoneET.getText().toString().trim())
+                                    .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
                                     .putExtra("OLD_PHONE", currentPhoneNumber)
                                     .putExtra("NEW_PHONE", newPhoneNumber));
                         } else {
                             Utils.hideSoftKeyboard(EditPhoneActivity.this);
                             Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "", updatePhoneResponse.getError().getFieldErrors().get(0));
                         }
-                    }
-                    if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                        if (updatePhoneResponse != null && updatePhoneResponse.getStatus().toLowerCase().equals("success")) {
-                            try {
-                                myApplicationObj.setUpdatePhoneResponse(updatePhoneResponse);
-                                Utils.hideKeypad(EditPhoneActivity.this);
-                                startActivity(new Intent(EditPhoneActivity.this, OTPValidation.class)
-                                        .putExtra("screen", "EditPhone")
-                                        .putExtra("OTP_TYPE", "OTP")
-                                        .putExtra("IS_OLD_PHONE", "true")
-                                        .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
-                                        .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
-                                        .putExtra("OLD_PHONE", currentPhoneNumber)
-                                        .putExtra("NEW_PHONE", newPhoneNumber));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            try {
-                                Utils.hideSoftKeyboard(EditPhoneActivity.this);
-                                Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "", updatePhoneResponse.getError().getFieldErrors().get(0));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -333,12 +301,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                newPhoneET.setFocus();
-            }
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 b_newPhoneET.setFocus();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
