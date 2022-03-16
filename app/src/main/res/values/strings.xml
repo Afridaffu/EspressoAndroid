@@ -198,6 +198,9 @@
     <string name="bank_delete_keep">Keep</string>
     <string name="bank_delete_title">Delete Bank Account</string>
 
+    <string name="email_updated">Email Updated</string>
+    <string name="phone_number_updated">Phone number updated</string>
+
     <string name="currency">CYN</string>
     <string name="edit"><u>Edit</u></string>
     <string name="reference_id_hyper"><u>[Reference ID (hyper</u></string>
@@ -557,7 +560,7 @@
     <string name="filter_button">filter Button</string>
     <string name="total_available_funds">Total Available Funds</string>
     <string name="recent_token_transactions">Recent Token Transactions</string>
-    <string name="identify_verification_under_review">Identify Verification\nUnder Review</string>
+    <string name="identify_verification_under_review">Identity Verification\nUnder Review</string>
     <string name="name_on_signet_account">Name on Signet Account</string>
 
     <string name="purchase_amount_processing_fee">(Purchase Amount + Processing Fee)</string>

@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_12sdp"
-                    android:src="@drawable/ic_credit_debit_card" />
+                    android:src="@drawable/ic_signetactive" />
 
                 <LinearLayout
                     android:id="@+id/layoutSDetails"
