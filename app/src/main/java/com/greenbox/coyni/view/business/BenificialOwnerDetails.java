@@ -23,16 +23,7 @@ public class BenificialOwnerDetails extends BaseActivity {
         setContentView(R.layout.activity_benificial_owner_details);
         Bundle bundle = getIntent().getExtras();
         name = bundle.getString(Utils.boName, name);
-        percentage = bundle.getInt(String.valueOf(Utils.boOwnershipPercentage), percentage);
-        address = bundle.getString(Utils.boAddress, address);
-        address1 = bundle.getString(Utils.boAdress1, address1);
-        city = bundle.getString(Utils.boCity, city);
-        state = bundle.getString(Utils.boState, state);
-        country = bundle.getString(Utils.boCountry, country);
-        zipcode = bundle.getString(Utils.boZipCode, zipcode);
-        dob = bundle.getString(Utils.boDob, dob);
-        ssn = bundle.getString(Utils.boSSN, ssn);
-        position = bundle.getInt(String.valueOf(Utils.position), position);
+        position = bundle.getInt(Utils.position, position);
         initFields();
     }
 

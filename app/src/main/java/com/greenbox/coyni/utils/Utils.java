@@ -247,7 +247,7 @@ public class Utils {
     public static final String teamMemberId = "TeamMemberId";
 
     public static final String boName = "BOName";
-    public static final int boOwnershipPercentage = 50;
+    public static final String boOwnershipPercentage = "BOPercentage";
     public static final String boAddress = "BoAddress";
     public static final String boAdress1="BoAddress1";
     public static final String boCity="BoCity";
@@ -265,7 +265,7 @@ public class Utils {
     public static final int companyId = 0;
 
 
-    public static final int position = 0;
+    public static final String position = "Position";
     public static final int cPP = 0;
     public static final int cTOS = 1;
     public static final int mPP = 8;

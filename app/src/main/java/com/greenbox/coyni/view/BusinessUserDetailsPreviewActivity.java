@@ -322,26 +322,12 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")) {
                         if (!dbaInfoResp.getData().getEmail().equalsIgnoreCase(value.getText().toString())) {
                             Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
-                            new Handler().postDelayed(() -> {
-                                try {
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }, 2000);
                         }
                         value.setText(dbaInfoResp.getData().getEmail());
                     } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneDBA")) {
                         String phoneNumber = "(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
                         if (!phoneNumber.equalsIgnoreCase(value.getText().toString())) {
                             Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
-                            new Handler().postDelayed(() -> {
-                                try {
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }, 2000);
                         }
                         value.setText(phoneNumber);
                     }
@@ -357,26 +343,12 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")) {
                         if (!companyInfoResp.getData().getEmail().equals(value.getText().toString())) {
                             Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
-                            new Handler().postDelayed(() -> {
-                                try {
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }, 2000);
                         }
                         value.setText(companyInfoResp.getData().getEmail());
                     } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")) {
                         String phoneNumber = "(" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
                         if (!phoneNumber.equals(value.getText().toString())) {
                             Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
-                            new Handler().postDelayed(() -> {
-                                try {
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }, 2000);
                         }
                         value.setText(phoneNumber);
                     }
