@@ -17,6 +17,7 @@ import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
+import com.greenbox.coyni.view.business.PayToMerchantActivity;
 
 public class CustomKeyboard extends LinearLayout implements View.OnClickListener {
 
@@ -168,6 +169,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                             break;
                         case "receivables":
                             BusinessReceivePaymentActivity.businessreceivePaymentActivity.setAmountClick();
+                            break;
+                        case "payToMerch":
+                            PayToMerchantActivity.payToMerchantActivity.payAmountClick();
                             break;
                     }
 

@@ -85,7 +85,6 @@ public class BusinessDashboardActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void onDashboardTabSelected(View view) {
@@ -304,7 +303,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 isTabsEnabled = true;
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-                isTabsEnabled = true;
+                isTabsEnabled = false;
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isTabsEnabled = true;
             }
@@ -376,10 +375,13 @@ public class BusinessDashboardActivity extends BaseActivity {
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 try {
                     if (businessWalletResponse != null) {
-                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                        if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0 &&
-                                businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
-                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+//                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                        if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
+                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else {
+                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                            }
                         }
                     }
                 } catch (Exception ex) {

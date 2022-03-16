@@ -40,9 +40,6 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.BusinessDashboardActivity;
-import com.greenbox.coyni.view.business.BusinessProfileActivity;
-import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -350,7 +347,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                         try {
 //                                            launchDashboard();
                                             dbHandler.clearAllTables();
-                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
+                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
                                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(i);
                                         } catch (Exception ex) {

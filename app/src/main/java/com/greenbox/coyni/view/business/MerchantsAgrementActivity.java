@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,15 +36,15 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class MerchantsAgrementActivity extends BaseActivity {
-    public CardView doneCV,signaturDoneCV;
+    public CardView doneCV, signaturDoneCV;
     LinearLayout signatureEditLl;
     ImageView mIVSignature, canceledIV;
     TextView savedText;
     BusinessDashboardViewModel businessDashboardViewModel;
-    DashboardViewModel dashboardViewModel;
     private String filePath = null;
     private boolean isSignatureCaptured = false;
     private WebView webView;
+    Long mLastClickTimeQA = 0L;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -61,21 +62,34 @@ public class MerchantsAgrementActivity extends BaseActivity {
         savedText = findViewById(R.id.savedtextTV);
         canceledIV = findViewById(R.id.canceledIV);
 
-        webView =(WebView)findViewById(R.id.webView);
+        webView = (WebView) findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webView.invalidate();
         webSettings.setJavaScriptEnabled(true);
         webView.setVerticalScrollBarEnabled(true);
         String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
         webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
-
+        showProgressDialog();
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                try {
+                    if (view.getTitle().equals("")) {
+                        view.reload();
+                    } else {
+                        dismissDialog();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
         canceledIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
 
 
         doneCV.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +133,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 this.filePath = filePath;
                 Bitmap myBitmap = BitmapFactory.decodeFile(targetFile.getAbsolutePath());
                 doneCV.setVisibility(View.VISIBLE);
-                savedText.setVisibility(View.VISIBLE);
+                savedText.setVisibility(View.INVISIBLE);
                 LogUtils.v(TAG, "file size " + myBitmap.getByteCount());
                 mIVSignature.setImageBitmap(myBitmap);
                 isSignatureCaptured = true;
@@ -159,13 +173,13 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 try {
                     deleteTemporarySignatureFile();
                     dismissDialog();
-                    businessDashboardViewModel.updateSignedAgree();
+                    //businessDashboardViewModel.updateSignedAgree();
                     if (signedAgreementResponse != null) {
                         if (signedAgreementResponse.getStatus() != null
                                 && signedAgreementResponse.getStatus().equalsIgnoreCase("Success")) {
                             //If require need to show the Toast to the User.
                             //finish();
-                            //businessDashboardViewModel.updateSignedAgree();
+                            businessDashboardViewModel.updateSignedAgree();
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
                             if (signedAgreementResponse.getError() != null
@@ -188,25 +202,23 @@ public class MerchantsAgrementActivity extends BaseActivity {
         businessDashboardViewModel.getUpdateSignAgreementsResponseMutableLiveData().observe(this, new Observer<UpdateSignAgreementsResponse>() {
             @Override
             public void onChanged(UpdateSignAgreementsResponse updateSignAgreementsResponse) {
-            try{
-                if(updateSignAgreementsResponse!= null){
-                    if(updateSignAgreementsResponse!= null && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess"));
-                    finish();
-                }
-                else {
-                    String errorMessage = getString(R.string.something_went_wrong);
-                    if (updateSignAgreementsResponse.getError() != null
-                            && updateSignAgreementsResponse.getError().getErrorDescription() != null) {
-                        errorMessage = updateSignAgreementsResponse.getError().getErrorDescription();
+                try {
+                    if (updateSignAgreementsResponse != null) {
+                        if (updateSignAgreementsResponse != null && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess"))
+                            ;
+                        finish();
+                    } else {
+                        String errorMessage = getString(R.string.something_went_wrong);
+                        if (updateSignAgreementsResponse.getError() != null
+                                && updateSignAgreementsResponse.getError().getErrorDescription() != null) {
+                            errorMessage = updateSignAgreementsResponse.getError().getErrorDescription();
+                        }
+                        Utils.displayAlert(errorMessage,
+                                MerchantsAgrementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
                     }
-                    Utils.displayAlert(errorMessage,
-                            MerchantsAgrementActivity.this, "", updateSignAgreementsResponse.getError().getFieldErrors().get(0));
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             }
         });
     }

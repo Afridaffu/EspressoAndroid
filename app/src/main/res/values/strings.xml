@@ -204,6 +204,8 @@
     <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
     <string name="maxlength">8</string>
+    <string name="maxlengthValue">11</string>
+    <string name="maxlengthamount">8</string>
     <string name="maxlendecimal">13</string>
     <string name="payrequestMaxAmt">1000000</string>
 
@@ -597,9 +599,12 @@
     <string name="ownership_title">Ownership"</string>
     <string name="primary">Primary</string>
     <string name="arrow_right">ArrowRight</string>
-    <string name="invitation_sent">Invitation has sent\!</string>
-    <string name="Removed_success">Removed Successfully\!</string>
-    <string name="invitation_canceled">Invitation Cancelled\!</string>
+    <string name="invitation_sent">Invitation has sent\</string>
+    <string name="Removed_success">Removed Successfully\</string>
+    <string name="invitation_canceled">Invitation Cancelled\</string>
     <string name="confirmation_msg">Do you want to discard the changes?</string>
+    <string name="pre_authorization">Pre-Authorization</string>
+    <string name="preauth_description">A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from [Descriptor Name] and enter the amount below.</string>
+    <string name="incorrect_amount_1_attempt_left">Incorrect amount, 1 attempt left</string>
 
 </resources>

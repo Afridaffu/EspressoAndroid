@@ -31,12 +31,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
+import com.greenbox.coyni.model.CompanyInfo.ContactInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -82,8 +85,16 @@ public class EditEmailActivity extends AppCompatActivity {
                 findViewById(R.id.b_topLL).setVisibility(VISIBLE);
                 findViewById(R.id.editEmailSV).setVisibility(GONE);
                     if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
-                            Log.e("This is ","DBA Info  Edit");
+                            LogUtils.e("This is ","DBA Info  Edit");
                     }
+            }
+            else
+            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
+                findViewById(R.id.b_topLL).setVisibility(VISIBLE);
+                findViewById(R.id.editEmailSV).setVisibility(GONE);
+                if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")){
+                    Log.e("This is ","Company Info  Edit");
+                }
             }
             initObservers();
             textWatchers();
@@ -154,32 +165,35 @@ public class EditEmailActivity extends AppCompatActivity {
 
                         if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")){
                             try {
-                                DBAInfoRequest dbaInfoRequest=new DBAInfoRequest();
-                                dbaInfoRequest.setEmail(Objects.requireNonNull(b_newEmailET.getText()).toString());
-                                dbaInfoRequest.setAddressLine1(myApplicationObj.getDbaInfoResp().getData().getAddressLine1());
-                                dbaInfoRequest.setAddressLine2(myApplicationObj.getDbaInfoResp().getData().getAddressLine2());
-                                dbaInfoRequest.setBusinessType(myApplicationObj.getDbaInfoResp().getData().getBusinessType());
-                                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getAverageTicket().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setCity(myApplicationObj.getDbaInfoResp().getData().getCity());
-                                dbaInfoRequest.setCopyCompanyInfo(myApplicationObj.getDbaInfoResp().getData().isCopyCompanyInfo());
-                                dbaInfoRequest.setCountry(myApplicationObj.getDbaInfoResp().getData().getCountry());
-                                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getHighTicket().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setIdentificationType(Integer.parseInt(myApplicationObj.getDbaInfoResp().getData().getIdentificationType()));
-                                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getMonthlyProcessingVolume().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setName(myApplicationObj.getDbaInfoResp().getData().getName());
+                                ContactInfoRequest contactInfoRequest=new ContactInfoRequest();
+                                contactInfoRequest.setEmail(Objects.requireNonNull(b_newEmailET.getText()).toString());
+                                contactInfoRequest.setId(myApplicationObj.getDbaInfoResp().getData().getId());
                                 PhNoWithCountryCode phNoWithCountryCode=new PhNoWithCountryCode();
                                 phNoWithCountryCode.setCountryCode(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getCountryCode());
                                 phNoWithCountryCode.setPhoneNumber(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
-                                dbaInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
-                                dbaInfoRequest.setState(myApplicationObj.getDbaInfoResp().getData().getState());
-                                dbaInfoRequest.setTimeZone(myApplicationObj.getDbaInfoResp().getData().getTimeZone());
-                                dbaInfoRequest.setWebsite(myApplicationObj.getDbaInfoResp().getData().getWebsite());
-                                dbaInfoRequest.setZipCode(myApplicationObj.getDbaInfoResp().getData().getZipCode());
-                                businessIdentityVerificationViewModel.patchDBAInfo(dbaInfoRequest);
+                                contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
                         }
+
+                        else if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyChangeEmail")){
+                            try {
+                                ContactInfoRequest contactInfoRequest=new ContactInfoRequest();
+                                contactInfoRequest.setEmail(Objects.requireNonNull(b_newEmailET.getText()).toString());
+
+                                PhNoWithCountryCode phNoWithCountryCode=new PhNoWithCountryCode();
+                                phNoWithCountryCode.setCountryCode(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getCountryCode());
+                                phNoWithCountryCode.setPhoneNumber(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
+                                contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                contactInfoRequest.setId(myApplicationObj.getCompanyInfoResp().getData().getId());
+                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                         else if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT||myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
                             callSendEmailOTPAPI();
                         }
@@ -631,12 +645,38 @@ public class EditEmailActivity extends AppCompatActivity {
             }
         });
 
-        businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
+//        businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
+//            @Override
+//            public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
+//                dialog.dismiss();
+//                try {
+//                    if (dbaInfoUpdateResp !=null && dbaInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
+//                        Utils.showCustomToast(EditEmailActivity.this, "Email updated", R.drawable.ic_check, "EMAIL");
+//                        new Handler().postDelayed(() -> {
+//                            try {
+//                                finish();
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }, 2000);
+//
+//                    }
+//                    else {
+//                        Toast.makeText(EditEmailActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+
+        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
             @Override
-            public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
+            public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
                 dialog.dismiss();
                 try {
-                    if (dbaInfoUpdateResp !=null && dbaInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                    if (companyInfoUpdateResp !=null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
                         Utils.showCustomToast(EditEmailActivity.this, "Email updated", R.drawable.ic_check, "EMAIL");
                         new Handler().postDelayed(() -> {
                             try {
@@ -656,6 +696,33 @@ public class EditEmailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
+            @Override
+            public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
+                dialog.dismiss();
+                try {
+                    if (companyInfoUpdateResp !=null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                        Utils.showCustomToast(EditEmailActivity.this, "Email updated", R.drawable.ic_check, "EMAIL");
+                        new Handler().postDelayed(() -> {
+                            try {
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }, 2000);
+
+                    }
+                    else {
+                        Toast.makeText(EditEmailActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override
