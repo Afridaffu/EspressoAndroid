@@ -39,6 +39,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     RelativeLayout layoutMain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
+    String fromStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
+            fromStr = getIntent().getStringExtra("screen");
             if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPwd")) {
                 tvHead.setText("Forgot Your Password?");
                 tvMessage.setText("Before we can reset your password, we will need to verify your identity.\nPlease enter the email register with your account.");
@@ -210,7 +212,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             etEmail.clearFocus();
                         } else {
                             String message = getString(R.string.something_went_wrong);
-                            if(emailResponse.getError().getFieldErrors().size() > 0) {
+                            if (emailResponse.getError().getFieldErrors().size() > 0) {
                                 message = emailResponse.getError().getFieldErrors().get(0);
                             }
                             Utils.displayAlert(emailResponse.getError().getErrorDescription(), ForgotPasswordActivity.this, "", message);
@@ -227,7 +229,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            etEmail.requestFocus();
+            if (fromStr.equals("ForgotPwd")) {
+                etEmail.requestFocus();
+                if(!Utils.isKeyboardVisible)
+                    Utils.shwForcedKeypad(this);
+            } else {
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(this);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

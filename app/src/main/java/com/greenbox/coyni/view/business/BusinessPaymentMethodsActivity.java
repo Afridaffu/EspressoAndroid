@@ -540,7 +540,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                     tvBankHead.setTextColor(getColor(R.color.primary_black));
                     tvBankCount.setTextColor(getColor(R.color.dark_grey));
                     tvBankMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgBankArrow.clearColorFilter();
+//                    imgBankArrow.clearColorFilter();
+                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }
                 if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
@@ -555,7 +556,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                     tvDCHead.setTextColor(getColor(R.color.primary_black));
                     tvDCardCount.setTextColor(getColor(R.color.dark_grey));
                     tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgDCardArrow.clearColorFilter();
+//                    imgDCardArrow.clearColorFilter();
+                    imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
                     imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
                 }
                 if (paymentMethodsResponse.getData().getSignetCount() >= paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
@@ -570,7 +572,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                     tvSignetHead.setTextColor(getColor(R.color.primary_black));
                     tvSignetCount.setTextColor(getColor(R.color.dark_grey));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgSignetArrow.clearColorFilter();
+//                    imgSignetArrow.clearColorFilter();
+                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
                     imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card);
 
                 }
