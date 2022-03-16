@@ -101,8 +101,8 @@ public class MerchantsAgrementActivity extends BaseActivity {
         doneCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showProgressDialog();
-//                businessDashboardViewModel.updateSignedAgree();
+                showProgressDialog();
+                businessDashboardViewModel.updateSignedAgree();
             }
         });
 
@@ -210,8 +210,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                     if (updateSignAgreementsResponse != null) {
                         if (updateSignAgreementsResponse.getStatus() != null
                                 && updateSignAgreementsResponse.getStatus().equalsIgnoreCase("Sucess")) {
-//                            finish();
-//                            businessDashboardViewModel.updateSignedAgree();
+                            finish();
                         } else {
                             String errorMessage = getString(R.string.something_went_wrong);
                             if (updateSignAgreementsResponse.getError() != null
