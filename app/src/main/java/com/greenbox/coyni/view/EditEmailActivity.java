@@ -57,13 +57,13 @@ public class EditEmailActivity extends AppCompatActivity {
     public boolean isSaveEnabled = false, isCurrentEmail = true, isNewEmail = false;
     LinearLayout currentEmailErrorLL, newEmailErrorLL,b_newEmailErrorLL;
     TextView currentEmailErrorTV, newEmailErrorTV, contactUsTV,b_newEmailErrorTV;
-    CardView saveEmailCV,b_saveEmailCV;
+    CardView saveEmailCV;
     Long mLastClickTime = 0L;
     ProgressDialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     LoginViewModel loginViewModel;
-    LinearLayout editEmailCloseLL,b_editEmailCloseLL;
+    LinearLayout b_editEmailCloseLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,27 +75,6 @@ public class EditEmailActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
             initFields();
-
-            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT){
-                findViewById(R.id.b_topLL).setVisibility(GONE);
-                findViewById(R.id.editEmailSV).setVisibility(VISIBLE);
-            }
-            else
-            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
-                findViewById(R.id.b_topLL).setVisibility(VISIBLE);
-                findViewById(R.id.editEmailSV).setVisibility(GONE);
-                    if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
-                            LogUtils.e("This is ","DBA Info  Edit");
-                    }
-            }
-            else
-            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
-                findViewById(R.id.b_topLL).setVisibility(VISIBLE);
-                findViewById(R.id.editEmailSV).setVisibility(GONE);
-                if (getIntent().getStringExtra("screen")!=null&&getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyChangeEmail")&&getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")){
-                    Log.e("This is ","Company Info  Edit");
-                }
-            }
             initObservers();
             textWatchers();
             focusWatchers();
@@ -111,18 +90,18 @@ public class EditEmailActivity extends AppCompatActivity {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
             myApplicationObj = (MyApplication) getApplicationContext();
-            editEmailCloseLL = findViewById(R.id.editEmailCloseLL);
+//            editEmailCloseLL = findViewById(R.id.editEmailCloseLL);
             currentEmailET = findViewById(R.id.currentEmailET);
-            newEmailET = findViewById(R.id.newEmailET);
+//            newEmailET = findViewById(R.id.newEmailET);
             currentEmailTIL = findViewById(R.id.currentEmailTIL);
-            newEmailTIL = findViewById(R.id.newEmailTIL);
-            editEmailSV = findViewById(R.id.editEmailSV);
-            currentEmailErrorLL = findViewById(R.id.currentEmailErrorLL);
-            newEmailErrorLL = findViewById(R.id.newEmailErrorLL);
-            currentEmailErrorTV = findViewById(R.id.currentEmailErrorTV);
-            newEmailErrorTV = findViewById(R.id.newEmailErrorTV);
+//            newEmailTIL = findViewById(R.id.newEmailTIL);
+//            editEmailSV = findViewById(R.id.editEmailSV);
+//            currentEmailErrorLL = findViewById(R.id.currentEmailErrorLL);
+//            newEmailErrorLL = findViewById(R.id.newEmailErrorLL);
+//            currentEmailErrorTV = findViewById(R.id.currentEmailErrorTV);
+//            newEmailErrorTV = findViewById(R.id.newEmailErrorTV);
             saveEmailCV = findViewById(R.id.saveEmailCV);
-            contactUsTV = findViewById(R.id.contactUsTV);
+//            contactUsTV = findViewById(R.id.contactUsTV);
 
             //Business..
             b_editEmailCloseLL = findViewById(R.id.b_editEmailCloseLL);
@@ -134,7 +113,7 @@ public class EditEmailActivity extends AppCompatActivity {
 
             currentEmailET.setText(myApplicationObj.getMyProfile().getData().getEmail());
 
-            newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
+//            newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
             b_newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
 
@@ -144,10 +123,17 @@ public class EditEmailActivity extends AppCompatActivity {
 //                public void onClick(View view) {
 //                    Utils.hideKeypad(EditEmailActivity.this);
 //                    currentEmailET.clearFocus();
-//                    newEmailET.clearFocus();
+//                    newEmailET.currentEmailTILclearFocus();
 //                }
 //            });
 
+
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT){
+                currentEmailTIL.setVisibility(GONE);
+            }
+            else {
+                currentEmailTIL.setVisibility(VISIBLE);
+            }
 
             saveEmailCV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,9 +210,9 @@ public class EditEmailActivity extends AppCompatActivity {
 //                    }
 //                }
 //            });
-            editEmailCloseLL.setOnClickListener(view -> {
-                finish();
-            });
+//            editEmailCloseLL.setOnClickListener(view -> {
+//                finish();
+//            });
 
             b_editEmailCloseLL.setOnClickListener(view -> {
                 finish();
@@ -302,49 +288,49 @@ public class EditEmailActivity extends AppCompatActivity {
 
         try {
             String beforeText = "";
-            newEmailET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    Log.e("beforeTextChanged", charSequence.toString());
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
-                        newEmailErrorLL.setVisibility(GONE);
-                        newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        newEmailTIL.setHintTextColor(colorState);
-                        Utils.setUpperHintColor(newEmailTIL, getResources().getColor(R.color.primary_green));
-                        isNewEmail = true;
-                    }
-                    else if (newEmailET.getText().toString().trim().length() == 0) {
-//                        newEmailErrorLL.setVisibility(VISIBLE);
-//                        newEmailErrorTV.setText("Field Required");
-                        isNewEmail = false;
-                    }
-                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
-                        isNewEmail = true;
-                    } else {
-                        isNewEmail = false;
-                    }
-                    enableOrDisableSave();
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    try {
-                        String str = newEmailET.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                            newEmailET.setText(newEmailET.getText().toString().replaceAll(" ", ""));
-                            newEmailET.setSelection(newEmailET.getText().length());
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+//            newEmailET.addTextChangedListener(new TextWatcher() {
+//                @Override
+//                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                    Log.e("beforeTextChanged", charSequence.toString());
+//                }
+//
+//                @Override
+//                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
+//                        newEmailErrorLL.setVisibility(GONE);
+//                        newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+////                        newEmailTIL.setHintTextColor(colorState);
+//                        Utils.setUpperHintColor(newEmailTIL, getResources().getColor(R.color.primary_green));
+//                        isNewEmail = true;
+//                    }
+//                    else if (newEmailET.getText().toString().trim().length() == 0) {
+////                        newEmailErrorLL.setVisibility(VISIBLE);
+////                        newEmailErrorTV.setText("Field Required");
+//                        isNewEmail = false;
+//                    }
+//                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
+//                        isNewEmail = true;
+//                    } else {
+//                        isNewEmail = false;
+//                    }
+//                    enableOrDisableSave();
+//
+//                }
+//
+//                @Override
+//                public void afterTextChanged(Editable editable) {
+//                    try {
+//                        String str = newEmailET.getText().toString();
+//                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+//                            newEmailET.setText(newEmailET.getText().toString().replaceAll(" ", ""));
+//                            newEmailET.setSelection(newEmailET.getText().length());
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
             b_newEmailET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -396,36 +382,36 @@ public class EditEmailActivity extends AppCompatActivity {
     public void focusWatchers() {
 
         try {
-            newEmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    if (!b) {
-                        if (newEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(newEmailET.getText().toString().trim())) {
-                            newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
-                            newEmailErrorLL.setVisibility(VISIBLE);
-                            newEmailErrorTV.setText("Please enter a valid Email");
-                        } else if (newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(newEmailET.getText().toString().trim())) {
-                            newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
-                            newEmailErrorLL.setVisibility(GONE);
-                            loginViewModel.validateEmail(newEmailET.getText().toString().trim());
-                        } else {
-                            newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
-                            newEmailErrorLL.setVisibility(VISIBLE);
-                            newEmailErrorTV.setText("Field Required");
-                        }
-                    } else {
-                        newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_green));
-
-                        currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                        Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
-
-                    }
-                }
-            });
+//            newEmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View view, boolean b) {
+//                    if (!b) {
+//                        if (newEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(newEmailET.getText().toString().trim())) {
+//                            newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
+//                            newEmailErrorLL.setVisibility(VISIBLE);
+//                            newEmailErrorTV.setText("Please enter a valid Email");
+//                        } else if (newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(newEmailET.getText().toString().trim())) {
+//                            newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
+//                            newEmailErrorLL.setVisibility(GONE);
+//                            loginViewModel.validateEmail(newEmailET.getText().toString().trim());
+//                        } else {
+//                            newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+//                            Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
+//                            newEmailErrorLL.setVisibility(VISIBLE);
+//                            newEmailErrorTV.setText("Field Required");
+//                        }
+//                    } else {
+//                        newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_green));
+//
+//                        currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+//                        Utils.setUpperHintColor(currentEmailTIL, getColor(R.color.primary_black));
+//
+//                    }
+//                }
+//            });
             b_newEmailET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View view, boolean b) {
@@ -499,12 +485,7 @@ public class EditEmailActivity extends AppCompatActivity {
 
             UpdateEmailRequest updateEmailRequest = new UpdateEmailRequest();
             updateEmailRequest.setExistingEmail(currentEmailET.getText().toString().trim());
-            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT) {
-                updateEmailRequest.setNewEmail(newEmailET.getText().toString().trim());
-            }
-            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
-                updateEmailRequest.setNewEmail(b_newEmailET.getText().toString().trim());
-            }
+            updateEmailRequest.setNewEmail(b_newEmailET.getText().toString().trim());
             customerProfileViewModel.updateEmailSendOTP(updateEmailRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -544,7 +525,7 @@ public class EditEmailActivity extends AppCompatActivity {
                                     .putExtra("OTP_TYPE", "OTP")
                                     .putExtra("IS_OLD_EMAIL", "true")
                                     .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
-                                    .putExtra("NEW_EMAIL", newEmailET.getText().toString().trim())
+                                    .putExtra("NEW_EMAIL", b_newEmailET.getText().toString().trim())
                             );
                         }
                         if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT){
@@ -694,13 +675,7 @@ public class EditEmailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-
-            if (myApplicationObj.getAccountType()==Utils.PERSONAL_ACCOUNT) {
-                newEmailET.requestFocus();
-            }
-            if (myApplicationObj.getAccountType()==Utils.BUSINESS_ACCOUNT) {
                 b_newEmailET.requestFocus();
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
