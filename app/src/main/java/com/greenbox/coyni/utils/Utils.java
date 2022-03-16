@@ -246,16 +246,7 @@ public class Utils {
     public static final String teamPhoneNumber = "TeamPhoneNumber";
     public static final String teamMemberId = "TeamMemberId";
 
-    public static final String boName = "BOName";
-    public static final String boOwnershipPercentage = "BOPercentage";
-    public static final String boAddress = "BoAddress";
-    public static final String boAdress1="BoAddress1";
-    public static final String boCity="BoCity";
-    public static final String boState="BoState";
-    public static final String boCountry="BoCountry";
-    public static final String boZipCode="BoZipcode";
-    public static final String boDob = "BoDob";
-    public static final String boSSN = "BoSSN";
+    public static final String boData = "BOData";
 
     public static final String companyName = "CompanyName";
     public static final String companyEmail = "CompanyEmail";

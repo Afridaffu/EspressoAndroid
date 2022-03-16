@@ -14,16 +14,17 @@ import com.greenbox.coyni.view.BaseActivity;
 public class BenificialOwnerDetails extends BaseActivity {
     private ProgressBar mProgress;
     private TextView mPercentage, mMailingAddress, mSSN, mName, mDob;
-    private String name = "", address = "", dob = "", ssn = "", address1 = "", city = "", state = "", country = "", zipcode = "";
-    private int percentage = 0, position = 0;
+    private String firstname = "", lastname = "", ssn = "";
+    private int position = 0;
     private LinearLayout bpbackBtn, primaryLL;
+    private BOResp.BeneficialOwner beneficialOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_benificial_owner_details);
-        BOResp.BeneficialOwner beneficialOwner = (BOResp.BeneficialOwner) getIntent().getSerializableExtra(Utils.boName);
-       // position = bundle.getInt(Utils.position, position);
+        beneficialOwner = (BOResp.BeneficialOwner) getIntent().getSerializableExtra(Utils.boData);
+        position = getIntent().getIntExtra(Utils.position, position);
         initFields();
     }
 
@@ -47,36 +48,39 @@ public class BenificialOwnerDetails extends BaseActivity {
                 onBackPressed();
             }
         });
-        if (name != null && !name.equals("")) {
-            mName.setText(name);
+        if (beneficialOwner.getFirstName() != null && !beneficialOwner.getFirstName().equals("")) {
+            firstname = beneficialOwner.getFirstName();
         }
-
-        mProgress.setProgress(percentage);
-        mPercentage.setText(percentage + getResources().getString(R.string.percentage));
-        if (dob != null && !dob.equals("")) {
-            mDob.setText(Utils.convertTxnDatebusiness(dob));
+        if (beneficialOwner.getLastName() != null && !beneficialOwner.getLastName().equals("")) {
+            lastname = beneficialOwner.getLastName();
         }
-        if (address != null && !address.equals("")) {
-            mMailingAddress.setText(address);
+        mName.setText(firstname + " " + lastname);
+        mProgress.setProgress(beneficialOwner.getOwnershipParcentage());
+        mPercentage.setText(beneficialOwner.getOwnershipParcentage() + getResources().getString(R.string.percentage));
+        if (beneficialOwner.getDob() != null && !beneficialOwner.getDob().equals("")) {
+            mDob.setText(Utils.convertTxnDatebusiness(beneficialOwner.getDob()));
         }
-        if (address1 != null && !address1.equals("")) {
-            mMailingAddress.append(", " + address1);
+        if (beneficialOwner.getAddressLine1() != null && !beneficialOwner.getAddressLine1().equals("")) {
+            mMailingAddress.setText(beneficialOwner.getAddressLine1());
         }
-        if (city != null && !city.equals("")) {
-            mMailingAddress.append(", " + city);
+        if (beneficialOwner.getAddressLine2() != null && !beneficialOwner.getAddressLine2().equals("")) {
+            mMailingAddress.append(", " + beneficialOwner.getAddressLine2());
         }
-        if (state != null && !state.equals("")) {
-            mMailingAddress.append(", " + state);
+        if (beneficialOwner.getCity() != null && !beneficialOwner.getCity().equals("")) {
+            mMailingAddress.append(", " + beneficialOwner.getCity());
         }
-        if (country != null && !country.equals("")) {
-            mMailingAddress.append(", " + country);
+        if (beneficialOwner.getState() != null && !beneficialOwner.getState().equals("")) {
+            mMailingAddress.append(", " + beneficialOwner.getState());
         }
-        if (zipcode != null && !zipcode.equals("")) {
-            mMailingAddress.append(", " + zipcode);
+        if (beneficialOwner.getCountry() != null && !beneficialOwner.getCountry().equals("")) {
+            mMailingAddress.append(", " + beneficialOwner.getCountry());
         }
-        String converted = ssn.replaceAll("\\w(?=\\w{2})", ".");
-        String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
-        if (ssn != null && !ssn.equals("")) {
+        if (beneficialOwner.getZipCode() != null && !beneficialOwner.getZipCode().equals("")) {
+            mMailingAddress.append(", " + beneficialOwner.getZipCode());
+        }
+        if (beneficialOwner.getSsn() != null && !beneficialOwner.getSsn().equals("")) {
+            String converted = beneficialOwner.getSsn().replaceAll("\\w(?=\\w{2})", ".");
+            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
             mSSN.setText(hifened);
         }
 

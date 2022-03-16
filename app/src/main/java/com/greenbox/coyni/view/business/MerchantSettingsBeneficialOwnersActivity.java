@@ -113,7 +113,7 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
                 Context context = view.getContext();
                 Intent intent = new Intent();
                 intent = new Intent(context, BenificialOwnerDetails.class);
-                intent.putExtra(Utils.boName, beneficialOwnerList.get(position));
+                intent.putExtra(Utils.boData, beneficialOwnerList.get(position));
                 intent.putExtra(Utils.position, position);
 
                 context.startActivity(intent);
