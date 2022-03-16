@@ -3,6 +3,7 @@ package com.greenbox.coyni.model.BeneficialOwners;
 import com.greenbox.coyni.model.Error;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class BOResp {
         this.error = error;
     }
 
-    public class BeneficialOwner {
+    public class BeneficialOwner implements Serializable {
         private int id;
         private String firstName = "";
         private String lastName = "";
@@ -173,7 +174,7 @@ public class BOResp {
         }
     }
 
-    public class RequiredDocumets {
+    public class RequiredDocumets implements Serializable {
         private String imgSize;
         private String imgName;
         private String imgLink;
