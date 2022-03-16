@@ -138,7 +138,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     boolean isAuthenticationCalled = false;
     Boolean isFaceLock = false, isTouchId = false;
 
-    Double cynValue = 0.0,avaBal = 0.0;
+    Double cynValue = 0.0, avaBal = 0.0;
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
@@ -280,7 +280,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 scanMeScanCodeLL.setVisibility(View.GONE);
             }
 
-            if (objMyApplication.getMyProfile().getData().getFirstName()!=null&& objMyApplication.getMyProfile().getData().getLastName() != null) {
+            if (objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
                 String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
                 if (strName != null && strName.length() > 22) {
                     tvName.setText(strName.substring(0, 22) + "...");
@@ -1061,7 +1061,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
                         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
-    //                    Reader reader = new QRCodeReader();
+                        //                    Reader reader = new QRCodeReader();
                         Reader reader = new MultiFormatReader();
 
                         Result result = reader.decode(bitmap);
@@ -1077,13 +1077,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                             strScanWallet = result.toString();
                         }
                         Log.e("Image Text :- ", strScanWallet);
-    //                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
+                        //                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
 
                         try {
                             if (!strScanWallet.equals(strWallet)) {
                                 getUserDetails(strScanWallet);
                             } else {
-    //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
+                                //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
                                 if (errorDialog == null) {
                                     displayAlert(getString(R.string.tokens_msg), "");
                                 }
@@ -1103,8 +1103,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     e.printStackTrace();
                     Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
-            }
-            else  if(requestCode ==  251) {
+            } else if (requestCode == 251) {
                 try {
                     //payTransaction();
                     dialog = Utils.showProgressDialog(ScanActivity.this);
@@ -1117,8 +1116,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            }
-            else if (requestCode == 0) {
+            } else if (requestCode == 0) {
                 try {
                     payTransaction();
                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
@@ -1127,8 +1125,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-            else  if(requestCode ==  251) {
+            } else if (requestCode == 251) {
                 try {
                     //payTransaction();
                     dialog = Utils.showProgressDialog(ScanActivity.this);
@@ -1141,8 +1138,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            }
-            else if (requestCode == 0) {
+            } else if (requestCode == 0) {
                 try {
                     payTransaction();
                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
@@ -1326,33 +1322,34 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails,Double balance,String bType) {
+    private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance) {
         isQRScan = false;
         mcodeScanner.stopPreview();
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails,false,balance,bType);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
                 LogUtils.v("Scan", "onDialog Clicked " + action);
                 if (action.equalsIgnoreCase("payTransaction")) {
+                    if (!isAuthenticationCalled) {
+                        if (payValidation()) {
+                            isAuthenticationCalled = true;
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
+                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    payTransaction();
+                                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                                            .putExtra("TYPE", "ENTER")
+                                            .putExtra("screen", "Pay"));
 
-                    if (!isAuthenticationCalled && payValidation()) {
-                        isAuthenticationCalled = true;
-                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
-                            if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
-                                Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                }
                             } else {
                                 payTransaction();
                                 startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Pay"));
-
                             }
-                        } else {
-                            payTransaction();
-                            startActivity(new Intent(ScanActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "Pay"));
                         }
                     }
                     LogUtils.v("Scan", "onDialog Clicked " + action);
@@ -1374,7 +1371,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     }
 
 
-        private void setFaceLock() {
+    private void setFaceLock() {
         try {
             isFaceLock = false;
             String value = dbHandler.getFacePinLock();
@@ -1437,6 +1434,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             ex.printStackTrace();
         }
     }
+
     private Boolean payValidation() {
         Boolean value = true;
         try {
@@ -1496,6 +1494,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
         return value;
     }
+
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
             if (objLimit.getTokenLimitFlag()) {
