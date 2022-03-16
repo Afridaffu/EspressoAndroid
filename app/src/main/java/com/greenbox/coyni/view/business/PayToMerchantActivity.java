@@ -49,6 +49,7 @@ import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -1046,7 +1047,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
             LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
+
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
             userNamePayTV.setText(strUserName);
             String strPFee = "";
@@ -1090,8 +1093,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-
+//                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
                         prevDialog.dismiss();
                         if (!isAuthenticationCalled) {
                             isAuthenticationCalled = true;

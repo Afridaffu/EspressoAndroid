@@ -223,8 +223,25 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+<!--        <TextView-->
+<!--            android:id="@+id/tv_lable"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:ellipsize="end"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingEnd="16dp"-->
+<!--            android:paddingRight="16dp"-->
+<!--            android:text="Slide to Confirm"-->
+<!--            android:textColor="@color/primary_green"-->
+<!--            android:textSize="@dimen/_15sdp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
+
         <TextView
-            android:id="@+id/tv_lable"
+            android:id="@+id/tv_lable_verify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -232,14 +249,37 @@
             android:gravity="center"
             android:paddingEnd="16dp"
             android:paddingRight="16dp"
-            android:text="Slide to Confirm"
+            android:text="Verifying"
             android:textColor="@color/primary_green"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/im_lock"
             app:layout_constraintStart_toEndOf="@+id/im_lock"
-            app:layout_constraintTop_toTopOf="@+id/im_lock" />
+            app:layout_constraintTop_toTopOf="@+id/im_lock"
+            android:visibility="gone"/>
 
+        <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
+            android:id="@+id/tv_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Slide to Confirm"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:angle="45"
+            app:chainUseRtl="true"
+            app:colors="@array/default_gradient_colors"
+            app:layout_constraintBottom_toBottomOf="@id/im_lock"
+            app:layout_constraintStart_toEndOf="@+id/im_lock"
+            app:layout_constraintTop_toTopOf="@+id/im_lock"
+            app:speed="500"
+            app:maxFPS="24"
+            app:simultaneousColors="8"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/im_lock"

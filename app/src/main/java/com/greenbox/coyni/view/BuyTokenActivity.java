@@ -57,6 +57,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -937,7 +938,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             LinearLayout layoutCard = prevDialog.findViewById(R.id.layoutCard);
             ImageView imgCardType = prevDialog.findViewById(R.id.imgCardType);
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             String strPFee = "";
@@ -990,7 +992,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(View.VISIBLE);
+                        tv_lable_verify.setVisibility(View.GONE);
                         if (!isBuyTokenAPICalled) {
                             //buyToken();
                             isBuyTokenAPICalled = true;
