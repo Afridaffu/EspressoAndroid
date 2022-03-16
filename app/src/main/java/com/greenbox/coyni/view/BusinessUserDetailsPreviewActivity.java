@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
@@ -90,8 +91,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
-        }
-        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
+        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
             heading.setText(getString(R.string.address));
             title.setText(getString(R.string.address_curr));
             if (value.getText().toString().equals("")) {
@@ -129,8 +129,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
 
             });
 
-        }
-        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")) {
+        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("UserDetails") && getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")) {
             heading.setText(getString(R.string.user_phonenumber));
             title.setText(getString(R.string.phonenumber_curr));
             value.setText(getIntent().getStringExtra("value"));
@@ -165,13 +164,12 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                 }
             });
 
-        }
-        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")){
+        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")) {
             heading.setText(getString(R.string.email));
             title.setText(getString(R.string.email_curr));
             value.setText(getIntent().getStringExtra("value"));
 
-            if (myApplicationObj.getDbaInfoResp()!=null){
+            if (myApplicationObj.getDbaInfoResp() != null) {
                 value.setText(myApplicationObj.getDbaInfoResp().getData().getEmail());
             }
 
@@ -184,21 +182,20 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditEmailActivity.class).putExtra("screen","CompanyChangeEmail").putExtra("action","EditEmailCompany"));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "CompanyChangeEmail").putExtra("action", "EditEmailCompany"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
-        }
-        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneDBA")){
+        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneDBA")) {
             heading.setText(getString(R.string.phone));
             title.setText(getString(R.string.phonenumber_curr));
             value.setText(getIntent().getStringExtra("value"));
             phoneFormat = getIntent().getStringExtra("value");
 
-            if (myApplicationObj.getDbaInfoResp()!=null){
-                value.setText( "(" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+            if (myApplicationObj.getDbaInfoResp() != null) {
+                value.setText("(" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
             }
 
 
@@ -210,20 +207,18 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditPhoneActivity.class).putExtra("screen","DBAChangePhone").putExtra("action","EditPhoneDBA").putExtra("OLD_PHONE", phoneFormat));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditPhoneActivity.class).putExtra("screen", "DBAChangePhone").putExtra("action", "EditPhoneDBA").putExtra("OLD_PHONE", phoneFormat));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
-        }
-
-        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")){
+        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")) {
             heading.setText(getString(R.string.email));
             title.setText(getString(R.string.email_curr));
             value.setText(getIntent().getStringExtra("value"));
 
-            if (myApplicationObj.getCompanyInfoResp()!=null){
+            if (myApplicationObj.getCompanyInfoResp() != null) {
                 value.setText(myApplicationObj.getCompanyInfoResp().getData().getEmail());
             }
 
@@ -236,21 +231,20 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditEmailActivity.class).putExtra("screen","CompanyChangeEmail").putExtra("action","EditEmailCompany"));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "CompanyChangeEmail").putExtra("action", "EditEmailCompany"));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
-        }
-        else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")){
+        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")) {
             heading.setText(getString(R.string.phone));
             title.setText(getString(R.string.phonenumber_curr));
             value.setText(getIntent().getStringExtra("value"));
             phoneFormat = getIntent().getStringExtra("value");
 
-            if (myApplicationObj.getCompanyInfoResp()!=null){
-                value.setText( "(" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+            if (myApplicationObj.getCompanyInfoResp() != null) {
+                value.setText("(" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
             }
 
 
@@ -262,7 +256,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this,EditPhoneActivity.class).putExtra("screen","CompanyChangePhone").putExtra("action","EditPhoneCompany").putExtra("OLD_PHONE", phoneFormat));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditPhoneActivity.class).putExtra("screen", "CompanyChangePhone").putExtra("action", "EditPhoneCompany").putExtra("OLD_PHONE", phoneFormat));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -276,7 +270,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
     private void initObservers() {
         dashboardViewModel.getProfileMutableLiveData().observe(BusinessUserDetailsPreviewActivity.this, profile -> {
             myApplicationObj.setMyProfile(profile);
-            if (getIntent().getStringExtra("title")!=null&&getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
+            if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("ADDRESS")) {
                 String addressFormatted = "";
                 if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
                     addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
@@ -308,11 +302,11 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
 
 //                value.setText(addressFormatted.substring(0, addressFormatted.trim().length() - 1) + ".");
             }
-            if (getIntent().getStringExtra("title")!=null&&getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")){
+            if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("EMAIL")) {
                 value.setText(profile.getData().getEmail());
             }
-            if (getIntent().getStringExtra("title")!=null&&getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")){
-                String phne_number=profile.getData().getPhoneNumber().split(" ")[1];
+            if (getIntent().getStringExtra("title") != null && getIntent().getStringExtra("title").equalsIgnoreCase("PHONE")) {
+                String phne_number = profile.getData().getPhoneNumber().split(" ")[1];
                 phne_number = "(" + phne_number.substring(0, 3) + ") " + phne_number.substring(3, 6) + "-" + phne_number.substring(6, 10);
 
                 value.setText(phne_number);
@@ -323,13 +317,33 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
         businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
             @Override
             public void onChanged(DBAInfoResp dbaInfoResp) {
-                if (dbaInfoResp!=null&&dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                if (dbaInfoResp != null && dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
                     myApplicationObj.setDbaInfoResp(dbaInfoResp);
                     if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")) {
+                        if (!dbaInfoResp.getData().getEmail().equalsIgnoreCase(value.getText().toString())) {
+                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
+                            new Handler().postDelayed(() -> {
+                                try {
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }, 2000);
+                        }
                         value.setText(dbaInfoResp.getData().getEmail());
-                    }
-                    else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneDBA")){
-                       value.setText("(" +dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+                    } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneDBA")) {
+                        String phoneNumber = "(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
+                        if (!phoneNumber.equalsIgnoreCase(value.getText().toString())) {
+                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
+                            new Handler().postDelayed(() -> {
+                                try {
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }, 2000);
+                        }
+                        value.setText(phoneNumber);
                     }
                 }
             }
@@ -338,17 +352,38 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
         businessIdentityVerificationViewModel.getGetCompanyInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
             @Override
             public void onChanged(CompanyInfoResp companyInfoResp) {
-                if (companyInfoResp!=null&&companyInfoResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                if (companyInfoResp != null && companyInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
                     myApplicationObj.setCompanyInfoResp(companyInfoResp);
                     if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")) {
+                        if (!companyInfoResp.getData().getEmail().equals(value.getText().toString())) {
+                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
+                            new Handler().postDelayed(() -> {
+                                try {
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }, 2000);
+                        }
                         value.setText(companyInfoResp.getData().getEmail());
-                    }
-                    else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")){
-                        value.setText("(" +companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+                    } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")) {
+                        String phoneNumber = "(" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
+                        if (!phoneNumber.equals(value.getText().toString())) {
+                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
+                            new Handler().postDelayed(() -> {
+                                try {
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                            }, 2000);
+                        }
+                        value.setText(phoneNumber);
                     }
                 }
             }
         });
+
     }
 
     @Override

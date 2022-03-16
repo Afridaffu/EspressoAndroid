@@ -18,7 +18,7 @@ import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 public class CompanyInfoDetails extends BaseActivity {
     private LinearLayout closeLL, emailLL, phoneLL;
-    private TextView mEmailTx, mPhoneNumberTx, mAddressTx, nameTX;
+    private TextView mEmailTx, mPhoneNumberTx, mAddressTx, nameTX,mBusinessEntity;
     private String companyEmail = "", companyPhone = "", companyCountryCode = "";
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private int companyId = 0;
@@ -39,6 +39,7 @@ public class CompanyInfoDetails extends BaseActivity {
         mPhoneNumberTx = (TextView) findViewById(R.id.phoneNumberTx);
         mAddressTx = (TextView) findViewById(R.id.addressTx);
         nameTX = (TextView) findViewById(R.id.name_id);
+        mBusinessEntity=(TextView)findViewById(R.id.business_entity);
         emailLL = (LinearLayout) findViewById(R.id.emailLL);
         phoneLL = (LinearLayout) findViewById(R.id.phoneLL);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
@@ -83,6 +84,9 @@ public class CompanyInfoDetails extends BaseActivity {
                                 if (cir.getName() != null && !cir.getName().equals("")) {
                                     nameTX.setText(cir.getName());
                                 }
+                                if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
+                                    mBusinessEntity.setText(cir.getBusinessEntity());
+                                }
 
                                 if (cir.getEmail() != null && !cir.getEmail().equals("")) {
                                     mEmailTx.setText(cir.getEmail());
@@ -97,9 +101,25 @@ public class CompanyInfoDetails extends BaseActivity {
                                 if (cir.getPhoneNumberDto().getCountryCode() != null && !cir.getPhoneNumberDto().getCountryCode().equals("")) {
                                     companyCountryCode = cir.getPhoneNumberDto().getCountryCode();
                                 }
-                                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("") || cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
                                     mAddressTx.setText(cir.getAddressLine1() + cir.getAddressLine2());
                                 }
+                                if(cir.getAddressLine2()!=null&&!cir.getAddressLine2().equals("")){
+                                    mAddressTx.append(", "+cir.getAddressLine2());
+                                }
+                                if(cir.getCity()!=null&&!cir.getCity().equals("")){
+                                    mAddressTx.append(", "+cir.getCity());
+                                }
+                                if(cir.getState()!=null&&!cir.getState().equals("")){
+                                    mAddressTx.append(", "+cir.getState());
+                                }
+                                if(cir.getCountry()!=null&&!cir.getCountry().equals("")){
+                                    mAddressTx.append(", "+cir.getCountry());
+                                }
+                                if(cir.getZipCode()!=null&&!cir.getZipCode().equals("")){
+                                    mAddressTx.append(", "+cir.getZipCode());
+                                }
+
                                 companyId = cir.getId();
 
                             } catch (Exception e) {

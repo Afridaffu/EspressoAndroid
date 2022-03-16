@@ -113,8 +113,13 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
                 Context context = view.getContext();
                 Intent intent = new Intent();
                 intent = new Intent(context, BenificialOwnerDetails.class);
-                intent.putExtra(Utils.boName, beneficialOwnerList.get(position).getFirstName() + "" + beneficialOwnerList.get(position).getLastName());
-                intent.putExtra(Utils.boAddress, beneficialOwnerList.get(position).getAddressLine1() + beneficialOwnerList.get(position).getAddressLine2());
+                intent.putExtra(Utils.boName, beneficialOwnerList.get(position).getFirstName() + " " + beneficialOwnerList.get(position).getLastName());
+                intent.putExtra(Utils.boAddress, beneficialOwnerList.get(position).getAddressLine1());
+                intent.putExtra(Utils.boAdress1, beneficialOwnerList.get(position).getAddressLine2());
+                intent.putExtra(Utils.boCity, beneficialOwnerList.get(position).getCity());
+                intent.putExtra(Utils.boState, beneficialOwnerList.get(position).getState());
+                intent.putExtra(Utils.boCountry, beneficialOwnerList.get(position).getCountry());
+                intent.putExtra(Utils.boZipCode, beneficialOwnerList.get(position).getZipCode());
                 intent.putExtra(Utils.boDob, beneficialOwnerList.get(position).getDob());
                 intent.putExtra(String.valueOf(Utils.boOwnershipPercentage), beneficialOwnerList.get(position).getOwnershipParcentage());
                 intent.putExtra(Utils.boSSN, beneficialOwnerList.get(position).getSsn());

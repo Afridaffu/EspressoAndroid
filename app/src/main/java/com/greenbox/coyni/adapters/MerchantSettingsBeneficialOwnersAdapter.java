@@ -61,7 +61,7 @@ public class MerchantSettingsBeneficialOwnersAdapter extends RecyclerView.Adapte
         if (objData.getLastName() != null && !objData.getLastName().equals("")) {
             lastName = objData.getLastName();
         }
-        holder.txName.setText(firstName + "" + lastName + "");
+        holder.txName.setText(firstName + " " + lastName + " ");
         if (objData.getOwnershipParcentage() != 0) {
             holder.ownershipTx.setText(objData.getOwnershipParcentage() + getContext().getString(R.string.ownership_percentage));
         }

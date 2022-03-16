@@ -249,6 +249,11 @@ public class Utils {
     public static final String boName = "BOName";
     public static final int boOwnershipPercentage = 50;
     public static final String boAddress = "BoAddress";
+    public static final String boAdress1="BoAddress1";
+    public static final String boCity="BoCity";
+    public static final String boState="BoState";
+    public static final String boCountry="BoCountry";
+    public static final String boZipCode="BoZipcode";
     public static final String boDob = "BoDob";
     public static final String boSSN = "BoSSN";
 
