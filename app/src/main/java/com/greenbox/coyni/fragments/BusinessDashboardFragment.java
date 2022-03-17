@@ -49,7 +49,7 @@ import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-
+//Business Dashboard Fragment
 public class BusinessDashboardFragment extends BaseFragment {
 
     private View mCurrentView;
