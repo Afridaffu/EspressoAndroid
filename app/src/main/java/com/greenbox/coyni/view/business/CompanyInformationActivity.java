@@ -1750,6 +1750,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 pickIntent.setType("*/*");
                 String[] extraMimeTypes = {"application/pdf", "image/*"};
+//                String[] extraMimeTypes = {"application/pdf", "image/*","text/csv","application/msword",
+//                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
                 pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
                 pickIntent.setAction(Intent.ACTION_GET_CONTENT);
 

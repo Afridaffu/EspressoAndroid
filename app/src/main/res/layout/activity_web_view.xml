@@ -12,80 +12,89 @@
         android:background="@color/white"
         android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/layoutClose"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/_10ssp"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/closeBtn"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:background="@color/white"
-            android:src="@drawable/ic_close"
-            android:visibility="visible"
-            app:tint="@color/black" />
-
-    <WebView
-        android:id="@+id/webView"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <RelativeLayout
-        android:id="@+id/layoutLoader"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="@dimen/_20sdp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/cpProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tvHead"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/_30sdp"
-            android:indeterminate="true"
-            app:indeterminateAnimationType="contiguous"
-            app:indicatorColor="@color/primary_green"
-            app:indicatorSize="@dimen/_40sdp"
-            app:trackThickness="@dimen/_6sdp"></com.google.android.material.progressindicator.CircularProgressIndicator>
-
-        <TextView
-            android:id="@+id/tvHead"
+        <LinearLayout
+            android:id="@+id/layoutClose"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="@dimen/_21sdp"
-            android:fontFamily="@font/opensans_bold"
-            android:gravity="center"
-            android:text="Authorizing…"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_16ssp" />
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/_10ssp"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvHead"
-            android:fontFamily="@font/opensans_regular"
-            android:gravity="center"
-            android:text="Please do not leave this screen. Thank you \nfor your patience."
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
+            <ImageButton
+                android:id="@+id/closeBtn"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:background="@color/white"
+                android:src="@drawable/ic_close"
+                android:visibility="visible"
+                app:tint="@color/black" />
 
-    </RelativeLayout>
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
 
-    </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/layoutLoader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="@dimen/_15sdp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/cpProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/centerLL"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/_30sdp"
+                    android:indeterminate="true"
+                    app:indeterminateAnimationType="contiguous"
+                    app:indicatorColor="@color/primary_green"
+                    app:indicatorSize="@dimen/_40sdp"
+                    app:trackThickness="@dimen/_6sdp"></com.google.android.material.progressindicator.CircularProgressIndicator>
+
+                <LinearLayout
+                    android:id="@+id/centerLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvHead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginBottom="@dimen/_21sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center"
+                        android:text="Authorizing…"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_16ssp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvHead"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center"
+                        android:text="Please do not leave this screen. Thank you\n for your patience."
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

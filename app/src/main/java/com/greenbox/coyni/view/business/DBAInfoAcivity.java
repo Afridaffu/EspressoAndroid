@@ -205,7 +205,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             dbaPhoneOET = findViewById(R.id.dbaPhoneOET);
             dbaPhoneOET.setFrom("DbaInfo", this);
-            dbaPhoneOET.setHintText("Customer Service Number");
+            dbaPhoneOET.setHintText("Customer Service Phone Number");
             customerphonenumLL = findViewById(R.id.customerphoneNumberErrorLL);
             customernumTV = findViewById(R.id.customerphoneNumberErrorTV);
 
@@ -961,9 +961,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     if (charSequence.length() > 0) {
+                        timezoneTIL.setHint("Time Zone");
                         Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
                         isTimeZone = true;
                     } else {
+                        timezoneTIL.setHint("Select Time Zone");
                         isTimeZone = false;
                     }
                     enableOrDisableNext();
@@ -1702,6 +1704,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 pickIntent.setType("*/*");
                 String[] extraMimeTypes = {"application/pdf", "image/*"};
+//                String[] extraMimeTypes = {"application/pdf", "image/*", "text/csv", "application/msword",
+//                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
                 pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
                 pickIntent.setAction(Intent.ACTION_GET_CONTENT);
 
