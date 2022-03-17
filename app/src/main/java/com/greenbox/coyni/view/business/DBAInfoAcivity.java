@@ -493,7 +493,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     }
 
     private void initObservers() {
-
         try {
             businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
                 @Override
@@ -520,7 +519,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                     if (dialog != null)
                         dismissDialog();
-
                     if (dbaInfoUpdateResp != null) {
                         if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
                             closeIV.setVisibility(GONE);
@@ -1304,9 +1302,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             if (type.equalsIgnoreCase("SAME")) {
                 isCopyCompanyInfo = true;
-
                 dbaFillingLL.setVisibility(GONE);
-
                 if (objMyApplication.getCompanyInfoResp() != null) {
                     CompanyInfoResp.Data cir = objMyApplication.getCompanyInfoResp().getData();
                     if (cir.getName() != null && !cir.getName().equals("")) {
