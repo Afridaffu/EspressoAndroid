@@ -56,12 +56,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private DBAInfoResp dbaInfoResponse;
-    private String addBusiness = "false";
-    private String addDBA = "false";
+    private String addBusiness = "false", addDBA = "false", boAPICallFrom = "RESUME";
     private LoginViewModel loginViewModel;
-    private String boAPICallFrom = "RESUME";
     private CardView mReviewCv;
-    private boolean review = false;
+    private boolean review = false, isBOStart = false;
     private ImageView bagIV;
 
     @Override
@@ -253,15 +251,15 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        if(addDBA.equalsIgnoreCase("true")){
-                                if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
-                                    dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-                                } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
-                                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
-                                    intent.putExtra("FROM", "TRACKER");
-                                    intent.putExtra("TYPE", "EXIST");
-                                    startActivity(intent);
-                                }
+                        if (addDBA.equalsIgnoreCase("true")) {
+                            if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
+                                dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+                            } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
+                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                                intent.putExtra("FROM", "TRACKER");
+                                intent.putExtra("TYPE", "EXIST");
+                                startActivity(intent);
+                            }
 
                         } else {
                             if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
@@ -345,7 +343,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (review) {
-                        if(addDBA.equalsIgnoreCase("true")){
+                        if (addDBA.equalsIgnoreCase("true")) {
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
                                     .putExtra("ADDBUSINESS", "true")
                                     .putExtra("ADDDBA", "true"));
@@ -555,11 +553,13 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         } else {
                             if (boAPICallFrom.equals("INCOMPLETE"))
                                 businessIdentityVerificationViewModel.postBeneficialOwnersID();
-                            boTV.setTextColor(getResources().getColor(R.color.primary_black));
-                            boIncompleteTV.setTextColor(getResources().getColor(R.color.dark_grey));
-                            boIncompleteTV.setText("Incomplete");
-                            boStartTV.setVisibility(VISIBLE);
-                            boInProgressIV.setVisibility(GONE);
+                            if (isBOStart) {
+                                boTV.setTextColor(getResources().getColor(R.color.primary_black));
+                                boIncompleteTV.setTextColor(getResources().getColor(R.color.dark_grey));
+                                boIncompleteTV.setText("Incomplete");
+                                boStartTV.setVisibility(VISIBLE);
+                                boInProgressIV.setVisibility(GONE);
+                            }
                         }
                     }
                 }
@@ -612,14 +612,13 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + new Gson().toJson(businessTrackerResponse));
 
         if (businessTrackerResponse.getData().isCompanyInfo()) {
-
             dbaInProgressIV.setVisibility(GONE);
             dbaStartTV.setVisibility(View.VISIBLE);
             dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
             caCompleteLL.setVisibility(View.VISIBLE);
             caIncompleteLL.setVisibility(View.GONE);
         } else {
-            if(addDBA.equalsIgnoreCase("true")){
+            if (addDBA.equalsIgnoreCase("true")) {
                 caIncompleteLL.setVisibility(View.GONE);
                 dbaInProgressIV.setVisibility(GONE);
                 dbaStartTV.setVisibility(View.VISIBLE);
@@ -643,7 +642,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             boIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
             dbaCompleteLL.setVisibility(View.VISIBLE);
             dbaIncompleteLL.setVisibility(View.GONE);
+            isBOStart = true;
         } else {
+            isBOStart = false;
             boStartTV.setVisibility(View.GONE);
             boIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
             dbaCompleteLL.setVisibility(View.GONE);

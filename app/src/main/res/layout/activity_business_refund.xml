@@ -225,7 +225,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <ImageView
-                                android:id="@+id/withBankwithdrawIDIV"
+                                android:id="@+id/RefundcopyIV"
                                 android:layout_width="@dimen/_11sdp"
                                 android:layout_height="14dp"
                                 android:layout_gravity="center"
@@ -472,7 +472,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-android:id="@+id/refundOTIgrossamountTV"
+                                android:id="@+id/refundOTIgrossamountTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/_4sdp"
