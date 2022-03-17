@@ -213,7 +213,7 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse.getData());
+                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
