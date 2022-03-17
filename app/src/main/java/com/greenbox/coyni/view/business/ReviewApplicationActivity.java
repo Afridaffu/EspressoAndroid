@@ -776,14 +776,19 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     dismissDialog();
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
-                        if (addBusiness.equalsIgnoreCase("true")) {
-                            loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
-                        } else {
-                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                            intent.putExtra("showGetStarted", true);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        }
+//                        if (addBusiness.equalsIgnoreCase("true")) {
+//                            loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
+//                        } else {
+//                            Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+//                            intent.putExtra("showGetStarted", true);
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                            startActivity(intent);
+//                        }
+
+                        Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
+                        intent.putExtra("showGetStarted", true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
 
                     } else {
                         Utils.displayAlert(submissionViewModel.getError().getErrorDescription(), ReviewApplicationActivity.this, "", submissionViewModel.getError().getFieldErrors().get(0));
