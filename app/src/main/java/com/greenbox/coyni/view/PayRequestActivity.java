@@ -90,7 +90,6 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     int requestedToUserId = 0;
     PaymentMethodsResponse paymentMethodsResponse;
     PayRequestCustomKeyboard cKey;
-    private LinearLayout llValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -408,7 +407,6 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             lyBalance = findViewById(R.id.lyBalance);
             payRequestLL = findViewById(R.id.payRequestLL);
             addNoteClickLL = findViewById(R.id.addNoteClickLL);
-            llValues = findViewById(R.id.ll_values);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
@@ -420,7 +418,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             cynWallet = objMyApplication.getGbtWallet();
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
-           // payRequestET.setMovementMethod(null);
+            // payRequestET.setMovementMethod(null);
 
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
@@ -909,7 +907,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
             } else if (editable.length() == 9) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
-            }else if (editable.length() <= 4) {
+            } else if (editable.length() <= 4) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
             }
 //            if (editable.length() > 12) {
@@ -1195,7 +1193,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                 public void onClick(View view) {
                     cvvDialog.dismiss();
                     Utils.isKeyboardVisible = false;
-                        Utils.hideKeypad(PayRequestActivity.this);
+                    Utils.hideKeypad(PayRequestActivity.this);
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -1204,8 +1202,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     try {
                         addNoteTV.setText(addNoteET.getText().toString().trim());
                         cvvDialog.dismiss();
-                        Utils.isKeyboardVisible=false;
-                            Utils.hideKeypad(PayRequestActivity.this);
+                        Utils.isKeyboardVisible = false;
+                        Utils.hideKeypad(PayRequestActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
