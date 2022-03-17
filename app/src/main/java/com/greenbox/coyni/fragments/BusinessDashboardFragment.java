@@ -35,6 +35,7 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -46,8 +47,9 @@ import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-
+//Business Dashboard Fragment
 public class BusinessDashboardFragment extends BaseFragment {
 
     private View mCurrentView;
@@ -65,19 +67,28 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions;
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
+    private DashboardViewModel mDashboardViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initFields();
         initObservers();
-        showUserData();
+        hideAllStatusViews();
         return mCurrentView;
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        hideAllStatusViews();
+        ((BusinessDashboardActivity) getActivity()).showProgressDialog();
+        mDashboardViewModel.meProfile();
+    }
+
+    @Override
     public void updateData() {
-        showUserData();
+
     }
 
     private void initFields() {
@@ -105,6 +116,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvContactUs = mCurrentView.findViewById(R.id.contactUSTV);
 
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
+        mDashboardViewModel = new ViewModelProvider(getActivity()).get(DashboardViewModel.class);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -195,6 +207,21 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
+
+        mDashboardViewModel.getProfileMutableLiveData().observe(getActivity(), new Observer<Profile>() {
+            @Override
+            public void onChanged(Profile profile) {
+                ((BusinessDashboardActivity) getActivity()).dismissDialog();
+                try {
+                    if (profile != null) {
+                        myApplication.setMyProfile(profile);
+                        showUserData();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void startTracker() {
@@ -229,9 +256,11 @@ public class BusinessDashboardFragment extends BaseFragment {
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                 showIdentityVerificationReview();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                showIdentityVerificationReview();
+                showAdditionalActionView();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+                showIdentityVerificationFailed();
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                 showIdentityVerificationFailed();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 showBusinessDashboardView();
@@ -259,6 +288,14 @@ public class BusinessDashboardFragment extends BaseFragment {
         });
     }
 
+    private void hideAllStatusViews() {
+        mLlIdentityVerificationReview.setVisibility(View.GONE);
+        mLlBusinessDashboardView.setVisibility(View.GONE);
+        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
+        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+        mLlGetStartedView.setVisibility(View.GONE);
+    }
+
     private void showBusinessDashboardView() {
         mLlIdentityVerificationReview.setVisibility(View.GONE);
         mLlBusinessDashboardView.setVisibility(View.VISIBLE);
@@ -282,7 +319,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.GONE);
         mLlGetStartedView.setVisibility(View.VISIBLE);
-
     }
 
     private void setBusinessData() {
@@ -352,7 +388,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
-
         customConfirmationDialog.show();
     }
 }

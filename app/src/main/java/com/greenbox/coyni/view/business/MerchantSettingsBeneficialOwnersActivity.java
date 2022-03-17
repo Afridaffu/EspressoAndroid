@@ -115,7 +115,6 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
                 intent = new Intent(context, BenificialOwnerDetails.class);
                 intent.putExtra(Utils.boData, beneficialOwnerList.get(position));
                 intent.putExtra(Utils.position, position);
-
                 context.startActivity(intent);
             };
         } catch (Exception ex) {

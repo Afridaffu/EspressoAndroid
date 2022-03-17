@@ -842,7 +842,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         firstNameErrorLL.setVisibility(GONE);
                         focusedID = firstNameET.getId();
-                        firstNameET.setHint("First Name");
+//                        firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
 //                        firstNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -880,7 +880,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         lastNameErrorLL.setVisibility(GONE);
                         focusedID = lastNameET.getId();
-                        lastNameET.setHint("Last Name");
+//                        lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
 //                        lastNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
