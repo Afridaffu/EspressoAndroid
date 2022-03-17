@@ -58,17 +58,17 @@ import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends AppCompatActivity {
     private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
-    private LinearLayout closeLL,webLL;
+    private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
-    ImageView dba_userProfileIV,editProfileIV;
+    ImageView dba_userProfileIV, editProfileIV;
     private MyApplication objMyApplication;
     private List<BusinessType> responce;
-    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS=101;
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     ProgressDialog dialog;
-    Long mLastClickTime=0L;
-    private LinearLayout editEmail,editPhone;
-    String emailID,phone_Number;
+    Long mLastClickTime = 0L;
+    private LinearLayout editEmail, editPhone;
+    String emailID, phone_Number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,14 +127,14 @@ public class DBAInfoDetails extends AppCompatActivity {
             editEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(DBAInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen","DBAInfo").putExtra("action","EditEmailDBA").putExtra("value",emailID));
+                    startActivity(new Intent(DBAInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "DBAInfo").putExtra("action", "EditEmailDBA").putExtra("value", emailID));
                 }
             });
 
             editPhone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(DBAInfoDetails.this,BusinessUserDetailsPreviewActivity.class).putExtra("screen","DBAInfo").putExtra("action","EditPhoneDBA").putExtra("value",phone_Number));
+                    startActivity(new Intent(DBAInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "DBAInfo").putExtra("action", "EditPhoneDBA").putExtra("value", phone_Number));
                 }
             });
 
@@ -162,14 +162,14 @@ public class DBAInfoDetails extends AppCompatActivity {
             if (dbaInfoResp.getData().getEmail() != null) {
                 emailTV.setText(dbaInfoResp.getData().getEmail());
                 try {
-                    emailID=dbaInfoResp.getData().getEmail();
+                    emailID = dbaInfoResp.getData().getEmail();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
                 emailTV.setText("");
             }
-            if (!dbaInfoResp.getData().getWebsite().equals("")) {
+            if (dbaInfoResp.getData().getWebsite() != null && !dbaInfoResp.getData().getWebsite().equals("")) {
                 webLL.setVisibility(View.VISIBLE);
                 webSiteTV.setText(dbaInfoResp.getData().getWebsite());
             } else {
@@ -177,7 +177,7 @@ public class DBAInfoDetails extends AppCompatActivity {
                 webSiteTV.setText("");
             }
             if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
-                String pnhNum=dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
+                String pnhNum = dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
                 String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
                 phoneNumberTV.setText(phone_number);
                 phone_Number = phone_number;
@@ -346,12 +346,12 @@ public class DBAInfoDetails extends AppCompatActivity {
                         if (addressFormatted.equals("")) {
                             addressFormatted = addressFormatted + "United States";
                             addressTV.setText(addressFormatted);
-    //                        business_userAddreTV.setText(addressFormatted);
-    //                        address=addressFormatted;
+                            //                        business_userAddreTV.setText(addressFormatted);
+                            //                        address=addressFormatted;
                         } else {
                             addressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-    //                        business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-    //                        address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+                            //                        business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                            //                        address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
                         }
 
                         for (int i = 0; i < responce.size(); i++) {
@@ -365,9 +365,8 @@ public class DBAInfoDetails extends AppCompatActivity {
                             }
                         }
                         bindImage(objMyApplication.getMyProfile().getData().getImage(), dbaInfoResp);
-                    }
-                    else {
-                        Utils.displayAlert(dbaInfoResp.getError().getErrorDescription(),DBAInfoDetails.this,"",dbaInfoResp.getError().getFieldErrors().get(0));
+                    } else {
+                        Utils.displayAlert(dbaInfoResp.getError().getErrorDescription(), DBAInfoDetails.this, "", dbaInfoResp.getError().getFieldErrors().get(0));
                     }
 
 
@@ -379,7 +378,7 @@ public class DBAInfoDetails extends AppCompatActivity {
                     if (profile.getStatus().equalsIgnoreCase("SUCCESS")) {
                         try {
                             objMyApplication.setMyProfile(profile);
-                            bindImage(profile.getData().getImage(),objMyApplication.getDbaInfoResp());
+                            bindImage(profile.getData().getImage(), objMyApplication.getDbaInfoResp());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -497,10 +496,10 @@ public class DBAInfoDetails extends AppCompatActivity {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         Uri uri = getImageUri(this, selectedImage);
                         CropImage.activity(uri).start(this);
-    //                        userProfileIV.setVisibility(View.VISIBLE);
-    //                        imageTextTV.setVisibility(View.GONE);
-    //                        userProfileIV.setImageBitmap(selectedImage);
-    //                        uploadImage();
+                        //                        userProfileIV.setVisibility(View.VISIBLE);
+                        //                        imageTextTV.setVisibility(View.GONE);
+                        //                        userProfileIV.setImageBitmap(selectedImage);
+                        //                        uploadImage();
                     }
                     break;
                 case 1:
@@ -509,10 +508,10 @@ public class DBAInfoDetails extends AppCompatActivity {
                             Uri selectedImage = data.getData();
                             if (selectedImage != null) {
                                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-    //                                userProfileIV.setImageBitmap(bitmap);
-    //                                userProfileIV.setVisibility(View.VISIBLE);
-    //                                imageTextTV.setVisibility(View.GONE);
-    //                                uploadImage();
+                                //                                userProfileIV.setImageBitmap(bitmap);
+                                //                                userProfileIV.setVisibility(View.VISIBLE);
+                                //                                imageTextTV.setVisibility(View.GONE);
+                                //                                uploadImage();
                                 Uri uri = getImageUri(this, bitmap);
                                 CropImage.activity(uri).start(this);
                             }
@@ -541,6 +540,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         String path = null;
         try {
@@ -553,6 +553,7 @@ public class DBAInfoDetails extends AppCompatActivity {
         }
         return Uri.parse(path);
     }
+
     private void uploadImage() {
         try {
             BitmapDrawable drawable = (BitmapDrawable) dba_userProfileIV.getDrawable();
@@ -584,6 +585,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
     public String getRealPathFromURI(Uri uri) {
         String path = "";
         try {
@@ -632,34 +634,34 @@ public class DBAInfoDetails extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            try {
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-                switch (requestCode) {
-                    case REQUEST_ID_MULTIPLE_PERMISSIONS:
+        try {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            switch (requestCode) {
+                case REQUEST_ID_MULTIPLE_PERMISSIONS:
 
-                        if (ContextCompat.checkSelfPermission(this,
-                                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            Utils.displayAlert("Requires Access to Camera.", DBAInfoDetails.this, "", "");
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        Utils.displayAlert("Requires Access to Camera.", DBAInfoDetails.this, "", "");
 
-                        } else if (ContextCompat.checkSelfPermission(this,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
+                    } else if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
 
-                        } else if (ContextCompat.checkSelfPermission(this,
-                                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
+                    } else if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
 
-                        } else {
+                    } else {
 //                        startActivity(new Intent(this, CameraActivity.class));
 //                        chooseFilePopup(this, selectedDocType);
-                            if (Utils.isKeyboardVisible)
-                                Utils.hideKeypad(DBAInfoDetails.this);
-                            showImagePickerDialog(this);
-                        }
-                        break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(DBAInfoDetails.this);
+                        showImagePickerDialog(this);
+                    }
+                    break;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+}
