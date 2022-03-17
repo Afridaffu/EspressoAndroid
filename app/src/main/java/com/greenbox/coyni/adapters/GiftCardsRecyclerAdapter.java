@@ -16,6 +16,7 @@ import com.greenbox.coyni.model.giftcard.Brand;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.GiftCardActivity;
 import com.greenbox.coyni.view.GiftCardDetails;
 import com.greenbox.coyni.view.LoginActivity;
 
@@ -64,6 +65,7 @@ public class GiftCardsRecyclerAdapter extends RecyclerView.Adapter<GiftCardsRecy
                 public void onClick(View v) {
                     try {
                         if (objData != null) {
+                            GiftCardActivity giftCardActivity = (GiftCardActivity) mContext;
                             Intent i = new Intent(mContext, GiftCardDetails.class);
                             i.putExtra("BRAND_KEY", objData.getBrandKey());
                             mContext.startActivity(i);
