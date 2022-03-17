@@ -169,7 +169,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             } else {
                 emailTV.setText("");
             }
-            if (dbaInfoResp.getData().getWebsite() != null) {
+            if (!dbaInfoResp.getData().getWebsite().equals("")) {
                 webLL.setVisibility(View.VISIBLE);
                 webSiteTV.setText(dbaInfoResp.getData().getWebsite());
             } else {
