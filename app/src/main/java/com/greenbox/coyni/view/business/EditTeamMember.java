@@ -136,7 +136,7 @@ public class EditTeamMember extends BaseActivity {
         }
         if (phoneNumber != null
                 && !phoneNumber.equals("")) {
-            editPhoneET.setText(phoneNumber);
+            editPhoneET.setText("(" +phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
         }
 
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
@@ -431,15 +431,11 @@ public class EditTeamMember extends BaseActivity {
         TeamRequest teamRequest = new TeamRequest();
         try {
             String emailAddress = editEmailET.getText().toString();
-            String phoneNumber = editPhoneET.getText().toString();
-            String firstName=editFNameET.getText().toString();
-            String lastName=editFNameET.getText().toString();
+            String phoneNumber = editPhoneET.getText().toString().substring(1, 4) + editPhoneET.getText().toString().substring(6, 9) + editPhoneET.getText().toString().substring(10, editPhoneET.getText().length());
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
             teamRequest.setPhoneNumber(phone);
-            teamRequest.setFirstName(firstName);
-            teamRequest.setLastName(lastName);
             teamRequest.setEmailAddress(emailAddress);
             teamRequest.setRoleId(19);
 

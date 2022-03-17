@@ -156,10 +156,9 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         TeamRequest teamRequest = new TeamRequest();
         try {
             firstName = editFNameET.getText().toString().trim();
-            phoneNumber = phoneNumberET.getText().toString().trim();
+            phoneNumber = phoneNumberET.getUnmaskedText();
             lastName = editLNameET.getText().toString().trim();
             emailAddress = editEmailET.getText().toString().trim();
-            phoneNumberET.getText().toString().trim();
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
@@ -423,10 +422,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
     public void teamInfoAddAPICall(TeamRequest teamRequest) {
         teamViewModel.addTeamMember(teamRequest);
-    }
-
-    public void addTeam() {
-        teamInfoAddAPICall(prepareRequest());
     }
 
     @Override

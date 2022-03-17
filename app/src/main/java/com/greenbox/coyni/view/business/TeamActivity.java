@@ -129,6 +129,7 @@ public class TeamActivity extends BaseActivity {
             memberClickListener = (view, position) -> {
                 Intent intent = new Intent(this, TeamMemberActivity.class);
                 intent.putExtra(Utils.teamMemberId, datumList.get(position).getId());
+                intent.putExtra(Utils.teamStatus,datumList.get(position).getStatus());
                 startActivity(intent);
 
             };
@@ -141,6 +142,7 @@ public class TeamActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         TeamRequest request = new TeamRequest();
+        showProgressDialog();
         teamViewModel.retrieveTeamInfo(request);
     }
 
@@ -150,6 +152,7 @@ public class TeamActivity extends BaseActivity {
             teamViewModel.getTeamRetrieveMutableLiveData().observe(this, new Observer<TeamResponseModel>() {
                 @Override
                 public void onChanged(TeamResponseModel teamResponseModel) {
+                    dismissDialog();
                     if (teamResponseModel != null) {
                         if (teamResponseModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                             if (teamResponseModel.getData().size() > 0) {

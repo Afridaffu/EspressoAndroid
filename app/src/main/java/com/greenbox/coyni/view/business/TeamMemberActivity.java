@@ -42,6 +42,7 @@ public class TeamMemberActivity extends BaseActivity {
         setContentView(R.layout.activity_team_member);
         Bundle bundle = getIntent().getExtras();
         teamMemberId = bundle.getInt(Utils.teamMemberId, teamMemberId);
+        status=bundle.getString(Utils.teamStatus,status);
 
         initFields();
         initObservers();
@@ -80,8 +81,7 @@ public class TeamMemberActivity extends BaseActivity {
                                 }
                                 if (data.getPhoneNumber() != null && !data.getPhoneNumber().equals("")) {
                                     phoneNumber=data.getPhoneNumber();
-
-                                    txPhoneNumber.setText(data.getPhoneNumber());
+                                    txPhoneNumber.setText("(" +phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
                                 }
                             } else {
                                 Utils.displayAlert(teamGetDataModel.getError().getErrorDescription(), TeamMemberActivity.this, "", teamGetDataModel.getError().getFieldErrors().get(0));
@@ -271,6 +271,7 @@ public class TeamMemberActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        showProgressDialog();
         teamViewModel.getTeamMember(teamMemberId);
     }
 

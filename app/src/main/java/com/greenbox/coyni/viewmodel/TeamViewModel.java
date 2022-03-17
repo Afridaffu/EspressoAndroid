@@ -248,7 +248,6 @@ public class TeamViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
                     try {
-                        Log.d("TeamInfo", response.body().getStatus());
                         if (response.isSuccessful()) {
                             TeamInfoAddModel obj = response.body();
                             teamAddMutableLiveData.setValue(obj);

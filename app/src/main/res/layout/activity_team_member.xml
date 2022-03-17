@@ -116,18 +116,19 @@
                                     android:text=""
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/_20sdp" />
-                                <ImageView
-                                    android:id="@+id/editStatusIV"
-                                    android:layout_width="6dp"
-                                    android:layout_height="6dp"
-                                    android:background="@drawable/pending_dot"
-                                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                                    app:layout_constraintEnd_toEndOf="@+id/linearLayout" />
                             </androidx.cardview.widget.CardView>
 
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
+                        <ImageView
+                            android:id="@+id/editStatusIV"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginEnd="6dp"
+                            android:background="@drawable/pending_dot"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                            app:layout_constraintEnd_toEndOf="@+id/linearLayout" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
