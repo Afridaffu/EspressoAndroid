@@ -160,7 +160,10 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
     public void setHintText(String text) {
         hintName.setText(text);
-        phnET.setHint(text);
+        if (text.equals("Customer Service Phone Number"))
+            phnET.setHint("Customer Service Number");
+        else
+            phnET.setHint(text);
     }
 
     public String getText() {
