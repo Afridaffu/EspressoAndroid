@@ -217,17 +217,15 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
                     if(editable.length()==5 || editable.length()==6){
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams. MATCH_PARENT ,
-                                LinearLayout.LayoutParams. WRAP_CONTENT ) ;
-                        layoutParams.setMargins( 0 , 25 , 0 , 0 ) ;
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if(editable.length()==7 || editable.length()==8){
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
 
                     }else if(editable.length()==9){
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    }else if(editable.length()<=4){
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
 
@@ -1257,6 +1255,9 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
             }else if(editable.length()==9){
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+            }else if(editable.length()<=4){
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
             }
 
 //            if (editable.length() > 12) {
