@@ -268,7 +268,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:hint="@string/billing_address_line_2_optional"
-                        android:textColorHint="@color/primary_black"
+                        android:textColorHint="@color/light_gray"
                         app:boxCornerRadiusBottomEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusTopEnd="12dp"

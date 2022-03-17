@@ -93,7 +93,6 @@ public class EditPhoneActivity extends AppCompatActivity {
 
             //Business..
             b_newPhoneET = findViewById(R.id.b_newPhoneET);
-            b_newPhoneET.setHint("Phone Number");
             b_newPhoneErrorLL = findViewById(R.id.b_newPhoneErrorLL);
             b_newPhoneErrorTV = findViewById(R.id.b_newPhoneErrorTV);
             b_editPhoneCloseLL = findViewById(R.id.b_editPhoneCloseLL);
@@ -102,10 +101,12 @@ public class EditPhoneActivity extends AppCompatActivity {
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
                 findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
+                b_newPhoneET.setHint("New Phone Number");
             }
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
                 findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
+                b_newPhoneET.setHint("Phone Number");
 
             }
 

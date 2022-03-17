@@ -116,6 +116,7 @@ public class EditEmailActivity extends AppCompatActivity {
 //            newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
             b_newEmailET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
+            currentEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
 
 //            editEmailSV.setOnClickListener(new View.OnClickListener() {

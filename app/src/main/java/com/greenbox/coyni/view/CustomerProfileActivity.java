@@ -835,6 +835,21 @@ public class CustomerProfileActivity extends AppCompatActivity {
         }
     }
 
+//    private void saveThumb(String value) {
+//        dbHandler.clearThumbPinLockTable();
+//        dbHandler.insertThumbPinLock(value);
+//    }
+//
+//    private void saveFace(String value) {
+//        dbHandler.clearFacePinLockTable();
+//        dbHandler.insertFacePinLock(value);
+//    }
+//
+//    private void saveToken(String value) {
+//        objMyApplication.setStrMobileToken(value);
+//        dbHandler.clearPermanentTokenTable();
+//        dbHandler.insertPermanentToken(value);
+//    }
     public void initObserver() {
         coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
             @Override
