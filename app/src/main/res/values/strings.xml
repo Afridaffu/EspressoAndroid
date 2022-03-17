@@ -86,7 +86,7 @@
 
 
     <string name="identity">Identity Verification</string>
-    <string name="MaillingAddress">Mailling Address</string>
+    <string name="MaillingAddress">Mailing Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
     <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
     <string name="city">City</string>
@@ -207,7 +207,7 @@
     <string name="chargeback_transaction"><u>link to the chargeback transaction]</u></string>
 
     <string name="maxlength">8</string>
-    <string name="maxlengthValue">11</string>
+    <string name="maxlengthValue">8</string>
     <string name="maxlengthamount">8</string>
     <string name="maxlendecimal">13</string>
     <string name="payrequestMaxAmt">1000000</string>
@@ -356,11 +356,14 @@
     <string name="business_token_account">Business Token Account</string>
     <string name="available_balance">Available Balance 99.00 CYN</string>
     <string name="decline_reserve_rules">Decline Reserve Rules?</string>
+    <string name="decline_reserve_rules_message">Are you sure you want to decline this reserve rule and cancel your merchant application? You will need to complete another application to apply again.</string>
     <string name="no_go_back">No, go back</string>
     <string name="verification_failed">Verification Failed</string>
     <string name="dear_name">Dear <b>[Name],</b></string>
+    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name:<b>[name]</b></string>
     <string name="dba_dba">DBA: <b>[DBA]</b></string>
+    <string name="we_thank_for_interest">Again, we thank you for your interest and wish you the best of luck.</string>
     <string name="documents_required">Documents Required</string>
     <string name="copy_of_social_security_card">Copy of Social Security card</string>
     <string name="upload_file">Upload File</string>

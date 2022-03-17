@@ -100,7 +100,8 @@ public class WebViewActivity extends AppCompatActivity {
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
                     try {
-                        if (!isReturn && (url.contains("http://localhost:3000/?fiLoginAcctId") || url.contains("http://localhost:3000/?&action=cancel"))) {
+//                        if (!isReturn && (url.contains("http://localhost:3000/?fiLoginAcctId") || url.contains("http://localhost:3000/?&action=cancel"))) {
+                        if (!isReturn && (url.contains("http://localhost:3000/?fiLoginAcctId") || url.contains("action=cancel"))) {
                             String string = url.replace("#", "?");
                             String action = Uri.parse(string).getQueryParameter("action");
                             objMyApplication.setStrFiservError(action);

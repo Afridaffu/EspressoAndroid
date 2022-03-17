@@ -166,6 +166,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     }else if(editable.length()==9){
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    }else if(editable.length()<=4){
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
 
 //                    if (editable.length() > 8) {
@@ -1643,6 +1646,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
             }else if(editable.length()==9){
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+            }else if(editable.length()<=4){
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
             }
 
 //            if (editable.length() > 12) {
