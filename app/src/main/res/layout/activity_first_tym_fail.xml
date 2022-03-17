@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvErrorHead"
+        android:layout_marginTop="@dimen/_30sdp"
         android:fontFamily="@font/opensans_regular"
         android:gravity="center"
         android:text="There was an error with verifying your \nbank account information. Please re-enter  \nyour bank information or try a different \npayment method."
@@ -57,6 +58,5 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />
     </androidx.cardview.widget.CardView>
-
 
 </RelativeLayout>
