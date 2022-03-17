@@ -1,7 +1,5 @@
 package com.greenbox.coyni.custom_camera;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -13,9 +11,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
+import com.greenbox.coyni.view.business.BusinessAdditionalActionRequired;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
@@ -58,6 +59,12 @@ public class RetakeActivity extends AppCompatActivity {
                     AddBeneficialOwnerActivity.identityFile = null;
                     AddBeneficialOwnerActivity.isFileSelected = false;
                     AddBeneficialOwnerActivity.enableOrDisableNext();
+                }else if (from.equals("AAR-SSC")) {
+                    BusinessAdditionalActionRequired.adtionalSscFile = null;
+                }else if (from.equals("AAR-SecFile")){
+                    BusinessAdditionalActionRequired.addtional2fFle = null;
+                }else if (from.equals("AAR-FBL")){
+                    BusinessAdditionalActionRequired.businessLincenseFile = null;
                 }
                 finish();
             }
@@ -86,6 +93,12 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("ADD_BO")) {
                     AddBeneficialOwnerActivity.addBeneficialOwnerActivity.removeAndUploadBODoc();
                     AddBeneficialOwnerActivity.enableOrDisableNext();
+                } else if(from.equals("AAR-SSC")){
+                    BusinessAdditionalActionRequired.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(1);
+                }else if(from.equals("AAR-SecFile")) {
+                    BusinessAdditionalActionRequired.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(2);
+                }else if(from.equals("AAR-FBL")) {
+                    BusinessAdditionalActionRequired.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(3);
                 }
             }
         });
@@ -110,6 +123,12 @@ public class RetakeActivity extends AppCompatActivity {
                     AddBeneficialOwnerActivity.identityFile = null;
                     AddBeneficialOwnerActivity.isFileSelected = false;
                     AddBeneficialOwnerActivity.enableOrDisableNext();
+                }else if (from.equals("AAR-SSC")) {
+                    BusinessAdditionalActionRequired.adtionalSscFile = null;
+                }else if (from.equals("AAR-SecFile")){
+                    BusinessAdditionalActionRequired.addtional2fFle = null;
+                }else if (from.equals("AAR-FBL")){
+                    BusinessAdditionalActionRequired.businessLincenseFile = null;
                 }
             }
         });

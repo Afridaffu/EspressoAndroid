@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
+import com.greenbox.coyni.view.business.BusinessAdditionalActionRequired;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
@@ -113,7 +114,16 @@ public class ImageUtility {
             } else if (from.equals("ADD_BO")) {
                 AddBeneficialOwnerActivity.identityFile = mediaFile;
 //                DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
+            } else if(from.equals("")) {
+                BusinessAdditionalActionRequired.adtionalSscFile = mediaFile;
             }
+            else if(from.equals("")) {
+                BusinessAdditionalActionRequired.addtional2fFle = mediaFile;
+            }
+            else if(from.equals("")) {
+                BusinessAdditionalActionRequired.businessLincenseFile = mediaFile;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
