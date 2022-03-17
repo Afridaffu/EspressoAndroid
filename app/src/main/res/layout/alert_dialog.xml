@@ -25,7 +25,7 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11sdp"
-            android:text="Coyni" />
+            android:text="coyni" />
 
         <TextView
             android:id="@+id/textTV"
