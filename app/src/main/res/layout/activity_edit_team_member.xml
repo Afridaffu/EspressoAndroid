@@ -95,6 +95,8 @@
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"
+                android:editable="false"
+                android:enabled="false"
                 android:inputType="text|textNoSuggestions"
                 android:maxLength="30"
                 android:maxLines="1"
@@ -150,7 +152,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="AUTOFILL_HINT_SMS_OTP"
-
+                android:editable="false"
+                android:enabled="false"
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:fontFamily="@font/opensans_semibold"
                 android:imeOptions="actionNext"

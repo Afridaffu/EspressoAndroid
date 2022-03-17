@@ -111,6 +111,7 @@ import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
+import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
@@ -521,6 +522,9 @@ public interface ApiService {
 
     @DELETE("api/v2/team/{teamMemberId}")
     Call<TeamInfoAddModel> deleteTeamMember(@Path("teamMemberId") Integer teamMemberId);
+
+    @GET("api/v2/team/{teamMemberId}")
+    Call<TeamGetDataModel> getTeamMember(@Path("teamMemberId") Integer teamMemberId);
 
     @POST("api/v2/team/send-invitation")
     Call<TeamInfoAddModel> addTeamMember(@Body TeamRequest request);
