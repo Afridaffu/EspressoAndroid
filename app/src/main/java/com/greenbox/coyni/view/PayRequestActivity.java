@@ -128,10 +128,6 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     convertUSDValue();
                     if (editable.length() == 5 || editable.length() == 6) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT);
-                        layoutParams.setMargins(0, 25, 0, 0);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
@@ -139,6 +135,9 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
                     } else if (editable.length() == 9) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() <= 4) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
 //                    if (editable.length() > 8) {
@@ -162,9 +161,13 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     disableButtons(true);
                 } else if (editable.length() == 0) {
                     payRequestET.setHint("0.00");
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(0, 0, 0, 0);
+                    payRequestET.setLayoutParams(lp);
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
+                    tvCurrency.setVisibility(View.GONE);
                     disableButtons(true);
                     cKey.clearData();
                 } else {
@@ -417,6 +420,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             cynWallet = objMyApplication.getGbtWallet();
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
+           // payRequestET.setMovementMethod(null);
+
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
@@ -898,16 +903,15 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
     private void changeTextSize(String editable) {
         try {
-            InputFilter[] FilterArray = new InputFilter[1];
             if (editable.length() == 5 || editable.length() == 6) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
             } else if (editable.length() == 7 || editable.length() == 8) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-
             } else if (editable.length() == 9) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+            }else if (editable.length() <= 4) {
+                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
             }
-
 //            if (editable.length() > 12) {
 //                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
 //                payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
@@ -925,7 +929,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 //                payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
 //                //tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
 //            }
-            payRequestET.setFilters(FilterArray);
+            //payRequestET.setFilters(FilterArray);
             payRequestET.setSelection(payRequestET.getText().length());
         } catch (Exception ex) {
             ex.printStackTrace();
