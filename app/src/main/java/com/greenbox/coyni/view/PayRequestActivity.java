@@ -408,7 +408,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             lyBalance = findViewById(R.id.lyBalance);
             payRequestLL = findViewById(R.id.payRequestLL);
             addNoteClickLL = findViewById(R.id.addNoteClickLL);
-            llValues = findViewById(R.id.ll_values);
+           // llValues = findViewById(R.id.ll_values);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
