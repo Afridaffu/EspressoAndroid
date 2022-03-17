@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -38,27 +37,27 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BusinessAdditionalActionRequired extends AppCompatActivity {
-
-    LinearLayout actionReqFileUploadedLL,sscFileUploadLL,actionReqFileUploadLL,businessLicenseUploadLL,lincenseFileUploadedLL,sscfileUploadedLL,acceptLL,declineLL,acceptDeclineLL,acceptdneLL,declindneLL;
-    TextView fileUploadTV,actionReqFileTV,licenseTV,fileUploadedTV,remarksTV,acceptMsgTV,declineMsgTV,compnyNameTV,actionReqFileUpdatedOnTV,licenseUploadedTV;
+public class BusinessAdditionalActionRequiredActivity extends AppCompatActivity {
+    private static Object ActivityCompat;
+    LinearLayout actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, sscfileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
+    TextView fileUploadTV, actionReqFileTV, licenseTV, fileUploadedTV, remarksTV, acceptMsgTV, declineMsgTV, compnyNameTV, actionReqFileUpdatedOnTV, licenseUploadedTV;
     String selectedDocType = "", from = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     private static final int ACTIVITY_CHOOSE_FILE = 3;
     private static final int PICK_IMAGE_REQUEST = 4;
     Long mLastClickTime = 0L;
     public int docTypeID = 0;
-    public static BusinessAdditionalActionRequired businessAdditionalActionRequired;
+    public static BusinessAdditionalActionRequiredActivity businessAdditionalActionRequired;
     public static File adtionalSscFile = null, addtional2fFle = null, businessLincenseFile = null;
-    public boolean issscFileUploadLL = false, isactionReqFileUploadLL = false, isbusinessLicenseUploadLL = false, ischeckbox2CB = false, ischeckbox3CB = false, ischeckboxCB = false, isSubmitEnabled=false;
-    private EditText refundET, addNoteET;
-    public CheckBox checkboxCB,checkbox2CB,checkbox3CB;
+    public boolean issscFileUploadLL = false, isactionReqFileUploadLL = false, isbusinessLicenseUploadLL = false, ischeckbox2CB = false, ischeckbox3CB = false, ischeckboxCB = false, isSubmitEnabled = false;
+    private EditText addNoteET;
+    public CheckBox checkboxCB, checkbox2CB, checkbox3CB;
     public CardView submitCV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_additonal_action_required);
+        setContentView(R.layout.activity_business_additional_action_required);
 
         businessAdditionalActionRequired = this;
         initFields();
@@ -82,7 +81,6 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
 
         fileUploadedTV = findViewById(R.id.sscfileUpdatedOnTV);
         actionReqFileUpdatedOnTV = findViewById(R.id.actionReqFileUpdatedOnTV);
-        licenseUploadedTV = findViewById(R.id.licenseUploadedTV);
 
         checkboxCB = findViewById(R.id.checkboxCB);
         checkbox2CB = findViewById(R.id.checkbox2CB);
@@ -105,10 +103,13 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
             public void onClick(View view) {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
+
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 displayComments();
+
             }
+
         });
         acceptLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,17 +118,19 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
                 compnyNameTV.setVisibility(View.GONE);
                 acceptdneLL.setVisibility(View.VISIBLE);
                 acceptMsgTV.setVisibility(View.VISIBLE);
-            }
-        });
 
+            }
+
+        });
     }
+
+
     private void displayComments() {
         try {
-            Dialog cvvDialog = new Dialog(BusinessAdditionalActionRequired.this);
+            Dialog cvvDialog = new Dialog(BusinessAdditionalActionRequiredActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             cvvDialog.setContentView(R.layout.add_note_layout);
             cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
@@ -139,9 +142,12 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
 
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
+
+
                 public void onClick(View view) {
                     cvvDialog.dismiss();
-                    Utils.hideKeypad(BusinessAdditionalActionRequired.this);
+                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -150,13 +156,12 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
                     try {
                         remarksTV.setText(addNoteET.getText().toString().trim());
                         cvvDialog.dismiss();
-                        Utils.hideKeypad(BusinessAdditionalActionRequired.this);
+                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                         remarksTV.setVisibility(View.VISIBLE);
                         acceptDeclineLL.setVisibility(View.GONE);
                         compnyNameTV.setVisibility(View.GONE);
                         declineMsgTV.setVisibility(View.VISIBLE);
                         declindneLL.setVisibility(View.VISIBLE);
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -165,7 +170,6 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
             addNoteET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 }
 
                 @Override
@@ -174,7 +178,9 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
                         addNoteTIL.setCounterEnabled(false);
                     } else {
                         addNoteTIL.setCounterEnabled(true);
+
                     }
+
                 }
 
                 @Override
@@ -184,14 +190,15 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
                         if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
                             addNoteET.setText("");
                             addNoteET.setSelection(addNoteET.getText().length());
+
                         } else if (str.length() > 0 && str.contains(".")) {
                             addNoteET.setText(addNoteET.getText().toString().replaceAll("\\.", ""));
                             addNoteET.setSelection(addNoteET.getText().length());
+
                         } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
                             addNoteET.setText("");
                             addNoteET.setSelection(addNoteET.getText().length());
                         }
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -203,22 +210,16 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
             }
             Window window = cvvDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
             WindowManager.LayoutParams wlp = window.getAttributes();
-
             wlp.gravity = Gravity.BOTTOM;
             wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             window.setAttributes(wlp);
-
             cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
             cvvDialog.show();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 
     public static boolean checkAndRequestPermissions(final Activity context) {
         try {
@@ -241,7 +242,7 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
 //                        .add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
 //            }
             if (!listPermissionsNeeded.isEmpty()) {
-                ActivityCompat.requestPermissions(context, listPermissionsNeeded
+                androidx.core.app.ActivityCompat.requestPermissions(context, listPermissionsNeeded
                                 .toArray(new String[listPermissionsNeeded.size()]),
                         REQUEST_ID_MULTIPLE_PERMISSIONS);
                 return false;
@@ -258,29 +259,29 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             switch (requestCode) {
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
-
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", BusinessAdditionalActionRequired.this, "", "");
+                        Utils.displayAlert("Requires Access to Camera.", BusinessAdditionalActionRequiredActivity.this, "", "");
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequired.this, "", "");
+                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequiredActivity.this, "", "");
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequired.this, "", "");
+                        Utils.displayAlert("Requires Access to Your Storage.", BusinessAdditionalActionRequiredActivity.this, "", "");
 
                     } else {
                         chooseFilePopup(this, selectedDocType);
                         if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(BusinessAdditionalActionRequired.this);
+                            Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     }
                     break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private void chooseFilePopup(final Context context, String type) {
@@ -297,44 +298,37 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
             wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             window.setAttributes(wlp);
             chooseFile.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
             TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
             TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
             TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
-
             libraryTV.setOnClickListener(view -> {
                 chooseFile.dismiss();
-
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
-            });
 
+            });
             takePhotoTV.setOnClickListener(view -> {
                 chooseFile.dismiss();
-                startActivity(new Intent(BusinessAdditionalActionRequired.this, CameraActivity.class).putExtra("FROM", type));
-
+                startActivity(new Intent(BusinessAdditionalActionRequiredActivity.this, CameraActivity.class).putExtra("FROM", type));
             });
-
             browseFileTV.setOnClickListener(view -> {
                 chooseFile.dismiss();
-
                 Intent pickIntent = new Intent();
                 pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 pickIntent.setType("*/*");
                 String[] extraMimeTypes = {"application/pdf", "image/*"};
                 pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
                 pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-
-                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
+                Intent
+                        chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
                 startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
-
             });
-
             chooseFile.show();
 
         } catch (Exception ex) {
             ex.printStackTrace();
+
         }
     }
 
@@ -346,11 +340,14 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
             String path = "";
             if (requestCode == ACTIVITY_CHOOSE_FILE) {
                 uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
+
             } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
                 uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+
         }
     }
 
@@ -361,66 +358,83 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
+
     }
 
+
     public void removeAndUploadAdditionalDoc(int docID) {
-//        docTypeID = docID;
+        //        docTypeID = docID;
         //identityVerificationViewModel.removeIdentityImage(docTypeID + "");
+
     }
+
 
     public void uploadDocumentFromLibrary(Uri uri, int reqType) {
         try {
             String FilePath = "";
             if (reqType == ACTIVITY_CHOOSE_FILE) {
                 FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
+
             } else {
                 FilePath = getRealPathFromURI(uri);
+
             }
             File mediaFile = new File(FilePath);
             if (selectedDocType.equals("AAR-SSC")) {
                 adtionalSscFile = mediaFile;
                 removeAndUploadAdditionalDoc(1);
+
             } else if (selectedDocType.equals("AAR-SecFile")) {
                 addtional2fFle = mediaFile;
                 removeAndUploadAdditionalDoc(2);
+
             } else if (selectedDocType.equals("AAR-FBL")) {
                 businessLincenseFile = mediaFile;
-                    removeAndUploadAdditionalDoc(3);
+                removeAndUploadAdditionalDoc(3);
+
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+
         }
+
     }
 
     public void fileOnClick(View view) {
         selectedDocType = "AAR-SSC";
-        if (checkAndRequestPermissions(BusinessAdditionalActionRequired.this)) {
+        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
+
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             chooseFilePopup(this, selectedDocType);
+
         }
+
     }
 
     public void actionReqOnClick(View view) {
         selectedDocType = "AAR-SecFile";
-        if (checkAndRequestPermissions(BusinessAdditionalActionRequired.this)) {
+        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
+
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             chooseFilePopup(this, selectedDocType);
+
         }
     }
 
     public void licenseOnClick(View view) {
         selectedDocType = "AAR-FBL";
-        if (checkAndRequestPermissions(BusinessAdditionalActionRequired.this)) {
+        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                 return;
             }
@@ -428,18 +442,24 @@ public class BusinessAdditionalActionRequired extends AppCompatActivity {
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             chooseFilePopup(this, selectedDocType);
+
         }
     }
 
+
     public void enableOrDisableNext() {
         try {
+
             if (issscFileUploadLL && isactionReqFileUploadLL && isbusinessLicenseUploadLL && ischeckboxCB && ischeckbox2CB && ischeckbox3CB) {
                 isSubmitEnabled = true;
                 submitCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+
             } else {
                 isSubmitEnabled = false;
                 submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

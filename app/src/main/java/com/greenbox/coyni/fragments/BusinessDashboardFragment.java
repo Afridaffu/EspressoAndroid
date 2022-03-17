@@ -40,7 +40,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
-import com.greenbox.coyni.view.business.BusinessAdditonalActionRequired;
+import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
@@ -143,7 +143,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 return;
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(getActivity(), BusinessAdditonalActionRequired.class));
+            startActivity(new Intent(getActivity(), BusinessAdditionalActionRequiredActivity.class));
         });
 
         mTvMerchantTransactions.setOnClickListener(v -> {
