@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -211,7 +212,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onResume() {
         try {
-            if (cvvDialog != null && addNoteET.hasFocus()) {
+            if (cvvDialog != null && cvvDialog.isShowing() && addNoteET.hasFocus()) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1102,6 +1103,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
 
     private void displayComments() {
         try {
+            Utils.isKeyboardVisible = true;
             cvvDialog = new Dialog(PayRequestActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             cvvDialog.setContentView(R.layout.add_note_layout);
@@ -1173,11 +1175,23 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
             cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
             cvvDialog.show();
+
+            cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if (!cvvDialog.isShowing()) {
+                        if (Utils.isKeyboardVisible) {
+                            Utils.hideKeypad(PayRequestActivity.this);
+                        }
+                    }
+                }
+            });
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     cvvDialog.dismiss();
-                    Utils.hideKeypad(PayRequestActivity.this);
+                    Utils.isKeyboardVisible = false;
+                        Utils.hideKeypad(PayRequestActivity.this);
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -1186,7 +1200,8 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     try {
                         addNoteTV.setText(addNoteET.getText().toString().trim());
                         cvvDialog.dismiss();
-                        Utils.hideKeypad(PayRequestActivity.this);
+                        Utils.isKeyboardVisible=false;
+                            Utils.hideKeypad(PayRequestActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

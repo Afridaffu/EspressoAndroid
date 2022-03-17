@@ -174,7 +174,7 @@ public class BOResp {
         }
     }
 
-    public class RequiredDocumets {
+    public class RequiredDocumets implements Serializable {
         private String imgSize;
         private String imgName;
         private String imgLink;

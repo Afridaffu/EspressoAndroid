@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
@@ -33,6 +34,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -52,6 +54,7 @@ import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.GiftCardBindingLayoutActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -87,6 +90,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     public static PayToMerchantActivity payToMerchantActivity;
     UserDetails details;
     boolean value;
+    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    TextView merchantType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,6 +248,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             payET.requestFocus();
             payET.setShowSoftInputOnFocus(false);
             payToMerchantActivity = this;
+            merchantType = findViewById(R.id.merchantTypeTV);
+            businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
@@ -252,6 +259,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     Utils.displayAlert(getString(R.string.internet), PayToMerchantActivity.this, "", "");
                 }
             }
+            businessIdentityVerificationViewModel.getBusinessType();
 
             payET.addTextChangedListener(this);
             if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
@@ -454,6 +462,25 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                         Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
                     }
                     payTransaction();
+                }
+            }
+        });
+
+        businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onChanged(BusinessTypeResp businessTypeResp) {
+                if (businessTypeResp != null && businessTypeResp.getStatus().equalsIgnoreCase("SUCCESS")){
+                    for (int i = 0; i < businessTypeResp.getData().size(); i++) {
+                        try {
+                            if (details.getData().getBusinessType().toLowerCase().trim().equals(businessTypeResp.getData().get(i).getKey().toLowerCase().trim())) {
+                                merchantType.setText("("+businessTypeResp.getData().get(i).getValue()+")");
+                                break;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         });
@@ -941,7 +968,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     }
 
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, boolean isPayToMerchantActivity,Double balance) {
-        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(PayToMerchantActivity.this, amount, userDetails, isPayToMerchantActivity,balance);
+        PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(PayToMerchantActivity.this, amount, userDetails, isPayToMerchantActivity,balance,"");
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {

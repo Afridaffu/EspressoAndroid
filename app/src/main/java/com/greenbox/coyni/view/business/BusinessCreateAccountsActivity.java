@@ -34,9 +34,9 @@ import java.util.Map;
 
 public class BusinessCreateAccountsActivity extends BaseActivity implements BusinessProfileRecyclerAdapter.OnSelectListner {
 
-    private TextView userShortInfoTV, userNameTV, userBalanceTV,businessPersonalAccountNameTv,mTvUserIconText;
-    private ImageView imgProfile, accountsCloseIV,mIvUserIcon;
-    private LinearLayout llOpenAccount,businessPersonalProfileAccount;
+    private TextView userShortInfoTV, userNameTV, userBalanceTV, businessPersonalAccountNameTv, mTvUserIconText;
+    private ImageView imgProfile, accountsCloseIV, mIvUserIcon;
+    private LinearLayout llOpenAccount, businessPersonalProfileAccount;
     private MyApplication myApplication;
     private DashboardViewModel dashboardViewModel;
     private ExpandableListView brandsGV;
@@ -64,7 +64,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             initFields();
             showUserData();
             initObservers();
-            
+
             accountsCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -77,7 +77,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 //                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class)
 //                            .putExtra("PersonalAccount", personalAccountExist)
 //                    );
-                   startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class));
+                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class));
                 }
             });
         } catch (Exception e) {
@@ -96,7 +96,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             userNameTV = findViewById(R.id.userNameTV);
             userBalanceTV = findViewById(R.id.userBalanceTV);
             accountsCloseIV = findViewById(R.id.accountsCloseIV);
-             brandsGV = findViewById(R.id.recyclerView);
+            brandsGV = findViewById(R.id.recyclerView);
             businessPersonalAccountNameTv = findViewById(R.id.business_personal_account_name);
             mIvUserIcon = findViewById(R.id.profile_img);
             mTvUserIconText = findViewById(R.id.b_imageTextTV);
@@ -122,7 +122,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                 username = username + " ";
                 username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
             }
-            userNameTV.setText(getResources().getString(R.string.dba_name, username));
+//            userNameTV.setText(getResources().getString(R.string.dba_name, username));
+            userNameTV.setText(username);
         }
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getImage() != null) {
@@ -153,10 +154,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
-                        myApplication.setGbtWallet(walletInfo.get(i));
-                        strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
-                        userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-                        myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
+                    myApplication.setGbtWallet(walletInfo.get(i));
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
+                    userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+                    myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
 //                    }
                 }
             }
@@ -175,10 +176,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                     Map<String, ArrayList<ProfilesResponse.Profiles>> map = new HashMap<>();
                     filterList = profilesResponse.getData();
 
-                    for(ProfilesResponse.Profiles c: filterList){
-                        if(c.getAccountType().equals(Utils.BUSINESS)){
-                                businessAccountList.add(c);
-                                addDetails(String.valueOf(c.getCompanyName()),c.getDbaOwner());
+                    for (ProfilesResponse.Profiles c : filterList) {
+                        if (c.getAccountType().equals(Utils.BUSINESS)) {
+                            businessAccountList.add(c);
+                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaOwner());
                         } else {
                             personalAccountList.add(c);
                         }
@@ -231,27 +232,27 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
                     LogUtils.v(TAG, map.toString());
 
-                    if(businessAccountList.size()!=0) {
+                    if (businessAccountList.size() != 0) {
                         brandsGV.setVisibility(View.VISIBLE);
-                        LogUtils.d(TAG,"subSet"+subSet);
-                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, subSet,BusinessCreateAccountsActivity.this);
+                        LogUtils.d(TAG, "subSet" + subSet);
+                        BusinessProfileRecyclerAdapter listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, subSet, BusinessCreateAccountsActivity.this);
                         brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);
                     }
 
-                    if(personalAccountList.size()!=0) {
+                    if (personalAccountList.size() != 0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
-                         personalAccountExist = "true";
+                        personalAccountExist = "true";
                         String iconText = "";
                         if (personalAccountList.get(0).getCompanyName() != null
-                                ) {
+                        ) {
                             String firstName = personalAccountList.get(0).getCompanyName();
                             iconText = firstName.substring(0, 1).toUpperCase();
                             String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
 
                         }
-                        if (personalAccountList.get(0).getImage()!= null) {
+                        if (personalAccountList.get(0).getImage() != null) {
                             mTvUserIconText.setVisibility(View.GONE);
                             mIvUserIcon.setVisibility(View.VISIBLE);
                             Glide.with(BusinessCreateAccountsActivity.this)
@@ -274,6 +275,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
 
     }
+
     private int addDetails(String mainSet, String subSet) {
         int groupPosition = 0;
         BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);

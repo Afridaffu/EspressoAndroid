@@ -536,7 +536,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvExtBHead.setTextColor(getColor(R.color.primary_black));
                     tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
                     tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgBankArrow.clearColorFilter();
+//                    imgBankArrow.clearColorFilter();
+                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }
                 if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
@@ -551,7 +552,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvDCHead.setTextColor(getColor(R.color.primary_black));
                     tvDCardHead.setTextColor(getColor(R.color.dark_grey));
                     tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgDCardArrow.clearColorFilter();
+//                    imgDCardArrow.clearColorFilter();
+                    imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
                     imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
                 }
                 if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
@@ -566,7 +568,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvCCHead.setTextColor(getColor(R.color.primary_black));
                     tvCCardHead.setTextColor(getColor(R.color.dark_grey));
                     tvCCardMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgCCardArrow.clearColorFilter();
+//                    imgCCardArrow.clearColorFilter();
+                    imgCCardArrow.setColorFilter(getColor(R.color.primary_black));
                     imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
 
                 }
@@ -733,7 +736,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvBankHead.setTextColor(getColor(R.color.primary_black));
                     tvBankCount.setTextColor(getColor(R.color.dark_grey));
                     tvBankMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgBBankArrow.clearColorFilter();
+//                    imgBBankArrow.clearColorFilter();
+                    imgBBankArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }
                 if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
@@ -748,7 +752,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvDCHead.setTextColor(getColor(R.color.primary_black));
                     tvDCardHead.setTextColor(getColor(R.color.dark_grey));
                     tvDCardMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgDCardArrow.clearColorFilter();
+//                    imgDCardArrow.clearColorFilter();
+                    imgDCardArrow.setColorFilter(getColor(R.color.primary_black));
                     imgDCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
                 }
                 if (paymentMethodsResponse.getData().getCreditCardCount() >= paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
@@ -763,7 +768,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvSignetHead.setTextColor(getColor(R.color.primary_black));
                     tvSignetCount.setTextColor(getColor(R.color.dark_grey));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-                    imgSignetArrow.clearColorFilter();
+//                    imgSignetArrow.clearColorFilter();
+                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
                     imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card);
 
                 }
@@ -1080,6 +1086,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listData, WithdrawPaymentMethodsActivity.this, "withdraw");
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawPaymentMethodsActivity.this);
                     rvPayMethods.setLayoutManager(mLayoutManager);
+                    rvPayMethods.setNestedScrollingEnabled(false);
                     rvPayMethods.setItemAnimator(new DefaultItemAnimator());
                     rvPayMethods.setAdapter(selectedPaymentMethodsAdapter);
                 } else {
