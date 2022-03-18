@@ -420,7 +420,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             retailLL.setOnClickListener(view -> {
                 if (!isRetail) {
-                    websiteOET.setHint("Website(Optional)");
+                    websiteOET.setHint("Website (Optional)");
                     isECommerce = false;
                     isRetail = true;
                     identificationType = 8;
@@ -830,7 +830,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.error_red));
                             zipcodeErrorLL.setVisibility(VISIBLE);
-                            zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                            zipcodeErrorTV.setText("Minimum 5 Digits Required");
 
                         } else {
                             zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
@@ -1409,7 +1409,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     }
 
                     if (cir.getIdentificationType().equals("8")) {
-                        websiteOET.setHint("Website(Optional)");
+                        websiteOET.setHint("Website (Optional)");
                         isECommerce = false;
                         isRetail = true;
                         identificationType = 8;

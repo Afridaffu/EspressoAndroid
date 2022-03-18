@@ -88,7 +88,7 @@
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailing Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
-    <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
+    <string name="mailingaddress2">Mailing Address Line 2 (Optional)</string>
     <string name="city">City</string>
     <string name="state">State</string>
     <string name="zip">Zip Code</string>
@@ -319,7 +319,7 @@
     <string name="add">Add</string>
     <string name="ca">CA</string>
     <string name="zipcode">Zipcode</string>
-    <string name="time_zone">Time Zone(Optional)</string>
+    <string name="time_zone">Time Zone (Optional)</string>
     <string name="select_time_zone">Select time zone</string>
     <string name="by_selecting">By selecting this we will clear your batch based on\nyour time zone at 11:59:59pm.</string>
     <string name="fire_bbq">Fire BBQ</string>
@@ -496,7 +496,7 @@
     <string name="company_address">Company Address</string>
     <string name="company_s_email">Companys Email</string>
     <string name="company_address_line_1">Company Address Line 1</string>
-    <string name="company_address_line_2_optional">Company Address Line 2(Optional)</string>
+    <string name="company_address_line_2_optional">Company Address Line 2 (Optional)</string>
     <string name="customer_service_email">Customer Service Email</string>
 
     <string name="paying_dba_name">Paying [DBA name]</string>
@@ -537,7 +537,7 @@
     <string name="transactionamount">Transaction Amount:</string>
     <string name="full_amount">Full Amount</string>
     <string name="payout_transactions">Payout Transactions</string>
-    <string name="search_by_payout">Search By Payout Date or Payout ID</string>
+    <string name="search_by_payout">Payout ID</string>
     <string name="amount">1/2 Amount</string>
     <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
     <string name="add_new_team_member">Add New Team Member</string>
@@ -581,7 +581,7 @@
     <string name="card_exp">Card Exp</string>
     <string name="billing_address_line_1">Billing Address Line 1</string>
     <string name="visa_debit_8765">Visa Debit ••••8765</string>
-    <string name="billing_address_line_2_optional">Billing Address Line 2(Optional)</string>
+    <string name="billing_address_line_2_optional">Billing Address Line 2 (Optional)</string>
     <string name="zip_code">Zip Code</string>
     <string name="remove_this_card">Remove This Card</string>
     <string name="save">Save</string>
@@ -615,5 +615,16 @@
     <string name="pre_authorization">Pre-Authorization</string>
     <string name="preauth_description">A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from [Descriptor Name] and enter the amount below.</string>
     <string name="incorrect_amount_1_attempt_left">Incorrect amount, 1 attempt left</string>
+    <string name="please_check_the_box_if_you_completed_a_task">Please check the box if you completed a task</string>
+    <string name="footer_full_legal_name_as_it"><b>FOOTER</b> - Full Legal name (as it </string>
+    <string name="Footer">appears in the Articles of \nIncorporation), address, customer \nservice phone number and email \naddress. The bank requires that the full \ncompany address including country (no \nabbreviations) is listed on the website. - \nMust be visible in ALL pages.</string>
+    <string name="terms_remove_opt_in_and_opt_out"><b>TERMS</b> - Remove OPT-IN and OPT-OUT</string>
+    <string name="Terms">sections as this is prohibited to be used \nby third parties.</string>
+    <string name="proof_of_ownership_should_be"><b>Proof of ownership </b>- should be</string>
+    <string name="ProofOfOwnership">provided (Whois-registration; or invoice \nplus screenshot from web hosting \nbackend) Applying Company should \nown the URL(s).</string>
+    <string name="please_upload_required_documents_below">Please upload required documents below</string>
+    <string name="Decline">Declined by applicant on Date due to :</string>
+    <string name="Accepted">Accepted by applicant on</string>
+
 
 </resources>

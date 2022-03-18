@@ -623,7 +623,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                             zipcodeErrorLL.setVisibility(VISIBLE);
-                            zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                            zipcodeErrorTV.setText("Minimum 5 Digits Required");
 
                         } else {
                             zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

@@ -52,9 +52,9 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     private boolean isProfile = false;
     private TextInputLayout timeZoneTIL, accountTIL, currencyTIL;
     private TextInputEditText timeZoneET, accountET, currencyET;
-    private RelativeLayout timeZoneRL,accountRL;
-    private LinearLayout preferencesCloseLL,defaultaccLL;
-    private TextView timezonetext ,mTvUserIconText,defualtAccountDialogPersonalNameTV;
+    private RelativeLayout timeZoneRL, accountRL;
+    private LinearLayout preferencesCloseLL, defaultaccLL;
+    private TextView timezonetext, mTvUserIconText, defualtAccountDialogPersonalNameTV;
     private ImageView accountDDIV;
     private View disableView;
     public static CustomerProfileViewModel customerProfileViewModel;
@@ -66,7 +66,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private int childid;
-    private String SelectedDBAName;
+    private String SelectedDBAName = "";
     private BusinessProfileRecyclerAdapter listAdapter;
     private ImageView businessPersonalProfileTickIcon;
     LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL, businessPersonalProfileAccount;
@@ -75,7 +75,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private String accountTypeId = "";
     private String personalAccountExist;
-
+    ProfilesResponse globalProfileResp;
 
 
     @Override
@@ -161,7 +161,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     windowAccount.setAttributes(wlp);
 
-                    if(personalAccountList.get(0).isSelected()){
+                    if (personalAccountList.get(0).isSelected()) {
                         businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
                     } else {
                         businessPersonalProfileTickIcon.setVisibility(View.GONE);
@@ -176,7 +176,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                             LogUtils.d("TAG", "GroupChildClick" + i + "....." + i1 + "....." + l);
                             childid = subSet.get(i).getSubsetName().get(i1).getId();
                             SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
-                            for(int k=0;k<subSet.size();k++) {
+                            for (int k = 0; k < subSet.size(); k++) {
                                 for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
                                     if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
                                         subSet.get(k).getSubsetName().get(j).setIsSelected(true);
@@ -236,7 +236,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                             businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
                             childid = personalAccountList.get(0).getId();
                             SelectedDBAName = personalAccountList.get(0).getFullName();
-                            for(int k=0;k<subSet.size();k++) {
+                            for (int k = 0; k < subSet.size(); k++) {
                                 for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
                                     if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
                                         subSet.get(k).getSubsetName().get(j).setIsSelected(true);
@@ -310,14 +310,15 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
 
             dashboardViewModel.mePreferences();
 
-          //  dashboardViewModel.getProfiles();
+            //  dashboardViewModel.getProfiles();
 
             // Business Preferences
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT){
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 timezonetext.setVisibility(View.VISIBLE);
-                defaultaccLL.setVisibility(View.GONE); }
+                defaultaccLL.setVisibility(View.GONE);
+            }
 
-            if(myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT){
+            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 timezonetext.setVisibility(View.GONE);
                 defaultaccLL.setVisibility(View.VISIBLE);
             }
@@ -388,7 +389,14 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), PreferencesActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
-                        accountET.setText(SelectedDBAName);
+                        try {
+                            if (SelectedDBAName.equals(""))
+                                accountET.setText(Utils.capitalize(globalProfileResp.getData().get(0).getFullName()));
+                            else
+                                accountET.setText(SelectedDBAName);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -422,7 +430,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
 //                    }
 ////                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
                     accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
-
+                    globalProfileResp = profilesResponse;
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
 //                        if (profilesResponse.getData().size() > 1) {
 //                            disableView.setVisibility(View.VISIBLE);
@@ -448,8 +456,8 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                                 addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId());
                             } else {
                                 personalAccountList.add(c);
-                                for(int i=0;i<personalAccountList.size();i++){
-                                    if(personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)){
+                                for (int i = 0; i < personalAccountList.size(); i++) {
+                                    if (personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)) {
                                         personalAccountList.get(i).setSelected(true);
                                     } else {
                                         personalAccountList.get(i).setSelected(false);

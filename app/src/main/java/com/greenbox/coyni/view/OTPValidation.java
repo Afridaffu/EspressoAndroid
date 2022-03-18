@@ -926,7 +926,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                     if (EditPhoneActivity.editPhoneActivity != null) {
                                                         EditPhoneActivity.editPhoneActivity.finish();
                                                     }
-                                                    if (BusinessUserDetailsPreviewActivity.businessUserDetailsPreviewActivity != null && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT){
+                                                    if (BusinessUserDetailsPreviewActivity.businessUserDetailsPreviewActivity != null && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                                         BusinessUserDetailsPreviewActivity.businessUserDetailsPreviewActivity.finish();
                                                     }
                                                     finish();

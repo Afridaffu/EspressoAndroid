@@ -72,7 +72,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/datePickET"
+                android:id="@+id/filterdatePickET"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -89,6 +89,7 @@
                 android:textSize="@dimen/_11ssp" />
 
             <ImageView
+                android:id="@+id/datePickIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"

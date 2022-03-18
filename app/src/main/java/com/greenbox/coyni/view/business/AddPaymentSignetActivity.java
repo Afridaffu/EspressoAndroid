@@ -345,7 +345,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             etAddress2.setSelection(etAddress2.getText().toString().length());
                         }
                     } else {
-                        etAddress2.setHint("Billing Address Line 2(Optional)");
+                        etAddress2.setHint("Billing Address Line 2 (Optional)");
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     }
@@ -434,7 +434,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                             zipErrorLL.setVisibility(VISIBLE);
-                            zipErrorTV.setText("Minimum 5 Characters Required");
+                            zipErrorTV.setText("Minimum 5 Digits Required");
                         } else if (etZipCode.getText().toString().trim().length() == 0) {
                             etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));

@@ -1054,7 +1054,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
 //                    zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeErrorTV.setText("Minimum 5 Characters Required");
+//                    zipcodeErrorTV.setText("Minimum 5 Digits Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
 //                    zipcodeErrorLL.setVisibility(VISIBLE);
@@ -1389,7 +1389,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);
-                        zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                        zipcodeErrorTV.setText("Minimum 5 Digits Required");
 
                     } else {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
