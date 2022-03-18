@@ -85,9 +85,11 @@
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
+                    android:id="@+id/securitycardFileLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_14sdp"
+                    android:onClick="securityFileOnClick"
                     android:background="@drawable/bg_white_color_light_border"
                     android:paddingStart="@dimen/_8sdp"
                     android:paddingTop="@dimen/_13sdp"
@@ -100,6 +102,7 @@
                         android:src="@drawable/ic_upload" />
 
                     <TextView
+                        android:id="@+id/securityfileTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -108,6 +111,51 @@
                         android:text="@string/upload_file"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_9ssp" />
+
+                    <LinearLayout
+                        android:id="@+id/securityFileUploadedLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_1sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Uploaded"
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_10ssp" />
+                            <TextView
+                                android:id="@+id/securityFileUpdatedOnTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text=""
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_8ssp" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:gravity="right"
+                            android:src="@drawable/ic_complete"
+
+                            />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -122,9 +170,11 @@
                     android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
+                    android:id="@+id/actionReq2FileLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_14sdp"
+                    android:onClick="actionReq2FileOnClick"
                     android:background="@drawable/bg_white_color_light_border"
                     android:paddingStart="@dimen/_8sdp"
                     android:paddingTop="@dimen/_13sdp"
@@ -137,6 +187,7 @@
                         android:src="@drawable/ic_upload" />
 
                     <TextView
+                        android:id="@+id/actionReq2FileTV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -145,6 +196,51 @@
                         android:text="@string/upload_file"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_9ssp" />
+
+                    <LinearLayout
+                        android:id="@+id/actionReq2FileUploadedLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_1sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Uploaded"
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_10ssp" />
+                            <TextView
+                                android:id="@+id/actionReq2FileUpdatedOnTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_regular"
+                                android:text=""
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_8ssp" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:gravity="right"
+                            android:src="@drawable/ic_complete"
+
+                            />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
             </LinearLayout>
