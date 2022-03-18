@@ -1,16 +1,16 @@
 package com.greenbox.coyni.view.business;
 
-import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 
 import com.greenbox.coyni.R;
 
-public class BusinessAdditonalActionRequired extends AppCompatActivity {
+public class PayoutDetailsTransactionList extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_additonal_action_required);
+        setContentView(R.layout.activity_payout_details_transaction_list);
     }
 }
