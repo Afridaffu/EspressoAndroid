@@ -34,6 +34,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.MerchantTransactionListPostedNewAdapter;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.adapters.TransactionListPostedNewAdapter;
 import com.greenbox.coyni.model.transaction.TransactionList;
@@ -60,13 +61,13 @@ import kotlin.jvm.functions.Function2;
 
 public class MerchantTransactionListActivity extends BaseActivity implements TextWatcher {
     private TransactionListPendingAdapter transactionListPendingAdapter;
-    private TransactionListPostedNewAdapter transactionListPostedAdapter;
+    private MerchantTransactionListPostedNewAdapter transactionListPostedAdapter;
     static Context context;
     private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
     private NestedScrollView nestedScrollView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
-    private int totalItemCount, currentPage = 0, total = 0;
+    private int totalItemCount, currentPage = 1, total = 0;
     private ExpandableHeightRecyclerView rvTransactionsPending, getRvTransactionsPosted;
     private Boolean isFilters = false, isRefresh = false, isNoData = false, isAPICalled = false;
     private MyApplication objMyApplication;
@@ -349,7 +350,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     layoutTransactionspending.setVisibility(View.GONE);
                                     pendingTxt.setVisibility(View.GONE);
                                     layoutTransactionsposted.setVisibility(View.VISIBLE);
-                                    transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
+                                    transactionListPostedAdapter = new MerchantTransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
                                     getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
@@ -369,7 +370,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
                                     rvTransactionsPending.setAdapter(transactionListPendingAdapter);
 
-                                    transactionListPostedAdapter = new TransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
+                                    transactionListPostedAdapter = new MerchantTransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
                                     getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
@@ -473,7 +474,11 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             if (transactionType.size() > 0) {
                 for (int i = 0; i < transactionType.size(); i++) {
                     switch (transactionType.get(i)) {
-                        case Utils.mSalesOrderToken:
+                        case Utils.saleOrder:
+                            transTypeSalesOrderToken.setChecked(true);
+                            break;
+
+                        case Utils.saleOrderToken:
                             transTypeSalesOrderToken.setChecked(true);
                             break;
 
@@ -614,10 +619,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
                 if (b) {
-                    transactionType.add(Utils.mSalesOrderToken);
+                    transactionType.add(Utils.saleOrder);
                 } else {
                     for (int i = 0; i < transactionType.size(); i++) {
-                        if (transactionType.get(i) == Utils.mSalesOrderToken) {
+                        if (transactionType.get(i) == Utils.saleOrder) {
                             transactionType.remove(i);
                             break;
                         }
