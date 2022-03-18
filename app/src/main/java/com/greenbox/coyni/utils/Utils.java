@@ -153,6 +153,8 @@ public class Utils {
     public static final String signetType = "7";
     public static final String payType = "12";
     public static final String businessType = "19";
+    public static final String tokenType = "11";
+    public static final String merchantType = "7";
     public static final String transferType = "10";
     public static final String paySubType = "8";
     public static final String requestSubType = "9";

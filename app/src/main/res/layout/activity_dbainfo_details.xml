@@ -142,6 +142,7 @@
                         android:layout_marginBottom="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_bold"
                         android:text=""
+                        android:textAlignment="center"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_16ssp" />
 
