@@ -63,7 +63,7 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class CustomerProfileActivity extends AppCompatActivity {
+public class CustomerProfileActivity extends BaseActivity {
     ImageView imgQRCode, profileIV;
     LinearLayout cpbackBtn;
     //    ProgressDialog dialog;

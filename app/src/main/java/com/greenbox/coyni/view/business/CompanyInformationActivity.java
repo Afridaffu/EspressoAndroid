@@ -918,7 +918,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             Utils.setUpperHintColor(zipcodetil, getColor(R.color.error_red));
                             zipcodeErrorLL.setVisibility(VISIBLE);
-                            zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                            zipcodeErrorTV.setText("Minimum 5 Digits Required");
 
                         } else {
                             zipcodetil.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
