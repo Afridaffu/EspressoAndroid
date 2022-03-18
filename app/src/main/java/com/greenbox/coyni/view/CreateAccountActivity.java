@@ -649,11 +649,13 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordTIL.setHint("Password");
                             confPasswordTIL.setHint("Confirm Password");
 
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             if (confirmPasswordET.getText().toString().trim().length() == 0)
                                 Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
-                            else
+                            else {
                                 Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            }
 
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             isConfirmPassword = true;
