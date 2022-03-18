@@ -777,7 +777,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     dismissDialog();
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
-
+                        LogUtils.d(TAG,"applicationSubmissionViewModel"+addDBA+",,,,,"+addBusiness);
                         if (addBusiness) {
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                         } else {

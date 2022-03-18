@@ -77,7 +77,7 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_14ssp"
-                    tools:text="Jonathan Joestar" />
+                    tools:text="" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
@@ -206,7 +206,7 @@
                     android:layout_marginStart="@dimen/_15sdp"
                     android:layout_marginEnd="@dimen/_10ssp"
                     android:fontFamily="@font/opensans_semibold"
-                    android:text="Jonathan Joestar  "
+                    android:text=""
                     android:layout_weight="1"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11sdp" />

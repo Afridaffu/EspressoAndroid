@@ -576,7 +576,12 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
                         idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
                         RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identificationType + "");
-                        RequestBody idNumber = RequestBody.create(MediaType.parse("text/plain"), objMyApplication.getCompanyInfoResp().getData().getSsnOrEin());
+                        RequestBody idNumber;
+                        if(objMyApplication.getCompanyInfoResp().getData().getSsnOrEin()!=null) {
+                             idNumber = RequestBody.create(MediaType.parse("text/plain"), objMyApplication.getCompanyInfoResp().getData().getSsnOrEin());
+                        } else {
+                             idNumber = RequestBody.create(MediaType.parse("text/plain"), "123456789");
+                        }
                         identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
                     }
                 }

@@ -9,7 +9,6 @@ public class BusinessAccountsListInfo {
     private String mainSetName;
     private String mainImage;
 
-
     private ArrayList<BusinessAccountDbaInfo> list = new ArrayList<BusinessAccountDbaInfo>();
 
     public String getName() {

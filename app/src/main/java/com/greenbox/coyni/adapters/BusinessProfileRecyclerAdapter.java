@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -58,6 +59,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         TextView profileImageText = (TextView) view.findViewById(R.id.b_imageTextTV);
         ImageView profileImage = (ImageView) view.findViewById(R.id.profile_img);
         ImageView imvTickIcon = (ImageView) view.findViewById(R.id.tickIcon);
+        TextView statusTV = (TextView) view.findViewById(R.id.statusTV);
+        LinearLayout statusLL = (LinearLayout) view.findViewById(R.id.statusLL);
 
         if(detailInfo.getName()!=null) {
             childItem.setText(detailInfo.getName().trim());
@@ -67,29 +70,45 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
         if (detailInfo.getIsSelected()) {
            imvTickIcon.setVisibility(View.VISIBLE);
+            statusLL.setVisibility(View.GONE);
         } else {
            imvTickIcon.setVisibility(View.GONE);
+            if(!detailInfo.getAccountSttaus().equalsIgnoreCase("active")){
+
+                if(detailInfo.getAccountSttaus().equalsIgnoreCase("terminated")){
+                    statusLL.setVisibility(View.VISIBLE);
+                    statusLL.setBackgroundColor(context.getColor(R.color.default_red));
+                    statusTV.setText(detailInfo.getAccountSttaus());
+                } else if(detailInfo.getAccountSttaus().equalsIgnoreCase("under review")){
+                    statusLL.setVisibility(View.VISIBLE);
+                    statusLL.setBackgroundColor(context.getColor(R.color.under_review_blue));
+                    statusTV.setText(detailInfo.getAccountSttaus());
+                } else {
+                    statusLL.setVisibility(View.VISIBLE);
+                    statusTV.setText(detailInfo.getAccountSttaus());
+                }
+            } else {
+                statusLL.setVisibility(View.GONE);
+            }
+
         }
 
         if (detailInfo.getDbaImage() != null && !detailInfo.getDbaImage().trim().equals("")) {
-
-            profileImageText.setVisibility(View.GONE);
+           // profileImageText.setVisibility(View.GONE);
             profileImage.setVisibility(View.VISIBLE);
+            Glide.with(context)
+                    .load(detailInfo.getDbaImage())
+                    .placeholder(R.drawable.ic_dba)
+                    .into(profileImage);
+
+        } else {
+            profileImage.setVisibility(View.VISIBLE);
+           // profileImageText.setVisibility(View.VISIBLE);
 
             Glide.with(context)
                     .load(detailInfo.getDbaImage())
-                    .placeholder(R.drawable.ic_profile_male_user)
+                    .placeholder(R.drawable.ic_dba)
                     .into(profileImage);
-        } else {
-            profileImage.setVisibility(View.GONE);
-            profileImageText.setVisibility(View.VISIBLE);
-
-            String imageText = "";
-            if(detailInfo.getName()!=null) {
-                imageText = imageText + detailInfo.getName().toUpperCase() +
-                        detailInfo.getName().toUpperCase();
-                profileImageText.setText(imageText);
-            }
         }
 
         return view;
@@ -129,7 +148,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         }
 
         TextView heading = (TextView) view.findViewById(R.id.title);
-        TextView profileImageText = (TextView) view.findViewById(R.id.b_imageTextTV);
+       // TextView profileImageText = (TextView) view.findViewById(R.id.b_imageTextTV);
         ImageView profileImage = (ImageView) view.findViewById(R.id.profile_img);
 
         if(headerInfo.getName()!=null) {
@@ -139,22 +158,19 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         }
 
         if (headerInfo.getMainImage() != null && !headerInfo.getMainImage().trim().equals("")) {
-
-            profileImageText.setVisibility(View.GONE);
+           // profileImageText.setVisibility(View.GONE);
             profileImage.setVisibility(View.VISIBLE);
-
             Glide.with(context)
                     .load(headerInfo.getMainImage())
-                    .placeholder(R.drawable.ic_profile_male_user)
+                    .placeholder(R.drawable.ic_company_info_business)
                     .into(profileImage);
         } else {
-            profileImage.setVisibility(View.GONE);
-            profileImageText.setVisibility(View.VISIBLE);
+            profileImage.setVisibility(View.VISIBLE);
+            Glide.with(context)
+                    .load(headerInfo.getMainImage())
+                    .placeholder(R.drawable.ic_company_info_business)
+                    .into(profileImage);
 
-            String imageText = "";
-            imageText = imageText + headerInfo.getName().substring(0, 1).toUpperCase() +
-                    headerInfo.getName().substring(0, 1).toUpperCase();
-            profileImageText.setText(imageText);
         }
 
         return view;
