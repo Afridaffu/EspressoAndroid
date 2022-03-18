@@ -1,9 +1,5 @@
 package com.greenbox.coyni.model.transaction;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import com.greenbox.coyni.model.Error;
-
 import java.util.ArrayList;
 
 public class TransactionListRequest {
@@ -24,9 +20,9 @@ public class TransactionListRequest {
     private String updatedToDateOperator;
     private String gbxTransactionId;
 
-    private ArrayList<Integer> transactionType ;
-    private ArrayList<Integer> transactionSubType ;
-    private ArrayList<Integer> txnStatus ;
+    private ArrayList<Integer> transactionType;
+    private ArrayList<Integer> transactionSubType;
+    private ArrayList<Integer> txnStatus;
 
     public String getWalletCategory() {
         return walletCategory;
