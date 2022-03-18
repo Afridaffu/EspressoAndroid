@@ -312,6 +312,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (confirmPasswordET.getText().length() > 0) {
                             confirmPasswordET.setSelection(confirmPasswordET.getText().length());
                         }
+                        confirmPasswordET.setHint("Confirm Password");
+                        confPasswordTIL.setHint("Confirm Password");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -487,7 +489,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 public void afterTextChanged(Editable s) {
                     try {
                         String str = firstNameET.getText().toString();
-                        if (str.length() > 0 && str.toString().trim().length() == 0) {
+                        if (str.length() > 0 && str.trim().length() == 0) {
                             firstNameET.setText("");
                             firstNameET.setSelection(firstNameET.getText().length());
                         } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
@@ -542,7 +544,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 public void afterTextChanged(Editable editable) {
                     try {
                         String str = lastNameET.getText().toString();
-                        if (str.length() > 0 && str.toString().trim().length() == 0) {
+                        if (str.length() > 0 && str.trim().length() == 0) {
                             lastNameET.setText(lastNameET.getText().toString().replaceAll(" ", ""));
                             lastNameET.setSelection(lastNameET.getText().length());
                         } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
@@ -649,11 +651,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordTIL.setHint("Password");
                             confPasswordTIL.setHint("Confirm Password");
 
-                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            if (confirmPasswordET.getText().toString().trim().length() == 0)
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
-                            else
-                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
+//                            confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+//                            if (confirmPasswordET.getText().toString().trim().length() == 0)
+//                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
+//                            else
+//                                Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
 
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
                             isConfirmPassword = true;
@@ -729,7 +731,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                                     passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                     Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                                 } else {
-                                    passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 }
                             }
                         } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim()) &&
@@ -925,7 +927,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordErrorLL.setVisibility(VISIBLE);
                             passwordErrorTV.setText("Field Required");
                         } else if (!strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             passwordTIL.setHint("Password");
                             passwordET.setHint("");
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
@@ -1199,7 +1201,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         tosTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(CreateAccountActivity.this);

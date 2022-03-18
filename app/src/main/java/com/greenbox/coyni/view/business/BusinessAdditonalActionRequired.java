@@ -11,6 +11,6 @@ public class BusinessAdditonalActionRequired extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_additonal_action_required);
+        setContentView(R.layout.activity_business_additional_action_required);
     }
 }

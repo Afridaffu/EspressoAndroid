@@ -494,6 +494,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
+            android:name=".view.business.BusinessBatchPayoutSearchActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
             android:name=".view.business.SignupMaillingAddresActivity"
             android:exported="false"
             android:screenOrientation="portrait"
