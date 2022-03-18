@@ -197,8 +197,8 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", "true")
-                                .putExtra("ADDDBA", "false"));
+                                .putExtra("ADDBUSINESS", true)
+                                .putExtra("ADDDBA", false));
 
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
@@ -217,8 +217,8 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", "true")
-                                .putExtra("ADDDBA", "true"));
+                                .putExtra("ADDBUSINESS", true)
+                                .putExtra("ADDDBA", true));
                         //displayAlert(BusinessAddNewBusinessAccountActivity.this);
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
