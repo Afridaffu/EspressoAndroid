@@ -82,10 +82,8 @@
                         android:layout_marginBottom="@dimen/_6sdp"
                         android:fontFamily="@font/opensans_bold"
                         android:text=""
-                        android:singleLine="true"
-                        android:ellipsize="marquee"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_24ssp" />
+                        android:textSize="@dimen/_20ssp" />
 
                     <TextView
                         android:id="@+id/business_entity"

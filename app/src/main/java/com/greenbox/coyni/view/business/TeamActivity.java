@@ -92,7 +92,7 @@ public class TeamActivity extends BaseActivity {
                 if (datumList.size() > 0) {
                     for (int iteration = 0; iteration < datumList.size(); iteration++) {
 
-                        if (datumList.get(iteration).getFirstName().toLowerCase().contains(search_key.toLowerCase())) {
+                        if (datumList.get(iteration).getFirstName().toLowerCase().contains(search_key.toLowerCase()) || datumList.get(iteration).getLastName().toLowerCase().contains(search_key.toLowerCase())) {
                             filterList.add(datumList.get(iteration));
                         }
                     }
@@ -129,7 +129,7 @@ public class TeamActivity extends BaseActivity {
             memberClickListener = (view, position) -> {
                 Intent intent = new Intent(this, TeamMemberActivity.class);
                 intent.putExtra(Utils.teamMemberId, datumList.get(position).getId());
-                intent.putExtra(Utils.teamStatus,datumList.get(position).getStatus());
+                intent.putExtra(Utils.teamStatus, datumList.get(position).getStatus());
                 startActivity(intent);
 
             };

@@ -28,7 +28,7 @@ import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class TeamMemberActivity extends BaseActivity {
     private TextView txName, txRole, txStatus, txImageName, txEmailAddress, txPhoneNumber;
-    private String firstName = "", lastName = "", role = "", status = "", emailAddress = "", phoneNumber = "", imageName = "";
+    private String firstName = "", lastName = "", role = "", status = "", emailAddress = "", phoneNumber = "", imageName = "", teamStatus = "";
     private int teamMemberId = 0;
     private CardView mEditCv, mCancelCV, mRemoveCv, mResendInvitation;
     private ImageView mStatusIcon;
@@ -42,7 +42,7 @@ public class TeamMemberActivity extends BaseActivity {
         setContentView(R.layout.activity_team_member);
         Bundle bundle = getIntent().getExtras();
         teamMemberId = bundle.getInt(Utils.teamMemberId, teamMemberId);
-        status=bundle.getString(Utils.teamStatus,status);
+        status = bundle.getString(Utils.teamStatus, status);
 
         initFields();
         initObservers();
@@ -57,12 +57,12 @@ public class TeamMemberActivity extends BaseActivity {
                     try {
                         if (teamGetDataModel != null) {
                             if (teamGetDataModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                                TeamData data=teamGetDataModel.getData();
+                                TeamData data = teamGetDataModel.getData();
                                 if (data.getFirstName() != null && !data.getFirstName().equals("")) {
-                                    firstName=data.getFirstName();
+                                    firstName = data.getFirstName();
                                 }
                                 if (data.getLastName() != null && !data.getLastName().equals("")) {
-                                    lastName=data.getLastName();
+                                    lastName = data.getLastName();
                                 }
                                 txName.setText(firstName + " " + lastName);
                                 char first = firstName.charAt(0);
@@ -73,15 +73,30 @@ public class TeamMemberActivity extends BaseActivity {
                                     txRole.setText(data.getRoleName());
                                 }
                                 if (data.getStatus() != null && !data.getStatus().equals("")) {
-                                    txStatus.setText(data.getStatus());
+                                    teamStatus = data.getStatus();
+                                    if (data.getStatus().equalsIgnoreCase(Utils.canceled)) {
+                                        txStatus.setText(Utils.expired);
+                                    }
+                                    else if(data.getStatus().equalsIgnoreCase(Utils.teammemberpending)){
+                                        mResendInvitation.setVisibility(View.GONE);
+                                        mCancelCV.setVisibility(View.VISIBLE);
+                                        mEditCv.setVisibility(View.VISIBLE);
+                                        mRemoveCv.setVisibility(View.GONE);
+                                        txStatus.setTextColor(getResources().getColor(R.color.pending_color));
+                                        mStatusIcon.setBackgroundResource(R.drawable.pending_dot);
+                                        txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                                    }
+                                    else {
+                                        txStatus.setText(data.getStatus());
+                                    }
                                 }
                                 if (data.getEmailAddress() != null && !data.getEmailAddress().equals("")) {
-                                    emailAddress=data.getEmailAddress();
+                                    emailAddress = data.getEmailAddress();
                                     txEmailAddress.setText(data.getEmailAddress());
                                 }
                                 if (data.getPhoneNumber() != null && !data.getPhoneNumber().equals("")) {
-                                    phoneNumber=data.getPhoneNumber();
-                                    txPhoneNumber.setText("(" +phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
+                                    phoneNumber = data.getPhoneNumber();
+                                    txPhoneNumber.setText("(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
                                 }
                             } else {
                                 Utils.displayAlert(teamGetDataModel.getError().getErrorDescription(), TeamMemberActivity.this, "", teamGetDataModel.getError().getFieldErrors().get(0));
@@ -202,7 +217,6 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.error_red));
             mStatusIcon.setBackgroundResource(R.drawable.resend_invitation_bg);
             txStatus.setBackgroundResource(R.drawable.txn_resend_invitation_bg);
-            txStatus.setText(Utils.expired);
         } else if (status.equalsIgnoreCase(Utils.inActive)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
@@ -277,7 +291,7 @@ public class TeamMemberActivity extends BaseActivity {
 
 
     private void showRemoveMemberDialog() {
-        DialogAttributes dialogAttributes = new DialogAttributes(getResources().getString(R.string.remove_team_members), getString(R.string.account_permissions, firstName +""+ lastName), getString(R.string.yes), getString(R.string.no));
+        DialogAttributes dialogAttributes = new DialogAttributes(getResources().getString(R.string.remove_team_members), getString(R.string.account_permissions, firstName + "" + lastName), getString(R.string.yes), getString(R.string.no));
         CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
                 (TeamMemberActivity.this, dialogAttributes);
 
