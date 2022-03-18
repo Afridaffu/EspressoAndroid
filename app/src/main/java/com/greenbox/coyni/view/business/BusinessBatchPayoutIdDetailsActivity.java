@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.greenbox.coyni.R;
 
-public class BusinessBatchPayoutSearch extends AppCompatActivity {
+public class BusinessBatchPayoutIdDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_batch_payout_search);
+        setContentView(R.layout.activity_business_batch_payout_id_details);
     }
 }

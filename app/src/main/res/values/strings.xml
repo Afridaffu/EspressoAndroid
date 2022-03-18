@@ -534,7 +534,7 @@
     <string name="transactionamount">Transaction Amount:</string>
     <string name="full_amount">Full Amount</string>
     <string name="payout_transactions">Payout Transactions</string>
-    <string name="search_by_payout">Search By Payout Date or Payout ID</string>
+    <string name="search_by_payout">Payout ID</string>
     <string name="amount">1/2 Amount</string>
     <string name="reason_for_refunds">Reason for Refund (Maximum 120 characters )</string>
     <string name="add_new_team_member">Add New Team Member</string>
