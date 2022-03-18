@@ -804,33 +804,37 @@ public class EditAddressActivity extends AppCompatActivity {
 
     public void initObservers() {
 
-        customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                try {
-                    dialog.dismiss();
-                    if (user != null) {
-                        if (user.getStatus().toString().toLowerCase().equals("success")) {
-                            Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        finish();
-                                    } catch (Exception ex) {
-                                        ex.printStackTrace();
+        try {
+            customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    try {
+                        dialog.dismiss();
+                        if (user != null) {
+                            if (user.getStatus().toString().toLowerCase().equals("success")) {
+                                Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            finish();
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
                                     }
-                                }
-                            }, 2000);
-                        } else {
-                            Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
+                                }, 2000);
+                            } else {
+                                Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //Business Changes........

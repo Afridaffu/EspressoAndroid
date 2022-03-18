@@ -72,6 +72,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     case "business payout":
                         txnType = Integer.parseInt(Utils.businessType);
                         break;
+                    case "merchant payout":
+                        txnType = Integer.parseInt(Utils.merchantType);
                 }
             }
             if (getIntent().getStringExtra("txnSubType") != null && !getIntent().getStringExtra("txnSubType").equals("")) {
@@ -101,9 +103,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     case "signet":
                         txnSubType = Integer.parseInt(Utils.signetType);
                         break;
-                    case "transfer":
-                        txnSubType = Integer.parseInt(Utils.transferType);
-                        break;
+//                    case "transfer":
+//                        txnSubType = Integer.parseInt(Utils.transferType);
+//                        break;
+//                    case "token":
+//                        txnSubType = Integer.parseInt(Utils.tokenType);
                 }
             }
 
@@ -163,6 +167,19 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                                     ControlMethod("withdrawbankaccount");
                                     withdrawBank(transactionDetails.getData());
                                     break;
+                            }
+                            break;
+                        case "business payout":
+                            switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
+                                case "transfer":{
+                                    ControlMethod("BusinessPayoutTransfer");
+                                    businessTransfer(transactionDetails.getData());}
+                                    break;
+                                case "token":{
+                                    ControlMethod("BusinessPayoutToken");
+                                    businessToken(transactionDetails.getData());
+                                }
+                                break;
                             }
                             break;
                     }
@@ -838,6 +855,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
     }
+
+    private void businessTransfer(TransactionData data) {
+    }
+
+    private void businessToken(TransactionData data) {
+    }
+
 
     private void ControlMethod(String methodToShow) {
         try {
