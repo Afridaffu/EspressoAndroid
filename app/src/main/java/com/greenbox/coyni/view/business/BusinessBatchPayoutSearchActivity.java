@@ -21,6 +21,7 @@ import com.greenbox.coyni.databinding.PayoutTransactionsFilterBinding;
 import com.greenbox.coyni.dialogs.MerchantTransactionsFilterDialog;
 import com.greenbox.coyni.dialogs.PayoutTransactionsDetailsFiltersDialog;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
 import com.greenbox.coyni.view.TransactionListActivity;
 
@@ -34,7 +35,7 @@ import java.util.TimeZone;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
-public class BusinessBatchPayoutSearchActivity extends AppCompatActivity {
+public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
     ImageView filterIconIV, datePickIV;
     TextView applyFilterBtnCV;
