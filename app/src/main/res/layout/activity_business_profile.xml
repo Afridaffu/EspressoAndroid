@@ -159,9 +159,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:text="VT"
+                                    android:text="AO"
                                     android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_20sdp"
+                                    android:textSize="@dimen/_18ssp"
                                     android:visibility="gone" />
 
                             </androidx.cardview.widget.CardView>
@@ -175,8 +175,8 @@
                             android:src="@drawable/ic_qr_code"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias=".8"
-                            app:layout_constraintVertical_bias="0.943"
+                            app:layout_constraintHorizontal_bias=".80"
+                            app:layout_constraintVertical_bias="0.9"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 

@@ -154,11 +154,20 @@ public class DBAInfoDetails extends AppCompatActivity {
     private void initData() {
         DBAInfoResp dbaInfoResp = objMyApplication.getDbaInfoResp();
         if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-            if (dbaInfoResp.getData().getName() != null) {
-                nameTV.setText(dbaInfoResp.getData().getName());
+            if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 20) {
+                nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
             } else {
-                nameTV.setText("");
+                nameTV.setText(dbaInfoResp.getData().getName());
             }
+            nameTV.setOnClickListener(view -> {
+
+                if (nameTV.getText().toString().contains("...") && dbaInfoResp.getData().getName().length() >= 21) {
+                        nameTV.setText(objMyApplication.getDbaInfoResp().getData().getName());
+
+                } else  {
+                        nameTV.setText(objMyApplication.getDbaInfoResp().getData().getName().substring(0, 20) + "...");
+                    }
+            });
             if (dbaInfoResp.getData().getEmail() != null) {
                 emailTV.setText(dbaInfoResp.getData().getEmail());
                 try {
@@ -171,7 +180,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             }
             if (dbaInfoResp.getData().getWebsite() != null && !dbaInfoResp.getData().getWebsite().equals("")) {
                 webLL.setVisibility(View.VISIBLE);
-                webSiteTV.setText(dbaInfoResp.getData().getWebsite());
+                webSiteTV.setText("https://" + dbaInfoResp.getData().getWebsite());
             } else {
                 webLL.setVisibility(View.GONE);
                 webSiteTV.setText("");
@@ -304,10 +313,10 @@ public class DBAInfoDetails extends AppCompatActivity {
                 public void onChanged(DBAInfoResp dbaInfoResp) {
                     if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
 
-                        if (dbaInfoResp.getData().getName() != null) {
+                        if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 20) {
+                            nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20)+"...");
+                        } else if (dbaInfoResp.getData().getName() != null){
                             nameTV.setText(dbaInfoResp.getData().getName());
-                        } else {
-                            nameTV.setText("");
                         }
                         if (dbaInfoResp.getData().getEmail() != null) {
                             emailTV.setText(dbaInfoResp.getData().getEmail());
@@ -315,7 +324,7 @@ public class DBAInfoDetails extends AppCompatActivity {
                             emailTV.setText("");
                         }
                         if (dbaInfoResp.getData().getWebsite() != null) {
-                            webSiteTV.setText(dbaInfoResp.getData().getWebsite());
+                            webSiteTV.setText("https://" + dbaInfoResp.getData().getWebsite());
                         } else {
                             webSiteTV.setText("");
                         }
