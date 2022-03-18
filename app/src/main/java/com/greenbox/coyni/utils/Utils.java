@@ -238,13 +238,11 @@ public class Utils {
 
     public static final String teamFirstName = "TeamMemberFirstName";
     public static final String teamLastName = "TeamMemberLastName";
-    public static final String teamImageName = "ImageName";
-    public static final String teamRoleName = "RoleName";
-    public static final String teamRole = "Role";
-    public static final String teamStatus = "Status";
+
     public static final String teamEmailAddress = "TeamEmailAddress";
     public static final String teamPhoneNumber = "TeamPhoneNumber";
     public static final String teamMemberId = "TeamMemberId";
+    public static final String teamStatus = "Status";
 
     public static final String boData = "BOData";
 
@@ -254,6 +252,13 @@ public class Utils {
     public static final String changeEdit = "ChangeEdit";
     public static final String comCountryCode = "CompanyCountryCode";
     public static final int companyId = 0;
+
+    public static final String active="Active";
+    public static final String inActive="Inactive";
+    public static final String teammemberpending="Pending";
+    public static final String resendInvitation="Resend Invitation";
+    public static final String canceled="Canceled";
+    public static final String expired="Expired";
 
 
     public static final String position = "Position";

@@ -18,6 +18,9 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.DialogAttributes;
+import com.greenbox.coyni.model.team.Data;
+import com.greenbox.coyni.model.team.TeamData;
+import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -38,20 +41,64 @@ public class TeamMemberActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_member);
         Bundle bundle = getIntent().getExtras();
-        firstName = bundle.getString(Utils.teamFirstName, firstName);
-        lastName = bundle.getString(Utils.teamLastName, lastName);
-        role = bundle.getString(Utils.teamRoleName, role);
-        status = bundle.getString(Utils.teamStatus, status);
-        emailAddress = bundle.getString(Utils.teamEmailAddress, emailAddress);
-        phoneNumber = bundle.getString(Utils.teamPhoneNumber, phoneNumber);
-        imageName = bundle.getString(Utils.teamImageName, imageName);
         teamMemberId = bundle.getInt(Utils.teamMemberId, teamMemberId);
+        status=bundle.getString(Utils.teamStatus,status);
 
         initFields();
         initObservers();
     }
 
     private void initObservers() {
+        try {
+            teamViewModel.getTeamGetMutableLiveData().observe(TeamMemberActivity.this, new Observer<TeamGetDataModel>() {
+                @Override
+                public void onChanged(TeamGetDataModel teamGetDataModel) {
+                    dismissDialog();
+                    try {
+                        if (teamGetDataModel != null) {
+                            if (teamGetDataModel.getStatus().equalsIgnoreCase("SUCCESS")) {
+                                TeamData data=teamGetDataModel.getData();
+                                if (data.getFirstName() != null && !data.getFirstName().equals("")) {
+                                    firstName=data.getFirstName();
+                                }
+                                if (data.getLastName() != null && !data.getLastName().equals("")) {
+                                    lastName=data.getLastName();
+                                }
+                                txName.setText(firstName + " " + lastName);
+                                char first = firstName.charAt(0);
+                                char lastname = lastName.charAt(0);
+                                String imageName = String.valueOf(first) + String.valueOf(lastname);
+                                txImageName.setText(imageName);
+                                if (data.getRoleName() != null && !data.getRoleName().equals("")) {
+                                    txRole.setText(data.getRoleName());
+                                }
+                                if (data.getStatus() != null && !data.getStatus().equals("")) {
+                                    txStatus.setText(data.getStatus());
+                                }
+                                if (data.getEmailAddress() != null && !data.getEmailAddress().equals("")) {
+                                    emailAddress=data.getEmailAddress();
+                                    txEmailAddress.setText(data.getEmailAddress());
+                                }
+                                if (data.getPhoneNumber() != null && !data.getPhoneNumber().equals("")) {
+                                    phoneNumber=data.getPhoneNumber();
+                                    txPhoneNumber.setText("(" +phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
+                                }
+                            } else {
+                                Utils.displayAlert(teamGetDataModel.getError().getErrorDescription(), TeamMemberActivity.this, "", teamGetDataModel.getError().getFieldErrors().get(0));
+                            }
+                        } else {
+                            Toast.makeText(TeamMemberActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         try {
             teamViewModel.getTeamCancelMutableLiveData().observe(TeamMemberActivity.this, new Observer<TeamInfoAddModel>() {
                 @Override
@@ -60,7 +107,7 @@ public class TeamMemberActivity extends BaseActivity {
                     try {
                         if (teamInfoAddModel != null) {
                             if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.invitation_canceled), R.drawable.ic_custom_tick, "PHONE");
+                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.invitation_canceled), R.drawable.ic_custom_tick, "Cancel");
                                 new Handler().postDelayed(() -> {
                                     try {
                                         finish();
@@ -92,7 +139,7 @@ public class TeamMemberActivity extends BaseActivity {
                     try {
                         if (teamInfoAddModel != null) {
                             if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.Removed_success), R.drawable.ic_custom_tick, "PHONE");
+                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.Removed_success), R.drawable.ic_custom_tick, "Delete");
                                 new Handler().postDelayed(() -> {
                                     try {
                                         finish();
@@ -138,13 +185,8 @@ public class TeamMemberActivity extends BaseActivity {
             }
         });
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
-        txName.setText(firstName + "" + lastName);
-        txRole.setText(role);
-        txStatus.setText(status);
-        txImageName.setText(imageName);
-        txEmailAddress.setText(emailAddress);
-        txPhoneNumber.setText(phoneNumber);
-        if (status.equalsIgnoreCase("Active")) {
+
+        if (status.equalsIgnoreCase(Utils.active)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
             mResendInvitation.setVisibility(View.GONE);
@@ -152,7 +194,7 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.active_green));
             mStatusIcon.setBackgroundResource(R.drawable.active_dot);
             txStatus.setBackgroundResource(R.drawable.txn_active_bg);
-        } else if (status.equalsIgnoreCase("Canceled")) {
+        } else if (status.equalsIgnoreCase(Utils.canceled)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
             mResendInvitation.setVisibility(View.VISIBLE);
@@ -160,8 +202,8 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.error_red));
             mStatusIcon.setBackgroundResource(R.drawable.resend_invitation_bg);
             txStatus.setBackgroundResource(R.drawable.txn_resend_invitation_bg);
-            txStatus.setText("Expired");
-        } else if (status.equalsIgnoreCase("Inactive")) {
+            txStatus.setText(Utils.expired);
+        } else if (status.equalsIgnoreCase(Utils.inActive)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
             mResendInvitation.setVisibility(View.GONE);
@@ -184,8 +226,6 @@ public class TeamMemberActivity extends BaseActivity {
                 Intent intent = new Intent(TeamMemberActivity.this, EditTeamMember.class);
                 intent.putExtra(Utils.teamFirstName, firstName);
                 intent.putExtra(Utils.teamLastName, lastName);
-                intent.putExtra(Utils.teamImageName, imageName);
-                intent.putExtra(Utils.teamRole, role);
                 intent.putExtra(Utils.teamEmailAddress, emailAddress);
                 intent.putExtra(Utils.teamPhoneNumber, phoneNumber);
                 intent.putExtra(Utils.teamMemberId, teamMemberId);
@@ -198,8 +238,6 @@ public class TeamMemberActivity extends BaseActivity {
                 Intent intent = new Intent(TeamMemberActivity.this, EditTeamMember.class);
                 intent.putExtra(Utils.teamFirstName, firstName);
                 intent.putExtra(Utils.teamLastName, lastName);
-                intent.putExtra(Utils.teamImageName, imageName);
-                intent.putExtra(Utils.teamRole, role);
                 intent.putExtra(Utils.teamEmailAddress, emailAddress);
                 intent.putExtra(Utils.teamPhoneNumber, phoneNumber);
                 intent.putExtra(Utils.teamMemberId, teamMemberId);
@@ -211,7 +249,7 @@ public class TeamMemberActivity extends BaseActivity {
             public void onClick(View v) {
                 try {
                     showProgressDialog();
-                    teamViewModel.cancelTeam(teamMemberId);
+                    teamViewModel.cancelTeamMember(teamMemberId);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -233,6 +271,8 @@ public class TeamMemberActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        showProgressDialog();
+        teamViewModel.getTeamMember(teamMemberId);
     }
 
 
@@ -246,7 +286,7 @@ public class TeamMemberActivity extends BaseActivity {
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(getString(R.string.yes))) {
                     customConfirmationDialog.dismiss();
-                    teamViewModel.deleteTeam(teamMemberId);
+                    teamViewModel.deleteTeamMember(teamMemberId);
                 }
             }
         });
