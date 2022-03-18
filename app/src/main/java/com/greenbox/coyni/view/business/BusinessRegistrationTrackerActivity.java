@@ -348,9 +348,16 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
                                     .putExtra("ADDBUSINESS", true)
                                     .putExtra("ADDDBA", true));
-                        } else {
+
+                        } else if(addBusiness) {
+
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
                                     .putExtra("ADDBUSINESS", true)
+                                    .putExtra("ADDDBA", false));
+
+                        } else {
+                            startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
+                                    .putExtra("ADDBUSINESS", false)
                                     .putExtra("ADDDBA", false));
                         }
 
