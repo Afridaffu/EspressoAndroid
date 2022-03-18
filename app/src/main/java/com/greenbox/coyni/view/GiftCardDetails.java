@@ -12,6 +12,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -26,11 +28,13 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,6 +55,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.GiftCardFixedAmountsAdapter;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.giftcard.Brand;
@@ -65,6 +70,7 @@ import com.greenbox.coyni.model.withdraw.GiftCardWithDrawInfo;
 import com.greenbox.coyni.model.withdraw.RecipientDetail;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
+import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
@@ -76,7 +82,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GiftCardDetails extends AppCompatActivity {
+public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputEditText firstNameET, lastNameET, emailET, amountET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, amountTIL;
     public LinearLayout emailErrorLL, firstNameErrorLL, lastNameErrorLL, giftCardDetailsLL, amountErrorLL;
@@ -129,6 +135,7 @@ public class GiftCardDetails extends AppCompatActivity {
     public void initFields() {
         try {
             giftCardDetails = this;
+            setKeyboardVisibilityListener(GiftCardDetails.this);
             objMyApplication = (MyApplication) getApplicationContext();
             firstNameErrorLL = findViewById(R.id.firstNameErrorLL);
             lastNameErrorLL = findViewById(R.id.lastNameErrorLL);
@@ -349,8 +356,8 @@ public class GiftCardDetails extends AppCompatActivity {
 
                                     amountETString = "$" + Utils.convertBigDecimalUSDC(String.valueOf(min)) + " - $" + Utils.convertBigDecimalUSDC(String.valueOf(max));
                                     amountET.requestFocus();
-                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//                                    if (!Utils.isKeyboardVisible)
+//                                        Utils.shwForcedKeypad(GiftCardDetails.this);
 //                                    selectedItem = objBrand.getItems().get(0);
                                 }
                             }
@@ -1027,7 +1034,8 @@ public class GiftCardDetails extends AppCompatActivity {
 
     public void giftCardPreview(View view) {
         try {
-            Utils.hideKeypad(GiftCardDetails.this, view);
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(GiftCardDetails.this);
             prevDialog = new Dialog(GiftCardDetails.this);
             prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             prevDialog.setContentView(R.layout.gift_card_order_preview);
@@ -1042,7 +1050,8 @@ public class GiftCardDetails extends AppCompatActivity {
             TextView subTotalTV = prevDialog.findViewById(R.id.subTotalTV);
             TextView feeTV = prevDialog.findViewById(R.id.feeTV);
             TextView totalTV = prevDialog.findViewById(R.id.totalTV);
-            TextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
             CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
 
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
@@ -1073,7 +1082,8 @@ public class GiftCardDetails extends AppCompatActivity {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
+                        tv_lable.setVisibility(GONE);
+                        tv_lable_verify.setVisibility(VISIBLE);
                         if (!isAuthenticationCalled) {
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
@@ -1302,5 +1312,46 @@ public class GiftCardDetails extends AppCompatActivity {
 
     }
 
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        if (visible) {
+            Utils.isKeyboardVisible = true;
+        } else {
+            Utils.isKeyboardVisible = false;
+        }
+        Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Utils.isKeyboardVisible)
+            Utils.hideKeypad(this);
+    }
 }

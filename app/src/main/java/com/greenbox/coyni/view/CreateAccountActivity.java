@@ -426,8 +426,13 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             public void onChanged(EmailExistsResponse emailExistsResponse) {
                 if (emailExistsResponse != null) {
                     if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
-                        emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                        Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
+                        if (emailET.hasFocus()) {
+                            emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                            Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
+                        } else {
+                            emailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                            Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_black));
+                        }
                         emailErrorLL.setVisibility(GONE);
                         isEmail = true;
                         enableOrDisableNext();
@@ -598,7 +603,10 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             passwordET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        passwordET.setText(charSequence);
+                        passwordET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
@@ -702,7 +710,10 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             confirmPasswordET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        confirmPasswordET.setText(charSequence);
+                        confirmPasswordET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
@@ -758,7 +769,25 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 }
             });
 
-            firstNameET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            passwordET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public void onDestroyActionMode(ActionMode mode) {
+                }
+
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
+                }
+            });
+
+            confirmPasswordET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
 
                 public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                     return false;
@@ -813,7 +842,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         firstNameErrorLL.setVisibility(GONE);
                         focusedID = firstNameET.getId();
-                        firstNameET.setHint("First Name");
+//                        firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
 //                        firstNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -851,7 +880,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         lastNameErrorLL.setVisibility(GONE);
                         focusedID = lastNameET.getId();
-                        lastNameET.setHint("Last Name");
+//                        lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
 //                        lastNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);

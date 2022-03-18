@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
     tools:context=".view.business.MerchantTransactionDetailsActivity">
-
 
 
     <LinearLayout
@@ -23,6 +22,7 @@
             android:paddingLeft="@dimen/_22sdp">
 
             <LinearLayout
+                android:id="@+id/lycloseLL"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="@dimen/_40sdp"
@@ -73,6 +73,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/mPayoutheaderTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -91,6 +92,7 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/merchantamountTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/_6sdp"
@@ -100,7 +102,6 @@
                                 android:textSize="@dimen/_24ssp" />
 
                             <TextView
-
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
@@ -138,6 +139,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/merchantstatusTV"
                                 android:layout_width="@dimen/_68sdp"
                                 android:layout_height="@dimen/_14sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
@@ -157,9 +159,7 @@
                             android:paddingLeft="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
                             android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp"
-
-                            >
+                            android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -171,6 +171,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/merchantdateTv"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -200,7 +201,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-
+                                android:id="@+id/mPayoutIdTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -238,7 +239,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-
+                                android:id="@+id/mreferenceIdTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -305,7 +306,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-
+android:id="@+id/merchantPIdateTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -335,12 +336,14 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/mPItotalamountTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="1,000.00"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -370,6 +373,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/mPItotaltransactionsTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -414,6 +418,7 @@
                                     android:textSize="@dimen/_11ssp" />
 
                                 <TextView
+                                    android:id="@+id/mPIdeposittoTV"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_semibold"

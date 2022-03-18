@@ -389,7 +389,6 @@
         </activity>
         <activity
             android:name=".view.business.SignatureActivity"
-            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AccountTypeActivity"
@@ -606,7 +605,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
-            android:name=".view.business.BusinessApplicationApproved"
+            android:name=".view.business.BusinessApplicationApprovedActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"

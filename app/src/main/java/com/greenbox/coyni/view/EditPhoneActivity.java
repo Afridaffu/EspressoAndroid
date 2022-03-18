@@ -100,8 +100,8 @@ public class EditPhoneActivity extends AppCompatActivity {
             b_contactUsTV = findViewById(R.id.b_contactUsTV);
 
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                findViewById(R.id.editPhoneSV).setVisibility(View.VISIBLE);
-                findViewById(R.id.business_topLL).setVisibility(View.GONE);
+                findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
+                findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
             }
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
@@ -127,29 +127,15 @@ public class EditPhoneActivity extends AppCompatActivity {
                         dialog.show();
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangePhone")) {
                             try {
-                                DBAInfoRequest dbaInfoRequest = new DBAInfoRequest();
-                                dbaInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getDbaInfoResp().getData().getEmail()));
-                                dbaInfoRequest.setAddressLine1(myApplicationObj.getDbaInfoResp().getData().getAddressLine1());
-                                dbaInfoRequest.setAddressLine2(myApplicationObj.getDbaInfoResp().getData().getAddressLine2());
-                                dbaInfoRequest.setBusinessType(myApplicationObj.getDbaInfoResp().getData().getBusinessType());
-                                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getAverageTicket().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setCity(myApplicationObj.getDbaInfoResp().getData().getCity());
-                                dbaInfoRequest.setCopyCompanyInfo(myApplicationObj.getDbaInfoResp().getData().isCopyCompanyInfo());
-                                dbaInfoRequest.setCountry(myApplicationObj.getDbaInfoResp().getData().getCountry());
-                                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getHighTicket().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setIdentificationType(Integer.parseInt(myApplicationObj.getDbaInfoResp().getData().getIdentificationType()));
-                                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(myApplicationObj.getDbaInfoResp().getData().getMonthlyProcessingVolume().trim().replace(",", "")).split("\\.")[0]));
-                                dbaInfoRequest.setName(myApplicationObj.getDbaInfoResp().getData().getName());
+                                ContactInfoRequest contactInfoRequest = new ContactInfoRequest();
+                                contactInfoRequest.setEmail(Objects.requireNonNull(myApplicationObj.getDbaInfoResp().getData().getEmail()));
+                                contactInfoRequest.setId(myApplicationObj.getDbaInfoResp().getData().getId());
                                 PhNoWithCountryCode phNoWithCountryCode = new PhNoWithCountryCode();
                                 phNoWithCountryCode.setCountryCode(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getCountryCode());
                                 newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
                                 phNoWithCountryCode.setPhoneNumber(newPhoneNumber);
-                                dbaInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
-                                dbaInfoRequest.setState(myApplicationObj.getDbaInfoResp().getData().getState());
-                                dbaInfoRequest.setTimeZone(myApplicationObj.getDbaInfoResp().getData().getTimeZone());
-                                dbaInfoRequest.setWebsite(myApplicationObj.getDbaInfoResp().getData().getWebsite());
-                                dbaInfoRequest.setZipCode(myApplicationObj.getDbaInfoResp().getData().getZipCode());
-                                businessIdentityVerificationViewModel.patchDBAInfo(dbaInfoRequest);
+                                contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
+                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
@@ -219,7 +205,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             });
 
-            b_editPhoneCloseLL.setOnClickListener(new View.OnClickListener() {
+            b_editPhoneCloseLL .setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
@@ -235,12 +221,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     private void callSendPhoneOTPAPI() {
         try {
             currentPhoneNumber = currentPhoneET.getText().toString().substring(1, 4) + currentPhoneET.getText().toString().substring(6, 9) + currentPhoneET.getText().toString().substring(10, currentPhoneET.getText().length());
-            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                newPhoneNumber = newPhoneET.getText().toString().substring(1, 4) + newPhoneET.getText().toString().substring(6, 9) + newPhoneET.getText().toString().substring(10, newPhoneET.getText().length());
-            }
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
-            }
             UpdatePhoneRequest updatePhoneRequest = new UpdatePhoneRequest();
             updatePhoneRequest.setCurrentPhoneNumber(currentPhoneNumber);
             updatePhoneRequest.setCurrentcountryCode(Utils.getStrCCode());
@@ -277,7 +258,6 @@ public class EditPhoneActivity extends AppCompatActivity {
             public void onChanged(UpdatePhoneResponse updatePhoneResponse) {
                 try {
                     dialog.dismiss();
-                    if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                         if (updatePhoneResponse != null && updatePhoneResponse.getStatus().toLowerCase().equals("success")) {
                             myApplicationObj.setUpdatePhoneResponse(updatePhoneResponse);
                             Utils.hideKeypad(EditPhoneActivity.this);
@@ -286,107 +266,42 @@ public class EditPhoneActivity extends AppCompatActivity {
                                     .putExtra("OTP_TYPE", "OTP")
                                     .putExtra("IS_OLD_PHONE", "true")
                                     .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
-                                    .putExtra("NEW_PHONE_MASKED", newPhoneET.getText().toString().trim())
+                                    .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
                                     .putExtra("OLD_PHONE", currentPhoneNumber)
                                     .putExtra("NEW_PHONE", newPhoneNumber));
                         } else {
                             Utils.hideSoftKeyboard(EditPhoneActivity.this);
                             Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "", updatePhoneResponse.getError().getFieldErrors().get(0));
                         }
-                    }
-                    if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                        if (updatePhoneResponse != null && updatePhoneResponse.getStatus().toLowerCase().equals("success")) {
-                            try {
-                                myApplicationObj.setUpdatePhoneResponse(updatePhoneResponse);
-                                Utils.hideKeypad(EditPhoneActivity.this);
-                                startActivity(new Intent(EditPhoneActivity.this, OTPValidation.class)
-                                        .putExtra("screen", "EditPhone")
-                                        .putExtra("OTP_TYPE", "OTP")
-                                        .putExtra("IS_OLD_PHONE", "true")
-                                        .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
-                                        .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
-                                        .putExtra("OLD_PHONE", currentPhoneNumber)
-                                        .putExtra("NEW_PHONE", newPhoneNumber));
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this
+                , new Observer<CompanyInfoUpdateResp>() {
+                    @Override
+                    public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
+                        dialog.dismiss();
+                        try {
+                            if (companyInfoUpdateResp != null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
+                               finish();
+                            } else {
+                                Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            try {
-                                Utils.hideSoftKeyboard(EditPhoneActivity.this);
-                                Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "", updatePhoneResponse.getError().getFieldErrors().get(0));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
-            @Override
-            public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
-                dialog.dismiss();
-                try {
-                    if (dbaInfoUpdateResp != null && dbaInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
-                        new Handler().postDelayed(() -> {
-                            try {
-                                finish();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }, 2000);
-
-                    } else {
-                        Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        businessIdentityVerificationViewModel.getContactInfoUpdateResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
-            @Override
-            public void onChanged(CompanyInfoUpdateResp companyInfoUpdateResp) {
-                dialog.dismiss();
-                try {
-                    if (companyInfoUpdateResp != null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                        Utils.showCustomToast(EditPhoneActivity.this, "Phone number updated", R.drawable.ic_check, "PHONE");
-                        new Handler().postDelayed(() -> {
-                            try {
-                                finish();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }, 2000);
-
-                    } else {
-                        Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
+                });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         try {
-            if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                newPhoneET.setFocus();
-            }
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 b_newPhoneET.setFocus();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

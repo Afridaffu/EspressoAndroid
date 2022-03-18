@@ -27,7 +27,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Https://"
+                android:text="https://"
                 android:textColor="@color/light_gray"
                 android:textSize="@dimen/_12ssp" />
 

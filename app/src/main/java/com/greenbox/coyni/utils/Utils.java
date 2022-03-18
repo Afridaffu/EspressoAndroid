@@ -153,6 +153,7 @@ public class Utils {
     public static final String signetType = "7";
     public static final String payType = "12";
     public static final String businessType = "19";
+    public static final String transferType = "10";
     public static final String paySubType = "8";
     public static final String requestSubType = "9";
     public static final String eventTypeId = "0";
@@ -256,11 +257,7 @@ public class Utils {
     public static final String teamPhoneNumber = "TeamPhoneNumber";
     public static final String teamMemberId = "TeamMemberId";
 
-    public static final String boName = "BOName";
-    public static final int boOwnershipPercentage = 50;
-    public static final String boAddress = "BoAddress";
-    public static final String boDob = "BoDob";
-    public static final String boSSN = "BoSSN";
+    public static final String boData = "BOData";
 
     public static final String companyName = "CompanyName";
     public static final String companyEmail = "CompanyEmail";
@@ -270,7 +267,7 @@ public class Utils {
     public static final int companyId = 0;
 
 
-    public static final int position = 0;
+    public static final String position = "Position";
     public static final int cPP = 0;
     public static final int cTOS = 1;
     public static final int mPP = 8;
@@ -505,13 +502,6 @@ public class Utils {
         } else {
             displayAlertNew(fieldError, activity, header);
         }
-    }
-
-    public static void displayAlertDecline(String msg, Activity activity, String header, String fieldError) {
-
-
-        displayAlertDecline(msg, activity, header);
-
     }
 
     public static String convertBigDecimalUSDC(String amount) {
@@ -769,56 +759,6 @@ public class Utils {
         }
 
         actionCV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        message.setText(msg);
-        Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        WindowManager.LayoutParams wlp = window.getAttributes();
-
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
-
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
-
-    public static void displayAlertDecline(String msg, final Context context, String headerText) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_decline_rules_btmshet);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
-        int width = mertics.widthPixels;
-
-        TextView header = dialog.findViewById(R.id.tvHeading);
-        TextView message = dialog.findViewById(R.id.tvMessage);
-        LinearLayout llgoback = dialog.findViewById(R.id.llgoback);
-        LinearLayout cancelBtn = dialog.findViewById(R.id.cancelBtn);
-
-        if (!headerText.equals("")) {
-            header.setVisibility(View.VISIBLE);
-            header.setText(headerText);
-        }
-
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        llgoback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();

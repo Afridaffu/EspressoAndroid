@@ -31,37 +31,38 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_16ssp" />
 
-    <ScrollView
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:src="@drawable/ic_no_token" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_11sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:text="Seems like no token available in your account. Please follow one of the prompts below to link an account."
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_20sdp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_13sdp"
-                android:src="@drawable/ic_no_token" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="Seems like no token available in your account. Please follow one of the prompts below to link an account."
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_20sdp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPayMethods"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
 
             <LinearLayout
                 android:id="@+id/lyAddPay"

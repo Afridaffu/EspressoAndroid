@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -56,7 +58,7 @@ import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends AppCompatActivity {
     private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
-    private LinearLayout closeLL;
+    private LinearLayout closeLL,webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
     ImageView dba_userProfileIV,editProfileIV;
@@ -91,6 +93,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             nameTV = findViewById(R.id.nameTV);
             emailTV = findViewById(R.id.emailIDTV);
             webSiteTV = findViewById(R.id.websiteTV);
+            webLL = findViewById(R.id.webIdLL);
             phoneNumberTV = findViewById(R.id.phoneNumberTV);
             addressTV = findViewById(R.id.addressTV);
             businessType = findViewById(R.id.businessTypeTV);
@@ -105,12 +108,11 @@ public class DBAInfoDetails extends AppCompatActivity {
 
             editProfileIV.setOnClickListener(view -> {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     if (checkAndRequestPermissions(this)) {
-        //                    chooseImage(this);
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
                         try {
                             showImagePickerDialog(this);
                         } catch (Exception e) {
@@ -167,9 +169,11 @@ public class DBAInfoDetails extends AppCompatActivity {
             } else {
                 emailTV.setText("");
             }
-            if (dbaInfoResp.getData().getWebsite() != null) {
+            if (!dbaInfoResp.getData().getWebsite().equals("")) {
+                webLL.setVisibility(View.VISIBLE);
                 webSiteTV.setText(dbaInfoResp.getData().getWebsite());
             } else {
+                webLL.setVisibility(View.GONE);
                 webSiteTV.setText("");
             }
             if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
@@ -623,4 +627,39 @@ public class DBAInfoDetails extends AppCompatActivity {
         }
         return true;
     }
-}
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            try {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                switch (requestCode) {
+                    case REQUEST_ID_MULTIPLE_PERMISSIONS:
+
+                        if (ContextCompat.checkSelfPermission(this,
+                                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.displayAlert("Requires Access to Camera.", DBAInfoDetails.this, "", "");
+
+                        } else if (ContextCompat.checkSelfPermission(this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
+
+                        } else if (ContextCompat.checkSelfPermission(this,
+                                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.displayAlert("Requires Access to Your Storage.", DBAInfoDetails.this, "", "");
+
+                        } else {
+//                        startActivity(new Intent(this, CameraActivity.class));
+//                        chooseFilePopup(this, selectedDocType);
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(DBAInfoDetails.this);
+                            showImagePickerDialog(this);
+                        }
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }

@@ -86,7 +86,6 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textIsSelectable="false"
                         android:textSize="@dimen/_12ssp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -285,7 +284,7 @@
                             android:id="@+id/passwordET"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:autofillHints="creditCardSecurityCode"
+                            android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?"
                             android:fontFamily="@font/opensans_semibold"
                             android:imeOptions="actionNext"
@@ -396,7 +395,7 @@
                         android:id="@+id/confirmPasswordET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%*?"
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionDone"

@@ -864,6 +864,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                         if (companyaddress2ET.getText().toString().length() > 0 && !companyaddress2ET.getText().toString().substring(0, 1).equals(" ")) {
                             companyaddress2ET.setText(companyaddress2ET.getText().toString().substring(0, 1).toUpperCase() + companyaddress2ET.getText().toString().substring(1));
+                            companyaddress2ET.setSelection(companyaddress2ET.getText().toString().length());
                         }
                     } else {
                         companyaddress2til.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -892,6 +893,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                         if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
                             cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
+                            cityET.setSelection(cityET.getText().toString().length());
                         }
                     } else {
                         cityET.setHint("City");
@@ -1748,6 +1750,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 pickIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 pickIntent.setType("*/*");
                 String[] extraMimeTypes = {"application/pdf", "image/*"};
+//                String[] extraMimeTypes = {"application/pdf", "image/*","text/csv","application/msword",
+//                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
                 pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
                 pickIntent.setAction(Intent.ACTION_GET_CONTENT);
 

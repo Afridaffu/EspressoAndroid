@@ -542,6 +542,10 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             address1ErrorLL.setVisibility(VISIBLE);
                             address1ErrorTV.setText("Field Required");
                         }
+                        if (mailAddr1.getText().toString().length() > 0 && !mailAddr1.getText().toString().substring(0, 1).equals(" ")) {
+                            mailAddr1.setText(mailAddr1.getText().toString().substring(0, 1).toUpperCase() + mailAddr1.getText().toString().substring(1).toLowerCase());
+                            mailAddr1.setSelection(mailAddr1.getText().toString().trim().length());
+                        }
                     } else {
                         mailAddr1.setHint("Street Address");
                         mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -562,7 +566,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         } else {
                             Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.light_gray));
                             mailingAddlineoptTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                        }
 
+                        if (mailAddr2.getText().toString().length() > 0 && !mailAddr2.getText().toString().substring(0, 1).equals(" ")) {
+                            mailAddr2.setText(mailAddr2.getText().toString().substring(0, 1).toUpperCase() + mailAddr2.getText().toString().substring(1).toLowerCase());
+                            mailAddr2.setSelection(mailAddr2.getText().toString().trim().length());
                         }
                     } else {
                         mailingAddlineoptTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -590,6 +598,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         }
                         if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
                             cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1));
+                            cityET.setSelection(cityET.getText().toString().trim().length());
                         }
                     } else {
                         cityET.setHint("City");
@@ -623,6 +632,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             zipcodeErrorTV.setText("Field Required");
                         }
                     } else {
+                        if(!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         zipcode.setHint("Zip Code");
                         zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
@@ -664,9 +675,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             ssnErrorTV.setText("Field Required");
                         }
                     } else {
+                        if(!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
-                        ssnET.setHint(R.string.digits4);
+                        ssnET.setHint(R.string.ssnlast);
                         ssnErrorLL.setVisibility(GONE);
                     }
                 }

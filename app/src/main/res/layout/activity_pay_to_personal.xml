@@ -137,144 +137,150 @@
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_11ssp"></TextView>
 
-<!--                    <RelativeLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="@dimen/_17sdp"-->
-<!--                        android:background="@color/white"-->
-<!--                        android:paddingLeft="@dimen/_20sdp"-->
-<!--                        android:paddingRight="@dimen/_30sdp">-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/tvCurrency"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_centerVertical="true"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_toLeftOf="@+id/lyAmount"-->
-<!--                            android:fontFamily="@font/opensans_bold"-->
-<!--                            android:paddingTop="@dimen/_9sdp"-->
-<!--                            android:paddingBottom="@dimen/_7sdp"-->
-<!--                            android:text="$"-->
-<!--                            android:textColor="@color/primary_green"-->
-<!--                            android:textSize="@dimen/_33ssp"-->
-<!--                            android:visibility="gone" />-->
-
-<!--                        <LinearLayout-->
-<!--                            android:id="@+id/lyAmount"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_centerVertical="true"-->
-<!--                            android:layout_marginLeft="@dimen/_5sdp"-->
-<!--                            android:layout_toLeftOf="@+id/imgConvert"-->
-<!--                            android:orientation="horizontal">-->
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/tvAmount"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:background="@color/white"-->
-<!--                                android:fontFamily="@font/opensans_bold"-->
-<!--                                android:gravity="center_vertical|right"-->
-<!--                                android:hint="0.00"-->
-<!--                                android:inputType="numberDecimal"-->
-<!--                                android:maxLength="@string/maxlength"-->
-<!--                                android:textColor="@color/primary_green"-->
-<!--                                android:textCursorDrawable="@drawable/cursorcolor"-->
-<!--                                android:textSize="@dimen/_43ssp" />-->
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/tvCYN"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:fontFamily="@font/opensans_bold"-->
-<!--                                android:text=" CYN"-->
-<!--                                android:textColor="@color/primary_green"-->
-<!--                                android:textSize="@dimen/_11ssp"-->
-<!--                                android:visibility="visible"></TextView>-->
-<!--                        </LinearLayout>-->
-
-<!--                        <ImageView-->
-<!--                            android:id="@+id/imgConvert"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_alignParentRight="true"-->
-<!--                            android:layout_centerVertical="true"-->
-<!--                            android:layout_marginLeft="@dimen/_7sdp"-->
-<!--                            android:layout_marginTop="@dimen/_8sdp"-->
-<!--                            android:src="@drawable/ic_download" />-->
-<!--                    </RelativeLayout>-->
+                    <RelativeLayout
+                        android:id="@+id/payLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_80sdp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/linearLayoutnew"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_60sdp"
-                        android:layout_margin="@dimen/_10ssp"
-                        android:gravity="center"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <LinearLayout
+                            android:id="@+id/lyamountview1"
                             android:layout_width="match_parent"
+                            android:gravity="center"
                             android:layout_height="wrap_content"
-                            android:id="@+id/ll_values"
-                            android:gravity="center_horizontal"
-                            android:layout_gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/tvCurrency"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="top"
-                                android:layout_marginEnd="@dimen/_5sdp"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="$"
+                                android:layout_gravity="top"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_15ssp"
+                                android:textSize="@dimen/_20sdp"
                                 android:visibility="gone" />
 
-                            <TextView
-                                android:id="@+id/tvAmount"
+                            <LinearLayout
+                                android:id="@+id/lyAmount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="@dimen/_10ssp"
-                                android:background="@color/white"
-                                android:fontFamily="@font/opensans_bold"
-                                android:gravity="center_vertical"
-                                android:hint="0.00"
-                                android:inputType="numberDecimal"
-                                android:maxLength="@string/maxlengthamount"
-                                android:textColor="@color/primary_black"
-                                android:textColorHint="@color/light_gray"
-                                android:textCursorDrawable="@drawable/cursorcolor"
-                                android:textSize="@dimen/_53sdp" />
+                                android:layout_gravity="center"
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tvCYN"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text=" CYN"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_12ssp"
-                                android:visibility="visible">
+                                <TextView
+                                    android:id="@+id/etAmount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/white"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:gravity="center_vertical|right"
+                                    android:hint="0.00"
+                                    android:inputType="numberDecimal"
+                                    android:maxLength="@string/maxlength"
+                                    android:textColor="@color/primary_black"
+                                    android:textColorHint="@color/light_gray"
+                                    android:cursorVisible="true"
+                                    android:textCursorDrawable="@drawable/cursor_green"
+                                    android:textSize="@dimen/_53ssp" />
 
-                            </TextView>
+                                <TextView
+                                    android:id="@+id/tvCYN"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:text=" CYN"
+                                    android:textColor="@color/primary_black"
+                                    android:textSize="@dimen/_12ssp"
+                                    android:visibility="visible"></TextView>
+                            </LinearLayout>
 
                             <ImageView
                                 android:id="@+id/imgConvert"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_10ssp"
+                                android:layout_marginBottom="@dimen/_10ssp"
                                 android:layout_gravity="bottom"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_marginBottom="@dimen/_5sdp"
                                 android:src="@drawable/ic_download" />
+
                         </LinearLayout>
 
-                    </LinearLayout>
+
+                    </RelativeLayout>
+
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/linearLayoutnew"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/_60sdp"-->
+<!--                        android:layout_margin="@dimen/_10ssp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:orientation="vertical">-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:id="@+id/ll_values"-->
+<!--                            android:gravity="center_horizontal"-->
+<!--                            android:layout_gravity="center_vertical"-->
+<!--                            android:orientation="horizontal">-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvCurrency"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="top"-->
+<!--                                android:layout_marginEnd="@dimen/_5sdp"-->
+<!--                                android:fontFamily="@font/opensans_bold"-->
+<!--                                android:text="$"-->
+<!--                                android:textColor="@color/primary_black"-->
+<!--                                android:textSize="@dimen/_15ssp"-->
+<!--                                android:visibility="gone" />-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvAmount"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="center_vertical"-->
+<!--                                android:layout_marginStart="@dimen/_10ssp"-->
+<!--                                android:background="@color/white"-->
+<!--                                android:fontFamily="@font/opensans_bold"-->
+<!--                                android:gravity="center_vertical"-->
+<!--                                android:hint="0.00"-->
+<!--                                android:inputType="numberDecimal"-->
+<!--                                android:maxLength="@string/maxlengthamount"-->
+<!--                                android:textColor="@color/primary_black"-->
+<!--                                android:textColorHint="@color/light_gray"-->
+<!--                                android:textCursorDrawable="@drawable/cursorcolor"-->
+<!--                                android:textSize="@dimen/_53sdp" />-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/tvCYN"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="bottom"-->
+<!--                                android:fontFamily="@font/opensans_bold"-->
+<!--                                android:text=" CYN"-->
+<!--                                android:textColor="@color/primary_black"-->
+<!--                                android:textSize="@dimen/_12ssp"-->
+<!--                                android:visibility="visible">-->
+
+<!--                            </TextView>-->
+
+<!--                            <ImageView-->
+<!--                                android:id="@+id/imgConvert"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="bottom"-->
+<!--                                android:layout_marginStart="@dimen/_5sdp"-->
+<!--                                android:layout_marginBottom="@dimen/_5sdp"-->
+<!--                                android:src="@drawable/ic_download" />-->
+<!--                        </LinearLayout>-->
+
+<!--                    </LinearLayout>-->
 
                     <View
                         android:layout_width="match_parent"
@@ -344,8 +350,25 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+<!--                <TextView-->
+<!--                    android:id="@+id/tvLable"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:ellipsize="end"-->
+<!--                    android:gravity="center"-->
+<!--                    android:paddingEnd="16dp"-->
+<!--                    android:paddingRight="16dp"-->
+<!--                    android:text="Slide to Confirm"-->
+<!--                    android:textColor="@color/primary_green"-->
+<!--                    android:textSize="@dimen/_15sdp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/im_lock"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
+
                 <TextView
-                    android:id="@+id/tvLable"
+                    android:id="@+id/tv_lable_verify"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -353,14 +376,37 @@
                     android:gravity="center"
                     android:paddingEnd="16dp"
                     android:paddingRight="16dp"
-                    android:text="Slide to Confirm"
+                    android:text="Verifying"
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_15sdp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/im_lock"
                     app:layout_constraintStart_toEndOf="@+id/im_lock"
-                    app:layout_constraintTop_toTopOf="@+id/im_lock" />
+                    app:layout_constraintTop_toTopOf="@+id/im_lock"
+                    android:visibility="gone"/>
 
+                <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
+                    android:id="@+id/tvLable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:paddingEnd="16dp"
+                    android:paddingRight="16dp"
+                    android:text="Slide to Confirm"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:angle="45"
+                    app:chainUseRtl="true"
+                    app:colors="@array/default_gradient_colors"
+                    app:layout_constraintBottom_toBottomOf="@id/im_lock"
+                    app:layout_constraintStart_toEndOf="@+id/im_lock"
+                    app:layout_constraintTop_toTopOf="@+id/im_lock"
+                    app:speed="500"
+                    app:maxFPS="24"
+                    app:simultaneousColors="8"/>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/im_lock"

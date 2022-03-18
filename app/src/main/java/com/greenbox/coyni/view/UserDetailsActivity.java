@@ -66,10 +66,12 @@ import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
+import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -95,6 +97,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private TextInputLayout business_defaultAccTIL;
     private TextInputEditText business_defaultaccountET;
     private MyApplication myApplicationObj;
+    private DatabaseHandler dbHandler;
     private ExpandableListView brandsGV;
 
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
@@ -159,7 +162,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
-
+            dbHandler = DatabaseHandler.getInstance(UserDetailsActivity.this);
             myApplicationObj = (MyApplication) getApplicationContext();
             userDetailsActivity = this;
             editProfileIV = findViewById(R.id.editProfileIV);
@@ -189,11 +192,19 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
-            isBiometric = Utils.getIsBiometric();
+            try {
+                isBiometric = Utils.getIsBiometric();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            SetToken(myApplicationObj, this);
-            SetFaceLock(myApplicationObj, this);
-            SetTouchId(myApplicationObj, this);
+            try {
+                setToken();
+                setTouchId();
+                setFaceLock();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             editProfileIV.setOnClickListener(view -> {
                 if (checkAndRequestPermissions(this)) {
@@ -202,7 +213,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    showImagePickerDialog(this);
+                    try {
+                        showImagePickerDialog(this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -216,21 +231,36 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                    startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
 //                            .putExtra("TYPE", "ENTER")
 //                            .putExtra("screen", "EditEmail"));
-                    authenticateType = "EMAIL";
+//                    try {
+//                        authenticateType = "EMAIL";
+//
+//                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+//                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+//                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                            } else {
+//                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("screen", "EditEmail"));
+//                            }
+//                        } else {
+//                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                    .putExtra("TYPE", "ENTER")
+//                                    .putExtra("screen", "EditEmail"));
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+                    //New wireframe changes
+                    try {
+                        authenticateType = "EMAIL";
+                        String face = String.valueOf(isFaceLock);
+                        String touch = String.valueOf(isTouchId);
 
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                        } else {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("screen", "EditEmail"));
-                        }
-                    } else {
-                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("screen", "EditEmail"));
+                        startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", emailId).putExtra("touch", touch).putExtra("face", face));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
                 }
             });
 
@@ -245,20 +275,24 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                            .putExtra("TYPE", "ENTER")
 //                            .putExtra("screen", "EditAddress"));
 
-                    authenticateType = "ADDRESS";
+                    try {
+                        authenticateType = "ADDRESS";
 
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                            } else {
+                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+                                        .putExtra("TYPE", "ENTER")
+                                        .putExtra("screen", "EditAddress"));
+                            }
                         } else {
                             startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "EditAddress"));
                         }
-                    } else {
-                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("screen", "EditAddress"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }
@@ -276,22 +310,36 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                            .putExtra("OLD_PHONE", phoneFormat)
 //                            .putExtra("screen", "EditPhone"));
 
-                    authenticateType = "PHONE";
+//                    try {
+//                        authenticateType = "PHONE";
+//
+//                        if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
+//                            if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
+//                                Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                            } else {
+//                                startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                        .putExtra("TYPE", "ENTER")
+//                                        .putExtra("OLD_PHONE", phoneFormat)
+//                                        .putExtra("screen", "EditPhone"));
+//                            }
+//                        } else {
+//                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
+//                                    .putExtra("TYPE", "ENTER")
+//                                    .putExtra("OLD_PHONE", phoneFormat)
+//                                    .putExtra("screen", "EditPhone"));
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
 
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(UserDetailsActivity.this)) {
-                        if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(UserDetailsActivity.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(UserDetailsActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                        } else {
-                            startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                    .putExtra("TYPE", "ENTER")
-                                    .putExtra("OLD_PHONE", phoneFormat)
-                                    .putExtra("screen", "EditPhone"));
-                        }
-                    } else {
-                        startActivity(new Intent(UserDetailsActivity.this, PINActivity.class)
-                                .putExtra("TYPE", "ENTER")
-                                .putExtra("OLD_PHONE", phoneFormat)
-                                .putExtra("screen", "EditPhone"));
+                    try {
+                        authenticateType = "PHONE";
+                        String face = String.valueOf(isFaceLock);
+                        String touch = String.valueOf(isTouchId);
+
+                        startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", phoneFormat).putExtra("touch", touch).putExtra("face", face));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }
@@ -303,11 +351,15 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-                authenticateType = "EMAIL";
-                String face = String.valueOf(isFaceLock);
-                String touch = String.valueOf(isTouchId);
+                try {
+                    authenticateType = "EMAIL";
+                    String face = String.valueOf(isFaceLock);
+                    String touch = String.valueOf(isTouchId);
 
-                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", emailId).putExtra("touch", touch).putExtra("face", face));
+                    startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", emailId).putExtra("touch", touch).putExtra("face", face));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             business_AddreLL.setOnClickListener(view -> {
@@ -317,11 +369,15 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 mLastClickTime = SystemClock.elapsedRealtime();
 
 
-                authenticateType = "ADDRESS";
-                String face = String.valueOf(isFaceLock);
-                String touch = String.valueOf(isTouchId);
+                try {
+                    authenticateType = "ADDRESS";
+                    String face = String.valueOf(isFaceLock);
+                    String touch = String.valueOf(isTouchId);
 
-                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", address).putExtra("touch", touch).putExtra("face", face));
+                    startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", address).putExtra("touch", touch).putExtra("face", face));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
             });
@@ -332,11 +388,15 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-                authenticateType = "PHONE";
-                String face = String.valueOf(isFaceLock);
-                String touch = String.valueOf(isTouchId);
+                try {
+                    authenticateType = "PHONE";
+                    String face = String.valueOf(isFaceLock);
+                    String touch = String.valueOf(isTouchId);
 
-                startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", phoneFormat).putExtra("touch", touch).putExtra("face", face));
+                    startActivity(new Intent(UserDetailsActivity.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "UserDetails").putExtra("title", authenticateType).putExtra("value", phoneFormat).putExtra("touch", touch).putExtra("face", face));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             });
 
@@ -345,20 +405,21 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
 
-                Profile profile = myApplicationObj.getMyProfile();
+                try {
+                    Profile profile = myApplicationObj.getMyProfile();
 
-                phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
-                phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
-                bindImage(myApplicationObj.getMyProfile().getData().getImage());
-                strFileName = myApplicationObj.getMyProfile().getData().getImage();
-                userEmailIdTV.setText(profile.getData().getEmail());
-                business_emailIdTV.setText(profile.getData().getEmail());
-                userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                userPhoneNumTV.setText(phoneFormat);
-                business_userPhneNoTV.setText(phoneFormat);
+                    phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
+                    phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+                    bindImage(myApplicationObj.getMyProfile().getData().getImage());
+                    strFileName = myApplicationObj.getMyProfile().getData().getImage();
+                    userEmailIdTV.setText(profile.getData().getEmail());
+                    business_emailIdTV.setText(profile.getData().getEmail());
+                    userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                    business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                    userPhoneNumTV.setText(phoneFormat);
+                    business_userPhneNoTV.setText(phoneFormat);
 
-                LogUtils.d(TAG,"profiledata"+profile);
+                    LogUtils.d(TAG,"profiledata"+profile);
 
 //                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
 //
@@ -368,31 +429,34 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                    business_defaultaccountET.setText(fullname);
 //                }
 
-                String addressFormatted = "";
-                if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
-                }
-                if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
-                }
-                if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
-                }
-                if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getState() + ", ";
-                }
+                    String addressFormatted = "";
+                    if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
+                    }
+                    if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
+                    }
+                    if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+                    }
+                    if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+                    }
 
-                if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
-                    addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
-                }
+                    if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                        addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+                    }
 
-                if (addressFormatted.equals("")) {
-                    addressFormatted = addressFormatted + "United States";
-                    userAddressTV.setText(addressFormatted);
-                    business_userAddreTV.setText(addressFormatted);
-                } else {
-                    userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                    business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                    if (addressFormatted.equals("")) {
+                        addressFormatted = addressFormatted + "United States";
+                        userAddressTV.setText(addressFormatted);
+                        business_userAddreTV.setText(addressFormatted);
+                    } else {
+                        userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                        business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
 
@@ -466,11 +530,15 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     });
 
                     if (businessAccountList.size() != 0) {
-                        brandsGV.setVisibility(View.VISIBLE);
-                        LogUtils.d(TAG, "subSet" + subSet);
+                        try {
+                            brandsGV.setVisibility(View.VISIBLE);
+                            LogUtils.d(TAG, "subSet" + subSet);
 
-                        listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
-                        brandsGV.setAdapter(listAdapter);
+                            listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
+                            brandsGV.setAdapter(listAdapter);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         brandsGV.setVisibility(View.GONE);
                     }
@@ -579,14 +647,18 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 if (imageResponse != null) {
                     if (imageResponse.getStatus().toLowerCase().equals("success")) {
-                        userProfileIV.setVisibility(View.GONE);
-                        imageTextTV.setVisibility(View.VISIBLE);
-                        String imageTextNew = "";
-                        imageTextNew = imageTextNew + myApplicationObj.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                                myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-                        imageTextTV.setText(imageTextNew);
-                        dashboardViewModel.meProfile();
-                        Utils.showCustomToast(UserDetailsActivity.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
+                        try {
+                            userProfileIV.setVisibility(View.GONE);
+                            imageTextTV.setVisibility(View.VISIBLE);
+                            String imageTextNew = "";
+                            imageTextNew = imageTextNew + myApplicationObj.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                                    myApplicationObj.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                            imageTextTV.setText(imageTextNew);
+                            dashboardViewModel.meProfile();
+                            Utils.showCustomToast(UserDetailsActivity.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         Utils.displayAlert(imageResponse.getError().getErrorDescription(), UserDetailsActivity.this, "", imageResponse.getError().getFieldErrors().get(0));
                     }
@@ -653,67 +725,71 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
-                if (profile != null) {
-                    myApplicationObj.setMyProfile(profile);
-                    if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
-                        phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
-                        phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
-                        bindImage(myApplicationObj.getMyProfile().getData().getImage());
-                        strFileName = myApplicationObj.getMyProfile().getData().getImage();
-                        userEmailIdTV.setText(profile.getData().getEmail());
-                        business_emailIdTV.setText(profile.getData().getEmail());
-                        emailId = profile.getData().getEmail();
-                        userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                        business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                        userPhoneNumTV.setText(phoneFormat);
-                        business_userPhneNoTV.setText(phoneFormat);
-                        String addressFormatted = "";
-                        if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
-                        }
-                        if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
-                        }
-                        if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
-                        }
-                        if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+                try {
+                    if (profile != null) {
+                        myApplicationObj.setMyProfile(profile);
+                        if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
+                            phoneNumber = profile.getData().getPhoneNumber().split(" ")[1];
+                            phoneFormat = "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+                            bindImage(myApplicationObj.getMyProfile().getData().getImage());
+                            strFileName = myApplicationObj.getMyProfile().getData().getImage();
+                            userEmailIdTV.setText(profile.getData().getEmail());
+                            business_emailIdTV.setText(profile.getData().getEmail());
+                            emailId = profile.getData().getEmail();
+                            userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                            business_userNameTV.setText(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                            userPhoneNumTV.setText(phoneFormat);
+                            business_userPhneNoTV.setText(phoneFormat);
+                            String addressFormatted = "";
+                            if (profile.getData().getAddressLine1() != null && !profile.getData().getAddressLine1().equals("")) {
+                                addressFormatted = addressFormatted + profile.getData().getAddressLine1() + ", ";
+                            }
+                            if (profile.getData().getAddressLine2() != null && !profile.getData().getAddressLine2().equals("")) {
+                                addressFormatted = addressFormatted + profile.getData().getAddressLine2() + ", ";
+                            }
+                            if (profile.getData().getCity() != null && !profile.getData().getCity().equals("")) {
+                                addressFormatted = addressFormatted + profile.getData().getCity() + ", ";
+                            }
+                            if (profile.getData().getState() != null && !profile.getData().getState().equals("")) {
+                                addressFormatted = addressFormatted + profile.getData().getState() + ", ";
+                            }
+
+                            if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
+                                addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
+                            }
+
+                            if (addressFormatted.equals("")) {
+                                addressFormatted = addressFormatted + "United States";
+                                userAddressTV.setText(addressFormatted);
+                                business_userAddreTV.setText(addressFormatted);
+                                address = addressFormatted;
+                            } else {
+                                userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                                business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+                                address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+                            }
+
                         }
 
-                        if (profile.getData().getZipCode() != null && !profile.getData().getZipCode().equals("")) {
-                            addressFormatted = addressFormatted + profile.getData().getZipCode() + ", ";
-                        }
 
-                        if (addressFormatted.equals("")) {
-                            addressFormatted = addressFormatted + "United States";
-                            userAddressTV.setText(addressFormatted);
-                            business_userAddreTV.setText(addressFormatted);
-                            address = addressFormatted;
-                        } else {
-                            userAddressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                            business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-                            address = addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
-                        }
-
+    //                    myApplicationObj.setMyProfile(profile);
+    //                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
+    //                        userProfileIV.setVisibility(View.VISIBLE);
+    //                        imageTextTV.setVisibility(View.GONE);
+    //                        Glide.with(UserDetailsActivity.this)
+    //                                .load(profile.getData().getImage())
+    //                                .into(userProfileIV);
+    //                    } else {
+    //                        userProfileIV.setVisibility(View.GONE);
+    //                        imageTextTV.setVisibility(View.VISIBLE);
+    //                        String imageText ="";
+    //                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
+    //                                profile.getData().getLastName().substring(0,1).toUpperCase();
+    //                        imageTextTV.setText(imageText);
+    //                    }
                     }
-
-
-//                    myApplicationObj.setMyProfile(profile);
-//                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
-//                        userProfileIV.setVisibility(View.VISIBLE);
-//                        imageTextTV.setVisibility(View.GONE);
-//                        Glide.with(UserDetailsActivity.this)
-//                                .load(profile.getData().getImage())
-//                                .into(userProfileIV);
-//                    } else {
-//                        userProfileIV.setVisibility(View.GONE);
-//                        imageTextTV.setVisibility(View.VISIBLE);
-//                        String imageText ="";
-//                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
-//                                profile.getData().getLastName().substring(0,1).toUpperCase();
-//                        imageTextTV.setText(imageText);
-//                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -781,39 +857,44 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
     private int addDetails(String mainSet, String subSet, String image, int id) {
 
-        LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
         int groupPosition = 0;
-        BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
+        try {
+            LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
+            groupPosition = 0;
+            BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
 
-        if (headerInfo == null) {
-            headerInfo = new BusinessAccountsListInfo();
-            headerInfo.setName(mainSet);
-            headerInfo.setMainImage(image);
-            this.mainSet.put(mainSet, headerInfo);
-            this.subSet.add(headerInfo);
+            if (headerInfo == null) {
+                headerInfo = new BusinessAccountsListInfo();
+                headerInfo.setName(mainSet);
+                headerInfo.setMainImage(image);
+                this.mainSet.put(mainSet, headerInfo);
+                this.subSet.add(headerInfo);
+            }
+
+            ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
+            int listSize = subList.size();
+            listSize++;
+
+            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+            detailInfo.setName(subSet);
+            detailInfo.setDbaImage(image);
+            detailInfo.setId(id);
+
+            if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
+                detailInfo.setIsSelected(true);
+                business_defaultaccountET.setText(subSet);
+
+            } else {
+                detailInfo.setIsSelected(false);
+            }
+
+            subList.add(detailInfo);
+
+            headerInfo.setSubsetName(subList);
+            groupPosition = this.subSet.indexOf(headerInfo);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-
-        ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
-        int listSize = subList.size();
-        listSize++;
-
-        BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-        detailInfo.setName(subSet);
-        detailInfo.setDbaImage(image);
-        detailInfo.setId(id);
-
-        if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
-            detailInfo.setIsSelected(true);
-            business_defaultaccountET.setText(subSet);
-
-        } else {
-            detailInfo.setIsSelected(false);
-        }
-
-        subList.add(detailInfo);
-
-        headerInfo.setSubsetName(subList);
-        groupPosition = this.subSet.indexOf(headerInfo);
 
         return groupPosition;
     }
@@ -1020,6 +1101,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 Log.e("filename", "" + filename);
                 dashboardViewModel.removeImage(filename);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1135,9 +1217,13 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     @Override
     protected void onResume() {
         super.onResume();
-        dashboardViewModel.meProfile();
-        if (Utils.isKeyboardVisible) {
-            Utils.hideKeypad(UserDetailsActivity.this);
+        try {
+            dashboardViewModel.meProfile();
+            if (Utils.isKeyboardVisible) {
+                Utils.hideKeypad(UserDetailsActivity.this);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1188,61 +1274,43 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         dialog.show();
     }
 
-    public static void SetToken(MyApplication objMyApplication, Activity activity) {
-        try {
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-            dsPermanentToken.moveToFirst();
-            if (dsPermanentToken.getCount() > 0) {
-                strToken = dsPermanentToken.getString(1);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public void setToken() {
+        strToken = dbHandler.getPermanentToken();
     }
 
-    public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
+    public void setFaceLock() {
         try {
             isFaceLock = false;
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                myApplicationObj.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                myApplicationObj.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void SetTouchId(MyApplication objMyApplication, Activity activity) {
+    public void setTouchId() {
         try {
             isTouchId = false;
-            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                myApplicationObj.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                myApplicationObj.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
         final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
