@@ -178,6 +178,13 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 isCity = true;
                 isState = true;
                 isZipcode = true;
+
+                if (etAddress2.getText().length()>0){
+                    Utils.setUpperHintColor(etlAddress2,getResources().getColor(R.color.primary_black));
+                }
+                else {
+                    Utils.setUpperHintColor(etlAddress2,getResources().getColor(R.color.light_gray));
+                }
                 if (selectedCard.getExpired()) {
                     isExpiry = false;
                     etExpiry.setEnabled(true);
