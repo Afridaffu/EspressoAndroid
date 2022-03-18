@@ -123,11 +123,13 @@
 
                         <ImageView
                             android:id="@+id/editStatusIV"
-                            android:layout_width="6dp"
-                            android:layout_height="6dp"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginEnd="6dp"
                             android:background="@drawable/pending_dot"
                             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                             app:layout_constraintEnd_toEndOf="@+id/linearLayout" />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -302,7 +304,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="change"
                         android:src="@drawable/ic_icon_awesome_pen" />
 

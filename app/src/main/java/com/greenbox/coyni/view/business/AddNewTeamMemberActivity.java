@@ -101,7 +101,13 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
         addNewTeamMemberActivity = this;
         backBtnLL = findViewById(R.id.backBtnLL);
-        backBtnLL.setOnClickListener(v -> onBackPressed());
+        backBtnLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.hideKeypad(AddNewTeamMemberActivity.this);
+                onBackPressed();
+            }
+        });
         editFNameTil = findViewById(R.id.fNameTIL);
         editLNameTil = findViewById(R.id.lNameTIL);
         editEmailTil = findViewById(R.id.emailIdTIL);
@@ -150,10 +156,9 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         TeamRequest teamRequest = new TeamRequest();
         try {
             firstName = editFNameET.getText().toString().trim();
-            phoneNumber = phoneNumberET.getText().toString().trim();
+            phoneNumber = phoneNumberET.getUnmaskedText();
             lastName = editLNameET.getText().toString().trim();
             emailAddress = editEmailET.getText().toString().trim();
-            phoneNumberET.getText().toString().trim();
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
@@ -416,11 +421,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     }
 
     public void teamInfoAddAPICall(TeamRequest teamRequest) {
-        teamViewModel.addTeam(teamRequest);
-    }
-
-    public void addTeam() {
-        teamInfoAddAPICall(prepareRequest());
+        teamViewModel.addTeamMember(teamRequest);
     }
 
     @Override
