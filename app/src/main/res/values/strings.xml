@@ -346,7 +346,7 @@
     <string name="clear">Clear</string>
     <string name="rotate_phone_sign">Please Rotate your Phone To Sign</string>
     <string name="remove_team_members">Remove Team Members</string>
-    <string name="account_permissions">Are you sure to remove [%1$s], will be \npermanently removed from your user list \nand All lose access to their shared \naccount permissions</string>
+    <string name="account_permissions">Are you sure to remove %1$s, will be permanently removed from your user list and all lose access to their shared account permissions</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="add_team_members">Add Team Members</string>
@@ -608,6 +608,7 @@
     <string name="primary">Primary</string>
     <string name="arrow_right">ArrowRight</string>
     <string name="invitation_sent">Invitation has sent\</string>
+    <string name="invitation_sent_with_exclamatory">Invitation has sent!\</string>
     <string name="Removed_success">Removed Successfully\</string>
     <string name="invitation_canceled">Invitation Cancelled\</string>
     <string name="confirmation_msg">Do you want to discard the changes?</string>
