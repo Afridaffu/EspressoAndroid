@@ -123,7 +123,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     SignOnData signOnData;
     private ImageView llEin;
     private PaymentMethodsViewModel paymentMethodsViewModel;
-    private TextView tosTV, prTv, spannableTV;
+    private TextView tosTV, prTv, spannableTV,httpHeader;
     private CompanyInfo cir;
     Long mLastClickTimeQA = 0L;
     Long mLastClickTime = 0L;
@@ -175,6 +175,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         CloseLL = findViewById(R.id.CloseLL);
         ssnEinTV = findViewById(R.id.ssnEinTV);
         spannableTV = findViewById(R.id.spannableTV);
+        httpHeader = findViewById(R.id.httpHeader);
 
         setSpannableText();
 
@@ -211,12 +212,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         isCPwdEye = true;
                         llEin.setBackgroundResource(R.drawable.ic_eyeclose);
                         if (cir.getIdentificationType() == 11) {
-                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
+                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
+                            String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5, converted.length());
                             mEINTx.setText(hifened);
                         } else {
-                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                            String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                            String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
+                            String hifened = converted.substring(0, 2) + " - " + converted.substring(2);
                             mEINTx.setText(hifened);
                         }
 //                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
@@ -225,10 +226,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     } else {
                         isCPwdEye = false;
                         if (cir.getIdentificationType() == 11) {
-                            mEINTx.setText(cir.getSsnOrEin().substring(0, 3) + "-" + cir.getSsnOrEin().substring(3, 5) + "-" + cir.getSsnOrEin().substring(5, cir.getSsnOrEin().length()));
+                            mEINTx.setText(cir.getSsnOrEin().substring(0, 3) + " - " + cir.getSsnOrEin().substring(3, 5) + " - " + cir.getSsnOrEin().substring(5, cir.getSsnOrEin().length()));
 
                         } else {
-                            mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + "-" + cir.getSsnOrEin().substring(2));
+                            mEINTx.setText(cir.getSsnOrEin().substring(0, 2) + " - " + cir.getSsnOrEin().substring(2));
 
                         }
                         llEin.setBackgroundResource(R.drawable.ic_eyeopen);
@@ -476,14 +477,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     if (cir.getIdentificationType() == 11) {
                                         ssnEinTV.setText("SSN");
                                         isCPwdEye = true;
-                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                        String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
+                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
+                                        String hifened = converted.substring(0, 3) + " - " + converted.substring(3, 5) + " - " + converted.substring(5, converted.length());
                                         mEINTx.setText(hifened);
                                     } else {
                                         ssnEinTV.setText("EIN/TIN");
                                         isCPwdEye = true;
-                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", ".");
-                                        String hifened = converted.substring(0, 2) + "-" + converted.substring(2);
+                                        String converted = cir.getSsnOrEin().replaceAll("\\w(?=\\w{2})", "•");
+                                        String hifened = converted.substring(0, 2) + " - " + converted.substring(2);
                                         mEINTx.setText(hifened);
                                     }
                                 }
@@ -582,8 +583,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
                             if (dbaInfo.getIdentificationType() == 8) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
+                                httpHeader.setVisibility(GONE);
                             } else if (dbaInfo.getIdentificationType() == 9) {
                                 mWebsiteHeadTX.setText("Website");
+                                httpHeader.setVisibility(View.VISIBLE);
                             }
                             if (dbaInfo.getWebsite() != null) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
@@ -636,8 +639,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                     llDBADocuments.setVisibility(View.VISIBLE);
                                     mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
-                                    dbaFillingLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
-                                    dbaFillingLL.setOnClickListener(new View.OnClickListener() {
+                                    llDBADocuments.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
+                                    llDBADocuments.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             showFile((String) v.getTag());
@@ -774,6 +777,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     dismissDialog();
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
+
                         if (addBusiness) {
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                         } else {

@@ -86,7 +86,7 @@
 
 
     <string name="identity">Identity Verification</string>
-    <string name="MaillingAddress">Mailling Address</string>
+    <string name="MaillingAddress">Mailing Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
     <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
     <string name="city">City</string>

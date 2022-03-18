@@ -54,7 +54,7 @@ public class AgreementsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         showProgressDialog();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-        dashboardViewModel.agreementsByType("1");
+//        dashboardViewModel.agreementsByType("1");
         setContentView(R.layout.activity_agreements);
         recyclerView = findViewById(R.id.recyclerview);
         recyclPastAgree = findViewById(R.id.recyclPastAgree);

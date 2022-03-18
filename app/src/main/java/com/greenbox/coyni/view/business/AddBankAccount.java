@@ -236,14 +236,16 @@ public class AddBankAccount extends BaseActivity {
 
     private void externalBank() {
         try {
-            TextView tvLearnMore, tvHead;
+            TextView tvLearnMore, tvHead, tvBankHead;
             CardView cvNext;
             LinearLayout lyExternalClose;
             tvHead = findViewById(R.id.tvHead);
             tvLearnMore = findViewById(R.id.tvLearnMore);
+            tvBankHead = findViewById(R.id.tvBankHead);
             cvNext = findViewById(R.id.cvNext);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             tvHead.setText("I’m Ready");
+            tvBankHead.setText("Add Bank Account");
             tvLearnMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

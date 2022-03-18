@@ -41,8 +41,8 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:padding="@dimen/_20sdp"
-                android:visibility="gone"
+                android:padding="@dimen/_10sdp"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -52,7 +52,7 @@
                     android:id="@+id/cpProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvHead"
+                    android:layout_above="@+id/centerLL"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/_30sdp"
                     android:indeterminate="true"
@@ -61,27 +61,36 @@
                     app:indicatorSize="@dimen/_40sdp"
                     app:trackThickness="@dimen/_6sdp"></com.google.android.material.progressindicator.CircularProgressIndicator>
 
-                <TextView
-                    android:id="@+id/tvHead"
+                <LinearLayout
+                    android:id="@+id/centerLL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_marginBottom="@dimen/_21sdp"
-                    android:fontFamily="@font/opensans_bold"
-                    android:gravity="center"
-                    android:text="Authorizing…"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_16ssp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvHead"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="center"
-                    android:text="Please do not leave this screen. Thank you \nfor your patience."
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp" />
+                    <TextView
+                        android:id="@+id/tvHead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginBottom="@dimen/_21sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center"
+                        android:text="Authorizing…"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_16ssp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvHead"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center"
+                        android:text="Please do not leave this screen. Thank you \nfor your patience."
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
+
 
             </RelativeLayout>
 
