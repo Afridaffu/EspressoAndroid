@@ -6,6 +6,8 @@ import static android.view.View.VISIBLE;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +31,7 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
@@ -44,6 +47,7 @@ public class EditTeamMember extends BaseActivity {
     public TextView editPhoneTV;
     public static int focusedID = 0;
     public CardView sendCV;
+    private Long mLastClickTime = 0L;
     public boolean isFirstName = false, isLastName = false, isEmail = false, isPhoneNumber = false, isNextEnabled = false;
     private String firstName = "", lastName = "", role = "", status = "", emailAddress = "", phoneNumber = "", imageName = "";
     private TeamViewModel teamViewModel;
@@ -59,11 +63,8 @@ public class EditTeamMember extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         firstName = bundle.getString(Utils.teamFirstName, firstName);
         lastName = bundle.getString(Utils.teamLastName, lastName);
-        role = bundle.getString(Utils.teamRoleName, role);
-        status = bundle.getString(Utils.teamStatus, status);
         emailAddress = bundle.getString(Utils.teamEmailAddress, emailAddress);
         phoneNumber = bundle.getString(Utils.teamPhoneNumber, phoneNumber);
-        imageName = bundle.getString(Utils.teamImageName, imageName);
         teamMemberId = bundle.getInt(Utils.teamMemberId, teamMemberId);
         initFields();
         initObservers();
@@ -87,7 +88,9 @@ public class EditTeamMember extends BaseActivity {
         //editPhoneTil = findViewById(R.id.phoneNumberOET);
 
         editFNameET = findViewById(R.id.editFNameET);
+        editFNameET.setEnabled(false);
         editLNameET = findViewById(R.id.editLNameET);
+        editLNameET.setEnabled(false);
         editEmailET = findViewById(R.id.editEmailET);
         editPhoneET = findViewById(R.id.phoneNumberOET);
         editPhoneET.setFrom("EDIT_TEAM_MEMBER");
@@ -107,17 +110,49 @@ public class EditTeamMember extends BaseActivity {
         editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
 
-        editFNameET.setText(firstName);
-        editLNameET.setText(lastName);
-        editEmailET.setText(emailAddress);
-        editPhoneET.setText(phoneNumber);
+        if (firstName != null
+                && !firstName.equals("")) {
+            editFNameET.setText(firstName);
+            Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
+            isFirstName = true;
+        } else {
+            isFirstName = false;
+        }
+        if (lastName != null
+                && !lastName.equals("")) {
+            editLNameET.setText(lastName);
+            Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
+            isLastName = true;
+        } else {
+            isLastName = false;
+        }
+        if (emailAddress != null
+                && !emailAddress.equals("")) {
+            editEmailET.setText(emailAddress);
+            Utils.setUpperHintColor(editEmailTil, getResources().getColor(R.color.primary_black));
+            isEmail = true;
+        } else {
+            isEmail = false;
+        }
+        if (phoneNumber != null
+                && !phoneNumber.equals("")) {
+            editPhoneET.setText("(" +phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
+        }
+
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
 
         sendCV = findViewById(R.id.sendCV);
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                teamInfoAPICall(prepareRequest());
+                if(isNextEnabled==true) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    showProgressDialog();
+                    teamInfoAPICall(prepareRequest());                }
+
             }
         });
 
@@ -389,17 +424,18 @@ public class EditTeamMember extends BaseActivity {
     }
 
     public void teamInfoAPICall(TeamRequest teamRequest) {
-        teamViewModel.updateTeamInfo(teamRequest, teamMemberId);
+        teamViewModel.updateTeamMember(teamRequest, teamMemberId);
     }
 
     public TeamRequest prepareRequest() {
         TeamRequest teamRequest = new TeamRequest();
         try {
             String emailAddress = editEmailET.getText().toString();
-            String phoneNumber = editPhoneET.getText().toString();
+            String phoneNumber = editPhoneET.getText().toString().substring(1, 4) + editPhoneET.getText().toString().substring(6, 9) + editPhoneET.getText().toString().substring(10, editPhoneET.getText().length());
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
             phone.setPhoneNumber(phoneNumber);
+            teamRequest.setPhoneNumber(phone);
             teamRequest.setEmailAddress(emailAddress);
             teamRequest.setRoleId(19);
 
@@ -443,8 +479,15 @@ public class EditTeamMember extends BaseActivity {
                 try {
                     if (teamInfoAddModel != null) {
                         if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "PHONE");
+                            Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.invitation_sent_with_exclamatory), R.drawable.ic_custom_tick, "Update");
+                            new Handler().postDelayed(() -> {
+                                try {
+                                    finish();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
+                            }, 2000);
                         } else {
                             Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), EditTeamMember.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
                         }
@@ -462,7 +505,7 @@ public class EditTeamMember extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        editFNameET.requestFocus();
+        editEmailET.requestFocus();
         Utils.shwForcedKeypad(EditTeamMember.this);
     }
 

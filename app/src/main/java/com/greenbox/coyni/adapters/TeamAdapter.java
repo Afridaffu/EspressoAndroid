@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.team.TeamData;
+import com.greenbox.coyni.utils.Utils;
 
 import java.util.List;
 
@@ -58,24 +59,24 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             char last = lastName.charAt(0);
             String imageName = String.valueOf(first) + String.valueOf(last);
             holder.txImageName.setText(imageName);
-            holder.txName.setText(firstName + lastName);
+            holder.txName.setText(firstName +" "+lastName);
             if (objData.getRoleName() != null && !objData.getRoleName().equals("")) {
                 holder.txRole.setText(objData.getRoleName());
             }
 
             if (objData.getStatus() != null && !objData.getStatus().equals("")) {
                 holder.txStatus.setText(objData.getStatus().toString());
-                if (objData.getStatus().equalsIgnoreCase("Pending")) {
+                if (objData.getStatus().equalsIgnoreCase(Utils.teammemberpending)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.pending_color));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
-                } else if (objData.getStatus().equalsIgnoreCase("Active")) {
+                } else if (objData.getStatus().equalsIgnoreCase(Utils.active)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
-                } else if (objData.getStatus().equalsIgnoreCase("Inactive")) {
+                } else if (objData.getStatus().equalsIgnoreCase(Utils.inActive)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
                 } else {
-                    holder.txStatus.setText("Resend Invitation");
+                    holder.txStatus.setText(Utils.resendInvitation);
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
                 }
             }

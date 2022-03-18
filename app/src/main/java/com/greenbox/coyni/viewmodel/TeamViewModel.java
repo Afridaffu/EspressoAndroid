@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.Error;
+import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
@@ -29,15 +29,16 @@ public class TeamViewModel extends AndroidViewModel {
         super(application);
     }
 
-    private MutableLiveData<TeamResponseModel> teamMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<TeamResponseModel> teamRetrieveMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamDelMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamAddMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamUpdateMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamCancelMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<TeamGetDataModel> teamGetMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<TeamResponseModel> getTeamMutableLiveData() {
-        return teamMutableLiveData;
+    public MutableLiveData<TeamResponseModel> getTeamRetrieveMutableLiveData() {
+        return teamRetrieveMutableLiveData;
     }
 
     public MutableLiveData<TeamInfoAddModel> getTeamDelMutableLiveData() {
@@ -56,7 +57,11 @@ public class TeamViewModel extends AndroidViewModel {
         return teamCancelMutableLiveData;
     }
 
-    public void getTeamInfo(TeamRequest teamRequest) {
+    public MutableLiveData<TeamGetDataModel> getTeamGetMutableLiveData() {
+        return teamGetMutableLiveData;
+    }
+
+    public void retrieveTeamInfo(TeamRequest teamRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<TeamResponseModel> mCall = apiService.getTeamData(teamRequest);
@@ -67,24 +72,24 @@ public class TeamViewModel extends AndroidViewModel {
                     try {
                         if (response.isSuccessful()) {
                             TeamResponseModel obj = response.body();
-                            teamMutableLiveData.setValue(obj);
+                            teamRetrieveMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<TeamResponseModel>() {
                             }.getType();
                             TeamResponseModel errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            teamMutableLiveData.setValue(errorResponse);
+                            teamRetrieveMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        teamMutableLiveData.setValue(null);
+                        teamRetrieveMutableLiveData.setValue(null);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<TeamResponseModel> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    teamMutableLiveData.setValue(null);
+                    teamRetrieveMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {
@@ -92,36 +97,36 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void updateTeamInfo(TeamRequest teamRequest, int teamMemberId) {
+    public void updateTeamMember(TeamRequest teamRequest, int teamMemberId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamResponseModel> mCall = apiService.updateTeamData(teamRequest, teamMemberId);
-            mCall.enqueue(new Callback<TeamResponseModel>() {
+            Call<TeamInfoAddModel> mCall = apiService.updateTeamMember(teamRequest, teamMemberId);
+            mCall.enqueue(new Callback<TeamInfoAddModel>() {
                 @Override
-                public void onResponse(Call<TeamResponseModel> call, Response<TeamResponseModel> response) {
+                public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
                     Log.d("UpdateTeamInfo", response.toString());
                     try {
                         if (response.isSuccessful()) {
-                            TeamResponseModel obj = response.body();
+                            TeamInfoAddModel obj = response.body();
 
-                            teamMutableLiveData.setValue(obj);
+                            teamUpdateMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<TeamResponseModel>() {
+                            Type type = new TypeToken<TeamInfoAddModel>() {
                             }.getType();
-                            TeamResponseModel errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            teamMutableLiveData.setValue(errorResponse);
+                            TeamInfoAddModel errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            teamUpdateMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        teamMutableLiveData.setValue(null);
+                        teamUpdateMutableLiveData.setValue(null);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<TeamResponseModel> call, Throwable t) {
+                public void onFailure(Call<TeamInfoAddModel> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    teamMutableLiveData.setValue(null);
+                    teamUpdateMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {
@@ -129,10 +134,10 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void deleteTeam(Integer teamMemberId) {
+    public void deleteTeamMember(Integer teamMemberId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamInfoAddModel> mCall = apiService.deleteTeam(teamMemberId);
+            Call<TeamInfoAddModel> mCall = apiService.deleteTeamMember(teamMemberId);
             mCall.enqueue(new Callback<TeamInfoAddModel>() {
                 @Override
                 public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
@@ -165,10 +170,10 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void cancelTeam(Integer teamMemberId) {
+    public void cancelTeamMember(Integer teamMemberId) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamInfoAddModel> mCall = apiService.cancelTeam(teamMemberId);
+            Call<TeamInfoAddModel> mCall = apiService.cancelTeamMember(teamMemberId);
             mCall.enqueue(new Callback<TeamInfoAddModel>() {
                 @Override
                 public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
@@ -200,7 +205,42 @@ public class TeamViewModel extends AndroidViewModel {
         }
     }
 
-    public void addTeam(TeamRequest teamRequest) {
+    public void getTeamMember(Integer teamMemberId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<TeamGetDataModel> mCall = apiService.getTeamMember(teamMemberId);
+            mCall.enqueue(new Callback<TeamGetDataModel>() {
+                @Override
+                public void onResponse(Call<TeamGetDataModel> call, Response<TeamGetDataModel> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            TeamGetDataModel obj = response.body();
+                            teamGetMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<TeamGetDataModel>() {
+                            }.getType();
+                            TeamGetDataModel errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            teamGetMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        teamGetMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TeamGetDataModel> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    teamGetMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void addTeamMember(TeamRequest teamRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<TeamInfoAddModel> mCall = apiService.addTeamMember(teamRequest);
@@ -208,7 +248,6 @@ public class TeamViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<TeamInfoAddModel> call, Response<TeamInfoAddModel> response) {
                     try {
-                        Log.d("TeamInfo", response.body().getStatus());
                         if (response.isSuccessful()) {
                             TeamInfoAddModel obj = response.body();
                             teamAddMutableLiveData.setValue(obj);

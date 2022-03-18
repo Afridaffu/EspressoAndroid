@@ -127,25 +127,9 @@ public class TeamActivity extends BaseActivity {
         try {
 
             memberClickListener = (view, position) -> {
-                String firstName = "", lastName = "";
-                if (datumList.get(position).getFirstName() != null && !datumList.get(position).getFirstName().equals("")) {
-                    firstName = datumList.get(position).getFirstName();
-                }
-                if (datumList.get(position).getLastName() != null && !datumList.get(position).getLastName().equals("")) {
-                    lastName = datumList.get(position).getLastName();
-                }
-                char first = firstName.charAt(0);
-                char lastname = lastName.charAt(0);
-                String imageName = String.valueOf(first) + String.valueOf(lastname);
                 Intent intent = new Intent(this, TeamMemberActivity.class);
-                intent.putExtra(Utils.teamFirstName, datumList.get(position).getFirstName());
-                intent.putExtra(Utils.teamLastName, datumList.get(position).getLastName());
-                intent.putExtra(Utils.teamImageName, imageName);
-                intent.putExtra(Utils.teamRoleName, datumList.get(position).getRoleName());
-                intent.putExtra(Utils.teamStatus, datumList.get(position).getStatus());
-                intent.putExtra(Utils.teamEmailAddress, datumList.get(position).getEmailAddress());
-                intent.putExtra(Utils.teamPhoneNumber, datumList.get(position).getPhoneNumber());
                 intent.putExtra(Utils.teamMemberId, datumList.get(position).getId());
+                intent.putExtra(Utils.teamStatus,datumList.get(position).getStatus());
                 startActivity(intent);
 
             };
@@ -158,15 +142,17 @@ public class TeamActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         TeamRequest request = new TeamRequest();
-        teamViewModel.getTeamInfo(request);
+        showProgressDialog();
+        teamViewModel.retrieveTeamInfo(request);
     }
 
     private void initObservers() {
 
         try {
-            teamViewModel.getTeamMutableLiveData().observe(this, new Observer<TeamResponseModel>() {
+            teamViewModel.getTeamRetrieveMutableLiveData().observe(this, new Observer<TeamResponseModel>() {
                 @Override
                 public void onChanged(TeamResponseModel teamResponseModel) {
+                    dismissDialog();
                     if (teamResponseModel != null) {
                         if (teamResponseModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                             if (teamResponseModel.getData().size() > 0) {
