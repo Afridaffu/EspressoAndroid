@@ -556,7 +556,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
-                    zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                    zipcodeErrorTV.setText("Minimum 5 Digits Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
 //                    zipcodeErrorLL.setVisibility(VISIBLE);
@@ -660,7 +660,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.error_red));
                         zipcodeErrorLL.setVisibility(VISIBLE);
-                        zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                        zipcodeErrorTV.setText("Minimum 5 Digits Required");
 
                     } else {
                         zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
@@ -804,33 +804,37 @@ public class EditAddressActivity extends AppCompatActivity {
 
     public void initObservers() {
 
-        customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                try {
-                    dialog.dismiss();
-                    if (user != null) {
-                        if (user.getStatus().toString().toLowerCase().equals("success")) {
-                            Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        finish();
-                                    } catch (Exception ex) {
-                                        ex.printStackTrace();
+        try {
+            customerProfileViewModel.getUserMutableLiveData().observe(this, new Observer<User>() {
+                @Override
+                public void onChanged(User user) {
+                    try {
+                        dialog.dismiss();
+                        if (user != null) {
+                            if (user.getStatus().toString().toLowerCase().equals("success")) {
+                                Utils.showCustomToast(EditAddressActivity.this, "Address has been updated", R.drawable.ic_location, "EditAddress");
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            finish();
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
                                     }
-                                }
-                            }, 2000);
-                        } else {
-                            Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
+                                }, 2000);
+                            } else {
+                                Utils.displayAlert(user.getError().getErrorDescription(), EditAddressActivity.this, "", user.getError().getFieldErrors().get(0));
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //Business Changes........
@@ -967,7 +971,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     b_zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_green));
-                    b_zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                    b_zipcodeErrorTV.setText("Minimum 5 Digits Required");
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
 //                    b_zipcodeErrorLL.setVisibility(VISIBLE);
@@ -1071,7 +1075,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         b_zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(b_zipcodeTIL, getColor(R.color.error_red));
                         b_zipcodeErrorLL.setVisibility(VISIBLE);
-                        b_zipcodeErrorTV.setText("Minimum 5 Characters Required");
+                        b_zipcodeErrorTV.setText("Minimum 5 Digits Required");
 
                     } else {
                         b_zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

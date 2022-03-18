@@ -44,8 +44,8 @@
 
                         <ImageView
                             android:id="@+id/iv_user_icon"
-                            android:layout_width="@dimen/_40sdp"
-                            android:layout_height="@dimen/_40sdp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:contentDescription="@string/user_details"
                             android:scaleType="fitXY"
                             android:src="@drawable/acct_profile"
@@ -58,9 +58,10 @@
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:layout_gravity="center"
+                            android:text="KM"
                             android:fontFamily="@font/opensans_bold"
                             android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_20ssp"
+                            android:textSize="@dimen/_16sdp"
                             android:visibility="gone" />
 
                     </androidx.cardview.widget.CardView>
