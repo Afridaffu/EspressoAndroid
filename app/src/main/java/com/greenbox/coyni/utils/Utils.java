@@ -168,6 +168,18 @@ public class Utils {
     public static final String cancel = "Cancelled";
     public static final String requestSub = "REQUEST TOKEN";
     public static final String SUCCESS = "SUCCESS";
+    public static final String gbxTxnIdType = "gbxTxnIdType";
+    public static final String txnType = "txnType";
+    public static final String txnSubType = "txnSubType";
+    public static final String Refundtxntype = "Refund";
+    public static final String SaleOrdertxntype = "Sale Order";
+    public static final String MonthlyServiceFeetxntype = "Monthly Service Fee";
+    public static final String Tokensub = "Token";
+    public static final String Success = "Success";
+//    controll methods in merchanttransactiondetails
+    public static final String refundCM = "refund";
+    public static final String saleorderCM = "saleorder";
+    public static final String monthlyservicefeeCM = "monthlyservicefee";
     public static final int inviteId = 74;
     public static final int requestId = 75;
     public static final int remindId = 76;
@@ -197,6 +209,7 @@ public class Utils {
     public static final int payRequest = 12;
     public static final int buyTokens = 2;
     public static final int saleOrder = 10;
+    public static final int monthlyservicefee = 17;
     public static final int withdraw = 3;
     public static final int refund = 9;
     public static final int accountTransfer = 0; //Not available
@@ -204,6 +217,7 @@ public class Utils {
     public static final int businessPayout = 19;
 
     public static final int sent = 8;
+    public static final int token = 11;
     public static final int received = 9;
     public static final int bankAccount = 0;
     public static final int creditCard = 2;
