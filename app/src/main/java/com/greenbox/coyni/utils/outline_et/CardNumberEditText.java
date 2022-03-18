@@ -172,6 +172,9 @@ public class CardNumberEditText extends ConstraintLayout {
                 } else if (cardBrand.toLowerCase().contains("discover")) {
                     imgCardType.setImageResource(R.drawable.ic_discover);
                 }
+            }else{
+                imgCardType.setVisibility(VISIBLE);
+                imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

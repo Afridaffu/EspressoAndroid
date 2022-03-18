@@ -14,6 +14,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -21,8 +23,12 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -31,6 +37,7 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.cards.CardEditRequest;
@@ -48,7 +55,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
-public class EditCardActivity extends AppCompatActivity {
+public class EditCardActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     PaymentsList selectedCard;
     MyApplication objMyApplication;
     TextInputEditText etName, etAddress1, etAddress2, etCity, etState, etZipcode, etCountry;
@@ -141,7 +148,7 @@ public class EditCardActivity extends AppCompatActivity {
             etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
             etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
-
+            setKeyboardVisibilityListener(this);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             etName.setEnabled(false);
 //            etExpiry.setEnabled(false);
@@ -150,8 +157,8 @@ public class EditCardActivity extends AppCompatActivity {
             etlCard.setFrom("EDIT_CARD");
             if (selectedCard != null) {
                 String name = "";
-                if( selectedCard.getName() != null) {
-                    if (selectedCard.getName().length()>=21) {
+                if (selectedCard.getName() != null) {
+                    if (selectedCard.getName().length() >= 21) {
                         name = selectedCard.getName().substring(0, 21) + "...";
                     } else {
                         name = selectedCard.getName();
@@ -439,7 +446,7 @@ public class EditCardActivity extends AppCompatActivity {
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             etAddress1.setSelection(etAddress1.getText().length());
-                            if(etAddress1.getText().length()==0){
+                            if (etAddress1.getText().length() == 0) {
                                 address1ErrorLL.setVisibility(GONE);
                             }
                         }
@@ -453,17 +460,16 @@ public class EditCardActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        etAddress2.setHint("Billing Address Line 2(Optional)");
+                        etAddress2.setHint("Billing Address Line 2 (Optional)");
                         etAddress2.setSelection(etAddress2.getText().length());
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     } else {
-                        if (etAddress2.getText().length()>0) {
+                        if (etAddress2.getText().length() > 0) {
                             etAddress2.setHint("");
                             etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
-                        }
-                        else {
+                        } else {
                             etAddress2.setHint("");
                             etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
@@ -483,7 +489,7 @@ public class EditCardActivity extends AppCompatActivity {
                                 etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.primary_black));
 
-                            }  else {
+                            } else {
                                 etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
@@ -551,11 +557,12 @@ public class EditCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
-                                zipErrorTV.setText("Minimum 5 Characters Required");
+                                zipErrorTV.setText("Minimum 5 Digits Required");
                                 isZipcode = false;
                             }
                         } else {
-                            Utils.shwForcedKeypad(EditCardActivity.this);
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(EditCardActivity.this);
                             etZipcode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
@@ -919,4 +926,36 @@ public class EditCardActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+    }
+
 }
