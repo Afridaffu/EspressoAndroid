@@ -229,7 +229,7 @@
                                                 <RelativeLayout
                                                     android:id="@+id/payLL"
                                                     android:layout_width="match_parent"
-                                                    android:layout_height="@dimen/_80sdp"
+                                                    android:layout_height="@dimen/_60sdp"
                                                     android:layout_gravity="center_vertical"
                                                     android:gravity="center_vertical"
                                                     android:orientation="horizontal">
@@ -249,8 +249,8 @@
                                                             android:text="$"
                                                             android:layout_gravity="top"
                                                             android:textColor="@color/primary_black"
-                                                            android:textSize="@dimen/_20sdp"
-                                                            android:visibility="gone" />
+                                                            android:textSize="@dimen/_25sdp"
+                                                            android:visibility="visible" />
 
                                                         <LinearLayout
                                                             android:id="@+id/lyAmount"
@@ -272,7 +272,7 @@
                                                                 android:textColor="@color/primary_black"
                                                                 android:textColorHint="@color/light_gray"
                                                                 android:cursorVisible="true"
-                                                                android:textCursorDrawable="@drawable/cursor_green"
+                                                                android:textCursorDrawable="@drawable/corner_grey"
                                                                 android:textSize="@dimen/_53ssp" />
 
                                                             <TextView
@@ -284,16 +284,16 @@
                                                                 android:textColor="@color/primary_black"
                                                                 android:textSize="@dimen/_12ssp"
                                                                 android:visibility="visible"></TextView>
-                                                        </LinearLayout>
 
-                                                        <ImageView
-                                                            android:id="@+id/imgConvert"
-                                                            android:layout_width="wrap_content"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginStart="@dimen/_10ssp"
-                                                            android:layout_marginBottom="@dimen/_10ssp"
-                                                            android:layout_gravity="bottom"
-                                                            android:src="@drawable/ic_download" />
+                                                            <ImageView
+                                                                android:id="@+id/imgConvert"
+                                                                android:layout_width="wrap_content"
+                                                                android:layout_marginStart="@dimen/_10ssp"
+                                                                android:layout_height="wrap_content"
+                                                                android:layout_gravity="bottom"
+                                                                android:src="@drawable/ic_download" />
+
+                                                        </LinearLayout>
 
                                                     </LinearLayout>
 

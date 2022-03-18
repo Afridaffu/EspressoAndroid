@@ -112,8 +112,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private MyApplication objMyApplication;
     private String mCompanyName = "", mBusinessEntity = "", mEIN = "", mEmail = "", mPhoneNumber = "", mAddress = "", mArticleDate = "", mEINDate = "", mW9Date = "";
     private String mDbName = "", mBusinessType = "", mTimeZone = "", mWebsite = "", mMonthlyProcVolume = "", mHighTicket = "", mAverageTicket = "", mCustomerServiceEmail = "", mCustomerServicePhone = "", mDbAddressLine = "", mDbFillingDate = "";
-    private String addBusiness = "false";
-    private String addDBA = "false";
+    private Boolean addBusiness = false;
+    private Boolean addDBA = false;
     private BankAccountsViewModel bankAccountsViewModel;
     private DashboardViewModel dashboardViewModel;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
@@ -123,7 +123,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     SignOnData signOnData;
     private ImageView llEin;
     private PaymentMethodsViewModel paymentMethodsViewModel;
-    private TextView tosTV, prTv, spannableTV;
+    private TextView tosTV, prTv, spannableTV,httpHeader;
     private CompanyInfo cir;
     Long mLastClickTimeQA = 0L;
     Long mLastClickTime = 0L;
@@ -137,17 +137,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         objMyApplication = (MyApplication) getApplicationContext();
 
-        if (getIntent().getStringExtra("ADDBUSINESS") != null) {
+        if (getIntent().getBooleanExtra("ADDBUSINESS" , false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            addBusiness = getIntent().getStringExtra("ADDBUSINESS");
+            addBusiness = getIntent().getBooleanExtra("ADDBUSINESS",false);
             LogUtils.d("addBusiness", "addBusiness" + addBusiness);
         }
-
-        if (getIntent().getStringExtra("ADDDBA") != null) {
+        if (getIntent().getBooleanExtra("ADDDBA",false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            addDBA = getIntent().getStringExtra("ADDDBA");
+            addDBA = getIntent().getBooleanExtra("ADDDBA",false);
             LogUtils.d("addDBA", "addDBA" + addDBA);
-
         }
 
         initFields();
@@ -177,6 +175,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         CloseLL = findViewById(R.id.CloseLL);
         ssnEinTV = findViewById(R.id.ssnEinTV);
         spannableTV = findViewById(R.id.spannableTV);
+        httpHeader = findViewById(R.id.httpHeader);
 
         setSpannableText();
 
@@ -584,8 +583,10 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             }
                             if (dbaInfo.getIdentificationType() == 8) {
                                 mWebsiteHeadTX.setText("Website (Optional)");
+                                httpHeader.setVisibility(GONE);
                             } else if (dbaInfo.getIdentificationType() == 9) {
                                 mWebsiteHeadTX.setText("Website");
+                                httpHeader.setVisibility(View.VISIBLE);
                             }
                             if (dbaInfo.getWebsite() != null) {
                                 mWebsiteTx.setText(dbaInfo.getWebsite());
@@ -638,8 +639,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 for (int i = 0; i < dbaInfo.getRequiredDocuments().size(); i++) {
                                     llDBADocuments.setVisibility(View.VISIBLE);
                                     mDbFillingDateTx.setText(getResources().getString(R.string.uploaded_on) + " " + Utils.convertDocUploadedDate(dbaInfo.getRequiredDocuments().get(i).getUpdatedAt()));
-                                    dbaFillingLL.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
-                                    dbaFillingLL.setOnClickListener(new View.OnClickListener() {
+                                    llDBADocuments.setTag(dbaInfo.getRequiredDocuments().get(i).getImgLink());
+                                    llDBADocuments.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             showFile((String) v.getTag());
@@ -776,7 +777,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     dismissDialog();
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
-                        if (addBusiness.equalsIgnoreCase("true")) {
+
+                        if (addBusiness) {
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                         } else {
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);

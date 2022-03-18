@@ -50,7 +50,16 @@ public class AddBusinessUserResponse {
         private boolean isPersonIdentified;
         private boolean isAgreementSigned;
 
+        private int accountType;
         private String jwtToken;
+
+        public int getAccountType() {
+            return accountType;
+        }
+
+        public void setAccountType(int accountType) {
+            this.accountType = accountType;
+        }
 
         public String getJwtToken() {
             return jwtToken;
