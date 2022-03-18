@@ -1,7 +1,5 @@
 package com.greenbox.coyni.custom_camera;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -13,9 +11,13 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
+import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
+import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
 
@@ -58,6 +60,18 @@ public class RetakeActivity extends AppCompatActivity {
                     AddBeneficialOwnerActivity.identityFile = null;
                     AddBeneficialOwnerActivity.isFileSelected = false;
                     AddBeneficialOwnerActivity.enableOrDisableNext();
+                }else if (from.equals("AAR-SSC")) {
+                    BusinessAdditionalActionRequiredActivity.adtionalSscFile = null;
+                }else if (from.equals("AAR-SecFile")){
+                    BusinessAdditionalActionRequiredActivity.addtional2fFle = null;
+                }else if (from.equals("AAR-FBL")){
+                    BusinessAdditionalActionRequiredActivity.businessLincenseFile = null;
+                }
+                else if(from.equals("AAR-securityCard")){
+                    AdditionalInformationRequiredActivity.securityFile = null;
+                }
+                else if(from.equals("AAR-actionReq2File")){
+                    AdditionalInformationRequiredActivity.actionReq2File = null;
                 }
                 finish();
             }
@@ -86,6 +100,18 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("ADD_BO")) {
                     AddBeneficialOwnerActivity.addBeneficialOwnerActivity.removeAndUploadBODoc();
                     AddBeneficialOwnerActivity.enableOrDisableNext();
+                } else if(from.equals("AAR-SSC")){
+                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(1);
+                }else if(from.equals("AAR-SecFile")) {
+                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(2);
+                }else if(from.equals("AAR-FBL")) {
+                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(3);
+                }
+                else if(from.equals("AAR-securityCard")){
+                    AdditionalInformationRequiredActivity.additionalInformationRequiredActivity.removeAndUploadAdditionalDoc(0);
+                }
+                else if(from.equals("AAR-actionReq2File")){
+                    AdditionalInformationRequiredActivity.additionalInformationRequiredActivity.removeAndUploadAdditionalDoc(0);
                 }
             }
         });
@@ -110,6 +136,18 @@ public class RetakeActivity extends AppCompatActivity {
                     AddBeneficialOwnerActivity.identityFile = null;
                     AddBeneficialOwnerActivity.isFileSelected = false;
                     AddBeneficialOwnerActivity.enableOrDisableNext();
+                }else if (from.equals("AAR-SSC")) {
+                    BusinessAdditionalActionRequiredActivity.adtionalSscFile = null;
+                }else if (from.equals("AAR-SecFile")){
+                    BusinessAdditionalActionRequiredActivity.addtional2fFle = null;
+                }else if (from.equals("AAR-FBL")){
+                    BusinessAdditionalActionRequiredActivity.businessLincenseFile = null;
+                }
+                else if(from.equals("AAR-securityCard")){
+                    AdditionalInformationRequiredActivity.securityFile = null;
+                }
+                else if(from.equals("AAR-actionReq2File")){
+                    AdditionalInformationRequiredActivity.actionReq2File = null;
                 }
             }
         });
