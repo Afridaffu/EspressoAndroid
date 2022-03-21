@@ -48,6 +48,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.business.MerchantTransactionDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".view.business.PayToMerchantActivity"
@@ -490,6 +491,11 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.business.BenificialMaillingAddressActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity
+            android:name=".view.business.BusinessBatchPayoutSearchActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />

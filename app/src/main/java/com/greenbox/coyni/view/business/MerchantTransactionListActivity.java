@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -24,12 +25,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.MerchantTransactionListPostedNewAdapter;
+import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -293,6 +296,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
+                dismissDialog();
                 try {
                     if (transactionList != null) {
                         if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -300,6 +304,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                             loadMoreTV.setVisibility(View.GONE);
                             try {
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(MerchantTransactionListActivity.this);
+                                LinearLayoutManager nLayoutManager = new LinearLayoutManager(MerchantTransactionListActivity.this);
 
                                 if (transactionList.getData() != null) {
                                     if (transactionList.getData().getItems() != null) {
@@ -343,8 +348,15 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
                                 if (globalPosted.size() > 0) {
                                     transactionListPostedAdapter = new MerchantTransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
-                                    getRvTransactionsPosted.setLayoutManager(mLayoutManager);
+                                    getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
+                                    transactionListPostedAdapter.setOnItemClickListener(new OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            LogUtils.v(TAG, "Clicked at position " + position);
+                                            showTransactionDetails(globalPosted.get(position));
+                                        }
+                                    });
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
                                     if (currentPage > 0) {
                                         int myPos = globalPosted.size() - transactionList.getData().getItems().getPostedTransactions().size();
@@ -415,5 +427,11 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         transactionType.add(Utils.merchantPayout);
         transactionType.add(Utils.monthlyServiceFee);
         return transactionType;
+    }
+
+    private void showTransactionDetails(TransactionListPosted selectedTransaction) {
+        Intent inDetails = new Intent(MerchantTransactionListActivity.this, MerchantTransactionDetailsActivity.class);
+        inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, selectedTransaction);
+        startActivity(inDetails);
     }
 }
