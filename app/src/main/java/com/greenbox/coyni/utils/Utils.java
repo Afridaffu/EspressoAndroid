@@ -194,7 +194,8 @@ public class Utils {
     public static String mondayURL = "https://monday.com/";
     //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+snkD6Sg0i3pdsBePQmRcpamT/Ss440879LzJVQJPWxAfslvVBaD7a11tGNrPOa59hRSx/Wr2JvEEZnMft6MClh2FHjehVH4TvbUH4Q5J8t9Fl59vCYSiHWl7wqEaSYJxkA5wI6VGC0+PVgcojfn3zlz04mza0I2zHWOHbIvl2z4WUw3lDmiV729HggfZJYSleNctEmFHscHKdTBIlJ2uhQm1uA==";
 //    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+skkD6XebOu1kYPMIy3HJXuIErNxvYkSdOTdpwY0Pn49l1koS9o2CfCe9Fa01YifNtCgXc37XRU5Di4z/Sspcjs9qrHOS0RFiGtmr5BaQcKjpuy/r5ukCVuNMHEK++HZYlahdIqFxGLjSll50XTn3j+YZFvIMd7CcXCmx9UP+zkdtcr5ib3+AyVdC/w5JKAMVRuNpN6PEGC02woYfYHB/uJmBZw==";
-    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+smkG6e3GUWZyfYVqd79iVH7r6ZTsAAIna1uwZpVc86X6m0Bzjc8ut7V9K68Yzb4Khc1TVrsMgFpVsfwwBpFIqWAKSmjf+rMxdY7uHkkJfitfKGg8NOO1Cu2L+Qx4epOpghSkMw/c9Q7ORSIacDj0moI1AoPyVTzSehuNWGx17g3iQXD7E4HznTwkU2H0I9Zst23aWvZbiBQGVCZ9ChQvM3at2A==";
+//    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+smkG6e3GUWZyfYVqd79iVH7r6ZTsAAIna1uwZpVc86X6m0Bzjc8ut7V9K68Yzb4Khc1TVrsMgFpVsfwwBpFIqWAKSmjf+rMxdY7uHkkJfitfKGg8NOO1Cu2L+Qx4epOpghSkMw/c9Q7ORSIacDj0moI1AoPyVTzSehuNWGx17g3iQXD7E4HznTwkU2H0I9Zst23aWvZbiBQGVCZ9ChQvM3at2A==";
+    public static String blinkCardKey = "sRwAAAASY29tLmdyZWVuYm94LmNveW5ppOyhw0QQR91SZ4Z+slEG6YrzB7khwY4q3StoNVUaCKdKVX2LzHaHhDz0MHkzRYMij/AYdyN6dsbX0w2EdCaLdY/wnQFmstU00LwMMm0LH2kvrwC14uwYF+DWsnakPr6ZXO+zR6B76tN53aS47Aa2P2qwbBt2pG/XHNNMcdJ0TbXxsZlZm8/o3F4t6yEqFppMuqaK0wfmfj95CAdT2S1SamGUHQeFONGL6hzGY38NbA==";
 
     public static final int payRequest = 12;
     public static final int buyTokens = 2;
@@ -223,6 +224,16 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
 
+    //Merchant Transaction Filter Type values
+
+    public static final int mRefund=9;
+    public static final int merchantPayout=7;
+    public static final int monthlyServiceFee=17;
+
+    public static final int mCompleted=0;
+    public static final int msRefund=1;
+    public static final int mPartialRefund=2;
+    public static final String SELECTED_MERCHANT_TRANSACTION = "Selected_Merchant_transaction";
     public static final float slidePercentage = 0.3f;
 
     public static boolean isKeyboardVisible = false;

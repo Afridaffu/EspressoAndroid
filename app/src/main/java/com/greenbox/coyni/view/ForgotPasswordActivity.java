@@ -131,7 +131,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     if (b) {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(ForgotPasswordActivity.this);
-                        etEmail.setHint("Email");
+//                        etEmail.setHint("Email");
                         etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
                         layoutEmailError.setVisibility(GONE);

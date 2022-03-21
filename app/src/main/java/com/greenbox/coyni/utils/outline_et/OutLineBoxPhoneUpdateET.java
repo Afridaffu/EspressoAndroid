@@ -205,7 +205,8 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
     }
 
     public void setHint(String hint) {
-        pnET.setHint(hint);
+//        pnET.setHint(hint);
+        pnET.setHint("");
         hintName.setText(hint);
 
         if (hint.contains("Current")) {

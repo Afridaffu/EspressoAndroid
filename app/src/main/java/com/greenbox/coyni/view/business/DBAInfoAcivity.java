@@ -684,7 +684,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbanameET.setSelection(dbanameET.getText().toString().length());
                         }
                     } else {
-                        dbanameET.setHint("DBA Name");
+//                        dbanameET.setHint("DBA Name");
                         dbanameTIL.setBoxStrokeColor(getColor(R.color.primary_green));
                         dbanameET.setHintTextColor(getColor(R.color.light_gray));
                         dbanameLL.setVisibility(GONE);
@@ -723,7 +723,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             dbaemailTV.setText("Field Required");
                         }
                     } else {
-                        dbaemailET.setHint("Customer Service Email");
+//                        dbaemailET.setHint("Customer Service Email");
                         dbaemailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         dbaemailET.setHintTextColor(getColor(R.color.light_gray));
                         dbaemailLL.setVisibility(GONE);
@@ -753,7 +753,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             companyaddressET.setSelection(companyaddressET.getText().toString().length());
                         }
                     } else {
-                        companyaddressET.setHint("Street Address");
+//                        companyaddressET.setHint("Street Address");
                         companyaddresstil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddresstil, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);
@@ -781,7 +781,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     } else {
                         companyaddress2til.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddress2til, getColor(R.color.primary_green));
-                        companyaddress2ET.setHint("Apt#, Suit, Floor");
+//                        companyaddress2ET.setHint("Apt#, Suit, Floor");
                         address2ErrorLL.setVisibility(GONE);
                     }
                 }
@@ -808,7 +808,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             cityET.setSelection(cityET.getText().toString().length());
                         }
                     } else {
-                        cityET.setHint("City");
+//                        cityET.setHint("City");
                         citytil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(citytil, getColor(R.color.primary_green));
                         cityErrorLL.setVisibility(GONE);
@@ -843,7 +843,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(DBAInfoAcivity.this);
 
-                        zipcodeET.setHint("Zip Code");
+//                        zipcodeET.setHint("Zip Code");
                         zipcodetil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(zipcodetil, getColor(R.color.primary_green));
                         zipcodeErrorLL.setVisibility(GONE);

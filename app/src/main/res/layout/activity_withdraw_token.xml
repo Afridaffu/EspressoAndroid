@@ -192,7 +192,8 @@
                     <RelativeLayout
                         android:id="@+id/payLL"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_80sdp"
+                        android:layout_marginTop="@dimen/_13ssp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
@@ -209,7 +210,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="$"
+                                android:text="$ "
                                 android:layout_gravity="top"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_20sdp"
@@ -235,7 +236,7 @@
                                     android:textColor="@color/primary_black"
                                     android:textColorHint="@color/light_gray"
                                     android:cursorVisible="true"
-                                    android:textCursorDrawable="@drawable/cursor_green"
+                                    android:textCursorDrawable="@drawable/cursorcolor"
                                     android:textSize="@dimen/_53ssp" />
 
                                 <TextView
@@ -247,6 +248,7 @@
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp"
                                     android:visibility="visible"></TextView>
+
                             </LinearLayout>
 
                             <ImageView
@@ -254,7 +256,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_10ssp"
-                                android:layout_marginBottom="@dimen/_10ssp"
+                                android:layout_marginBottom="@dimen/_14ssp"
                                 android:layout_gravity="bottom"
                                 android:src="@drawable/ic_download" />
 
