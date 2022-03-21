@@ -184,7 +184,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "DBAChangeEmail").putExtra("action", "EditEmailDBA"));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "DBAChangeEmail").putExtra("action", "EditEmailDBA").putExtra("currentEmail",value.getText().toString()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
