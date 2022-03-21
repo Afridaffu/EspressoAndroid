@@ -24,17 +24,23 @@ import com.greenbox.coyni.view.TransactionDetailsActivity;
 
 import java.util.List;
 
-public class MerchantTransactionListPostedInnerAdapter extends RecyclerView.Adapter<MerchantTransactionListPostedInnerAdapter.MyViewHolder> {
+public class MerchantTransactionListPostedInnerAdapter extends BaseRecyclerViewAdapter<MerchantTransactionListPostedInnerAdapter.MyViewHolder> {
     Context mContext;
     MyApplication objMyApplication;
     List<TransactionListPosted> transactionListItemsposted;
     TransactionList transactionList;
     Long mLastClickTime = 0L;
+    private OnItemClickListener listener;
 
     public MerchantTransactionListPostedInnerAdapter(List<TransactionListPosted> list, Context context) {
         this.transactionListItemsposted = list;
         this.mContext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
+    }
+
+    @Override
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -75,12 +81,12 @@ public class MerchantTransactionListPostedInnerAdapter extends RecyclerView.Adap
             holder.blankView.setVisibility(View.GONE);
         }
 
-        holder.blankView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        holder.blankView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         //type transaction
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
@@ -129,22 +135,26 @@ public class MerchantTransactionListPostedInnerAdapter extends RecyclerView.Adap
             }
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.ll_merchant_transaction_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
+//                try {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//
+//                    Intent i = new Intent(mContext, TransactionDetailsActivity.class);
+//                    i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
+//                    i.putExtra("txnType", objData.getTxnTypeDn());
+//                    i.putExtra("txnSubType", objData.getTxnSubTypeDn());
+//                    mContext.startActivity(i);
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
 
-                    Intent i = new Intent(mContext, TransactionDetailsActivity.class);
-                    i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
-                    i.putExtra("txnType", objData.getTxnTypeDn());
-                    i.putExtra("txnSubType", objData.getTxnSubTypeDn());
-                    mContext.startActivity(i);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                if(listener != null) {
+                    listener.onItemClick(null, position);
                 }
             }
         });
@@ -161,13 +171,14 @@ public class MerchantTransactionListPostedInnerAdapter extends RecyclerView.Adap
         TextView txnTypeDn, txnTypeDnExtention, amount, txnStatus, createdDate,businessTx;
         RelativeLayout itemRL;
         LinearLayout lineItem;
+        LinearLayout ll_merchant_transaction_item;
         View blankView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             txnTypeDn = itemView.findViewById(R.id.messageTV);
             txnTypeDnExtention = itemView.findViewById(R.id.messagTV);
-
+            ll_merchant_transaction_item = itemView.findViewById(R.id.ll_merchant_transaction_item);
             amount = itemView.findViewById(R.id.amountTV);
             txnStatus = itemView.findViewById(R.id.statusTV);
             createdDate = itemView.findViewById(R.id.balanceTV);

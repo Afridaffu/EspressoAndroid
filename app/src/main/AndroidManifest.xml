@@ -48,6 +48,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.business.MerchantTransactionDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".view.business.PayToMerchantActivity"

@@ -15,17 +15,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.transaction.TransactionData;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.TransactionDetailsActivity;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-public class MerchantTransactionDetailsActivity extends AppCompatActivity {
+public class MerchantTransactionDetailsActivity extends BaseActivity {
 
 
     private DashboardViewModel dashboardViewModel;
@@ -43,6 +45,7 @@ public class MerchantTransactionDetailsActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_merchant_transaction_details);
+            TransactionListPosted selectedTransaction = (TransactionListPosted) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
             initialization();
             initObserver();
         } catch (Exception e) {
@@ -81,12 +84,13 @@ public class MerchantTransactionDetailsActivity extends AppCompatActivity {
                     case Utils.Tokensub:
                         txnSubType = Utils.token;
                         break;
+
                 }
             }
 
             if (Utils.checkInternet(MerchantTransactionDetailsActivity.this)) {
-                progressDialog = Utils.showProgressDialog(MerchantTransactionDetailsActivity.this);
-                dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
+//                progressDialog = Utils.showProgressDialog(MerchantTransactionDetailsActivity.this);
+//                businessDashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
             } else {
                 Utils.displayAlert(getString(R.string.internet), MerchantTransactionDetailsActivity.this, "", "");
             }
