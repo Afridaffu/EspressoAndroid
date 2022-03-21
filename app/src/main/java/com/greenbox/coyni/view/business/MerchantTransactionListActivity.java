@@ -293,6 +293,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {
+                dismissDialog();
                 try {
                     if (transactionList != null) {
                         if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -300,6 +301,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                             loadMoreTV.setVisibility(View.GONE);
                             try {
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(MerchantTransactionListActivity.this);
+                                LinearLayoutManager nLayoutManager = new LinearLayoutManager(MerchantTransactionListActivity.this);
 
                                 if (transactionList.getData() != null) {
                                     if (transactionList.getData().getItems() != null) {
@@ -343,7 +345,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
                                 if (globalPosted.size() > 0) {
                                     transactionListPostedAdapter = new MerchantTransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
-                                    getRvTransactionsPosted.setLayoutManager(mLayoutManager);
+                                    getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
                                     if (currentPage > 0) {
