@@ -71,6 +71,7 @@ public class CompanyInfoDetails extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        showProgressDialog();
         businessIdentityVerificationViewModel.getCompanyInfo();
     }
 
@@ -79,6 +80,7 @@ public class CompanyInfoDetails extends BaseActivity {
             businessIdentityVerificationViewModel.getGetCompanyInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
                 @Override
                 public void onChanged(CompanyInfoResp companyInfoResp) {
+                    dismissDialog();
                     if (companyInfoResp != null) {
                         if (companyInfoResp.getStatus().toLowerCase().toString().equals("success")) {
                             try {

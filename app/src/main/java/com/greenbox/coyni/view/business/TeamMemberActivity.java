@@ -85,6 +85,7 @@ public class TeamMemberActivity extends BaseActivity {
                                         txStatus.setTextColor(getResources().getColor(R.color.pending_color));
                                         mStatusIcon.setBackgroundResource(R.drawable.pending_dot);
                                         txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                                        txStatus.setText(data.getStatus());
                                     }
                                     else {
                                         txStatus.setText(data.getStatus());
