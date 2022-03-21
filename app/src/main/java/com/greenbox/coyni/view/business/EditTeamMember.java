@@ -142,6 +142,7 @@ public class EditTeamMember extends BaseActivity {
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
 
         sendCV = findViewById(R.id.sendCV);
+
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

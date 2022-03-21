@@ -4,7 +4,9 @@ package com.greenbox.coyni.model.transaction;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TransactionListPosted {
+import java.io.Serializable;
+
+public class TransactionListPosted implements Serializable {
         @SerializedName("createdAt")
         @Expose
         private String createdAt;

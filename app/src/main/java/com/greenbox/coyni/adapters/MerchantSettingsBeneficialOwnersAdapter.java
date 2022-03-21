@@ -53,6 +53,8 @@ public class MerchantSettingsBeneficialOwnersAdapter extends RecyclerView.Adapte
         BOResp.BeneficialOwner objData = beneficialOwnerList.get(pos);
         if (pos == 0) {
             holder.primaryIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.primaryIcon.setVisibility(View.GONE);
         }
         String firstName = "", lastName = "";
         if (objData.getFirstName() != null && !objData.getFirstName().equals("")) {
