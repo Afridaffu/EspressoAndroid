@@ -103,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_42sdp"
         android:gravity="center"
-        app:cardBackgroundColor="@color/inactive_color"
+        app:cardBackgroundColor="@color/primary_green"
         android:layout_marginBottom="@dimen/_27sdp"
         app:cardCornerRadius="@dimen/_20sdp">
 

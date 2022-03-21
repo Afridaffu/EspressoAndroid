@@ -83,6 +83,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
                     showCalendarDialog();
                 } else if(action.equals("Date_SELECTED")) {
                     LogUtils.v(TAG, "Date Selected " + value);
+                    filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
                 }
             }
         });
