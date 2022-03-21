@@ -32,12 +32,13 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BusinessAdditionalActionRequiredActivity extends AppCompatActivity {
+public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private static Object ActivityCompat;
     LinearLayout actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, sscfileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
     TextView fileUploadTV, actionReqFileTV, licenseTV, fileUploadedTV, remarksTV, acceptMsgTV, declineMsgTV, compnyNameTV, actionReqFileUpdatedOnTV, licenseUploadedTV;

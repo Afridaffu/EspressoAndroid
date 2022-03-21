@@ -1,17 +1,14 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.TransactionDetailsActivity;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class BusinessBatchPayoutIdDetailsActivity extends AppCompatActivity {
+public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
 
     LinearLayout payoytBackLL,payoutRefIdLL,payoutTokenNoLL,payoutReserveIdLL;
     TextView payoutRefIdTV,payoutTokenIdTV,ReserveIdTV;

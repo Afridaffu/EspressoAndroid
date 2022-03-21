@@ -817,7 +817,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
                             }
                         } else {
-                            etAddress2.setHint("Billing Address Line 2(Optional)");
+                            etAddress2.setHint("Billing Address Line 2 (Optional)");
                             etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                         }
@@ -896,7 +896,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
-                                zipErrorTV.setText("Minimum 5 Characters Required");
+                                zipErrorTV.setText("Minimum 5 Digits Required");
                             } else if (etZipCode.getText().toString().trim().length() == 0) {
                                 etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));

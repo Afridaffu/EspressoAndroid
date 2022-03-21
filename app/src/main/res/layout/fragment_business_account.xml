@@ -52,9 +52,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:text="KM"
                         android:fontFamily="@font/opensans_bold"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_20sdp"
+                        android:textSize="@dimen/_16sdp"
                         android:visibility="gone" />
 
                 </androidx.cardview.widget.CardView>
