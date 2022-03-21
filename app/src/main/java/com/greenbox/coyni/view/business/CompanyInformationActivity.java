@@ -781,7 +781,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
 
                     } else {
-                        companynameET.setHint("Company’s Name");
+//                        companynameET.setHint("Company’s Name");
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         companynameET.setHintTextColor(getColor(R.color.light_gray));
                         companynameErrorLL.setVisibility(GONE);
@@ -811,7 +811,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
 
                     } else {
-                        companyemailET.setHint("Company’s Email");
+//                        companyemailET.setHint("Company’s Email");
                         companyemailtil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyemailtil, getColor(R.color.primary_green));
                         companyemailErrorLL.setVisibility(GONE);
@@ -841,7 +841,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             companyaddressET.setSelection(companyaddressET.getText().toString().length());
                         }
                     } else {
-                        companyaddressET.setHint(getResources().getString(R.string.company_address_line_1));
+//                        companyaddressET.setHint(getResources().getString(R.string.company_address_line_1));
                         companyaddresstil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddresstil, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);
@@ -869,7 +869,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     } else {
                         companyaddress2til.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(companyaddress2til, getColor(R.color.primary_green));
-                        companyaddress2ET.setHint(getResources().getString(R.string.company_address_line_2_optional));
+//                        companyaddress2ET.setHint(getResources().getString(R.string.company_address_line_2_optional));
                         address2ErrorLL.setVisibility(GONE);
                     }
                 }
@@ -896,7 +896,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             cityET.setSelection(cityET.getText().toString().length());
                         }
                     } else {
-                        cityET.setHint("City");
+//                        cityET.setHint("City");
                         citytil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(citytil, getColor(R.color.primary_green));
                         cityErrorLL.setVisibility(GONE);
@@ -931,7 +931,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
 
-                        zipcodeET.setHint("Zip Code");
+//                        zipcodeET.setHint("Zip Code");
                         zipcodetil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(zipcodetil, getColor(R.color.primary_green));
                         zipcodeErrorLL.setVisibility(GONE);

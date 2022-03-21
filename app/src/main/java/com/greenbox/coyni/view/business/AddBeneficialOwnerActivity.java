@@ -1100,7 +1100,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                 } else {
                     fnameLL.setVisibility(GONE);
-                    fnameET.setHint("First Name");
+//                    fnameET.setHint("First Name");
                     fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(fnametil, getColor(R.color.primary_green));
                 }
@@ -1134,7 +1134,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                 } else {
                     lnameLL.setVisibility(GONE);
-                    lnameET.setHint("Last Name");
+//                    lnameET.setHint("Last Name");
                     lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(lnametil, getColor(R.color.primary_green));
                 }
@@ -1249,7 +1249,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                 } else {
                     ownershipET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
-                    ownershipET.setHint("Ownership %");
+//                    ownershipET.setHint("Ownership %");
                     ownershiptil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(ownershiptil, getColor(R.color.primary_green));
                     ownershipLL.setVisibility(GONE);
@@ -1313,7 +1313,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
 
                     }
                 } else {
-                    address1ET.setHint("Street Address");
+//                    address1ET.setHint("Street Address");
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_green));
                     address1ErrorLL.setVisibility(GONE);
@@ -1339,7 +1339,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
 
                 } else {
-                    address2ET.setHint("Apt#, Suit, Floor ");
+//                    address2ET.setHint("Apt#, Suit, Floor ");
                     address2ErrorLL.setVisibility(GONE);
                     address2TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address2TIL, getColor(R.color.primary_green));
@@ -1368,7 +1368,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         cityET.setSelection(cityET.getText().toString().length());
                     }
                 } else {
-                    cityET.setHint("City");
+//                    cityET.setHint("City");
                     cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_green));
                     cityErrorLL.setVisibility(GONE);
@@ -1401,7 +1401,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     zipcodeET.requestFocus();
                     if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
-                    zipcodeET.setHint("Zip Code");
+//                    zipcodeET.setHint("Zip Code");
                     zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
                     zipcodeErrorLL.setVisibility(GONE);

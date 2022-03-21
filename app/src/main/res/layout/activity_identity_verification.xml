@@ -724,7 +724,6 @@
                                 android:enabled="false"
                                 android:focusable="false"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:hint="@string/countryhint"
                                 android:imeOptions="actionDone"
                                 android:padding="@dimen/_12sdp"
                                 android:text="@string/countryhint"
