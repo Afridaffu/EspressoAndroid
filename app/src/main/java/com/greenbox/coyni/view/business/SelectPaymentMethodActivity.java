@@ -209,7 +209,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 }
             }
             addPayment();
-            paymentMethods();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -410,7 +410,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             tvExtBankHead = findViewById(R.id.tvBankCount);
             tvExtBankMsg = findViewById(R.id.tvBankMsg);
             imgBankArrow = findViewById(R.id.imgBBankArrow);
-            imgBankIcon = findViewById(R.id.imgBankIcon);
+            imgBankIcon = findViewById(R.id.imgBBankIcon);
             imgDCardLogo = findViewById(R.id.imgDCardLogo);
             tvDCHead = findViewById(R.id.tvDCHead);
             tvDCardHead = findViewById(R.id.tvDCardCount);
@@ -427,6 +427,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
             imgLogo = findViewById(R.id.imgLogo);
+
+            paymentMethods();
 
             lyBPayClose.setOnClickListener(new View.OnClickListener() {
                 @Override

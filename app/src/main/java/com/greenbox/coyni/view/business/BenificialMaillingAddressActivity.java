@@ -209,7 +209,7 @@ public class BenificialMaillingAddressActivity extends AppCompatActivity {
                         mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(mailzipcodeTIL, getColor(R.color.error_red));
                         mailzipErrorLL.setVisibility(VISIBLE);
-                        mailzipTV.setText("Field Required 5 Characters");
+                        mailzipTV.setText("Minimum 5 Digits Required");
                     } else {
                         mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                         Utils.setUpperHintColor(mailzipcodeTIL, getColor(R.color.light_gray));

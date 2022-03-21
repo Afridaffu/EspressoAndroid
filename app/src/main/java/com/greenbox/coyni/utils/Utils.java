@@ -154,6 +154,8 @@ public class Utils {
     public static final String signetType = "7";
     public static final String payType = "12";
     public static final String businessType = "19";
+    public static final String tokenType = "11";
+    public static final String merchantType = "7";
     public static final String transferType = "10";
     public static final String paySubType = "8";
     public static final String requestSubType = "9";
@@ -240,6 +242,17 @@ public class Utils {
     public static final int cancelled = 4;//Not available
     public static final int inProgress = 0;
     public static final int failed = 3;
+
+    //Merchant Transaction Filter Type values
+
+    public static final int mRefund=9;
+    public static final int merchantPayout=7;
+    public static final int monthlyServiceFee=17;
+
+    public static final int mCompleted=0;
+    public static final int msRefund=1;
+    public static final int mPartialRefund=2;
+
 
     public static final float slidePercentage = 0.3f;
 
