@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MerchantTransactionListPostedNewAdapter extends RecyclerView.Adapter<MerchantTransactionListPostedNewAdapter.MyViewHolder> {
+public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAdapter<MerchantTransactionListPostedNewAdapter.MyViewHolder> {
     Context mContext;
     MyApplication objMyApplication;
     List<List<TransactionListPosted>> listedData = new ArrayList<>();
     List<TransactionListPosted> transactionListItemsposted;
     ArrayList<String> dates = new ArrayList<>();
-
+    private OnItemClickListener listener;
 
     public MerchantTransactionListPostedNewAdapter(List<TransactionListPosted> list, Context context) {
         this.transactionListItemsposted = list;
@@ -51,9 +51,12 @@ public class MerchantTransactionListPostedNewAdapter extends RecyclerView.Adapte
             }
             listedData.add(individualDateData);
         }
-
     }
 
+    @Override
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
@@ -85,6 +88,8 @@ public class MerchantTransactionListPostedNewAdapter extends RecyclerView.Adapte
                 LinearLayoutManager nLayoutManager = new LinearLayoutManager(mContext);
                 holder.innerRV.setLayoutManager(nLayoutManager);
                 holder.innerRV.setItemAnimator(new DefaultItemAnimator());
+
+                transactionListPostedInnerAdapter.setOnItemClickListener(listener);
                 holder.innerRV.setAdapter(transactionListPostedInnerAdapter);
             } catch (Exception e) {
                 e.printStackTrace();
