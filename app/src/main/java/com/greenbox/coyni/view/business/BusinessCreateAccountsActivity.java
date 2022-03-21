@@ -217,6 +217,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         try {
             String strAmount = "";
             List<WalletInfo> walletInfo = walletResponse.getWalletNames();
+            LogUtils.d(TAG,"setUserBalance"+walletInfo.toString());
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
@@ -238,11 +239,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
-
                     Map<String, ArrayList<ProfilesResponse.Profiles>> map = new HashMap<>();
                     filterList = profilesResponse.getData();
                     for (ProfilesResponse.Profiles c : filterList) {
-                        if (c.getAccountType().equals(Utils.BUSINESS)) {
+                        if (c.getAccountType().equals(Utils.BUSINESS))  {
                             businessAccountList.add(c);
                             addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(),c.getAccountStatus());
                         } else {
@@ -364,9 +364,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
            // }
 
             subList.add(detailInfo);
-
             headerInfo.setSubsetName(subList);
             groupPosition = this.subSet.indexOf(headerInfo);
+
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

@@ -37,6 +37,7 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.IdVeAdditionalActionActivity;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
@@ -53,7 +54,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity implements AddNewBusinessAccountDBAAdapter.OnSelectListner {
+public class BusinessAddNewBusinessAccountActivity extends BaseActivity implements AddNewBusinessAccountDBAAdapter.OnSelectListner {
 
     private ImageView imageViewClose;
     private LinearLayout llNewComapny, llNewDba;
@@ -176,10 +177,10 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
                     if (profilesResponse != null) {
                         filterList = profilesResponse.getData();
                         for (ProfilesResponse.Profiles c : filterList) {
-                            if (c.getAccountType().equals(Utils.BUSINESS)) {
-                                businessAccountList.add(c);
-                                //listComapny.add(c.getAccountType());
+                            LogUtils.d(TAG,"getProfileRespMutableLiveData"+c.getDbaOwner());
+                            if (c.getAccountType().equals(Utils.BUSINESS) && c.getDbaOwner()!=null) {
                             } else {
+                                businessAccountList.add(c);
                             }
                         }
                     }
@@ -193,7 +194,6 @@ public class BusinessAddNewBusinessAccountActivity extends AppCompatActivity imp
             identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
