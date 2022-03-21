@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.utils.LogUtils;
@@ -24,14 +26,20 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView txvCompanyName;
-        private ImageView imvTickIcon;
+        private ImageView imvTickIcon,profileImage;
         private View viewLine;
+        private  TextView statusTV;
+        private  LinearLayout statusLL;
+
 
         public MyViewHolder(View view) {
             super(view);
-            txvCompanyName = (TextView) view.findViewById(R.id.txv_comapny_name);
+            txvCompanyName = (TextView) view.findViewById(R.id.title);
             imvTickIcon = (ImageView) view.findViewById(R.id.tickIcon);
+            profileImage = (ImageView) view.findViewById(R.id.profileImage);
             viewLine = (View) view.findViewById(R.id.viewLine);
+             statusTV = (TextView) view.findViewById(R.id.statusTV);
+             statusLL = (LinearLayout) view.findViewById(R.id.statusLL);
         }
     }
 
@@ -58,10 +66,48 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
             } else {
                 holder.viewLine.setVisibility(View.VISIBLE);
             }
+
             if (listCompany.get(position).isSelected()) {
                 holder.imvTickIcon.setVisibility(View.VISIBLE);
+                holder.statusLL.setVisibility(View.GONE);
             } else {
                 holder.imvTickIcon.setVisibility(View.GONE);
+                if(!listCompany.get(position).getAccountStatus().equalsIgnoreCase("active")){
+
+                    if(listCompany.get(position).getAccountStatus().equalsIgnoreCase("terminated")){
+                        holder.statusLL.setVisibility(View.VISIBLE);
+                        holder.statusLL.setBackgroundColor(mContext.getColor(R.color.default_red));
+                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
+                    } else if(listCompany.get(position).getAccountStatus().equalsIgnoreCase("under review")){
+                        holder.statusLL.setVisibility(View.VISIBLE);
+                        holder.statusLL.setBackgroundColor(mContext.getColor(R.color.under_review_blue));
+                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
+                    } else {
+                        holder.statusLL.setVisibility(View.VISIBLE);
+                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
+                    }
+                } else {
+                    holder.statusLL.setVisibility(View.GONE);
+                }
+
+
+            }
+
+            if (listCompany.get(position).getImage() != null && !listCompany.get(position).getImage().trim().equals("")) {
+                // profileImageText.setVisibility(View.GONE);
+                holder.profileImage.setVisibility(View.VISIBLE);
+                Glide.with(mContext)
+                        .load(listCompany.get(position).getImage())
+                        .placeholder(R.drawable.ic_case)
+                        .into(holder.profileImage);
+
+            } else {
+                holder.profileImage.setVisibility(View.VISIBLE);
+                // profileImageText.setVisibility(View.VISIBLE);
+                Glide.with(mContext)
+                        .load(listCompany.get(position).getImage())
+                        .placeholder(R.drawable.ic_case)
+                        .into(holder.profileImage);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

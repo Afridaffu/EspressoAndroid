@@ -20,10 +20,11 @@
         <ImageView
             android:layout_width="@dimen/_33sdp"
             android:layout_height="@dimen/_33sdp"
+            android:id="@+id/profileImage"
             android:src="@drawable/profile" />
 
         <TextView
-            android:id="@+id/txv_comapny_name"
+            android:id="@+id/title"
             android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,6 +34,33 @@
             android:layout_marginTop="@dimen/_10ssp"
             android:textSize="@dimen/text_size_14sp"
             android:layout_weight="1"/>
+
+        <LinearLayout
+            android:id="@+id/statusLL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintBottom_toBottomOf="@id/tickIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginRight="@dimen/_10ssp"
+            app:layout_constraintTop_toTopOf="@id/tickIcon"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/txn_pending_bg"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/statusTV"
+                android:layout_width="@dimen/_68sdp"
+                android:layout_height="@dimen/_14sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text=""
+                android:gravity="center"
+                android:textColor="#FFA701"
+                android:textSize="@dimen/_7ssp" />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/tickIcon"

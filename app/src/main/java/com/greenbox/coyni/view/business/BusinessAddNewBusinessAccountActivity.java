@@ -132,13 +132,13 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity implemen
 //        for(ProfilesResponse.Profiles c: businessAccountList){
 //            listComapny.add(c.getCompanyName());
 //        }
-
+        LogUtils.d(TAG,"businessAccountList"+businessAccountList.toString());
         AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, BusinessAddNewBusinessAccountActivity.this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         rvCompanyList.setLayoutManager(mLayoutManager);
         rvCompanyList.setItemAnimator(new DefaultItemAnimator());
         rvCompanyList.setAdapter(addNewBusinessAccountDBAAdapter);
-        LogUtils.d("eeee", "eeee" + companyId);
+        LogUtils.d(TAG, "eeee" + companyId);
 
         addDBACardView.setOnClickListener(new View.OnClickListener() {
             @Override

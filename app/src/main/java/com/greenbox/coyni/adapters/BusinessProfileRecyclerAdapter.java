@@ -162,13 +162,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             profileImage.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(headerInfo.getMainImage())
-                    .placeholder(R.drawable.ic_company_info_business)
+                    .placeholder(R.drawable.ic_case)
                     .into(profileImage);
         } else {
             profileImage.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(headerInfo.getMainImage())
-                    .placeholder(R.drawable.ic_company_info_business)
+                    .placeholder(R.drawable.ic_case)
                     .into(profileImage);
 
         }
