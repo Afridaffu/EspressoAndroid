@@ -222,7 +222,6 @@ public class Utils {
     public static final int accountTransfer = 0; //Not available
     public static final int paidInvoice = 15;
     public static final int businessPayout = 19;
-    public static final int merchantPayout = 7;
 
     public static final int sent = 8;
     public static final int token = 11;
