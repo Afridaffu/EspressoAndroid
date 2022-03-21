@@ -40,33 +40,45 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
 
         if (position % 2 == 0) {
             holder.statusType.setText("On Hold");
-            holder.statusType.setTextColor(context.getColor(R.color.error_red));
+            holder.amount.setTextColor(context.getColor(R.color.active_black));
+            holder.statusType.setTextColor(context.getColor(R.color.pending_color));
             holder.statusType.setBackgroundResource(R.drawable.txn_pending_bg);
         } else {
-            holder.statusType.setText("Open");
-            holder.statusType.setBackgroundResource(R.drawable.txn_completed_bg);
+
+            if (position % 3 == 0) {
+                holder.statusType.setText("Open");
+                holder.statusType.setTextColor(context.getColor(R.color.inprogress_status));
+                holder.statusType.setBackgroundResource(R.drawable.txn_inprogress_bg);
+            }
+            else {
+                holder.statusType.setText("Released");
+                holder.amount.setText("6435.21");
+                holder.amount.setTextColor(context.getColor(R.color.active_green));
+                holder.statusType.setTextColor(context.getColor(R.color.completed_status));
+                holder.statusType.setBackgroundResource(R.drawable.txn_completed_bg);
+            }
         }
         holder.rlBase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(null, position);
+                listener.onItemClick(null, holder.getAdapterPosition());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 12;
+        return 21;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public RelativeLayout rlBase;
-        public TextView ammont, statusType, dateTime;
+        public TextView amount, statusType, dateTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            ammont = itemView.findViewById(R.id.ammont_TV);
+            amount = itemView.findViewById(R.id.ammont_TV);
             statusType = itemView.findViewById(R.id.status_TV);
             dateTime = itemView.findViewById(R.id.dateTime_TV);
             rlBase = itemView.findViewById(R.id.rl_base);

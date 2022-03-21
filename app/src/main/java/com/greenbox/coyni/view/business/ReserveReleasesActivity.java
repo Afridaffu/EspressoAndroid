@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -79,12 +80,12 @@ public class ReserveReleasesActivity extends BaseActivity {
                 LinearLayout llManualLL = dialog.findViewById(R.id.llManual);
 
                 llRolling.setOnClickListener(view ->
-                        finish()
+                        onBackPressed()
 //                        startActivity(new Intent(ReserveReleasesActivity.this, ReserveReleasesActivity.class))
                 );
                 llManualLL.setOnClickListener(view ->
-                        finish()
-//                        startActivity(new Intent(ReserveReleasesActivity.this, ManualReleasesActivity.class))
+//                        finish()
+                        startActivity(new Intent(ReserveReleasesActivity.this, ManualReleasesActivity.class))
                 );
 
             }
