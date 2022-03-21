@@ -88,7 +88,7 @@
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailing Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
-    <string name="mailingaddress2">Mailing Address Line 2(Optional)</string>
+    <string name="mailingaddress2">Mailing Address Line 2 (Optional)</string>
     <string name="city">City</string>
     <string name="state">State</string>
     <string name="zip">Zip Code</string>
@@ -319,7 +319,7 @@
     <string name="add">Add</string>
     <string name="ca">CA</string>
     <string name="zipcode">Zipcode</string>
-    <string name="time_zone">Time Zone(Optional)</string>
+    <string name="time_zone">Time Zone (Optional)</string>
     <string name="select_time_zone">Select time zone</string>
     <string name="by_selecting">By selecting this we will clear your batch based on\nyour time zone at 11:59:59pm.</string>
     <string name="fire_bbq">Fire BBQ</string>
@@ -496,7 +496,7 @@
     <string name="company_address">Company Address</string>
     <string name="company_s_email">Companys Email</string>
     <string name="company_address_line_1">Company Address Line 1</string>
-    <string name="company_address_line_2_optional">Company Address Line 2(Optional)</string>
+    <string name="company_address_line_2_optional">Company Address Line 2 (Optional)</string>
     <string name="customer_service_email">Customer Service Email</string>
 
     <string name="paying_dba_name">Paying [DBA name]</string>
@@ -581,7 +581,7 @@
     <string name="card_exp">Card Exp</string>
     <string name="billing_address_line_1">Billing Address Line 1</string>
     <string name="visa_debit_8765">Visa Debit ••••8765</string>
-    <string name="billing_address_line_2_optional">Billing Address Line 2(Optional)</string>
+    <string name="billing_address_line_2_optional">Billing Address Line 2 (Optional)</string>
     <string name="zip_code">Zip Code</string>
     <string name="remove_this_card">Remove This Card</string>
     <string name="save">Save</string>

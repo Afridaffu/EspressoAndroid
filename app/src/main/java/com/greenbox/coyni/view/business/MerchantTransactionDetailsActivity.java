@@ -1,22 +1,20 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.TransactionDetailsActivity;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-public class MerchantTransactionDetailsActivity extends AppCompatActivity {
+public class MerchantTransactionDetailsActivity extends BaseActivity {
 
 
     private BusinessDashboardViewModel businessDashboardViewModel;
@@ -24,6 +22,7 @@ public class MerchantTransactionDetailsActivity extends AppCompatActivity {
     private String strGbxTxnIdType = "";
     private int txnType, txnSubType;
     ProgressDialog progressDialog;
+
     //    CardView cancelTxnCV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +32,14 @@ public class MerchantTransactionDetailsActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_merchant_transaction_details);
-        initialization();
-        initObserver();
+            TransactionListPosted selectedTransaction = (TransactionListPosted) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
+            initialization();
+            initObserver();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void initialization() {
         try {
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
@@ -75,7 +76,7 @@ public class MerchantTransactionDetailsActivity extends AppCompatActivity {
             }
 
             if (Utils.checkInternet(MerchantTransactionDetailsActivity.this)) {
-                progressDialog = Utils.showProgressDialog(MerchantTransactionDetailsActivity.this);
+//                progressDialog = Utils.showProgressDialog(MerchantTransactionDetailsActivity.this);
 //                businessDashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
             } else {
                 Utils.displayAlert(getString(R.string.internet), MerchantTransactionDetailsActivity.this, "", "");

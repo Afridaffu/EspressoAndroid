@@ -308,7 +308,9 @@
                                     android:textColorHint="@color/light_gray"
                                     android:cursorVisible="true"
                                     android:textCursorDrawable="@drawable/cursor_green"
-                                    android:textSize="@dimen/_53ssp" />
+                                    android:textSize="@dimen/_53ssp"
+                                    android:longClickable="false"
+                                    android:textIsSelectable="false"/>
 
                                 <TextView
                                     android:id="@+id/tvCYN"

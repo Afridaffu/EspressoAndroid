@@ -19,11 +19,12 @@ import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 
 public class CompanyInfoDetails extends BaseActivity {
     private LinearLayout closeLL, emailLL, phoneLL;
-    private TextView mEmailTx, mPhoneNumberTx, mAddressTx, nameTX,mBusinessEntity;
+    private TextView mEmailTx, mPhoneNumberTx, mAddressTx, nameTX, mBusinessEntity;
     private String companyEmail = "", companyPhone = "", companyCountryCode = "";
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private int companyId = 0;
     MyApplication myApplication;
+    private String strName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class CompanyInfoDetails extends BaseActivity {
         mPhoneNumberTx = (TextView) findViewById(R.id.phoneNumberTx);
         mAddressTx = (TextView) findViewById(R.id.addressTx);
         nameTX = (TextView) findViewById(R.id.name_id);
-        mBusinessEntity=(TextView)findViewById(R.id.business_entity);
+        mBusinessEntity = (TextView) findViewById(R.id.business_entity);
         emailLL = (LinearLayout) findViewById(R.id.emailLL);
         phoneLL = (LinearLayout) findViewById(R.id.phoneLL);
         myApplication = (MyApplication)getApplicationContext();
@@ -75,22 +76,25 @@ public class CompanyInfoDetails extends BaseActivity {
         emailLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen","CompanyInfo").putExtra("action","EditEmailCompany").putExtra("value",companyEmail));
+                startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "CompanyInfo").putExtra("action", "EditEmailCompany").putExtra("value", companyEmail));
             }
         });
 
         phoneLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CompanyInfoDetails.this,BusinessUserDetailsPreviewActivity.class).putExtra("screen","CompanyInfo").putExtra("action","EditPhoneCompany").putExtra("value",companyPhone));
+                startActivity(new Intent(CompanyInfoDetails.this, BusinessUserDetailsPreviewActivity.class).putExtra("screen", "CompanyInfo").putExtra("action", "EditPhoneCompany").putExtra("value", companyPhone));
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
+        showProgressDialog();
         businessIdentityVerificationViewModel.getCompanyInfo();
     }
+
     private void initObservers() {
         try {
             businessIdentityVerificationViewModel.getGetCompanyInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
@@ -129,20 +133,20 @@ public class CompanyInfoDetails extends BaseActivity {
                                 if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
                                     mAddressTx.setText(cir.getAddressLine1() + cir.getAddressLine2());
                                 }
-                                if(cir.getAddressLine2()!=null&&!cir.getAddressLine2().equals("")){
-                                    mAddressTx.append(", "+cir.getAddressLine2());
+                                if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
+                                    mAddressTx.append(", " + cir.getAddressLine2());
                                 }
-                                if(cir.getCity()!=null&&!cir.getCity().equals("")){
-                                    mAddressTx.append(", "+cir.getCity());
+                                if (cir.getCity() != null && !cir.getCity().equals("")) {
+                                    mAddressTx.append(", " + cir.getCity());
                                 }
-                                if(cir.getState()!=null&&!cir.getState().equals("")){
-                                    mAddressTx.append(", "+cir.getState());
+                                if (cir.getState() != null && !cir.getState().equals("")) {
+                                    mAddressTx.append(", " + cir.getState());
                                 }
-                                if(cir.getCountry()!=null&&!cir.getCountry().equals("")){
-                                    mAddressTx.append(", "+cir.getCountry());
+                                if (cir.getCountry() != null && !cir.getCountry().equals("")) {
+                                    mAddressTx.append(", " + cir.getCountry());
                                 }
-                                if(cir.getZipCode()!=null&&!cir.getZipCode().equals("")){
-                                    mAddressTx.append(", "+cir.getZipCode());
+                                if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
+                                    mAddressTx.append(", " + cir.getZipCode());
                                 }
 
                                 companyId = cir.getId();
