@@ -142,6 +142,7 @@ public class Utils {
     public static final String transCompleted = "completed";
     public static final String transFailed = "failed";
     public static final String transCancelled = "cancelled";
+    public static final String transinprogress = "in progress";
     public static final String walletCategory = "1";
     public static final String addType = "2";
     public static final String withdrawType = "3";
@@ -174,12 +175,16 @@ public class Utils {
     public static final String Refundtxntype = "Refund";
     public static final String SaleOrdertxntype = "Sale Order";
     public static final String MonthlyServiceFeetxntype = "Monthly Service Fee";
+    public static final String BusinessPayouttxntype = "Business Payout";
+    public static final String MerchantPayouttxntype = "Merchant Payout";
     public static final String Tokensub = "Token";
     public static final String Success = "Success";
 //    controll methods in merchanttransactiondetails
     public static final String refundCM = "refund";
     public static final String saleorderCM = "saleorder";
     public static final String monthlyservicefeeCM = "monthlyservicefee";
+    public static final String businesspayoutCM = "businesspayout";
+    public static final String merchantmayoutCM = "merchantmayout";
     public static final int inviteId = 74;
     public static final int requestId = 75;
     public static final int remindId = 76;
@@ -215,6 +220,7 @@ public class Utils {
     public static final int accountTransfer = 0; //Not available
     public static final int paidInvoice = 15;
     public static final int businessPayout = 19;
+    public static final int merchantPayout = 7;
 
     public static final int sent = 8;
     public static final int token = 11;

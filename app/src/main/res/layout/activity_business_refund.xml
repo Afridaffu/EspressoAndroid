@@ -22,7 +22,7 @@
             android:paddingLeft="@dimen/_22sdp">
 
             <LinearLayout
-                android:id="@+id/lycloseLL"
+                android:id="@+id/RefundCloseLL"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="@dimen/_40sdp"

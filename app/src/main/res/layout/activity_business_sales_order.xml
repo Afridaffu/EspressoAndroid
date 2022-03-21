@@ -22,7 +22,7 @@
             android:paddingLeft="@dimen/_22sdp">
 
             <LinearLayout
-                android:id="@+id/lycloseLL"
+                android:id="@+id/Saleorderclosell"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="@dimen/_40sdp"
@@ -210,7 +210,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <ImageView
-                                android:id="@+id/SalesReferenceidIV"
+                                android:id="@+id/SalesReferenceCopyIV"
                                 android:layout_width="@dimen/_11sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_gravity="center"
