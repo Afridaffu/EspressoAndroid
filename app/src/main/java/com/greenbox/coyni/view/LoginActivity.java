@@ -326,7 +326,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     Utils.shwForcedKeypad(LoginActivity.this);
                                 etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
-                                etEmail.setHint((getResources().getString(R.string.email)));
+//                                etEmail.setHint((getResources().getString(R.string.email)));
                                 layoutEmailError.setVisibility(GONE);
                             }
                         }

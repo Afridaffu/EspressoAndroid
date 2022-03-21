@@ -899,7 +899,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                            passwordET.setHint("Password");
+//                            passwordET.setHint("Password");
 //                            stregnthViewLL.setVisibility(VISIBLE);
 //                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
@@ -954,7 +954,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     if (b) {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
-                        confirmPasswordET.setHint("Confirm Password");
+//                        confirmPasswordET.setHint("Confirm Password");
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                         confPasswordTIL.setHint("Confirm Password");
@@ -1014,7 +1014,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             Utils.shwForcedKeypad(CreateAccountActivity.this);
                         emailErrorLL.setVisibility(GONE);
                         focusedID = emailET.getId();
-                        emailET.setHint("Email");
+//                        emailET.setHint("Email");
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
                     }

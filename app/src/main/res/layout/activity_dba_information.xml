@@ -952,7 +952,6 @@
                             android:enabled="false"
                             android:focusable="false"
                             android:fontFamily="@font/opensans_semibold"
-                            android:hint="@string/countryhint"
                             android:imeOptions="actionDone"
                             android:inputType="text"
                             android:maxLength="30"

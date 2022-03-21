@@ -175,7 +175,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CreatePasswordActivity.this);
                         if (passwordET.getText().toString().trim().length() == 0 || !strong.matcher(passwordET.getText().toString().trim()).matches()) {
-                            passwordET.setHint("Password");
+//                            passwordET.setHint("Password");
 //                            stregnthViewLL.setVisibility(VISIBLE);
 //                            passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                            Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));

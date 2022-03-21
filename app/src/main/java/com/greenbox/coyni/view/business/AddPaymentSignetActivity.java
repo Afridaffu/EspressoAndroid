@@ -242,7 +242,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         }
 
                     } else {
-                        etName.setHint("Enter Name");
+//                        etName.setHint("Enter Name");
                         etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                         InputMethodManager imm = (InputMethodManager) AddPaymentSignetActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -315,7 +315,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_black));
                         }
                     } else {
-                        etAddress1.setHint("Billing Address Line 1");
+//                        etAddress1.setHint("Billing Address Line 1");
                         etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);
@@ -345,7 +345,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             etAddress2.setSelection(etAddress2.getText().toString().length());
                         }
                     } else {
-                        etAddress2.setHint("Billing Address Line 2 (Optional)");
+//                        etAddress2.setHint("Billing Address Line 2 (Optional)");
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     }
@@ -378,7 +378,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_black));
                         }
                     } else {
-                        etCity.setHint("City");
+//                        etCity.setHint("City");
                         etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                         cityErrorLL.setVisibility(GONE);
@@ -443,7 +443,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         }
                     } else {
                         Utils.shwForcedKeypad(AddPaymentSignetActivity.this);
-                        etZipCode.setHint("Zip Code");
+//                        etZipCode.setHint("Zip Code");
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                         zipErrorLL.setVisibility(GONE);
