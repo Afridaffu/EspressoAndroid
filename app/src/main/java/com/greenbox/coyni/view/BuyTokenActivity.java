@@ -152,22 +152,42 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         convertUSDValue();
                     }
 
-                    if(editable.length()==5 || editable.length()==6){
+                    if (editable.length() == 5 || editable.length() == 6) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams. MATCH_PARENT ,
-                                LinearLayout.LayoutParams. WRAP_CONTENT ) ;
-                        layoutParams.setMargins( 0 , 25 , 0 , 0 ) ;
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if(editable.length()==7 || editable.length()==8){
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 6, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
-                    }else if(editable.length()==9){
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    }else if(editable.length()<=4){
+                    } else if (editable.length() == 7 || editable.length() == 8) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 0, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() >= 9) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 6, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                    } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 13, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    }else if (editable.length() <= 4) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 13, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
 
@@ -1639,15 +1659,35 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
 
-            if(editable.length()==5 || editable.length()==6){
+            if (editable.length() == 5 || editable.length() == 6) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-            } else if(editable.length()==7 || editable.length()==8){
-                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
-            }else if(editable.length()==9){
+
+            } else if (editable.length() == 7 || editable.length() == 8) {
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 0, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+            } else if (editable.length() >= 9) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
-            }else if(editable.length()<=4){
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+            } else if (editable.length() <= 4) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 13, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
             }
 
 //            if (editable.length() > 12) {
