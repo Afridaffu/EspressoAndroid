@@ -257,6 +257,7 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                     }
                     else if (FROM.equals("EDIT_TEAM_MEMBER")) {
                         EditTeamMember editteammem = EditTeamMember.editTeamMember;
+                        hintName.setVisibility(VISIBLE);
                         if (charSequence.length() == 14) {
                             isPhoneError = false;
                             editteammem.editPhonLL.setVisibility(GONE);

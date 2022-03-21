@@ -122,11 +122,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/topLL"
             android:layout_marginTop="@dimen/_8sdp"
-            android:gravity="right"
             android:layout_toLeftOf="@id/balanceTV"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Balance "
             android:layout_weight="1"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="right"
+            android:text="Balance "
             android:textColor="@color/light_gray"
             android:textSize="@dimen/_10ssp" />
 

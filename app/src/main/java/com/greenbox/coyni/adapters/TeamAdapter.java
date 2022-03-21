@@ -72,12 +72,12 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.active)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
-                } else if (objData.getStatus().equalsIgnoreCase(Utils.inActive)) {
-                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
-                    holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
-                } else {
+                } else if(objData.getStatus().equalsIgnoreCase(Utils.canceled)){
                     holder.txStatus.setText(Utils.resendInvitation);
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
+                }else {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
                 }
             }
 
