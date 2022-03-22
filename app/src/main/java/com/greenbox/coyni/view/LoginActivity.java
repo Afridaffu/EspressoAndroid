@@ -551,7 +551,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     try {
                         String strEndPoint = "";
                         strEndPoint = BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.URL_PRODUCTION;
-                        if (logoClickCount == 4) {
+                        if (logoClickCount == 5) {
+                            logoClickCount = 0;
                             Toast.makeText(LoginActivity.this, strEndPoint, Toast.LENGTH_LONG).show();
                         } else {
                             logoClickCount++;
