@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -79,7 +80,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibilityListener {
-    TextView resendTV, newCodeTV, subHeaderTV, headerTV;
+    TextView resendTV, newCodeTV, subHeaderTV, headerTV, contactUsTV;
     PinView otpPV;
     ImageView otpValidationCloseIV;
     int resendCounter = 0;
@@ -138,6 +139,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             tryAgainCV = findViewById(R.id.tryAgainCV);
             secureAccountRL = findViewById(R.id.secureAccountRL);
             secureNextCV = findViewById(R.id.secureNextCV);
+            contactUsTV = findViewById(R.id.contactUsTV);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             layoutEntry.setVisibility(View.VISIBLE);
             layoutFailure.setVisibility(View.GONE);
@@ -467,6 +469,18 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         .putExtra(Utils.ACCOUNT_TYPE, mAccountType));
             });
 
+            contactUsTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(Utils.mondayURL));
+                    startActivity(i);
+                }
+            });
 //            layoutMain.setOnTouchListener(new View.OnTouchListener() {
 //                @Override
 //                public boolean onTouch(View v, MotionEvent event) {

@@ -80,6 +80,15 @@ public class TransactionData {
     private String walletId;
     private String nameOnBank;
 
+    //    MerchantTransaction newly added fields
+
+    private String fees;
+    private String netAmount;
+    private String senderEmail;
+    private String reserve;
+    private String grossAmount;
+    private String dateAndTime;
+    private String refundAmount;
 
     public String getWithdrawId() {
         return withdrawId;
@@ -429,4 +438,51 @@ public class TransactionData {
     public String getNameOnBank() {
         return nameOnBank;
     }
+
+
+//    MerchantTransaction newly added fields
+
+    public String getFees() {
+        return fees;
+    }
+    public void setFees(String fees) {
+        this.fees = fees;
+    }
+    public String getNetAmount() {
+        return netAmount;
+    }
+    public void setNetAmount(String netAmount) {
+        this.netAmount = netAmount;
+    }
+    public String getSenderEmail() {
+        return senderEmail;
+    }
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
+    }
+    public String getReserve() {
+        return reserve;
+    }
+    public void setReserve(String reserve) {
+        this.reserve = reserve;
+    }
+    public String getGrossAmount() {
+        return grossAmount;
+    }
+    public void setGrossAmount(String grossAmount) {
+        this.grossAmount = grossAmount;
+    }
+    public String getDateAndTime() {
+        return dateAndTime;
+    }
+    public void setDateAndTime(String dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
+    public String getRefundAmount() {
+        return refundAmount;
+    }
+    public void setRefundAmount(String refundAmount) {
+        this.refundAmount = refundAmount;
+    }
+
 }

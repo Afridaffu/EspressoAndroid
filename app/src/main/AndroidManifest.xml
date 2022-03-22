@@ -48,8 +48,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.business.MerchantTransactionDetailsActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.business.PayToMerchantActivity"
             android:exported="true" />
@@ -368,7 +368,8 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.CreateAccountActivity"
             android:configChanges="uiMode"

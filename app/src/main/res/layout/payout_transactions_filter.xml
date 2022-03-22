@@ -103,7 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_42sdp"
         android:gravity="center"
-        app:cardBackgroundColor="#00a6a2"
+        app:cardBackgroundColor="@color/primary_green"
         android:layout_marginBottom="@dimen/_27sdp"
         app:cardCornerRadius="@dimen/_20sdp">
 
@@ -111,7 +111,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/primary_green"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
             android:text="@string/apply_filter"

@@ -11,106 +11,144 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.OTPValidation">
 
-    <LinearLayout
-        android:id="@+id/layoutEntry"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="visible">
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:fitsSystemWindows="true">-->
 
-        <ImageView
-            android:id="@+id/otpValidationCloseIV"
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_40sdp"
-            android:layout_marginBottom="@dimen/_14sdp"
-            android:src="@drawable/ic_back" />
+        <LinearLayout
+            android:id="@+id/layoutEntry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-        <TextView
-            android:id="@+id/headerTV"
+            <ImageView
+                android:id="@+id/otpValidationCloseIV"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/headerTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_14sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:text="Please Verify Your Phone Number"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_16ssp" />
+
+            <TextView
+                android:id="@+id/subHeaderTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_38sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:text="We sent you 6-digit code to the registered phone number"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <com.greenbox.coyni.utils.otpview.PinView
+                android:id="@+id/otpPV"
+                style="@style/PinWidget.PinView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:cursorVisible="false"
+                android:fontFamily="@font/opensans_regular"
+                android:inputType="number"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold"
+                app:cursorColor="@color/primary_color"
+                app:cursorWidth="0dp"
+                app:hideLineWhenFilled="false"
+                app:itemCount="6"
+                app:itemHeight="@dimen/_40sdp"
+                app:itemRadius="6dp"
+                app:itemSpacing="@dimen/_7sdp"
+                app:itemWidth="@dimen/_35sdp"
+                app:lineColor="@color/line_colors"
+                app:lineWidth="2dp"
+                app:viewType="rectangle" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:text="Didn't get the code?"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:id="@+id/resendTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Resend"
+                android:textColor="@color/primary_color"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:id="@+id/newCodeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
+                android:text="A new code has sent"
+                android:textColor="@color/primary_color"
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_14sdp"
-            android:fontFamily="@font/opensans_bold"
-            android:text="Please Verify Your Phone Number"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_16ssp" />
-
-        <TextView
-            android:id="@+id/subHeaderTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_38sdp"
-            android:fontFamily="@font/opensans_regular"
-            android:text="We sent you 6-digit code to the registered phone number"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
-
-        <com.greenbox.coyni.utils.otpview.PinView
-            android:id="@+id/otpPV"
-            style="@style/PinWidget.PinView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:cursorVisible="false"
-            android:fontFamily="@font/opensans_regular"
-            android:inputType="number"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_16ssp"
-            android:textStyle="bold"
-            app:cursorColor="@color/primary_color"
-            app:cursorWidth="0dp"
-            app:hideLineWhenFilled="false"
-            app:itemCount="6"
-            app:itemHeight="@dimen/_40sdp"
-            app:itemRadius="6dp"
-            app:itemSpacing="@dimen/_7sdp"
-            app:itemWidth="@dimen/_35sdp"
-            app:lineColor="@color/line_colors"
-            app:lineWidth="2dp"
-            app:viewType="rectangle" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_25sdp"
-            android:fontFamily="@font/opensans_regular"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/_50sdp"
             android:gravity="center"
-            android:text="Didn't get the code?"
-            android:textColor="@color/primary_black"
-            android:textSize="@dimen/_12ssp" />
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/resendTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:text="Resend"
-            android:textColor="@color/primary_color"
-            android:textSize="@dimen/_12ssp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="center"
+                android:text="Don't have access? "
+                android:textColor="@color/xdark_gray"
+                android:textSize="@dimen/_10ssp" />
 
-        <TextView
-            android:id="@+id/newCodeTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:fontFamily="@font/opensans_semibold"
-            android:gravity="center"
-            android:text="A new code has sent"
-            android:textColor="@color/primary_color"
-            android:textSize="@dimen/_12ssp"
-            android:visibility="gone" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/contactUsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="center"
+                android:text="Contact Us"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+<!--    </RelativeLayout>-->
 
     <LinearLayout
         android:id="@+id/layoutFailure"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_7sdp"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/_7sdp">
+        android:visibility="gone">
 
         <include layout="@layout/activity_retry_create_account" />
     </LinearLayout>
@@ -167,9 +205,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
                 android:text="Next"
-                android:fontFamily="@font/opensans_bold"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold" />

@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +47,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
@@ -81,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     SQLiteDatabase mydatabase;
     Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
     Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
-    ImageView loginBGIV, endIconIV;
+    ImageView loginBGIV, endIconIV, coyniLogoIV;
     CheckBox chkRemember;
     MyApplication objMyApplication;
     LinearLayout layoutClose;
@@ -91,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     LoginResponse loginResponse;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     boolean closeClicked = false;
+    int logoClickCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,6 +227,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             chkRemember = findViewById(R.id.chkRemember);
             loginBGIV = findViewById(R.id.loginBGIV);
             endIconIV = findViewById(R.id.endIconIV);
+            coyniLogoIV = findViewById(R.id.coyniLogoIV);
             cvNext.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
@@ -541,6 +545,24 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 }
             });
 
+            coyniLogoIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        String strEndPoint = "";
+                        strEndPoint = BuildConfig.FLAVOR + " " + BuildConfig.BUILD_TYPE + " " + BuildConfig.URL_PRODUCTION;
+                        if (logoClickCount == 5) {
+                            logoClickCount = 0;
+                            Toast.makeText(LoginActivity.this, strEndPoint, Toast.LENGTH_LONG).show();
+                        } else {
+                            logoClickCount++;
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
             enableIcon();
             SetDB();
             SetToken();
