@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -632,13 +633,35 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
-            if(editable.length()==5 || editable.length()==6){
+            if (editable.length() == 5 || editable.length() == 6) {
                 tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-            } else if(editable.length()==7 || editable.length()==8){
-                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
-            }else if(editable.length()==9){
+
+            } else if (editable.length() == 7 || editable.length() == 8) {
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 0, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+            } else if (editable.length() >= 9) {
                 tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+            } else if (editable.length() <= 4) {
+                tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 13, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
             }
 
 //            if (editable.length() > 12) {

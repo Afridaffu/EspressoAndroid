@@ -547,7 +547,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             mailAddr1.setSelection(mailAddr1.getText().toString().trim().length());
                         }
                     } else {
-                        mailAddr1.setHint("Street Address");
+//                        mailAddr1.setHint("Street Address");
                         mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);
@@ -575,7 +575,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     } else {
                         mailingAddlineoptTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(mailingAddlineoptTIL, getColor(R.color.primary_green));
-                        mailAddr2.setHint("Apt#, Suit, Floor");
+//                        mailAddr2.setHint("Apt#, Suit, Floor");
                     }
                 }
             });
@@ -601,7 +601,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             cityET.setSelection(cityET.getText().toString().trim().length());
                         }
                     } else {
-                        cityET.setHint("City");
+//                        cityET.setHint("City");
                         cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_green));
                         cityErrorLL.setVisibility(GONE);
@@ -634,7 +634,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     } else {
                         if(!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(IdentityVerificationActivity.this);
-                        zipcode.setHint("Zip Code");
+//                        zipcode.setHint("Zip Code");
                         zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.primary_green));
                         zipcodeErrorLL.setVisibility(GONE);
@@ -679,7 +679,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
-                        ssnET.setHint(R.string.ssnlast);
+//                        ssnET.setHint(R.string.ssnlast);
                         ssnErrorLL.setVisibility(GONE);
                     }
                 }

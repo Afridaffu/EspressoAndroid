@@ -23,6 +23,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -52,6 +53,7 @@ import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
@@ -60,7 +62,7 @@ import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
-public class PayRequestActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
+public class PayRequestActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
     MyApplication objMyApplication;
     private TextView keyOne, keyTwo, keyThree, keyFour, keyFive, keySix, keySeven, keyEight, keyNine, keyZero, keyDot, keyActionText, keyPay, keyRquest;
     private ImageView keyBack;
@@ -127,16 +129,40 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     convertUSDValue();
                     if (editable.length() == 5 || editable.length() == 6) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 6, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 0, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
-                    } else if (editable.length() == 9) {
-                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() >= 9) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 6, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     } else if (editable.length() <= 4) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 13, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    }else if (editable.length() <= 4) {
+                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 13, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
 //                    if (editable.length() > 8) {
@@ -154,7 +180,7 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     } else {
                         disableButtons(true);
                     }
-                    //payRequestET.setSelection(payRequestET.getText().length());
+                    payRequestET.setSelection(payRequestET.getText().length());
                 } else if (editable.toString().equals(".")) {
                     payRequestET.setText("");
                     disableButtons(true);
@@ -163,14 +189,22 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lp.setMargins(0, 0, 0, 0);
                     payRequestET.setLayoutParams(lp);
+                    LogUtils.d(TAG,"lengthhh zeroo");
+                    LinearLayout.LayoutParams lpImageConvert = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    lpImageConvert.setMargins(15, 38, 0, 0);
+                    imgConvert.setLayoutParams(lpImageConvert);
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
-                    tvCurrency.setVisibility(View.GONE);
+                   // tvCurrency.setVisibility(View.VISIBLE);
                     disableButtons(true);
                     cKey.clearData();
                 } else {
                     payRequestET.setText("");
+                    LogUtils.d(TAG,"lengthhh zeroo");
+                    LinearLayout.LayoutParams lpImageConvert = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    lpImageConvert.setMargins(15, 13, 0, 0);
+                    imgConvert.setLayoutParams(lpImageConvert);
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
@@ -903,12 +937,33 @@ public class PayRequestActivity extends AppCompatActivity implements View.OnClic
         try {
             if (editable.length() == 5 || editable.length() == 6) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+
             } else if (editable.length() == 7 || editable.length() == 8) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-            } else if (editable.length() == 9) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 0, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+            } else if (editable.length() >= 9) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
             } else if (editable.length() <= 4) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 13, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
             }
 //            if (editable.length() > 12) {
 //                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));

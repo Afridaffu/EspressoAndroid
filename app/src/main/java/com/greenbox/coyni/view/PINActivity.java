@@ -1,6 +1,8 @@
 package com.greenbox.coyni.view;
 
 
+import static android.view.View.VISIBLE;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -35,6 +37,7 @@ import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
+import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
@@ -43,9 +46,10 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
-public class PINActivity extends AppCompatActivity implements View.OnClickListener {
+public class PINActivity extends BaseActivity implements View.OnClickListener {
     View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
     TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
     ImageView backActionIV, imgBack;
@@ -65,6 +69,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     Dialog prevDialog;
     private DatabaseHandler dbHandler;
+    LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +138,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             chooseCircleOne = (View) findViewById(R.id.chooseCircleOne);
             chooseCircleTwo = (View) findViewById(R.id.chooseCircleTwo);
             chooseCircleThree = (View) findViewById(R.id.chooseCircleThree);
@@ -594,6 +600,34 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
+
+        try {
+            loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
+                @Override
+                public void onChanged(EmailResendResponse emailResponse) {
+                    dismissDialog();
+                    if (emailResponse != null) {
+                        if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            Intent i = new Intent(PINActivity.this, OTPValidation.class);
+                            i.putExtra("OTP_TYPE", "EMAIL");
+                            i.putExtra("EMAIL", Utils.getUserEmail(PINActivity.this));
+                            i.putExtra("screen", "ForgotPin");
+                            startActivity(i);
+                        } else {
+                            String message = getString(R.string.something_went_wrong);
+                            if (emailResponse.getError().getFieldErrors().size() > 0) {
+                                message = emailResponse.getError().getFieldErrors().get(0);
+                            }
+                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), PINActivity.this, "", message);
+                        }
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -714,9 +748,11 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 }
                 break;
             case R.id.tvForgot:
-                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
-                i.putExtra("screen", "ForgotPin");
-                startActivity(i);
+                showProgressDialog();
+                loginViewModel.emailotpresend(Utils.getUserEmail(PINActivity.this));
+//                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
+//                i.putExtra("screen", "ForgotPin");
+//                startActivity(i);
                 break;
 
         }

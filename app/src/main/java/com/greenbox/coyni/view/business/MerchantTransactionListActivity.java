@@ -352,9 +352,9 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
                                     transactionListPostedAdapter.setOnItemClickListener(new OnItemClickListener() {
                                         @Override
-                                        public void onItemClick(View view, int position) {
+                                        public void onItemClick(int position, Object obj) {
                                             LogUtils.v(TAG, "Clicked at position " + position);
-                                            showTransactionDetails(globalPosted.get(position));
+                                            showTransactionDetails((TransactionListPosted) obj);
                                         }
                                     });
                                     getRvTransactionsPosted.setAdapter(transactionListPostedAdapter);
