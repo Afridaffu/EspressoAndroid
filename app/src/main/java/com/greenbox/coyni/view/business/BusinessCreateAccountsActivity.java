@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
@@ -13,8 +14,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
@@ -28,6 +31,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -60,6 +64,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private BusinessProfileRecyclerAdapter listAdapter;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
 
     @Override
@@ -120,6 +125,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         loginViewModel = new ViewModelProvider(BusinessCreateAccountsActivity.this).get(LoginViewModel.class);
+        businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+
 
         brandsGV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -302,19 +309,46 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             }
         });
 
+        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+            @Override
+            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+                if (businessTrackerResponse != null) {
+                    if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        myApplication.setBusinessTrackerResponse(businessTrackerResponse);
+
+                    }
+                }
+            }
+        });
+
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
+
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
-                            LogUtils.d(TAG, "btResp" + btResp);
+                            LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
+                            LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
+                            LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
+
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            //finish();
-                            if (btResp.getData().getAccountType() == 2) {
-                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                                intent.putExtra("showGetStarted", true);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                            businessIdentityVerificationViewModel.getBusinessTracker();
+
+                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                if(btResp.getData().getAccountStatus().equalsIgnoreCase("active")){
+                                     myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                                    Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                     startActivity(intent);
+                                 } else {
+                                    myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                                    Log.e("Tracker resp", new Gson().toJson(myApplication.getBusinessTrackerResponse()));
+                                    Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                 }
+
+
                             } else {
                                 Intent i = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

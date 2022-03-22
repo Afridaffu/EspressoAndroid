@@ -98,7 +98,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             profileImage.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(detailInfo.getDbaImage())
-                    .placeholder(R.drawable.ic_dba)
+                    .placeholder(R.drawable.acct_profile)
                     .into(profileImage);
 
         } else {
@@ -107,7 +107,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
             Glide.with(context)
                     .load(detailInfo.getDbaImage())
-                    .placeholder(R.drawable.ic_dba)
+                    .placeholder(R.drawable.acct_profile)
                     .into(profileImage);
         }
 

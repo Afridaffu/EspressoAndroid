@@ -667,6 +667,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                                 getStatesUrl(login.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(login.getData().getAccountType());
+                                objMyApplication.setDbaOwnerId(login.getData().getDbaOwnerId());
 //                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
 //                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (login.getData().getPasswordExpired()) {
@@ -796,7 +797,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     if (businessTrackerResponse != null) {
                         if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
-
                             Log.e("Tracker resp", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
                         }
                     }
