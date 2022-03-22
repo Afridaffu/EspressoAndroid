@@ -9,16 +9,21 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.business_id_verification.ApplicationCancelledData;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
+import com.greenbox.coyni.model.business_transactions.BusinessTransactionDetailsResp;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
+import com.greenbox.coyni.model.transaction.TransactionDetails;
+import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -31,12 +36,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BusinessDashboardViewModel extends AndroidViewModel {
+//    private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignetResponse> signetResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignedAgreementResponse> signedAgreementResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResponse> updateSignAgreementsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CancelApplicationResponse> cancelApplicationResponseMutableLiveData = new MutableLiveData<>();
+//    private MutableLiveData<BusinessTransactionDetailsResp> businessTransactionDetailsRespMutableLiveData = new MutableLiveData<>();
+
 
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
 
@@ -51,6 +59,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<SignetResponse> getSignetResponseMutableLiveData() {
         return signetResponseMutableLiveData;
     }
+
+//    public MutableLiveData<BusinessTransactionDetailsResp> getbusinessTransactionDetailsMutableLiveData() {
+//        return businessTransactionDetailsRespMutableLiveData;
+//    }
 
     public MutableLiveData<BusinessWalletResponse> getBusinessWalletResponseMutableLiveData() {
         return businessWalletResponseMutableLiveData;
@@ -245,7 +257,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 @Override
                 public void onFailure(Call<UpdateSignAgreementsResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                     updateSignAgreementsResponseMutableLiveData.setValue(null);
+                    updateSignAgreementsResponseMutableLiveData.setValue(null);
                 }
             });
         } catch (Exception ex) {
@@ -262,7 +274,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 if (response.isSuccessful() && response.body() != null) {
                     CancelApplicationResponse cancelledData = response.body();
                     cancelApplicationResponseMutableLiveData.setValue(cancelledData);
-                }else {
+                } else {
                     Gson gson = new Gson();
                     Type type = new TypeToken<CancelApplicationResponse>() {
                     }.getType();
@@ -293,7 +305,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                     if (response.isSuccessful()) {
                         Fees feeData = response.body();
                         feesMutableLiveData.setValue(feeData);
-                    }else {
+                    } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<Fees>() {
                         }.getType();
@@ -316,5 +328,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
-
 }
+
+
+

@@ -174,12 +174,13 @@ public class Utils {
     public static final String gbxTxnIdType = "gbxTxnIdType";
     public static final String txnType = "txnType";
     public static final String txnSubType = "txnSubType";
-    public static final String Refundtxntype = "Refund";
-    public static final String SaleOrdertxntype = "Sale Order";
-    public static final String MonthlyServiceFeetxntype = "Monthly Service Fee";
-    public static final String BusinessPayouttxntype = "Business Payout";
-    public static final String MerchantPayouttxntype = "Merchant Payout";
-    public static final String Tokensub = "Token";
+    public static final String refundtxntype = "refund";
+    public static final String saleOrdertxntype = "sale Order";
+    public static final String monthlyServiceFeetxntype = "monthly Service Fee";
+    public static final String businessPayouttxntype = "business Payout";
+    public static final String merchantPayouttxntype = "merchant Payout";
+    public static final String tokensub = "token";
+    public static final String transfersub = "transfer";
     public static final String Success = "Success";
 //    controll methods in merchanttransactiondetails
     public static final String refundCM = "refund";
@@ -235,6 +236,7 @@ public class Utils {
     public static final int saleOrderToken = 11; //need to confirm
     public static final int failedWithdraw = 11; // need to confirm
     public static final int cancelledWithdraw = 18;
+    public static final int transfer = 10;
 
     public static final int pending = 1;
     public static final int completed = 2;
