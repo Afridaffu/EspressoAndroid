@@ -62,12 +62,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPayMethods"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 
             <LinearLayout
                 android:id="@+id/lyAddPay"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">

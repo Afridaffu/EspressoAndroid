@@ -9,7 +9,7 @@
     <include
         android:id="@+id/withdrawmethod"
         layout="@layout/selectwithdrawmethod"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <include
         android:id="@+id/withdrawnotoken"
@@ -19,7 +19,7 @@
     <include
         android:id="@+id/addpayment"
         layout="@layout/activity_addpayment_method"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <include
         android:id="@+id/addbpayment"

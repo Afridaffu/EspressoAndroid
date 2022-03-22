@@ -721,7 +721,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            etName.setHint("Name on Card");
+//                            etName.setHint("Name on Card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                             InputMethodManager imm = (InputMethodManager) BusinessAddCardActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -792,7 +792,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                 address1ErrorTV.setText("Field Required");
                             }
                         } else {
-                            etAddress1.setHint("Billing Address Line 1");
+//                            etAddress1.setHint("Billing Address Line 1");
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                         }
@@ -817,7 +817,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                 Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
                             }
                         } else {
-                            etAddress2.setHint("Billing Address Line 2 (Optional)");
+//                            etAddress2.setHint("Billing Address Line 2 (Optional)");
                             etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                         }
@@ -845,7 +845,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                 cityErrorTV.setText("Field Required");
                             }
                         } else {
-                            etCity.setHint("City");
+//                            etCity.setHint("City");
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                         }
@@ -911,7 +911,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
 //                                isZipcode = false;
 //                            }
                         } else {
-                            etZipCode.setHint("Zip Code");
+//                            etZipCode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                         }

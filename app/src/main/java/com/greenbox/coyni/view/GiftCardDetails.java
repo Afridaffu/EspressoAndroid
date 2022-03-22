@@ -716,7 +716,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                             amountErrorTV.setText("Field Required");
                         }
                     } else {
-                        amountET.setHint("Amount");
+//                        amountET.setHint("Amount");
                         InputFilter[] FilterArray = new InputFilter[1];
                         FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
                         amountET.setFilters(FilterArray);
@@ -754,7 +754,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                             firstNameET.setText(firstNameET.getText().toString().substring(0, 1).toUpperCase() + firstNameET.getText().toString().substring(1));
                         }
                     } else {
-                        firstNameET.setHint("First Name");
+//                        firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
                         Utils.openKeyPad(GiftCardDetails.this, firstNameET);
@@ -789,7 +789,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                             lastNameET.setText(lastNameET.getText().toString().substring(0, 1).toUpperCase() + lastNameET.getText().toString().substring(1));
                         }
                     } else {
-                        lastNameET.setHint("Last Name");
+//                        lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
                         Utils.openKeyPad(GiftCardDetails.this, lastNameET);
@@ -828,7 +828,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                         }
                     } else {
 //                        emailET.setHint("Coyni@example.com");
-                        emailET.setHint("Email");
+//                        emailET.setHint("Email");
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));

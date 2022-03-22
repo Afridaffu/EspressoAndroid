@@ -155,37 +155,70 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//        switch (resultCode) {
+//            case 1:
+//                if (data == null) {
+//                    if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+//                        Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
+//                    } else {
+//                        pDialog = Utils.showProgressDialog(this);
+//                        customerProfileViewModel.meSyncAccount();
+//                    }
+//                }
+//                break;
+//            case RESULT_OK:
+//            case 235: {
+//                try {
+//                    pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
+//                    BiometricTokenRequest request = new BiometricTokenRequest();
+//                    request.setDeviceId(Utils.getDeviceID());
+//                    request.setMobileToken(objMyApplication.getStrMobileToken());
+//                    request.setActionType(Utils.withdrawActionType);
+//                    coyniViewModel.biometricToken(request);
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//            break;
+//            case 0:
+//                if (requestCode != 3 && requestCode != 1) {
+//                    startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+//                            .putExtra("TYPE", "ENTER")
+//                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+//                            .putExtra("screen", "Withdraw"));
+//                }
+//                break;
+//        }
+
         switch (resultCode) {
-            case 1:
-                if (data == null) {
-                    if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                        Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
-                    } else {
-                        pDialog = Utils.showProgressDialog(this);
-                        customerProfileViewModel.meSyncAccount();
-                    }
-                }
-                break;
             case RESULT_OK:
-            case 235: {
                 try {
-                    //withdrawToken();
-                    pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
-                    BiometricTokenRequest request = new BiometricTokenRequest();
-                    request.setDeviceId(Utils.getDeviceID());
-                    request.setMobileToken(objMyApplication.getStrMobileToken());
-                    request.setActionType(Utils.withdrawActionType);
-                    coyniViewModel.biometricToken(request);
+                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                        pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
+                        BiometricTokenRequest request = new BiometricTokenRequest();
+                        request.setDeviceId(Utils.getDeviceID());
+                        request.setMobileToken(objMyApplication.getStrMobileToken());
+                        request.setActionType(Utils.withdrawActionType);
+                        coyniViewModel.biometricToken(request);
+                    } else if (data == null && requestCode == 1) {
+                        if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                            Utils.displayAlert("Bank integration has been cancelled", WithdrawTokenActivity.this, "", "");
+                        } else {
+                            pDialog = Utils.showProgressDialog(this);
+                            customerProfileViewModel.meSyncAccount();
+                        }
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            }
-            break;
+                break;
             case 0:
-                startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
-                        .putExtra("TYPE", "ENTER")
-                        .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
-                        .putExtra("screen", "Withdraw"));
+                if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                    startActivity(new Intent(WithdrawTokenActivity.this, PINActivity.class)
+                            .putExtra("TYPE", "ENTER")
+                            .putExtra("subtype", selectedCard.getPaymentMethod().toLowerCase())
+                            .putExtra("screen", "Withdraw"));
+                }
                 break;
         }
     }
@@ -215,17 +248,42 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     isUSD = true;
                     convertUSDValue();
 
-                    if(editable.length()==5 || editable.length()==6){
+                    if (editable.length() == 5 || editable.length() == 6) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-                    } else if(editable.length()==7 || editable.length()==8){
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 6, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
-                    }else if(editable.length()==9){
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    }else if(editable.length()<=4){
+                    } else if (editable.length() == 7 || editable.length() == 8) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 0, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    } else if (editable.length() >= 9) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 6, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                    } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 13, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    }else if (editable.length() <= 4) {
+                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(15, 13, 0, 0);
+                        imgConvert.setLayoutParams(params);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     }
 
@@ -1245,19 +1303,39 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     }
 
     private void changeTextSize(String editable) {
+
         try {
             InputFilter[] FilterArray = new InputFilter[1];
 
-            if(editable.length()==5 || editable.length()==6){
+            if (editable.length() == 5 || editable.length() == 6) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-            } else if(editable.length()==7 || editable.length()==8){
-                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
-            }else if(editable.length()==9){
+
+            } else if (editable.length() == 7 || editable.length() == 8) {
+                etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 0, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+            } else if (editable.length() >= 9) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
-            }else if(editable.length()<=4){
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 6, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+            } else if (editable.length() <= 4) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.setMargins(15, 13, 0, 0);
+                imgConvert.setLayoutParams(params);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
             }
 
 //            if (editable.length() > 12) {
