@@ -61,7 +61,7 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
         holder.rlBase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(null, holder.getAdapterPosition());
+                listener.onItemClick(holder.getAdapterPosition(), null);
             }
         });
     }
