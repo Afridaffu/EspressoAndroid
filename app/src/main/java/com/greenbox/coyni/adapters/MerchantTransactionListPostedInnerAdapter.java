@@ -54,7 +54,7 @@ public class MerchantTransactionListPostedInnerAdapter extends BaseRecyclerViewA
 
     @Override
     public void onBindViewHolder(@NonNull MerchantTransactionListPostedInnerAdapter.MyViewHolder holder, int position) {
-        TransactionListPosted objData = transactionListItemsposted.get(position);
+        TransactionListPosted objData = transactionListItemsposted.get(holder.getAdapterPosition());
         String strType = "";
 
 
@@ -154,7 +154,7 @@ public class MerchantTransactionListPostedInnerAdapter extends BaseRecyclerViewA
 //                }
 
                 if(listener != null) {
-                    listener.onItemClick(null, position);
+                    listener.onItemClick(position, null);
                 }
             }
         });

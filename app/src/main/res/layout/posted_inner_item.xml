@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/ll_merchant_transaction_item"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingStart="@dimen/_11sdp"
-        android:paddingEnd="@dimen/_11sdp"
         android:paddingTop="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_11sdp"
         android:paddingBottom="@dimen/_10sdp">
 
         <LinearLayout
@@ -27,29 +27,28 @@
                 android:id="@+id/messageTV"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semibold"
                 android:layout_weight=".65"
-                android:textColor="@color/primary_black"
-                android:visibility="visible"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:fontFamily="@font/opensans_semibold"
                 android:maxLines="1"
+                android:singleLine="true"
                 android:text="Buy Tokens from Card "
+                android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp"
-                />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/messagTV"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/opensans_semibold"
-                android:singleLine="true"
                 android:layout_weight=".3"
+                android:fontFamily="@font/opensans_semibold"
                 android:gravity="start"
+                android:singleLine="true"
                 android:text=" **1234"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
 
             <TextView

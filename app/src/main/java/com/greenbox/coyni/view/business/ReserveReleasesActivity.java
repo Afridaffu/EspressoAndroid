@@ -43,7 +43,7 @@ public class ReserveReleasesActivity extends BaseActivity {
         ReserveReleasesRollingAdapter adapter = new ReserveReleasesRollingAdapter(this);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(int position, Object obj) {
                 LogUtils.v(TAG, "position clicked " + position);
             }
         });
