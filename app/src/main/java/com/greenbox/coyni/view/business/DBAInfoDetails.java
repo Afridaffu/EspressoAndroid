@@ -41,6 +41,7 @@ import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -57,7 +58,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class DBAInfoDetails extends AppCompatActivity {
+public class DBAInfoDetails extends BaseActivity {
     private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
     private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
@@ -69,7 +70,7 @@ public class DBAInfoDetails extends AppCompatActivity {
     ProgressDialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
-    String emailID, phone_Number;
+    String emailID, phone_Number,bType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,111 +148,13 @@ public class DBAInfoDetails extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    @SuppressLint("SetTextI18n")
-    private void initData() {
-        try {
-            DBAInfoResp dbaInfoResp = objMyApplication.getDbaInfoResp();
-            if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 20) {
-                    nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
-                } else {
-                    nameTV.setText(dbaInfoResp.getData().getName());
-                }
-                nameTV.setOnClickListener(view -> {
-
-                    try {
-                        if (nameTV.getText().toString().contains("...") && dbaInfoResp.getData().getName().length() >= 21) {
-                                nameTV.setText(objMyApplication.getDbaInfoResp().getData().getName());
-
-                        } else if (dbaInfoResp.getData().getName().length() >= 21) {
-                                nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
-                            } else {
-                                nameTV.setText(dbaInfoResp.getData().getName());
-                            }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-                if (dbaInfoResp.getData().getEmail() != null) {
-                    emailTV.setText(dbaInfoResp.getData().getEmail());
-                    try {
-                        emailID = dbaInfoResp.getData().getEmail();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    emailTV.setText("");
-                }
-                if (dbaInfoResp.getData().getWebsite() != null && !dbaInfoResp.getData().getWebsite().equals("")) {
-                    webLL.setVisibility(View.VISIBLE);
-                    webSiteTV.setText("https://" + dbaInfoResp.getData().getWebsite());
-                } else {
-                    webLL.setVisibility(View.GONE);
-                    webSiteTV.setText("");
-                }
-                if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
-                    String pnhNum = dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
-                    String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
-                    phoneNumberTV.setText(phone_number);
-                    phone_Number = phone_number;
-                } else {
-                    phoneNumberTV.setText("");
-                }
-
-                String addressFormatted = "";
-                if (dbaInfoResp.getData().getAddressLine1() != null && !dbaInfoResp.getData().getAddressLine1().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getAddressLine1() + ", ";
-                }
-                if (dbaInfoResp.getData().getAddressLine2() != null && !dbaInfoResp.getData().getAddressLine2().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getAddressLine2() + ", ";
-                }
-                if (dbaInfoResp.getData().getCity() != null && !dbaInfoResp.getData().getCity().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getCity() + ", ";
-                }
-                if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
-                }
-
-                if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {
-                    addressFormatted = addressFormatted + dbaInfoResp.getData().getZipCode() + ", ";
-                }
-
-                if (addressFormatted.equals("")) {
-                    addressFormatted = addressFormatted + "United States";
-                    addressTV.setText(addressFormatted);
-    //                        business_userAddreTV.setText(addressFormatted);
-    //                        address=addressFormatted;
-                } else {
-                    addressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-    //                        business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
-    //                        address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
-                }
-
-                for (int i = 0; i < responce.size(); i++) {
-                    try {
-                        if (dbaInfoResp.getData().getBusinessType().toLowerCase().trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
-                            businessType.setText(responce.get(i).getValue());
-                            break;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-    //            if (dbaInfoResp.getData().getBusinessType() != null) {
-    //                businessType.setText(dbaInfoResp.getData().getBusinessType());
-    //            }
-    //            else {
-    //                businessType.setText("");
-    //            }
-
-
+            for (int i = 0; i < responce.size(); i++) {
                 try {
-                    bindImage(objMyApplication.getMyProfile().getData().getImage(), dbaInfoResp);
+                    if (bType.trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
+                        businessType.setText(responce.get(i).getValue());
+                        break;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -259,6 +162,115 @@ public class DBAInfoDetails extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void initData() {
+//        try {
+//            DBAInfoResp dbaInfoResp = objMyApplication.getDbaInfoResp();
+//            if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
+//                if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 20) {
+//                    nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
+//                } else {
+//                    nameTV.setText(dbaInfoResp.getData().getName());
+//                }
+//                nameTV.setOnClickListener(view -> {
+//
+//                    try {
+//                        if (nameTV.getText().toString().contains("...") && dbaInfoResp.getData().getName().length() >= 21) {
+//                                nameTV.setText(objMyApplication.getDbaInfoResp().getData().getName());
+//
+//                        } else if (dbaInfoResp.getData().getName().length() >= 21) {
+//                                nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
+//                            } else {
+//                                nameTV.setText(dbaInfoResp.getData().getName());
+//                            }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                });
+//                if (dbaInfoResp.getData().getEmail() != null) {
+//                    emailTV.setText(dbaInfoResp.getData().getEmail());
+//                    try {
+//                        emailID = dbaInfoResp.getData().getEmail();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    emailTV.setText("");
+//                }
+//                if (dbaInfoResp.getData().getWebsite() != null && !dbaInfoResp.getData().getWebsite().equals("")) {
+//                    webLL.setVisibility(View.VISIBLE);
+//                    webSiteTV.setText("https://" + dbaInfoResp.getData().getWebsite());
+//                } else {
+//                    webLL.setVisibility(View.GONE);
+//                    webSiteTV.setText("");
+//                }
+//                if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
+//                    String pnhNum = dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
+//                    String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
+//                    phoneNumberTV.setText(phone_number);
+//                    phone_Number = phone_number;
+//                } else {
+//                    phoneNumberTV.setText("");
+//                }
+//
+//                String addressFormatted = "";
+//                if (dbaInfoResp.getData().getAddressLine1() != null && !dbaInfoResp.getData().getAddressLine1().equals("")) {
+//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getAddressLine1() + ", ";
+//                }
+//                if (dbaInfoResp.getData().getAddressLine2() != null && !dbaInfoResp.getData().getAddressLine2().equals("")) {
+//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getAddressLine2() + ", ";
+//                }
+//                if (dbaInfoResp.getData().getCity() != null && !dbaInfoResp.getData().getCity().equals("")) {
+//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getCity() + ", ";
+//                }
+//                if (dbaInfoResp.getData().getState() != null && !dbaInfoResp.getData().getState().equals("")) {
+//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getState() + ", ";
+//                }
+//
+//                if (dbaInfoResp.getData().getZipCode() != null && !dbaInfoResp.getData().getZipCode().equals("")) {
+//                    addressFormatted = addressFormatted + dbaInfoResp.getData().getZipCode() + ", ";
+//                }
+//
+//                if (addressFormatted.equals("")) {
+//                    addressFormatted = addressFormatted + "United States";
+//                    addressTV.setText(addressFormatted);
+//    //                        business_userAddreTV.setText(addressFormatted);
+//    //                        address=addressFormatted;
+//                } else {
+//                    addressTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//    //                        business_userAddreTV.setText(addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".");
+//    //                        address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
+//                }
+//
+//                for (int i = 0; i < responce.size(); i++) {
+//                    try {
+//                        if (dbaInfoResp.getData().getBusinessType().toLowerCase().trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
+//                            businessType.setText(responce.get(i).getValue());
+//                            break;
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//    //            if (dbaInfoResp.getData().getBusinessType() != null) {
+//    //                businessType.setText(dbaInfoResp.getData().getBusinessType());
+//    //            }
+//    //            else {
+//    //                businessType.setText("");
+//    //            }
+//
+//
+//                try {
+//                    bindImage(objMyApplication.getMyProfile().getData().getImage(), dbaInfoResp);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 
     }
@@ -327,6 +339,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
                 @Override
                 public void onChanged(DBAInfoResp dbaInfoResp) {
+                    dismissDialog();
                     if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                         objMyApplication.setDbaInfoResp(dbaInfoResp);
@@ -345,8 +358,17 @@ public class DBAInfoDetails extends AppCompatActivity {
                         } else {
                             webSiteTV.setText("");
                         }
+//                        if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
+//                            phoneNumberTV.setText("(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+//                        } else {
+//                            phoneNumberTV.setText("");
+//                        }
+
                         if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
-                            phoneNumberTV.setText("(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+                            String pnhNum = dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
+                            String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
+                            phoneNumberTV.setText(phone_number);
+                            phone_Number = phone_number;
                         } else {
                             phoneNumberTV.setText("");
                         }
@@ -380,6 +402,10 @@ public class DBAInfoDetails extends AppCompatActivity {
                             //                        address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
                         }
 
+
+                        if (dbaInfoResp.getData().getBusinessType() != null && !dbaInfoResp.getData().getBusinessType().equals("")){
+                            bType = dbaInfoResp.getData().getBusinessType();
+                        }
                         for (int i = 0; i < responce.size(); i++) {
                             try {
                                 if (dbaInfoResp.getData().getBusinessType().toLowerCase().trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
@@ -512,6 +538,7 @@ public class DBAInfoDetails extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
+            showProgressDialog();
             businessIdentityVerificationViewModel.getDBAInfo();
             dashboardViewModel.meProfile();
         } catch (Exception e) {

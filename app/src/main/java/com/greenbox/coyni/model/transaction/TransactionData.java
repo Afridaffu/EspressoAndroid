@@ -77,6 +77,8 @@ public class TransactionData {
     private String giftCardAmount;
     private String subtotal;
     private String remarks;
+    private String walletId;
+    private String nameOnBank;
 
 
     public String getWithdrawId() {
@@ -418,5 +420,13 @@ public class TransactionData {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getWalletId() {
+        return walletId;
+    }
+
+    public String getNameOnBank() {
+        return nameOnBank;
     }
 }

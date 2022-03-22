@@ -47,8 +47,6 @@ public class CompanyInfoDetails extends BaseActivity {
         phoneLL = (LinearLayout) findViewById(R.id.phoneLL);
         myApplication = (MyApplication)getApplicationContext();
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
-        showProgressDialog();
-        businessIdentityVerificationViewModel.getCompanyInfo();
 
         closeLL.setOnClickListener(new View.OnClickListener() {
             @Override

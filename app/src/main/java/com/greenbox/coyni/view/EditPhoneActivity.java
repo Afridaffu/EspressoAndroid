@@ -1,5 +1,7 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.VISIBLE;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -136,7 +138,15 @@ public class EditPhoneActivity extends AppCompatActivity {
                                 newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
                                 phNoWithCountryCode.setPhoneNumber(newPhoneNumber);
                                 contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
-                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                                currentPhoneNumber = currentPhoneET.getText().toString().substring(1, 4) + currentPhoneET.getText().toString().substring(6, 9) + currentPhoneET.getText().toString().substring(10, currentPhoneET.getText().length());
+                                if (currentPhoneNumber.equalsIgnoreCase(newPhoneNumber)) {
+                                    dialog.dismiss();
+                                    Utils.displayAlertNew("Please enter a new phone number ",EditPhoneActivity.this,"Coyni");
+                                } else {
+                                    b_newPhoneErrorLL.setVisibility(View.GONE);
+                                    b_newPhoneErrorTV.setText("");
+                                    businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                                }
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
@@ -206,7 +216,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                 }
             });
 
-            b_editPhoneCloseLL .setOnClickListener(new View.OnClickListener() {
+            b_editPhoneCloseLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onBackPressed();
@@ -222,7 +232,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     private void callSendPhoneOTPAPI() {
         try {
             currentPhoneNumber = currentPhoneET.getText().toString().substring(1, 4) + currentPhoneET.getText().toString().substring(6, 9) + currentPhoneET.getText().toString().substring(10, currentPhoneET.getText().length());
-                newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
+            newPhoneNumber = b_newPhoneET.getText().toString().substring(1, 4) + b_newPhoneET.getText().toString().substring(6, 9) + b_newPhoneET.getText().toString().substring(10, b_newPhoneET.getText().length());
             UpdatePhoneRequest updatePhoneRequest = new UpdatePhoneRequest();
             updatePhoneRequest.setCurrentPhoneNumber(currentPhoneNumber);
             updatePhoneRequest.setCurrentcountryCode(Utils.getStrCCode());
@@ -259,21 +269,21 @@ public class EditPhoneActivity extends AppCompatActivity {
             public void onChanged(UpdatePhoneResponse updatePhoneResponse) {
                 try {
                     dialog.dismiss();
-                        if (updatePhoneResponse != null && updatePhoneResponse.getStatus().toLowerCase().equals("success")) {
-                            myApplicationObj.setUpdatePhoneResponse(updatePhoneResponse);
-                            Utils.hideKeypad(EditPhoneActivity.this);
-                            startActivity(new Intent(EditPhoneActivity.this, OTPValidation.class)
-                                    .putExtra("screen", "EditPhone")
-                                    .putExtra("OTP_TYPE", "OTP")
-                                    .putExtra("IS_OLD_PHONE", "true")
-                                    .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
-                                    .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
-                                    .putExtra("OLD_PHONE", currentPhoneNumber)
-                                    .putExtra("NEW_PHONE", newPhoneNumber));
-                        } else {
-                            Utils.hideSoftKeyboard(EditPhoneActivity.this);
-                            Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "", updatePhoneResponse.getError().getFieldErrors().get(0));
-                        }
+                    if (updatePhoneResponse != null && updatePhoneResponse.getStatus().toLowerCase().equals("success")) {
+                        myApplicationObj.setUpdatePhoneResponse(updatePhoneResponse);
+                        Utils.hideKeypad(EditPhoneActivity.this);
+                        startActivity(new Intent(EditPhoneActivity.this, OTPValidation.class)
+                                .putExtra("screen", "EditPhone")
+                                .putExtra("OTP_TYPE", "OTP")
+                                .putExtra("IS_OLD_PHONE", "true")
+                                .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
+                                .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
+                                .putExtra("OLD_PHONE", currentPhoneNumber)
+                                .putExtra("NEW_PHONE", newPhoneNumber));
+                    } else {
+                        Utils.hideSoftKeyboard(EditPhoneActivity.this);
+                        Utils.displayAlert(updatePhoneResponse.getError().getErrorDescription(), EditPhoneActivity.this, "", updatePhoneResponse.getError().getFieldErrors().get(0));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -287,7 +297,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                         dialog.dismiss();
                         try {
                             if (companyInfoUpdateResp != null && companyInfoUpdateResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                               finish();
+                                finish();
                             } else {
                                 Toast.makeText(EditPhoneActivity.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
                             }
@@ -302,7 +312,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-                b_newPhoneET.setFocus();
+            b_newPhoneET.setFocus();
         } catch (Exception e) {
             e.printStackTrace();
         }

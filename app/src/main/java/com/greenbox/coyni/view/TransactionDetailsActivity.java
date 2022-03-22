@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
-import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.transaction.TransactionData;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.utils.MyApplication;
@@ -30,7 +30,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     MyApplication objMyApplication;
     String strGbxTxnIdType = "";
-    int txnType, txnSubType;
+    int txnType;
+    Integer txnSubType;
     ProgressDialog progressDialog;
     CardView cancelTxnCV;
 
@@ -103,6 +104,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     case "signet":
                         txnSubType = Integer.parseInt(Utils.signetType);
                         break;
+                    default:
+                        txnSubType = null;
+                        break;
 //                    case "transfer":
 //                        txnSubType = Integer.parseInt(Utils.transferType);
 //                        break;
@@ -157,7 +161,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                             switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
                                 case "gift card":
                                     ControlMethod("withdrawgift");
-                                    withdrawGiftcard(transactionDetails.getData());
+                                    withdrawGiftCard(transactionDetails.getData());
                                     break;
                                 case "instant pay":
                                     ControlMethod("withdrawinstant");
@@ -166,6 +170,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                                 case "bank account":
                                     ControlMethod("withdrawbankaccount");
                                     withdrawBank(transactionDetails.getData());
+                                    break;
+                                case "signet":
+                                    ControlMethod("withdrawsignet");
+                                    withdrawSignet(transactionDetails.getData());
                                     break;
                             }
                             break;
@@ -203,6 +211,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
     private void payRequest(TransactionData objData) {
@@ -540,7 +549,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
 
-    private void withdrawGiftcard(TransactionData objData) {
+    private void withdrawGiftCard(TransactionData objData) {
         TextView headerMsdTV, amountTV;
         TextView status, dateandtime, withGiftcardname, subtotal, fee, grandtotal, refid, withid, recipientname, email;
         LinearLayout previous, giftCardWithdrawID, giftcardReferenceID;
@@ -750,91 +759,91 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void withdrawBank(TransactionData objData) {
-        TextView withbankheader, withbankamount, withbankdescription, withbankstatus, withbankdatetime, withbankwithdrawalAmount, withbankprocefee, withbanktotal, withbankaccountbal, withbankwithdrawalId, withbankrefId;
-        TextView withbanknameonaccount, withbankname, withbankaccount;
-        ImageView withbankwithdrawalid, withbankrefIDIV;
+        TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
+        TextView withBankNameOnAccount, withBankName, withBankAccount;
+//        ImageView withbankwithdrawalid, withbankrefIDIV;
         LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
 
-        withbankheader = findViewById(R.id.withbankheaderTV);
-        withbankamount = findViewById(R.id.withBankAmount);
-        withbankdescription = findViewById(R.id.withBankDescrptnTV);
-        withbankstatus = findViewById(R.id.withBankStatusTV);
-        withbankdatetime = findViewById(R.id.withbankDatetimeTV);
-        withbankwithdrawalAmount = findViewById(R.id.withBankWithdrawAmount);
-        withbankprocefee = findViewById(R.id.withBankProcessFee);
-        withbanktotal = findViewById(R.id.withBankTotalTV);
-        withbankaccountbal = findViewById(R.id.withBankAccBalanceTV);
-        withbankwithdrawalId = findViewById(R.id.withBankWithdrawidTV);
-        withbankrefId = findViewById(R.id.withBankReferenceIDTV);
+        withBankHeader = findViewById(R.id.withBankHeaderTV);
+        withBankAmount = findViewById(R.id.withBankAmount);
+        withBankDescription = findViewById(R.id.withBankDescrptnTV);
+        withBankStatus = findViewById(R.id.withBankStatusTV);
+        withBankDateTime = findViewById(R.id.withbankDatetimeTV);
+        withBankWithdrawalAmount = findViewById(R.id.withBankWithdrawAmount);
+        withBankProcessingFee = findViewById(R.id.withBankProcessFee);
+        withBankTotal = findViewById(R.id.withBankTotalTV);
+        withBankAccountBal = findViewById(R.id.withBankAccBalanceTV);
+        withBankWithdrawalId = findViewById(R.id.withBankWithdrawidTV);
+        withBankRefId = findViewById(R.id.withBankReferenceIDTV);
         withBankWithdrawalID = findViewById(R.id.withBankWithdrawalIDLL);
         withBankReference = findViewById(R.id.withBankReferenceIDLL);
-        withbanknameonaccount = findViewById(R.id.withBankNameOnAccountTV);
-        withbankname = findViewById(R.id.withBankBanknameTV);
-        withbankaccount = findViewById(R.id.withBankbankaccountTV);
+        withBankNameOnAccount = findViewById(R.id.withBankNameOnAccountTV);
+        withBankName = findViewById(R.id.withBankBanknameTV);
+        withBankAccount = findViewById(R.id.withBankbankaccountTV);
 
         withBankCloseLL = findViewById(R.id.withbankCloseLL);
-        withbankwithdrawalid = findViewById(R.id.withBankwithdrawIDIV);
-        withbankrefIDIV = findViewById(R.id.withBankReferenceIDIV);
+//        withbankwithdrawalid = findViewById(R.id.withBankwithdrawIDIV);
+//        withbankrefIDIV = findViewById(R.id.withBankReferenceIDIV);
 
 
-        withbankheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withbankamount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
+        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
 //        if (objData.getDescription().equals("")) {
 //            withbankdescription.setVisibility(View.GONE);
 //        } else {
 //            withbankdescription.setText("\"" + objData.getDescription() + "\"");
 //        }
         if (objData.getRemarks().equals("")) {
-            withbankdescription.setVisibility(View.GONE);
+            withBankDescription.setVisibility(View.GONE);
         } else {
-            withbankdescription.setText("\"" + objData.getRemarks() + "\"");
+            withBankDescription.setText("\"" + objData.getRemarks() + "\"");
         }
-        withbankstatus.setText(objData.getStatus());
+        withBankStatus.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
             case "completed":
-                withbankstatus.setTextColor(getResources().getColor(R.color.completed_status));
-                withbankstatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
             case "in progress":
             case "inprogress":
-                withbankstatus.setTextColor(getResources().getColor(R.color.inprogress_status));
-                withbankstatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                withBankStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case "pending":
-                withbankstatus.setTextColor(getResources().getColor(R.color.pending_status));
-                withbankstatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                withBankStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
             case "failed":
-                withbankstatus.setTextColor(getResources().getColor(R.color.failed_status));
-                withbankstatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
         }
 
-        withbankdatetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
         Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("CYN", "").trim());
         Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
 
-        withbankwithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
-        withbankprocefee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
-        withbanktotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotal + procesFee)));
+        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
+        withBankTotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotal + procesFee)));
 
-        withbankaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId().length() > 10) {
-            withbankwithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
         } else {
-            withbankwithdrawalId.setText(objData.getWithdrawalId());
+            withBankWithdrawalId.setText(objData.getWithdrawalId());
         }
 
-        withbankrefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        withBankRefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
 
-        withbanknameonaccount.setText(objData.getNameOnBankAccount());
+        withBankNameOnAccount.setText(objData.getNameOnBankAccount());
 
-        withbankname.setText(objData.getBankName());
+        withBankName.setText(objData.getBankName());
 
 
-        withbankaccount.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
+        withBankAccount.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
         withBankCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -853,6 +862,124 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
             }
         });
+
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private void withdrawSignet(TransactionData objData) {
+
+        TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
+        TextView withBankNameOnAccount, withBankName, withBankAccount,signetTextTV;
+//        ImageView withbankwithdrawalid, withbankrefIDIV;
+        LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
+
+        withBankHeader = findViewById(R.id.withBankHeaderTV);
+        withBankAmount = findViewById(R.id.withBankAmount);
+        withBankDescription = findViewById(R.id.withBankDescrptnTV);
+        withBankStatus = findViewById(R.id.withBankStatusTV);
+        withBankDateTime = findViewById(R.id.withbankDatetimeTV);
+        withBankWithdrawalAmount = findViewById(R.id.withBankWithdrawAmount);
+        withBankProcessingFee = findViewById(R.id.withBankProcessFee);
+        withBankTotal = findViewById(R.id.withBankTotalTV);
+        withBankAccountBal = findViewById(R.id.withBankAccBalanceTV);
+        withBankWithdrawalId = findViewById(R.id.withBankWithdrawidTV);
+        withBankRefId = findViewById(R.id.withBankReferenceIDTV);
+        withBankWithdrawalID = findViewById(R.id.withBankWithdrawalIDLL);
+        withBankReference = findViewById(R.id.withBankReferenceIDLL);
+        withBankNameOnAccount = findViewById(R.id.withBankNameOnAccountTV);
+        withBankName = findViewById(R.id.withBankBanknameTV);
+        withBankAccount = findViewById(R.id.withBankbankaccountTV);
+        signetTextTV = findViewById(R.id.bankNameORSignetTV);
+
+        withBankCloseLL = findViewById(R.id.withbankCloseLL);
+//        withbankwithdrawalid = findViewById(R.id.withBankwithdrawIDIV);
+//        withbankrefIDIV = findViewById(R.id.withBankReferenceIDIV);
+
+
+        withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
+        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+//        if (objData.getDescription().equals("")) {
+//            withbankdescription.setVisibility(View.GONE);
+//        } else {
+//            withbankdescription.setText("\"" + objData.getDescription() + "\"");
+//        }
+        withBankStatus.setText(objData.getStatus());
+        switch (objData.getStatus().toLowerCase()) {
+            case "completed":
+                withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                break;
+            case "in progress":
+            case "inprogress":
+                withBankStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                break;
+            case "pending":
+                withBankStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                break;
+            case "failed":
+            case "cancelled":
+                withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                break;
+        }
+
+        withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+
+        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("CYN", "").trim());
+        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
+
+        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
+        withBankTotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotal + procesFee)));
+
+        withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+
+        if (objData.getWithdrawalId().length() > 10) {
+            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        } else {
+            withBankWithdrawalId.setText(objData.getWithdrawalId());
+        }
+
+        withBankRefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+
+        withBankNameOnAccount.setText(objData.getNameOnBank());
+
+        signetTextTV.setText("Signet Wallet ID");
+        signetTextTV.setPadding(0,0,0,20);
+        findViewById(R.id.nameOnAccount).setPadding(0,10,0,0);
+        findViewById(R.id.withdrawIDTV).setPadding(0,10,0,0);
+        if (objData.getWithdrawalId().length() > 20) {
+            withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
+        } else {
+            withBankName.setText(objData.getWalletId());
+        }
+        findViewById(R.id.bankAccountLL).setVisibility(View.GONE);
+
+
+
+        withBankCloseLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        withBankReference.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+            }
+        });
+        withBankWithdrawalID.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
+            }
+        });
+
+        withBankDescription.setVisibility(View.GONE);
 
     }
 
@@ -926,7 +1053,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                 }
                 break;
-                case "withdrawbankaccount": {
+                case "withdrawbankaccount":
+                case "withdrawsignet": {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
