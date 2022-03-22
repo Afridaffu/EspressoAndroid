@@ -198,7 +198,7 @@
     <string name="bank_delete_keep">Keep</string>
     <string name="bank_delete_title">Delete Bank Account</string>
 
-    <string name="email_updated">Email Updated</string>
+    <string name="email_updated">Email updated</string>
     <string name="phone_number_updated">Phone number updated</string>
 
     <string name="currency">CYN</string>
@@ -380,7 +380,7 @@
     <string name="transaction_details">Transaction Details</string>
     <string name="canceled_bank_withdraw">Canceled Bank withdraw</string>
     <string name="_100_00">100.00</string>
-    <string name="cyn">CYN</string>
+    <string name="cyn">(CYN)</string>
     <string name="_1d3hsm734h"><u>1d3hsM734h…</u></string>
     <color name="background_color">#8ef2f5f8</color>
     <string name="rolling_reserves_with_a_rolling_reserve"><b>ROLLING RESERVES:</b> With a rolling reserve</string>
@@ -429,12 +429,12 @@
     <string name="payout_information">Payout Information</string>
     <string name="date_time">07/27/2020 @ 2:20 am</string>
     <string name="payout_reference_id">Payout Reference ID</string>
-    <string name="snd_no">SND327433N</string>
+    <string name="snd_no"><u>SND327433N</u></string>
     <string name="total_transactions">Total Transactions</string>
     <string name="to_token_account">To Token Account</string>
-    <string name="as28027281">aS28027281</string>
+    <string name="as28027281"><u>aS28027281</u></string>
     <string name="recent_transactions">Recent Transactions</string>
-    <string name="_78dfbwaebfih">78dfbwaebfih</string>
+    <string name="_78dfbwaebfih"><u>78dfbwaebfih</u></string>
     <string name="refund_to_customer_name">Refund to [Customer Name]</string>
     <string name="sale_order_customer_name">Sale Order - [Customer Name]</string>
     <string name="greenboxpos">Greenboxpos</string>

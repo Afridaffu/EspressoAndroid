@@ -236,50 +236,73 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
-//            if (requestCode == 1 && data == null) {
-//                if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-//                    Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
-//                } else {
-//                    pDialog = Utils.showProgressDialog(this);
-//                    customerProfileViewModel.meSyncAccount();
+            super.onActivityResult(requestCode, resultCode, data);
+//            switch (resultCode) {
+//                case 1:
+//                    if (data == null) {
+//                        if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+//                            Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+//                        } else {
+//                            pDialog = Utils.showProgressDialog(this);
+//                            customerProfileViewModel.meSyncAccount();
+//                        }
+//                    }
+//                    break;
+//                case RESULT_OK:
+//                case 235: {
+//                    try {
+//                        //buyToken();
+//                        pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
+//                        BiometricTokenRequest request = new BiometricTokenRequest();
+//                        request.setDeviceId(Utils.getDeviceID());
+////                        request.setMobileToken(strToken);
+//                        request.setMobileToken(objMyApplication.getStrMobileToken());
+//                        request.setActionType(Utils.buyActionType);
+//                        coyniViewModel.biometricToken(request);
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
 //                }
-//            } else {
-//                super.onActivityResult(requestCode, resultCode, data);
+//                break;
+//                case 0:
+//                    if (requestCode != 3 && requestCode != 1) {
+//                        startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
+//                                .putExtra("TYPE", "ENTER")
+//                                .putExtra("screen", "buy")
+//                                .putExtra("cynValue", String.valueOf(cynValue)));
+//                    }
+//                    break;
 //            }
 
-            super.onActivityResult(requestCode, resultCode, data);
             switch (resultCode) {
-                case 1:
-                    if (data == null) {
-                        if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-                            Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
-                        } else {
-                            pDialog = Utils.showProgressDialog(this);
-                            customerProfileViewModel.meSyncAccount();
-                        }
-                    }
-                    break;
                 case RESULT_OK:
-                case 235: {
                     try {
-                        //buyToken();
-                        pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
-                        BiometricTokenRequest request = new BiometricTokenRequest();
-                        request.setDeviceId(Utils.getDeviceID());
-//                        request.setMobileToken(strToken);
-                        request.setMobileToken(objMyApplication.getStrMobileToken());
-                        request.setActionType(Utils.buyActionType);
-                        coyniViewModel.biometricToken(request);
+                        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                            pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
+                            BiometricTokenRequest request = new BiometricTokenRequest();
+                            request.setDeviceId(Utils.getDeviceID());
+                            request.setMobileToken(objMyApplication.getStrMobileToken());
+                            request.setActionType(Utils.buyActionType);
+                            coyniViewModel.biometricToken(request);
+                        } else if (data == null && requestCode == 1) {
+                            if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
+                                Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
+                            } else {
+                                pDialog = Utils.showProgressDialog(this);
+                                customerProfileViewModel.meSyncAccount();
+                            }
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }
-                break;
+                    break;
                 case 0:
-                    startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "buy")
-                            .putExtra("cynValue", String.valueOf(cynValue)));
+                    if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                        startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
+                                .putExtra("TYPE", "ENTER")
+                                .putExtra("screen", "buy")
+                                .putExtra("cynValue", String.valueOf(cynValue)));
+                    }
                     break;
             }
         } catch (Exception ex) {

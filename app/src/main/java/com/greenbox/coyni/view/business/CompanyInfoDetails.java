@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
@@ -22,6 +23,7 @@ public class CompanyInfoDetails extends BaseActivity {
     private String companyEmail = "", companyPhone = "", companyCountryCode = "";
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private int companyId = 0;
+    MyApplication myApplication;
     private String strName = "";
 
     @Override
@@ -43,13 +45,31 @@ public class CompanyInfoDetails extends BaseActivity {
         mBusinessEntity = (TextView) findViewById(R.id.business_entity);
         emailLL = (LinearLayout) findViewById(R.id.emailLL);
         phoneLL = (LinearLayout) findViewById(R.id.phoneLL);
+        myApplication = (MyApplication)getApplicationContext();
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+        showProgressDialog();
         businessIdentityVerificationViewModel.getCompanyInfo();
 
         closeLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        nameTX.setOnClickListener(view -> {
+
+            try {
+                if (nameTX.getText().toString().contains("...") && myApplication.getCompanyInfoResp().getData().getName().toString().length() >= 21) {
+                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName());
+
+                } else if (myApplication.getCompanyInfoResp().getData().getName().length() >= 21) {
+                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName().substring(0, 20) + "...");
+                } else {
+                    nameTX.setText(myApplication.getCompanyInfoResp().getData().getName());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
@@ -85,23 +105,13 @@ public class CompanyInfoDetails extends BaseActivity {
                         if (companyInfoResp.getStatus().toLowerCase().toString().equals("success")) {
                             try {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
-
+                                myApplication.setCompanyInfoResp(companyInfoResp);
                                 if (cir.getName() != null && !cir.getName().equals("")) {
-                                    strName = cir.getName();
-                                    if (strName != null && strName.length() > 20) {
-                                        nameTX.setText(strName.substring(0, 20) + "...");
+                                    if ( cir.getName().length() > 20) {
+                                        nameTX.setText(cir.getName().substring(0, 20) + "...");
                                     } else {
-                                        nameTX.setText(strName);
+                                        nameTX.setText(cir.getName());
                                     }
-                                    nameTX.setOnClickListener(view -> {
-
-                                        if (nameTX.getText().toString().contains("...") && strName.length() >= 21) {
-                                            nameTX.setText(strName);
-
-                                        } else {
-                                            nameTX.setText(strName.substring(0, 20) + "...");
-                                        }
-                                    });
                                 }
                                 if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
                                     mBusinessEntity.setText(cir.getBusinessEntity());
