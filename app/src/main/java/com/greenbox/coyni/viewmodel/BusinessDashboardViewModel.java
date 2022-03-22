@@ -36,14 +36,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BusinessDashboardViewModel extends AndroidViewModel {
-//    private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignetResponse> signetResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignedAgreementResponse> signedAgreementResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResponse> updateSignAgreementsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CancelApplicationResponse> cancelApplicationResponseMutableLiveData = new MutableLiveData<>();
-//    private MutableLiveData<BusinessTransactionDetailsResp> businessTransactionDetailsRespMutableLiveData = new MutableLiveData<>();
 
 
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
@@ -60,9 +58,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         return signetResponseMutableLiveData;
     }
 
-//    public MutableLiveData<BusinessTransactionDetailsResp> getbusinessTransactionDetailsMutableLiveData() {
-//        return businessTransactionDetailsRespMutableLiveData;
-//    }
 
     public MutableLiveData<BusinessWalletResponse> getBusinessWalletResponseMutableLiveData() {
         return businessWalletResponseMutableLiveData;

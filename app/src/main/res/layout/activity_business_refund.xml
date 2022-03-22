@@ -157,11 +157,9 @@
                                 android:layout_width="@dimen/_68sdp"
                                 android:layout_height="@dimen/_14sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/txn_completed_bg"
                                 android:fontFamily="@font/opensans_bold"
                                 android:gravity="center"
                                 android:text=""
-                                android:textColor="@color/active_green"
                                 android:textSize="@dimen/_7sdp" />
                         </LinearLayout>
 

@@ -175,17 +175,17 @@ public class Utils {
     public static final String txnType = "txnType";
     public static final String txnSubType = "txnSubType";
     public static final String refundtxntype = "refund";
-    public static final String saleOrdertxntype = "sale Order";
-    public static final String monthlyServiceFeetxntype = "monthly Service Fee";
+    public static final String saleOrdertxntype = "sale order";
+    public static final String monthlyServiceFeetxntype = "monthly service fee";
     public static final String businessPayouttxntype = "business Payout";
     public static final String merchantPayouttxntype = "merchant Payout";
     public static final String tokensub = "token";
     public static final String transfersub = "transfer";
     public static final String Success = "Success";
 //    controll methods in merchanttransactiondetails
-    public static final String refundCM = "refund";
-    public static final String saleorderCM = "saleorder";
-    public static final String monthlyservicefeeCM = "monthlyservicefee";
+    public static final String refundCM = "refundCM";
+    public static final String saleorderCM = "saleorderCM";
+    public static final String monthlyservicefeeCM = "monthlyservicefeeCM";
     public static final String businesspayoutCM = "businesspayout";
     public static final String merchantmayoutCM = "merchantmayout";
     public static final int inviteId = 74;

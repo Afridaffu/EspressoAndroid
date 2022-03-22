@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,10 +35,10 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
     private DashboardViewModel dashboardViewModel;
     private MyApplication objMyApplication;
     private String strGbxTxnIdType = "";
-    private int txnType, txnSubType;
-//    ProgressDialog progressDialog;
+    private int txnType;
+    private Integer txnSubType;
+    private TransactionListPosted selectedTransaction;
 
-    //    CardView cancelTxnCV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -46,7 +47,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_merchant_transaction_details);
-            TransactionListPosted selectedTransaction = (TransactionListPosted) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
+            selectedTransaction = (TransactionListPosted) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
             initialization();
             initObserver();
         } catch (Exception e) {
@@ -59,12 +60,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
-            if (getIntent().getStringExtra(Utils.gbxTxnIdType) != null && !getIntent().getStringExtra(Utils.gbxTxnIdType).equals("")) {
-                strGbxTxnIdType = getIntent().getStringExtra(Utils.gbxTxnIdType);
-            }
-            if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(Utils.txnType).equals("")) {
+            if (selectedTransaction != null && !selectedTransaction.equals("")) {
                 //txnType = Integer.parseInt(getIntent().getStringExtra("txnType"));
-                switch (getIntent().getStringExtra(Utils.txnType).toLowerCase()) {
+                switch (selectedTransaction.getTxnTypeDn().toLowerCase()) {
                     case Utils.refundtxntype:
                         txnType = Utils.refund;
                         break;
@@ -79,23 +77,24 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
 //                        break;
                 }
             }
-            if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(Utils.txnSubType).equals("")) {
+            if (selectedTransaction != null && !selectedTransaction.equals("")) {
                 //txnSubType = Integer.parseInt(getIntent().getStringExtra("txnSubType"));
-                switch (getIntent().getStringExtra(Utils.txnSubType).toLowerCase()) {
+                switch (selectedTransaction.getTxnSubTypeDn().toLowerCase()) {
 
                     case Utils.tokensub:
-                        txnSubType = Utils.token;
+                        txnSubType = Integer.valueOf(Utils.token);
                         break;
                     case Utils.transfersub:
-                        txnSubType = Utils.transfer;
+                        txnSubType = Integer.valueOf(Utils.transfer);
                         break;
+                    default:
+                        txnSubType = null;
 
                 }
             }
 
             if (Utils.checkInternet(MerchantTransactionDetailsActivity.this)) {
-//                progressDialog = Utils.showProgressDialog(MerchantTransactionDetailsActivity.this);
-                dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
+                dashboardViewModel.getTransactionDetails(selectedTransaction.getGbxTransactionId(), txnType, txnSubType);
             } else {
                 Utils.displayAlert(getString(R.string.internet), MerchantTransactionDetailsActivity.this, "", "");
             }
@@ -111,28 +110,27 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             dashboardViewModel.getTransactionDetailsMutableLiveData().observe(this, new Observer<TransactionDetails>() {
                 @Override
                 public void onChanged(TransactionDetails transactionDetails) {
-//                    if (progressDialog != null) {
-//                        progressDialog.dismiss();
-//                    }
-                    if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase(Utils.Success)) {
-                        switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
+                    if (transactionDetails != null && transactionDetails.getData() != null && transactionDetails.getStatus().equalsIgnoreCase("SUCCESS")){
+                        switch (transactionDetails.getData().getTransactionType().toLowerCase()){
+
                             case Utils.refundtxntype:
                                 ControlMethod(Utils.refundCM);
-                                refundMerchant(transactionDetails.getData());
+                                refundMerchant(transactionDetails);
                                 break;
                             case Utils.saleOrdertxntype:
                                 ControlMethod(Utils.saleorderCM);
-                                saleorderMerchant(transactionDetails.getData());
+                                saleorderMerchant(transactionDetails);
                                 break;
                             case Utils.monthlyServiceFeetxntype:
                                 ControlMethod(Utils.monthlyservicefeeCM);
-                                monthlyservicefeeMerchant(transactionDetails.getData());
+                                monthlyservicefeeMerchant(transactionDetails);
                                 break;
 //                            case Utils.merchantPayouttxntype:
 //                                ControlMethod(Utils.merchantmayoutCM);
-//                                merchantpayout(transactionDetails.getData());
+//                                merchantpayout(transactionDetails);
 //                                break;
                         }
+
                     }
                 }
             });
@@ -142,7 +140,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         }
     }
 
-    private void refundMerchant(TransactionData objData) {
+    @SuppressLint("SetTextI18n")
+    private void refundMerchant(TransactionDetails objData) {
         try {
             ImageView refundcopyIV;
             TextView refundheadertv, refundamounttv, refundReasontv, refundStatustv, refundDatetimetv, refundreferencetv, refundfeetv, refundtotalAmounttv, refundreciptantNametv, refundReciptantEmailtv, refundOTIdatetv, refundOTIgrossamounttv, refundOTIFeetv, refundOTINetamounttv, refundOTIrefrencetv;
@@ -166,9 +165,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             refundOTINetamounttv = findViewById(R.id.refundOTINetamountTV);
             refundOTIrefrencetv = findViewById(R.id.refundOTIrefrenceTV);
 
-            refundheadertv.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-            refundStatustv.setText(objData.getStatus());
-            switch (objData.getStatus().toLowerCase()) {
+            refundheadertv.setText(objData.getData().getTransactionType());
+            refundStatustv.setText(objData.getData().getStatus());
+            switch (objData.getData().getStatus().toLowerCase()) {
                 case Utils.transCompleted:
                     refundStatustv.setTextColor(getResources().getColor(R.color.completed_status));
                     refundStatustv.setBackgroundResource(R.drawable.txn_completed_bg);
@@ -186,18 +185,26 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     refundStatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            refundamounttv.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN", "").trim()));
-            refundreferencetv.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-            refundreciptantNametv.setText(Utils.capitalize(objData.getRecipientName()));
-            refundReciptantEmailtv.setText(objData.getRecipientEmail());
-            refundOTIrefrencetv.setText(objData.getReferenceId());
-            refundDatetimetv.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-            refundfeetv.setText(Utils.convertTwoDecimal(objData.getFees().replace("CYN", "").trim()));
-            refundtotalAmounttv.setText(Utils.convertTwoDecimal(objData.getRefundAmount().replace("CYN", "").trim()));
-            refundOTIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getDateAndTime()));
-            refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getGrossAmount().replace("CYN", "").trim()));
-            refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getFees().replace("CYN", "").trim()));
-            refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getNetAmount().replace("CYN", "").trim()));
+            if(objData.getData().getRefundAmount()!=null) {
+                refundamounttv.setText(Utils.convertTwoDecimal(objData.getData().getRefundAmount().replace("USD", "").trim()));
+            }
+
+            if (objData.getData().getReferenceId().length()>10) {
+                refundOTIrefrencetv.setText(objData.getData().getReferenceId().substring(0,10)+"...");
+                refundreferencetv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            }else {
+                refundreferencetv.setText(objData.getData().getReferenceId());
+                refundOTIrefrencetv.setText(objData.getData().getReferenceId());
+            }
+            refundreciptantNametv.setText(Utils.capitalize(objData.getData().getRecipientName()));
+            refundReciptantEmailtv.setText(objData.getData().getRecipientEmail());
+            refundDatetimetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
+            refundfeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
+            refundtotalAmounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
+            refundOTIdatetv.setText(objData.getData().getDateAndTime());
+            refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
+            refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
+            refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("USD", "").trim()));
 
 
             refundCloseLL.setOnClickListener(new View.OnClickListener() {
@@ -210,7 +217,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             refundcopyIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.copyText(objData.getReferenceId(),MerchantTransactionDetailsActivity.this);
+                    Utils.copyText(objData.getData().getReferenceId(),MerchantTransactionDetailsActivity.this);
                 }
             });
         } catch (Exception ex) {
@@ -219,7 +226,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
 
     }
 
-    private void saleorderMerchant(TransactionData objData) {
+    private void saleorderMerchant(TransactionDetails objData) {
         try {
             ImageView refundIV, SalesReferencecopyIV;
             TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
@@ -240,9 +247,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             salessendernameTVTV = findViewById(R.id.SalessendernameTVTV);
             salessenderemailTV = findViewById(R.id.SalessenderemailTV);
 
-            salesheaderTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-            salesStatusTV.setText(objData.getStatus());
-            switch (objData.getStatus().toLowerCase()) {
+            salesheaderTV.setText(objData.getData().getTransactionType() + " - " + objData.getData().getTransactionSubtype());
+            salesStatusTV.setText(objData.getData().getStatus());
+            switch (objData.getData().getStatus().toLowerCase()) {
                 case Utils.transCompleted:
                     salesStatusTV.setTextColor(getResources().getColor(R.color.completed_status));
                     salesStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
@@ -260,16 +267,21 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     salesStatusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-
-            salesReferenceidTV.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-            salesDatetimeTV.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-            salesAmount_TV.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN", "").trim()));
-            salesfeesTV.setText(Utils.convertTwoDecimal(objData.getFees().replace("CYN", "").trim()));
-            salesnetamountTV.setText(Utils.convertTwoDecimal(objData.getNetAmount().replace("CYN", "").trim()));
-            salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()));
-            salesreserveTV.setText(Utils.convertTwoDecimal(objData.getReserve().replace("CYN", "").trim()));
-            salessendernameTVTV.setText(objData.getSenderName());
-            salessenderemailTV.setText(objData.getSenderEmail());
+            if (objData.getData().getReferenceId().length()>10) {
+                salesReferenceidTV.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            }else {
+                salesReferenceidTV.setText(objData.getData().getReferenceId());
+            }
+            salesDatetimeTV.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
+            if (objData.getData().getGrossAmount() != null) {
+                salesAmount_TV.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
+            }
+            salesfeesTV.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
+            salesnetamountTV.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("USD", "").trim()));
+            salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
+//            salesreserveTV.setText(Utils.convertTwoDecimal(objData.getData().getReserve().replace("CYN", "").trim()));
+            salessendernameTVTV.setText(objData.getData().getSenderName());
+            salessenderemailTV.setText(objData.getData().getSenderEmail());
 
 
             saleorderclosell.setOnClickListener(new View.OnClickListener() {
@@ -288,7 +300,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             SalesReferencecopyIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.copyText(objData.getReferenceId(), MerchantTransactionDetailsActivity.this);
+                    Utils.copyText(objData.getData().getReferenceId(), MerchantTransactionDetailsActivity.this);
                 }
             });
 
@@ -297,7 +309,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         }
     }
 
-    private void monthlyservicefeeMerchant(TransactionData objData) {
+    private void monthlyservicefeeMerchant(TransactionDetails objData) {
         try {
             ImageView msFeecopyIV;
             TextView MSFheadertv, MSFamounttv,MSFstatustv, MSFdatetv, MSfreferenceIdtv, MSFmerchantbalancetv;
@@ -312,10 +324,10 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             MSfreferenceIdtv = findViewById(R.id.MSfreferenceIdTV);
             MSFmerchantbalancetv = findViewById(R.id.MSFmerchantbalanceTV);
 
-            MSFheadertv.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
+            MSFheadertv.setText(objData.getData().getTransactionType());
 
-            MSFstatustv.setText(objData.getStatus());
-            switch (objData.getStatus().toLowerCase()) {
+            MSFstatustv.setText(objData.getData().getStatus());
+            switch (objData.getData().getStatus().toLowerCase()) {
                 case Utils.transCompleted:
                     MSFstatustv.setTextColor(getResources().getColor(R.color.completed_status));
                     MSFstatustv.setBackgroundResource(R.drawable.txn_completed_bg);
@@ -333,11 +345,16 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     MSFstatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            MSFamounttv.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN", "").trim()));
-
-            MSfreferenceIdtv.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-            MSFdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-            MSFmerchantbalancetv.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()));
+            if(objData.getData().getGrossAmount()!=null) {
+                MSFamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
+            }
+            if (objData.getData().getReferenceId().length()>10) {
+                MSfreferenceIdtv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            }else {
+                MSfreferenceIdtv.setText(objData.getData().getReferenceId());
+            }
+            MSFdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
+            MSFmerchantbalancetv.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
 
 
 
@@ -350,7 +367,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             msFeecopyIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.copyText(objData.getReferenceId(),MerchantTransactionDetailsActivity.this);
+                    Utils.copyText(objData.getData().getReferenceId(),MerchantTransactionDetailsActivity.this);
                 }
             });
         } catch (Exception ex) {
@@ -358,7 +375,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         }
     }
 
-//    private void merchantpayout(TransactionData objData) {
+//    private void merchantpayout(TransactionDetails objData) {
 //        try {
 //            ImageView referencecopyIV, payoutcopyIV;
 //            TextView mPayoutheadertv, merchantamounttv, merchantstatustv, merchantdatetv, mPayoutIdtv, mreferenceIdtv, merchantPIdatetv, mPItotalamounttv, mPItotaltransactionstv, mPIdeposittotv, salessenderemailTV;
@@ -378,32 +395,6 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
 //            mPIdeposittotv = findViewById(R.id.mPIdeposittoTV);
 //            referencecopyIV = findViewById(R.id.referenceCopyIV);
 //            payoutcopyIV = findViewById(R.id.payoutCopyIV);
-//
-//
-//
-//            merchantstatustv.setText(objData.getStatus());
-//            switch (objData.getStatus().toLowerCase()) {
-//                case Utils.transCompleted:
-//                    merchantstatustv.setTextColor(getResources().getColor(R.color.completed_status));
-//                    merchantstatustv.setBackgroundResource(R.drawable.txn_completed_bg);
-//                    break;
-//                case Utils.transinprogress:
-//                    merchantstatustv.setTextColor(getResources().getColor(R.color.inprogress_status));
-//                    merchantstatustv.setBackgroundResource(R.drawable.txn_inprogress_bg);
-//                    break;
-//                case Utils.transPending:
-//                    merchantstatustv.setTextColor(getResources().getColor(R.color.pending_status));
-//                    merchantstatustv.setBackgroundResource(R.drawable.txn_pending_bg);
-//                    break;
-//                case Utils.transFailed:
-//                    merchantstatustv.setTextColor(getResources().getColor(R.color.failed_status));
-//                    merchantstatustv.setBackgroundResource(R.drawable.txn_failed_bg);
-//                    break;
-//            }
-//
-////            mreferenceIdtv.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-////            merchantdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-////
 //
 //            mpayoutll.setOnClickListener(new View.OnClickListener() {
 //                @Override
