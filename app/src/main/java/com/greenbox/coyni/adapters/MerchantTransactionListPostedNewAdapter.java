@@ -48,7 +48,6 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             }
         }
 
-
 //        for (int i = 0; i < list.size(); i++) {
 //            String datee = objMyApplication.convertZoneDateLastYear(list.get(i).getUpdatedAt().split("\\.")[0]);
 //            if (!dates.contains(datee)) {
@@ -136,7 +135,8 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             lineItem = itemView.findViewById(R.id.viewV);
             blankView = itemView.findViewById(R.id.blankView);
             businessTx = itemView.findViewById(R.id.balTXT);
-            //businessTx.setVisibility(View.GONE);
+            businessTx.setVisibility(View.GONE);
+            txnTypeDnExtention.setVisibility(View.GONE);
         }
     }
 

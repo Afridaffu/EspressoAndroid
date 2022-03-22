@@ -1,21 +1,25 @@
 package com.greenbox.coyni.view.business;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,10 +27,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.chip.Chip;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.MerchantTransactionListPostedNewAdapter;
 import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
+import com.greenbox.coyni.dialogs.CalenderRangeDialog;
+import com.greenbox.coyni.dialogs.MerchantTransactionsFilterDialog;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -38,9 +45,17 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 
 public class MerchantTransactionListActivity extends BaseActivity implements TextWatcher {
     private TransactionListPendingAdapter transactionListPendingAdapter;
@@ -53,7 +68,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     private ExpandableHeightRecyclerView rvTransactionsPending, getRvTransactionsPosted;
     private Boolean isFilters = false, isRefresh = false, isNoData = false, isAPICalled = false;
     private MyApplication objMyApplication;
-    private LinearLayout layoutTransactionspending, layoutTransactionsposted;
+    private LinearLayout layoutTransactionspending, layoutTransactionsposted, clearTextLL;
     private TextView noTransactionTV, noMoreTransactionTV;
     private DashboardViewModel dashboardViewModel;
     private TransactionList transactionList;
@@ -93,13 +108,12 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    //showFiltersPopup();
+                    showFiltersPopup();
                 }
             });
 
             closeBtn.setOnClickListener(view -> finish());
             searchET.addTextChangedListener(this);
-
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -272,10 +286,556 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         }
     }
 
+    public void showFiltersPopup() {
+        // custom dialog
+        MerchantTransactionsFilterDialog dialog = new MerchantTransactionsFilterDialog(MerchantTransactionListActivity.this);
+        // dialog.setContentView(R.layout.merchant_transactions_filter);
+        dialog.show();
+
+        Chip transTypeSalesOrderToken = dialog.findViewById(R.id.transTypeSalesOrderToken);
+        Chip transTypeRefund = dialog.findViewById(R.id.transTypeRefund);
+        Chip transTypeMerchantPayout = dialog.findViewById(R.id.transTypeMerchantPayout);
+        Chip transTypeMonthlyServiceFee = dialog.findViewById(R.id.transTypeMonthlyServiceFee);
+
+        Chip transStatusCompleted = dialog.findViewById(R.id.transStatusCompleted);
+        Chip transStatusRefund = dialog.findViewById(R.id.transStatusRefund);
+        Chip transStatusPartialRefund = dialog.findViewById(R.id.transStatusPartialRefund);
+
+        EditText transAmountStartET = dialog.findViewById(R.id.transAmountStartET);
+        EditText transAmountEndET = dialog.findViewById(R.id.transAmountEndET);
+
+        CardView applyFilterBtnCV = dialog.findViewById(R.id.applyFilterBtnCV);
+        LinearLayout dateRangePickerLL = dialog.findViewById(R.id.dateRangePickerLL);
+        EditText getDateFromPickerET = dialog.findViewById(R.id.datePickET);
+        TextView resetFiltersTV = dialog.findViewById(R.id.resetFiltersTV);
+
+        if (isFilters) {
+            if (transactionType.size() > 0) {
+                for (int i = 0; i < transactionType.size(); i++) {
+                    switch (transactionType.get(i)) {
+                        case Utils.saleOrder:
+                            transTypeSalesOrderToken.setChecked(true);
+                            break;
+
+                        case Utils.refund:
+                            transTypeRefund.setChecked(true);
+                            break;
+
+                        case Utils.merchantPayout:
+                            transTypeMerchantPayout.setChecked(true);
+                            break;
+
+                        case Utils.monthlyServiceFee:
+                            transTypeMonthlyServiceFee.setChecked(true);
+                            break;
+
+
+                    }
+                }
+            }
+
+
+            if (txnStatus.size() > 0) {
+                for (int i = 0; i < txnStatus.size(); i++) {
+                    switch (txnStatus.get(i)) {
+                        case Utils.completed:
+                            transStatusCompleted.setChecked(true);
+                            break;
+
+                        case Utils.refund:
+                            transStatusRefund.setChecked(true);
+                            break;
+
+                        case Utils.cancelled:
+                            transStatusPartialRefund.setChecked(true);
+                            break;
+
+                    }
+                }
+            }
+
+            if (!strStartAmount.trim().equals("")) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountStartET.setFilters(FilterArray);
+                transAmountStartET.setText(strStartAmount);
+            }
+
+            if (!strEndAmount.trim().equals("")) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                transAmountEndET.setFilters(FilterArray);
+                transAmountEndET.setText(strEndAmount);
+            }
+
+            if (!strSelectedDate.equals("")) {
+                getDateFromPickerET.setText(strSelectedDate);
+            }
+        } else {
+            transactionType.clear();
+            transactionSubType.clear();
+            txnStatus.clear();
+            strFromDate = "";
+            strToDate = "";
+            strStartAmount = "";
+            strEndAmount = "";
+            startDateD = null;
+            endDateD = null;
+            startDateLong = 0L;
+            endDateLong = 0L;
+            isFilters = false;
+            strSelectedDate = "";
+            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+//            searchET.setText("");
+        }
+
+        resetFiltersTV.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                return;
+            }
+            mLastClickTimeFilters = SystemClock.elapsedRealtime();
+            transactionType.clear();
+            transactionSubType.clear();
+            txnStatus.clear();
+            strFromDate = "";
+            strToDate = "";
+            strStartAmount = "";
+            strEndAmount = "";
+            startDateD = null;
+            endDateD = null;
+            startDateLong = 0L;
+            endDateLong = 0L;
+            isFilters = false;
+            strSelectedDate = "";
+            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+
+
+            searchET.removeTextChangedListener(MerchantTransactionListActivity.this);
+            searchET.setText("");
+            searchET.addTextChangedListener(MerchantTransactionListActivity.this);
+            transAmountStartET.setText("");
+            transAmountEndET.setText("");
+            getDateFromPickerET.setText("");
+
+            transAmountStartET.clearFocus();
+            searchET.clearFocus();
+            transAmountEndET.clearFocus();
+            getDateFromPickerET.clearFocus();
+
+            transTypeSalesOrderToken.setChecked(false);
+            transTypeRefund.setChecked(false);
+            transTypeMerchantPayout.setChecked(false);
+            transTypeMonthlyServiceFee.setChecked(false);
+            transTypeRefund.setChecked(false);
+
+            transStatusCompleted.setChecked(false);
+            transStatusRefund.setChecked(false);
+            transStatusPartialRefund.setChecked(false);
+
+            transAmountStartET.setText("");
+            transAmountEndET.setText("");
+            getDateFromPickerET.setText("");
+
+            globalPending.clear();
+            globalPosted.clear();
+            currentPage = 0;
+            total = 0;
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+            transactionsAPI(transactionListRequest);
+            objMyApplication.initializeTransactionSearch();
+            objMyApplication.setTransactionListSearch(transactionListRequest);
+        });
+
+        transTypeSalesOrderToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionType.add(Utils.saleOrder);
+                } else {
+                    for (int i = 0; i < transactionType.size(); i++) {
+                        if (transactionType.get(i) == Utils.saleOrder) {
+                            transactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transTypeRefund.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionType.add(Utils.refund);
+                } else {
+                    for (int i = 0; i < transactionType.size(); i++) {
+                        if (transactionType.get(i) == Utils.refund) {
+                            transactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transTypeMerchantPayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionType.add(Utils.merchantPayout);
+                } else {
+                    for (int i = 0; i < transactionType.size(); i++) {
+                        if (transactionType.get(i) == Utils.merchantPayout) {
+                            transactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transTypeMonthlyServiceFee.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionType.add(Utils.monthlyServiceFee);
+                } else {
+                    for (int i = 0; i < transactionType.size(); i++) {
+                        if (transactionType.get(i) == Utils.monthlyServiceFee) {
+                            transactionType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transStatusCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    txnStatus.add(Utils.completed);
+                } else {
+                    for (int i = 0; i < txnStatus.size(); i++) {
+                        if (txnStatus.get(i) == Utils.completed) {
+                            txnStatus.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transStatusRefund.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    txnStatus.add(Utils.refund);
+//                    transStatusCanceled.setChecked(false);
+                } else {
+//                    transStatusCanceled.setChecked(false);
+                    for (int i = 0; i < txnStatus.size(); i++) {
+                        if (txnStatus.get(i) == Utils.refund) {
+                            txnStatus.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transStatusPartialRefund.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    txnStatus.add(Utils.inProgress);
+                } else {
+                    for (int i = 0; i < txnStatus.size(); i++) {
+                        if (txnStatus.get(i) == Utils.inProgress) {
+                            txnStatus.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        transAmountStartET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals(".")) {
+                    transAmountStartET.setText("");
+                }
+            }
+        });
+
+        transAmountEndET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().equals(".")) {
+                    transAmountEndET.setText("");
+                }
+            }
+        });
+
+        transAmountStartET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
+                    USFormat(transAmountStartET, "START");
+
+                    try {
+
+                        if (!transAmountStartET.getText().toString().equals("") && !transAmountStartET.getText().toString().equals("")) {
+
+                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            if (endAmount < startAmount) {
+                                Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", MerchantTransactionListActivity.this, "", "");
+
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
+                                transAmountEndET.setText("");
+                                strEndAmount = "";
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
+                }
+            }
+        });
+
+        transAmountEndET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (transAmountStartET.getText().toString().equals("")) {
+                    transAmountStartET.setText("0.00");
+                }
+
+                if (!hasFocus) {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
+                    USFormat(transAmountEndET, "END");
+                    try {
+
+                        if (!transAmountEndET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
+
+                            Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                            Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                            if (endAmount < startAmount) {
+                                Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", MerchantTransactionListActivity.this, "", "");
+                                transAmountStartET.setText("");
+                                strStartAmount = "";
+                                transAmountEndET.setText("");
+                                strEndAmount = "";
+                            }
+                        }
+                        if (transAmountStartET.getText().toString().equals("")) {
+                            transAmountStartET.setText("0.00");
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)))});
+                }
+            }
+        });
+
+        transAmountStartET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
+                    USFormat(transAmountStartET, "START");
+                    transAmountStartET.clearFocus();
+                }
+
+                return false;
+            }
+        });
+
+        transAmountEndET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)))});
+                    USFormat(transAmountEndET, "END");
+                    transAmountEndET.clearFocus();
+                    if (transAmountStartET.getText().toString().equals("")) {
+                        transAmountStartET.setText("0.00");
+                    }
+                }
+                return false;
+            }
+        });
+
+        applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                pendingTxt.setVisibility(View.GONE);
+                layoutTransactionspending.setVisibility(View.GONE);
+                layoutTransactionsposted.setVisibility(View.GONE);
+                nestedScrollView.smoothScrollTo(0, 0);
+
+                globalPending.clear();
+                globalPosted.clear();
+                currentPage = 0;
+                total = 0;
+                isFilters = false;
+                searchET.removeTextChangedListener(MerchantTransactionListActivity.this);
+                searchET.setText("");
+                searchET.addTextChangedListener(MerchantTransactionListActivity.this);
+                transAmountStartET.clearFocus();
+                transAmountEndET.clearFocus();
+                TransactionListRequest transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNo(String.valueOf(currentPage));
+                transactionListRequest.setWalletCategory(Utils.walletCategory);
+                transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+
+
+                if (transactionType.size() > 0) {
+                    isFilters = true;
+                    transactionListRequest.setTransactionType(transactionType);
+                }
+                if (transactionSubType.size() > 0) {
+                    isFilters = true;
+                    transactionListRequest.setTransactionSubType(transactionSubType);
+                }
+                if (txnStatus.size() > 0) {
+                    isFilters = true;
+                    transactionListRequest.setTxnStatus(txnStatus);
+                }
+                if (!transAmountStartET.getText().toString().trim().equals("")) {
+                    isFilters = true;
+                    transactionListRequest.setFromAmount(transAmountStartET.getText().toString().replace(",", ""));
+                    transactionListRequest.setFromAmountOperator(">=");
+                } else {
+                    strStartAmount = "";
+                }
+                if (!transAmountEndET.getText().toString().trim().equals("")) {
+                    isFilters = true;
+                    transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
+                    transactionListRequest.setToAmountOperator("<=");
+
+                    if (transAmountStartET.getText().toString().trim().equals("") || transAmountStartET.getText().toString().trim().equals("0.00")) {
+                        transactionListRequest.setFromAmount("0.00");
+                        transactionListRequest.setFromAmountOperator(">=");
+                        strStartAmount = "0.00";
+                    }
+                } else {
+                    strEndAmount = "";
+                }
+                if (!strFromDate.equals("")) {
+                    isFilters = true;
+                    transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
+                    transactionListRequest.setUpdatedFromDateOperator(">=");
+                }
+                if (!strToDate.equals("")) {
+                    isFilters = true;
+                    transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
+                    transactionListRequest.setUpdatedToDateOperator("<=");
+                }
+                if (isFilters) {
+                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
+                } else {
+                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+                }
+
+                if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
+                    Double startAmount = Double.parseDouble(transAmountStartET.getText().toString().replace(",", "").trim());
+                    Double endAmount = Double.parseDouble(transAmountEndET.getText().toString().replace(",", "").trim());
+                    if (endAmount < startAmount) {
+                        Utils.displayAlert("'From Amount' should not be greater than 'To Amount'", MerchantTransactionListActivity.this, "", "");
+                        transAmountStartET.setText("");
+                        strStartAmount = "";
+                        transAmountEndET.setText("");
+                        strEndAmount = "";
+                    } else {
+                        transactionsAPI(transactionListRequest);
+                        objMyApplication.initializeTransactionSearch();
+                        objMyApplication.setTransactionListSearch(transactionListRequest);
+                        noMoreTransactionTV.setVisibility(View.GONE);
+                        dialog.dismiss();
+                    }
+                } else {
+                    transactionsAPI(transactionListRequest);
+                    objMyApplication.initializeTransactionSearch();
+                    objMyApplication.setTransactionListSearch(transactionListRequest);
+                    noMoreTransactionTV.setVisibility(View.GONE);
+                    dialog.dismiss();
+
+                }
+
+            }
+        });
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.show();
+
+        dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+                showCalendar(getDateFromPickerET);
+            }
+        });
+
+        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+                showCalendar(getDateFromPickerET);
+            }
+        });
+
+    }
+
     private void initFields() {
         closeBtn = findViewById(R.id.closeBtnIV);
         filterIV = findViewById(R.id.filtericonIV);
-
+       // clearTextLL = findViewById(R.id.clearTextLL);
         nestedScrollView = findViewById(R.id.nestedSV);
         swipeRefreshLayout = findViewById(R.id.refreshLayout);
         progressBar = findViewById(R.id.progressBarLoadMore);
@@ -290,6 +850,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         noMoreTransactionTV = findViewById(R.id.noMoreTransactions);
         pendingTxt = findViewById(R.id.pendingTV);
         searchET = findViewById(R.id.searchET);
+
     }
 
     private void initObservers() {
@@ -422,7 +983,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
     private ArrayList<Integer> getDefaultTransactionTypes() {
         ArrayList<Integer> transactionType = new ArrayList<>();
-        transactionType.add(Utils.saleOrderToken);
+        transactionType.add(Utils.saleOrder);
         transactionType.add(Utils.refund);
         transactionType.add(Utils.merchantPayout);
         transactionType.add(Utils.monthlyServiceFee);
@@ -433,5 +994,140 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         Intent inDetails = new Intent(MerchantTransactionListActivity.this, MerchantTransactionDetailsActivity.class);
         inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, selectedTransaction);
         startActivity(inDetails);
+    }
+
+    private void USFormat(EditText etAmount, String mode) {
+        try {
+            String strAmount = "";
+            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
+            etAmount.setSelection(etAmount.getText().length());
+            if (mode.equals("START")) {
+                strStartAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            } else {
+                strEndAmount = Utils.USNumberFormat(Double.parseDouble(strAmount));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void showCalendar(EditText getDateFromPickerET) {
+        // custom dialog
+        CalenderRangeDialog dialog = new CalenderRangeDialog(MerchantTransactionListActivity.this);
+        dialog.show();
+
+        ImageView closeIV = dialog.findViewById(R.id.closeIV);
+        TextView doneTV = dialog.findViewById(R.id.doneTV);
+        TextView rangeDateTV = dialog.findViewById(R.id.rangeDateTV);
+        closeIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        doneTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    dialog.dismiss();
+                    getDateFromPickerET.setText(strSelectedDate);
+
+                    new Date(startDateLong).getYear();
+                    Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                    int mYear = c.get(Calendar.YEAR);
+                    int mMonth = c.get(Calendar.MONTH);
+                    int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    String sDate = formatter.format(startDateLong);
+                    String eDate = formatter.format(endDateLong);
+
+                    strFromDate = sDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[0])) + " 00:00:00.000";
+
+                    Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
+
+                    if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == (mMonth + 1)
+                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
+                        String str = sdf.format(new Date());
+                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " " + str;
+                    } else {
+                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " 23:59:59.000";
+                    }
+
+                    Log.e("strFromDate", strFromDate);
+                    Log.e("strToDate", strToDate);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        com.greenbox.coyni.utils.verticalcalendar.CalendarPicker calendarPicker = dialog.findViewById(R.id.calendar_view);
+        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
+        Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+//        endDate.add(Calendar.MONTH, 12); // Add 6 months ahead from current date
+        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
+        calendarPicker.showDayOfWeekTitle(true);
+        calendarPicker.setMode(com.greenbox.coyni.utils.verticalcalendar.CalendarPicker.SelectionMode.RANGE);
+        calendarPicker.scrollToDate(endDate.getTime());
+
+
+        try {
+            if (!strSelectedDate.equals("")) {
+                rangeDateTV.setText(strSelectedDate);
+                calendarPicker.setSelectionDate(new Date(startDateLong), new Date(endDateLong));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        calendarPicker.setOnRangeSelectedListener((date, date2, s, s2) -> {
+
+            SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
+
+            try {
+                startDateD = f.parse(s);
+                endDateD = f.parse(s2);
+                startDateLong = startDateD.getTime();
+                endDateLong = endDateD.getTime();
+                Log.e("startDate long", startDateLong + "  " + endDateLong);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+            strSelectedDate = simpleDateFormat.format(startDateLong) + " - " + simpleDateFormat.format(endDateLong);
+            rangeDateTV.setText(strSelectedDate);
+
+            return null;
+        });
+
+        calendarPicker.setOnStartSelectedListener(new Function2<Date, String, Unit>() {
+            @Override
+            public Unit invoke(Date date, String s) {
+                SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
+
+                try {
+                    startDateD = f.parse(s);
+                    endDateD = f.parse(s);
+                    startDateLong = startDateD.getTime();
+                    endDateLong = endDateD.getTime();
+                    Log.e("startDate long", startDateLong + "  " + endDateLong);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
+                strSelectedDate = simpleDateFormat.format(startDateLong) + " - " + simpleDateFormat.format(endDateLong);
+                rangeDateTV.setText(strSelectedDate);
+
+                return null;
+            }
+        });
     }
 }
