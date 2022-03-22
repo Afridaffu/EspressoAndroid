@@ -2,9 +2,12 @@ package com.greenbox.coyni.view;
 
 import static android.view.View.VISIBLE;
 
+import static com.greenbox.coyni.view.TransactionListActivity.context;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -14,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -316,7 +321,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         }
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-                        if (isNoToken) {
+                        if (isNoToken || objMyApplication.getGBTBalance() == 0) {
                             isNoToken = false;
                             ControlMethod("withdrawnotoken");
                             bindWithdrawNoTokens();
@@ -530,6 +535,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvExtBankHead.setTextColor(getColor(R.color.light_gray));
                     tvExtBankMsg.setTextColor(getColor(R.color.light_gray));
                     imgBankArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgBankArrow.setEnabled(false);
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_inactive);
                 } else {
                     tvBankError.setVisibility(View.GONE);
@@ -537,7 +543,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
                     tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgBankArrow.clearColorFilter();
-                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
+//                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgBankArrow.setEnabled(true);
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }
                 if (paymentMethodsResponse.getData().getDebitCardCount() >= paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {

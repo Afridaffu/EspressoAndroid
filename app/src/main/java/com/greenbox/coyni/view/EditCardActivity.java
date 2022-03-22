@@ -449,7 +449,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                                 address1ErrorTV.setText("Field Required");
                             }
                         } else {
-                            etAddress1.setHint("Billing Address Line 1");
+//                            etAddress1.setHint("Billing Address Line 1");
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             etAddress1.setSelection(etAddress1.getText().length());
@@ -467,7 +467,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        etAddress2.setHint("Billing Address Line 2 (Optional)");
+//                        etAddress2.setHint("Billing Address Line 2 (Optional)");
                         etAddress2.setSelection(etAddress2.getText().length());
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
@@ -506,7 +506,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                                 etCity.setText(etCity.getText().toString().substring(0, 1).toUpperCase() + etCity.getText().toString().substring(1));
                             }
                         } else {
-                            etCity.setHint("City");
+//                            etCity.setHint("City");
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                             etCity.setSelection(etCity.getText().length());
@@ -570,7 +570,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                         } else {
                             if (!Utils.isKeyboardVisible)
                                 Utils.shwForcedKeypad(EditCardActivity.this);
-                            etZipcode.setHint("Zip Code");
+//                            etZipcode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                             etZipcode.setSelection(etZipcode.getText().length());

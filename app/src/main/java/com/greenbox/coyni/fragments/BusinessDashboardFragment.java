@@ -42,10 +42,12 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
+import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
+import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -56,7 +58,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
     private CardView mIvUserIconCV;
-    private TextView mTvUserName, mTvUserIconText;
+    private TextView mTvUserName, mTvUserIconText, mTvReserveList, mPayoutHistory;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView,
             mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView;
@@ -114,7 +116,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         mCvBatchNow = mCurrentView.findViewById(R.id.cv_batch_now);
         mCvGetStarted = mCurrentView.findViewById(R.id.cv_app_get_started);
         mTvContactUs = mCurrentView.findViewById(R.id.contactUSTV);
-
+        mTvReserveList = mCurrentView.findViewById(R.id.tv_reserve_list);
+        mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutHistory);
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
         mDashboardViewModel = new ViewModelProvider(getActivity()).get(DashboardViewModel.class);
 
@@ -323,6 +326,19 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void setBusinessData() {
         mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
+        mTvReserveList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent inReleases = new Intent(getActivity(), ReserveReleasesActivity.class);
+                startActivity(inReleases);
+            }
+        });
+        mPayoutHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), BusinessBatchPayoutSearchActivity.class));
+            }
+        });
     }
 
     private void showIdentityVerificationReview() {

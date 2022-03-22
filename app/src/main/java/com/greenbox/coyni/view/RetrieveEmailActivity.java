@@ -266,7 +266,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         firstNameErrorLL.setVisibility(GONE);
                         firstTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_green));
-                        firstName.setHint("First Name");
+//                        firstName.setHint("First Name");
 //                        firstName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
                     }
@@ -301,7 +301,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         lastNameErrorLL.setVisibility(GONE);
                         lastTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_green));
-                        lastName.setHint("Last Name");
+//                        lastName.setHint("Last Name");
 //                        lastName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                     }
                 }

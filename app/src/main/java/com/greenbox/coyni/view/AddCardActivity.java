@@ -757,7 +757,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             }
 
                         } else {
-                            etName.setHint("Name on Card");
+//                            etName.setHint("Name on Card");
                             etlName.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlName, getColor(R.color.primary_green));
                             InputMethodManager imm = (InputMethodManager) AddCardActivity.this.getSystemService(Service.INPUT_METHOD_SERVICE);
@@ -869,7 +869,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 etAddress1.setSelection(etAddress1.getText().toString().length());
                             }
                         } else {
-                            etAddress1.setHint("Billing Address Line 1");
+//                            etAddress1.setHint("Billing Address Line 1");
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             address1ErrorLL.setVisibility(GONE);
@@ -899,7 +899,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 etAddress2.setSelection(etAddress2.getText().toString().length());
                             }
                         } else {
-                            etAddress2.setHint("Billing Address Line 2 (Optional)");
+//                            etAddress2.setHint("Billing Address Line 2 (Optional)");
                             etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                         }
@@ -931,7 +931,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 etCity.setSelection(etCity.getText().toString().length());
                             }
                         } else {
-                            etCity.setHint("City");
+//                            etCity.setHint("City");
                             etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCity, getColor(R.color.primary_green));
                             cityErrorLL.setVisibility(GONE);
@@ -995,7 +995,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         } else {
                             if (!Utils.isKeyboardVisible)
                                 Utils.shwForcedKeypad(AddCardActivity.this);
-                            etZipCode.setHint("Zip Code");
+//                            etZipCode.setHint("Zip Code");
                             etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_green));
                             zipErrorLL.setVisibility(GONE);

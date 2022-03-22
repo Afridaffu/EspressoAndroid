@@ -190,7 +190,7 @@ public class EditTeamMember extends BaseActivity {
                     } else {
                         editFNameLL.setVisibility(GONE);
                         focusedID = editFNameET.getId();
-                        editFNameET.setHint("First Name");
+//                        editFNameET.setHint("First Name");
                         editFNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(editFNameTil, getColor(R.color.primary_green));
                     }
@@ -224,7 +224,7 @@ public class EditTeamMember extends BaseActivity {
                     } else {
                         focusedID = editLNameET.getId();
                         editLNameLL.setVisibility(GONE);
-                        editLNameET.setHint("Last Name");
+//                        editLNameET.setHint("Last Name");
                         editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(editLNameTil, getColor(R.color.primary_green));
                     }
@@ -258,7 +258,7 @@ public class EditTeamMember extends BaseActivity {
                         }
                     } else {
                         focusedID = editEmailET.getId();
-                        editEmailET.setHint("Email");
+//                        editEmailET.setHint("Email");
                         editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_green));
                     }
