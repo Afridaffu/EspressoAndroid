@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/payoutDetailsListLL"
+    tools:context=".view.business.PayoutDetailsTransactionList"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/_6sdp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sale Order - "
+            android:textSize="@dimen/_11ssp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/primary_black" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="[Customer Name]"
+            android:textSize="@dimen/_11ssp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/primary_black" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="750,000,00"
+            android:gravity="right"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginEnd="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:textColor="@color/active_green" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/paidTV"
+            android:layout_width="@dimen/_68sdp"
+            android:layout_height="@dimen/_17sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:background="@drawable/fill_grn_color_smallradius"
+            android:fontFamily="@font/opensans_bold"
+            android:gravity="center"
+            android:text="Paid"
+            android:textColor="@color/active_green"
+            android:textSize="@dimen/_7ssp" />
+
+        <TextView
+            android:id="@+id/payoutDateTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="right"
+            android:text="06/23/2021 @ 2:20am"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="@color/blue_light" />
+
+</LinearLayout>

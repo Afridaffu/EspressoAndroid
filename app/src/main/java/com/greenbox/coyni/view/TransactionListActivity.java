@@ -80,6 +80,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
     List<TransactionListPending> globalPending = new ArrayList<>();
     List<TransactionListPosted> globalPosted = new ArrayList<>();
 
+
     private ArrayList<Integer> transactionType = new ArrayList<Integer>();
     private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
