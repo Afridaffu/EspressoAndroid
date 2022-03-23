@@ -12,6 +12,11 @@ public class TransactionDetails {
     @SerializedName("timestamp")
     @Expose
     private String timestamp;
+
+    public TransactionData getData() {
+        return data;
+    }
+
     @SerializedName("data")
     @Expose
     private TransactionData data;
@@ -35,9 +40,6 @@ public class TransactionDetails {
         this.timestamp = timestamp;
     }
 
-    public TransactionData getData() {
-        return data;
-    }
 
     public void setData(TransactionData data) {
         this.data = data;
