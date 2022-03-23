@@ -42,13 +42,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
         BatchPayoutListAdapter payoutListAdapter = new BatchPayoutListAdapter(payoutList);
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPayout);
-//        recyclerViewPayouts.setHasFixedSize(true);
+//       recyclerViewPayouts.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(payoutListAdapter);
 
         payoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(int position,Object obj) {
                 LogUtils.v(TAG, "Position is " + position);
                 Intent i = new Intent(BusinessBatchPayoutSearchActivity.this, BusinessBatchPayoutIdDetailsActivity.class);
                 startActivity(i);

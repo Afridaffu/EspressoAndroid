@@ -3,7 +3,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_60sdp">
+    android:layout_height="@dimen/_120sdp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/profile_account_profile_image"
@@ -93,5 +93,60 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_custom_tick"
         app:tint="@color/primary_green" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/tickIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tickIcon"
+        android:layout_marginStart="@dimen/_30ssp"
+        android:layout_marginEnd="@dimen/_30ssp"
+        android:background="@color/light_gray"
+        >
+    </View>
+
+    <LinearLayout
+        android:id="@+id/ll_add_dba"
+        android:layout_width="match_parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_55sdp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_11sdp"
+            android:layout_marginStart="@dimen/_30ssp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_circle" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="Add DBA "
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_11sdp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

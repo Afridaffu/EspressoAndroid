@@ -32,6 +32,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.mainSetName = deptList;
         this.listener = listener;
+        LogUtils.d("listener","listener"+listener);
 
     }
 
@@ -61,6 +62,16 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         ImageView imvTickIcon = (ImageView) view.findViewById(R.id.tickIcon);
         TextView statusTV = (TextView) view.findViewById(R.id.statusTV);
         LinearLayout statusLL = (LinearLayout) view.findViewById(R.id.statusLL);
+        LinearLayout addDBA = (LinearLayout) view.findViewById(R.id.ll_add_dba);
+
+        LogUtils.d("isLastChild","isLastChild"+isLastChild);
+
+
+        if(isLastChild){
+            addDBA.setVisibility(View.VISIBLE);
+        } else {
+            addDBA.setVisibility(View.GONE);
+        }
 
         if(detailInfo.getName()!=null) {
             childItem.setText(detailInfo.getName().trim());
@@ -189,7 +200,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     public interface OnSelectListner{
         void selectedItem(int id);
     }
-
 
 }
 
