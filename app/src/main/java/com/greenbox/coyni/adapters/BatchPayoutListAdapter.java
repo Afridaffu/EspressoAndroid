@@ -57,6 +57,7 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
             public void onClick(View v) {
 
                 listener.onItemClick(position, null);
+
             }
         });
 
