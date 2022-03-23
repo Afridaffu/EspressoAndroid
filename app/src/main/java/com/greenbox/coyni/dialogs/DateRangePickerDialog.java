@@ -88,6 +88,7 @@ public class DateRangePickerDialog extends BaseDialog {
                     Log.e("strToDate", strToDate);
 
                     getOnDialogClickListener().onDialogClicked("Done", strFromDate + " - " + strToDate);
+                    dismiss();
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -157,7 +158,5 @@ public class DateRangePickerDialog extends BaseDialog {
                 return null;
             }
         });
-
     }
-
 }
