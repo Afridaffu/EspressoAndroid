@@ -43,6 +43,7 @@ public class ProfilesResponse {
     }
 
     public class Profiles {
+
         private int id;
         private String fullName;
         private String accountType;

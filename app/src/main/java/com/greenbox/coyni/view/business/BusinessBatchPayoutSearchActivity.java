@@ -45,7 +45,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
         BatchPayoutListAdapter payoutListAdapter = new BatchPayoutListAdapter(payoutList);
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPayout);
-//        recyclerViewPayouts.setHasFixedSize(true);
+//       recyclerViewPayouts.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(payoutListAdapter);
 

@@ -85,7 +85,7 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     //    WalletResponse walletResponse;
     String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
-    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType;
+    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType ,dbaOwnerId=0;
     TransactionList transactionList;
     PaymentsList selectedCard;
     TransferFeeResponse transferFeeResponse;
@@ -107,6 +107,14 @@ public class MyApplication extends Application {
     BOResp beneficialOwnersResponse;
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
+
+    public int getDbaOwnerId() {
+        return dbaOwnerId;
+    }
+
+    public void setDbaOwnerId(int dbaOwnerId) {
+        this.dbaOwnerId = dbaOwnerId;
+    }
 
     public LatestTxnResponse getListLatestTxn() {
         return listLatestTxn;

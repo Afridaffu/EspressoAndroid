@@ -126,7 +126,31 @@ public class BusinessTrackerResponse {
         public void setProcessingFees(boolean processingFees) {
             isProcessingFees = processingFees;
         }
+
+        @Override
+        public String toString() {
+            return "Daata{" +
+                    "isProfileVerified=" + isProfileVerified +
+                    ", isCompanyInfo=" + isCompanyInfo +
+                    ", isDbaInfo=" + isDbaInfo +
+                    ", isBeneficialOwners=" + isBeneficialOwners +
+                    ", isBankAccount=" + isBankAccount +
+                    ", isAgreementSigned=" + isAgreementSigned +
+                    ", isApplicationSummary=" + isApplicationSummary +
+                    ", isFirstLogin=" + isFirstLogin +
+                    ", isProcessingFees=" + isProcessingFees +
+                    '}';
+        }
     }
 
+    @Override
+    public String toString() {
+        return "BusinessTrackerResponse{" +
+                "status='" + status + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", data=" + data +
+                ", error=" + error +
+                '}';
+    }
 }
 

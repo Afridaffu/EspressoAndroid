@@ -155,4 +155,27 @@ public class WalletInfo {
     public void setWalletType(String walletType) {
         this.walletType = walletType;
     }
+
+    @Override
+    public String toString() {
+        return "WalletInfo{" +
+                "createdAt='" + createdAt + '\'' +
+                ", walletId='" + walletId + '\'' +
+                ", walletName='" + walletName + '\'' +
+                ", availableBalance='" + availableBalance + '\'' +
+                ", availabilityToUse=" + availabilityToUse +
+                ", exchangeRate=" + exchangeRate +
+                ", exchangeVariation='" + exchangeVariation + '\'' +
+                ", exchangeAmount=" + exchangeAmount +
+                ", status='" + status + '\'' +
+                ", walletCategory='" + walletCategory + '\'' +
+                ", type='" + type + '\'' +
+                ", subType='" + subType + '\'' +
+                ", walletDescription='" + walletDescription + '\'' +
+                ", amount='" + amount + '\'' +
+                ", balance='" + balance + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", walletType='" + walletType + '\'' +
+                '}';
+    }
 }
