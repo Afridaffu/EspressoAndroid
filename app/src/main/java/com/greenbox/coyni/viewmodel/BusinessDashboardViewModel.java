@@ -15,7 +15,7 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.business_id_verification.ApplicationCancelledData;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
-import com.greenbox.coyni.model.business_transactions.BusinessTransactionDetailsResp;
+//import com.greenbox.coyni.model.business_transactions.BusinessTransactionDetailsResp;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
