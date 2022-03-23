@@ -70,6 +70,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
+    private int dbaID=0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -228,8 +229,17 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void startTracker() {
-        Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
-        startActivity(inTracker);
+        LogUtils.d(TAG,"tracker iddddd"+ myApplication.getDbaOwnerId());
+        if(myApplication.getDbaOwnerId()!=0){
+            Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
+            inTracker.putExtra("ADDBUSINESS", true);
+            inTracker.putExtra("ADDDBA", true);
+            startActivity(inTracker);
+        } else {
+            Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
+            startActivity(inTracker);
+        }
+
     }
 
     private void launchApplicationCancelledScreen() {
@@ -249,8 +259,10 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showUserData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
-        if (!getActivity().getIntent().getBooleanExtra("showGetStarted", false) &&
-                myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
+        LogUtils.d(TAG,"dashboardmyApplication"+myApplication.getBusinessTrackerResponse());
+        LogUtils.d(TAG,"dashboardshowGetStarted"+getActivity().getIntent().getBooleanExtra("showGetStarted", false));
+        LogUtils.d(TAG,"dashboardisProfileVerified"+myApplication.getBusinessTrackerResponse().getData().isProfileVerified());
+        if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
                 && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
             showGetStartedView();
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null

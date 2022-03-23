@@ -36,6 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BusinessDashboardViewModel extends AndroidViewModel {
+
     private MutableLiveData<PaymentMethodsResponse> paymentMethodsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<SignetResponse> signetResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessWalletResponse> businessWalletResponseMutableLiveData = new MutableLiveData<>();
