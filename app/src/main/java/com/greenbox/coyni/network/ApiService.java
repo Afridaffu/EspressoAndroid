@@ -262,7 +262,6 @@ public interface ApiService {
     @GET("api/v2/profile/me/profile-accounts")
     Call<ProfilesResponse> getProfiles();
 
-
     @POST("api/v2/fiserv/signon")
     Call<SignOn> meSignOn();
 
@@ -359,7 +358,7 @@ public interface ApiService {
     @GET("api/v2/transactions/token/info/{gbxTxnId}/{txnType}")
     Call<TransactionDetails> getTransactionDetails(@Path("gbxTxnId") String gbxTxnId,
                                                    @Path("txnType") int txnType,
-                                                   @Query("txnSubType") int txnSubType);
+                                                   @Query("txnSubType") Integer txnSubType);
 
     @POST("api/v2/transactions/me/limit/{userType}")
     Call<TransactionLimitResponse> transactionLimits(@Body TransactionLimitRequest request, @Path("userType") int userType);

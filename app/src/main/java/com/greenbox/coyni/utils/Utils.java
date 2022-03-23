@@ -142,6 +142,7 @@ public class Utils {
     public static final String transCompleted = "completed";
     public static final String transFailed = "failed";
     public static final String transCancelled = "cancelled";
+    public static final String transinprogress = "in progress";
     public static final String walletCategory = "1";
     public static final String addType = "2";
     public static final String withdrawType = "3";
@@ -170,6 +171,23 @@ public class Utils {
     public static final String cancel = "Cancelled";
     public static final String requestSub = "REQUEST TOKEN";
     public static final String SUCCESS = "SUCCESS";
+    public static final String gbxTxnIdType = "gbxTxnIdType";
+    public static final String txnType = "txnType";
+    public static final String txnSubType = "txnSubType";
+    public static final String refundtxntype = "refund";
+    public static final String saleOrdertxntype = "sale order";
+    public static final String monthlyServiceFeetxntype = "monthly service fee";
+    public static final String businessPayouttxntype = "business Payout";
+    public static final String merchantPayouttxntype = "merchant Payout";
+    public static final String tokensub = "token";
+    public static final String transfersub = "transfer";
+    public static final String Success = "Success";
+//    controll methods in merchanttransactiondetails
+    public static final String refundCM = "refundCM";
+    public static final String saleorderCM = "saleorderCM";
+    public static final String monthlyservicefeeCM = "monthlyservicefeeCM";
+    public static final String businesspayoutCM = "businesspayout";
+    public static final String merchantmayoutCM = "merchantmayout";
     public static final int inviteId = 74;
     public static final int requestId = 75;
     public static final int remindId = 76;
@@ -200,6 +218,7 @@ public class Utils {
     public static final int payRequest = 12;
     public static final int buyTokens = 2;
     public static final int saleOrder = 10;
+    public static final int monthlyservicefee = 17;
     public static final int withdraw = 3;
     public static final int refund = 9;
     public static final int accountTransfer = 0; //Not available
@@ -207,6 +226,7 @@ public class Utils {
     public static final int businessPayout = 19;
 
     public static final int sent = 8;
+    public static final int token = 11;
     public static final int received = 9;
     public static final int bankAccount = 0;
     public static final int creditCard = 2;
@@ -217,6 +237,7 @@ public class Utils {
     public static final int saleOrderToken = 11; //need to confirm
     public static final int failedWithdraw = 11; // need to confirm
     public static final int cancelledWithdraw = 18;
+    public static final int transfer = 10;
 
     public static final int pending = 1;
     public static final int completed = 2;

@@ -298,6 +298,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         isDeCredit = false;
                         ControlMethod("addpayment");
                         strCurrent = "addpayment";
+                        addPayment();
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
@@ -395,7 +396,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");
                 tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
-                if (strScreen.equals("") && strCurrent.equals("addpayment")) {
+//                if (strScreen.equals("") && strCurrent.equals("addpayment")) {
+                if (strScreen.equals("") && strCurrent.equals("addpayment") && (paymentMethodsResponse.getData().getData() == null || paymentMethodsResponse.getData().getData().size() == 0)) {
                     tvMessage.setVisibility(View.VISIBLE);
                     imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
 

@@ -18,7 +18,15 @@ public class LoginData {
     private Boolean biometricEnabled;
     private StateList stateList;
     private int accountType;
+    private int dbaOwnerId;
 
+    public int getDbaOwnerId() {
+        return dbaOwnerId;
+    }
+
+    public void setDbaOwnerId(int dbaOwnerId) {
+        this.dbaOwnerId = dbaOwnerId;
+    }
 
     public int getUserId() {
         return userId;

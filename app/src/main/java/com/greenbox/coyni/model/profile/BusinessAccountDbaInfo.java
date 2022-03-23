@@ -6,8 +6,18 @@ public class BusinessAccountDbaInfo {
 
     private String name = "";
     private String dbaImage = "";
+    private String accountSttaus = "";
     private int id ;
     private boolean isSelected ;
+
+
+    public String getAccountSttaus() {
+        return accountSttaus;
+    }
+
+    public void setAccountSttaus(String accountSttaus) {
+        this.accountSttaus = accountSttaus;
+    }
 
     // Getter , setter methods
     public String getName() {

@@ -322,7 +322,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         }
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
-                        if (isNoToken) {
+                        if (isNoToken || objMyApplication.getGBTBalance() == 0) {
                             isNoToken = false;
                             ControlMethod("withdrawnotoken");
                             bindWithdrawNoTokens();
