@@ -262,7 +262,6 @@ public interface ApiService {
     @GET("api/v2/profile/me/profile-accounts")
     Call<ProfilesResponse> getProfiles();
 
-
     @POST("api/v2/fiserv/signon")
     Call<SignOn> meSignOn();
 

@@ -832,7 +832,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     for (ProfilesResponse.Profiles c : filterList) {
                         if (c.getAccountType().equals(Utils.BUSINESS)) {
                             businessAccountList.add(c);
-                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId());
+                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(),c.getAccountStatus());
                         } else {
                             personalAccountList.add(c);
                             for(int i=0;i<personalAccountList.size();i++){
@@ -854,7 +854,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
     }
 
-    private int addDetails(String mainSet, String subSet, String image, int id) {
+    private int addDetails(String mainSet, String subSet, String image, int id,String accountStatus) {
 
         int groupPosition = 0;
         try {
@@ -878,6 +878,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             detailInfo.setName(subSet);
             detailInfo.setDbaImage(image);
             detailInfo.setId(id);
+            detailInfo.setAccountSttaus(accountStatus);
 
             if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
                 detailInfo.setIsSelected(true);
