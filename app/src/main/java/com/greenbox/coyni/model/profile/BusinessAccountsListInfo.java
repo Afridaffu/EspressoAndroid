@@ -8,8 +8,17 @@ public class BusinessAccountsListInfo {
 
     private String mainSetName;
     private String mainImage;
+    private int id ;
 
     private ArrayList<BusinessAccountDbaInfo> list = new ArrayList<BusinessAccountDbaInfo>();
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return mainSetName;
@@ -18,7 +27,6 @@ public class BusinessAccountsListInfo {
     public void setName(String mainSetName) {
         this.mainSetName = mainSetName;
     }
-
 
     public String getMainImage() {
         return mainImage;

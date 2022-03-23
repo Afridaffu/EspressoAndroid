@@ -94,18 +94,18 @@
         android:src="@drawable/ic_custom_tick"
         app:tint="@color/primary_green" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/tickIcon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tickIcon"
-        android:layout_marginStart="@dimen/_30ssp"
-        android:layout_marginEnd="@dimen/_30ssp"
-        android:background="@color/light_gray"
-        >
-    </View>
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        app:layout_constraintStart_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/ll_add_dba"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        android:layout_marginStart="@dimen/_30ssp"-->
+<!--        android:layout_marginEnd="@dimen/_30ssp"-->
+<!--        android:background="@color/light_gray"-->
+<!--        >-->
+<!--    </View>-->
 
     <LinearLayout
         android:id="@+id/ll_add_dba"

@@ -25,6 +25,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private ArrayList<BusinessAccountsListInfo> mainSetName;
+    private List<ProfilesResponse.Profiles> businessAccountList;
     private OnSelectListner listener;
 
 
@@ -32,6 +33,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.mainSetName = deptList;
         this.listener = listener;
+        this.businessAccountList = businessAccountList;
         LogUtils.d("listener","listener"+listener);
 
     }
@@ -65,7 +67,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         LinearLayout addDBA = (LinearLayout) view.findViewById(R.id.ll_add_dba);
 
         LogUtils.d("isLastChild","isLastChild"+isLastChild);
-
 
         if(isLastChild){
             addDBA.setVisibility(View.VISIBLE);
@@ -121,6 +122,24 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     .placeholder(R.drawable.acct_profile)
                     .into(profileImage);
         }
+
+        addDBA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    int companyID=0;
+//                    for (ProfilesResponse.Profiles c : businessAccountList) {
+//                        if(c.getCompanyName().equalsIgnoreCase(mainSetName.get(groupPosition).getName()) && c.getDbaOwner()==null){
+//                            companyID = c.getId();
+//                        }
+//                    }
+                    listener.selectedItem(mainSetName.get(groupPosition).getId());
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+
+        });
 
         return view;
     }

@@ -33,6 +33,7 @@ import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private BusinessProfileRecyclerAdapter listAdapter;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private IdentityVerificationViewModel identityVerificationViewModel;
 
 
     @Override
@@ -126,6 +128,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         loginViewModel = new ViewModelProvider(BusinessCreateAccountsActivity.this).get(LoginViewModel.class);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+        identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
 
         brandsGV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -357,14 +360,33 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
                         }
                     }
-
             }
         });
+
+        try {
+            identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse);
+                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
+                                .putExtra("ADDBUSINESS", true)
+                                .putExtra("ADDDBA", true));
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private int addDetails(String mainSet, String subSet, String image, int id , String accountStatus) {
+    private int addDetails(String mainSet, String subSet, String image, int id , String accountStatus ) {
 
         int groupPosition = 0;
+
         try {
             LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
             groupPosition = 0;
@@ -374,7 +396,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                 headerInfo = new BusinessAccountsListInfo();
                 headerInfo.setName(mainSet);
                 headerInfo.setMainImage(image);
-
+                headerInfo.setId(id);
                 this.mainSet.put(mainSet, headerInfo);
                 this.subSet.add(headerInfo);
             }
@@ -432,12 +454,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     public void selectedItem(int id) {
 
         LogUtils.d("switching", "accounttttt" + id);
-//        UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
-//        userPreferenceModel.setLocalCurrency(0);
-//        userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-//        userPreferenceModel.setPreferredAccount(childid);
-//        customerProfileViewModel.updatePreferences(userPreferenceModel);
-//        dialog.dismiss();
+        identityVerificationViewModel.getPostAddDBABusiness(id);
 
     }
 }
