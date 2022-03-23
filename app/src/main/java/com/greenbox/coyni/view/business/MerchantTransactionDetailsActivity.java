@@ -210,8 +210,12 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
             refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("USD", "").trim()));
-
-
+            refundReasontv.setText(objData.getData().getRemarks());
+            if (objData.getData().getRemarks().equals("")) {
+                refundReasontv.setVisibility(View.GONE);
+            } else {
+                refundReasontv.setText("\"" + objData.getData().getRemarks() + "\"");
+            }
             refundCloseLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
