@@ -930,7 +930,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         Boolean value = true;
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")));
+            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",",""));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
                 tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);

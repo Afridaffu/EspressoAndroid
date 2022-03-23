@@ -427,7 +427,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvDCardMsg = findViewById(R.id.tvDCardMsg);
             imgDCardArrow = findViewById(R.id.imgDCardArrow);
             imgCCardLogo = findViewById(R.id.imgCCardLogo);
-            imgCCardArrow = findViewById(R.id.imgCCardArrow);
+            imgCCardArrow = findViewById(R.id.imgCCardArrowC);
             tvCCHead = findViewById(R.id.tvCCHead);
             tvCCardHead = findViewById(R.id.tvCCardHead);
             tvCCardMsg = findViewById(R.id.tvCCardMsg);

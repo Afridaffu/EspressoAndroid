@@ -401,7 +401,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             tvDCardMsg = findViewById(R.id.tvDCardMsg);
             imgDCardArrow = findViewById(R.id.imgDCardArrow);
             imgCCardLogo = findViewById(R.id.imgCCardLogo);
-            imgCCardArrow = findViewById(R.id.imgCCardArrow);
+            imgCCardArrow = findViewById(R.id.imgCCardArrowC);
             tvCCHead = findViewById(R.id.tvCCHead);
             tvCCardHead = findViewById(R.id.tvCCardHead);
             tvCCardMsg = findViewById(R.id.tvCCardMsg);
@@ -544,7 +544,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
                     tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgBankArrow.clearColorFilter();
-//                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBankArrow.setEnabled(true);
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }
@@ -570,6 +570,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvCCardHead.setTextColor(getColor(R.color.light_gray));
                     tvCCardMsg.setTextColor(getColor(R.color.light_gray));
                     imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgCCardArrow.setEnabled(false);
                     imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
                 } else {
                     tvCCardError.setVisibility(View.GONE);
@@ -578,6 +579,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvCCardMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgCCardArrow.clearColorFilter();
                     imgCCardArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgCCardArrow.setEnabled(true);
                     imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
 
                 }

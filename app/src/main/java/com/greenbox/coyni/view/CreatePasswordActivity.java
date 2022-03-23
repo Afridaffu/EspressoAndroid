@@ -234,7 +234,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     if (b) {
 //                        if (!Utils.isKeyboardVisible)
 //                            Utils.shwForcedKeypad(CreatePasswordActivity.this);
-                        confirmPasswordET.setHint("Confirm Password");
+//                        confirmPasswordET.setHint("Confirm Password");
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
                         confPasswordTIL.setHint("Confirm Password");
