@@ -491,7 +491,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Upload DBA filing"
+                        android:text="Upload DBA filling (Optional)"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_10ssp"
                         android:visibility="visible" />

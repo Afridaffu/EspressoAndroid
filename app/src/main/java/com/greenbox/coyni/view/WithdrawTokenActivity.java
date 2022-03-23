@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -124,6 +125,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_withdraw_token);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             withdrawTokenActivity = this;
             initialization();
             initObserver();
@@ -245,7 +247,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    }else if (editable.length() <= 4) {
+                    } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
@@ -1438,6 +1440,13 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    cvvDialog = null;
                 }
             });
 

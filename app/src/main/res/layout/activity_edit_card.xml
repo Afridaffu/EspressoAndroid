@@ -125,7 +125,7 @@
                             android:layout_marginTop="@dimen/_12sdp"
                             android:background="@drawable/disable_bg" />
 
-                        <com.greenbox.coyni.utils.outline_et.CardNumberEditText
+                        <com.greenbox.coyni.utils.outline_et.EditCardNumberET
                             android:id="@+id/etlCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />

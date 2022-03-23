@@ -156,6 +156,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
 
                         divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                         divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
+
+//                        if(!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(AddCardActivity.this);
                     }
                 }
 
@@ -1812,6 +1815,19 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etCardNumber.setText("");
                         etExpiry.setText("");
                         etCVV.setText("");
+
+                        etAddress1.setText("");
+                        etAddress2.setText("");
+                        etCity.setText("");
+                        etState.setText("");
+                        etZipCode.setText("");
+                        etZipCode.clearFocus();
+
+                        Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

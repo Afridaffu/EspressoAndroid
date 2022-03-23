@@ -59,10 +59,10 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/_20sdp">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
                 android:id="@+id/rvPayMethods"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+                android:layout_height="match_parent"></com.greenbox.coyni.utils.ExpandableHeightRecyclerView>
 
             <LinearLayout
                 android:id="@+id/lyAddPay"

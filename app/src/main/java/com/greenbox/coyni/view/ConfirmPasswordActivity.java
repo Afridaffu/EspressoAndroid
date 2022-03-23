@@ -13,6 +13,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -99,7 +102,10 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
             currentPassET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        currentPassET.setText(charSequence);
+                        currentPassET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
@@ -117,8 +123,35 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void afterTextChanged(Editable editable) {
+                public void afterTextChanged(Editable s) {
+                    try {
+                        if (s.length() > 0 && s.toString().trim().length() == 0) {
+                            currentPassET.setText("");
+                        } else if (s.length() > 0 && s.toString().contains(" ")) {
+                            currentPassET.setText(s.toString().trim());
+                            currentPassET.setSelection(s.toString().trim().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 
+            currentPassET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public void onDestroyActionMode(ActionMode mode) {
+                }
+
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
                 }
             });
 

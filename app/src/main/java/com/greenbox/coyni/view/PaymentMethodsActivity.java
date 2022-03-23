@@ -126,6 +126,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
+
         } catch (Exception ex) {
             super.onActivityResult(requestCode, resultCode, data);
             ex.printStackTrace();
@@ -175,11 +176,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
                 addPayment();
+                hideorShowNoTokenText();
             } else {
                 if (!isPayments) {
                     getPaymentMethods();
                 }
             }
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -394,6 +398,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (strScreen.equals("") && strCurrent.equals("addpayment")) {
                     tvMessage.setVisibility(View.VISIBLE);
                     imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
+
                 }
             }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
@@ -525,6 +530,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             cvAddPayment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    hideorShowNoTokenText();
                     numberOfAccounts();
                     ControlMethod("addpayment");
                     strCurrent = "addpay";
@@ -630,7 +636,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         PaymentMethodsAdapter paymentMethodsAdapter;
         try {
             if (listPayments != null && listPayments.size() > 0) {
-                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this,"customer");
+                paymentMethodsAdapter = new PaymentMethodsAdapter(listPayments, PaymentMethodsActivity.this, "customer");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(PaymentMethodsActivity.this);
                 rvPaymentMethods.setLayoutManager(mLayoutManager);
                 rvPaymentMethods.setItemAnimator(new DefaultItemAnimator());
@@ -907,4 +913,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
+    public void hideorShowNoTokenText() {
+        if (paymentMethodsResponse.getData().getBankCount() > 0
+                || paymentMethodsResponse.getData().getDebitCardCount() > 0
+                || paymentMethodsResponse.getData().getCreditCardCount() > 0) {
+            tvMessage.setVisibility(View.GONE);
+        } else {
+            tvMessage.setVisibility(View.VISIBLE);
+        }
+    }
 }

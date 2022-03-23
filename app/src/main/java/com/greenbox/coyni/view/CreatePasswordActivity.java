@@ -14,6 +14,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -229,8 +232,8 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CreatePasswordActivity.this);
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CreatePasswordActivity.this);
                         confirmPasswordET.setHint("Confirm Password");
                         confPasswordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_green));
@@ -340,7 +343,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
             passwordET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        passwordET.setText(charSequence);
+                        passwordET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
@@ -452,7 +458,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
             confirmPasswordET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                    if (i2 - i1 > 1) {
+                        confirmPasswordET.setText(charSequence);
+                        confirmPasswordET.setSelection(charSequence.toString().length());
+                    }
                 }
 
                 @Override
@@ -509,6 +518,42 @@ public class CreatePasswordActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            passwordET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public void onDestroyActionMode(ActionMode mode) {
+                }
+
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
+                }
+            });
+
+            confirmPasswordET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public void onDestroyActionMode(ActionMode mode) {
+                }
+
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
                 }
             });
 
@@ -609,6 +654,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
                 dialog.dismiss();
                 if (login != null) {
                     if (login.getStatus().toLowerCase().equals("success")) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         layoutNewPassword.setVisibility(View.GONE);
                         layoutDone.setVisibility(VISIBLE);
                         isSuccessLayout = true;

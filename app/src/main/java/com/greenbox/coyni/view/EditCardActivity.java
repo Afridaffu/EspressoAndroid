@@ -47,6 +47,7 @@ import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CardNumberEditText;
+import com.greenbox.coyni.utils.outline_et.EditCardNumberET;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.text.SimpleDateFormat;
@@ -59,7 +60,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
     PaymentsList selectedCard;
     MyApplication objMyApplication;
     TextInputEditText etName, etAddress1, etAddress2, etCity, etState, etZipcode, etCountry;
-    CardNumberEditText etlCard;
+    EditCardNumberET etlCard;
     MaskEditText etExpiry;
     PaymentMethodsViewModel paymentMethodsViewModel;
     CardView cvSave, cvRemove;

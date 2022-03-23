@@ -1322,6 +1322,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
             errorDialog.setCanceledOnTouchOutside(false);
             errorDialog.show();
+
+            errorDialog.setOnDismissListener(dialogInterface -> {
+                isQRScan = true;
+                mcodeScanner.startPreview();
+                scannerLayout.setVisibility(View.VISIBLE);
+                errorDialog = null;
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

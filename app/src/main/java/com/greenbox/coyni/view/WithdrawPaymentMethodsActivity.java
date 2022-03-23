@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.AddPaymentSignetActivity;
@@ -1084,7 +1085,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         try {
             LinearLayout lyNTClose = findViewById(R.id.lyNTClose);
             LinearLayout lyAddPay = findViewById(R.id.lyAddPay);
-            RecyclerView rvPayMethods = findViewById(R.id.rvPayMethods);
+            ExpandableHeightRecyclerView rvPayMethods = findViewById(R.id.rvPayMethods);
             List<PaymentsList> listData = new ArrayList<>();
             if (paymentMethodsResponse != null) {
                 listData = paymentMethodsResponse.getData().getData();
@@ -1094,6 +1095,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawPaymentMethodsActivity.this);
                     rvPayMethods.setLayoutManager(mLayoutManager);
                     rvPayMethods.setNestedScrollingEnabled(false);
+                    rvPayMethods.setExpanded(true);
                     rvPayMethods.setItemAnimator(new DefaultItemAnimator());
                     rvPayMethods.setAdapter(selectedPaymentMethodsAdapter);
                 } else {
@@ -1140,7 +1142,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            RecyclerView rvSelPayMethods = payDialog.findViewById(R.id.rvSelPayMethods);
+            ExpandableHeightRecyclerView rvSelPayMethods = payDialog.findViewById(R.id.rvSelPayMethods);
             LinearLayout lyAddPay = payDialog.findViewById(R.id.lyAddPay);
             TextView tvHead = payDialog.findViewById(R.id.tvHead);
             tvHead.setText("Withdraw Method");
@@ -1149,6 +1151,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listPayments, WithdrawPaymentMethodsActivity.this, "withdrawtoken");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawPaymentMethodsActivity.this);
                 rvSelPayMethods.setLayoutManager(mLayoutManager);
+                rvSelPayMethods.setNestedScrollingEnabled(false);
+                rvSelPayMethods.setExpanded(true);
                 rvSelPayMethods.setItemAnimator(new DefaultItemAnimator());
                 rvSelPayMethods.setAdapter(selectedPaymentMethodsAdapter);
             }
