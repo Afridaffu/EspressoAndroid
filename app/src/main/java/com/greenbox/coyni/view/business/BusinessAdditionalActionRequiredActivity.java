@@ -26,13 +26,26 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
+import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.bank.BankDeleteResponseData;
+import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.cards.CardDeleteResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
 import com.greenbox.coyni.utils.FileUtils;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
+import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
+import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequired;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +67,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private EditText addNoteET;
     public CheckBox checkboxCB, checkbox2CB, checkbox3CB;
     public CardView submitCV;
+    private UnderwritingUserActionRequired underwritingUserActionRequired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +76,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         businessAdditionalActionRequired = this;
         initFields();
+        initObserver();
 
     }
 
@@ -98,6 +113,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         acceptdneLL = findViewById(R.id.acceptDneLL);
         compnyNameTV = findViewById(R.id.comapny_nameTV);
 
+        underwritingUserActionRequired = new ViewModelProvider(this).get(UnderwritingUserActionRequired.class);
+
+        underwritingUserActionRequired.postactionRequired();
 
         declineLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +142,21 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         });
     }
+
+    private void initObserver() {
+        underwritingUserActionRequired.getUserAccountLimitsMutableLiveData().observe(this, new Observer<ActionRequiredDataResponse>() {
+            @Override
+            public void onChanged(ActionRequiredDataResponse actionRequiredDataResponse) {
+                try {
+                    LogUtils.d(TAG,"ActionRequiredDataResponse"+actionRequiredDataResponse);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+    }
+
 
 
     private void displayComments() {

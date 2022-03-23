@@ -124,6 +124,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.userrequest.UserRequest;
@@ -536,6 +537,11 @@ public interface ApiService {
 
     @POST("api/v2/business/fees")
     Call<CompanyInfoUpdateResp> fees();
+
+    @GET("api/v2/underwriting/user/action-required")
+    Call<ActionRequiredDataResponse> postAdditionActionRequired();
+
+
 
 }
 

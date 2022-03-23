@@ -1,13 +1,28 @@
-package com.greenbox.coyni.model.login;
+package com.greenbox.coyni.model.underwriting;
 
-
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.greenbox.coyni.model.Error;
+import com.greenbox.coyni.model.transaction.TransactionData;
 
-public class LoginResponse {
+public class ActionRequiredResponse {
 
+    @SerializedName("status")
+    @Expose
     private String status;
+    @SerializedName("timestamp")
+    @Expose
     private String timestamp;
-    private LoginData data;
+
+    public ActionRequiredDataResponse getData() {
+        return data;
+    }
+
+    @SerializedName("data")
+    @Expose
+    private ActionRequiredDataResponse data;
+    @SerializedName("error")
+    @Expose
     private Error error;
 
     public String getStatus() {
@@ -26,11 +41,8 @@ public class LoginResponse {
         this.timestamp = timestamp;
     }
 
-    public LoginData getData() {
-        return data;
-    }
 
-    public void setData(LoginData data) {
+    public void setData(ActionRequiredDataResponse data) {
         this.data = data;
     }
 
