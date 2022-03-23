@@ -136,7 +136,7 @@ public class EditTeamMember extends BaseActivity {
         }
         if (phoneNumber != null
                 && !phoneNumber.equals("")) {
-            editPhoneET.setText("(" +phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
+            editPhoneET.setText("(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10));
         }
 
         teamViewModel = new ViewModelProvider(this).get(TeamViewModel.class);
@@ -146,13 +146,14 @@ public class EditTeamMember extends BaseActivity {
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isNextEnabled==true) {
+                if (isNextEnabled == true) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     showProgressDialog();
-                    teamInfoAPICall(prepareRequest());                }
+                    teamInfoAPICall(prepareRequest());
+                }
 
             }
         });
@@ -249,7 +250,7 @@ public class EditTeamMember extends BaseActivity {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.error_red));
                             editEmailLL.setVisibility(VISIBLE);
-                            editEmailTV.setText("Field Required");
+                            editEmailTV.setText("Please enter a valid Email");
                         } else {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.light_gray));
@@ -446,6 +447,7 @@ public class EditTeamMember extends BaseActivity {
 
         return teamRequest;
     }
+
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
         final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -503,6 +505,7 @@ public class EditTeamMember extends BaseActivity {
         });
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

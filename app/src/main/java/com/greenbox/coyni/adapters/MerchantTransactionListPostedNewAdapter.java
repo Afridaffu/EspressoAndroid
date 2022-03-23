@@ -41,11 +41,18 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             String datee = objMyApplication.convertZoneDateLastYear(transactionListItemsPosted.get(i).getUpdatedAt().split("\\.")[0]);
             DateItem dateItem = new DateItem();
             dateItem.setDate(datee);
-            if (consolidatedListData.contains(dateItem)) {
-                consolidatedListData.add(transactionListItemsPosted.get(i));
-            } else {
+
+            if (!consolidatedListData.contains(dateItem)) {
                 consolidatedListData.add(dateItem);
             }
+            consolidatedListData.add(transactionListItemsPosted.get(i));
+
+//            if (consolidatedListData.contains(dateItem)) {
+//                consolidatedListData.add(transactionListItemsPosted.get(i));
+//            } else {
+//                consolidatedListData.add(dateItem);
+//                i--;
+//            }
         }
 
 //        for (int i = 0; i < list.size(); i++) {

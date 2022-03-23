@@ -138,7 +138,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isNextEnabled==true) {
+                if (isNextEnabled == true) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -265,7 +265,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.error_red));
                             editEmailLL.setVisibility(VISIBLE);
-                            editEmailTV.setText("Field Required");
+                            editEmailTV.setText("Please enter a valid Email");
                         } else {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.light_gray));

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.verticalcalendar.CalendarPicker;
 
@@ -33,6 +34,7 @@ public class DateRangePickerDialog extends BaseDialog {
     Date startDateD = null;
     Date endDateD = null;
     public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
+    private RangeDates dateRangeModelClass;
 
 
     @Override
@@ -88,6 +90,11 @@ public class DateRangePickerDialog extends BaseDialog {
                     Log.e("strToDate", strToDate);
 
                     getOnDialogClickListener().onDialogClicked("Done", strFromDate + " - " + strToDate);
+                    dateRangeModelClass=new RangeDates();
+                    dateRangeModelClass.setUpdatedToDate(strToDate);
+                    dateRangeModelClass.setUpdatedFromDate(strToDate);
+                    dateRangeModelClass.setFullDate(strSelectedDate);
+                    getOnDialogClickListener().onDialogClicked(Utils.datePicker,dateRangeModelClass);
                     dismiss();
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
@@ -158,5 +165,7 @@ public class DateRangePickerDialog extends BaseDialog {
                 return null;
             }
         });
+
     }
+
 }
