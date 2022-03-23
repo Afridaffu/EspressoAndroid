@@ -179,13 +179,11 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     }
 
                                     if (!strFromDate.equals("")) {
-                                      //  transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
-                                        transactionListRequest.setUpdatedFromDate("2022-03-08 10:24:55.538");
+                                        transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
                                         //transactionListRequest.setUpdatedFromDateOperator(">=");
                                     }
                                     if (!strToDate.equals("")) {
-                                       // transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
-                                        transactionListRequest.setUpdatedToDate("2022-03-08 10:24:55.538");
+                                        transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                                         //transactionListRequest.setUpdatedToDateOperator("<=");
                                     }
                                 }

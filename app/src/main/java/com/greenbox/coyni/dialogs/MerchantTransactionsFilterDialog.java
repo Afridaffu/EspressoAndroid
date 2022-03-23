@@ -1,7 +1,5 @@
 package com.greenbox.coyni.dialogs;
 
-import static com.microblink.blinkcard.MicroblinkSDK.getApplicationContext;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,10 +23,8 @@ import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MerchantTransactionsFilterDialog extends BaseDialog {
     private Boolean isFilters = false;

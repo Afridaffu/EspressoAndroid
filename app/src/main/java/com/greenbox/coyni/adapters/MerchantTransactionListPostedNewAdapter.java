@@ -245,7 +245,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         holder.ll_merchant_transaction_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.onItemClick(0, objData);
                 }
             }

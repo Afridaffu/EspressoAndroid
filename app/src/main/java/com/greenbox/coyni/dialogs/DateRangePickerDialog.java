@@ -90,11 +90,11 @@ public class DateRangePickerDialog extends BaseDialog {
                     Log.e("strToDate", strToDate);
 
                     getOnDialogClickListener().onDialogClicked("Done", strFromDate + " - " + strToDate);
-                    dateRangeModelClass=new RangeDates();
+                    dateRangeModelClass = new RangeDates();
                     dateRangeModelClass.setUpdatedToDate(strToDate);
                     dateRangeModelClass.setUpdatedFromDate(strToDate);
                     dateRangeModelClass.setFullDate(strSelectedDate);
-                    getOnDialogClickListener().onDialogClicked(Utils.datePicker,dateRangeModelClass);
+                    getOnDialogClickListener().onDialogClicked(Utils.datePicker, dateRangeModelClass);
                     dismiss();
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
