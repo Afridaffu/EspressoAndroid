@@ -16,6 +16,7 @@ import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
 import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,13 +86,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             statusLL.setVisibility(View.GONE);
         } else {
            imvTickIcon.setVisibility(View.GONE);
-            if(!detailInfo.getAccountSttaus().equalsIgnoreCase("active")){
-
-                if(detailInfo.getAccountSttaus().equalsIgnoreCase("terminated")){
+            if(!detailInfo.getAccountSttaus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+                if(detailInfo.getAccountSttaus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())){
                     statusLL.setVisibility(View.VISIBLE);
                     statusLL.setBackgroundColor(context.getColor(R.color.default_red));
                     statusTV.setText(detailInfo.getAccountSttaus());
-                } else if(detailInfo.getAccountSttaus().equalsIgnoreCase("under review")){
+                } else if(detailInfo.getAccountSttaus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())){
                     statusLL.setVisibility(View.VISIBLE);
                     statusLL.setBackgroundColor(context.getColor(R.color.under_review_blue));
                     statusTV.setText(detailInfo.getAccountSttaus());

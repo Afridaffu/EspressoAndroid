@@ -359,14 +359,14 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                             businessIdentityVerificationViewModel.getBusinessTracker();
 
                             if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                if(btResp.getData().getAccountStatus().equalsIgnoreCase("active")){
+                                if(btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
                                      myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                                     Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
                                      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                      startActivity(intent);
                                  } else {
                                     myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
-                                    Log.e("Tracker resp", new Gson().toJson(myApplication.getBusinessTrackerResponse()));
+                                    Log.e(TAG, new Gson().toJson(myApplication.getBusinessTrackerResponse()));
                                     Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
@@ -388,7 +388,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse);
+                    LogUtils.d(TAG, "addDBAresponse" + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
@@ -409,7 +409,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         int groupPosition = 0;
 
         try {
-            LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
+            LogUtils.d(TAG, "adddetails" + mainSet + subSet + id + accountTypeId);
             groupPosition = 0;
             BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
 
@@ -474,7 +474,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     @Override
     public void selectedItem(int id) {
 
-        LogUtils.d("switching", "accounttttt" + id);
+        LogUtils.d(TAG, "accounttttt" + id);
         identityVerificationViewModel.getPostAddDBABusiness(id);
 
     }

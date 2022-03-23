@@ -72,13 +72,13 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                 holder.statusLL.setVisibility(View.GONE);
             } else {
                 holder.imvTickIcon.setVisibility(View.GONE);
-                if(!listCompany.get(position).getAccountStatus().equalsIgnoreCase("active")){
+                if(!listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
 
-                    if(listCompany.get(position).getAccountStatus().equalsIgnoreCase("terminated")){
+                    if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())){
                         holder.statusLL.setVisibility(View.VISIBLE);
                         holder.statusLL.setBackgroundColor(mContext.getColor(R.color.default_red));
                         holder.statusTV.setText(listCompany.get(position).getAccountStatus());
-                    } else if(listCompany.get(position).getAccountStatus().equalsIgnoreCase("under review")){
+                    } else if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())){
                         holder.statusLL.setVisibility(View.VISIBLE);
                         holder.statusLL.setBackgroundColor(mContext.getColor(R.color.under_review_blue));
                         holder.statusTV.setText(listCompany.get(position).getAccountStatus());
@@ -116,7 +116,6 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
             @Override
             public void onClick(View v) {
                 try {
-                    LogUtils.d("position","postion"+position+listCompany.size());
                     for (int i = 0; i < listCompany.size(); i++) {
                         if (position == i) {
                             listCompany.get(i).setSelected(true);
