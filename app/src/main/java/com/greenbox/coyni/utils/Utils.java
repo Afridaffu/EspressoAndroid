@@ -106,6 +106,7 @@ public class Utils {
         ACTIVE("Active"),
         DEACTIVE("DeActivated"),
         ACTION_REQUIRED("Action Required"),
+        ADDITIONAL_INFO_REQUIRED("Additional Info Required"),
         REGISTRATION_CANCELED("Canceled"),
         UNVERIFIED("Unverified"),
         INFO_SHARED("Info Shared"),
