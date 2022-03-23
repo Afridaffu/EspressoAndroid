@@ -12,7 +12,9 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.view.TransactionListActivity;
+import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 
 import org.w3c.dom.Text;
 
@@ -21,14 +23,15 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     TextView resetFilterTV;
     ImageView datePickIV;
     public CardView applyFilterBtnCV;
-    EditText filterdatePickET;
-    private String dateSelected = null;
+    EditText filterDatePickET;
+    private Context context;
     public boolean isfilterdatePickET = false,isapplyEnabled= false;
-    public static PayoutTransactionsDetailsFiltersDialog payoutTransactionsDetailsFiltersDialog;
+//    public static PayoutTransactionsDetailsFiltersDialog payoutTransactionsDetailsFiltersDialog;
+//    public static DateRangePickerDialog dateRangePickerDialog;
 
-    public PayoutTransactionsDetailsFiltersDialog(Context context, String dateSelected) {
+    public PayoutTransactionsDetailsFiltersDialog(Context context) {
         super(context);
-        this.dateSelected = dateSelected;
+        this.context = context;
     }
 
     @Override
@@ -36,36 +39,48 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payout_transactions_filter);
 
-        datePickLL = findViewById(R.id.dateRangePickerLL);
+        datePickLL = findViewById(R.id.payoutDateRangePickerLL);
         datePickIV = findViewById(R.id.datePickIV);
-        filterdatePickET = findViewById(R.id.filterdatePickET);
+        filterDatePickET = findViewById(R.id.filterdatePickET);
         applyFilterBtnCV = findViewById(R.id.applyFilterBtnCV);
         resetFilterTV = findViewById(R.id.resetFiltersTV);
 
-        if(dateSelected != null && !dateSelected.equals("")) {
-            filterdatePickET.setText(dateSelected);
-        }
         datePickLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
-                dismiss();
+                showCalendarDialog();
+//                getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
+//                dismiss();
             }
         });
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getOnDialogClickListener().onDialogClicked("Date_SELECTED", dateSelected);
                 dismiss();
-
+//                getOnDialogClickListener().onDialogClicked("Date_SELECTED", dateSelected);
             }
         });
         resetFilterTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterdatePickET.setText("");
+                filterDatePickET.setText("");
             }
         });
-
     }
+    private void showCalendarDialog() {
+        DateRangePickerDialog dialog = new DateRangePickerDialog(context);
+        dialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                if(action.equals("Done")) {
+                    filterDatePickET.setText("");
+//                    showFiltersPopup();
+//                    getOnDialogClickListener().onDialogClicked("Filter_applied", null);
+//                    dismiss();
+                }
+            }
+        });
+        dialog.show();
+    }
+
 }
