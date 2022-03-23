@@ -67,6 +67,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private BusinessProfileRecyclerAdapter listAdapter;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private IdentityVerificationViewModel identityVerificationViewModel;
+    private String userName;
 
 
     @Override
@@ -191,15 +192,21 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                 && myApplication.getMyProfile().getData().getFirstName() != null) {
             String firstName = myApplication.getMyProfile().getData().getFirstName();
             iconText = firstName.substring(0, 1).toUpperCase();
-            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+            userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
             if (myApplication.getMyProfile().getData().getLastName() != null) {
-                String lastName = myApplication.getMyProfile().getData().getFirstName();
+                String lastName = myApplication.getMyProfile().getData().getLastName();
                 iconText = iconText + lastName.substring(0, 1).toUpperCase();
-                username = username + " ";
-                username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                userName = userName + " ";
+                userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
             }
-//          userNameTV.setText(getResources().getString(R.string.dba_name, username));
-            userNameTV.setText(username);
+
+            userNameTV.setText(getResources().getString(R.string.dba_name, userName));
+
+            if (userName != null && userName.length() > 21) {
+                userNameTV.setText(userName.substring(0, 21) + " ");
+            } else {
+                userNameTV.setText(userName);
+            }
         }
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getImage() != null) {
@@ -214,6 +221,20 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             imgProfile.setVisibility(View.GONE);
             userShortInfoTV.setText(iconText);
         }
+
+//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+//                && myApplication.getMyProfile().getData().getImage() != null) {
+//            userShortInfoTV.setVisibility(View.GONE);
+//            imgProfile.setVisibility(View.VISIBLE);
+//            Glide.with(this)
+//                    .load(myApplication.getMyProfile().getData().getImage())
+//                    .placeholder(R.drawable.ic_profile_male_user)
+//                    .into(imgProfile);
+//        } else {
+//            userShortInfoTV.setVisibility(View.VISIBLE);
+//            imgProfile.setVisibility(View.GONE);
+//            userShortInfoTV.setText(iconText);
+//        }
 
         setUserBalance(myApplication.getWalletResponseData());
 
