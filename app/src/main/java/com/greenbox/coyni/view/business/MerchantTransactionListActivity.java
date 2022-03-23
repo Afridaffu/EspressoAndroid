@@ -158,35 +158,36 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-
-                                if (isFilters) {
-                                    if (transactionType.size() > 0) {
-                                        transactionListRequest.setTransactionType(transactionType);
-                                    }
-                                    if (transactionSubType.size() > 0) {
-                                        transactionListRequest.setTransactionSubType(transactionSubType);
-                                    }
-                                    if (txnStatus.size() > 0) {
-                                        transactionListRequest.setTxnStatus(txnStatus);
-                                    }
-                                    if (!strStartAmount.trim().equals("")) {
-                                        transactionListRequest.setFromAmount(strStartAmount.replace(",", ""));
-                                        transactionListRequest.setFromAmountOperator(">=");
-                                    }
-                                    if (!strEndAmount.trim().equals("")) {
-                                        transactionListRequest.setToAmount(strEndAmount.replace(",", ""));
-                                        transactionListRequest.setToAmountOperator("<=");
-                                    }
-
-                                    if (!strFromDate.equals("")) {
-                                        transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
-                                        //transactionListRequest.setUpdatedFromDateOperator(">=");
-                                    }
-                                    if (!strToDate.equals("")) {
-                                        transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
-                                        //transactionListRequest.setUpdatedToDateOperator("<=");
-                                    }
-                                }
+//
+//                                if (isFilters) {
+//                                    if (transactionType.size() > 0) {
+//                                        transactionListRequest.setTransactionType(transactionType);
+//                                    }
+//                                    if (transactionSubType.size() > 0) {
+//                                        transactionListRequest.setTransactionSubType(transactionSubType);
+//                                    }
+//                                    if (txnStatus.size() > 0) {
+//                                        transactionListRequest.setTxnStatus(txnStatus);
+//                                    }
+//                                    if (!strStartAmount.trim().equals("")) {
+//                                        transactionListRequest.setFromAmount(strStartAmount.replace(",", ""));
+//                                        transactionListRequest.setFromAmountOperator(">=");
+//                                    }
+//                                    if (!strEndAmount.trim().equals("")) {
+//                                        transactionListRequest.setToAmount(strEndAmount.replace(",", ""));
+//                                        transactionListRequest.setToAmountOperator("<=");
+//                                    }
+//
+//                                    if (!strFromDate.equals("")) {
+//                                        transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
+//                                        //transactionListRequest.setUpdatedFromDateOperator(">=");
+//                                    }
+//                                    if (!strToDate.equals("")) {
+//                                        transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
+//                                        //transactionListRequest.setUpdatedToDateOperator("<=");
+//                                    }
+//                                }
+//
                                 transactionsAPI(transactionListRequest);
                                 objMyApplication.initializeTransactionSearch();
                                 objMyApplication.setTransactionListSearch(transactionListRequest);
