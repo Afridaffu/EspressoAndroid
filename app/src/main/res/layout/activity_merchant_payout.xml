@@ -22,7 +22,7 @@
             android:paddingLeft="@dimen/_22sdp">
 
             <LinearLayout
-                android:id="@+id/lycloseLL"
+                android:id="@+id/Mpayoutll"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="@dimen/_40sdp"
@@ -212,7 +212,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <ImageView
-
+                                android:id="@+id/payoutCopyIV"
                                 android:layout_width="@dimen/_11sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_gravity="center"
@@ -250,7 +250,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <ImageView
-                                android:id="@+id/withBankwithdrawIDIV"
+                                android:id="@+id/referenceCopyIV"
                                 android:layout_width="@dimen/_11sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_gravity="center"
@@ -306,7 +306,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-android:id="@+id/merchantPIdateTV"
+                                android:id="@+id/merchantPIdateTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"

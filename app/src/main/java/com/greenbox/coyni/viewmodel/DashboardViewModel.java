@@ -627,7 +627,7 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
-    public void getTransactionDetails(String gbxTxnIdType, int txnType, int txnSubType) {
+    public void getTransactionDetails(String gbxTxnIdType, int txnType, Integer txnSubType) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<TransactionDetails> call = apiService.getTransactionDetails(gbxTxnIdType, txnType, txnSubType);
