@@ -194,7 +194,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
             heading.setText(getString(R.string.phone));
             title.setText(getString(R.string.phonenumber_curr));
             value.setText(getIntent().getStringExtra("value"));
-            phoneFormat = getIntent().getStringExtra("value");
+            phoneFormat = value.getText().toString();
 
             if (myApplicationObj.getDbaInfoResp() != null) {
                 value.setText("(" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));

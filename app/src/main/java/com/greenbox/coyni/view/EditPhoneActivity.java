@@ -143,8 +143,6 @@ public class EditPhoneActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                     Utils.displayAlertNew("Please enter a new phone number ",EditPhoneActivity.this,"Coyni");
                                 } else {
-                                    b_newPhoneErrorLL.setVisibility(View.GONE);
-                                    b_newPhoneErrorTV.setText("");
                                     businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
                                 }
                             } catch (NumberFormatException e) {
