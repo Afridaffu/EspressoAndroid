@@ -157,7 +157,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    }else if (editable.length() <= 4) {
+                    } else if (editable.length() <= 4) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
@@ -189,19 +189,19 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lp.setMargins(0, 0, 0, 0);
                     payRequestET.setLayoutParams(lp);
-                    LogUtils.d(TAG,"lengthhh zeroo");
+                    LogUtils.d(TAG, "lengthhh zeroo");
                     LinearLayout.LayoutParams lpImageConvert = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lpImageConvert.setMargins(15, 38, 0, 0);
                     imgConvert.setLayoutParams(lpImageConvert);
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
-                   // tvCurrency.setVisibility(View.VISIBLE);
+                    // tvCurrency.setVisibility(View.VISIBLE);
                     disableButtons(true);
                     cKey.clearData();
                 } else {
                     payRequestET.setText("");
-                    LogUtils.d(TAG,"lengthhh zeroo");
+                    LogUtils.d(TAG, "lengthhh zeroo");
                     LinearLayout.LayoutParams lpImageConvert = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lpImageConvert.setMargins(15, 13, 0, 0);
                     imgConvert.setLayoutParams(lpImageConvert);
@@ -823,11 +823,11 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //                startActivity(i);
 //                value = false;
 //            } else
-            if (cynValue > avaBal) {
-                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-                value = false;
-            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
+                value = false;
+            } else if (cynValue > avaBal) {
+                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             }
 //            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {

@@ -52,12 +52,13 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BatchPayoutListAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull BatchPayoutListAdapter.MyViewHolder holder,int position) {
         holder.detailsLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 listener.onItemClick(position, null);
+
             }
         });
 

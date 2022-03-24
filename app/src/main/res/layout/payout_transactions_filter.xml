@@ -63,7 +63,7 @@
             android:textSize="@dimen/_11ssp" />
 
         <LinearLayout
-            android:id="@+id/dateRangePickerLL"
+            android:id="@+id/payoutDateRangePickerLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_23sdp"

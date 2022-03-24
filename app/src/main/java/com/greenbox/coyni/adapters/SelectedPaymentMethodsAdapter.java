@@ -190,6 +190,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                         mLastClickTime = SystemClock.elapsedRealtime();
                         switch (strScreen) {
                             case "selectpay":
+                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                 objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {
                                     if (!objData.getRelink()) {
@@ -212,6 +213,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 }
                                 break;
                             case "withdrawtoken":
+                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                 objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (!objData.getRelink()) {
@@ -227,6 +229,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 break;
                             case "buytoken":
                                 if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                     objMyApplication.setSelectedCard(objData);
                                     notifyDataSetChanged();
                                     if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
@@ -245,6 +248,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 }
                                 break;
                             case "withdraw":
+                                objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                 objMyApplication.setSelectedCard(objData);
                                 if (objData.getPaymentMethod().toLowerCase().equals("bank")) {
                                     if (!objData.getRelink()) {
@@ -260,6 +264,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 break;
                             case "wdrawtoken":
                                 if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                    objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                     objMyApplication.setSelectedCard(objData);
                                     notifyDataSetChanged();
                                     if (objData.getPaymentMethod().toLowerCase().equals("bank") || objData.getPaymentMethod().toLowerCase().equals("signet")) {

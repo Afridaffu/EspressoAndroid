@@ -26,6 +26,11 @@ public class DateItem extends ListItem {
         if (this == obj) {
             return true;
         }
+
+        if (!(obj instanceof DateItem)) {
+            return false;
+        }
+
         DateItem dateItem = (DateItem) obj;
         return Objects.equals(date, dateItem.date);
     }

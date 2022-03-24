@@ -83,7 +83,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_10ssp"
                 android:fontFamily="@font/opensans_semibold"
-                android:text="Jonathan Joestar  "
+                android:text=""
                 android:layout_weight="1"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11sdp" />

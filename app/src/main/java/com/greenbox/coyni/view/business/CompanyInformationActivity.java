@@ -250,13 +250,21 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
 
+                    if (position == 0) {
+                        enableOrDisableNext();
+                    } else if (position == 1) {
+                        enableOrDisableAddressNext();
+                    } else if (position == 2) {
+                        enableOrDisableDocsDone();
+                    }
                 }
 
                 @Override
                 public void onPageSelected(int position) {
+                    Log.e("onPageSelected", position + "");
                     selectedPage = position;
                     if (position == 0) {
-                        enableOrDisableNext();
+
                         close.setVisibility(VISIBLE);
                         backIV.setVisibility(GONE);
                         divider0.setBackgroundResource(R.drawable.button_background);
@@ -266,8 +274,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
 
+                        enableOrDisableNext();
                     } else if (position == 1) {
-                        enableOrDisableAddressNext();
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
                         divider0.setBackgroundResource(R.drawable.button_background1);
@@ -276,10 +284,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        enableOrDisableAddressNext();
+
                     } else if (position == 2) {
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-                        enableOrDisableDocsDone();
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
                         divider0.setBackgroundResource(R.drawable.button_background1);
@@ -289,22 +298,14 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(CompanyInformationActivity.this);
 
-//                        if (SSNTYPE.equals("SSN")) {
-//                            aoiLL.setVisibility(GONE);
-//                            einLetterLL.setVisibility(GONE);
-//                            w9FormLL.setVisibility(VISIBLE);
-//
-//                        } else {
-//                            aoiLL.setVisibility(VISIBLE);
-//                            einLetterLL.setVisibility(VISIBLE);
-//                            w9FormLL.setVisibility(VISIBLE);
-//                        }
+                        enableOrDisableDocsDone();
+
                     }
                 }
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
-
+                    Log.e("onPageScrollStateChanged", state + "");
                 }
             });
 
@@ -963,7 +964,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 //                        companynameerrorTV.setText("Field Required");
                         iscompanyName = false;
                     }
-                    enableOrDisableNext();
+                    if (selectedPage == 0)
+                        enableOrDisableNext();
                 }
 
                 @Override
@@ -1045,7 +1047,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         } else {
                             isBusinessEntity = false;
                         }
-                        enableOrDisableAddressNext();
+                        enableOrDisableNext();
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }

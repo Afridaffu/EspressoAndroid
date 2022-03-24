@@ -292,7 +292,7 @@ public class TeamMemberActivity extends BaseActivity {
 
 
     private void showRemoveMemberDialog() {
-        DialogAttributes dialogAttributes = new DialogAttributes(getResources().getString(R.string.remove_team_members), getString(R.string.account_permissions, firstName + "" + lastName), getString(R.string.yes), getString(R.string.no));
+        DialogAttributes dialogAttributes = new DialogAttributes(getResources().getString(R.string.remove_team_members), getString(R.string.account_permissions, firstName + " " + lastName), getString(R.string.yes), getString(R.string.no));
         CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
                 (TeamMemberActivity.this, dialogAttributes);
 
