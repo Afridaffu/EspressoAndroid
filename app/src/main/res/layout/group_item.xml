@@ -7,7 +7,7 @@
     <View
         android:id="@+id/bottom_corners"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
+        android:layout_height="@dimen/_15sdp"
         android:background="@drawable/bottom_left_right_corner"
         android:visibility="visible" />
 
@@ -29,7 +29,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="8dp"
+        android:layout_height="@dimen/_10sdp"
         android:background="@drawable/left_right_corner" />
 
 </LinearLayout>
