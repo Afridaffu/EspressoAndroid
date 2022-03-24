@@ -182,7 +182,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    }else if (editable.length() <= 4) {
+                    } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
@@ -407,6 +407,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        rollbackSelectedCard();
                         selectPayMethod();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -647,8 +648,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         paymentMethodsResponse = payMethodsResponse;
                     }
                     if (objMyApplication.getSelectedCard() != null) {
-                        selectedCard = objMyApplication.getSelectedCard();
-                        bindPayMethod(selectedCard);
+//                        selectedCard = objMyApplication.getSelectedCard();
+                        bindPayMethod(rollbackSelectedCard());
                     }
                 }
             }
@@ -1521,6 +1522,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 Utils.displayAlert(strSignOn, BuyTokenActivity.this, "", "");
                             }
                         }
+//                        rollbackSelectedCard();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1746,4 +1748,23 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
+    public PaymentsList rollbackSelectedCard() {
+        if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+            if (objMyApplication.getSelectedCard().getRelink()) {
+                selectedCard = objMyApplication.getPrevSelectedCard();
+                objMyApplication.setSelectedCard(selectedCard);
+            } else {
+                selectedCard = objMyApplication.getSelectedCard();
+            }
+        } else {
+            if (objMyApplication.getSelectedCard().getExpired()) {
+                selectedCard = objMyApplication.getPrevSelectedCard();
+                objMyApplication.setSelectedCard(selectedCard);
+            } else {
+                selectedCard = objMyApplication.getSelectedCard();
+            }
+        }
+
+        return selectedCard;
+    }
 }

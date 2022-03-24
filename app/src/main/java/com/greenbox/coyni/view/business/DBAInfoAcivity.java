@@ -1197,7 +1197,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             } else {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone && isDBAFiling && isIDVESelected) {
+                        && isHighTkt && isAvgTkt && isTimeZone  && isIDVESelected) {
+//                    && isDBAFiling (DBA file is Optional)
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                     viewPager.setPagingEnabled(true);

@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
+import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.AddPaymentSignetActivity;
@@ -400,7 +401,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             tvDCardMsg = findViewById(R.id.tvDCardMsg);
             imgDCardArrow = findViewById(R.id.imgDCardArrow);
             imgCCardLogo = findViewById(R.id.imgCCardLogo);
-            imgCCardArrow = findViewById(R.id.imgCCardArrow);
+            imgCCardArrow = findViewById(R.id.imgCCardArrowC);
             tvCCHead = findViewById(R.id.tvCCHead);
             tvCCardHead = findViewById(R.id.tvCCardHead);
             tvCCardMsg = findViewById(R.id.tvCCardMsg);
@@ -543,7 +544,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvExtBankHead.setTextColor(getColor(R.color.dark_grey));
                     tvExtBankMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgBankArrow.clearColorFilter();
-//                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBankArrow.setEnabled(true);
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }
@@ -569,6 +570,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvCCardHead.setTextColor(getColor(R.color.light_gray));
                     tvCCardMsg.setTextColor(getColor(R.color.light_gray));
                     imgCCardArrow.setColorFilter(getColor(R.color.light_gray));
+                    imgCCardArrow.setEnabled(false);
                     imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card_inactive);
                 } else {
                     tvCCardError.setVisibility(View.GONE);
@@ -577,6 +579,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     tvCCardMsg.setTextColor(getColor(R.color.dark_grey));
 //                    imgCCardArrow.clearColorFilter();
                     imgCCardArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgCCardArrow.setEnabled(true);
                     imgCCardLogo.setImageResource(R.drawable.ic_credit_debit_card);
 
                 }
@@ -1084,7 +1087,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         try {
             LinearLayout lyNTClose = findViewById(R.id.lyNTClose);
             LinearLayout lyAddPay = findViewById(R.id.lyAddPay);
-            RecyclerView rvPayMethods = findViewById(R.id.rvPayMethods);
+            ExpandableHeightRecyclerView rvPayMethods = findViewById(R.id.rvPayMethods);
             List<PaymentsList> listData = new ArrayList<>();
             if (paymentMethodsResponse != null) {
                 listData = paymentMethodsResponse.getData().getData();
@@ -1094,6 +1097,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawPaymentMethodsActivity.this);
                     rvPayMethods.setLayoutManager(mLayoutManager);
                     rvPayMethods.setNestedScrollingEnabled(false);
+                    rvPayMethods.setExpanded(true);
                     rvPayMethods.setItemAnimator(new DefaultItemAnimator());
                     rvPayMethods.setAdapter(selectedPaymentMethodsAdapter);
                 } else {
@@ -1140,7 +1144,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            RecyclerView rvSelPayMethods = payDialog.findViewById(R.id.rvSelPayMethods);
+            ExpandableHeightRecyclerView rvSelPayMethods = payDialog.findViewById(R.id.rvSelPayMethods);
             LinearLayout lyAddPay = payDialog.findViewById(R.id.lyAddPay);
             TextView tvHead = payDialog.findViewById(R.id.tvHead);
             tvHead.setText("Withdraw Method");
@@ -1149,6 +1153,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listPayments, WithdrawPaymentMethodsActivity.this, "withdrawtoken");
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(WithdrawPaymentMethodsActivity.this);
                 rvSelPayMethods.setLayoutManager(mLayoutManager);
+                rvSelPayMethods.setNestedScrollingEnabled(false);
+                rvSelPayMethods.setExpanded(true);
                 rvSelPayMethods.setItemAnimator(new DefaultItemAnimator());
                 rvSelPayMethods.setAdapter(selectedPaymentMethodsAdapter);
             }

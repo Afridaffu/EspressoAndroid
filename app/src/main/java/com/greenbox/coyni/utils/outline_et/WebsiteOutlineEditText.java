@@ -49,7 +49,8 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
         websiteET.setOnFocusChangeListener((view, b) -> {
             try {
                 if (b) {
-                    websiteET.setHint(hintString);
+//                    websiteET.setHint(hintString);
+                    websiteET.setHint("");
                     hintName.setVisibility(VISIBLE);
                     hintName.setTextColor(getResources().getColor(R.color.primary_color));
                     hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
@@ -62,6 +63,7 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                         hintName.setVisibility(GONE);
 
                     if (websiteET.getText().toString().trim().length() > 0 && !isValidUrl(websiteET.getText().toString().trim())) {
+                        websiteET.setHint("");
                         if (hintString.equals("Website")) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -72,6 +74,7 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     } else if ((websiteET.getText().length() == 0)) {
+                        websiteET.setHint(hintString);
                         if (hintString.equals("Website")) {
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
@@ -82,6 +85,7 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     } else {
+                        websiteET.setHint("");
                         hintName.setTextColor(getResources().getColor(R.color.primary_black));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                     }
@@ -158,13 +162,14 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
 
     public void setHint(String text) {
         hintName.setText(text);
-        websiteET.setHint(text);
         hintString = text;
         if (!text.equals("Website") && !websiteET.hasFocus()) {
+            websiteET.setHint(text);
             websiteErrorLL.setVisibility(GONE);
             hintName.setTextColor(getResources().getColor(R.color.primary_black));
             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
         } else if (text.equals("Website") && !websiteET.hasFocus()) {
+            websiteET.setHint(text);
             if (websiteET.getText().toString().trim().length() > 0 && !isValidUrl(websiteET.getText().toString().trim())) {
                 hintName.setTextColor(getResources().getColor(R.color.error_red));
                 hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));

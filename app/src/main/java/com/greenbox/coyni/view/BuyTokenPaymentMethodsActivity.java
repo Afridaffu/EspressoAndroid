@@ -21,6 +21,7 @@ import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -233,6 +234,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                             }
                         } else {
                             if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                                Log.e("setResolveUrl","228 setResolveUrl");
                                 objMyApplication.setResolveUrl(true);
                                 customerProfileViewModel.meSignOn();
                             } else {
@@ -256,6 +258,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
+                            Log.e("setResolveUrl","252 setResolveUrl");
                             objMyApplication.setResolveUrl(true);
                             customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
@@ -424,7 +427,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvDCardMsg = findViewById(R.id.tvDCardMsg);
             imgDCardArrow = findViewById(R.id.imgDCardArrow);
             imgCCardLogo = findViewById(R.id.imgCCardLogo);
-            imgCCardArrow = findViewById(R.id.imgCCardArrow);
+            imgCCardArrow = findViewById(R.id.imgCCardArrowC);
             tvCCHead = findViewById(R.id.tvCCHead);
             tvCCardHead = findViewById(R.id.tvCCardHead);
             tvCCardMsg = findViewById(R.id.tvCCardMsg);
@@ -865,6 +868,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
+                                Log.e("setResolveUrl","862 setResolveUrl");
                                 objMyApplication.setResolveUrl(true);
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);

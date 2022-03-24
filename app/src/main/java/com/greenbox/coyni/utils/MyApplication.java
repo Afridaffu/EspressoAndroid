@@ -85,9 +85,9 @@ public class MyApplication extends Application {
     PaymentMethodsResponse paymentMethodsResponse;
     //    WalletResponse walletResponse;
     String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
-    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType ,dbaOwnerId=0;
+    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType, dbaOwnerId = 0;
     TransactionList transactionList;
-    PaymentsList selectedCard;
+    PaymentsList selectedCard, prevSelectedCard;
     TransferFeeResponse transferFeeResponse;
     BrandsResponse selectedBrandResponse;
     WithdrawRequest withdrawRequest;
@@ -594,6 +594,14 @@ public class MyApplication extends Application {
 
     public void setSelectedCard(PaymentsList selectedCard) {
         this.selectedCard = selectedCard;
+    }
+
+    public PaymentsList getPrevSelectedCard() {
+        return prevSelectedCard;
+    }
+
+    public void setPrevSelectedCard(PaymentsList selectedCard) {
+        this.prevSelectedCard = selectedCard;
     }
 
     public String getStrStatesUrl() {

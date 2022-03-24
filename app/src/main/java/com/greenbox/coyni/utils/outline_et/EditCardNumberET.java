@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.view.AddCardActivity;
 
-public class CardNumberEditText extends ConstraintLayout {
+public class EditCardNumberET extends ConstraintLayout {
 
     private TextView hintName;
     private LinearLayout hintHolder;
@@ -27,21 +27,21 @@ public class CardNumberEditText extends ConstraintLayout {
     public String cardType = "";
     public String from = "";
 
-    public CardNumberEditText(Context context) {
+    public EditCardNumberET(Context context) {
         this(context, null, 0);
     }
 
-    public CardNumberEditText(Context context, AttributeSet attrs) {
+    public EditCardNumberET(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CardNumberEditText(Context context, AttributeSet attrs, int defStyleattr) {
+    public EditCardNumberET(Context context, AttributeSet attrs, int defStyleattr) {
         super(context, attrs, defStyleattr);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attributeSet) {
-        LayoutInflater.from(context).inflate(R.layout.card_number_layout, this, true);
+        LayoutInflater.from(context).inflate(R.layout.edit_card_number_layout, this, true);
         hintName = findViewById(R.id.hintTV);
         hintHolder = findViewById(R.id.hintdHolderLL);
         cnET = findViewById(R.id.pnET);
@@ -151,9 +151,6 @@ public class CardNumberEditText extends ConstraintLayout {
 
     public void setText(String text) {
         cnET.setText(text);
-        if (text.equals("")) {
-            hintName.setVisibility(GONE);
-        }
     }
 
     public void setSelection() {
@@ -178,7 +175,7 @@ public class CardNumberEditText extends ConstraintLayout {
                 } else if (cardBrand.toLowerCase().contains("discover")) {
                     imgCardType.setImageResource(R.drawable.ic_discover);
                 }
-            } else {
+            }else{
                 imgCardType.setVisibility(VISIBLE);
                 imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
             }

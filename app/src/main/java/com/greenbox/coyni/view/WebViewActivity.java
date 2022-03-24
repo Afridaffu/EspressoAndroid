@@ -150,7 +150,13 @@ public class WebViewActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        objMyApplication.setResolveUrl(false);
+    }
+
+    //    @Override
 //    public void onPageStarted(String url, Bitmap favicon) {
 //        try {
 //            if (!isReturn && (url.contains("http://localhost:3000/?fiLoginAcctId") || url.contains("http://localhost:3000/?&action=cancel"))) {
