@@ -48,7 +48,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
         payoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(int position, Object obj) {
                 LogUtils.v(TAG, "Position is " + position);
                 Intent i = new Intent(BusinessBatchPayoutSearchActivity.this, BusinessBatchPayoutIdDetailsActivity.class);
                 startActivity(i);

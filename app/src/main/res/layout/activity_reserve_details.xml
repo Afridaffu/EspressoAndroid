@@ -4,600 +4,552 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/et_bg_gray"
+    android:orientation="vertical"
     tools:context=".view.business.ReserveDetailsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="visible">
+        android:background="@drawable/backgrndbtmcornrs"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/lyRDClose"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/_22sdp"
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginBottom="@dimen/_14sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/buy_token"
+                android:src="@drawable/ic_back" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_22sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="@string/reserve_detail"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/backgrndbtmcornrs"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/lyPRClose"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="@dimen/_22sdp"
-                android:layout_marginTop="@dimen/_45sdp"
-                android:layout_marginBottom="@dimen/_14sdp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/buy_token"
-                    android:src="@drawable/ic_back" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_22sdp"
-                android:layout_marginBottom="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_bold"
-                android:text="Reserve Detail"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16ssp" />
-        </LinearLayout>
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="0dp">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/_11sdp"
+                    android:paddingEnd="@dimen/_11sdp"
+                    android:paddingBottom="@dimen/_23sdp">
+
+                    <TextView
+                        android:id="@+id/headerTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_21sdp"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="@string/reserve_id"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tvreserveID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text=" [#ID]"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_10ssp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/reserve_held"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_10ssp" />
+
+                    <TextView
+                        android:id="@+id/tvamount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="6435.21 CYN"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_16ssp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:layout_marginBottom="@dimen/_11sdp"
+                        android:background="@color/blue_light" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/status"
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/reserveStatusTV"
+                            android:layout_width="@dimen/_68sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:background="@drawable/fill_grn_color_smallradius"
+                            android:fontFamily="@font/opensans_bold"
+                            android:gravity="center"
+                            android:text="@string/completed"
+                            android:textColor="@color/active_green"
+                            android:textSize="@dimen/_7ssp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.3"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/daily_batch_ids"
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <LinearLayout
+                            android:id="@+id/lycopy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/reserveIDTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:text="SND327433N"
+                                android:textColor="@color/primary_green"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <ImageView
+                                android:layout_width="@dimen/_11sdp"
+                                android:layout_height="@dimen/_11sdp"
+                                android:layout_gravity="end|center"
+                                android:layout_marginStart="@dimen/_6sdp"
+                                android:src="@drawable/ic_copy_active" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Batch Date"
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/releasedateTimeTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:text="07/27/2020 @ 2:20 am"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/reserve_rules"
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/reserveRegularTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:text="20% / 20days Rolling"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_11sdp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_25sdp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_21sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:text="Reserve Is Still Being Held"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_9sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Release Scheduled for "
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text="12/24/2020 "
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="for the"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="amount of"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text=" 6435.21 CYN."
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_11sdp"
+                android:visibility="visible"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_11sdp"
+                    android:layout_marginBottom="@dimen/_25sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_20sdp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_21sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:gravity="center"
+                        android:text="@string/scheduled_release_has_been_canceled"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/canceledTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_9sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:gravity="center_horizontal"
+                        android:lineSpacingExtra="@dimen/_3ssp"
+                        android:text="@string/canceled_description"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_11sdp"
+                android:visibility="visible"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_11sdp"
+                    android:layout_marginBottom="@dimen/_25sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/amount_released"
+                        android:textColor="@color/primary_green"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tvreleasedAMT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_bold"
+                        android:text="6435.21 CYN"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_16ssp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:background="@color/blue_light" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/release_on"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/ReleasedDateTimeTv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:text="07/27/2020 @ 2:20 am"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.3"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Release Transaction ID"
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <LinearLayout
+                            android:id="@+id/releasedIDcopyLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvtransID"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:text="SND327433N"
+                                android:textColor="@color/primary_green"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <ImageView
+                                android:layout_width="@dimen/_11sdp"
+                                android:layout_height="@dimen/_11sdp"
+                                android:layout_gravity="end|center"
+                                android:layout_marginStart="@dimen/_6sdp"
+                                android:src="@drawable/ic_copy_active" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_18sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.3"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/to_token_account"
+                            android:textColor="@color/xdark_gray"
+                            android:textSize="@dimen/_11ssp" />
+
+
+                        <TextView
+                            android:id="@+id/tvDBAName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:text="[DBA Name Here]"
+                            android:textColor="@color/primary_green"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_11sdp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingStart="@dimen/_11sdp"
-                        android:paddingEnd="@dimen/_11sdp"
-                        android:paddingBottom="@dimen/_23sdp">
-
-                        <TextView
-                            android:id="@+id/headerTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_21sdp"
-                            android:fontFamily="@font/opensans_bold"
-                            android:text="Reserve ID"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp"
-                            android:visibility="visible" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text=" [#ID]"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_10ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Reserve Held"
-                            android:textColor="@color/primary_green"
-                            android:textSize="@dimen/_10ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/opensans_bold"
-                            android:text="6435.21 CYN"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_16ssp" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_1sdp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:layout_marginBottom="@dimen/_11sdp"
-                            android:background="@color/blue_light" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_8sdp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/status"
-                                android:textColor="@color/xdark_gray"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:id="@+id/payreqStatusTV"
-                                android:layout_width="@dimen/_68sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/fill_grn_color_smallradius"
-                                android:fontFamily="@font/opensans_bold"
-                                android:gravity="center"
-                                android:text="@string/completed"
-                                android:textColor="@color/active_green"
-                                android:textSize="@dimen/_7ssp" />
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_18sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.3"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Daily Batch IDs"
-                                android:textColor="@color/xdark_gray"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <LinearLayout
-                                android:id="@+id/lyAcAdd"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/referIDTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text="SND327433N"
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <ImageView
-                                    android:layout_width="@dimen/_11sdp"
-                                    android:layout_height="@dimen/_11sdp"
-                                    android:layout_gravity="right|center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
-                                    android:src="@drawable/ic_copy_active" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_18sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Batch Date"
-                                android:textColor="@color/xdark_gray"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:id="@+id/releasedateTimeTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="07/27/2020 @ 2:20 am"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_18sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/reserve_rules"
-                                android:textColor="@color/xdark_gray"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:id="@+id/reserveRegularTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="20% / 20days Rolling"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_11sdp"
-                    android:layout_marginEnd="@dimen/_11sdp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_11sdp"
-                    android:visibility="gone"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_25sdp"
-                        android:background="@color/white"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_21sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:gravity="center"
-                            android:text="Reserve Is Still Being Held"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_9sdp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Release Scheduled for "
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="12/24/2020 "
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="for the"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="amount of"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text=" 6435.21 CYN."
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_11sdp"
-                    android:layout_marginEnd="@dimen/_11sdp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_11sdp"
-                    android:visibility="gone"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_25sdp"
-                        android:gravity="center"
-                        android:background="@color/white"
-                        android:paddingBottom="@dimen/_20sdp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_21sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:gravity="center"
-                            android:text="Scheduled Release Has Been Canceled"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_9sdp"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Release Scheduled for "
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="12/24/2020 "
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="for the"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="amount of "
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="6435.21 CYN "
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="has been canceled due"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                        </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="to lack of funds in the reserve balance."
-                            android:textColor="@color/dark_grey"
-                            android:textSize="@dimen/_11ssp" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_11sdp"
-                    android:layout_marginEnd="@dimen/_11sdp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_11sdp"
-                    android:visibility="visible"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_25sdp"
-                        android:layout_marginHorizontal="@dimen/_11sdp"
-                        android:gravity="center"
-                        android:background="@color/white"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:text="Amount Released"
-                            android:textColor="@color/primary_green"
-                            android:textSize="@dimen/_11ssp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/opensans_bold"
-                            android:text="6435.21 CYN"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_16ssp" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_1sdp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_11sdp"
-                            android:background="@color/blue_light" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_18sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Release On"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="07/27/2020 @ 2:20 am"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_18sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.3"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Release Transaction ID"
-                                android:textColor="@color/xdark_gray"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <LinearLayout
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text="SND327433N"
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <ImageView
-                                    android:layout_width="@dimen/_11sdp"
-                                    android:layout_height="@dimen/_11sdp"
-                                    android:layout_gravity="right|center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
-                                    android:src="@drawable/ic_copy_active" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_18sdp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.3"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="To Token Account"
-                                android:textColor="@color/xdark_gray"
-                                android:textSize="@dimen/_11ssp" />
-
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text="[DBA Name Here]"
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_11ssp" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/_20sdp"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:layout_weight="1"
-                        android:text="Recent Transactions"
                         android:fontFamily="@font/opensans_bold"
+                        android:text="@string/recent_transactions"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -612,32 +564,43 @@
                         android:textSize="@dimen/_9ssp" />
                 </LinearLayout>
 
-                <androidx.cardview.widget.CardView
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    android:layout_height="wrap_content" >
 
-                    <LinearLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:orientation="vertical">
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginBottom="@dimen/_45sdp"
+                        app:cardCornerRadius="@dimen/_10sdp"
+                        app:cardElevation="0dp">
 
-                        <androidx.recyclerview.widget.RecyclerView
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="vertical">
 
-                        </androidx.recyclerview.widget.RecyclerView>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerviewRV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_43sdp"
+                                android:nestedScrollingEnabled="false"
+                                android:scrollbars="none">
 
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                            </androidx.recyclerview.widget.RecyclerView>
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.core.widget.NestedScrollView>
+
             </LinearLayout>
-            </LinearLayout>
+        </LinearLayout>
 
-        </ScrollView>
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

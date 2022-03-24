@@ -44,7 +44,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_38sdp"
+            android:layout_marginStart="1dp"
             android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginEnd="1dp"
             android:layout_marginBottom="@dimen/_2sdp"
             app:cardCornerRadius="@dimen/_19sdp">
 
@@ -59,127 +61,134 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_9sdp"
-                    android:contentDescription="@string/search_by_reserve_id"
                     android:src="@drawable/ic_search_icon" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:gravity="center">
 
                     <EditText
                         android:id="@+id/searchET"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
                         android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_weight="1"
                         android:background="@android:color/transparent"
-                        android:cursorVisible="false"
-                        android:hint="@string/search_by_reserve_id"
+                        android:cursorVisible="true"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                         android:fontFamily="@font/opensans_regular"
-                        android:inputType="text"
+                        android:hint="@string/search_by_reserve_id"
+                        android:imeOptions="actionDone"
+                        android:maxLength="35"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="@color/primary_black"
                         android:textColorHint="@color/dark_grey"
-                        android:textCursorDrawable="@drawable/cursor_color_text"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textCursorDrawable="@drawable/cursor_color"
+                        android:textSize="@dimen/_11ssp" />
 
                     <View
                         android:layout_width="@dimen/_1sdp"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_6sdp"
-                        android:layout_marginEnd="@dimen/_11sdp"
+                        android:layout_marginHorizontal="@dimen/_11sdp"
                         android:layout_marginBottom="@dimen/_6sdp"
-                        android:layout_toStartOf="@id/ivFilterIcon"
-                        android:background="@color/vlight_gray" />
+                        android:background="@color/dark_color_bg" />
 
                     <ImageView
                         android:id="@+id/ivFilterIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_marginEnd="@dimen/_14sdp"
-                        android:contentDescription="@string/filter"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:src="@drawable/ic_filtericon" />
-                </RelativeLayout>
+                        android:src="@drawable/ic_filter_enabled" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayoutRL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none">
-        <LinearLayout
+        android:layout_height="wrap_content">
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.cardview.widget.CardView
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_11sdp"
-                android:layout_marginTop="@dimen/_14sdp"
-                android:layout_marginRight="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_31sdp"
-                android:background="@color/white"
-                app:cardCornerRadius="@dimen/_10sdp">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:layout_marginRight="@dimen/_11sdp"
+                    android:layout_marginBottom="@dimen/_31sdp"
+                    android:background="@color/white"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="0dp">
 
                     <LinearLayout
-                        android:id="@+id/rollingLL"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/_13sdp"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="@string/rolling_releases"
-                            android:textColor="@color/primary_black"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <ImageView
+                        <LinearLayout
+                            android:id="@+id/rollingLL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            android:contentDescription="@string/reserve_releases"
-                            android:src="@drawable/ic_chevron_down" />
+                            android:layout_marginTop="@dimen/_13sdp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/rolling_releases"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_12ssp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                android:contentDescription="@string/reserve_releases"
+                                android:src="@drawable/ic_chevron_down" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_11sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:background="@color/vlight_gray" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rrTransListRV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="none"
+                            android:nestedScrollingEnabled="false"
+                            android:background="@color/white"
+                            android:layout_marginBottom="@dimen/_20sdp">
+
+                        </androidx.recyclerview.widget.RecyclerView>
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_11sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:background="@color/vlight_gray" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rrTransListRV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none"
-                        android:nestedScrollingEnabled="false"
-                        android:background="@color/white"
-                        android:layout_marginBottom="@dimen/_20sdp">
+        </androidx.core.widget.NestedScrollView>
 
-                    </androidx.recyclerview.widget.RecyclerView>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

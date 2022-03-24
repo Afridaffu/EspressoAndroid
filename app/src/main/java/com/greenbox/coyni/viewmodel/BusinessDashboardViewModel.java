@@ -9,21 +9,15 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
-import com.greenbox.coyni.model.business_id_verification.ApplicationCancelledData;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
-import com.greenbox.coyni.model.business_transactions.BusinessTransactionDetailsResp;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
-import com.greenbox.coyni.model.transaction.TransactionDetails;
-import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
