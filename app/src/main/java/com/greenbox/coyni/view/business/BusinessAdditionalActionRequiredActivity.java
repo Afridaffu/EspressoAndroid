@@ -157,8 +157,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     }
 
-
-
     private void displayComments() {
         try {
             Dialog cvvDialog = new Dialog(BusinessAdditionalActionRequiredActivity.this);
