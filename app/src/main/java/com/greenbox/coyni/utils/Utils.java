@@ -295,6 +295,10 @@ public class Utils {
     public static final String canceled = "Canceled";
     public static final String expired = "Expired";
 
+    public static final String applyFilter="apply";
+    public static final String datePicker="DatePicker";
+
+
 
     public static final String position = "Position";
     public static final int cPP = 0;

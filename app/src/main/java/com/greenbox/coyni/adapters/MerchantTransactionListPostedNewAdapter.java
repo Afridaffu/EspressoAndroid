@@ -22,6 +22,7 @@ import com.greenbox.coyni.utils.Utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
@@ -35,19 +36,27 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         this.transactionListItemsPosted = list;
         this.mContext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
-
+        Collections.sort(transactionListItemsPosted, Collections.reverseOrder());
         consolidatedListData = new ArrayList<>();
+
         for (int i = 0; i < transactionListItemsPosted.size(); i++) {
             String datee = objMyApplication.convertZoneDateLastYear(transactionListItemsPosted.get(i).getUpdatedAt().split("\\.")[0]);
             DateItem dateItem = new DateItem();
             dateItem.setDate(datee);
-            if (consolidatedListData.contains(dateItem)) {
-                consolidatedListData.add(transactionListItemsPosted.get(i));
-            } else {
+
+            if (!consolidatedListData.contains(dateItem)) {
                 consolidatedListData.add(dateItem);
             }
-        }
+            consolidatedListData.add(transactionListItemsPosted.get(i));
 
+//            if (consolidatedListData.contains(dateItem)) {
+//                consolidatedListData.add(transactionListItemsPosted.get(i));
+//            } else {
+//                consolidatedListData.add(dateItem);
+//                i--;
+//            }
+
+        }
 
 //        for (int i = 0; i < list.size(); i++) {
 //            String datee = objMyApplication.convertZoneDateLastYear(list.get(i).getUpdatedAt().split("\\.")[0]);
@@ -136,16 +145,19 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             lineItem = itemView.findViewById(R.id.viewV);
             blankView = itemView.findViewById(R.id.blankView);
             businessTx = itemView.findViewById(R.id.balTXT);
-            //businessTx.setVisibility(View.GONE);
+            businessTx.setVisibility(View.GONE);
+            txnTypeDnExtention.setVisibility(View.GONE);
         }
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         TextView date;
+        View viewBottomCorner;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.tv_group_name);
+            viewBottomCorner = itemView.findViewById(R.id.bottom_corners);
         }
     }
 
@@ -158,6 +170,11 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strCurDate = spf.format(Calendar.getInstance().getTime());
+        if (holder.getAdapterPosition() == 0) {
+            holder.viewBottomCorner.setVisibility(View.GONE);
+        } else {
+            holder.viewBottomCorner.setVisibility(View.VISIBLE);
+        }
         if (date.getDate().equals(objMyApplication.convertZoneDateLastYear(strCurDate))) {
             holder.date.setText("Today");
         } else {
@@ -238,7 +255,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         holder.ll_merchant_transaction_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.onItemClick(0, objData);
                 }
             }

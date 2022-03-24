@@ -160,9 +160,8 @@
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="Date &amp; Time"
                                 android:textColor="@color/dark_grey"
@@ -197,10 +196,14 @@
                                 android:text="@string/reference_id"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
-
+                            <LinearLayout
+                                android:id="@+id/SalesReferenceCopyLL"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
                             <TextView
                                 android:id="@+id/SalesReferenceidTV"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
@@ -217,7 +220,7 @@
                                 android:layout_marginLeft="@dimen/_6sdp"
                                 android:src="@drawable/ic_copy" />
                         </LinearLayout>
-
+                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -228,9 +231,8 @@
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/fees"
                                 android:textColor="@color/dark_grey"
@@ -269,9 +271,8 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/reserve_amount"
                                 android:textColor="@color/dark_grey"
@@ -309,9 +310,8 @@
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/netamount"
                                 android:textColor="@color/dark_grey"
@@ -349,9 +349,8 @@
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/MerchantBalance"
                                 android:textColor="@color/dark_grey"
@@ -427,14 +426,13 @@
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
                             android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_8sdp"
+                            android:paddingTop="@dimen/_18sdp"
                             android:paddingRight="@dimen/_11sdp"
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/sender_name"
                                 android:textColor="@color/dark_grey"
@@ -443,7 +441,7 @@
 
                             <TextView
                                 android:id="@+id/SalessendernameTVTV"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
@@ -462,12 +460,11 @@
                             android:paddingLeft="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
                             android:paddingRight="@dimen/_11sdp"
-                            android:paddingBottom="@dimen/_11sdp">
+                            android:paddingBottom="@dimen/_16sdp">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/sender_email"
                                 android:textColor="@color/dark_grey"
@@ -476,7 +473,7 @@
 
                             <TextView
                                 android:id="@+id/SalessenderemailTV"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
