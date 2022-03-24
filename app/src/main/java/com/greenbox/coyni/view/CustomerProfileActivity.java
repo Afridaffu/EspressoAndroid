@@ -755,11 +755,14 @@ public class CustomerProfileActivity extends BaseActivity {
             if (enablePopup != null) {
                 enablePopup.dismiss();
             }
-            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-                BiometricRequest biometricRequest = new BiometricRequest();
-                biometricRequest.setBiometricEnabled(true);
-                biometricRequest.setDeviceId(Utils.getDeviceID());
-                coyniViewModel.saveBiometric(biometricRequest);
+            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE) {
+                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+                if (fingerprintManager.hasEnrolledFingerprints()) {
+                    BiometricRequest biometricRequest = new BiometricRequest();
+                    biometricRequest.setBiometricEnabled(true);
+                    biometricRequest.setDeviceId(Utils.getDeviceID());
+                    coyniViewModel.saveBiometric(biometricRequest);
+                }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
                     BiometricTokenRequest request = new BiometricTokenRequest();

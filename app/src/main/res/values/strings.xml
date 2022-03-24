@@ -68,6 +68,7 @@
     <string name="setupnotnowBtn">Not Now</string>
 
     <string name="uploadid">Fill out your information and Upload ID</string>
+    <string name="uploadid_cust">Upload ID and fill out your information</string>
     <string name="contentuploadid">Upload and Scan ID: Driver’s License,\nState-Issued ID, or Passport.</string>
     <string name="digits4">Last 4 digits</string>
     <string name="ssnlast">SSN Last 4 Digits</string>

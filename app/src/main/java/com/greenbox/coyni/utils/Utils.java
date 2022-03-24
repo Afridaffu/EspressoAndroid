@@ -85,6 +85,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -182,7 +183,7 @@ public class Utils {
     public static final String tokensub = "token";
     public static final String transfersub = "transfer";
     public static final String Success = "Success";
-//    controll methods in merchanttransactiondetails
+    //    controll methods in merchanttransactiondetails
     public static final String refundCM = "refundCM";
     public static final String saleorderCM = "saleorderCM";
     public static final String monthlyservicefeeCM = "monthlyservicefeeCM";
@@ -247,13 +248,13 @@ public class Utils {
 
     //Merchant Transaction Filter Type values
 
-    public static final int mRefund=9;
-    public static final int merchantPayout=7;
-    public static final int monthlyServiceFee=17;
+    public static final int mRefund = 9;
+    public static final int merchantPayout = 7;
+    public static final int monthlyServiceFee = 17;
 
-    public static final int mCompleted=0;
-    public static final int msRefund=1;
-    public static final int mPartialRefund=2;
+    public static final int mCompleted = 0;
+    public static final int msRefund = 1;
+    public static final int mPartialRefund = 2;
     public static final String SELECTED_MERCHANT_TRANSACTION = "Selected_Merchant_transaction";
     public static final float slidePercentage = 0.3f;
 
@@ -287,12 +288,12 @@ public class Utils {
     public static final String comCountryCode = "CompanyCountryCode";
     public static final int companyId = 0;
 
-    public static final String active="Active";
-    public static final String inActive="Inactive";
-    public static final String teammemberpending="Pending";
-    public static final String resendInvitation="Resend Invitation";
-    public static final String canceled="Canceled";
-    public static final String expired="Expired";
+    public static final String active = "Active";
+    public static final String inActive = "Inactive";
+    public static final String teammemberpending = "Pending";
+    public static final String resendInvitation = "Resend Invitation";
+    public static final String canceled = "Canceled";
+    public static final String expired = "Expired";
 
 
     public static final String position = "Position";
@@ -1490,4 +1491,5 @@ public class Utils {
             }
         });
     }
+
 }
