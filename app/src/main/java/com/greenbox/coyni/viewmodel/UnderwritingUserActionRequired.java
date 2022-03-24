@@ -26,6 +26,7 @@ import com.greenbox.coyni.model.users.UserData;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.LogUtils;
 
 import java.lang.reflect.Type;
 
@@ -50,9 +51,12 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<ActionRequiredResponse> mCall = apiService.postAdditionActionRequired();
+
             mCall.enqueue(new Callback<ActionRequiredResponse>() {
+
                 @Override
                 public void onResponse(Call<ActionRequiredResponse> call, Response<ActionRequiredResponse> response) {
+                    LogUtils.d("UnderwritingUserActionRequired",""+response);
                     if (response.isSuccessful()) {
                         ActionRequiredResponse obj = response.body();
                         ActionRequiredResponseMutableLiveData.setValue(obj);
@@ -69,6 +73,8 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<ActionRequiredResponse> call, Throwable t) {
+                    LogUtils.d("UnderwritingUserActionRequired","UnderwritingUserActionRequired"+t.getMessage());
+                    LogUtils.d("UnderwritingUserActionRequired","UnderwritingUserActionRequired44"+t.toString());
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

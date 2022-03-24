@@ -14,16 +14,21 @@ public class ActionRequiredResponse {
     @Expose
     private String timestamp;
 
+    @SerializedName("data")
+    @Expose
+    private ActionRequiredDataResponse data;
+
+    @SerializedName("error")
+    @Expose
+    private Error error;
+
     public ActionRequiredDataResponse getData() {
         return data;
     }
 
-    @SerializedName("data")
-    @Expose
-    private ActionRequiredDataResponse data;
-    @SerializedName("error")
-    @Expose
-    private Error error;
+    public void setData(ActionRequiredDataResponse data) {
+        this.data = data;
+    }
 
     public String getStatus() {
         return status;
@@ -39,11 +44,6 @@ public class ActionRequiredResponse {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
-    }
-
-
-    public void setData(ActionRequiredDataResponse data) {
-        this.data = data;
     }
 
     public Error getError() {

@@ -15,11 +15,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
@@ -102,83 +106,82 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 //        lincenseFileUploadedLL = findViewById(R.id.lincenseFileUploadedLL);
 
         fileUploadedTV = findViewById(R.id.sscfileUpdatedOnTV);
-       // actionReqFileUpdatedOnTV = findViewById(R.id.actionReqFileUpdatedOnTV);
+        // actionReqFileUpdatedOnTV = findViewById(R.id.actionReqFileUpdatedOnTV);
 
         checkboxCB = findViewById(R.id.checkboxCB);
-        checkbox2CB = findViewById(R.id.checkbox2CB);
-        checkbox3CB = findViewById(R.id.checkbox3CB);
+//        checkbox2CB = findViewById(R.id.checkbox2CB);
+//        checkbox3CB = findViewById(R.id.checkbox3CB);
         submitCV = findViewById(R.id.submitCV);
 
-        declindneLL = findViewById(R.id.declineDneLL);
-        declineLL = findViewById(R.id.declineLL);
-        acceptLL = findViewById(R.id.acceptLL);
-        remarksTV = findViewById(R.id.remarksTV);
-        acceptDeclineLL = findViewById(R.id.acceptDeclineLL);
-        acceptMsgTV = findViewById(R.id.acceptMsgTV);
-        declineMsgTV = findViewById(R.id.declineMsgTV);
-        acceptdneLL = findViewById(R.id.acceptDneLL);
-        compnyNameTV = findViewById(R.id.comapny_nameTV);
+//        declindneLL = findViewById(R.id.declineDneLL);
+//        declineLL = findViewById(R.id.declineLL);
+//        acceptLL = findViewById(R.id.acceptLL);
+//        remarksTV = findViewById(R.id.remarksTV);
+//        acceptDeclineLL = findViewById(R.id.acceptDeclineLL);
+//        acceptMsgTV = findViewById(R.id.acceptMsgTV);
+//        declineMsgTV = findViewById(R.id.declineMsgTV);
+//        acceptdneLL = findViewById(R.id.acceptDneLL);
+//        compnyNameTV = findViewById(R.id.comapny_nameTV);
 
         underwritingUserActionRequired = new ViewModelProvider(this).get(UnderwritingUserActionRequired.class);
 
         underwritingUserActionRequired.postactionRequired();
 
-        declineLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
+//        declineLL.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//                displayComments();
+//
+//            }
+//
+//        });
+//        acceptLL.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                acceptDeclineLL.setVisibility(View.GONE);
+//                compnyNameTV.setVisibility(View.GONE);
+//                acceptdneLL.setVisibility(View.VISIBLE);
+//                acceptMsgTV.setVisibility(View.VISIBLE);
+//
+//            }
+//
+//        });
 
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                displayComments();
+        LayoutInflater documentsRequiredInflater = getLayoutInflater();
 
-            }
-
-        });
-        acceptLL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                acceptDeclineLL.setVisibility(View.GONE);
-                compnyNameTV.setVisibility(View.GONE);
-                acceptdneLL.setVisibility(View.VISIBLE);
-                acceptMsgTV.setVisibility(View.VISIBLE);
-
-            }
-
-        });
     }
 
     private void initObserver() {
         underwritingUserActionRequired.getUserAccountLimitsMutableLiveData().observe(this,
                 new Observer<ActionRequiredResponse>() {
                     @Override
-                    public void onChanged(ActionRequiredResponse actionRequiredDataResponse) {
+                    public void onChanged(ActionRequiredResponse actionRequiredResponse) {
                         try {
-                            LogUtils.d(TAG, "ActionRequiredDataResponse" + actionRequiredDataResponse);
+                            LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
 
-                            if (actionRequiredDataResponse != null && actionRequiredDataResponse.getData() != null) {
-                                if (actionRequiredDataResponse.getData().getAdditionalDocument() != null &&
-                                        actionRequiredDataResponse.getData().getAdditionalDocument().size() != 0) {
-                                    additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
+                            if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
+                                if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
+                                        actionRequiredResponse.getData().getAdditionalDocument().size() != 0) {
 
-                                    for(AdditionalDocumentData documents : actionRequiredDataResponse.getData().getAdditionalDocument()){
+                                    additionalRequiredDocuments(actionRequiredResponse);
 
-                                        TextView documentName = findViewById(R.id.tvdocumentName);
-                                        LinearLayout dosumentFileUploadLL = findViewById(R.id.sscFileUploadLL);
-                                        LinearLayout dosumentsLL = findViewById(R.id.documentLL);
-                                        documentName.setText(documents.getDocumentName());
+                                }
+                                if (actionRequiredResponse.getData().getWebsiteChange() != null
+                                        && actionRequiredResponse.getData().getWebsiteChange().size() != 0) {
 
-                                        dosumentsLL.addView(documentName);
-                                        dosumentsLL.addView(dosumentFileUploadLL);
+                                    websiteChanges(actionRequiredResponse);
 
-                                    }
-                                } else if (actionRequiredDataResponse.getData().getWebsiteChange() != null
-                                && actionRequiredDataResponse.getData().getWebsiteChange().size()!=0) {
-                                    websiteRevisionRequiredLL.setVisibility(View.VISIBLE);
-                                }else if (actionRequiredDataResponse.getData().getInformationChange() != null
-                                        && actionRequiredDataResponse.getData().getInformationChange().size()!=0) {
-                                    informationRevisionLL.setVisibility(View.VISIBLE);
+                                }
+                                if (actionRequiredResponse.getData().getInformationChange() != null
+                                        && actionRequiredResponse.getData().getInformationChange().size() != 0) {
+
+                                    informationRevision(actionRequiredResponse);
+
                                 }
                             }
                         } catch (Exception ex) {
@@ -188,6 +191,71 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 });
 
     }
+
+    private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
+        additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
+        LinearLayout.LayoutParams layoutParamss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
+            View inf = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
+            LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
+            TextView documentName = inf.findViewById(R.id.tvdocumentName);
+            documentRequiredLL.setVisibility(View.VISIBLE);
+            documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentName());
+            additionalDocumentRequiredLL.addView(inf, layoutParamss);
+        }
+    }
+
+    private void websiteChanges(ActionRequiredResponse actionRequiredResponse) {
+        websiteRevisionRequiredLL.setVisibility(View.VISIBLE);
+        LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        for (int i = 0; i < actionRequiredResponse.getData().getWebsiteChange().size(); i++) {
+            View inf1 = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
+            LinearLayout websiteChangeLL = inf1.findViewById(R.id.website);
+            TextView tvheading = inf1.findViewById(R.id.tvheading);
+            TextView tvDescription = inf1.findViewById(R.id.tvDescription);
+            ImageView imgWebsite = inf1.findViewById(R.id.imgWebsite);
+            websiteChangeLL.setVisibility(View.VISIBLE);
+            tvheading.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader());
+            tvDescription.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getComment());
+            if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1()!=null) {
+                imgWebsite.setVisibility(View.VISIBLE);
+
+                Glide.with(this)
+                        .load(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1())
+                        .placeholder(R.drawable.ic_profilelogo)
+                        .into(imgWebsite);
+            }  else {
+                imgWebsite.setVisibility(View.GONE);
+            }
+            websiteRevisionRequiredLL.addView(inf1, layoutParamss1);
+        }
+    }
+
+    private void informationRevision(ActionRequiredResponse actionRequiredResponse) {
+        informationRevisionLL.setVisibility(View.VISIBLE);
+        LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        for (int i = 0; i < actionRequiredResponse.getData().getInformationChange().size(); i++) {
+            View inf1 = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
+            LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
+            TextView comapny_nameTV = inf1.findViewById(R.id.comapny_nameTV);
+            TextView comapnynameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
+            TextView comapnynameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
+            TextView tvMessage = inf1.findViewById(R.id.tvMessage);
+            websiteChangeLL.setVisibility(View.VISIBLE);
+            if(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0)!=null) {
+                if (actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0) != null) {
+                    comapny_nameTV.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getName());
+                    comapnynameOriginal.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getOriginalValue());
+                    comapnynameProposed.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getProposedValue());
+                    tvMessage.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getAdminMessage());
+                }
+            }
+            informationRevisionLL.addView(inf1, layoutParamss1);
+        }
+    }
+
+
 
     private void displayComments() {
         try {

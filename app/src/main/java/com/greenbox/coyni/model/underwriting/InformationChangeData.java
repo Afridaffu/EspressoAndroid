@@ -9,7 +9,7 @@ public class InformationChangeData {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private String id;
 
     @SerializedName("iteration")
     @Expose
@@ -27,11 +27,11 @@ public class InformationChangeData {
     @Expose
     private List<ProposalsData> proposals;
 
-    public int getId() {
+    public String  getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

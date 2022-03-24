@@ -15,7 +15,7 @@ public class WebsiteChangeData {
 
     @SerializedName("header")
     @Expose
-    private int header;
+    private String header;
 
     @SerializedName("comment")
     @Expose
@@ -61,11 +61,11 @@ public class WebsiteChangeData {
         this.iteration = iteration;
     }
 
-    public int getHeader() {
+    public String getHeader() {
         return header;
     }
 
-    public void setHeader(int header) {
+    public void setHeader(String header) {
         this.header = header;
     }
 
