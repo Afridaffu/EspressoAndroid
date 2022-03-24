@@ -68,6 +68,7 @@
     <string name="setupnotnowBtn">Not Now</string>
 
     <string name="uploadid">Fill out your information and Upload ID</string>
+    <string name="uploadid_cust">Upload ID and fill out your information</string>
     <string name="contentuploadid">Upload and Scan ID: Driver’s License,\nState-Issued ID, or Passport.</string>
     <string name="digits4">Last 4 digits</string>
     <string name="ssnlast">SSN Last 4 Digits</string>
@@ -84,6 +85,8 @@
     <string name="businessProfileAccountItemImage">Business Profile account Profile Image</string>
     <string name="businessProfileAccountExpandDownArrow">Business Profile account Profile Expand Down Arrow</string>
 
+    <string name="transAmountAlert">From Amount\' should not be greater than \'To Amount</string>
+    <string name="email_field_alert">Please enter a valid Email</string>
 
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailing Address</string>

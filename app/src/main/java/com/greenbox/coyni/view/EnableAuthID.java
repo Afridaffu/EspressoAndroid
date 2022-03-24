@@ -41,7 +41,7 @@ public class EnableAuthID extends AppCompatActivity {
     CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
     TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
     RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
-    String enableType, strScreen = "";
+    String enableType, enableTypeCopy, strScreen = "";
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     SQLiteDatabase mydatabase;
     ImageView succesCloseIV;
@@ -83,7 +83,7 @@ public class EnableAuthID extends AppCompatActivity {
             businessSuccessRL = findViewById(R.id.businessSuccessRL);
             businessGetStartedCV = findViewById(R.id.businessGetStartedCV);
 
-            enableType = getIntent().getStringExtra("ENABLE_TYPE");
+            enableType = enableTypeCopy = getIntent().getStringExtra("ENABLE_TYPE");
             objMyApplication = (MyApplication) getApplicationContext();
             if (getIntent().getStringExtra("screen") != null) {
                 strScreen = getIntent().getStringExtra("screen");
@@ -242,7 +242,7 @@ public class EnableAuthID extends AppCompatActivity {
             succesCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (enableType.equals("TOUCH")) {
+                    if (enableTypeCopy.equals("TOUCH")) {
                         faceIDRL.setVisibility(View.GONE);
                         touchIDRL.setVisibility(View.VISIBLE);
                         successRL.setVisibility(View.GONE);
@@ -286,7 +286,7 @@ public class EnableAuthID extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        startActivity(new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class).putExtra("FROM","signup"));
+                        startActivity(new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class).putExtra("FROM", "signup"));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -313,7 +313,7 @@ public class EnableAuthID extends AppCompatActivity {
                         if (!objMyApplication.isDeviceID()) {
                             Utils.generateUUID(EnableAuthID.this);
                         }
-                        if (enableType.equals("FACE")) {
+                        if (enableTypeCopy.equals("FACE")) {
                             saveFace("true");
                             saveThumb("false");
                             Utils.showCustomToast(EnableAuthID.this, "Face ID has been turned on", R.drawable.ic_faceid, "authid");
@@ -335,7 +335,7 @@ public class EnableAuthID extends AppCompatActivity {
                                     }
                                 }
                             }, 2000);
-                        } else if (enableType.equals("TOUCH")) {
+                        } else if (enableTypeCopy.equals("TOUCH")) {
                             saveFace("false");
                             saveThumb("true");
                             Utils.showCustomToast(EnableAuthID.this, "Touch ID has been turned on", R.drawable.ic_touch_id, "authid");
@@ -384,16 +384,18 @@ public class EnableAuthID extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-
-                dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                dialog.setIndeterminate(false);
-                dialog.setMessage("Please wait...");
-                dialog.show();
-                BiometricRequest biometricRequest = new BiometricRequest();
-                biometricRequest.setBiometricEnabled(true);
-                biometricRequest.setDeviceId(Utils.getDeviceID());
-                coyniViewModel.saveBiometric(biometricRequest);
+            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE) {
+                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+                if (fingerprintManager.hasEnrolledFingerprints()) {
+                    dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
+                    dialog.setIndeterminate(false);
+                    dialog.setMessage("Please wait...");
+                    dialog.show();
+                    BiometricRequest biometricRequest = new BiometricRequest();
+                    biometricRequest.setBiometricEnabled(true);
+                    biometricRequest.setDeviceId(Utils.getDeviceID());
+                    coyniViewModel.saveBiometric(biometricRequest);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
