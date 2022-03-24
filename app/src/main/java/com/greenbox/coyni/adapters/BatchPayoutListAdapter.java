@@ -1,5 +1,6 @@
 package com.greenbox.coyni.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -51,12 +52,13 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BatchPayoutListAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BatchPayoutListAdapter.MyViewHolder holder,int position) {
         holder.detailsLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                listener.onItemClick(position,null);
+                listener.onItemClick(position, null);
+
             }
         });
 

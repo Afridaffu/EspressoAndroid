@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BatchPayoutListAdapter;
@@ -25,14 +26,16 @@ import java.util.Date;
 
 public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
-    ImageView filterIconIV, datePickIV;
+    ImageView filterIconIV, datePickIV,closeBtnIV;
     TextView applyFilterBtnCV;
     EditText filterdatePickET;
     LinearLayout dateRangePickerLL;
+    SwipeRefreshLayout refreshpageSL;
     Date startDateD = null;
     Date endDateD = null;
     RecyclerView recyclerViewPayouts;
     BatchPayoutList[] payoutList = new BatchPayoutList[]{};
+    private BusinessBatchPayoutSearchActivity businessBatchPayoutSearchActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +45,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
         BatchPayoutListAdapter payoutListAdapter = new BatchPayoutListAdapter(payoutList);
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPayout);
-//        recyclerViewPayouts.setHasFixedSize(true);
+//       recyclerViewPayouts.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(payoutListAdapter);
 
         payoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(int position,Object obj) {
+            public void onItemClick(int position, Object obj) {
                 LogUtils.v(TAG, "Position is " + position);
                 Intent i = new Intent(BusinessBatchPayoutSearchActivity.this, BusinessBatchPayoutIdDetailsActivity.class);
                 startActivity(i);
@@ -58,30 +61,51 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
     }
 
     private void initFields() {
+        closeBtnIV = findViewById(R.id.closeBtnIV);
         filterIconIV = findViewById(R.id.filterIconIV);
         applyFilterBtnCV = findViewById(R.id.applyFilterBtnCV);
         filterdatePickET = findViewById(R.id.filterdatePickET);
         dateRangePickerLL = findViewById(R.id.dateRangePickerLL);
         datePickIV = findViewById(R.id.datePickIV);
         recyclerViewPayouts = findViewById(R.id.recyclerViewPayout);
+        refreshpageSL = findViewById(R.id.refreshpageSL);
 
+        closeBtnIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         filterIconIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFiltersPopup(null);
+                showFiltersPopup();
+            }
+        });
+
+
+        refreshpageSL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    filterIconIV.setVisibility(View.GONE);
+                    filterIconIV.setImageResource(R.drawable.ic_filtericon);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
 
-    private void showFiltersPopup(String dateSelected) {
-        PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, dateSelected);
+    private void showFiltersPopup() {
+        PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                if(action.equals("Date_PICK_SELECTED")) {
-                    showCalendarDialog();
-                } else if(action.equals("Date_SELECTED")) {
+                if(action.equals("Date_SELECTED")) {
                     LogUtils.v(TAG, "Date Selected " + value);
                     filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
                 }
@@ -91,17 +115,17 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
     }
 
 
-    private void showCalendarDialog() {
-        DateRangePickerDialog dialog = new DateRangePickerDialog(BusinessBatchPayoutSearchActivity.this);
-        dialog.setOnDialogClickListener(new OnDialogClickListener() {
-            @Override
-            public void onDialogClicked(String action, Object value) {
-                if(action.equals("Done")) {
-                    showFiltersPopup(value+"");
-                }
-            }
-        });
-        dialog.show();
-    }
+//    private void showCalendarDialog() {
+//        DateRangePickerDialog dialog = new DateRangePickerDialog(BusinessBatchPayoutSearchActivity.this);
+//        dialog.setOnDialogClickListener(new OnDialogClickListener() {
+//            @Override
+//            public void onDialogClicked(String action, Object value) {
+//                if(action.equals("Done")) {
+//                    showFiltersPopup(value+"");
+//                }
+//            }
+//        });
+//        dialog.show();
+//    }
 
 }

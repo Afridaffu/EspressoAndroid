@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
@@ -13,8 +14,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
+import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
@@ -28,7 +31,9 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.ArrayList;
@@ -60,6 +65,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private BusinessProfileRecyclerAdapter listAdapter;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private IdentityVerificationViewModel identityVerificationViewModel;
+    private String userName;
 
 
     @Override
@@ -117,8 +125,12 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         loginViewModel = new ViewModelProvider(BusinessCreateAccountsActivity.this).get(LoginViewModel.class);
+        businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+        identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+
 
         brandsGV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -180,15 +192,21 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                 && myApplication.getMyProfile().getData().getFirstName() != null) {
             String firstName = myApplication.getMyProfile().getData().getFirstName();
             iconText = firstName.substring(0, 1).toUpperCase();
-            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+            userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
             if (myApplication.getMyProfile().getData().getLastName() != null) {
-                String lastName = myApplication.getMyProfile().getData().getFirstName();
+                String lastName = myApplication.getMyProfile().getData().getLastName();
                 iconText = iconText + lastName.substring(0, 1).toUpperCase();
-                username = username + " ";
-                username = username + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                userName = userName + " ";
+                userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
             }
-//          userNameTV.setText(getResources().getString(R.string.dba_name, username));
-            userNameTV.setText(username);
+
+            userNameTV.setText(getResources().getString(R.string.dba_name, userName));
+
+            if (userName != null && userName.length() > 21) {
+                userNameTV.setText(userName.substring(0, 21) + " ");
+            } else {
+                userNameTV.setText(userName);
+            }
         }
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getImage() != null) {
@@ -204,6 +222,20 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             userShortInfoTV.setText(iconText);
         }
 
+//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+//                && myApplication.getMyProfile().getData().getImage() != null) {
+//            userShortInfoTV.setVisibility(View.GONE);
+//            imgProfile.setVisibility(View.VISIBLE);
+//            Glide.with(this)
+//                    .load(myApplication.getMyProfile().getData().getImage())
+//                    .placeholder(R.drawable.ic_profile_male_user)
+//                    .into(imgProfile);
+//        } else {
+//            userShortInfoTV.setVisibility(View.VISIBLE);
+//            imgProfile.setVisibility(View.GONE);
+//            userShortInfoTV.setText(iconText);
+//        }
+
         setUserBalance(myApplication.getWalletResponseData());
 
 //        Double bal = myApplication.getGBTBalance();
@@ -216,6 +248,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         try {
             String strAmount = "";
             List<WalletInfo> walletInfo = walletResponse.getWalletNames();
+            LogUtils.d(TAG,"setUserBalance"+walletInfo.toString());
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
@@ -237,13 +270,12 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
-
                     Map<String, ArrayList<ProfilesResponse.Profiles>> map = new HashMap<>();
                     filterList = profilesResponse.getData();
                     for (ProfilesResponse.Profiles c : filterList) {
-                        if (c.getAccountType().equals(Utils.BUSINESS)) {
+                        if (c.getAccountType().equals(Utils.BUSINESS))  {
                             businessAccountList.add(c);
-                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId());
+                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(),c.getAccountStatus());
                         } else {
                             personalAccountList.add(c);
                             for(int i=0;i<personalAccountList.size();i++){
@@ -301,19 +333,46 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             }
         });
 
+        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+            @Override
+            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+                if (businessTrackerResponse != null) {
+                    if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                        myApplication.setBusinessTrackerResponse(businessTrackerResponse);
+
+                    }
+                }
+            }
+        });
+
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
+
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
-                            LogUtils.d(TAG, "btResp" + btResp);
+                            LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
+                            LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
+                            LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
+
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            //finish();
-                            if (btResp.getData().getAccountType() == 2) {
-                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                                intent.putExtra("showGetStarted", true);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                            businessIdentityVerificationViewModel.getBusinessTracker();
+
+                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                                if(btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+                                     myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                                    Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                     startActivity(intent);
+                                 } else {
+                                    myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                                    Log.e(TAG, new Gson().toJson(myApplication.getBusinessTrackerResponse()));
+                                    Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                 }
+
+
                             } else {
                                 Intent i = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -322,16 +381,35 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
                         }
                     }
-
             }
         });
+
+        try {
+            identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                    LogUtils.d(TAG, "addDBAresponse" + identityImageResponse);
+                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
+                                .putExtra("ADDBUSINESS", true)
+                                .putExtra("ADDDBA", true));
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private int addDetails(String mainSet, String subSet, String image, int id) {
+    private int addDetails(String mainSet, String subSet, String image, int id , String accountStatus ) {
 
         int groupPosition = 0;
+
         try {
-            LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
+            LogUtils.d(TAG, "adddetails" + mainSet + subSet + id + accountTypeId);
             groupPosition = 0;
             BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
 
@@ -339,6 +417,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                 headerInfo = new BusinessAccountsListInfo();
                 headerInfo.setName(mainSet);
                 headerInfo.setMainImage(image);
+                headerInfo.setId(id);
                 this.mainSet.put(mainSet, headerInfo);
                 this.subSet.add(headerInfo);
             }
@@ -351,6 +430,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             detailInfo.setName(subSet);
             detailInfo.setDbaImage(image);
             detailInfo.setId(id);
+            detailInfo.setAccountSttaus(accountStatus);
 
 //            if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
 //                detailInfo.setIsSelected(true);
@@ -361,9 +441,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
            // }
 
             subList.add(detailInfo);
-
             headerInfo.setSubsetName(subList);
             groupPosition = this.subSet.indexOf(headerInfo);
+
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -394,13 +474,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     @Override
     public void selectedItem(int id) {
 
-        LogUtils.d("switching", "accounttttt" + id);
-//        UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
-//        userPreferenceModel.setLocalCurrency(0);
-//        userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-//        userPreferenceModel.setPreferredAccount(childid);
-//        customerProfileViewModel.updatePreferences(userPreferenceModel);
-//        dialog.dismiss();
+        LogUtils.d(TAG, "accounttttt" + id);
+        identityVerificationViewModel.getPostAddDBABusiness(id);
 
     }
 }

@@ -264,7 +264,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
                             getBusinessAddCustomer.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<TrackerResponse>() {
+                            Type type = new TypeToken<AddBusinessUserResponse>() {
                             }.getType();
                             AddBusinessUserResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
                             getBusinessAddCustomer.setValue(errorResponse);

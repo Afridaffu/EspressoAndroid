@@ -750,13 +750,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d(TAG, "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            //finish();
                             if (objMyApplication.getAccountType() == 2) {
                                 Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                                 intent.putExtra("showGetStarted", true);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
-                            } else {
+                            }else {
                                 Intent i = new Intent(ReviewApplicationActivity.this, DashboardActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
@@ -777,7 +776,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     dismissDialog();
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
-
+                        LogUtils.d(TAG,"applicationSubmissionViewModel"+addDBA+",,,,,"+addBusiness);
                         if (addBusiness) {
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                         } else {

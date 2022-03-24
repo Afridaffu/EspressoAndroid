@@ -72,7 +72,7 @@ public class CustomerProfileActivity extends BaseActivity {
     CardView cvLogout;
     ConstraintLayout userProfile;
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
-    Long mLastClickTime = 0L,mLastClickTimeShare = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeShare = 0L;
     public static SQLiteDatabase mydatabase;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
@@ -609,15 +609,19 @@ public class CustomerProfileActivity extends BaseActivity {
             copyRecipientAddress.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ClipboardManager myClipboard;
-                    myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    try {
+                        ClipboardManager myClipboard;
+                        myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
-                    ClipData myClip;
-                    String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
-                    myClip = ClipData.newPlainText("text", text);
-                    myClipboard.setPrimaryClip(myClip);
+                        ClipData myClip;
+                        String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
+                        myClip = ClipData.newPlainText("text", text);
+                        myClipboard.setPrimaryClip(myClip);
 //                    showToast();
-                    Utils.showCustomToast(CustomerProfileActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
+                        Utils.showCustomToast(CustomerProfileActivity.this, "Your address has successfully copied to clipboard.", R.drawable.ic_custom_tick, "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -772,8 +776,7 @@ public class CustomerProfileActivity extends BaseActivity {
                             .putExtra("screen", "ChangePassword");
                     startActivity(i);
                 }
-            }
-            else  if (requestCode == CODE_AUTHENTICATION_VERIFICATION_RESET_PIN) {
+            } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION_RESET_PIN) {
                 if (resultCode == RESULT_OK) {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "CHOOSE")
@@ -835,7 +838,7 @@ public class CustomerProfileActivity extends BaseActivity {
         }
     }
 
-//    private void saveThumb(String value) {
+    //    private void saveThumb(String value) {
 //        dbHandler.clearThumbPinLockTable();
 //        dbHandler.insertThumbPinLock(value);
 //    }

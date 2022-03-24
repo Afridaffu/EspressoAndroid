@@ -51,7 +51,25 @@ public class AddBusinessUserResponse {
         private boolean isAgreementSigned;
 
         private int accountType;
+        private int dbaOwnerId;
         private String jwtToken;
+        private String accountStatus;
+
+        public String getAccountStatus() {
+            return accountStatus;
+        }
+
+        public void setAccountStatus(String accountStatus) {
+            this.accountStatus = accountStatus;
+        }
+
+        public int getDbaOwnerId() {
+            return dbaOwnerId;
+        }
+
+        public void setDbaOwnerId(int dbaOwnerId) {
+            this.dbaOwnerId = dbaOwnerId;
+        }
 
         public int getAccountType() {
             return accountType;
@@ -117,5 +135,29 @@ public class AddBusinessUserResponse {
         public void setAgreementSigned(boolean agreementSigned) {
             isAgreementSigned = agreementSigned;
         }
+
+        @Override
+        public String toString() {
+            return "TrackerData{" +
+                    "isProfileVerified=" + isProfileVerified +
+                    ", isAuthyRegistered=" + isAuthyRegistered +
+                    ", isAddressAvailable=" + isAddressAvailable +
+                    ", isPaymentModeAdded=" + isPaymentModeAdded +
+                    ", isPersonIdentified=" + isPersonIdentified +
+                    ", isAgreementSigned=" + isAgreementSigned +
+                    ", accountType=" + accountType +
+                    ", jwtToken='" + jwtToken + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "AddBusinessUserResponse{" +
+                "status='" + status + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", data=" + data +
+                ", error=" + error +
+                '}';
     }
 }

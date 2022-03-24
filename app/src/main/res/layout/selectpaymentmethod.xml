@@ -65,10 +65,10 @@
                 android:paddingRight="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_20sdp">
 
-                <androidx.recyclerview.widget.RecyclerView
+                <com.greenbox.coyni.utils.ExpandableHeightRecyclerView
                     android:id="@+id/rvSelPayMethods"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                    android:layout_height="wrap_content"></com.greenbox.coyni.utils.ExpandableHeightRecyclerView>
 
                 <LinearLayout
                     android:id="@+id/lyAddPay"

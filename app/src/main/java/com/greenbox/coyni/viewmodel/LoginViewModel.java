@@ -48,6 +48,7 @@ import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.network.ApiClient;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Singleton;
 
 import java.lang.reflect.Type;
@@ -813,6 +814,7 @@ public class LoginViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
                     try {
+                        LogUtils.d("LOGINVIEW","MOdel"+response);
                         if (response.isSuccessful()) {
                             AddBusinessUserResponse obj = response.body();
                             postChangeAccountResponse.setValue(obj);

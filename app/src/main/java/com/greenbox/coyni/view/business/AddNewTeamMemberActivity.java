@@ -138,7 +138,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isNextEnabled==true) {
+                if (isNextEnabled) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -256,7 +256,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.error_red));
                             editEmailLL.setVisibility(VISIBLE);
-                            editEmailTV.setText("Please enter a valid Email");
+                            editEmailTV.setText(getString(R.string.email_field_alert));
                         } else if (editEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(editEmailET.getText().toString().trim())) {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_black));
@@ -265,7 +265,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.error_red));
                             editEmailLL.setVisibility(VISIBLE);
-                            editEmailTV.setText("Field Required");
+                            editEmailTV.setText(getString(R.string.email_field_alert));
                         } else {
                             editEmailTil.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(editEmailTil, getColor(R.color.light_gray));
