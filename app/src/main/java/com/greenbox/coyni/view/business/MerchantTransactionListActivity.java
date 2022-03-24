@@ -220,7 +220,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     }
 
     private void initFields() {
-        bottomCorners=findViewById(R.id.bottom_corners);
+        bottomCorners = findViewById(R.id.bottom_corners);
         closeBtn = findViewById(R.id.closeBtnIV);
         filterIV = findViewById(R.id.filtericonIV);
         nestedScrollView = findViewById(R.id.nestedSV);
@@ -313,7 +313,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     } else {
                                         getRvTransactionsPosted.scrollToPosition(0);
                                     }
-                                }else{
+                                } else {
                                     bottomCorners.setVisibility(View.GONE);
                                 }
                             } catch (Exception e) {
@@ -366,7 +366,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         }
     }
 
-    public void transactionsAPI(TransactionListRequest transactionListRequest) {
+    private void transactionsAPI(TransactionListRequest transactionListRequest) {
         showProgressDialog();
         dashboardViewModel.meTransactionList(transactionListRequest);
     }

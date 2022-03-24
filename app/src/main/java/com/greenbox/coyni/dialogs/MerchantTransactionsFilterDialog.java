@@ -42,7 +42,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private EditText getDateFromPickerET;
     private RangeDates rangeDates;
     private Activity activity;
-    private int isShowing=0;
+    private int isShowing = 0;
     private DateRangePickerDialog dateRangePickerDialog;
 
     public MerchantTransactionsFilterDialog(Context context) {
@@ -62,7 +62,6 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private void initFields() {
 
         objMyApplication = (MyApplication) context.getApplicationContext();
-        dateRangePickerDialog = new DateRangePickerDialog(context);
         Chip transTypeSalesOrderToken = findViewById(R.id.transTypeSalesOrderToken);
         Chip transTypeRefund = findViewById(R.id.transTypeRefund);
         Chip transTypeMerchantPayout = findViewById(R.id.transTypeMerchantPayout);
@@ -518,26 +517,33 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         dateRangePickerLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(dateRangePickerDialog!=null&&!dateRangePickerDialog.isShowing())
-                    showCalendar();
-            }
-        });
-
-        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
                     return;
                 }
                 mLastClickTimeFilters = SystemClock.elapsedRealtime();
-                getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
-                dismiss();
+                if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
+                    return;
+                }
+                showCalendar();
             }
         });
+
+//        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+//                    return;
+//                }
+//                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+//                getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
+//                dismiss();
+//            }
+//        });
     }
 
     public void showCalendar() {
         // custom dialog
+        dateRangePickerDialog = new DateRangePickerDialog(context);
         dateRangePickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {

@@ -27,7 +27,7 @@ public class DateItem extends ListItem {
             return true;
         }
 
-        if(!(obj instanceof DateItem)) {
+        if (!(obj instanceof DateItem)) {
             return false;
         }
 
