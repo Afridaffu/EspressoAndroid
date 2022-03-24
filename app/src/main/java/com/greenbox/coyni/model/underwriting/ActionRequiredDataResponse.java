@@ -56,5 +56,15 @@ public class ActionRequiredDataResponse {
         this.informationChange = informationChange;
     }
 
+    @Override
+    public String toString() {
+
+        return "ActionRequiredDataResponse{" +
+                "status=" + status +
+                ", additionalDocument=" + additionalDocument +
+                ", websiteChange=" + websiteChange +
+                ", informationChange=" + informationChange +
+                '}';
+    }
 }
 

@@ -19,6 +19,7 @@ import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
 import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.users.AccountLimits;
 import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
@@ -38,36 +39,36 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
         super(application);
     }
 
-    private MutableLiveData<ActionRequiredDataResponse> actionRequiredDataResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ActionRequiredResponse> ActionRequiredResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<ActionRequiredDataResponse> getUserAccountLimitsMutableLiveData() {
-        return actionRequiredDataResponseMutableLiveData;
+    public MutableLiveData<ActionRequiredResponse> getUserAccountLimitsMutableLiveData() {
+        return ActionRequiredResponseMutableLiveData;
     }
 
     public void postactionRequired() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<ActionRequiredDataResponse> mCall = apiService.postAdditionActionRequired();
-            mCall.enqueue(new Callback<ActionRequiredDataResponse>() {
+            Call<ActionRequiredResponse> mCall = apiService.postAdditionActionRequired();
+            mCall.enqueue(new Callback<ActionRequiredResponse>() {
                 @Override
-                public void onResponse(Call<ActionRequiredDataResponse> call, Response<ActionRequiredDataResponse> response) {
+                public void onResponse(Call<ActionRequiredResponse> call, Response<ActionRequiredResponse> response) {
                     if (response.isSuccessful()) {
-                        ActionRequiredDataResponse obj = response.body();
-                        actionRequiredDataResponseMutableLiveData.setValue(obj);
+                        ActionRequiredResponse obj = response.body();
+                        ActionRequiredResponseMutableLiveData.setValue(obj);
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<ActionRequiredDataResponse>() {
+                        Type type = new TypeToken<ActionRequiredResponse>() {
                         }.getType();
-                        ActionRequiredDataResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        ActionRequiredResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
-                            actionRequiredDataResponseMutableLiveData.setValue(errorResponse);
+                            ActionRequiredResponseMutableLiveData.setValue(errorResponse);
                         }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ActionRequiredDataResponse> call, Throwable t) {
+                public void onFailure(Call<ActionRequiredResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

@@ -39,6 +39,8 @@ import com.greenbox.coyni.model.bank.SyncAccount;
 import com.greenbox.coyni.model.cards.CardDeleteResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
+import com.greenbox.coyni.model.underwriting.AdditionalDocumentData;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
@@ -53,7 +55,7 @@ import java.util.List;
 
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private static Object ActivityCompat;
-    LinearLayout actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, sscfileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
+    LinearLayout additionalDocumentRequiredLL, websiteRevisionRequiredLL, informationRevisionLL, actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, sscfileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
     TextView fileUploadTV, actionReqFileTV, licenseTV, fileUploadedTV, remarksTV, acceptMsgTV, declineMsgTV, compnyNameTV, actionReqFileUpdatedOnTV, licenseUploadedTV;
     String selectedDocType = "", from = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
@@ -84,19 +86,23 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private void initFields() {
 
         sscFileUploadLL = findViewById(R.id.sscFileUploadLL);
-        actionReqFileUploadLL = findViewById(R.id.actionReqFileUploadLL);
-        businessLicenseUploadLL = findViewById(R.id.businessLicenseUploadLL);
+//        actionReqFileUploadLL = findViewById(R.id.actionReqFileUploadLL);
+//        businessLicenseUploadLL = findViewById(R.id.businessLicenseUploadLL);
+
+        additionalDocumentRequiredLL = findViewById(R.id.ll_document_required);
+        websiteRevisionRequiredLL = findViewById(R.id.website_revision_required);
+        informationRevisionLL = findViewById(R.id.information_revision);
 
         fileUploadTV = findViewById(R.id.sscuploadFileTV);
-        actionReqFileTV = findViewById(R.id.actionReqFileTV);
-        licenseTV = findViewById(R.id.licenseTV);
+//        actionReqFileTV = findViewById(R.id.actionReqFileTV);
+//        licenseTV = findViewById(R.id.licenseTV);
 
         sscfileUploadedLL = findViewById(R.id.sscfileUploadedLL);
-        actionReqFileUploadedLL = findViewById(R.id.actionReqFileUploadedLL);
-        lincenseFileUploadedLL = findViewById(R.id.lincenseFileUploadedLL);
+//        actionReqFileUploadedLL = findViewById(R.id.actionReqFileUploadedLL);
+//        lincenseFileUploadedLL = findViewById(R.id.lincenseFileUploadedLL);
 
         fileUploadedTV = findViewById(R.id.sscfileUpdatedOnTV);
-        actionReqFileUpdatedOnTV = findViewById(R.id.actionReqFileUpdatedOnTV);
+       // actionReqFileUpdatedOnTV = findViewById(R.id.actionReqFileUpdatedOnTV);
 
         checkboxCB = findViewById(R.id.checkboxCB);
         checkbox2CB = findViewById(R.id.checkbox2CB);
@@ -144,16 +150,42 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     }
 
     private void initObserver() {
-        underwritingUserActionRequired.getUserAccountLimitsMutableLiveData().observe(this, new Observer<ActionRequiredDataResponse>() {
-            @Override
-            public void onChanged(ActionRequiredDataResponse actionRequiredDataResponse) {
-                try {
-                    LogUtils.d(TAG,"ActionRequiredDataResponse"+actionRequiredDataResponse);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        underwritingUserActionRequired.getUserAccountLimitsMutableLiveData().observe(this,
+                new Observer<ActionRequiredResponse>() {
+                    @Override
+                    public void onChanged(ActionRequiredResponse actionRequiredDataResponse) {
+                        try {
+                            LogUtils.d(TAG, "ActionRequiredDataResponse" + actionRequiredDataResponse);
+
+                            if (actionRequiredDataResponse != null && actionRequiredDataResponse.getData() != null) {
+                                if (actionRequiredDataResponse.getData().getAdditionalDocument() != null &&
+                                        actionRequiredDataResponse.getData().getAdditionalDocument().size() != 0) {
+                                    additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
+
+                                    for(AdditionalDocumentData documents : actionRequiredDataResponse.getData().getAdditionalDocument()){
+
+                                        TextView documentName = findViewById(R.id.tvdocumentName);
+                                        LinearLayout dosumentFileUploadLL = findViewById(R.id.sscFileUploadLL);
+                                        LinearLayout dosumentsLL = findViewById(R.id.documentLL);
+                                        documentName.setText(documents.getDocumentName());
+
+                                        dosumentsLL.addView(documentName);
+                                        dosumentsLL.addView(dosumentFileUploadLL);
+
+                                    }
+                                } else if (actionRequiredDataResponse.getData().getWebsiteChange() != null
+                                && actionRequiredDataResponse.getData().getWebsiteChange().size()!=0) {
+                                    websiteRevisionRequiredLL.setVisibility(View.VISIBLE);
+                                }else if (actionRequiredDataResponse.getData().getInformationChange() != null
+                                        && actionRequiredDataResponse.getData().getInformationChange().size()!=0) {
+                                    informationRevisionLL.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
 
     }
 
