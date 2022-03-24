@@ -49,6 +49,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                 try {
 
                     if (b) {
+                        phnET.setHint("");
                         if (FROM.equals("DbaInfo")) {
                             DBAInfoAcivity dba = (DBAInfoAcivity) mContext;
                             dba.customerphonenumLL.setVisibility(GONE);
@@ -60,10 +61,13 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         hintName.setTextColor(getResources().getColor(R.color.primary_color));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
-                        if (phnET.getText().toString().length() > 0)
+                        if (phnET.getText().toString().length() > 0) {
                             hintName.setVisibility(VISIBLE);
-                        else
+                            phnET.setHint("");
+                        } else {
                             hintName.setVisibility(GONE);
+                            setETHint();
+                        }
                         hintName.setTextColor(getResources().getColor(R.color.primary_black));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                     }
@@ -160,11 +164,7 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
     public void setHintText(String text) {
         hintName.setText(text);
-        if (text.equals("Customer Service Phone Number"))
-//            phnET.setHint("Customer Service Number");
-            phnET.setHint("");
-        else
-            phnET.setHint(text);
+        setETHint();
     }
 
     public String getText() {
@@ -187,5 +187,10 @@ public class CompanyOutLineBoxPhoneNumberEditText extends ConstraintLayout {
         phnET.setSelection(phnET.getText().toString().length());
     }
 
-
+    public void setETHint(){
+        if (hintName.getText().toString().equals("Customer Service Phone Number"))
+            phnET.setHint("Customer Service Number");
+        else
+            phnET.setHint(hintName.getText().toString());
+    }
 }

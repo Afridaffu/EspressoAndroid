@@ -393,11 +393,11 @@
                     <TextView
                         android:id="@+id/etRemarks"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_54sdp"
+                        android:layout_height="@dimen/_44sdp"
                         android:layout_marginLeft="@dimen/_15sdp"
                         android:layout_marginTop="@dimen/_19sdp"
                         android:layout_marginRight="@dimen/_15sdp"
-                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_15sdp"
                         android:fontFamily="@font/opensans_semibold"
                         android:hint="Optional: Add Note (Maximum 120 characters )"
                         android:textColor="@color/primary_black"

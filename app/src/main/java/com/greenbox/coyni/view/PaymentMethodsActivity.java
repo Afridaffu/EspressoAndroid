@@ -126,6 +126,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
+
         } catch (Exception ex) {
             super.onActivityResult(requestCode, resultCode, data);
             ex.printStackTrace();
@@ -175,11 +176,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
                 addPayment();
+                hideorShowNoTokenText();
             } else {
                 if (!isPayments) {
                     getPaymentMethods();
                 }
             }
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -372,7 +376,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvDCardMsg = findViewById(R.id.tvDCardMsg);
             imgDCardArrow = findViewById(R.id.imgDCardArrow);
             imgCCardLogo = findViewById(R.id.imgCCardLogo);
-            imgCCardArrow = findViewById(R.id.imgCCardArrow);
+            imgCCardArrow = findViewById(R.id.imgCCardArrowC);
             tvCCHead = findViewById(R.id.tvCCHead);
             tvCCardHead = findViewById(R.id.tvCCardHead);
             tvCCardMsg = findViewById(R.id.tvCCardMsg);
@@ -396,6 +400,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 if (strScreen.equals("") && strCurrent.equals("addpayment") && (paymentMethodsResponse.getData().getData() == null || paymentMethodsResponse.getData().getData().size() == 0)) {
                     tvMessage.setVisibility(View.VISIBLE);
                     imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
+
                 }
             }
             lyAPayClose.setOnClickListener(new View.OnClickListener() {
@@ -527,6 +532,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             cvAddPayment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    hideorShowNoTokenText();
                     numberOfAccounts();
                     ControlMethod("addpayment");
                     strCurrent = "addpay";
@@ -909,4 +915,13 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
+    public void hideorShowNoTokenText() {
+        if (paymentMethodsResponse.getData().getBankCount() > 0
+                || paymentMethodsResponse.getData().getDebitCardCount() > 0
+                || paymentMethodsResponse.getData().getCreditCardCount() > 0) {
+            tvMessage.setVisibility(View.GONE);
+        } else {
+            tvMessage.setVisibility(View.VISIBLE);
+        }
+    }
 }

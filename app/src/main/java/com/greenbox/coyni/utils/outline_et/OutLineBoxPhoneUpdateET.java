@@ -50,28 +50,36 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
                 try {
                     if (isPhoneError) {
                         if (b) {
+                            pnET.setHint("");
                             hintName.setVisibility(VISIBLE);
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         } else {
-                            if (pnET.getText().toString().length() > 0)
+                            if (pnET.getText().toString().length() > 0) {
                                 hintName.setVisibility(VISIBLE);
-                            else
+                                pnET.setHint("");
+                            } else {
                                 hintName.setVisibility(GONE);
+                                pnET.setHint("Phone Number");
+                            }
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
                     } else {
                         if (b) {
+                            pnET.setHint("");
                             hintName.setVisibility(VISIBLE);
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {
 
-                            if (pnET.getText().toString().length() > 0)
+                            if (pnET.getText().toString().length() > 0) {
                                 hintName.setVisibility(VISIBLE);
-                            else
+                                pnET.setHint("");
+                            } else {
                                 hintName.setVisibility(GONE);
+                                pnET.setHint("Phone Number");
+                            }
                             hintName.setTextColor(getResources().getColor(R.color.primary_black));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                         }
@@ -195,7 +203,7 @@ public class OutLineBoxPhoneUpdateET extends ConstraintLayout {
 
     public void setText(String text) {
         pnET.setText(text);
-        if(text.trim().length() > 0){
+        if (text.trim().length() > 0) {
             hintName.setVisibility(VISIBLE);
         }
     }

@@ -258,7 +258,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_14sdp"
-                    android:layout_toLeftOf="@+id/imgCCardArrow"
+                    android:layout_toLeftOf="@+id/imgCCardArrowC"
                     android:layout_toRightOf="@+id/imgCCardLogo"
                     android:orientation="vertical">
 
@@ -310,7 +310,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/imgCCardArrow"
+                    android:id="@+id/imgCCardArrowC"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
