@@ -53,6 +53,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
 //                consolidatedListData.add(dateItem);
 //                i--;
 //            }
+
         }
 
 //        for (int i = 0; i < list.size(); i++) {
@@ -149,10 +150,12 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         TextView date;
+        View viewBottomCorner;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.tv_group_name);
+            viewBottomCorner = itemView.findViewById(R.id.bottom_corners);
         }
     }
 
@@ -165,6 +168,11 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strCurDate = spf.format(Calendar.getInstance().getTime());
+        if (holder.getAdapterPosition() == 0) {
+            holder.viewBottomCorner.setVisibility(View.GONE);
+        } else {
+            holder.viewBottomCorner.setVisibility(View.VISIBLE);
+        }
         if (date.getDate().equals(objMyApplication.convertZoneDateLastYear(strCurDate))) {
             holder.date.setText("Today");
         } else {

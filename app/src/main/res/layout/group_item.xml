@@ -4,6 +4,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/bottom_corners"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/bottom_left_right_corner"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_group_name"
@@ -20,5 +26,10 @@
         android:textColor="@color/primary_black"
         android:textSize="@dimen/_12ssp"
         android:visibility="visible" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/left_right_corner" />
 
 </LinearLayout>

@@ -73,6 +73,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     private long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
     private Date startDateD = null;
     private Date endDateD = null;
+    private View bottomCorners;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,36 +159,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-//
-//                                if (isFilters) {
-//                                    if (transactionType.size() > 0) {
-//                                        transactionListRequest.setTransactionType(transactionType);
-//                                    }
-//                                    if (transactionSubType.size() > 0) {
-//                                        transactionListRequest.setTransactionSubType(transactionSubType);
-//                                    }
-//                                    if (txnStatus.size() > 0) {
-//                                        transactionListRequest.setTxnStatus(txnStatus);
-//                                    }
-//                                    if (!strStartAmount.trim().equals("")) {
-//                                        transactionListRequest.setFromAmount(strStartAmount.replace(",", ""));
-//                                        transactionListRequest.setFromAmountOperator(">=");
-//                                    }
-//                                    if (!strEndAmount.trim().equals("")) {
-//                                        transactionListRequest.setToAmount(strEndAmount.replace(",", ""));
-//                                        transactionListRequest.setToAmountOperator("<=");
-//                                    }
-//
-//                                    if (!strFromDate.equals("")) {
-//                                        transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
-//                                        //transactionListRequest.setUpdatedFromDateOperator(">=");
-//                                    }
-//                                    if (!strToDate.equals("")) {
-//                                        transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
-//                                        //transactionListRequest.setUpdatedToDateOperator("<=");
-//                                    }
-//                                }
-//
                                 transactionsAPI(transactionListRequest);
                                 objMyApplication.initializeTransactionSearch();
                                 objMyApplication.setTransactionListSearch(transactionListRequest);
@@ -249,6 +220,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     }
 
     private void initFields() {
+        bottomCorners=findViewById(R.id.bottom_corners);
         closeBtn = findViewById(R.id.closeBtnIV);
         filterIV = findViewById(R.id.filtericonIV);
         nestedScrollView = findViewById(R.id.nestedSV);
