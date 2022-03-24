@@ -79,6 +79,13 @@ public class TransactionData {
     private String remarks;
     private String walletId;
     private String nameOnBank;
+    private String payoutId;
+    private String payoutDate;
+    private String totalTransactions;
+    private String failedReason;
+    private String achReferenceId;
+
+
 
     //    MerchantTransaction newly added fields
 
@@ -89,6 +96,7 @@ public class TransactionData {
     private String grossAmount;
     private String dateAndTime;
     private String refundAmount;
+    private String depositTo;
 
     public String getWithdrawId() {
         return withdrawId;
@@ -439,8 +447,63 @@ public class TransactionData {
         return nameOnBank;
     }
 
+    public void setWalletId(String walletId) {
+        this.walletId = walletId;
+    }
 
-//    MerchantTransaction newly added fields
+    public void setNameOnBank(String nameOnBank) {
+        this.nameOnBank = nameOnBank;
+    }
+
+    public String getPayoutId() {
+        return payoutId;
+    }
+
+    public void setPayoutId(String payoutId) {
+        this.payoutId = payoutId;
+    }
+
+    public String getPayoutDate() {
+        return payoutDate;
+    }
+
+    public void setPayoutDate(String payoutDate) {
+        this.payoutDate = payoutDate;
+    }
+
+    public String getTotalTransactions() {
+        return totalTransactions;
+    }
+
+    public void setTotalTransactions(String totalTransactions) {
+        this.totalTransactions = totalTransactions;
+    }
+
+    public String getDepositTo() {
+        return depositTo;
+    }
+
+    public void setDepositTo(String depositTo) {
+        this.depositTo = depositTo;
+    }
+
+    public String getFailedReason() {
+        return failedReason;
+    }
+
+    public void setFailedReason(String failedReason) {
+        this.failedReason = failedReason;
+    }
+
+    public String getAchReferenceId() {
+        return achReferenceId;
+    }
+
+    public void setAchReferenceId(String achReferenceId) {
+        this.achReferenceId = achReferenceId;
+    }
+
+    //    MerchantTransaction newly added fields
 
     public String getFees() {
         return fees;

@@ -184,7 +184,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "DBAChangeEmail").putExtra("action", "EditEmailDBA").putExtra("currentEmail",value.getText().toString()));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "DBAChangeEmail").putExtra("action", "EditEmailDBA").putExtra("currentEmail", value.getText().toString()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -194,12 +194,11 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
             heading.setText(getString(R.string.phone));
             title.setText(getString(R.string.phonenumber_curr));
             value.setText(getIntent().getStringExtra("value"));
-            phoneFormat = value.getText().toString();
 
             if (myApplicationObj.getDbaInfoResp() != null) {
                 value.setText("(" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
             }
-
+            phoneFormat = value.getText().toString();
 
             changeCV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -332,6 +331,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                             Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
                         }
                         value.setText(phoneNumber);
+                        phoneFormat = phoneNumber;
                     }
                 }
             }

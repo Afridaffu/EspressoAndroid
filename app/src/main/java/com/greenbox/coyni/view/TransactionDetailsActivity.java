@@ -2,13 +2,14 @@ package com.greenbox.coyni.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -19,9 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.transaction.TransactionData;
-import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -75,6 +74,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         break;
                     case "merchant payout":
                         txnType = Integer.parseInt(Utils.merchantType);
+                        break;
+                    case "canceled bank withdraw":
+                        txnType = Utils.cancelledWithdraw;
+                        break;
+                    case "failed bank withdraw":
+                        txnType = Utils.failedWithdraw;
+                        break;
                 }
             }
             if (getIntent().getStringExtra("txnSubType") != null && !getIntent().getStringExtra("txnSubType").equals("")) {
@@ -107,11 +113,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     default:
                         txnSubType = null;
                         break;
-//                    case "transfer":
-//                        txnSubType = Integer.parseInt(Utils.transferType);
-//                        break;
-//                    case "token":
-//                        txnSubType = Integer.parseInt(Utils.tokenType);
                 }
             }
 
@@ -127,98 +128,94 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void initObserver() {
-        dashboardViewModel.getTransactionDetailsMutableLiveData().observe(this, new Observer<TransactionDetails>() {
-            @Override
-            public void onChanged(TransactionDetails transactionDetails) {
-                if (progressDialog != null) {
-                    progressDialog.dismiss();
-                }
-                if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase("Success")) {
-                    switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
-                        case "pay / request":
-                            ControlMethod("payrequest");
-                            payRequest(transactionDetails.getData());
-                            break;
-                        case "buy token":
-                        case "buy tokens":
-                            switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                                case "credit card":
-                                case "debit card":
-                                    ControlMethod("buytoken");
-                                    buyTokenCreditDebit(transactionDetails.getData());
-                                    break;
-                                case "bank account":
-                                    ControlMethod("buytokenbank");
-                                    buyTokenBankAccount(transactionDetails.getData());
-                                    break;
-                                case "signet":
-                                    ControlMethod("buytokensignet");
-                                    buyTokenSignet(transactionDetails.getData());
-                                    break;
-                            }
-                            break;
-                        case "withdraw":
-                            switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                                case "gift card":
-                                    ControlMethod("withdrawgift");
-                                    withdrawGiftCard(transactionDetails.getData());
-                                    break;
-                                case "instant pay":
-                                    ControlMethod("withdrawinstant");
-                                    withdrawInstant(transactionDetails.getData());
-                                    break;
-                                case "bank account":
-                                    ControlMethod("withdrawbankaccount");
-                                    withdrawBank(transactionDetails.getData());
-                                    break;
-                                case "signet":
-                                    ControlMethod("withdrawsignet");
-                                    withdrawSignet(transactionDetails.getData());
-                                    break;
-                            }
-                            break;
-                        case "business payout":
-                            switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                                case "transfer":{
-                                    ControlMethod("BusinessPayoutTransfer");
-                                    businessTransfer(transactionDetails.getData());}
-                                    break;
-                                case "token":{
-                                    ControlMethod("BusinessPayoutToken");
-                                    businessToken(transactionDetails.getData());
-                                }
+        dashboardViewModel.getTransactionDetailsMutableLiveData().observe(this, transactionDetails -> {
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+            if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase("Success")) {
+                switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
+                    case "pay / request":
+                        ControlMethod("payrequest");
+                        payRequest(transactionDetails.getData());
+                        break;
+                    case "buy token":
+                    case "buy tokens":
+                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
+                            case "credit card":
+                            case "debit card":
+                                ControlMethod("buytoken");
+                                buyTokenCreditDebit(transactionDetails.getData());
                                 break;
-                            }
-                            break;
+                            case "bank account":
+                                ControlMethod("buytokenbank");
+                                buyTokenBankAccount(transactionDetails.getData());
+                                break;
+                            case "signet":
+                                ControlMethod("buytokensignet");
+                                buyTokenSignet(transactionDetails.getData());
+                                break;
+                        }
+                        break;
+                    case "withdraw":
+                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
+                            case "gift card":
+                                ControlMethod("withdrawgift");
+                                withdrawGiftCard(transactionDetails.getData());
+                                break;
+                            case "instant pay":
+                                ControlMethod("withdrawinstant");
+                                withdrawInstant(transactionDetails.getData());
+                                break;
+                            case "bank account":
+                                ControlMethod("withdrawbankaccount");
+                                withdrawBank(transactionDetails.getData());
+                                break;
+                            case "signet":
+                                ControlMethod("withdrawsignet");
+                                withdrawSignet(transactionDetails.getData());
+                                break;
+                        }
+                        break;
+                    case "business payout": {
+
+                        ControlMethod("businessPayout");
+                        businessPayout(transactionDetails.getData());
                     }
+                    break;
+                    case "canceled bank withdraw": {
+                        ControlMethod("cancelledWithdraw");
+                        cancelledWithdraw(transactionDetails.getData());
+                    }
+                    break;
+                    case "failed bank withdraw": {
+                        ControlMethod("failedWithdraw");
+                        failedWithdraw(transactionDetails.getData());
+                    }
+                    break;
                 }
             }
         });
 
-        dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, new Observer<CancelBuyTokenResponse>() {
-            @Override
-            public void onChanged(CancelBuyTokenResponse cancelBuyTokenResponse) {
-                try {
-                    progressDialog.dismiss();
-                    if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase("Success")) {
-                        Utils.showCustomToast(TransactionDetailsActivity.this, "Transaction cancelled successfully.", R.drawable.ic_custom_tick, "");
-                        //progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
-                        dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+        dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, cancelBuyTokenResponse -> {
+            try {
+                progressDialog.dismiss();
+                if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase("Success")) {
+                    Utils.showCustomToast(TransactionDetailsActivity.this, "Transaction cancelled successfully.", R.drawable.ic_custom_tick, "");
+                    //progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+                    dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
     }
 
-
-
+    @SuppressLint("SetTextI18n")
     private void payRequest(TransactionData objData) {
         try {
             TextView headerTV, amount, descrptn, completed, datetime, fee, total, balance;
             TextView refid, name, accountadress;
-            LinearLayout lyPRClose, lyRefId, lyAccAdd, payreqPfLL, payreqTAmountLL;
+            LinearLayout lyPRClose, lyRefId, lyAccAdd;
             headerTV = findViewById(R.id.headerTV);
             amount = findViewById(R.id.amountTV);
             descrptn = findViewById(R.id.descrptnTV);
@@ -242,24 +239,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 accountadress.setText((objData.getRecipientWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
                 fee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
                 total.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
-                lyAccAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this);
-                    }
-                });
+                lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this));
             } else {
                 amount.setText(Utils.convertTwoDecimal(objData.getAmountReceived().replace("CYN", "").trim()));
                 findViewById(R.id.payreqTAmountLL).setVisibility(View.GONE);
                 findViewById(R.id.payreqPfLL).setVisibility(View.GONE);
                 name.setText(objData.getSenderName());
                 accountadress.setText((objData.getSenderWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
-                lyAccAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Utils.copyText(objData.getSenderWalletAddress(), TransactionDetailsActivity.this);
-                    }
-                });
+                lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getSenderWalletAddress(), TransactionDetailsActivity.this));
             }
             if (!objData.getSenderMessage().equals("")) {
                 descrptn.setText("\"" + objData.getSenderMessage() + "\"");
@@ -291,28 +278,19 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     break;
             }
 
-            lyPRClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onBackPressed();
-                }
-            });
-            lyRefId.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
-                }
-            });
+            lyPRClose.setOnClickListener(view -> onBackPressed());
+            lyRefId.setOnClickListener(view -> Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this));
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void buyTokenCreditDebit(TransactionData objData) {
-        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseamount, successadd, chargeback;
-        TextView refid, name, accountadress, descriptorname, cardNumber, expiryDate, depositIDTV;
-        LinearLayout lyPRClose, lyRefId, lyAccAdd;
+        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmountTV, successadd, chargeback;
+        TextView refid, name, descriptorName, cardNumber, expiryDate, depositIDTV;
+        LinearLayout lyPRClose;
         ImageView refIdIV, depositIDIV, cardBrandIV;
         LinearLayout depositID, referenceID;
 
@@ -320,14 +298,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         amount = findViewById(R.id.tvAmount);
         status = findViewById(R.id.statusTV);
         datetime = findViewById(R.id.datetimeTV);
-        purchaseamount = findViewById(R.id.purchaseTV);
+        purchaseAmountTV = findViewById(R.id.purchaseTV);
         fee = findViewById(R.id.processingFeeTV);
         total = findViewById(R.id.totalAmountTV);
         balance = findViewById(R.id.accBalTV);
         depositID = findViewById(R.id.depositIDLL);
         referenceID = findViewById(R.id.referenceIDLL);
         refid = findViewById(R.id.referenceIDTV);
-        descriptorname = findViewById(R.id.descriNameTV);
+        descriptorName = findViewById(R.id.descriNameTV);
         name = findViewById(R.id.cardHoldernameTV);
         cardNumber = findViewById(R.id.cardnumTV);
         expiryDate = findViewById(R.id.expdateTV);
@@ -335,8 +313,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         chargeback = findViewById(R.id.chargeback);
         depositIDTV = findViewById(R.id.depositid);
         lyPRClose = findViewById(R.id.previous);
-        refIdIV = findViewById(R.id.refIdIV);
-        depositIDIV = findViewById(R.id.depositIdIV);
         cardBrandIV = findViewById(R.id.cardBrandIV);
 
         headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
@@ -364,7 +340,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 break;
         }
         datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseamount.setText(objData.getYouPay());
+        purchaseAmountTV.setText(objData.getYouPay());
 
         switch (objData.getCardBrand()) {
             case "MASTERCARD":
@@ -385,43 +361,29 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         Double purchaseAmount = Double.parseDouble(objData.getYouGet().replace("CYN", "").trim());
         Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", "").trim());
         datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseamount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
+        purchaseAmountTV.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
         fee.setText("$" + Utils.convertTwoDecimal((objData.getProcessingFee().replace("USD", "").trim())));
         total.setText("$" + Utils.convertTwoDecimal(String.valueOf(purchaseAmount + processingFee)));
         balance.setText(Utils.convertTwoDecimal((objData.getAccountBalance().replace("CYN", "").trim())) + " CYN");
 
         refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-        descriptorname.setText(objData.getDescriptorName());
+        descriptorName.setText(objData.getDescriptorName());
         name.setText(objData.getCardHolderName());
         cardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
         expiryDate.setText(objData.getCardExpiryDate());
         depositIDTV.setText(objData.getDepositid().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-        lyPRClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-        referenceID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
-            }
-        });
-        depositID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this);
-            }
-        });
+        lyPRClose.setOnClickListener(view -> onBackPressed());
+        referenceID.setOnClickListener(view -> Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this));
+        depositID.setOnClickListener(view -> Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this));
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void buyTokenBankAccount(TransactionData objData) {
         TextView headerTV, amount, status, datetime, fee, total, balance, purchaseamount, successadd, chargeback;
         TextView refid, name, accountadress, descriptorname, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
         LinearLayout lyPRClose, btBankReference, btBankDepositID;
-        ImageView previousBtn, refIdIV, depositIDIV;
+        ImageView previousBtn, depositIDIV;
 
         headerTV = findViewById(R.id.btbankheaderTV);
         amount = findViewById(R.id.btbankamountTV);
@@ -436,8 +398,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         descriptorname = findViewById(R.id.btbankDescrptorTV);
         depositIDTV = findViewById(R.id.btbankDepositIDTV);
         lyPRClose = findViewById(R.id.btbankprevious);
-        refIdIV = findViewById(R.id.btbankrefIV);
-        depositIDIV = findViewById(R.id.btbankDeposiIV);
         bankAccNumTV = findViewById(R.id.btbankaccountTV);
         bankNameTV = findViewById(R.id.btbanknameTV);
         nameOnAccTV = findViewById(R.id.btbanknameACTV);
@@ -483,17 +443,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         nameOnAccTV.setText(objData.getNameOnBankAccount());
 
-        cancelTxnCV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                try {
-//                    progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
-//                    dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-                cancelPopup();
-            }
+        cancelTxnCV.setOnClickListener(view -> {
+            cancelPopup();
         });
 
         lyPRClose.setOnClickListener(new View.OnClickListener() {
@@ -524,12 +475,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
 
     }
+
     private void buyTokenSignet(TransactionData objData) {
-        TextView headerText,amount,status,date,purchaseAmount,processingFee
-                ,totalAmount,depositID,referenceID,descriptorName
-                ,nameOnAccount,walletID;
-        LinearLayout copyRefID,copyDepositeID;
-        headerText=findViewById(R.id.buySignetHeaderTV);
+        TextView headerText, amount, status, date, purchaseAmount, processingFee, totalAmount, depositID, referenceID, descriptorName, nameOnAccount, walletID;
+        LinearLayout copyRefID, copyDepositeID;
+        headerText = findViewById(R.id.buySignetHeaderTV);
         amount = findViewById(R.id.signetAmountTV);
         status = findViewById(R.id.signetStatusTV);
         date = findViewById(R.id.signetdateTimeTV);
@@ -545,10 +495,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         copyDepositeID = findViewById(R.id.copyDepositID);
 
 
-
     }
 
-
+    @SuppressLint("SetTextI18n")
     private void withdrawGiftCard(TransactionData objData) {
         TextView headerMsdTV, amountTV;
         TextView status, dateandtime, withGiftcardname, subtotal, fee, grandtotal, refid, withid, recipientname, email;
@@ -636,6 +585,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void withdrawInstant(TransactionData objData) {
         LinearLayout previous, withdrawID, referenceID;
         TextView withiheader, withiamount, withidescription, withistatus, withidatetime, withiwithdrawalAmount, withiprocefee, withitotal, withiaccountbal, withiwithdrawalId, withirefId;
@@ -748,16 +698,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
             }
         });
-        withdrawID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
-            }
-        });
+        withdrawID.setOnClickListener(view -> Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this));
 
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void withdrawBank(TransactionData objData) {
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
         TextView withBankNameOnAccount, withBankName, withBankAccount;
@@ -856,21 +802,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
             }
         });
-        withBankWithdrawalID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
-            }
-        });
+        withBankWithdrawalID.setOnClickListener(view -> Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this));
 
     }
-
 
     @SuppressLint("SetTextI18n")
     private void withdrawSignet(TransactionData objData) {
 
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
-        TextView withBankNameOnAccount, withBankName, withBankAccount,signetTextTV;
+        TextView withBankNameOnAccount, withBankName, withBankAccount, signetTextTV;
 //        ImageView withbankwithdrawalid, withbankrefIDIV;
         LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
 
@@ -943,21 +883,23 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             withBankWithdrawalId.setText(objData.getWithdrawalId());
         }
 
-        withBankRefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-
+        if (objData.getReferenceId().length() > 10)
+            withBankRefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        else {
+            withBankRefId.setText(objData.getReferenceId());
+        }
         withBankNameOnAccount.setText(objData.getNameOnBank());
 
         signetTextTV.setText("Signet Wallet ID");
-        signetTextTV.setPadding(0,0,0,20);
-        findViewById(R.id.nameOnAccount).setPadding(0,10,0,0);
-        findViewById(R.id.withdrawIDTV).setPadding(0,10,0,0);
+//        signetTextTV.setPadding(0, 0, 0, 20);
+//        findViewById(R.id.nameOnAccount).setPadding(0, 10, 0, 0);
+//        findViewById(R.id.withdrawIDTV).setPadding(30, 30, 0, 0);
         if (objData.getWithdrawalId().length() > 20) {
             withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
         } else {
             withBankName.setText(objData.getWalletId());
         }
         findViewById(R.id.bankAccountLL).setVisibility(View.GONE);
-
 
 
         withBankCloseLL.setOnClickListener(new View.OnClickListener() {
@@ -983,12 +925,326 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void businessTransfer(TransactionData data) {
+    @SuppressLint("SetTextI18n")
+    private void businessPayout(TransactionData businessPayoutData) {
+        try {
+            TextView headerNameTV, amountTV, statusTV, dateAndTime, payoutID, refID, payoutDate, totalAmount, totalTransactions, depositID;
+            LinearLayout copyPayoutID, copyReferenceIDLL;
+            String payoutId = "";
+
+            headerNameTV = findViewById(R.id.mPayoutheaderTV);
+            amountTV = findViewById(R.id.merchantamountTV);
+            statusTV = findViewById(R.id.merchantstatusTV);
+            dateAndTime = findViewById(R.id.merchantdateTv);
+            payoutID = findViewById(R.id.mPayoutIdTV);
+            copyPayoutID = findViewById(R.id.copyPayoutIDLL);
+            copyReferenceIDLL = findViewById(R.id.copuRefIDLL);
+            refID = findViewById(R.id.mreferenceIdTV);
+            payoutDate = findViewById(R.id.merchantPIdateTV);
+            totalAmount = findViewById(R.id.mPItotalamountTV);
+            totalTransactions = findViewById(R.id.mPItotaltransactionsTV);
+            depositID = findViewById(R.id.mPIdeposittoTV);
+
+            headerNameTV.setText(businessPayoutData.getTransactionType());
+
+            amountTV.setText(Utils.convertTwoDecimal(businessPayoutData.getTotalAmount().replace("CYN", "").trim()));
+
+            statusTV.setText(businessPayoutData.getStatus());
+            switch (businessPayoutData.getStatus().toLowerCase()) {
+                case "completed":
+                    statusTV.setTextColor(getResources().getColor(R.color.completed_status));
+                    statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case "in progress":
+                case "inprogress":
+                    statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case "pending":
+                    statusTV.setTextColor(getResources().getColor(R.color.pending_status));
+                    statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case "failed":
+                case "cancelled":
+                    statusTV.setTextColor(getResources().getColor(R.color.failed_status));
+                    statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+
+            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(businessPayoutData.getCreatedDate()));
+
+            if (businessPayoutData.getPayoutId().length() > 10) {
+                payoutId = businessPayoutData.getPayoutId().substring(0, 10) + "...";
+                payoutID.setText(Html.fromHtml("<u>" + payoutId + "</u>"));
+            } else {
+//                payoutID.setText(businessPayoutData.getPayoutId());
+                payoutId = businessPayoutData.getPayoutId();
+                payoutID.setText(Html.fromHtml("<u>" + payoutId + "</u>"));
+            }
+
+            copyPayoutID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.copyText(businessPayoutData.getPayoutId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            if (businessPayoutData.getReferenceId().length() > 10) {
+                refID.setText(businessPayoutData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                refID.setText(businessPayoutData.getReferenceId());
+            }
+
+            copyReferenceIDLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.copyText(businessPayoutData.getReferenceId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            payoutDate.setText(businessPayoutData.getPayoutDate());
+
+            totalAmount.setText(Utils.convertTwoDecimal(businessPayoutData.getTotalAmount().replace("CYN", "").trim()) + " ");
+
+            totalTransactions.setText(businessPayoutData.getTotalTransactions());
+
+
+            if (businessPayoutData.getDepositTo().length() > 10) {
+                depositID.setText(businessPayoutData.getDepositTo().substring(0, 10) + "...");
+            } else {
+                depositID.setText(businessPayoutData.getDepositTo());
+            }
+
+            findViewById(R.id.Mpayoutll).setOnClickListener(view -> finish());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    private void businessToken(TransactionData data) {
+    @SuppressLint("SetTextI18n")
+    private void failedWithdraw(TransactionData failedData) {
+        try {
+            TextView transactionTypeTV, amountTV, statusTV, dateAndTime, refID, reasonFailed, achWithTV, achRefID, withdrawAmountTV, processingFeeTV, totalAmountTV;
+            LinearLayout copyReferenceIDLL, copyACHWithID;
+
+            transactionTypeTV = findViewById(R.id.headerTxtTV);
+            amountTV = findViewById(R.id.amountTV);
+            statusTV = findViewById(R.id.statusTV);
+            dateAndTime = findViewById(R.id.dateAndTimeTV);
+            refID = findViewById(R.id.referenceIDTV);
+            copyReferenceIDLL = findViewById(R.id.copyRefIDLL);
+            reasonFailed = findViewById(R.id.reasonForFailed);
+            achWithTV = findViewById(R.id.ACHWithdrawalIDTV);
+            copyACHWithID = findViewById(R.id.copyACHWithdrawalIDTV);
+            achRefID = findViewById(R.id.achReferenceIDTV);
+            withdrawAmountTV = findViewById(R.id.withdrawAmountTV);
+            processingFeeTV = findViewById(R.id.withBankProcessFee);
+            totalAmountTV = findViewById(R.id.totalAmountTV);
+
+            transactionTypeTV.setText(failedData.getTransactionType());
+
+            statusTV.setText(failedData.getStatus());
+
+            amountTV.setText(Utils.convertTwoDecimal(failedData.getWithdrawAmount().replace("CYN", "").trim()));
+
+
+            try {
+                switch (failedData.getStatus().toLowerCase()) {
+                    case "completed":
+                        statusTV.setTextColor(getResources().getColor(R.color.completed_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                        break;
+                    case "in progress":
+                    case "inprogress":
+                        statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                        break;
+                    case "pending":
+                        statusTV.setTextColor(getResources().getColor(R.color.pending_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
+                        break;
+                    case "failed":
+                    case "cancelled":
+                        statusTV.setTextColor(getResources().getColor(R.color.failed_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
+                        break;
+                }
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
+
+            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(failedData.getCreatedDate()));
+
+            if (failedData.getReferenceId().length() > 10)
+                refID.setText(failedData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            else {
+                refID.setText(failedData.getReferenceId());
+            }
+
+            copyReferenceIDLL.setOnClickListener(view -> {
+                try {
+                    Utils.copyText(failedData.getReferenceId(), TransactionDetailsActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            reasonFailed.setText(failedData.getFailedReason());
+
+            if (failedData.getAchReferenceId() != null) {
+                if (failedData.getWithdrawId().length() > 10) {
+                    achWithTV.setText(failedData.getWithdrawId().substring(0, 10) + "...");
+                } else {
+                    achWithTV.setText(failedData.getWithdrawId());
+                }
+            }
+            copyACHWithID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.copyText(failedData.getWithdrawId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            String achRefId = "";
+            if (failedData.getAchReferenceId().length() > 10) {
+                achRefId = failedData.getAchReferenceId().substring(0, 10) + "...";
+                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+            } else {
+                achRefId = failedData.getAchReferenceId();
+                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+            }
+
+            withdrawAmountTV.setText(Utils.convertTwoDecimal(failedData.getWithdrawAmount().replace("CYN", "").trim()));
+
+            processingFeeTV.setText(Utils.convertTwoDecimal(failedData.getProcessingFee().replace("CYN", "").trim()));
+
+            totalAmountTV.setText(Utils.convertTwoDecimal(failedData.getTotalAmount().replace("CYN", "").trim()));
+        } catch (Resources.NotFoundException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
+    @SuppressLint("SetTextI18n")
+    private void cancelledWithdraw(TransactionData cancelledData) {
+        try {
+            TextView transactionTypeTV, amountTV, statusTV, dateAndTime, refID, reasonFailed, achWithTV, achRefID, withdrawAmountTV, processingFeeTV, totalAmountTV;
+            LinearLayout copyReferenceIDLL, copyACHWithID;
+
+            transactionTypeTV = findViewById(R.id.headerTxtTV);
+            amountTV = findViewById(R.id.amountTV);
+            statusTV = findViewById(R.id.statusTV);
+            dateAndTime = findViewById(R.id.dateAndTimeTV);
+            refID = findViewById(R.id.referenceIDTV);
+            copyReferenceIDLL = findViewById(R.id.copyRefIDLL);
+            reasonFailed = findViewById(R.id.reasonForFailed);
+            achWithTV = findViewById(R.id.ACHWithdrawalIDTV);
+            copyACHWithID = findViewById(R.id.copyACHWithdrawalIDTV);
+            achRefID = findViewById(R.id.achReferenceIDTV);
+            withdrawAmountTV = findViewById(R.id.withdrawAmountTV);
+            processingFeeTV = findViewById(R.id.withBankProcessFee);
+            totalAmountTV = findViewById(R.id.totalAmountTV);
+
+            transactionTypeTV.setText(cancelledData.getTransactionType());
+
+            statusTV.setText(cancelledData.getStatus());
+
+            amountTV.setText(Utils.convertTwoDecimal(cancelledData.getWithdrawAmount().replace("CYN", "").trim()));
+
+
+            try {
+                switch (cancelledData.getStatus().toLowerCase()) {
+                    case "completed":
+                        statusTV.setTextColor(getResources().getColor(R.color.completed_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                        break;
+                    case "in progress":
+                    case "inprogress":
+                        statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                        break;
+                    case "pending":
+                        statusTV.setTextColor(getResources().getColor(R.color.pending_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
+                        break;
+                    case "failed":
+                    case "cancelled":
+                        statusTV.setTextColor(getResources().getColor(R.color.failed_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
+                        break;
+                }
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
+
+            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(cancelledData.getCreatedDate()));
+
+            if (cancelledData.getReferenceId().length() > 10)
+                refID.setText(cancelledData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            else {
+                refID.setText(cancelledData.getReferenceId());
+            }
+
+            copyReferenceIDLL.setOnClickListener(view -> {
+                try {
+                    Utils.copyText(cancelledData.getReferenceId(), TransactionDetailsActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            findViewById(R.id.failedReTV).setVisibility(View.GONE);
+            reasonFailed.setVisibility(View.GONE);
+
+            if (cancelledData.getAchReferenceId() != null) {
+                if (cancelledData.getWithdrawId().length() > 10) {
+                    achWithTV.setText(cancelledData.getWithdrawId().substring(0, 10) + "...");
+                } else {
+                    achWithTV.setText(cancelledData.getWithdrawId());
+                }
+            }
+            copyACHWithID.setOnClickListener(view -> {
+                try {
+                    Utils.copyText(cancelledData.getWithdrawId(), TransactionDetailsActivity.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            String achRefId;
+            if (cancelledData.getAchReferenceId().length() > 10) {
+                achRefId = cancelledData.getAchReferenceId().substring(0, 10) + "...";
+                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+            } else {
+                achRefId = cancelledData.getAchReferenceId();
+                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+            }
+
+            withdrawAmountTV.setText(Utils.convertTwoDecimal(cancelledData.getWithdrawAmount().replace("CYN", "").trim()));
+
+            processingFeeTV.setText(Utils.convertTwoDecimal(cancelledData.getProcessingFee().replace("CYN", "").trim()));
+
+            totalAmountTV.setText(Utils.convertTwoDecimal(cancelledData.getTotalAmount().replace("CYN", "").trim()));
+        } catch (Resources.NotFoundException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private void ControlMethod(String methodToShow) {
         try {
@@ -1001,6 +1257,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
                 }
                 break;
                 case "buytoken": {
@@ -1011,6 +1268,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
                 }
                 break;
                 case "buytokenbank": {
@@ -1021,9 +1279,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
                 }
                 break;
-                case "buytokensignet":{
+                case "buytokensignet": {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1031,6 +1290,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.VISIBLE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawgift": {
@@ -1041,6 +1301,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawinstant": {
@@ -1051,6 +1312,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.VISIBLE);
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
                 }
                 break;
                 case "withdrawbankaccount":
@@ -1062,6 +1324,32 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
                     findViewById(R.id.withdrawBank).setVisibility(View.VISIBLE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                }
+                break;
+                case "businessPayout": {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.VISIBLE);
+                }
+                break;
+                case "cancelledWithdraw":
+                case "failedWithdraw": {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.VISIBLE);
+
                 }
                 break;
             }
@@ -1083,22 +1371,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             TextView tvNo = dialog.findViewById(R.id.tvNo);
             TextView tvYes = dialog.findViewById(R.id.tvYes);
 
-            tvNo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            tvNo.setOnClickListener(v -> dialog.dismiss());
+            tvYes.setOnClickListener(v -> {
+                try {
                     dialog.dismiss();
-                }
-            });
-            tvYes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        dialog.dismiss();
-                        progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
-                        dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
+                    dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             });
             Window window = dialog.getWindow();

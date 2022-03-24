@@ -11,203 +11,199 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/backgrndbtmcornrs"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/_22sdp">
+
+        <LinearLayout
+            android:id="@+id/Mpayoutll"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_left" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="@string/transaction_details"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/backgrndbtmcornrs"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/_22sdp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/Mpayoutll"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="@dimen/_40sdp"
-                android:layout_marginBottom="@dimen/_14sdp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_chevron_left" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_11sdp"
-                android:fontFamily="@font/opensans_bold"
-                android:text="@string/transaction_details"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16ssp" />
-
-        </LinearLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
-
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_7sdp"
+                android:background="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp">
 
-                <androidx.cardview.widget.CardView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:layout_marginRight="@dimen/_11sdp"
-                    android:layout_marginBottom="@dimen/_7sdp"
-                    android:background="@color/white"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/mPayoutheaderTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_22sdp"
+                        android:layout_marginBottom="@dimen/_6sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12ssp" />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/merchantamountTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_6sdp"
+                            android:fontFamily="@font/opensans_bold"
+                            android:textColor="@color/primary_color"
+                            android:textSize="@dimen/_24ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text="@string/currency"
+                            android:textColor="@color/primary_color"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_1sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:layout_marginRight="@dimen/_11sdp"
+                        android:layout_marginBottom="@dimen/_11sdp"
+                        android:background="@color/blue_light" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingEnd="@dimen/_10sdp">
 
                         <TextView
-                            android:id="@+id/mPayoutheaderTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_11sdp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/status"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/merchantstatusTV"
+                            android:layout_width="@dimen/_68sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:background="@drawable/fill_grn_color_smallradius"
+                            android:fontFamily="@font/opensans_bold"
+                            android:gravity="center"
+                            android:textColor="@color/active_green"
+                            android:textSize="@dimen/_7ssp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/date_amp_time"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/merchantdateTv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_22sdp"
-                            android:layout_marginBottom="@dimen/_6sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="@string/merchant_payout"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_12ssp" />
-
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/payout_id"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
 
                         <LinearLayout
+                            android:id="@+id/copyPayoutIDLL"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_alignParentEnd="true"
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/merchantamountTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/_6sdp"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="1,000.00"
-                                android:textColor="@color/primary_color"
-                                android:textSize="@dimen/_24ssp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="@string/currency"
-                                android:textColor="@color/primary_color"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_1sdp"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_11sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            android:layout_marginBottom="@dimen/_11sdp"
-                            android:background="@color/blue_light" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingRight="@dimen/_10sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_8sdp"
-                                android:layout_marginBottom="@dimen/_11sdp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/status"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:id="@+id/merchantstatusTV"
-                                android:layout_width="@dimen/_68sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/fill_grn_color_smallradius"
-                                android:fontFamily="@font/opensans_bold"
-                                android:gravity="center"
-                                android:text="@string/completed"
-                                android:textColor="@color/active_green"
-                                android:textSize="@dimen/_7ssp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="Date &amp; Time"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:id="@+id/merchantdateTv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="07/27/2020 10:36:14"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/payout_id"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
                                 android:id="@+id/mPayoutIdTV"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="233hsM734h…"
+                                android:gravity="end"
                                 android:textColor="@color/primary_green"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -216,36 +212,42 @@
                                 android:layout_width="@dimen/_11sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_gravity="center"
-                                android:layout_marginLeft="@dimen/_6sdp"
+                                android:layout_marginStart="@dimen/_6sdp"
                                 android:src="@drawable/ic_copy" />
                         </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/reference_id"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/reference_id"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
+                            android:id="@+id/copuRefIDLL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/mreferenceIdTV"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="1d3hsM734h…"
+                                android:gravity="end"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -254,185 +256,181 @@
                                 android:layout_width="@dimen/_11sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_gravity="center"
-                                android:layout_marginLeft="@dimen/_6sdp"
+                                android:layout_marginStart="@dimen/_6sdp"
                                 android:src="@drawable/ic_copy" />
                         </LinearLayout>
-                    </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-                <TextView
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/_22sdp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/payout_information"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_12ssp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_83sdp"
+                android:background="@color/white"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_22sdp"
-                    android:layout_marginTop="@dimen/_11sdp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="@string/payout_information"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_11sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:layout_marginRight="@dimen/_11sdp"
-                    android:layout_marginBottom="@dimen/_83sdp"
-                    android:background="@color/white"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_18sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/payout_date"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/merchantPIdateTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/total_amount"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/mPItotalamountTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:text="@string/currency"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/total_transactions"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/mPItotaltransactionsTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/deposit_to"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_18sdp"
-                            android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp">
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/payout_date"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:id="@+id/merchantPIdateTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="05/01/2021 6:00 PM to/n05/02/2021 5:59 PM"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/total_amount"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <TextView
-                                android:id="@+id/mPItotalamountTV"
-                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:text="1,000.00"
+                                android:gravity="end"
+                                android:text="@string/business_tokenaccount"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/mPIdeposittoTV"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="@string/currency"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/total_transactions"
-                                android:textColor="@color/dark_grey"
+                                android:gravity="end"
+                                android:textColor="@color/primary_green"
                                 android:textSize="@dimen/_11ssp" />
 
-                            <TextView
-                                android:id="@+id/mPItotaltransactionsTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
-                                android:text="232"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:paddingLeft="@dimen/_11sdp"
-                            android:paddingTop="@dimen/_8sdp"
-                            android:paddingRight="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_11sdp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/opensans_regular"
-                                android:text="@string/deposit_to"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text="@string/business_tokenaccount"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
-
-                                <TextView
-                                    android:id="@+id/mPIdeposittoTV"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
-                                    android:text="1d3hsM734h…"
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_11ssp" />
-
-                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
