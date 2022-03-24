@@ -138,7 +138,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         sendCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isNextEnabled == true) {
+                if (isNextEnabled) {
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
