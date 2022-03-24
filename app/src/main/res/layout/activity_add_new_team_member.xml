@@ -43,15 +43,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="none">
-
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_21sdp"
             android:orientation="vertical">
 
@@ -238,7 +235,7 @@
                     android:fontFamily="@font/opensans_semibold"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress|textNoSuggestions"
-                    android:maxLength="50"
+                    android:maxLength="255"
                     android:maxLines="1"
                     android:padding="@dimen/_14sdp"
                     android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -321,28 +318,34 @@
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/_11ssp" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvSend"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_43sdp"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="@dimen/_16sdp"
-                android:gravity="center"
-                app:cardBackgroundColor="@color/bg_inactive"
-                app:cardCornerRadius="@dimen/_22sdp"
-                app:cardElevation="0dp">
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="vertical">
 
-                <TextView
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvSend"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/opensans_bold"
+                    android:layout_height="@dimen/_43sdp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="@dimen/_16sdp"
                     android:gravity="center"
-                    android:text="@string/send"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
-            </androidx.cardview.widget.CardView>
+                    app:cardBackgroundColor="@color/bg_inactive"
+                    app:cardCornerRadius="@dimen/_22sdp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center"
+                        android:text="@string/send"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
         </LinearLayout>
 
