@@ -89,15 +89,21 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if(!detailInfo.getAccountSttaus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
                 if(detailInfo.getAccountSttaus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())){
                     statusLL.setVisibility(View.VISIBLE);
-                    statusLL.setBackgroundColor(context.getColor(R.color.default_red));
+                    statusLL.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
                     statusTV.setText(detailInfo.getAccountSttaus());
+                    statusTV.setTextColor(context.getColor(R.color.default_red));
+
                 } else if(detailInfo.getAccountSttaus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())){
                     statusLL.setVisibility(View.VISIBLE);
-                    statusLL.setBackgroundColor(context.getColor(R.color.under_review_blue));
+                    statusLL.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
                     statusTV.setText(detailInfo.getAccountSttaus());
+                    statusTV.setTextColor(context.getColor(R.color.under_review_blue));
+
                 } else {
                     statusLL.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountSttaus());
+                    statusTV.setTextColor(context.getColor(R.color.orange_status));
+
                 }
             } else {
                 statusLL.setVisibility(View.GONE);
