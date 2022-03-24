@@ -7,7 +7,7 @@ import com.greenbox.coyni.model.ListItem;
 
 import java.io.Serializable;
 
-public class TransactionListPosted extends ListItem implements Serializable {
+public class TransactionListPosted extends ListItem implements Serializable,Comparable<TransactionListPosted>{
     @SerializedName("createdAt")
     @Expose
     private String createdAt;
@@ -127,5 +127,10 @@ public class TransactionListPosted extends ListItem implements Serializable {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    @Override
+    public int compareTo(TransactionListPosted transactionListPosted) {
+        return updatedAt.compareTo(transactionListPosted.updatedAt);
     }
 }

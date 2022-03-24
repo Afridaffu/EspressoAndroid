@@ -22,6 +22,7 @@ import com.greenbox.coyni.utils.Utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
@@ -35,8 +36,9 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         this.transactionListItemsPosted = list;
         this.mContext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
-
+        Collections.sort(transactionListItemsPosted, Collections.reverseOrder());
         consolidatedListData = new ArrayList<>();
+
         for (int i = 0; i < transactionListItemsPosted.size(); i++) {
             String datee = objMyApplication.convertZoneDateLastYear(transactionListItemsPosted.get(i).getUpdatedAt().split("\\.")[0]);
             DateItem dateItem = new DateItem();

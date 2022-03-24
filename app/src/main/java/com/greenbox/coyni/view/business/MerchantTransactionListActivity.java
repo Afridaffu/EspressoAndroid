@@ -295,6 +295,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 }
 
                                 if (globalPosted.size() > 0) {
+                                    bottomCorners.setVisibility(View.VISIBLE);
                                     transactionListPostedAdapter = new MerchantTransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
                                     getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
@@ -312,6 +313,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     } else {
                                         getRvTransactionsPosted.scrollToPosition(0);
                                     }
+                                }else{
+                                    bottomCorners.setVisibility(View.GONE);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
