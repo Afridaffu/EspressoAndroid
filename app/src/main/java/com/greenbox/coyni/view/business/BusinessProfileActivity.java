@@ -716,17 +716,19 @@ public class BusinessProfileActivity extends AppCompatActivity {
 //            if (enablePopup != null) {
 //                enablePopup.dismiss();
 //            }
-//            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-////                dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
-////                dialog.setIndeterminate(false);
-////                dialog.setMessage("Please wait...");
-////                dialog.show();
-//                BiometricRequest biometricRequest = new BiometricRequest();
-//                biometricRequest.setBiometricEnabled(true);
-//                biometricRequest.setDeviceId(Utils.getDeviceID());
-//                coyniViewModel.saveBiometric(biometricRequest);
-//            } else
-            if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE) {
+//                dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
+//                dialog.setIndeterminate(false);
+//                dialog.setMessage("Please wait...");
+//                dialog.show();
+                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+                if (fingerprintManager.hasEnrolledFingerprints()) {
+                    BiometricRequest biometricRequest = new BiometricRequest();
+                    biometricRequest.setBiometricEnabled(true);
+                    biometricRequest.setDeviceId(Utils.getDeviceID());
+                    coyniViewModel.saveBiometric(biometricRequest);
+                }
+            } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
                     Intent cp = new Intent(BusinessProfileActivity.this, ConfirmPasswordActivity.class);
                     startActivity(cp);

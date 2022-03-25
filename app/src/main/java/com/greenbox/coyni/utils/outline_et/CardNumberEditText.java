@@ -153,6 +153,7 @@ public class CardNumberEditText extends ConstraintLayout {
         cnET.setText(text);
         if (text.equals("")) {
             hintName.setVisibility(GONE);
+            cnET.setHint("Card Number");
         }
     }
 

@@ -415,8 +415,8 @@ public class CustomerProfileActivity extends BaseActivity {
                 } else {
                     if (objMyApplication.getStrUserName().length() == 21) {
                         customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20) + "...");
-                    } else if (objMyApplication.getStrUserName().length() > 22) {
-                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 22) + "...");
+                    } else if (objMyApplication.getStrUserName().length() > 21) {
+                        customerNameTV.setText(objMyApplication.getStrUserName().substring(0, 20) + "...");
                     } else {
                         customerNameTV.setText(objMyApplication.getStrUserName());
                     }
@@ -755,11 +755,14 @@ public class CustomerProfileActivity extends BaseActivity {
             if (enablePopup != null) {
                 enablePopup.dismiss();
             }
-            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
-                BiometricRequest biometricRequest = new BiometricRequest();
-                biometricRequest.setBiometricEnabled(true);
-                biometricRequest.setDeviceId(Utils.getDeviceID());
-                coyniViewModel.saveBiometric(biometricRequest);
+            if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE) {
+                FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+                if (fingerprintManager.hasEnrolledFingerprints()) {
+                    BiometricRequest biometricRequest = new BiometricRequest();
+                    biometricRequest.setBiometricEnabled(true);
+                    biometricRequest.setDeviceId(Utils.getDeviceID());
+                    coyniViewModel.saveBiometric(biometricRequest);
+                }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
                     BiometricTokenRequest request = new BiometricTokenRequest();

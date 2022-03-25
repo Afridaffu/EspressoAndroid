@@ -139,7 +139,7 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="There’s a issue with your payment"
                 android:textColor="@color/error_red"
-                android:textSize="@dimen/_9sdp"></TextView>
+                android:textSize="@dimen/_10ssp"></TextView>
 
         </LinearLayout>
     </LinearLayout>
