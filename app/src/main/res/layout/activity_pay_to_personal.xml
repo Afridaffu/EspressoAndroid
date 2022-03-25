@@ -153,16 +153,17 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/tvCurrency"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="$ "
-                                android:layout_gravity="top"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_20sdp"
-                                android:visibility="gone" />
+                        <TextView
+                            android:id="@+id/tvCurrency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/opensans_bold"
+                            android:text="$ "
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:layout_gravity="top"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_30ssp"
+                            android:visibility="gone" />
 
                             <LinearLayout
                                 android:id="@+id/lyAmount"
