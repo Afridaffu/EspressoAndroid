@@ -123,7 +123,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     SignOnData signOnData;
     private ImageView llEin;
     private PaymentMethodsViewModel paymentMethodsViewModel;
-    private TextView tosTV, prTv, spannableTV,httpHeader;
+    private TextView tosTV, prTv, spannableTV, httpHeader;
     private CompanyInfo cir;
     Long mLastClickTimeQA = 0L;
     Long mLastClickTime = 0L;
@@ -137,14 +137,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         objMyApplication = (MyApplication) getApplicationContext();
 
-        if (getIntent().getBooleanExtra("ADDBUSINESS" , false)) {
+        if (getIntent().getBooleanExtra("ADDBUSINESS", false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            addBusiness = getIntent().getBooleanExtra("ADDBUSINESS",false);
+            addBusiness = getIntent().getBooleanExtra("ADDBUSINESS", false);
             LogUtils.d("addBusiness", "addBusiness" + addBusiness);
         }
-        if (getIntent().getBooleanExtra("ADDDBA",false)) {
+        if (getIntent().getBooleanExtra("ADDDBA", false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            addDBA = getIntent().getBooleanExtra("ADDDBA",false);
+            addDBA = getIntent().getBooleanExtra("ADDDBA", false);
             LogUtils.d("addDBA", "addDBA" + addDBA);
         }
 
@@ -755,7 +755,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 intent.putExtra("showGetStarted", true);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
-                            }else {
+                            } else {
                                 Intent i = new Intent(ReviewApplicationActivity.this, DashboardActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
@@ -776,12 +776,15 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     dismissDialog();
                     if (submissionViewModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                         objMyApplication.setSubmitResponseModel(submissionViewModel);
-                        LogUtils.d(TAG,"applicationSubmissionViewModel"+addDBA+",,,,,"+addBusiness);
+                        LogUtils.d(TAG, "applicationSubmissionViewModel" + addDBA + ",,,,," + addBusiness);
                         if (addBusiness) {
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                         } else {
+                            if (objMyApplication.getBusinessTrackerResponse() != null
+                                    && objMyApplication.getBusinessTrackerResponse().getData() != null) {
+                                objMyApplication.getBusinessTrackerResponse().getData().setProfileVerified(true);
+                            }
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
-                            intent.putExtra("showGetStarted", true);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }

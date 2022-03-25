@@ -691,7 +691,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         USFormat(amountET);
-                        Utils.hideKeypad(GiftCardDetails.this);
+//                        Utils.hideKeypad(GiftCardDetails.this);
                         amountET.setHint("");
                         if (amountET.getText().toString().trim().length() > 0) {
                             if (amountErrorLL.getVisibility() == VISIBLE) {
@@ -757,7 +757,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 //                        firstNameET.setHint("First Name");
                         firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
-                        Utils.openKeyPad(GiftCardDetails.this, firstNameET);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(GiftCardDetails.this);
                         firstNameErrorLL.setVisibility(GONE);
                     }
                 }
@@ -792,7 +793,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 //                        lastNameET.setHint("Last Name");
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
-                        Utils.openKeyPad(GiftCardDetails.this, lastNameET);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(GiftCardDetails.this);
                         lastNameErrorLL.setVisibility(GONE);
                     }
                 }
@@ -832,7 +834,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                         emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         emailTIL.setHint("Email");
                         Utils.setUpperHintColor(emailTIL, getColor(R.color.primary_green));
-                        Utils.openKeyPad(GiftCardDetails.this, emailET);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(GiftCardDetails.this);
                         emailErrorLL.setVisibility(GONE);
                     }
                 }

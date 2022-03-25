@@ -1059,8 +1059,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setVisibility(View.VISIBLE);
-                        tv_lable_verify.setVisibility(View.GONE);
+                        tv_lable.setVisibility(View.GONE);
+                        tv_lable_verify.setVisibility(View.VISIBLE);
                         if (!isBuyTokenAPICalled) {
                             //buyToken();
                             isBuyTokenAPICalled = true;

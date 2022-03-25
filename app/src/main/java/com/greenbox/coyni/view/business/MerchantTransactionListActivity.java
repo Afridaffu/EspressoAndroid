@@ -1,6 +1,5 @@
 package com.greenbox.coyni.view.business;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -27,6 +26,8 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.MerchantTransactionListPostedNewAdapter;
 import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
+import com.greenbox.coyni.dialogs.MerchantTransactionsFilterDialog;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
@@ -53,7 +54,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     private ExpandableHeightRecyclerView rvTransactionsPending, getRvTransactionsPosted;
     private Boolean isFilters = false, isRefresh = false, isNoData = false, isAPICalled = false;
     private MyApplication objMyApplication;
-    private LinearLayout layoutTransactionspending, layoutTransactionsposted;
+    private LinearLayout layoutTransactionspending, layoutTransactionsposted, clearTextLL;
     private TextView noTransactionTV, noMoreTransactionTV;
     private DashboardViewModel dashboardViewModel;
     private TransactionList transactionList;
@@ -72,6 +73,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     private long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
     private Date startDateD = null;
     private Date endDateD = null;
+    private View bottomCorners;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +95,12 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    //showFiltersPopup();
+                    showFilterDialog();
                 }
             });
 
             closeBtn.setOnClickListener(view -> finish());
             searchET.addTextChangedListener(this);
-
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -147,9 +148,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
                         Log.e("scrollY", scrollY + "  " + v.getChildAt(0).getMeasuredHeight() + " " + v.getMeasuredHeight());
                         try {
-//                            isFilters = false;
-//                            searchET.setText("");
-//                            searchET.clearFocus();
                             Log.e("total abcd", total + "");
                             Log.e("currentPage acbd", currentPage + "");
                             if (total - 1 > currentPage) {
@@ -161,53 +159,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-
-                                if (isFilters) {
-                                    if (transactionType.size() > 0) {
-                                        transactionListRequest.setTransactionType(transactionType);
-                                    }
-                                    if (transactionSubType.size() > 0) {
-                                        transactionListRequest.setTransactionSubType(transactionSubType);
-                                    }
-                                    if (txnStatus.size() > 0) {
-                                        transactionListRequest.setTxnStatus(txnStatus);
-                                    }
-                                    if (!strStartAmount.trim().equals("")) {
-                                        transactionListRequest.setFromAmount(strStartAmount.replace(",", ""));
-                                        transactionListRequest.setFromAmountOperator(">=");
-                                    }
-                                    if (!strEndAmount.trim().equals("")) {
-                                        transactionListRequest.setToAmount(strEndAmount.replace(",", ""));
-                                        transactionListRequest.setToAmountOperator("<=");
-                                    }
-
-                                    if (!strFromDate.equals("")) {
-                                        transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
-                                        transactionListRequest.setUpdatedFromDateOperator(">=");
-                                    }
-                                    if (!strToDate.equals("")) {
-                                        transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
-                                        transactionListRequest.setUpdatedToDateOperator("<=");
-                                    }
-                                } else {
-//                                    globalPending.clear();
-//                                    globalPosted.clear();
-//                                    transactionType.clear();
-//                                    transactionSubType.clear();
-//                                    txnStatus.clear();
-//                                    currentPage = 0;
-//                                    strFromDate = "";
-//                                    strToDate = "";
-//                                    strStartAmount = "";
-//                                    strEndAmount = "";
-//                                    startDateD = null;
-//                                    endDateD = null;
-//                                    startDateLong = 0L;
-//                                    endDateLong = 0L;
-//                                    strSelectedDate = "";
-//                                    filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-                                }
-
                                 transactionsAPI(transactionListRequest);
                                 objMyApplication.initializeTransactionSearch();
                                 objMyApplication.setTransactionListSearch(transactionListRequest);
@@ -216,10 +167,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                             } else {
                                 noMoreTransactionTV.setVisibility(View.VISIBLE);
                             }
-//                            if (total == TransactionListActivity.transactionListActivity.currentPage) {
-//                                noMoreTransactionTV.setVisibility(View.VISIBLE);
-//                            }
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -273,9 +220,9 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     }
 
     private void initFields() {
+        bottomCorners = findViewById(R.id.bottom_corners);
         closeBtn = findViewById(R.id.closeBtnIV);
         filterIV = findViewById(R.id.filtericonIV);
-
         nestedScrollView = findViewById(R.id.nestedSV);
         swipeRefreshLayout = findViewById(R.id.refreshLayout);
         progressBar = findViewById(R.id.progressBarLoadMore);
@@ -290,6 +237,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         noMoreTransactionTV = findViewById(R.id.noMoreTransactions);
         pendingTxt = findViewById(R.id.pendingTV);
         searchET = findViewById(R.id.searchET);
+
     }
 
     private void initObservers() {
@@ -347,6 +295,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 }
 
                                 if (globalPosted.size() > 0) {
+                                    bottomCorners.setVisibility(View.VISIBLE);
                                     transactionListPostedAdapter = new MerchantTransactionListPostedNewAdapter(globalPosted, MerchantTransactionListActivity.this);
                                     getRvTransactionsPosted.setLayoutManager(nLayoutManager);
                                     getRvTransactionsPosted.setItemAnimator(new DefaultItemAnimator());
@@ -364,6 +313,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     } else {
                                         getRvTransactionsPosted.scrollToPosition(0);
                                     }
+                                } else {
+                                    bottomCorners.setVisibility(View.GONE);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -422,7 +373,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
     private ArrayList<Integer> getDefaultTransactionTypes() {
         ArrayList<Integer> transactionType = new ArrayList<>();
-        transactionType.add(Utils.saleOrderToken);
+        transactionType.add(Utils.saleOrder);
         transactionType.add(Utils.refund);
         transactionType.add(Utils.merchantPayout);
         transactionType.add(Utils.monthlyServiceFee);
@@ -433,5 +384,33 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         Intent inDetails = new Intent(MerchantTransactionListActivity.this, MerchantTransactionDetailsActivity.class);
         inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, selectedTransaction);
         startActivity(inDetails);
+    }
+
+    private void showFilterDialog() {
+        MerchantTransactionsFilterDialog filterDialog = new MerchantTransactionsFilterDialog(MerchantTransactionListActivity.this);
+        filterDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                if (action.equalsIgnoreCase(Utils.applyFilter)) {
+                    globalPending.clear();
+                    globalPosted.clear();
+                    TransactionListRequest listRequest = (TransactionListRequest) value;
+                    if (listRequest != null) {
+                        isFilters = true;
+                    }
+                    if (isFilters) {
+                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
+                    } else {
+                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+                    }
+
+                    transactionsAPI(listRequest);
+                } else if (action.equals("Date_SELECTED")) {
+                    LogUtils.v(TAG, "Date Selected " + value);
+                    filterIV.setImageResource(R.drawable.ic_filter_enabled);
+                }
+            }
+        });
+        filterDialog.show();
     }
 }

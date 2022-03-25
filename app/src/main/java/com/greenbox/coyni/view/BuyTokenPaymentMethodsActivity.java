@@ -102,14 +102,14 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
 //                } else if (!strCurrent.equals("firstError")) {
 //                    super.onBackPressed();
 //                }
-                if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
+                if (strCurrent.equals("externalBank")) {
+                    ControlMethod("addpayment");
+                    strCurrent = "addpayment";
+                } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
                     super.onBackPressed();
                 } else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
                     ControlMethod("paymentMethods");
                     strCurrent = "paymentMethods";
-                } else if (strCurrent.equals("externalBank")) {
-                    ControlMethod("addpayment");
-                    strCurrent = "addpayment";
                 }
             } else {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
@@ -234,7 +234,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                             }
                         } else {
                             if (signOn.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                                Log.e("setResolveUrl","228 setResolveUrl");
+                                Log.e("setResolveUrl", "228 setResolveUrl");
                                 objMyApplication.setResolveUrl(true);
                                 customerProfileViewModel.meSignOn();
                             } else {
@@ -258,7 +258,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
-                            Log.e("setResolveUrl","252 setResolveUrl");
+                            Log.e("setResolveUrl", "252 setResolveUrl");
                             objMyApplication.setResolveUrl(true);
                             customerProfileViewModel.meSignOn();
                         } else if (!isBank) {
@@ -868,7 +868,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                         } else {
                             if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                 isBank = true;
-                                Log.e("setResolveUrl","862 setResolveUrl");
+                                Log.e("setResolveUrl", "862 setResolveUrl");
                                 objMyApplication.setResolveUrl(true);
                                 Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
                                 i.putExtra("signon", signOnData);
