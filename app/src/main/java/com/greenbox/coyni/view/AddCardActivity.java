@@ -158,7 +158,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
 
 //                        if(!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(AddCardActivity.this);
+                        Utils.shwForcedKeypad(AddCardActivity.this);
                     }
                 }
 
@@ -243,7 +243,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             etlZipCode = findViewById(R.id.etlZipCode);
             etName.requestFocus();
             etCardNumber.setFrom("ADD_CARD");
-            etName.setHint("Name on Card");
+//            etName.setHint("Name on Card");
             try {
                 MicroblinkSDK.setLicenseKey(Utils.blinkCardKey, this);
                 mRecognizer = new BlinkCardRecognizer();
@@ -335,6 +335,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddCardActivity.this);
                     onBackPressed();
                 }
             });
@@ -661,13 +663,16 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 Utils.displayAlert("CVV is required", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getValid()) {
-                Utils.displayAlert("Invalid request! Please check the card and try again.", AddCardActivity.this, "", "");
+//                Utils.displayAlert("Invalid request! Please check the card and try again.", AddCardActivity.this, "", "");
+                displayAlert("Invalid request! Please check the card and try again.", "");
                 return value = false;
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit") && objCard.getData().getCardType().toLowerCase().equals("credit")) {
-                Utils.displayAlert("Invalid request! Please add Debit Card only.", AddCardActivity.this, "", "");
+//                Utils.displayAlert("Invalid request! Please add Debit Card only.", AddCardActivity.this, "", "");
+                displayAlert("Invalid request! Please add Debit Card only.", "");
                 return value = false;
             } else if (getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("credit") && objCard.getData().getCardType().toLowerCase().equals("debit")) {
-                Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
+//                Utils.displayAlert("Invalid request! Please add Credit Card only.", AddCardActivity.this, "", "");
+                displayAlert("Invalid request! Please add Credit Card only.", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
                 Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
