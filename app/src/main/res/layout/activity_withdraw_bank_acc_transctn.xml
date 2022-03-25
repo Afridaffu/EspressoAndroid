@@ -68,7 +68,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/withbankheaderTV"
+                            android:id="@+id/withBankHeaderTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -368,6 +368,7 @@
                         android:orientation="vertical">
 
                         <LinearLayout
+                            android:id="@+id/withdrawIDTV"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
@@ -481,6 +482,7 @@
                             android:paddingBottom="@dimen/_11sdp">
 
                             <TextView
+                                android:id="@+id/nameOnAccount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -510,6 +512,7 @@
                             android:paddingBottom="@dimen/_10sdp">
 
                             <TextView
+                                android:id="@+id/bankNameORSignetTV"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -531,6 +534,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/bankAccountLL"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"

@@ -628,6 +628,11 @@
     <string name="please_upload_required_documents_below">Please upload required documents below</string>
     <string name="Decline">Declined by applicant on Date due to :</string>
     <string name="Accepted">Accepted by applicant on</string>
-
+    <string name="reserve_detail">Reserve Detail</string>
+    <string name="daily_batch_ids">Daily Batch IDs</string>
+    <string name="release_on">Release On</string>
+    <string name="amount_released">Amount Released</string>
+    <string name="canceled_description">Release Scheduled for <b>%s</b> for the amount of<b> %s CYN</b> has been canceled due to lack of funds in the reserve balance.</string>
+    <string name="scheduled_release_has_been_canceled">Scheduled Release Has Been Canceled</string>
 
 </resources>
