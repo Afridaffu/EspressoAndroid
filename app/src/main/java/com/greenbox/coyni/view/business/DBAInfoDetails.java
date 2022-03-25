@@ -41,6 +41,7 @@ import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessUserDetailsPreviewActivity;
 import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -57,7 +58,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class DBAInfoDetails extends AppCompatActivity {
+public class DBAInfoDetails extends BaseActivity {
     private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
     private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
@@ -69,7 +70,7 @@ public class DBAInfoDetails extends AppCompatActivity {
     ProgressDialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
-    String emailID, phone_Number;
+    String emailID, phone_Number,bType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class DBAInfoDetails extends AppCompatActivity {
         setContentView(R.layout.activity_dbainfo_details);
         try {
             initFields();
-            initData();
+//            initData();
             initObservers();
         } catch (Exception e) {
             e.printStackTrace();
@@ -147,6 +148,17 @@ public class DBAInfoDetails extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
+
+            for (int i = 0; i < responce.size(); i++) {
+                try {
+                    if (bType.trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
+                        businessType.setText(responce.get(i).getValue());
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -194,7 +206,7 @@ public class DBAInfoDetails extends AppCompatActivity {
                     webLL.setVisibility(View.GONE);
                     webSiteTV.setText("");
                 }
-                if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
+                if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null && !dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().equals("") && dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().length() >= 10) {
                     String pnhNum = dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
                     String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
                     phoneNumberTV.setText(phone_number);
@@ -327,6 +339,7 @@ public class DBAInfoDetails extends AppCompatActivity {
             businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
                 @Override
                 public void onChanged(DBAInfoResp dbaInfoResp) {
+                    dismissDialog();
                     if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                         objMyApplication.setDbaInfoResp(dbaInfoResp);
@@ -345,8 +358,17 @@ public class DBAInfoDetails extends AppCompatActivity {
                         } else {
                             webSiteTV.setText("");
                         }
-                        if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
-                            phoneNumberTV.setText("(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+//                        if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {
+//                            phoneNumberTV.setText("(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
+//                        } else {
+//                            phoneNumberTV.setText("");
+//                        }
+
+                        if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null && !dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().equals("") && dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().length()>= 10) {
+                            String pnhNum = dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber();
+                            String phone_number = "(" + pnhNum.substring(0, 3) + ") " + pnhNum.substring(3, 6) + "-" + pnhNum.substring(6, 10);
+                            phoneNumberTV.setText(phone_number);
+                            phone_Number = phone_number;
                         } else {
                             phoneNumberTV.setText("");
                         }
@@ -380,6 +402,10 @@ public class DBAInfoDetails extends AppCompatActivity {
                             //                        address=addressFormatted.trim().substring(0, addressFormatted.trim().length() - 1) + ".";
                         }
 
+
+                        if (dbaInfoResp.getData().getBusinessType() != null && !dbaInfoResp.getData().getBusinessType().equals("")){
+                            bType = dbaInfoResp.getData().getBusinessType();
+                        }
                         for (int i = 0; i < responce.size(); i++) {
                             try {
                                 if (dbaInfoResp.getData().getBusinessType().toLowerCase().trim().equals(responce.get(i).getKey().toLowerCase().trim())) {
@@ -512,6 +538,7 @@ public class DBAInfoDetails extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
+            showProgressDialog();
             businessIdentityVerificationViewModel.getDBAInfo();
             dashboardViewModel.meProfile();
         } catch (Exception e) {

@@ -176,6 +176,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             headerTV.setText("Please Verify your Email");
                             subHeaderTV.setText("We sent you a 6-digit code to the registered email address: " + EMAIL);
                         } else if (OTP_TYPE.equals("SECURE")) {
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                             Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
                             secureAccountRL.setVisibility(View.VISIBLE);
                             layoutMain.setClickable(false);
@@ -558,6 +559,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                     break;
                                                 case "SignUp":
                                                     if (OTP_TYPE.equals("EMAIL")) {
+                                                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                                                         Utils.hideKeypad(OTPValidation.this, otpPV.getRootView());
                                                         Utils.setStrAuth(emailResponse.getData().getJwtToken());
                                                         secureAccountRL.setVisibility(View.VISIBLE);
@@ -639,6 +641,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                         }
                                         break;
                                     case "login":
+                                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                                         secureAccountRL.setVisibility(View.VISIBLE);
                                         layoutMain.setClickable(false);
                                         layoutMain.setEnabled(false);
@@ -769,6 +772,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                 if (initializeCustomerResponse != null) {
                     if (initializeCustomerResponse.getStatus().toLowerCase().toString().equals("success")) {
                         Utils.setStrAuth(initializeCustomerResponse.getData().getJwtToken());
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         secureAccountRL.setVisibility(View.VISIBLE);
                         layoutMain.setClickable(false);
                         layoutMain.setEnabled(false);

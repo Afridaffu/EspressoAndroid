@@ -201,6 +201,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
+                android:layout_marginStart="@dimen/_11sdp"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
