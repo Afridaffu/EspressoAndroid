@@ -3,18 +3,13 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,14 +21,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class AddNewTeamMemberActivity extends BaseActivity {
@@ -73,7 +66,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                 try {
                     if (teamInfoAddModel != null) {
                         if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "PHONE");
+                            Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "");
                             new Handler().postDelayed(() -> {
                                 try {
                                     finish();
