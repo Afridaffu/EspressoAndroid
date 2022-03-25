@@ -85,6 +85,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -140,6 +141,7 @@ public class Utils {
     public static final String transInProgress = "inprogress";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
+    public static final String transOpen = "open";
     public static final String transFailed = "failed";
     public static final String transCancelled = "cancelled";
     public static final String transinprogress = "in progress";
@@ -1489,5 +1491,18 @@ public class Utils {
             public void onDestroyActionMode(ActionMode actionMode) {
             }
         });
+    }
+
+    public static String convertPayoutDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
     }
 }
