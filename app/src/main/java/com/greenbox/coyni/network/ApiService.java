@@ -8,6 +8,8 @@ import com.greenbox.coyni.model.BeneficialOwners.BORequest;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
@@ -537,5 +539,7 @@ public interface ApiService {
     @POST("api/v2/business/fees")
     Call<CompanyInfoUpdateResp> fees();
 
+    @GET("api/v2/transactions/admin/totalPayout")
+    Call<BatchPayoutListResponse> getPayoutListData();
 }
 

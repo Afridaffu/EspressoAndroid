@@ -60,7 +60,7 @@
                     android:gravity="center">
 
                     <EditText
-                        android:id="@+id/searchET"
+                        android:id="@+id/payoutSearchET"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_8sdp"

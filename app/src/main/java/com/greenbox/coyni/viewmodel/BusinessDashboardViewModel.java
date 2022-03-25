@@ -10,9 +10,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
-//import com.greenbox.coyni.model.business_transactions.BusinessTransactionDetailsResp;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -38,6 +38,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<SignedAgreementResponse> signedAgreementResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UpdateSignAgreementsResponse> updateSignAgreementsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CancelApplicationResponse> cancelApplicationResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BatchPayoutListResponse> batchPayoutListMutableLiveData = new MutableLiveData<>();
 
 
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
@@ -69,6 +70,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<CancelApplicationResponse> getCancelApplicationResponseMutableLiveData() {
         return cancelApplicationResponseMutableLiveData;
+    }
+
+    public MutableLiveData<BatchPayoutListResponse> getBatchPayoutListMutableLiveData() {
+        return batchPayoutListMutableLiveData;
     }
 
     public MutableLiveData<Fees> getFeesMutableLiveData() {
@@ -319,6 +324,42 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+    public void getPayoutListData() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData();
+            call.enqueue(new Callback<BatchPayoutListResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+                    if (response.isSuccessful()) {
+                        BatchPayoutListResponse list = response.body();
+                        batchPayoutListMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BatchPayoutListResponse>() {
+                        }.getType();
+                        BatchPayoutListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        batchPayoutListMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+                    batchPayoutListMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
