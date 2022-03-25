@@ -67,21 +67,21 @@ public class RefundTransactionActivity extends AppCompatActivity {
 
 
 
-    //    private void setRefundAmountClick() {
-//        try {
-//            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                return;
-//            }
-//            cynValue = Double.parseDouble(refundET.getText().toString().trim());
-//            mLastClickTime = SystemClock.elapsedRealtime();
-////            isButtonClick = true;
-////            convertUSDtoCYN();
-////            calculateFee(Utils.USNumberFormat(cynValue));
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
+        private void setRefundAmountClick() {
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            cynValue = Double.parseDouble(refundET.getText().toString().trim());
+            mLastClickTime = SystemClock.elapsedRealtime();
+//            isButtonClick = true;
+//            convertUSDtoCYN();
+//            calculateFee(Utils.USNumberFormat(cynValue));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
     private void initialization() {
 
         objMyApplication = (MyApplication) getApplicationContext();

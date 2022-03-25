@@ -56,7 +56,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+//                dismiss();
 //                getOnDialogClickListener().onDialogClicked("Date_SELECTED", dateSelected);
             }
         });

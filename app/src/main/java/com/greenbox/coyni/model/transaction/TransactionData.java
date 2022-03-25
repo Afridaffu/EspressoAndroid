@@ -97,6 +97,8 @@ public class TransactionData {
     private String dateAndTime;
     private String refundAmount;
     private String depositTo;
+    private String amountSent;
+
 
     public String getWithdrawId() {
         return withdrawId;
@@ -547,47 +549,11 @@ public class TransactionData {
     public void setRefundAmount(String refundAmount) {
         this.refundAmount = refundAmount;
     }
-
-
-    private String amountSent;
-    private String totalTransactions;
-    private String depositTo;
-    private String payoutId;
-    private String payoutDate;
-
-
-
     public String getAmountSent() {
         return amountSent;
     }
     public void setAmountSent(String amountSent) {
         this.amountSent = amountSent;
     }
-    public String getTotalTransactions() {
-        return totalTransactions;
-    }
-    public void setTotalTransactions(String totalTransactions) {
-        this.totalTransactions = totalTransactions;
-    }
-    public String getDepositTo() {
-        return depositTo;
-    }
-    public void setDepositTo(String depositTo) {
-        this.depositTo = depositTo;
-    }
-    public String getPayoutId() {
-        return payoutId;
-    }
-    public void setPayoutId(String payoutId) {
-        this.payoutId = payoutId;
-    }
-    public String getPayoutDate() {
-        return payoutDate;
-    }
-
-    public void setPayoutDate(String payoutDate) {
-        this.payoutDate = payoutDate;
-    }
-
 
 }

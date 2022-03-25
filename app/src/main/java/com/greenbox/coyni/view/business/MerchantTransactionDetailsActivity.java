@@ -73,8 +73,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     case Utils.monthlyServiceFeetxntype:
                         txnType = Utils.monthlyservicefee;
                         break;
-                    case Utils.businessPayouttxntype:
-                        txnType = Utils.businessPayout;
+                    case Utils.merchantPayouttxntype:
+                        txnType = Utils.merchantPayout;
                         break;
                 }
             }
@@ -85,9 +85,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     case Utils.tokensub:
                         txnSubType = Integer.valueOf(Utils.token);
                         break;
-//                    case Utils.transfersub:
-//                        txnSubType = Integer.valueOf(Utils.transfer);
-//                        break;
+                    case Utils.transfersub:
+                        txnSubType = Integer.valueOf(Utils.transfer);
+                        break;
                     default:
                         txnSubType = null;
 
@@ -129,7 +129,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                                 controlMethod(Utils.monthlyservicefeeCM);
                                 monthlyServiceFeeMerchant(transactionDetails);
                                 break;
-                            case Utils.businessPayouttxntype:
+                            case Utils.merchantPayouttxntype:
                                 controlMethod(Utils.merchantpayoutCM);
                                 merchantPayout(transactionDetails);
                                 break;
@@ -206,7 +206,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             refundDatetimetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
             refundfeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
             refundtotalAmounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
-            refundOTIdatetv.setText(objData.getData().getDateAndTime());
+            refundOTIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getDateAndTime()));
             refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
             refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("USD", "").trim()));
