@@ -25,6 +25,8 @@
         <item name="actionOverflowMenuStyle">@style/popupOverflowMenu</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:screenOrientation">portrait</item>
+        <item name="colorControlNormal">@color/light_gray</item>   <!-- normal border color change as you wish -->
+        <item name="colorControlActivated">@color/primary_green</item> <!-- activated color change as you wish -->
     </style>
 
     <style name="popupOverflowMenu" parent="@style/Widget.MaterialComponents.PopupMenu.Overflow">

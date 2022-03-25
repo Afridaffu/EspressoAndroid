@@ -1321,7 +1321,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             isAuthenticationCalled = false;
             if (!addNoteTV.getText().toString().trim().equals("")) {
                 lyMessage.setVisibility(View.VISIBLE);
-                messageNoteTV.setText(addNoteTV.getText().toString());
+                messageNoteTV.setText("\"" + addNoteTV.getText().toString() + "\"");
             } else {
                 lyMessage.setVisibility(View.INVISIBLE);
             }
@@ -1511,4 +1511,5 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             ex.printStackTrace();
         }
     }
+
 }
