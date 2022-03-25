@@ -89,7 +89,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     private void initFields() {
 
-        sscFileUploadLL = findViewById(R.id.sscFileUploadLL);
 //        actionReqFileUploadLL = findViewById(R.id.actionReqFileUploadLL);
 //        businessLicenseUploadLL = findViewById(R.id.businessLicenseUploadLL);
 
@@ -198,6 +197,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
             View inf = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
             LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
+            sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
             TextView documentName = inf.findViewById(R.id.tvdocumentName);
             documentRequiredLL.setVisibility(View.VISIBLE);
             documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentName());
