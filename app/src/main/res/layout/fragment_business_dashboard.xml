@@ -40,7 +40,8 @@
                         android:id="@+id/iv_user_icon_CV"
                         android:layout_width="@dimen/_36sdp"
                         android:layout_height="@dimen/_36sdp"
-                        app:cardCornerRadius="@dimen/_18sdp">
+                        app:cardCornerRadius="@dimen/_18sdp"
+                        app:cardBackgroundColor="@color/white">
 
                         <ImageView
                             android:id="@+id/iv_user_icon"

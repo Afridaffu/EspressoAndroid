@@ -364,8 +364,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 }
                                 etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                             } else {
-                                if (!Utils.isKeyboardVisible)
-                                    Utils.shwForcedKeypad(LoginActivity.this);
+
                                 etlPassword.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                                 layoutPwdError.setVisibility(GONE);
@@ -374,6 +373,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                                 else
                                     etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+
+                                if (!Utils.isKeyboardVisible) {
+                                    Log.e("Utils.isKeyboardVisible Focus", Utils.isKeyboardVisible + "");
+                                    Utils.shwForcedKeypad(LoginActivity.this);
+                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -981,6 +985,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             loginBGIV.setAlpha(1.0f);
         }
         Utils.isKeyboardVisible = visible;
+        Log.e("keyboard", Utils.isKeyboardVisible + "");
     }
 
     private void getStatesUrl(String strCode) {

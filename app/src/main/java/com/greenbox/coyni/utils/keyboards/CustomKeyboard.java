@@ -124,6 +124,10 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 } else {
                     enteredText = enteredText + value;
                     inputConnection.commitText(value, 1);
+
+                    if (strScreen.equals("addcard")) {
+                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -133,12 +137,21 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         keyBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String chatSet = (String) inputConnection.getSelectedText(0);
                 try {
+
                     inputConnection.deleteSurroundingText(1, 0);
                     enteredText = enteredText.substring(0, enteredText.length() - 1);
+
+                    if (strScreen.equals("addcard")) {
+                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+                    }
                 } catch (Exception e) {
-//                    e.printStackTrace();
+                    e.printStackTrace();
+                    if (strScreen.equals("addcard")) {
+                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+                    }
                 }
             }
         });

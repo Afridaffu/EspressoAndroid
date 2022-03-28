@@ -68,7 +68,7 @@
                 android:id="@+id/etlAmuont"
                 style="@style/TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="64dp"
                 app:boxStrokeColor="@color/primary_green"
                 app:hintEnabled="false"
                 app:prefixText="$   "
@@ -86,14 +86,14 @@
                     android:imeOptions="actionDone"
                     android:maxLength="4"
                     android:maxLines="1"
-                    android:padding="@dimen/_14sdp"
                     android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                     android:singleLine="true"
+                    android:paddingTop="@dimen/_14sdp"
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:textIsSelectable="false"
-                    android:textSize="@dimen/_19ssp" />
+                    android:textSize="@dimen/_18ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
