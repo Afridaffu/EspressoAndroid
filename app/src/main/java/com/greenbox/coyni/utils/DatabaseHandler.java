@@ -29,6 +29,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_IS_LOCK = "isLock";
     private static final String COLUMN_PER_TOKEN = "perToken";
+    private static final String COLUMN_EMAIL_REMIND = "username";
+    private static final String COLUMN_USER_DETAILS = "email";
+
 
     private DatabaseHandler(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,6 +49,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_PERMANENT_TOKEN + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, " + COLUMN_PER_TOKEN + " TEXT);");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_THUMB_PIN_LOCK + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, " + COLUMN_IS_LOCK + " TEXT);");
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_FACE_PIN_LOCK + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, " + COLUMN_IS_LOCK + " TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_REMEMBER + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, " + COLUMN_EMAIL_REMIND + " TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+TABLE_USER_DETAILS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, " +  COLUMN_USER_DETAILS + " TEXT);");
+
     }
 
     @Override
@@ -145,6 +151,64 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("Delete from " + TABLE_USER_DETAILS);
         db.execSQL("Delete from " + TABLE_REMEMBER);
         db.execSQL("Delete from " + TABLE_DONT_REMIND);
+        db.close();
+    }
+
+    public void insertTableRemember(String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_EMAIL_REMIND, value);
+        db.insert(TABLE_REMEMBER, null, contentValues);
+        db.close();
+    }
+
+
+    public String getTableRemember() {
+        String result = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from " + TABLE_REMEMBER, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            result = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL_REMIND));
+            LogUtils.v(TAG, result);
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
+    public void clearTableRemember() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("Delete from " + TABLE_REMEMBER);
+        db.close();
+    }
+
+    public void insertTableUserDetails(String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_USER_DETAILS, value);
+        db.insert(TABLE_USER_DETAILS, null, contentValues);
+        db.close();
+    }
+
+
+    public String getTableUserDetails() {
+        String result = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from " + TABLE_USER_DETAILS, null);
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            result = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_DETAILS));
+            LogUtils.v(TAG, result);
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
+    public void clearTableUserDetails() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("Delete from " + TABLE_USER_DETAILS);
         db.close();
     }
 

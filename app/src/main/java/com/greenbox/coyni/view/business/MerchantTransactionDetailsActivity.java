@@ -432,9 +432,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             }
             merchantdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
             if (objData.getData().getGrossAmount() != null) {
-                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
+                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             }
-            if (objData.getData().getGrossAmount() != null) {
+            if (objData.getData().getTotalAmount() != null) {
                 mPItotalamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
             }
             mpayoutll.setOnClickListener(new View.OnClickListener() {

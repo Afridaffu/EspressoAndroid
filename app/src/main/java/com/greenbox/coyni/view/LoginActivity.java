@@ -58,6 +58,7 @@ import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -85,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
     ImageView loginBGIV, endIconIV, coyniLogoIV;
     CheckBox chkRemember;
+    DatabaseHandler dbHandler;
     MyApplication objMyApplication;
     LinearLayout layoutClose;
     RelativeLayout layoutMain;
@@ -232,6 +234,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
+            dbHandler = DatabaseHandler.getInstance(LoginActivity.this);
 
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
@@ -564,11 +567,17 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 }
             });
             enableIcon();
-            SetDB();
-            SetToken();
-            SetFaceLock();
-            SetTouchId();
-            SetRemember();
+//            SetDB();
+//            SetToken();
+//            SetFaceLock();
+//            SetTouchId();
+//            SetRemember();
+
+            setDB();
+            setToken();
+            setFaceLock();
+            setTouchId();
+            setRemember();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -590,6 +599,15 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         }
     }
 
+    private void setDB() {
+            String value = dbHandler.getTableUserDetails();
+
+            if (value != null && !value.equals("")){
+                strFirstUser = value;
+            }
+    }
+
+
     private void SetToken() {
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
@@ -602,6 +620,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void setToken() {
+        strToken = dbHandler.getPermanentToken();
+        objMyApplication.setStrMobileToken(strToken);
     }
 
     private void SetFaceLock() {
@@ -628,6 +651,26 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         }
     }
 
+    public void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                if (Utils.getIsTouchEnabled()) {
+                    endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
+                } else {
+                    endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_faceid));
+                }
+            } else {
+                isFaceLock = false;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void SetTouchId() {
         try {
             isTouchId = false;
@@ -643,6 +686,23 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     isTouchId = false;
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
+
+            } else {
+                isTouchId = false;
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -671,6 +731,22 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             }
         }
     }
+
+    private void setRemember() {
+            String value = dbHandler.getTableRemember();
+            if (value != null && !value.equals("")) {
+                etEmail.setText(value);
+                if (isEmailValid(etEmail.getText().toString().trim())) {
+                    Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    layoutEmailError.setVisibility(GONE);
+                }
+                chkRemember.setChecked(true);
+            } else {
+                chkRemember.setChecked(false);
+        }
+    }
+
 
     private void initObserver() {
         try {
@@ -892,8 +968,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (strEmail.equals("")) {
                 strEmail = etEmail.getText().toString().trim().toLowerCase();
             }
-            mydatabase.execSQL("Delete from tblRemember");
-            mydatabase.execSQL("INSERT INTO tblRemember(id,username) VALUES(null,'" + strEmail.toLowerCase() + "')");
+//            mydatabase.execSQL("Delete from tblRemember");
+//            mydatabase.execSQL("INSERT INTO tblRemember(id,username) VALUES(null,'" + strEmail.toLowerCase() + "')");
+            dbHandler.clearTableRemember();
+            dbHandler.insertTableRemember(strEmail.toLowerCase());
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -904,8 +983,10 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (strFirstUser.equals("")) {
                 strFirstUser = etEmail.getText().toString().trim().toLowerCase();
             }
-            mydatabase.execSQL("Delete from tblUserDetails");
-            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+//            mydatabase.execSQL("Delete from tblUserDetails");
+//            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+            dbHandler.clearTableUserDetails();
+            dbHandler.insertTableUserDetails(strFirstUser.toLowerCase());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
