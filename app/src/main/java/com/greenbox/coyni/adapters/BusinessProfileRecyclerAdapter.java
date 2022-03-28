@@ -28,6 +28,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     private ArrayList<BusinessAccountsListInfo> mainSetName;
     private List<ProfilesResponse.Profiles> businessAccountList;
     private OnSelectListner listener;
+    private BusinessAccountsListInfo headerInfo;
 
 
     public BusinessProfileRecyclerAdapter(Context context, ArrayList<BusinessAccountsListInfo> deptList,OnSelectListner listener) {
@@ -70,7 +71,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         LogUtils.d("isLastChild","isLastChild"+isLastChild);
 
         if(isLastChild){
-            addDBA.setVisibility(View.VISIBLE);
+            if(headerInfo.getName().equalsIgnoreCase("Shared Account")){
+                addDBA.setVisibility(View.GONE);
+            } else {
+                addDBA.setVisibility(View.VISIBLE);
+            }
         } else {
             addDBA.setVisibility(View.GONE);
         }
@@ -78,7 +83,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         if(detailInfo.getName()!=null) {
             childItem.setText(detailInfo.getName().trim());
         } else {
-            childItem.setText("");
+                childItem.setText("");
         }
 
         if (detailInfo.getIsSelected()) {
@@ -103,22 +108,17 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusLL.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountSttaus());
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
-
                 }
             } else {
                 statusLL.setVisibility(View.GONE);
             }
-
         }
-
         if (detailInfo.getDbaImage() != null && !detailInfo.getDbaImage().trim().equals("")) {
-           // profileImageText.setVisibility(View.GONE);
             profileImage.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(detailInfo.getDbaImage())
                     .placeholder(R.drawable.acct_profile)
                     .into(profileImage);
-
         } else {
             profileImage.setVisibility(View.VISIBLE);
            // profileImageText.setVisibility(View.VISIBLE);
@@ -177,7 +177,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isLastChild, View view,
                              ViewGroup parent) {
 
-        BusinessAccountsListInfo headerInfo = (BusinessAccountsListInfo) getGroup(groupPosition);
+        headerInfo = (BusinessAccountsListInfo) getGroup(groupPosition);
         if (view == null) {
             LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inf.inflate(R.layout.business_profile_accounts_item, null);

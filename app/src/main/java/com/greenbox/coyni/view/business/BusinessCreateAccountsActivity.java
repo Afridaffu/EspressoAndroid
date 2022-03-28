@@ -24,6 +24,8 @@ import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.BusinessAccountDbaInfo;
 import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
+import com.greenbox.coyni.model.profile.BusinessSharedAccountDbaInfo;
+import com.greenbox.coyni.model.profile.BusinessSharedAccountsListInfo;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
@@ -46,12 +48,13 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
     private TextView userShortInfoTV, defualtAccountDialogPersonalNameTV,userNameTV, userBalanceTV, businessPersonalAccountNameTv, mTvUserIconText;
     private ImageView imgProfile, accountsCloseIV, mIvUserIcon;
-    private LinearLayout llOpenAccount, businessPersonalProfileAccount;
+    private LinearLayout llOpenAccount, businessPersonalProfileAccount,businessSharedProfileAccount;
     private MyApplication myApplication;
     private DashboardViewModel dashboardViewModel;
-    private ExpandableListView brandsGV;
+    private ExpandableListView brandsGV,sharedEL;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private List<ProfilesResponse.Profiles> sharedAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> dbaList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> dbaAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
@@ -63,7 +66,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private String SelectedDBAName;
     private String accountTypeId = "";
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
+    private LinkedHashMap<String, BusinessAccountsListInfo> mainSetShared = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
+    private ArrayList<BusinessAccountsListInfo> subSetShared = new ArrayList<BusinessAccountsListInfo>();
     private BusinessProfileRecyclerAdapter listAdapter;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private IdentityVerificationViewModel identityVerificationViewModel;
@@ -114,10 +119,12 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             userBalanceTV = findViewById(R.id.userBalanceTV);
             accountsCloseIV = findViewById(R.id.accountsCloseIV);
             brandsGV = findViewById(R.id.recyclerView);
+           // sharedEL = findViewById(R.id.shared_recyclerView);
             businessPersonalAccountNameTv = findViewById(R.id.business_personal_account_name);
             mIvUserIcon = findViewById(R.id.profile_img);
             mTvUserIconText = findViewById(R.id.b_imageTextTV);
             businessPersonalProfileAccount = findViewById(R.id.profileLL);
+          //  businessSharedProfileAccount = findViewById(R.id.sharedLL);
             myApplication = (MyApplication) getApplicationContext();
             businessPersonalProfileTickIcon = findViewById(R.id.tickIcon);
             defualtAccountDialogPersonalNameTV = findViewById(R.id.defualt_account_dialog_personal_name);
@@ -140,6 +147,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                 LogUtils.d(TAG, "GroupChildClick" + i + "....." + i1 + "....." + l);
                 childid = subSet.get(i).getSubsetName().get(i1).getId();
                 SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
+
                 for(int k=0;k<subSet.size();k++) {
                     for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
                         if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
@@ -270,25 +278,29 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
-                    Map<String, ArrayList<ProfilesResponse.Profiles>> map = new HashMap<>();
                     filterList = profilesResponse.getData();
+
                     for (ProfilesResponse.Profiles c : filterList) {
-                        if (c.getAccountType().equals(Utils.BUSINESS))  {
+                        if (c.getAccountType().equals(Utils.BUSINESS)) {
                             businessAccountList.add(c);
-                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(),c.getAccountStatus());
-                        } else {
+                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(), c.getAccountStatus());
+                        }
+                        else {
                             personalAccountList.add(c);
                             for(int i=0;i<personalAccountList.size();i++){
-//                                if(personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)){
-//                                    personalAccountList.get(i).setSelected(true);
-//                                } else {
                                     personalAccountList.get(i).setSelected(false);
-
-                               // }
                             }
                         }
 
                     }
+
+                    for (ProfilesResponse.Profiles c : filterList) {
+                        if (c.getAccountType().equals(Utils.SHARED)) {
+                            businessAccountList.add(c);
+                            addDetails("Shared Account", c.getCompanyName(), c.getImage(), c.getId(), c.getAccountStatus());
+                        }
+                    }
+
                     if (businessAccountList.size() != 0) {
                         try {
                             brandsGV.setVisibility(View.VISIBLE);
@@ -301,6 +313,19 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                     } else {
                         brandsGV.setVisibility(View.GONE);
                     }
+
+//                    if (sharedAccountList.size() != 0) {
+//                        try {
+//                            businessSharedProfileAccount.setVisibility(View.GONE);
+//                            LogUtils.d(TAG, "subSetShared" + subSetShared);
+//                            listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, subSetShared, BusinessCreateAccountsActivity.this);
+//                            sharedEL.setAdapter(listAdapter);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {
+//                        businessSharedProfileAccount.setVisibility(View.GONE);
+//                    }
 
                     if (personalAccountList.size() != 0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
@@ -412,7 +437,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             LogUtils.d(TAG, "adddetails" + mainSet + subSet + id + accountTypeId);
             groupPosition = 0;
             BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
-
             if (headerInfo == null) {
                 headerInfo = new BusinessAccountsListInfo();
                 headerInfo.setName(mainSet);
@@ -432,13 +456,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             detailInfo.setId(id);
             detailInfo.setAccountSttaus(accountStatus);
 
-//            if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
-//                detailInfo.setIsSelected(true);
-//                business_defaultaccountET.setText(subSet);
-//
-//            } else {
-                detailInfo.setIsSelected(false);
-           // }
+            detailInfo.setIsSelected(false);
 
             subList.add(detailInfo);
             headerInfo.setSubsetName(subList);
@@ -451,25 +469,47 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         return groupPosition;
     }
 
-//    private int addDetails(String mainSet, String subSet) {
-//        int groupPosition = 0;
-//        BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
-//        if (headerInfo == null) {
-//            headerInfo = new BusinessAccountsListInfo();
-//            headerInfo.setName(mainSet);
-//            this.mainSet.put(mainSet, headerInfo);
-//            this.subSet.add(headerInfo);
-//        }
-//        ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
-//        int listSize = subList.size();
-//        listSize++;
-//        BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-//        detailInfo.setName(subSet);
-//        subList.add(detailInfo);
-//        headerInfo.setSubsetName(subList);
-//        groupPosition = this.subSet.indexOf(headerInfo);
-//        return groupPosition;
-//    }
+    private int addDetailsShared(String mainSetShared,String accountSttaus, String subSetShared, String image, int id , String accountStatus ) {
+
+        int groupPosition = 0;
+
+        try {
+            LogUtils.d(TAG, "adddetails" + mainSetShared + subSetShared + id + accountTypeId);
+            groupPosition = 0;
+            BusinessAccountsListInfo headerInfoShared = this.mainSetShared.get(mainSetShared);
+
+            if (headerInfoShared == null) {
+                headerInfoShared = new BusinessAccountsListInfo();
+                headerInfoShared.setName(accountSttaus);
+                headerInfoShared.setMainImage(image);
+                headerInfoShared.setId(id);
+                this.mainSetShared.put(mainSetShared, headerInfoShared);
+                this.subSetShared.add(headerInfoShared);
+            }
+
+            ArrayList<BusinessAccountDbaInfo> subList = headerInfoShared.getSubsetName();
+            int listSize = subList.size();
+            listSize++;
+
+            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+            detailInfo.setName(subSetShared);
+            detailInfo.setDbaImage(image);
+            detailInfo.setId(id);
+            detailInfo.setAccountSttaus(accountStatus);
+
+            detailInfo.setIsSelected(false);
+
+            subList.add(detailInfo);
+            headerInfoShared.setSubsetName(subList);
+            groupPosition = this.subSetShared.indexOf(headerInfoShared);
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        return groupPosition;
+    }
+
 
     @Override
     public void selectedItem(int id) {
