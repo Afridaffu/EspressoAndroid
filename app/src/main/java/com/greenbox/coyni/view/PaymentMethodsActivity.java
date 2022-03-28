@@ -395,7 +395,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 imgLogo.setVisibility(View.VISIBLE);
                 tvMessage.setVisibility(View.GONE);
                 tvExtBHead.setText("External Bank Account");
-                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
+                tvMessage.setText("There is no payment method currently linked to your account. Please follow one of the prompts below to link an account.");
 //                if (strScreen.equals("") && strCurrent.equals("addpayment")) {
                 if (strScreen.equals("") && strCurrent.equals("addpayment") && (paymentMethodsResponse.getData().getData() == null || paymentMethodsResponse.getData().getData().size() == 0)) {
                     tvMessage.setVisibility(View.VISIBLE);
@@ -497,6 +497,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvLearnMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     try {
                         Utils.populateLearnMore(PaymentMethodsActivity.this);
                     } catch (Exception ex) {

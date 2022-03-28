@@ -134,7 +134,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 12);
+                        tvCurrency.setLayoutParams(params1);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
@@ -142,7 +145,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 0, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 10);
+                        tvCurrency.setLayoutParams(params1);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() >= 9) {
@@ -150,23 +156,31 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    } else if (editable.length() <= 4) {
-                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(15, 13, 0, 0);
-                        imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 10);
+                        tvCurrency.setLayoutParams(params1);
 
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() <= 4) {
                         payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 25);
+                        tvCurrency.setLayoutParams(params1);
+
                     }
+                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//                    } else if (editable.length() <= 4) {
+//                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+//                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                        params.setMargins(15, 13, 0, 0);
+//                        imgConvert.setLayoutParams(params);
+//
+//                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+//                    }
 //                    if (editable.length() > 8) {
 //                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
 //                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
@@ -979,7 +993,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 12);
+                tvCurrency.setLayoutParams(params1);
 
 
             } else if (editable.length() == 7 || editable.length() == 8) {
@@ -987,21 +1004,30 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 0, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() >= 9) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() <= 4) {
                 payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 13, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 25);
+                tvCurrency.setLayoutParams(params1);
 
             }
 //            if (editable.length() > 12) {
@@ -1360,7 +1386,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             isAuthenticationCalled = false;
             if (!addNoteTV.getText().toString().trim().equals("")) {
                 lyMessage.setVisibility(View.VISIBLE);
-                messageNoteTV.setText(addNoteTV.getText().toString());
+                messageNoteTV.setText("\"" + addNoteTV.getText().toString() + "\"");
             } else {
                 lyMessage.setVisibility(View.INVISIBLE);
             }
@@ -1550,4 +1576,5 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             ex.printStackTrace();
         }
     }
+
 }

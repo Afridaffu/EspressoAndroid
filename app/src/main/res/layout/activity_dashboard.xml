@@ -256,7 +256,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_21sdp"
                     android:layout_marginTop="@dimen/_20sdp"
-                    android:fontFamily="@font/opensans_bold"
+                    android:fontFamily="@font/opensans_semibold"
                     android:text="Available Balance"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_12ssp"
