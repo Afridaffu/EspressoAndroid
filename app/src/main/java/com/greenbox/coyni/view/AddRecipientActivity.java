@@ -46,6 +46,8 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class AddRecipientActivity extends AppCompatActivity {
     RecyclerView rvContacts, rvCoyniUsers, rvRecent;
     List<RecentUsersData> usersList;
     List<CoyniUsersData> listCoyniUsers;
-    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers, tvContactMsg;
+    TextView tvRecentUsers, tvSearchUsers, tvCoyniUsers, tvContactMsg, tvNoContacts;
     RecentUsersAdapter recentUsersAdapter;
     CoyniUsersAdapter coyniUsersAdapter;
     ContactsAdapter contactsAdapter;
@@ -69,6 +71,7 @@ public class AddRecipientActivity extends AppCompatActivity {
     ImageView imgScan;
     EditText etSearch;
     String strWalletId = "", search_text = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,7 @@ public class AddRecipientActivity extends AppCompatActivity {
             lyContacts = findViewById(R.id.lyContacts);
             lyCoyniUsers = findViewById(R.id.lyCoyniUsers);
             tvContactMsg = findViewById(R.id.tvContactMsg);
+            tvNoContacts = findViewById(R.id.tvNoContacts);
             imgScan = findViewById(R.id.imgScan);
             etSearch = findViewById(R.id.etSearch);
             if (Utils.checkInternet(AddRecipientActivity.this)) {
@@ -334,6 +338,12 @@ public class AddRecipientActivity extends AppCompatActivity {
                     usersList.addAll(users);
                 }
 
+                Collections.sort(usersList, new Comparator<RecentUsersData>() {
+                    @Override
+                    public int compare(RecentUsersData o1, RecentUsersData o2) {
+                        return o1.getUserName().compareTo(o2.getUserName());
+                    }
+                });
                 recentUsersAdapter = new RecentUsersAdapter(usersList, AddRecipientActivity.this);
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(AddRecipientActivity.this);
                 rvRecent.setLayoutManager(mLayoutManager);
@@ -475,6 +485,10 @@ public class AddRecipientActivity extends AppCompatActivity {
                         Utils.displayAlert(getString(R.string.internet), AddRecipientActivity.this, "", "");
                     }
                 }
+            }else {
+                rvContacts.setVisibility(View.GONE);
+                tvContactMsg.setVisibility(View.GONE);
+                tvNoContacts.setVisibility(View.VISIBLE);
             }
             payViewModel.recentUsers();
         } catch (Exception ex) {
@@ -504,11 +518,28 @@ public class AddRecipientActivity extends AppCompatActivity {
                     contactsList.addAll(nWAList);
                 }
 
+
+                Collections.sort(contactsList, new Comparator<RegUsersResponseData>() {
+                    @Override
+                    public int compare(RegUsersResponseData o1, RegUsersResponseData o2) {
+                        return o1.getUserName().compareTo(o2.getUserName());
+                    }
+                });
+
+                rvContacts.setVisibility(View.VISIBLE);
+                tvContactMsg.setVisibility(View.VISIBLE);
+                tvNoContacts.setVisibility(View.GONE);
+
                 contactsAdapter = new ContactsAdapter(contactsList, AddRecipientActivity.this);
                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(AddRecipientActivity.this);
                 rvContacts.setLayoutManager(mLayoutManager);
                 rvContacts.setItemAnimator(new DefaultItemAnimator());
                 rvContacts.setAdapter(contactsAdapter);
+            } else {
+                rvContacts.setVisibility(View.GONE);
+                tvContactMsg.setVisibility(View.GONE);
+                tvNoContacts.setVisibility(View.VISIBLE);
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();

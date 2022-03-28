@@ -442,7 +442,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
                 tvMessage.setVisibility(VISIBLE);
                 tvExtBHead.setText("External Bank Account");
-                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
+                tvMessage.setText("There is no payment method currently linked to your account. Please follow one of the prompts below to link an account.");
             } else {
                 imgLogo.setVisibility(View.GONE);
                 tvExtBHead.setText("Bank Account");
