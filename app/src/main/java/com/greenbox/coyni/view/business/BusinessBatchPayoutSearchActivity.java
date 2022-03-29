@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +24,8 @@ import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayoutTransactionsDetailsFiltersDialog;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListData;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
@@ -38,13 +42,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
+public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
     ImageView filterIconIV, datePickIV, closeBtnIV;
-    TextView applyFilterBtnCV;
-    EditText filterdatePickET,searchET;
+    TextView applyFilterBtnCV, noPayoutTransactions, noMorePayoutTransactions, payoutLoadMoreTV;
+    private ProgressBar payoutProgressBarLoadMore;
+    EditText filterdatePickET, searchET;
     LinearLayout dateRangePickerLL;
     SwipeRefreshLayout refreshpageSL;
+    private int totalItemCount, currentPage = 1, total = 0;
     Date startDateD = null;
     Date endDateD = null;
     RecyclerView recyclerViewPayouts;
@@ -52,7 +58,9 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
     private BusinessBatchPayoutSearchActivity businessBatchPayoutSearchActivity;
     private MyApplication objMyApplication;
     private BusinessDashboardViewModel businessDashboardViewModel;
+    private DashboardViewModel dashboardViewModel;
     private BatchPayoutListAdapter batchPayoutListAdapter;
+    MerchantTransactionListActivity merchantTransactionListActivity;
 
 
     @Override
@@ -63,7 +71,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
         initObserver();
 
         BatchPayoutListAdapter payoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewPayout);
+        RecyclerView recyclerView = findViewById(R.id.payoutRecyclerView);
 //       recyclerViewPayouts.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(payoutListAdapter);
@@ -86,9 +94,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
         filterdatePickET = findViewById(R.id.filterdatePickET);
         dateRangePickerLL = findViewById(R.id.dateRangePickerLL);
         datePickIV = findViewById(R.id.datePickIV);
-        recyclerViewPayouts = findViewById(R.id.recyclerViewPayout);
-        refreshpageSL = findViewById(R.id.refreshpageSL);
+        recyclerViewPayouts = findViewById(R.id.payoutRecyclerView);
+        refreshpageSL = findViewById(R.id.payoutRefreshLayout);
         searchET = findViewById(R.id.payoutSearchET);
+        noPayoutTransactions = findViewById(R.id.payoutNoTransactions);
+        noMorePayoutTransactions = findViewById(R.id.payoutNoMoreTransactions);
+        payoutProgressBarLoadMore = findViewById(R.id.payoutProgressBarLoadMore);
+        payoutLoadMoreTV = findViewById(R.id.payoutLoadMoreTV);
 
         recyclerViewPayouts.setLayoutManager(new LinearLayoutManager(this));
 
@@ -113,13 +125,21 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
             }
         });
 
+        refreshpageSL.setColorSchemeColors(getResources().getColor(R.color.primary_green));
 
         refreshpageSL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 try {
+                    noMorePayoutTransactions.setVisibility(View.GONE);
+
                     filterIconIV.setVisibility(View.GONE);
                     filterIconIV.setImageResource(R.drawable.ic_filtericon);
+
+                    BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
+                    batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
+                    batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -127,6 +147,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
 
             }
         });
+
+
     }
 
     private void showFiltersPopup() {
@@ -143,21 +165,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
         dialog.show();
     }
 
-
-    //    private void showCalendarDialog() {
-//        DateRangePickerDialog dialog = new DateRangePickerDialog(BusinessBatchPayoutSearchActivity.this);
-//        dialog.setOnDialogClickListener(new OnDialogClickListener() {
-//            @Override
-//            public void onDialogClicked(String action, Object value) {
-//                if(action.equals("Done")) {
-//                    showFiltersPopup(value+"");
-//                }
-//            }
-//        });
-//        dialog.show();
-//    }
-
-
     private void initObserver() {
         try {
             businessDashboardViewModel.getBatchPayoutListMutableLiveData().observe(this, new Observer<BatchPayoutListResponse>() {
@@ -165,9 +172,21 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
                 public void onChanged(BatchPayoutListResponse batchPayoutList) {
                     if (batchPayoutList != null) {
                         if (batchPayoutList.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            if (batchPayoutList.getData().getItems()!= null) {
+                            if (batchPayoutList.getData().getItems() != null) {
                                 payoutList = batchPayoutList.getData().getItems();
-                                batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this,payoutList);
+                                batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
+                                batchPayoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(int position, Object obj) {
+                                        LogUtils.d(TAG,"onitemclick"+position +obj.toString());
+
+                                        BatchPayoutListItems batchPayoutListItem = (BatchPayoutListItems) obj;
+                                        showBatchPayoutDetails(batchPayoutListItem);
+//                                        businessDashboardViewModel.batchPayoutIdDetails();
+                                        //Navigate to intent
+                                    }
+
+                                });
                                 recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
                             }
                         }
@@ -183,39 +202,25 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity  {
 
     }
 
-//    private void payoutAPI(BatchPayoutRequest batchPayoutRequest) {
-//        showProgressDialog();
-//        businessDashboardViewModel.getPayoutListData(batchPayoutRequest);
-//    }
-//
-//    @Override
-//    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//    }
-//
-//    @Override
-//    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//        if (charSequence.length() > 20) {
-////            payoutList.clear();
-//            BatchPayoutRequest batchPayoutRequest = new BatchPayoutRequest();
-//            batchPayoutRequest.setBatchId(charSequence.toString());
-//            payoutAPI(batchPayoutRequest);
-//        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
-//        } else if (charSequence.toString().trim().length() == 0) {
-////            payoutList.clear();
-//        }
-//
-//    }
-//
-//    @Override
-//    public void afterTextChanged(Editable editable) {
-//        if (editable == searchET.getEditableText()) {
-//            try {
-//
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//
-//    }
+    private void showBatchPayoutDetails(BatchPayoutListItems items) {
+        try {
+            Intent i = new Intent(this, BusinessBatchPayoutIdDetailsActivity.class);
+            startActivity(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void loadData() {
+        try {
+            currentPage = 0;
+            noMorePayoutTransactions.setVisibility(View.GONE);
+            BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
+            batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

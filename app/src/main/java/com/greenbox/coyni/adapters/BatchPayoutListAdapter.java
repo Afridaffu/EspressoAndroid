@@ -1,6 +1,8 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.TransactionDetailsActivity;
+import com.greenbox.coyni.view.business.BusinessBatchPayoutIdDetailsActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 
 import java.util.Arrays;
@@ -63,47 +67,34 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
 
     @Override
     public void onBindViewHolder(@NonNull BatchPayoutListAdapter.MyViewHolder holder, int position) {
+        holder.detailsLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(position, listItems.get(position));
+            }
+        });
 
         BatchPayoutListItems objData = listItems.get(position);
 
         if (objData.getSentTo() != null && !objData.getSentTo().equals("")) {
             holder.payoutSentTextTV.setText(objData.getSentTo());
         }
-//        if (objData.getStatus() != null && !objData.getStatus().equals("")) {
-//            holder.statusTV.setText(objData.getStatus());
-//        }
-
         if (objData.getTotalAmount() != null && !objData.getTotalAmount().equals("")) {
             holder.payoutMoneyTV.setText(Utils.convertTwoDecimal(objData.getTotalAmount()));
         }
-
         if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")) {
             holder.payoutDateTV.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
         }
 
-//        holder.payoutDateTV.setText(Utils.convertPayoutDate(objData.getCreatedAt().split("")[0]) + Utils.convertPayoutTime(objData.getCreatedAt().split("")[1]));
-//        if (objData.getStatus() != null && !objData.getStatus().equals("")) {
-//            holder.statusTV.setText(objData.getStatus());
-//        }
-//
-
         holder.statusTV.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
-            case "completed":
+            case "paid":
                 holder.statusTV.setTextColor(context.getResources().getColor(R.color.completed_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
             case "in progress":
                 holder.statusTV.setTextColor(context.getResources().getColor(R.color.inprogress_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                break;
-//            case "pending":
-//                holder.statusTV.setTextColor(context.getResources().getColor(R.color.pending_status));
-//                holder.statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
-//                break;
-            case "partialrefund":
-                holder.statusTV.setTextColor(context.getResources().getColor(R.color.pending_status));
-                holder.statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
             case "open":
                 holder.statusTV.setTextColor(context.getResources().getColor(R.color.pending_status));
@@ -118,13 +109,5 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
         return listItems.size();
     }
 }
-
-
-//        holder.detailsLL.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listener.onItemClick(position, null);
-//            }
-//        });
 
 

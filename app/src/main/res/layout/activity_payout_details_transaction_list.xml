@@ -13,6 +13,7 @@
         android:orientation="horizontal"
         android:layout_margin="@dimen/_6sdp">
         <TextView
+            android:id="@+id/transactionTypeTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sale Order - "
@@ -20,6 +21,7 @@
             android:fontFamily="@font/opensans_semibold"
             android:textColor="@color/primary_black" />
         <TextView
+            android:id="@+id/customerNameTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -28,6 +30,7 @@
             android:fontFamily="@font/opensans_semibold"
             android:textColor="@color/primary_black" />
         <TextView
+            android:id="@+id/payoutAmountTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
