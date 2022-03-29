@@ -94,7 +94,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     RelativeLayout secureAccountRL;
     CardView secureNextCV;
     MyApplication objMyApplication;
-    SQLiteDatabase mydatabase;
+//    SQLiteDatabase mydatabase;
     Cursor dsUserDetails;
     String strFirstUser = "";
     private int mAccountType = Utils.PERSONAL_ACCOUNT;
@@ -125,7 +125,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             if (getIntent() != null) {
                 mAccountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
             }
-            SetDB();
+//            SetDB();
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             resendTV = findViewById(R.id.resendTV);
             headerTV = findViewById(R.id.headerTV);
@@ -1172,26 +1172,27 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
         }
     }
 
-    private void SetDB() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
-            }
-        }
-    }
+    //Shiva Comment's
+//    private void SetDB() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+//        } catch (Exception ex) {
+//            if (ex.getMessage().toString().contains("no such table")) {
+//                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
+//            }
+//        }
+//    }
 
-    private void saveFirstUser() {
-        try {
-            mydatabase.execSQL("Delete from tblUserDetails");
-            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + EMAIL.toLowerCase() + "')");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void saveFirstUser() {
+//        try {
+//            mydatabase.execSQL("Delete from tblUserDetails");
+//            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + EMAIL.toLowerCase() + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void getStatesUrl(String strCode) {
         try {

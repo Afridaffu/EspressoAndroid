@@ -672,12 +672,17 @@ public class CustomerProfileActivity extends BaseActivity {
 //            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
 //            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
 //            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-            mydatabase.execSQL("Delete from tblUserDetails;");
-            mydatabase.execSQL("Delete from tblRemember;");
-            mydatabase.execSQL("Delete from tblThumbPinLock;");
-            mydatabase.execSQL("Delete from tblFacePinLock;");
-            mydatabase.execSQL("Delete from tblPermanentToken;");
-            mydatabase.execSQL("Delete from tblDontRemind;");
+
+            //SHIVA Changes
+//            mydatabase.execSQL("Delete from tblUserDetails;");
+//            mydatabase.execSQL("Delete from tblRemember;");
+//            mydatabase.execSQL("Delete from tblThumbPinLock;");
+//            mydatabase.execSQL("Delete from tblFacePinLock;");
+//            mydatabase.execSQL("Delete from tblPermanentToken;");
+//            mydatabase.execSQL("Delete from tblDontRemind;");
+
+            dbHandler.clearAllTables();
+
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();
@@ -963,87 +968,134 @@ public class CustomerProfileActivity extends BaseActivity {
         });
     }
 
+//    private boolean getLocalBiometricEnabled() {
+//        boolean isFace = false;
+//        boolean isTouch = false;
+//        boolean isBiometric = false;
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            cursor = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            cursor.moveToFirst();
+//            if (cursor.getCount() > 0) {
+//                String value = cursor.getString(1);
+//                if (value.equals("true")) {
+//                    isFace = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isFace = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            cursor = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            cursor.moveToFirst();
+//            if (cursor.getCount() > 0) {
+//                String value = cursor.getString(1);
+//                if (value.equals("true")) {
+//                    isTouch = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isTouch = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//
+//            isBiometric = isFace || isTouch;
+//
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//        return isBiometric;
+//    }
+//
+//    public boolean isTouchEnabled() {
+//        boolean touch = false;
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            cursor = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            cursor.moveToFirst();
+//            if (cursor.getCount() > 0) {
+//                String value = cursor.getString(1);
+//                if (value.equals("true")) {
+//                    touch = true;
+//                } else {
+//                    touch = false;
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return touch;
+//    }
+//
+//    public boolean isFaceEnabled() {
+//        boolean face = false;
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            cursor = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            cursor.moveToFirst();
+//            if (cursor.getCount() > 0) {
+//                String value = cursor.getString(1);
+//                if (value.equals("true")) {
+//                    face = true;
+//                } else {
+//                    face = false;
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return face;
+//    }
+
+
     private boolean getLocalBiometricEnabled() {
         boolean isFace = false;
         boolean isTouch = false;
         boolean isBiometric = false;
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            cursor = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0) {
-                String value = cursor.getString(1);
-                if (value.equals("true")) {
-                    isFace = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFace = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
+        String value = dbHandler.getFacePinLock();
 
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            cursor = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0) {
-                String value = cursor.getString(1);
-                if (value.equals("true")) {
-                    isTouch = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouch = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-
-            isBiometric = isFace || isTouch;
-
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (value.equals("true")) {
+            isFace = true;
+            objMyApplication.setLocalBiometric(true);
+        } else {
+            objMyApplication.setLocalBiometric(false);
         }
+
+        String valueTouch = cursor.getString(1);
+        if (valueTouch.equals("true")) {
+            isTouch = true;
+            objMyApplication.setLocalBiometric(true);
+        } else {
+            objMyApplication.setLocalBiometric(false);
+        }
+
+        isBiometric = isFace || isTouch;
+
+
         return isBiometric;
     }
 
     public boolean isTouchEnabled() {
         boolean touch = false;
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            cursor = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0) {
-                String value = cursor.getString(1);
-                if (value.equals("true")) {
-                    touch = true;
-                } else {
-                    touch = false;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        String value = dbHandler.getThumbPinLock();
+        if (value.equals("true")) {
+            touch = true;
         }
         return touch;
     }
 
     public boolean isFaceEnabled() {
         boolean face = false;
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            cursor = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0) {
-                String value = cursor.getString(1);
-                if (value.equals("true")) {
-                    face = true;
-                } else {
-                    face = false;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        String value = dbHandler.getFacePinLock();
+        if (value.equals("true")) {
+            face = true;
         }
         return face;
     }
+
 
     private void bindImage(String imageString) {
         try {

@@ -132,29 +132,33 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         isPwdEye = false;
         try {
             if (!isExpiry) {
-                mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-                Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
-                cursor.moveToFirst();
-                if (cursor.getCount() > 0) {
-                    String value = cursor.getString(1);
+//                mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//                Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
+//                cursor.moveToFirst();
+//                if (cursor.getCount() > 0) {
+//                    String value = cursor.getString(1);
+                String value = dbHandler.getTableRemember();
+
+                if (value != null && !value.equals("")) {
                     etEmail.setText(value);
                     if (isEmailValid(etEmail.getText().toString().trim())) {
                         Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
                         etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         layoutEmailError.setVisibility(GONE);
                     }
-//                    etPassword.setText("");
-//                    etPassword.setHint("");
-//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                    clearPwdControl();
-                } else {
-//                    etPassword.setText("");
-//                    etPassword.setHint("");
-//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                    clearPwdControl();
                 }
+//                    etPassword.setText("");
+//                    etPassword.setHint("");
+//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+//                    clearPwdControl();
+//                } else {
+//                    etPassword.setText("");
+//                    etPassword.setHint("");
+//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
+//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                clearPwdControl();
+//                }
                 if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
                     if (chkRemember.isChecked()) {
                         etPassword.setText("");
@@ -571,6 +575,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 }
             });
             enableIcon();
+
+            //Shiva Changes
 //            SetDB();
 //            SetToken();
 //            SetFaceLock();
@@ -604,11 +610,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     private void setDB() {
-            String value = dbHandler.getTableUserDetails();
+        String value = dbHandler.getTableUserDetails();
 
-            if (value != null && !value.equals("")){
-                strFirstUser = value;
-            }
+        if (value != null && !value.equals("")) {
+            strFirstUser = value;
+        }
     }
 
 
@@ -737,17 +743,17 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     private void setRemember() {
-            String value = dbHandler.getTableRemember();
-            if (value != null && !value.equals("")) {
-                etEmail.setText(value);
-                if (isEmailValid(etEmail.getText().toString().trim())) {
-                    Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                    layoutEmailError.setVisibility(GONE);
-                }
-                chkRemember.setChecked(true);
-            } else {
-                chkRemember.setChecked(false);
+        String value = dbHandler.getTableRemember();
+        if (value != null && !value.equals("")) {
+            etEmail.setText(value);
+            if (isEmailValid(etEmail.getText().toString().trim())) {
+                Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                layoutEmailError.setVisibility(GONE);
+            }
+            chkRemember.setChecked(true);
+        } else {
+            chkRemember.setChecked(false);
         }
     }
 
@@ -782,7 +788,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     if (chkRemember.isChecked()) {
                                         saveCredentials();
                                     } else {
-                                        mydatabase.execSQL("Delete from tblRemember");
+//                                        mydatabase.execSQL("Delete from tblRemember");
+                                        dbHandler.clearTableRemember();
                                     }
                                     saveFirstUser();
                                     if (login.getData().getCoyniPin()) {
