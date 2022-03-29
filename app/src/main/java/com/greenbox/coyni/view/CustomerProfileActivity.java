@@ -797,65 +797,66 @@ public class CustomerProfileActivity extends BaseActivity {
         }
     }
 
-    private void saveThumb(String value) {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblThumbPinLock");
-            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
-            cursor = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0) {
-                Log.e("Thumb", cursor.getString(1));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void saveFace(String value) {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblFacePinLock");
-            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
-            cursor = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            cursor.moveToFirst();
-            if (cursor.getCount() > 0) {
-                Log.e("Face", cursor.getString(1));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void saveToken(String value) {
-        try {
-            objMyApplication.setStrMobileToken(value);
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
-            mydatabase.execSQL("Delete from tblPermanentToken");
-            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    //    private void saveThumb(String value) {
-//        dbHandler.clearThumbPinLockTable();
-//        dbHandler.insertThumbPinLock(value);
+//    private void saveThumb(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblThumbPinLock");
+//            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+//            cursor = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            cursor.moveToFirst();
+//            if (cursor.getCount() > 0) {
+//                Log.e("Thumb", cursor.getString(1));
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
 //    }
 //
 //    private void saveFace(String value) {
-//        dbHandler.clearFacePinLockTable();
-//        dbHandler.insertFacePinLock(value);
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblFacePinLock");
+//            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
+//            cursor = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            cursor.moveToFirst();
+//            if (cursor.getCount() > 0) {
+//                Log.e("Face", cursor.getString(1));
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
 //    }
 //
 //    private void saveToken(String value) {
-//        objMyApplication.setStrMobileToken(value);
-//        dbHandler.clearPermanentTokenTable();
-//        dbHandler.insertPermanentToken(value);
+//        try {
+//            objMyApplication.setStrMobileToken(value);
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
+//            mydatabase.execSQL("Delete from tblPermanentToken");
+//            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
 //    }
+
+    private void saveThumb(String value) {
+        dbHandler.clearThumbPinLockTable();
+        dbHandler.insertThumbPinLock(value);
+    }
+
+    private void saveFace(String value) {
+        dbHandler.clearFacePinLockTable();
+        dbHandler.insertFacePinLock(value);
+    }
+
+    private void saveToken(String value) {
+        objMyApplication.setStrMobileToken(value);
+        dbHandler.clearPermanentTokenTable();
+        dbHandler.insertPermanentToken(value);
+    }
+
     public void initObserver() {
         coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
             @Override
