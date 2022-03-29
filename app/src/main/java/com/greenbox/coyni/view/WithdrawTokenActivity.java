@@ -972,7 +972,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         Boolean value = true;
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",",""));
+            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",", ""));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
                 tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
@@ -1656,7 +1656,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             };
             ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(clickableSpan, strMessage.indexOf("Learn More"), strMessage.length(), 0);
+            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             tvDescription.setText(ss);
 

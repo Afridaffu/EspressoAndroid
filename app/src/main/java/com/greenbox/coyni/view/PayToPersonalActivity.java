@@ -294,6 +294,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 }
             }
             if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                tvAmount.setFilters(FilterArray);
+
                 tvAmount.setText(getIntent().getStringExtra("amount"));
                 USFormat(tvAmount);
                 cynValue = Double.parseDouble(tvAmount.getText().toString().trim().replace(",", ""));
@@ -674,6 +678,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
             if (editable.length() == 5 || editable.length() == 6) {
                 tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -11,8 +11,8 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/editPhoneSV"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/topLL"
@@ -20,11 +20,11 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/saveEmailCV"
             android:layout_alignParentTop="true"
-            android:visibility="visible"
             android:orientation="vertical"
             android:paddingStart="@dimen/_21sdp"
             android:paddingTop="@dimen/_45sdp"
-            android:paddingEnd="@dimen/_21sdp">
+            android:paddingEnd="@dimen/_21sdp"
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/editPhoneCloseLL"
@@ -47,11 +47,11 @@
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_16ssp" />
 
-            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
-                android:id="@+id/currentPhoneET"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_32sdp" />
+            <!--            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET-->
+            <!--                android:id="@+id/currentPhoneET"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/_32sdp" />-->
 
             <LinearLayout
                 android:id="@+id/currentPhoneErrorLL"
@@ -188,6 +188,14 @@
             android:orientation="vertical">
 
             <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
+                android:id="@+id/currentPhoneET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp" />
+
+            <com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneUpdateET
                 android:id="@+id/b_newPhoneET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -199,9 +207,9 @@
                 android:id="@+id/b_newPhoneErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
-                android:layout_marginStart="@dimen/_11sdp"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -229,8 +237,8 @@
                 android:gravity="center"
                 android:text="Don't have access"
                 android:textColor="@color/primary_black"
-                android:visibility="gone"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/b_contactUsTV"
@@ -242,8 +250,8 @@
                 android:gravity="center"
                 android:text="@string/contact_us"
                 android:textColor="@color/primary_color"
-                android:visibility="gone"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>
