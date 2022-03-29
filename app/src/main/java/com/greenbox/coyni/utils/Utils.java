@@ -24,10 +24,17 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
@@ -76,6 +83,7 @@ import com.greenbox.coyni.view.business.DBAInfoAcivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -137,10 +145,11 @@ public class Utils {
     public static String strURL_PRODUCTION;
     public static Boolean isFaceEnabled;
     public static Boolean isTouchEnabled;
-    public static Boolean isBiometric;
+    public static Boolean isBiometric = false;
     public static final String transInProgress = "inprogress";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
+    public static final String transOpen = "open";
     public static final String transFailed = "failed";
     public static final String transCancelled = "cancelled";
     public static final String transinprogress = "in progress";
@@ -295,9 +304,8 @@ public class Utils {
     public static final String canceled = "Canceled";
     public static final String expired = "Expired";
 
-    public static final String applyFilter="apply";
-    public static final String datePicker="DatePicker";
-
+    public static final String applyFilter = "apply";
+    public static final String datePicker = "DatePicker";
 
 
     public static final String position = "Position";
@@ -706,6 +714,13 @@ public class Utils {
     public static ColorStateList getNormalColorState(Context context) {
         state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
         color = new int[]{ContextCompat.getColor(context, R.color.light_gray), ContextCompat.getColor(context, R.color.light_gray)};
+        colorState = new ColorStateList(state, color);
+        return colorState;
+    }
+
+    public static ColorStateList getFocusedColorState(Context context) {
+        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+        color = new int[]{ContextCompat.getColor(context, R.color.primary_green), ContextCompat.getColor(context, R.color.primary_green)};
         colorState = new ColorStateList(state, color);
         return colorState;
     }
@@ -1178,6 +1193,14 @@ public class Utils {
             int width = mertics.widthPixels;
 
             LinearLayout layoutClose = dialog.findViewById(R.id.layoutClose);
+            TextView bankTV = dialog.findViewById(R.id.bankTV);
+            TextView instantTV = dialog.findViewById(R.id.instantTV);
+            TextView giftCardTV = dialog.findViewById(R.id.giftCardTV);
+
+            setSpannableText("Bank Accounts: All Bank account transactions typically take up to 3 business days to process.", context, bankTV, 14);
+            setSpannableText("Instant Pay: Withdrawing money to an Instant Pay bank account uses your debit card to facilitate the process. This typically takes about 30 seconds to process, but can take up to 30 minutes depending on your bank. Most, but not all banks support Instant Pay.", context, instantTV, 12);
+            setSpannableText("Gift Cards: Purchasing a gift card with your coyni tokens typically takes about 1 minute to process the request and to send out the email that contains the gift card.", context, giftCardTV, 11);
+
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1495,5 +1518,32 @@ public class Utils {
             }
         });
     }
+    
 
+    public static String convertPayoutDate(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public static void setSpannableText(String text, Context context, TextView spannableTV, int end) {
+
+        SpannableString ss = new SpannableString(text);
+
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        ss.setSpan(new RelativeSizeSpan(1f), 0, end, 0);
+        ss.setSpan(bss, 0, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.primary_black)), 0, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableTV.setText(ss);
+        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
 }

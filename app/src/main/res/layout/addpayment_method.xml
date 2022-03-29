@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account."
+                android:text="There is no payment method currently linked to your account. Please follow one of the prompts below to link an account."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp"
                 android:visibility="gone" />

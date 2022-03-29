@@ -216,7 +216,7 @@ public class EditCardNumberET extends ConstraintLayout {
         cnET.setEnabled(false);
         cnET.setTextColor(getResources().getColor(R.color.xdark_gray));
         hintName.setTextColor(getResources().getColor(R.color.xdark_gray));
-        hintName.setBackgroundColor(Color.TRANSPARENT);
+//        hintName.setBackgroundColor(Color.TRANSPARENT);
         hintHolder.setBackground(null);
     }
 
@@ -246,7 +246,7 @@ public class EditCardNumberET extends ConstraintLayout {
 
     public void enableHint() {
         hintName.setVisibility(VISIBLE);
-        hintName.setBackgroundColor(getResources().getColor(R.color.white));
+//        hintName.setBackgroundColor(getResources().getColor(R.color.white));
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
     }
 }

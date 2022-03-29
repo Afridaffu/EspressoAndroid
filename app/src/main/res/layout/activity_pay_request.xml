@@ -360,7 +360,6 @@
 <!--                                                            android:src="@drawable/ic_download" />-->
 
 <!--                                                    </LinearLayout>-->
-
 <!--                                                </RelativeLayout>-->
 
                         <RelativeLayout
@@ -385,9 +384,10 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="$ "
+                                    android:layout_marginTop="@dimen/_6sdp"
                                     android:layout_gravity="top"
                                     android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_20sdp"
+                                    android:textSize="@dimen/_30ssp"
                                     android:visibility="gone" />
 
                                 <LinearLayout

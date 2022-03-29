@@ -31,7 +31,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.DatePicker;
+//import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,8 +63,10 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.SSNBOEditText;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
+import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
+import com.ideyalabs.wheelpicker.DatePicker;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -275,7 +277,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 ssnET.clearFocus();
-                setToDate(dobET);
+//                setToDate(dobET);
+                setToDateWheelPicker(dobET);
             }
         });
 
@@ -288,7 +291,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 ssnET.clearFocus();
-                setToDate(dobET);
+//                setToDate(dobET);
+                setToDateWheelPicker(dobET);
             }
         });
 
@@ -297,7 +301,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void onFocusChange(View view, boolean b) {
                 if (b) {
                     ssnET.clearFocus();
-                    setToDate(dobET);
+//                    setToDate(dobET);
+                    setToDateWheelPicker(dobET);
                 }
             }
         });
@@ -650,44 +655,90 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
     }
 
     private void setToDate(EditText dob) {
+//        try {
+//
+//            Calendar c = Calendar.getInstance();
+//            mYear = c.get(Calendar.YEAR);
+//            mMonth = c.get(Calendar.MONTH);
+//            mDay = c.get(Calendar.DAY_OF_MONTH);
+//
+//            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.CalendarDialogTheme,
+//                    new DatePickerDialog.OnDateSetListener() {
+//                        @Override
+//                        public void onDateSet(DatePicker view, int year,
+//                                              int monthOfYear, int dayOfMonth) {
+//                            try {
+//                                String dateToConvert = Utils.changeFormat(dayOfMonth) + "/" + Utils.changeFormat((monthOfYear + 1)) + "/" + year;
+//                                String convertedDate = convertDate(dateToConvert);
+//                                dob.setText(convertedDate);
+//                                isDOBSelected = true;
+//                                dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
+//                                enableOrDisableNext();
+//                                ssnET.clearFocus();
+//                                datepicker = new DatePicker(AddBeneficialOwnerActivity.this);
+//                                datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
+//                                Utils.setUpperHintColor(dobtil, getResources().getColor(R.color.primary_black));
+//                            } catch (Exception ex) {
+//                                ex.printStackTrace();
+//                            }
+//                        }
+//                    }, mYear, mMonth, mDay);
+//
+//            long years = 568025136000L;
+//            long yearsback = c.getTimeInMillis() - years;
+//            datePickerDialog.getDatePicker().setMaxDate(yearsback);
+//            if (datepicker != null) {
+//                datePickerDialog.updateDate(datepicker.getYear(), datepicker.getMonth() - 1, datepicker.getDayOfMonth());
+//            }
+//            datePickerDialog.show();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+    }
+
+    private void setToDateWheelPicker(TextInputEditText dobET) {
         try {
-
-            Calendar c = Calendar.getInstance();
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.CalendarDialogTheme,
-                    new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year,
-                                              int monthOfYear, int dayOfMonth) {
-                            try {
-                                String dateToConvert = Utils.changeFormat(dayOfMonth) + "/" + Utils.changeFormat((monthOfYear + 1)) + "/" + year;
-                                String convertedDate = convertDate(dateToConvert);
-                                dob.setText(convertedDate);
-                                isDOBSelected = true;
-                                dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
-                                enableOrDisableNext();
-                                ssnET.clearFocus();
-                                datepicker = new DatePicker(AddBeneficialOwnerActivity.this);
-                                datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
-                                Utils.setUpperHintColor(dobtil, getResources().getColor(R.color.primary_black));
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }, mYear, mMonth, mDay);
-
             long years = 568025136000L;
-            long yearsback = c.getTimeInMillis() - years;
-            datePickerDialog.getDatePicker().setMaxDate(yearsback);
-            if (datepicker != null) {
-                datePickerDialog.updateDate(datepicker.getYear(), datepicker.getMonth() - 1, datepicker.getDayOfMonth());
+            com.ideyalabs.wheelpicker.DatePicker picker = new com.ideyalabs.wheelpicker.DatePicker(AddBeneficialOwnerActivity.this);
+            picker.show(getWindow());
+            Date maxDate = new Date(System.currentTimeMillis() - years);
+            picker.getPickerView().setMaxDate(maxDate);
+            if (!dateOfBirth.equals("")) {
+                picker.getPickerView().setDate(Integer.parseInt(dateOfBirth.split("-")[0]),
+                        Integer.parseInt(dateOfBirth.split("-")[1]) - 1,
+                        Integer.parseInt(dateOfBirth.split("-")[2]));
             }
-            datePickerDialog.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+            picker.setContinueClickButtonListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        int mYear = picker.getPickerView().getCurrentData().getFirst();
+                        int mMonth = picker.getPickerView().getCurrentData().getSecond();
+                        int mDay = picker.getPickerView().getCurrentData().getThird();
+//                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth + 1)) + "/" + mYear;
+                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth)) + "/" + mYear;
+                        String convertedDate = convertDate(dateToConvert);
+                        dobET.setText(convertedDate);
+                        isDOBSelected = true;
+//                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth + 1)) + "-" + Utils.changeFormat(mDay);
+                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth)) + "-" + Utils.changeFormat(mDay);
+                        enableOrDisableNext();
+                        ssnET.clearFocus();
+//                        datepicker = new DatePicker(IdentityVerificationActivity.this);
+//                        datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
+                        Utils.setUpperHintColor(dobtil, getResources().getColor(R.color.primary_black));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                    Log.e("WheelPicker", dateOfBirth);
+                    picker.hide();
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
