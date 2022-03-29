@@ -138,8 +138,8 @@
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/userProfileCV"
-                                android:layout_width="@dimen/_48sdp"
-                                android:layout_height="@dimen/_48sdp"
+                                android:layout_width="@dimen/_46sdp"
+                                android:layout_height="@dimen/_46sdp"
                                 android:layout_alignParentRight="true"
                                 android:layout_gravity="center"
                                 app:cardCornerRadius="@dimen/_24sdp"
