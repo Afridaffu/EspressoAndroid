@@ -1431,6 +1431,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 //                        }
                     }
                 }
+            } else {
+                isPayments = false;
             }
         } catch (Exception ex) {
             ex.printStackTrace();

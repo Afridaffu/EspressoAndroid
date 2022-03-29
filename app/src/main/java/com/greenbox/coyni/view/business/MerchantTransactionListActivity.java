@@ -240,7 +240,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
     }
 
-    private void initObservers() {
+    void initObservers() {
         dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
             @Override
             public void onChanged(TransactionList transactionList) {

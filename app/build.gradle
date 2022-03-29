@@ -168,6 +168,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
+    //iOS Style DatePicker
+    implementation project(path: ':WheelPicker')
 //    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1'
 }
