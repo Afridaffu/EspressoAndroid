@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
@@ -73,6 +76,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private IdentityVerificationViewModel identityVerificationViewModel;
     private String userName;
+    private ScrollView expandablescrollview;
 
 
     @Override
@@ -112,6 +116,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
     private void initFields() {
         try {
+            expandablescrollview = findViewById(R.id.activity_expandable_scroll_view);
             llOpenAccount = findViewById(R.id.ll_open_account);
             userShortInfoTV = findViewById(R.id.tvUserInfo);
             imgProfile = findViewById(R.id.imgProfile);
@@ -137,7 +142,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         loginViewModel = new ViewModelProvider(BusinessCreateAccountsActivity.this).get(LoginViewModel.class);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
-
 
         brandsGV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -307,6 +311,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                             LogUtils.d(TAG, "subSet" + subSet);
                             listAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, subSet, BusinessCreateAccountsActivity.this);
                             brandsGV.setAdapter(listAdapter);
+                            setListViewHeight(brandsGV, -1);
+                            brandsGV.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+                                @Override
+                                public boolean onGroupClick(ExpandableListView parent, View v,
+                                                            int groupPosition, long id) {
+                                    setListViewHeight(parent, groupPosition);
+                                    return false;
+                                }
+                            });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -370,6 +384,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             }
         });
 
+
+
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
@@ -429,6 +445,42 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         }
     }
 
+    private void setListViewHeight(ExpandableListView listView,
+                                   int group) {
+        ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+
+            if (((listView.isGroupExpanded(i)) && (i != group))
+                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
+                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+                    View listItem = listAdapter.getChildView(i, j, false, null,
+                            listView);
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+                    totalHeight += listItem.getMeasuredHeight();
+
+                }
+            }
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10)
+            height = 200;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+
+    }
+
     private int addDetails(String mainSet, String subSet, String image, int id , String accountStatus ) {
 
         int groupPosition = 0;
@@ -461,47 +513,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             subList.add(detailInfo);
             headerInfo.setSubsetName(subList);
             groupPosition = this.subSet.indexOf(headerInfo);
-
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
-        return groupPosition;
-    }
-
-    private int addDetailsShared(String mainSetShared,String accountSttaus, String subSetShared, String image, int id , String accountStatus ) {
-
-        int groupPosition = 0;
-
-        try {
-            LogUtils.d(TAG, "adddetails" + mainSetShared + subSetShared + id + accountTypeId);
-            groupPosition = 0;
-            BusinessAccountsListInfo headerInfoShared = this.mainSetShared.get(mainSetShared);
-
-            if (headerInfoShared == null) {
-                headerInfoShared = new BusinessAccountsListInfo();
-                headerInfoShared.setName(accountSttaus);
-                headerInfoShared.setMainImage(image);
-                headerInfoShared.setId(id);
-                this.mainSetShared.put(mainSetShared, headerInfoShared);
-                this.subSetShared.add(headerInfoShared);
-            }
-
-            ArrayList<BusinessAccountDbaInfo> subList = headerInfoShared.getSubsetName();
-            int listSize = subList.size();
-            listSize++;
-
-            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-            detailInfo.setName(subSetShared);
-            detailInfo.setDbaImage(image);
-            detailInfo.setId(id);
-            detailInfo.setAccountSttaus(accountStatus);
-
-            detailInfo.setIsSelected(false);
-
-            subList.add(detailInfo);
-            headerInfoShared.setSubsetName(subList);
-            groupPosition = this.subSetShared.indexOf(headerInfoShared);
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
