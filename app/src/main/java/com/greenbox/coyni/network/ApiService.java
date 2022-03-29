@@ -165,6 +165,9 @@ public interface ApiService {
     @POST("api/v2/user/register/phone-otp/validate")
     Call<SMSValidate> smsotp(@Body SmsRequest smsRequest);
 
+    @POST("api/v2/user/sms-otp/validate")
+    Call<SMSValidate> smsotpLogin(@Body SmsRequest smsRequest);
+
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
 

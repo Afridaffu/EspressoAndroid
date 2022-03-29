@@ -133,6 +133,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 strOnPauseScreen = "";
             } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
                 ControlMethod("addpayment");
+            } else if (strScreen != null && strScreen.equals("banksuccess")) {
+                //Added on 29-03-2022 - VT
             } else if (strScreen != null && !strScreen.equals("addpay")) {
                 if (!isPayments) {
                     getPaymentMethods();
@@ -737,11 +739,20 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         try {
             isBankSuccess = true;
             ControlMethod("banksuccess");
+
+            //Added 29-03-2022 - VT
+            strCurrent = strScreen = "banksuccess";
+            //Added 29-03-2022 - VT
+
             cvDone = findViewById(R.id.cvDone);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     isBankSuccess = false;
+                    //Added 29-03-2022 - VT
+                    strCurrent = "externalBank";
+                    strScreen = "withdraw";
+                    //Added 29-03-2022 - VT
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";
