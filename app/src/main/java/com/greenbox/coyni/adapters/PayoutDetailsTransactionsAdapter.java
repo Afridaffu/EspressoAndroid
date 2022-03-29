@@ -25,14 +25,15 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
+public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder>{
+    private OnItemClickListener listener;
     private Context mContext;
     private MyApplication objMyApplication;
     private List<ListItem> consolidatedListData = new ArrayList<>();
     private List<TransactionListPosted> transactionListItemsPosted;
-    private OnItemClickListener listener;
 
-    public MerchantTransactionListPostedNewAdapter(List<TransactionListPosted> list, Context context) {
+
+    public PayoutDetailsTransactionsAdapter(List<TransactionListPosted> list, Context context) {
         this.transactionListItemsPosted = list;
         this.mContext = context;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
@@ -45,37 +46,37 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             dateItem.setDate(datee);
 
 
-            if (!consolidatedListData.contains(dateItem)) {
-                consolidatedListData.add(dateItem);
-            }
+//            if (!consolidatedListData.contains(dateItem)) {
+//                consolidatedListData.add(dateItem);
+//            }
             consolidatedListData.add(transactionListItemsPosted.get(i));
 
-//            if (consolidatedListData.contains(dateItem)) {
-//                consolidatedListData.add(transactionListItemsPosted.get(i));
-//            } else {
-//                consolidatedListData.add(dateItem);
-//                i--;
-//            }
-
         }
+    }
 
-//        for (int i = 0; i < list.size(); i++) {
-//            String datee = objMyApplication.convertZoneDateLastYear(list.get(i).getUpdatedAt().split("\\.")[0]);
-//            if (!dates.contains(datee)) {
-//                dates.add(datee);
-//            }
-//        }
-//
-//        for (int j = 0; j < dates.size(); j++) {
-//            List<TransactionListPosted> individualDateData = new ArrayList<>();
-//            for (int i = 0; i < list.size(); i++) {
-//                String datee = objMyApplication.convertZoneDateLastYear(list.get(i).getUpdatedAt().split("\\.")[0]);
-//                if (dates.get(j).equals(datee)) {
-//                    individualDateData.add(list.get(i));
-//                }
-//            }
-//            listedData.add(individualDateData);
-//        }
+
+    @Override
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener= listener;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        RecyclerView.ViewHolder viewHolder = null;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        switch (viewType) {
+            case ListItem.TYPE_GENERAL:
+                View v1 = inflater.inflate(R.layout.posted_inner_item, parent, false);
+                viewHolder = new PayoutDetailsTransactionsAdapter.ItemViewHolder(v1);
+                break;
+//            case ListItem.TYPE_GROUP:
+//                View v2 = inflater.inflate(R.layout.group_item, parent, false);
+//                viewHolder = new PayoutDetailsTransactionsAdapter.GroupViewHolder(v2);
+//                break;
+        }
+        return viewHolder;
     }
 
     @Override
@@ -84,42 +85,20 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
     }
 
     @Override
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder viewHolder = null;
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        switch (viewType) {
-            case ListItem.TYPE_GENERAL:
-                View v1 = inflater.inflate(R.layout.posted_inner_item, parent, false);
-                viewHolder = new ItemViewHolder(v1);
-                break;
-            case ListItem.TYPE_GROUP:
-                View v2 = inflater.inflate(R.layout.group_item, parent, false);
-                viewHolder = new GroupViewHolder(v2);
-                break;
-        }
-        return viewHolder;
-    }
-
-    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()) {
             case ListItem.TYPE_GENERAL:
-                ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+                PayoutDetailsTransactionsAdapter.ItemViewHolder itemViewHolder = (PayoutDetailsTransactionsAdapter.ItemViewHolder) holder;
                 TransactionListPosted objData = (TransactionListPosted) consolidatedListData.get(position);
                 setItemViewData(objData, itemViewHolder);
                 break;
-            case ListItem.TYPE_GROUP:
-                GroupViewHolder groupViewHolder = (GroupViewHolder) holder;
-                DateItem dateItem = (DateItem) consolidatedListData.get(position);
-                setGroupViewData(dateItem, groupViewHolder);
-                break;
+//            case ListItem.TYPE_GROUP:
+//                PayoutDetailsTransactionsAdapter.GroupViewHolder groupViewHolder = (PayoutDetailsTransactionsAdapter.GroupViewHolder) holder;
+//                DateItem dateItem = (DateItem) consolidatedListData.get(position);
+//                setGroupViewData(dateItem, groupViewHolder);
+//                break;
         }
+
     }
 
     @Override
@@ -162,12 +141,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         }
     }
 
-    public void updateList(List<List<TransactionListPosted>> list) {
-        //listedData = list;
-        notifyDataSetChanged();
-    }
-
-    private void setGroupViewData(DateItem date, GroupViewHolder holder) {
+    private void setGroupViewData(DateItem date, MerchantTransactionListPostedNewAdapter.GroupViewHolder holder) {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strCurDate = spf.format(Calendar.getInstance().getTime());
@@ -187,13 +161,13 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         }
     }
 
-    private void setItemViewData(TransactionListPosted objData, ItemViewHolder holder) {
+    private void setItemViewData(TransactionListPosted objData, PayoutDetailsTransactionsAdapter.ItemViewHolder holder) {
         String strType = "";
         String[] data = objData.getTxnTypeDn().replace("****", "-").split("-");
         try {
             if (data.length > 1) {
                 holder.txnTypeDnExtention.setVisibility(View.VISIBLE);
-                holder.txnTypeDn.setText(data[0]);
+//                holder.txnTypeDn.setText(data[0]);
                 holder.txnTypeDnExtention.setText("**" + data[1]);
                 holder.txnTypeDn.setVisibility(View.VISIBLE);
             } else {
@@ -204,7 +178,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             e.printStackTrace();
         }
 
-        holder.createdDate.setText(Utils.convertDate(objData.getCreatedAt()));
+        holder.createdDate.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
 
         //type transaction
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
@@ -278,5 +252,4 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
         }
         return strValue;
     }
-
 }
