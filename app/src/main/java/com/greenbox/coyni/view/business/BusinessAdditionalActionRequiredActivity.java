@@ -193,6 +193,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
         additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
+
         LinearLayout.LayoutParams layoutParamss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
             View inf = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);

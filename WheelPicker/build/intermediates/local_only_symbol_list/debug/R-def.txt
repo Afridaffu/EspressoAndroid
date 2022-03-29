@@ -1,0 +1,28 @@
+R_DEF: Internal format may change without notice
+local
+anim wheel_sheet_translate_in
+anim wheel_sheet_translate_out
+attr? highlighting_visible
+color text_wheel_disable_text_color
+color text_wheel_highlight_bg_color
+color text_wheel_text_color
+color wheel_action_sheet_bg_color
+dimen text_wheel_picker_item_height
+dimen text_wheel_picker_text_size
+dimen wheel_action_sheet_bg_radius
+dimen wheel_picker_highlight_radius
+drawable text_wheel_colors
+drawable text_wheel_highlight_bg
+drawable wheel_action_sheet_bg
+id container_view
+id day_picker
+id month_picker
+id tv_continue
+id tv_done
+id year_picker
+layout picker_action_sheet_content
+layout triple_picker_view
+layout wheel_picker_item
+string day_time_picker_format_day
+style WheelSheetTranslate
+styleable TextWheelPickerView highlighting_visible

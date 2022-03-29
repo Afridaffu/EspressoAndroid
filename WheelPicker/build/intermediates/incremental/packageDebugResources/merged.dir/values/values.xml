@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="text_wheel_disable_text_color">#ACACAC</color>
+    <color name="text_wheel_highlight_bg_color">#11000000</color>
+    <color name="text_wheel_text_color">@android:color/black</color>
+    <color name="wheel_action_sheet_bg_color">@android:color/white</color>
+    <dimen name="text_wheel_picker_item_height">32dp</dimen>
+    <dimen name="text_wheel_picker_text_size">22sp</dimen>
+    <dimen name="wheel_action_sheet_bg_radius">16dp</dimen>
+    <dimen name="wheel_picker_highlight_radius">8dp</dimen>
+    <string name="day_time_picker_format_day">%d</string>
+    <style name="WheelSheetTranslate">
+        <item name="android:windowEnterAnimation">@anim/wheel_sheet_translate_in</item>
+        <item name="android:windowExitAnimation">@anim/wheel_sheet_translate_out</item>
+    </style>
+    <declare-styleable name="TextWheelPickerView">
+        <attr format="boolean" name="highlighting_visible"/>
+    </declare-styleable>
+</resources>
