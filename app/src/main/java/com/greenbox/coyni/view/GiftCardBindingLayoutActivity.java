@@ -397,7 +397,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             };
             ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(clickableSpan, strMessage.indexOf("Learn More"), strMessage.length(), 0);
+//            ss.setSpan(clickableSpan, strMessage.indexOf("Learn More"), strMessage.length(), 0);
+            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
 
             tvDescription.setText(ss);
 

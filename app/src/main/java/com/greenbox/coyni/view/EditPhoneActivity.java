@@ -100,14 +100,13 @@ public class EditPhoneActivity extends AppCompatActivity {
             b_editPhoneCloseLL = findViewById(R.id.b_editPhoneCloseLL);
             b_contactUsTV = findViewById(R.id.b_contactUsTV);
 
+            findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
+            findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
+
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
-                findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
                 b_newPhoneET.setHint("New Phone Number");
-            }
-            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                findViewById(R.id.editPhoneSV).setVisibility(View.GONE);
-                findViewById(R.id.business_topLL).setVisibility(View.VISIBLE);
+            } else if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                currentPhoneET.setVisibility(View.GONE);
                 b_newPhoneET.setHint("Phone Number");
 
             }
@@ -141,7 +140,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                                 currentPhoneNumber = currentPhoneET.getText().toString().substring(1, 4) + currentPhoneET.getText().toString().substring(6, 9) + currentPhoneET.getText().toString().substring(10, currentPhoneET.getText().length());
                                 if (currentPhoneNumber.equalsIgnoreCase(newPhoneNumber)) {
                                     dialog.dismiss();
-                                    Utils.displayAlertNew("Please enter a new phone number ",EditPhoneActivity.this,"Coyni");
+                                    Utils.displayAlertNew("Please enter a new phone number ", EditPhoneActivity.this, "Coyni");
                                 } else {
                                     businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
                                 }

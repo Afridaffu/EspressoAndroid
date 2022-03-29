@@ -124,7 +124,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
                 holder.tvWalletAddress.setVisibility(View.GONE);
                 holder.imgInvite.setVisibility(View.VISIBLE);
-                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact.substring(0, 1).toUpperCase()));
             }
 
             if (objData.getImage() != null && !objData.getImage().trim().equals("")) {

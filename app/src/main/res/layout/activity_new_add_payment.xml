@@ -164,7 +164,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Visa, MasterCard, Discover, and American Express credit cards"
+                    android:text="Visa, Mastercard, Discover, and American Express credit cards"
                     android:textSize="@dimen/_9ssp"
                     android:fontFamily="@font/opensans_regular"
                     />
