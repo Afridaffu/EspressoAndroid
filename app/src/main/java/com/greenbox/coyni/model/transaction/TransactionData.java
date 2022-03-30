@@ -97,6 +97,8 @@ public class TransactionData {
     private String dateAndTime;
     private String refundAmount;
     private String depositTo;
+    private String amountSent;
+
 
     public String getWithdrawId() {
         return withdrawId;
@@ -546,6 +548,12 @@ public class TransactionData {
     }
     public void setRefundAmount(String refundAmount) {
         this.refundAmount = refundAmount;
+    }
+    public String getAmountSent() {
+        return amountSent;
+    }
+    public void setAmountSent(String amountSent) {
+        this.amountSent = amountSent;
     }
 
 }

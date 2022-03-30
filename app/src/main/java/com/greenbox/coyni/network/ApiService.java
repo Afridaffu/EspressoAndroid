@@ -550,5 +550,11 @@ public interface ApiService {
 //    @POST("api/v2/transactions/business-activity")
 //    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
+
+    @GET("api/v2/transactions/admin/totalPayout")
+    Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
+
+//    @GET("api/v2/transactions/admin/totalPayout")
+//    Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey,@Query("fromDate") String fromDate,@Query("toDate") String toDate);
 }
 
