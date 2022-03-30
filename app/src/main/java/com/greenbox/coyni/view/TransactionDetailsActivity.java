@@ -733,7 +733,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
 
         withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
 //        if (objData.getDescription().equals("")) {
 //            withbankdescription.setVisibility(View.GONE);
 //        } else {
@@ -766,23 +766,24 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+//
+//        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("USD", "").trim());
+//        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
 
-        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("CYN", "").trim());
-        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
-
-        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
         withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
-        withBankTotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotal + procesFee)));
+        withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN","").trim()));
 
+        if(objData.getAccountBalance() != null)
         withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId().length() > 10) {
-            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0,10) + "...");
         } else {
             withBankWithdrawalId.setText(objData.getWithdrawalId());
         }
 
-        withBankRefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        withBankRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
 
         withBankNameOnAccount.setText(objData.getNameOnBankAccount());
 
