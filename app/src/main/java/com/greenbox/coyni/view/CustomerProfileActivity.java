@@ -1064,7 +1064,7 @@ public class CustomerProfileActivity extends BaseActivity {
             objMyApplication.setLocalBiometric(false);
         }
 
-        String valueTouch = cursor.getString(1);
+        String valueTouch = dbHandler.getThumbPinLock();
         if (valueTouch.equals("true")) {
             isTouch = true;
             objMyApplication.setLocalBiometric(true);
