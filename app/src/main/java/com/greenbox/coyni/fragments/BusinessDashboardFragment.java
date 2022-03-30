@@ -70,7 +70,9 @@ public class BusinessDashboardFragment extends BaseFragment {
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
-    private int dbaID=0;
+    private int dbaID = 0;
+    private TextView merchantBalanceTV;
+    private String merchantBalance;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,7 +80,20 @@ public class BusinessDashboardFragment extends BaseFragment {
         initFields();
         initObservers();
         hideAllStatusViews();
+        //getMerchantBalance();
         return mCurrentView;
+    }
+
+    private void getMerchantBalance() {
+        Double amt = 0.0;
+        if (myApplication.getGBTBalance() != null) {
+            amt += myApplication.getGBTBalance();
+        }
+        if (myApplication.getMerchantBalance() != null) {
+            amt += myApplication.getMerchantBalance();
+        }
+        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(amt)));
+
     }
 
     @Override
@@ -121,6 +136,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutHistory);
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
         mDashboardViewModel = new ViewModelProvider(getActivity()).get(DashboardViewModel.class);
+        merchantBalanceTV = mCurrentView.findViewById(R.id.merchant_balance_tv);
+
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -229,8 +246,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void startTracker() {
-        LogUtils.d(TAG,"tracker iddddd"+ myApplication.getDbaOwnerId());
-        if(myApplication.getDbaOwnerId()!=0){
+        LogUtils.d(TAG, "tracker iddddd" + myApplication.getDbaOwnerId());
+        if (myApplication.getDbaOwnerId() != 0) {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
             inTracker.putExtra("ADDBUSINESS", true);
             inTracker.putExtra("ADDDBA", true);
@@ -259,8 +276,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showUserData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
-        LogUtils.d(TAG,"dashboardmyApplication"+myApplication.getBusinessTrackerResponse());
-        LogUtils.d(TAG,"dashboardisProfileVerified"+myApplication.getBusinessTrackerResponse().getData().isProfileVerified());
+        LogUtils.d(TAG, "dashboardmyApplication" + myApplication.getBusinessTrackerResponse());
+        LogUtils.d(TAG, "dashboardisProfileVerified" + myApplication.getBusinessTrackerResponse().getData().isProfileVerified());
         if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
                 && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
             showGetStartedView();
@@ -336,6 +353,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
+        getMerchantBalance();
         mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BusinessBatchPayoutSearchActivity extends BaseActivity {
+public class BusinessBatchPayoutSearchActivity extends BaseActivity implements TextWatcher {
 
     ImageView filterIconIV, datePickIV, closeBtnIV;
     TextView applyFilterBtnCV, noPayoutTransactions, noMorePayoutTransactions, payoutLoadMoreTV;
@@ -108,7 +108,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
         BatchPayoutRequest batchPayoutRequest = null;
         businessDashboardViewModel.getPayoutListData();
 
-//        searchET.addTextChangedListener(this);
+        searchET.addTextChangedListener(this);
 
 
         closeBtnIV.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +170,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
             businessDashboardViewModel.getBatchPayoutListMutableLiveData().observe(this, new Observer<BatchPayoutListResponse>() {
                 @Override
                 public void onChanged(BatchPayoutListResponse batchPayoutList) {
+                    dismissDialog();
                     if (batchPayoutList != null) {
                         if (batchPayoutList.getStatus().equalsIgnoreCase("SUCCESS")) {
                             if (batchPayoutList.getData().getItems() != null) {
@@ -187,12 +188,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
                                     }
 
                                 });
+                                batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
                                 recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
                             }
-                        }
-                    } else {
-                        Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutSearchActivity.this, "", batchPayoutList.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutSearchActivity.this, "", batchPayoutList.getError().getFieldErrors().get(0));
 
+                        }
                     }
                 }
             });
@@ -202,6 +204,46 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity {
 
     }
 
+    private void payoutAPI() {
+        showProgressDialog();
+        businessDashboardViewModel.getPayoutListData();
+    }
+
+    private void payoutAPI(String search) {
+        showProgressDialog();
+        businessDashboardViewModel.getPayoutlistData(search);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (charSequence.length() >= 14) {
+            payoutList.clear();
+            BatchPayoutRequest batchPayoutRequest = new BatchPayoutRequest();
+            batchPayoutRequest.setBatchId(charSequence.toString());
+            payoutAPI(charSequence.toString());
+        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+        } else if (charSequence.toString().trim().length() == 0) {
+            payoutList.clear();
+            businessDashboardViewModel.getPayoutListData();
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable == searchET.getEditableText()) {
+            try {
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
     private void showBatchPayoutDetails(BatchPayoutListItems items) {
         try {
             Intent i = new Intent(this, BusinessBatchPayoutIdDetailsActivity.class);
