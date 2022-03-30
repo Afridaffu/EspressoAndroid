@@ -1045,24 +1045,30 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         }.start();
     }
 
+//    private void SetDontRemind() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
+//            dsDontRemind.moveToFirst();
+//            if (dsDontRemind.getCount() > 0) {
+//                if (dsDontRemind.getString(1).equals("true")) {
+//                    isDontRemind = true;
+//                } else {
+//                    isDontRemind = false;
+//                }
+//            }
+//        } catch (Exception ex) {
+//            if (ex.getMessage().toString().contains("no such table")) {
+//                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+//            }
+//        }
+//    }
+
     private void SetDontRemind() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
-            dsDontRemind.moveToFirst();
-            if (dsDontRemind.getCount() > 0) {
-                if (dsDontRemind.getString(1).equals("true")) {
-                    isDontRemind = true;
-                } else {
-                    isDontRemind = false;
-                }
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
-            }
-        }
+        String value = dbHandler.getTableDontRemind();
+        isDontRemind = value != null && value.equals("true");
+
     }
 
     private void launchDashboard() {
