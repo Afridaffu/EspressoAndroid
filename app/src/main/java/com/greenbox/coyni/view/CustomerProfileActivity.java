@@ -1057,7 +1057,7 @@ public class CustomerProfileActivity extends BaseActivity {
         boolean isBiometric = false;
         String value = dbHandler.getFacePinLock();
 
-        if (value.equals("true")) {
+        if (value != null && value.equals("true")) {
             isFace = true;
             objMyApplication.setLocalBiometric(true);
         } else {
@@ -1065,7 +1065,7 @@ public class CustomerProfileActivity extends BaseActivity {
         }
 
         String valueTouch = dbHandler.getThumbPinLock();
-        if (valueTouch.equals("true")) {
+        if (valueTouch != null && valueTouch.equals("true")) {
             isTouch = true;
             objMyApplication.setLocalBiometric(true);
         } else {
