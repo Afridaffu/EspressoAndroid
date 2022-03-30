@@ -108,6 +108,15 @@ public class MyApplication extends Application {
     BOResp beneficialOwnersResponse;
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
+    Double merchantBalance = 0.0;
+
+    public Double getMerchantBalance() {
+        return merchantBalance;
+    }
+
+    public void setMerchantBalance(Double merchantBalance) {
+        this.merchantBalance = merchantBalance;
+    }
 
     public int getDbaOwnerId() {
         return dbaOwnerId;
