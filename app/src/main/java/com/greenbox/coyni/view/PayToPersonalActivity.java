@@ -392,7 +392,35 @@ public class PayToPersonalActivity extends AppCompatActivity {
             tvTitle = findViewById(R.id.tvTitle);
             tvWAddress = findViewById(R.id.tvWAddress);
             userProfile = findViewById(R.id.imgProfile);
+            String strName = Utils.capitalize(userDetails.getData().getFullName());
+
+            if (strName.length() > 20)
+                tvName.setText(strName.substring(0, 20));
+            else
+                tvName.setText(strName);
+
             tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+            tvName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (tvName.getText().toString().contains("...")) {
+                        if (strName.length() == 21 || strName.length() > 21) {
+                            tvName.setText(strName.substring(0, 20));
+                        } else {
+                            tvName.setText(strName);
+                        }
+                    } else {
+                        if (strName.length() == 21) {
+                            tvName.setText(strName.substring(0, 20) + "...");
+                        } else if (strName.length() > 22) {
+                            tvName.setText(strName.substring(0, 22) + "...");
+                        } else {
+                            tvName.setText(strName);
+                        }
+                    }
+                }
+            });
+
             strUserName = Utils.capitalize(userDetails.getData().getFullName());
             String imageTextNew = "";
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +

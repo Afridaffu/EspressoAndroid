@@ -172,7 +172,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         tvCurrency.setLayoutParams(params1);
 
                     }
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                    //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
 //                    } else if (editable.length() <= 4) {
 //                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
 //                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1538,12 +1538,14 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
 
                         if (!isAuthenticationCalled) {
                             isAuthenticationCalled = true;
                             requestTransaction();
+
+                            tv_lable.setVisibility(View.GONE);
+                            tv_lable.setText("Verifying");
+                            tv_lable_verify.setVisibility(View.VISIBLE);
                         }
                     }
                 }

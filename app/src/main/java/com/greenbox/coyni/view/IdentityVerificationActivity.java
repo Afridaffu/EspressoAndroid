@@ -154,7 +154,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         backbtn.setVisibility(VISIBLE);
                         closebtn.setVisibility(GONE);
                         mailAddr1.requestFocus();
-                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                     }
                 }
 
@@ -837,6 +838,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
 //                    setToDate(dobET);
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                     setToDateWheelPicker(dobET);
                 }
             });
@@ -851,6 +854,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
 //                    setToDate(dobET);
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                     setToDateWheelPicker(dobET);
                 }
             });
@@ -861,6 +866,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     if (b) {
                         ssnET.clearFocus();
 //                        setToDate(dobET);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         setToDateWheelPicker(dobET);
                     }
                 }
