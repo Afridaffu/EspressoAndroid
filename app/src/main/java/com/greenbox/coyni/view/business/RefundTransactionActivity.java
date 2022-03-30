@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -55,8 +57,6 @@ public class RefundTransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refund_transaction);
         initialization();
-
-
         refundBackIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,21 +65,23 @@ public class RefundTransactionActivity extends AppCompatActivity {
         });
     }
 
-    //    private void setRefundAmountClick() {
-//        try {
-//            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                return;
-//            }
-//            cynValue = Double.parseDouble(refundET.getText().toString().trim());
-//            mLastClickTime = SystemClock.elapsedRealtime();
-////            isButtonClick = true;
-////            convertUSDtoCYN();
-////            calculateFee(Utils.USNumberFormat(cynValue));
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
+
+
+        private void setRefundAmountClick() {
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            cynValue = Double.parseDouble(refundET.getText().toString().trim());
+            mLastClickTime = SystemClock.elapsedRealtime();
+//            isButtonClick = true;
+//            convertUSDtoCYN();
+//            calculateFee(Utils.USNumberFormat(cynValue));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
     private void initialization() {
 
         objMyApplication = (MyApplication) getApplicationContext();
