@@ -256,7 +256,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             completed.setText(objData.getStatus());
             datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
             balance.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
-            refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            refid.setText(objData.getReferenceId().substring(0, 10) + "...");
 
 
             switch (objData.getStatus().toLowerCase()) {
@@ -366,12 +366,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         total.setText("$" + Utils.convertTwoDecimal(String.valueOf(purchaseAmount + processingFee)));
         balance.setText(Utils.convertTwoDecimal((objData.getAccountBalance().replace("CYN", "").trim())) + " CYN");
 
-        refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorName.setText(objData.getDescriptorName());
         name.setText(objData.getCardHolderName());
         cardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
         expiryDate.setText(objData.getCardExpiryDate());
-        depositIDTV.setText(objData.getDepositid().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
         lyPRClose.setOnClickListener(view -> onBackPressed());
         referenceID.setOnClickListener(view -> Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this));
         depositID.setOnClickListener(view -> Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this));
@@ -436,9 +436,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         fee.setText("$" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("USD", "").trim()));
         total.setText("$" + Utils.convertTwoDecimal(objData.getYouPay().replace("USD", "").trim()));
         bankAccNumTV.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
-        refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         descriptorname.setText(objData.getDescriptorName());
-        depositIDTV.setText(objData.getDepositid().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
         bankNameTV.setText(objData.getBankName());
 
         nameOnAccTV.setText(objData.getNameOnBankAccount());
@@ -547,7 +547,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withGiftcardname.setText(objData.getGiftCardName());
 
-        refid.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
         recipientname.setText(Utils.capitalize(objData.getRecipientName()));
         email.setText(objData.getRecipientEmail());
 
@@ -560,7 +560,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         dateandtime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
         if (objData.getWithdrawId().length() > 10) {
-            withid.setText(objData.getWithdrawId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            withid.setText(objData.getWithdrawId().substring(0, 10) + "...");
         } else {
             withid.setText(objData.getWithdrawId());
         }
@@ -658,12 +658,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withiaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId().length() > 10) {
-            withiwithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            withiwithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
         } else {
             withiwithdrawalId.setText(objData.getWithdrawalId());
         }
 
-        withirefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+        withirefId.setText(objData.getReferenceId().substring(0, 10) + "...");
 
         withicardHolderName.setText(objData.getCardHolderName());
 
@@ -772,13 +772,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
         withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
-        withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN","").trim()));
+        withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()));
 
-        if(objData.getAccountBalance() != null)
-        withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        if (objData.getAccountBalance() != null)
+            withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId().length() > 10) {
-            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0,10) + "...");
+            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
         } else {
             withBankWithdrawalId.setText(objData.getWithdrawalId());
         }
@@ -879,13 +879,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
         if (objData.getWithdrawalId().length() > 10) {
-            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
         } else {
             withBankWithdrawalId.setText(objData.getWithdrawalId());
         }
 
         if (objData.getReferenceId().length() > 10)
-            withBankRefId.setText(objData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+            withBankRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
         else {
             withBankRefId.setText(objData.getReferenceId());
         }
@@ -1088,7 +1088,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             dateAndTime.setText(objMyApplication.convertZoneLatestTxn(failedData.getCreatedDate()));
 
             if (failedData.getReferenceId().length() > 10)
-                refID.setText(failedData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+                refID.setText(failedData.getReferenceId().substring(0, 10) + "...");
             else {
                 refID.setText(failedData.getReferenceId());
             }
@@ -1197,7 +1197,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             dateAndTime.setText(objMyApplication.convertZoneLatestTxn(cancelledData.getCreatedDate()));
 
             if (cancelledData.getReferenceId().length() > 10)
-                refID.setText(cancelledData.getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+                refID.setText(cancelledData.getReferenceId().substring(0, 10) + "...");
             else {
                 refID.setText(cancelledData.getReferenceId());
             }
