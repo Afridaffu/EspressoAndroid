@@ -180,11 +180,10 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 isState = true;
                 isZipcode = true;
 
-                if (etAddress2.getText().length()>0){
-                    Utils.setUpperHintColor(etlAddress2,getResources().getColor(R.color.primary_black));
-                }
-                else {
-                    Utils.setUpperHintColor(etlAddress2,getResources().getColor(R.color.light_gray));
+                if (etAddress2.getText().length() > 0) {
+                    Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
+                } else {
+                    Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.light_gray));
                 }
                 if (selectedCard.getExpired()) {
                     isExpiry = false;
@@ -325,6 +324,14 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 if (cardEditResponse != null) {
                     try {
                         if (cardEditResponse.getStatus().toLowerCase().equals("success")) {
+                            //Added on 30-03-2022 - VT
+                            if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+                                objMyApplication.getSelectedCard().setRelink(false);
+                            } else {
+                                objMyApplication.getSelectedCard().setExpired(false);
+                            }
+                            //Added on 30-03-2022 - VT
+
                             Utils.showCustomToast(EditCardActivity.this, cardEditResponse.getData(), R.drawable.ic_custom_tick, "");
                             new Handler().postDelayed(new Runnable() {
                                 @Override

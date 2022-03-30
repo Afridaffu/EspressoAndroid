@@ -1300,7 +1300,12 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         errorDialog.dismiss();
                         errorDialog = null;
                         isQRScan = false;
-                        mcodeScanner.startPreview();
+                        if (ContextCompat.checkSelfPermission(ScanActivity.this,
+                                Manifest.permission.CAMERA)
+                                == PackageManager.PERMISSION_GRANTED) {
+                            mcodeScanner.startPreview();
+                        }
+
                         scannerLayout.setVisibility(View.VISIBLE);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1325,7 +1330,11 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
             errorDialog.setOnDismissListener(dialogInterface -> {
                 isQRScan = true;
-                mcodeScanner.startPreview();
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    mcodeScanner.startPreview();
+                }
                 scannerLayout.setVisibility(View.VISIBLE);
                 errorDialog = null;
             });
