@@ -10,6 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
@@ -40,6 +42,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<UpdateSignAgreementsResponse> updateSignAgreementsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CancelApplicationResponse> cancelApplicationResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> batchPayoutListMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BatchPayoutIdDetailsResponse> batchPayoutIdDetailsResponseMutableLiveData = new MutableLiveData<>();
 
 
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
@@ -75,6 +78,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<BatchPayoutListResponse> getBatchPayoutListMutableLiveData() {
         return batchPayoutListMutableLiveData;
+    }
+
+    public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData(){
+        return batchPayoutIdDetailsResponseMutableLiveData;
     }
 
     public MutableLiveData<Fees> getFeesMutableLiveData() {
@@ -394,6 +401,32 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+//    public void batchPayoutIdDetails(BatchPayoutDetailsRequest batchPayoutDetailsRequest){
+//
+//        ApiService apiService = AuthApiClient.getInstance().create((ApiService.class));
+//        Call<BatchPayoutIdDetailsResponse> call = apiService.batchPayoutIdDetails(batchPayoutDetailsRequest);
+//        call.enqueue(new Callback<BatchPayoutIdDetailsResponse>() {
+//            @Override
+//            public void onResponse(Call<BatchPayoutIdDetailsResponse> call, Response<BatchPayoutIdDetailsResponse> response) {
+//                try{
+//                    if(response.isSuccessful()){
+//
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<BatchPayoutIdDetailsResponse> call, Throwable t) {
+//
+//            }
+//        });
+//
+//    }
 
 }
 

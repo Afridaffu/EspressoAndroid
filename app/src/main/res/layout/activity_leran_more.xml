@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_19sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="When you send or receive money from a source \noutside the coyni environment, it can take up to \na few minutes to complete those requests. \nTransactions made within the coyni environment \n(token to token transactions) happen instantly.  \nHere is some information on specific transaction \ntypes that you might encounter:"
+                android:text="When you send or receive money from a source outside the coyni environment, it can take up to a few minutes to complete those requests. Transactions made within the coyni environment (token to token transactions) happen instantly.  Here is some information on specific transaction types that you might encounter:"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 
@@ -51,97 +51,35 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Bank Accounts: "
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="All Bank account transactions"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
-                </LinearLayout>
-
                 <TextView
+                    android:id="@+id/bankTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_20sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="typically take up to 3 business days to process."
+                    android:text="Bank Accounts: All Bank account transactions typically take up to 3 business days to process."
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Instant Pay: "
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="Withdrawing money to an Instant"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
-                </LinearLayout>
-
                 <TextView
+                    android:id="@+id/instantTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_20sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="Pay bank account uses your debit card to \nfacilitate the process. This typically takes about \n30 seconds to process, but can take up to 30 \nminutes depending on your bank. Most, but not \nall banks support Instant Pay."
+                    android:text="Instant Pay: Withdrawing money to an Instant Pay bank account uses your debit card to facilitate the process. This typically takes about 30 seconds to process, but can take up to 30 minutes depending on your bank. Most, but not all banks support Instant Pay."
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="Gift Cards: "
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_12ssp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/opensans_regular"
-                        android:text="Purchasing a gift card with your"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
-                </LinearLayout>
-
                 <TextView
+                    android:id="@+id/giftCardTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="coyni tokens typically takes about 1 minute to \nprocess the request and to send out the email\nthat contains the gift card."
+                    android:text="Gift Cards: Purchasing a gift card with your coyni tokens typically takes about 1 minute to process the request and to send out the email that contains the gift card."
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
+
             </LinearLayout>
 
         </LinearLayout>

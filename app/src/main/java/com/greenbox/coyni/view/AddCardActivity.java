@@ -101,7 +101,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     String strName = "", strCardNo = "", strExpiry = "", strCvv = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
     TextInputEditText etName, etCVV, etAddress1, etAddress2, etCity, etState, etZipCode, etCountry, etPreAmount;
     CardNumberEditText etCardNumber;
-    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode;
+    TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode, etlAmount;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
@@ -593,6 +593,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             double value = Double.parseDouble(((LinkedTreeMap) apiError.getData()).get("attempts").toString());
                             int attempt = (int) value;
                             llError.setVisibility(VISIBLE);
+                            etlAmount.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             if (attempt != 3) {
                                 if (3 - attempt == 1) {
                                     tvError.setText("Incorrect amount " + (3 - attempt) + " try left.");
@@ -604,6 +605,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                     public void run() {
                                         try {
                                             llError.setVisibility(GONE);
+                                            etlAmount.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -1145,8 +1147,13 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         if (charSequence.toString().trim().length() == 0 && isCardClear) {
                             isCardClear = false;
                             cvvErrorLL.setVisibility(GONE);
-                            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.light_gray));
+                            if (etCVV.hasFocus()) {
+                                etlCVV.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                                Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.primary_green));
+                            } else {
+                                etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.light_gray));
+                            }
                         }
                     }
                     enableOrDisableNext();
@@ -1480,6 +1487,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             llError = preAuthDialog.findViewById(R.id.llError);
             tvError = preAuthDialog.findViewById(R.id.tvError);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
+            etlAmount = preAuthDialog.findViewById(R.id.etlAmuont);
+
             ctKey = preAuthDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify", this);
             ctKey.setScreenName("addcard");
@@ -1579,6 +1588,14 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         } catch (Exception ex) {
             preDialog.dismiss();
             ex.printStackTrace();
+        }
+    }
+
+    public void enableOrDisableFocus(String enteredText) {
+        if (enteredText.length() > 0) {
+            etlAmount.setBoxStrokeColorStateList(Utils.getFocusedColorState(getApplicationContext()));
+        } else if (enteredText.length() == 0) {
+            etlAmount.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
         }
     }
 
@@ -1827,6 +1844,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etState.setText("");
                         etZipCode.setText("");
                         etZipCode.clearFocus();
+
 
                         Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                         Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));

@@ -2,6 +2,8 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
@@ -166,6 +168,9 @@ public interface ApiService {
 
     @POST("api/v2/user/register/phone-otp/validate")
     Call<SMSValidate> smsotp(@Body SmsRequest smsRequest);
+
+    @POST("api/v2/user/sms-otp/validate")
+    Call<SMSValidate> smsotpLogin(@Body SmsRequest smsRequest);
 
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
@@ -541,6 +546,10 @@ public interface ApiService {
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();
+
+//    @POST("api/v2/transactions/business-activity")
+//    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
+
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);

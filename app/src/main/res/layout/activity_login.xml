@@ -104,7 +104,6 @@
                     android:importantForAutofill="no"
                     android:inputType="textEmailAddress|textNoSuggestions"
                     android:longClickable="false"
-                    android:textIsSelectable="false"
                     android:maxLines="1"
                     android:padding="@dimen/_14sdp"
                     android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
@@ -112,6 +111,7 @@
                     android:textColor="@color/text_color"
                     android:textColorHint="@color/light_gray"
                     android:textCursorDrawable="@drawable/cursor_color"
+                    android:textIsSelectable="false"
                     android:textSize="@dimen/_12ssp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -173,14 +173,14 @@
                         android:inputType="textPassword|textNoSuggestions"
                         android:longClickable="false"
                         android:maxLength="12"
+                        android:maxLines="1"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
-                        android:textSize="@dimen/_12ssp"
-                        />
+                        android:textSize="@dimen/_10ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 

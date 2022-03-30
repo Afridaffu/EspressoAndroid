@@ -315,6 +315,40 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
+    public void smsotpLoginValidate(SmsRequest smsRequest) {
+        try {
+            ApiService apiService = ApiClient.getInstance().create(ApiService.class);
+            Call<SMSValidate> mCall = apiService.smsotpLogin(smsRequest);
+            mCall.enqueue(new Callback<SMSValidate>() {
+                @Override
+                public void onResponse(Call<SMSValidate> call, Response<SMSValidate> response) {
+                    if (response.isSuccessful()) {
+                        SMSValidate obj = response.body();
+                        smsotpLiveData.setValue(obj);
+                        Log.e("SMS Validate Resp", new Gson().toJson(obj));
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<SMSValidate>() {
+                        }.getType();
+                        SMSValidate errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            smsotpLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SMSValidate> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     public void login(LoginRequest loginRequest) {
         try {
             ApiService apiService = ApiClient.getInstance().create(ApiService.class);

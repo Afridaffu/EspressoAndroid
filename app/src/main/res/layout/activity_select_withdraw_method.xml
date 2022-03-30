@@ -164,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Use a Visa or MasterCard debit cards for instant coyni withdraws via Instant Pay"
+                        android:text="Use a Visa or Mastercard debit cards for instant coyni withdraws via Instant Pay"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9ssp" />
 
