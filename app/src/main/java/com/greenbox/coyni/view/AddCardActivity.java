@@ -1147,8 +1147,13 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         if (charSequence.toString().trim().length() == 0 && isCardClear) {
                             isCardClear = false;
                             cvvErrorLL.setVisibility(GONE);
-                            etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.light_gray));
+                            if (etCVV.hasFocus()) {
+                                etlCVV.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                                Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.primary_green));
+                            } else {
+                                etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(etlCVV, getResources().getColor(R.color.light_gray));
+                            }
                         }
                     }
                     enableOrDisableNext();
@@ -1839,6 +1844,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etState.setText("");
                         etZipCode.setText("");
                         etZipCode.clearFocus();
+
 
                         Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                         Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));

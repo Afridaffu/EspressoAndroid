@@ -278,17 +278,17 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onGroupClicked(String accountType, Integer id) {
-                LogUtils.v(TAG, "account type " + accountType + "    id: "+id);
+                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
             }
 
             @Override
             public void onChildClicked(String accountType, Integer id) {
-                LogUtils.v(TAG, "account type " + accountType + "    id: "+id);
+                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
             }
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
-                LogUtils.v(TAG, "account type " + accountType + "    id: "+id);
+                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
@@ -407,9 +407,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
-
                 if (btResp != null) {
                     if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
@@ -417,7 +417,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         businessIdentityVerificationViewModel.getBusinessTracker();
 
-                        if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                        if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
                             if (btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                                 myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                                 Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
@@ -431,14 +431,21 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                                 startActivity(intent);
                             }
 
-
                         } else {
-                            Intent i = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
+                            myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                            Log.e(TAG, new Gson().toJson(myApplication.getBusinessTrackerResponse()));
+                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
 
+
+                    } else {
+                        Intent i = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
                     }
+
                 }
             }
         });

@@ -381,6 +381,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                                 objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             } else {
                                 objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                                objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             }
                         }
                     }

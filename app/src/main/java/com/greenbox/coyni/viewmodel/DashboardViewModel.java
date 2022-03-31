@@ -640,7 +640,7 @@ public class DashboardViewModel extends AndroidViewModel {
                             transactionDetailsMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<TransactionList>() {
+                            Type type = new TypeToken<TransactionDetails>() {
                             }.getType();
                             TransactionDetails errorResponse = gson.fromJson(response.errorBody().string(), type);
                             transactionDetailsMutableLiveData.setValue(errorResponse);
