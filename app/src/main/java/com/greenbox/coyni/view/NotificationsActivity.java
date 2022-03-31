@@ -747,10 +747,11 @@ public class NotificationsActivity extends AppCompatActivity {
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
 //                        tv_lable.setText("Verifying");
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+//                        tv_lable.setVisibility(View.GONE);
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
                         userPayRequest = request;
                         if (!isAuthenticationCalled) {
+                            tv_lable.setText("Verifying");
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(NotificationsActivity.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(NotificationsActivity.this)) || (isFaceLock))) {
                                     prevDialog.dismiss();

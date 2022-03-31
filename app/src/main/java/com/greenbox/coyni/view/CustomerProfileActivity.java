@@ -55,6 +55,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.Locale;
@@ -95,6 +96,7 @@ public class CustomerProfileActivity extends BaseActivity {
     private final int CODE_AUTHENTICATION_VERIFICATION_RESET_PIN = 252;
     String authenticateType = "";
     boolean isLoggedOut = false;
+    CustomerProfileViewModel customerProfileViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +186,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 }
 
                 dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+                customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
 
                 if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                     tvBMSetting.setText(getString(R.string.security_touchid));
@@ -446,6 +449,8 @@ public class CustomerProfileActivity extends BaseActivity {
                     }
                 }
             });
+
+            customerProfileViewModel.meSyncAccount();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -577,9 +582,13 @@ public class CustomerProfileActivity extends BaseActivity {
             String strUserName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() + "" + objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase());
             String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
             userInfo.setText(strUserName.toUpperCase(Locale.US));
-            if (strName != null && strName.length() > 21) {
-                userFullName.setText(strName.substring(0, 22) + "...");
-            } else {
+//            if (strName != null && strName.length() > 21) {
+//                userFullName.setText(strName.substring(0, 22) + "...");
+//            } else {
+//                userFullName.setText(strName);
+//            }
+
+            if (strName != null) {
                 userFullName.setText(strName);
             }
 

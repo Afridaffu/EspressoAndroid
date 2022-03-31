@@ -391,13 +391,15 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/descriptorLL"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal"
                             android:paddingLeft="@dimen/_11sdp"
                             android:paddingTop="@dimen/_8sdp"
                             android:paddingRight="@dimen/_11sdp"
-                            android:paddingBottom="@dimen/_10sdp">
+                            android:paddingBottom="@dimen/_10sdp"
+                            >
 
                             <TextView
                                 android:layout_width="match_parent"

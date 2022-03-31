@@ -401,6 +401,41 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+    public void getPayoutlistdata(String fromDate, String toDate) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BatchPayoutListResponse> call = apiService.getPayoutlistdata(fromDate,toDate);
+            call.enqueue(new Callback<BatchPayoutListResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+                    if (response.isSuccessful()) {
+                        BatchPayoutListResponse list = response.body();
+                        batchPayoutListMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BatchPayoutListResponse>() {
+                        }.getType();
+                        BatchPayoutListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        batchPayoutListMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+                    batchPayoutListMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 //    public void batchPayoutIdDetails(BatchPayoutDetailsRequest batchPayoutDetailsRequest){
 //

@@ -95,11 +95,18 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -673,6 +680,23 @@ public class Utils {
             new EnableAuthID().toastTimer(dialog);
         }
 
+    }
+
+    public static String formatDate(String date) {
+        if (date.length() == 22) {
+            date = date + "0";
+        }
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            strDate = spf.format(newDate);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
     }
 
     public static boolean disabledMultiClick() {

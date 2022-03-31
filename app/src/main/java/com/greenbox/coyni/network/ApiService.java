@@ -554,7 +554,7 @@ public interface ApiService {
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
 
-//    @GET("api/v2/transactions/admin/totalPayout")
-//    Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey,@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+    @GET("api/v2/transactions/admin/totalPayout")
+    Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
 }
 

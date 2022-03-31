@@ -1090,9 +1090,11 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setVisibility(GONE);
-                        tv_lable_verify.setVisibility(VISIBLE);
+//                        tv_lable.setVisibility(GONE);
+//                        tv_lable.setText("Verifying");
+//                        tv_lable_verify.setVisibility(VISIBLE);
                         if (!isAuthenticationCalled) {
+                            tv_lable.setText("Verifying");
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(GiftCardDetails.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(GiftCardDetails.this)) || (isFaceLock))) {
 //                                    prevDialog.dismiss();
