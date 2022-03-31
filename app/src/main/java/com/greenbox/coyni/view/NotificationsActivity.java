@@ -44,6 +44,7 @@ import com.greenbox.coyni.model.withdraw.GiftCardWithDrawInfo;
 import com.greenbox.coyni.model.withdraw.RecipientDetail;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -77,6 +78,7 @@ public class NotificationsActivity extends AppCompatActivity {
     public List<NotificationsDataItems> globalRequests = new ArrayList<>();
     public RecyclerView notificationsRV;
     LinearLayout notifBackbtn;
+    DatabaseHandler dbHandler;
     public TextView notificationsTV, requestsTV, noDataTV;
     public static NotificationsActivity notificationsActivity;
     MyApplication objMyApplication;
@@ -112,6 +114,8 @@ public class NotificationsActivity extends AppCompatActivity {
         notificationsActivity = this;
         objMyApplication = (MyApplication) getApplicationContext();
         notificationsRV = findViewById(R.id.notificationsRV);
+        dbHandler = DatabaseHandler.getInstance(NotificationsActivity.this);
+
         notifBackbtn = findViewById(R.id.notifBackbtn);
         notificationsTV = findViewById(R.id.notificationsTV);
         requestsTV = findViewById(R.id.requestsTV);
@@ -144,8 +148,10 @@ public class NotificationsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        SetFaceLock();
-        SetTouchId();
+//        SetFaceLock();
+//        SetTouchId();
+        setFaceLock();
+        setTouchId();
 
         notifBackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -857,43 +863,78 @@ public class NotificationsActivity extends AppCompatActivity {
         }
     }
 
-    public void SetFaceLock() {
+//    public void SetFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            dsFacePin.moveToFirst();
+//            if (dsFacePin.getCount() > 0) {
+//                String value = dsFacePin.getString(1);
+//                if (value.equals("true")) {
+//                    isFaceLock = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isFaceLock = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void SetTouchId() {
+//        try {
+//            isTouchId = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            dsTouchID.moveToFirst();
+//            if (dsTouchID.getCount() > 0) {
+//                String value = dsTouchID.getString(1);
+//                if (value.equals("true")) {
+//                    isTouchId = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isTouchId = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+
+    public void setFaceLock() {
         try {
             isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void SetTouchId() {
+    public void setTouchId() {
         try {
             isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

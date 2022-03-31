@@ -66,6 +66,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -85,6 +86,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
     RelativeLayout lyPayMethod, lyMainLayout;
     LinearLayout lyCDetails, lyBuyClose, lyBDetails;
+    DatabaseHandler dbHandler;
     EditText etAmount;
     CustomKeyboard ctKey;
     PaymentMethodsResponse paymentMethodsResponse;
@@ -327,6 +329,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             objMyApplication = (MyApplication) getApplicationContext();
             selectedCard = objMyApplication.getSelectedCard();
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+            dbHandler = DatabaseHandler.getInstance(BuyTokenActivity.this);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
@@ -363,8 +366,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
-            SetFaceLock();
-            SetTouchId();
+//            SetFaceLock();
+//            SetTouchId();
+            setFaceLock();
+            setTouchId();
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -690,47 +695,47 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         });
     }
 
-    public void SetFaceLock() {
-        try {
-            isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void SetTouchId() {
-        try {
-            isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void SetFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            dsFacePin.moveToFirst();
+//            if (dsFacePin.getCount() > 0) {
+//                String value = dsFacePin.getString(1);
+//                if (value.equals("true")) {
+//                    isFaceLock = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isFaceLock = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void SetTouchId() {
+//        try {
+//            isTouchId = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            dsTouchID.moveToFirst();
+//            if (dsTouchID.getCount() > 0) {
+//                String value = dsTouchID.getString(1);
+//                if (value.equals("true")) {
+//                    isTouchId = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isTouchId = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 //    private void SetToken() {
 //        try {
@@ -1811,5 +1816,42 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         spannableTV.setText(ss);
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+    private void setToken() {
+        strToken = dbHandler.getPermanentToken();
+    }
+
+    private void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

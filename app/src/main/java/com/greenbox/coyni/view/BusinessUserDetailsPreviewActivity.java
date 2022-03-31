@@ -315,48 +315,50 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
 
         });
 
-        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
-            @Override
-            public void onChanged(DBAInfoResp dbaInfoResp) {
-                if (dbaInfoResp != null && dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                    myApplicationObj.setDbaInfoResp(dbaInfoResp);
-                    if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")) {
-                        if (!dbaInfoResp.getData().getEmail().equalsIgnoreCase(value.getText().toString())) {
-                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
+        if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(this, new Observer<DBAInfoResp>() {
+                @Override
+                public void onChanged(DBAInfoResp dbaInfoResp) {
+                    if (dbaInfoResp != null && dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        myApplicationObj.setDbaInfoResp(dbaInfoResp);
+                        if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailDBA")) {
+                            if (!dbaInfoResp.getData().getEmail().equalsIgnoreCase(value.getText().toString())) {
+                                Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
+                            }
+                            value.setText(dbaInfoResp.getData().getEmail());
+                        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneDBA")) {
+                            String phoneNumber = "(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
+                            if (!phoneNumber.equalsIgnoreCase(value.getText().toString())) {
+                                Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
+                            }
+                            value.setText(phoneNumber);
+                            phoneFormat = phoneNumber;
                         }
-                        value.setText(dbaInfoResp.getData().getEmail());
-                    } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("DBAInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneDBA")) {
-                        String phoneNumber = "(" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
-                        if (!phoneNumber.equalsIgnoreCase(value.getText().toString())) {
-                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
-                        }
-                        value.setText(phoneNumber);
-                        phoneFormat = phoneNumber;
                     }
                 }
-            }
-        });
+            });
 
-        businessIdentityVerificationViewModel.getGetCompanyInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
-            @Override
-            public void onChanged(CompanyInfoResp companyInfoResp) {
-                if (companyInfoResp != null && companyInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                    myApplicationObj.setCompanyInfoResp(companyInfoResp);
-                    if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")) {
-                        if (!companyInfoResp.getData().getEmail().equals(value.getText().toString())) {
-                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
+            businessIdentityVerificationViewModel.getGetCompanyInfoResponse().observe(this, new Observer<CompanyInfoResp>() {
+                @Override
+                public void onChanged(CompanyInfoResp companyInfoResp) {
+                    if (companyInfoResp != null && companyInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        myApplicationObj.setCompanyInfoResp(companyInfoResp);
+                        if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditEmailCompany")) {
+                            if (!companyInfoResp.getData().getEmail().equals(value.getText().toString())) {
+                                Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.email_updated), R.drawable.ic_check, "EMAIL");
+                            }
+                            value.setText(companyInfoResp.getData().getEmail());
+                        } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")) {
+                            String phoneNumber = "(" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
+                            if (!phoneNumber.equals(value.getText().toString())) {
+                                Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
+                            }
+                            value.setText(phoneNumber);
                         }
-                        value.setText(companyInfoResp.getData().getEmail());
-                    } else if (getIntent().getStringExtra("screen").equalsIgnoreCase("CompanyInfo") && getIntent().getStringExtra("action").equalsIgnoreCase("EditPhoneCompany")) {
-                        String phoneNumber = "(" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + companyInfoResp.getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10);
-                        if (!phoneNumber.equals(value.getText().toString())) {
-                            Utils.showCustomToast(BusinessUserDetailsPreviewActivity.this, getResources().getString(R.string.phone_number_updated), R.drawable.ic_check, "PHONE");
-                        }
-                        value.setText(phoneNumber);
                     }
                 }
-            }
-        });
+            });
+        }
 
     }
 
@@ -412,8 +414,10 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         try {
             dashboardViewModel.meProfile();
-            businessIdentityVerificationViewModel.getDBAInfo();
-            businessIdentityVerificationViewModel.getCompanyInfo();
+            if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                businessIdentityVerificationViewModel.getDBAInfo();
+                businessIdentityVerificationViewModel.getCompanyInfo();
+            }
             initObservers();
         } catch (Exception e) {
             e.printStackTrace();
