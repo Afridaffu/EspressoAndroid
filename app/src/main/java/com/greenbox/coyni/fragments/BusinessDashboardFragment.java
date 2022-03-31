@@ -493,7 +493,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
-        if(listItems!=null) {
+        if(listItems!=null && listItems.size() > 0) {
             Collections.sort(listItems, Collections.reverseOrder());
             if (listItems.get(0).getStatus().equalsIgnoreCase("open")) {
                 String amount = listItems.get(0).getTotalAmount();
@@ -508,21 +508,20 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
             payoutsList.removeAllViews();
+                for (int i = 0; i < listItems.size() && i < 5; i++) {
+                    View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
 
-            for (int i = 0; i < 5; i++) {
-                View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
+                    TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
+                    String listDate = listItems.get(i).getCreatedAt();
+                    payoutDate.setText(myApplication.convertZoneDateTime(listDate, "yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
 
-                TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
-                String listDate = listItems.get(i).getCreatedAt();
-                payoutDate.setText(myApplication.convertZoneDateTime(listDate, "yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
+                    TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
+                    totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(i).getTotalAmount()));
 
-                TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
-                totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(i).getTotalAmount()));
+                    payoutsList.addView(xmlView);
 
-                payoutsList.addView(xmlView);
-
+                }
             }
-        }
         else {
             Log.d(TAG,"No Batch Payouts for this user");
         }

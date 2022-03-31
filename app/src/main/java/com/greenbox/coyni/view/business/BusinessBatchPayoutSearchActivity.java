@@ -70,6 +70,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     MerchantTransactionListActivity merchantTransactionListActivity;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
