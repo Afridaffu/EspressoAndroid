@@ -192,7 +192,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
                                 });
                                 if (payoutList.size() > 0)
-                                    batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
                                 recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
                                 recyclerViewPayouts.setVisibility(View.VISIBLE);
                                 noMorePayoutTransactions.setVisibility(View.GONE);
