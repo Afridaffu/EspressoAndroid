@@ -389,9 +389,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
-
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                            
                             LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                             LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                             LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
@@ -399,7 +399,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             businessIdentityVerificationViewModel.getBusinessTracker();
 
-                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT ) {
                                 if(btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
                                      myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                                     Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
