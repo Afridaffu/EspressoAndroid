@@ -194,7 +194,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                     if (businessAccountList.size() != 0) {
                         brandsGV.setVisibility(View.VISIBLE);
                         LogUtils.d("TAG", "subSet" + subSet);
-                        listAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, subSet, PreferencesActivity.this);
+                        //listAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, subSet, PreferencesActivity.this);
                         brandsGV.setAdapter(listAdapter);
                     } else {
                         brandsGV.setVisibility(View.GONE);

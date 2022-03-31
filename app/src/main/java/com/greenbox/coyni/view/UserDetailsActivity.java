@@ -533,7 +533,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         try {
                             brandsGV.setVisibility(View.VISIBLE);
                             LogUtils.d(TAG, "subSet" + subSet);
-                            listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
+                            //listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
                             brandsGV.setAdapter(listAdapter);
                         } catch (Exception e) {
                             e.printStackTrace();
