@@ -298,11 +298,14 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
-                            //Added on 30-03-2022 - VT
-                            if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
-                                objMyApplication.getSelectedCard().setRelink(false);
-                            } else {
-                                objMyApplication.getSelectedCard().setExpired(false);
+
+                            if(objMyApplication.getSelectedCard()!=null) {
+                                //Added on 30-03-2022 - VT
+                                if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+                                    objMyApplication.getSelectedCard().setRelink(false);
+                                } else {
+                                    objMyApplication.getSelectedCard().setExpired(false);
+                                }
                             }
                             //Added on 30-03-2022 - VT
                             dashboardViewModel.mePaymentMethods();

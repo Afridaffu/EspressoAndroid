@@ -136,7 +136,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     boolean isAuthenticationCalled = false;
-    Boolean isFaceLock = false, isTouchId = false;
+    Boolean isFaceLock = false, isTouchId = false, isAlbumClicked = false;
 
     Double cynValue = 0.0, avaBal = 0.0;
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
@@ -285,9 +285,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
             if (objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
                 String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
-                if (strName != null && strName.length() > 22) {
-                    tvName.setText(strName.substring(0, 22) + "...");
-                } else {
+//                if (strName != null && strName.length() > 22) {
+//                    tvName.setText(strName.substring(0, 22) + "...");
+//                } else {
+//                    tvName.setText(strName);
+//                }
+
+                if (strName != null) {
                     tvName.setText(strName);
                 }
             }
@@ -502,12 +506,25 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             savetoAlbum.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     try {
-                        saveToGallery();
-                        Utils.showCustomToast(ScanActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+                        if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                            ActivityCompat.requestPermissions(ScanActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 321);
+                        } else {
+                            saveToGallery();
+                            Utils.showCustomToast(ScanActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+
+
+//                    try {
+//                        saveToGallery();
+//                        Utils.showCustomToast(ScanActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
                 }
             });
 
@@ -537,6 +554,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
+
+                            isAlbumClicked = true;
 
                             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                             photoPickerIntent.setType("image/*");
@@ -617,6 +636,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                 e.printStackTrace();
                             }
                         }
+                    } else {
+                        displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -641,6 +662,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         if (mycodeScannerView.getVisibility() == View.VISIBLE) {
 //                            Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", apiError.getError().getErrorDescription());
                             if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
+
                                 displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                             }
                         }
@@ -658,6 +680,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 //                        Utils.displayAlert("Try scanning a coyni QR code.", ScanActivity.this, "Invalid QR code", "");
                         if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
                             displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
+                        } else {
+                            displayAlert(s, "Invalid QR code");
                         }
                     }
                 }
@@ -830,6 +854,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     });
                 }
             });
+
             mycodeScannerView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -852,7 +877,17 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         try {
-            if (requestCode == 123) {
+
+            if (requestCode == 321) {
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Utils.displayAlert("Requires Access to Your Storage.", ScanActivity.this, "", "");
+                } else if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    saveToGallery();
+                    Utils.showCustomToast(ScanActivity.this, "Saved to gallery successfully", R.drawable.ic_custom_tick, "");
+                }
+            } else if (requestCode == 123) {
                 try {
                     if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         StartScanner();
@@ -896,12 +931,16 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         try {
             super.onResume();
             isQRScan = false;
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_GRANTED) {
-                mcodeScanner.startPreview();
-                scannerLayout.setVisibility(View.VISIBLE);
+            if (!isAlbumClicked) {
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    mcodeScanner.startPreview();
+                    scannerLayout.setVisibility(View.VISIBLE);
 
+                }
+            } else {
+                isAlbumClicked = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1051,6 +1090,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        mcodeScanner.stopPreview();
+        scannerLayout.setVisibility(View.GONE);
+
         if (resultCode == RESULT_OK) {
             if (requestCode == 101) {
                 try {
@@ -1084,10 +1127,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
                         try {
                             if (!strScanWallet.equals(strWallet)) {
+                                isQRScan = true;
                                 getUserDetails(strScanWallet);
                             } else {
                                 //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
                                 if (errorDialog == null) {
+//                                    mcodeScanner.stopPreview();
+//                                    scannerLayout.setVisibility(View.GONE);
                                     displayAlert(getString(R.string.tokens_msg), "");
                                 }
                             }
@@ -1098,6 +1144,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
                     } catch (Exception e) {
                         if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
+//                            mcodeScanner.stopPreview();
+//                            scannerLayout.setVisibility(View.GONE);
                             displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                         }
                         e.printStackTrace();
@@ -1153,6 +1201,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             }
         } else {
             //Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
+            mcodeScanner.startPreview();
+            scannerLayout.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -1271,6 +1322,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     private void displayAlert(String msg, String headerText) {
         // custom dialog
         try {
+//            if (errorDialog != null) {
+//                errorDialog.dismiss();
+//            }
             errorDialog = new Dialog(ScanActivity.this);
             errorDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             errorDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
@@ -1292,6 +1346,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     e.printStackTrace();
                 }
             }
+
+//            if (ContextCompat.checkSelfPermission(ScanActivity.this,
+//                    Manifest.permission.CAMERA)
+//                    == PackageManager.PERMISSION_GRANTED) {
+//                mcodeScanner.stopPreview();
+//                scannerLayout.setVisibility(View.GONE);
+//            }
 
             actionCV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1329,7 +1390,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             errorDialog.show();
 
             errorDialog.setOnDismissListener(dialogInterface -> {
-                isQRScan = true;
+                isQRScan = false;
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {

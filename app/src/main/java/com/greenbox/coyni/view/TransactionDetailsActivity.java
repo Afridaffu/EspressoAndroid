@@ -382,7 +382,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void buyTokenBankAccount(TransactionData objData) {
         TextView headerTV, amount, status, datetime, fee, total, balance, purchaseamount, successadd, chargeback;
         TextView refid, name, accountadress, descriptorname, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
-        LinearLayout lyPRClose, btBankReference, btBankDepositID;
+        LinearLayout lyPRClose, btBankReference, btBankDepositID, descriptorLL;
         ImageView previousBtn, depositIDIV;
 
         headerTV = findViewById(R.id.btbankheaderTV);
@@ -402,6 +402,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         bankNameTV = findViewById(R.id.btbanknameTV);
         nameOnAccTV = findViewById(R.id.btbanknameACTV);
         cancelTxnCV = findViewById(R.id.cancelTxnCV);
+        descriptorLL = findViewById(R.id.descriptorLL);
         headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
 
         amount.setText(objData.getYouGet().replace("CYN", ""));
@@ -423,9 +424,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 status.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
             case "failed":
+                status.setTextColor(getResources().getColor(R.color.failed_status));
+                status.setBackgroundResource(R.drawable.txn_failed_bg);
+                break;
             case "cancelled": {
                 status.setTextColor(getResources().getColor(R.color.failed_status));
                 status.setBackgroundResource(R.drawable.txn_failed_bg);
+                descriptorLL.setVisibility(View.GONE);
                 break;
             }
         }

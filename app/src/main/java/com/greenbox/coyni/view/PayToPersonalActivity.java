@@ -219,9 +219,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
                             motionLayout.transitionToState(motionLayout.getEndState());
                             paySlideToConfirm.setInteractionEnabled(false);
 //                            tvLable.setText("Verifying");
-                            tvLable.setVisibility(View.GONE);
-                            tv_lable_verify.setVisibility(View.VISIBLE);
+//                            tvLable.setVisibility(View.GONE);
+//                            tv_lable_verify.setVisibility(View.VISIBLE);
                             if (!isPayCalled) {
+                                tvLable.setText("Verifying");
                                 isPayCalled = true;
                                 if (payValidation()) {
                                     pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
@@ -465,11 +466,12 @@ public class PayToPersonalActivity extends AppCompatActivity {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-//                        tv_lable.setText("Verifying");
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+//                        tv_lable.setVisibility(View.GONE);
+
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
 //                        prevDialog.dismiss();
                         if (!isAuthenticationCalled) {
+                            tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToPersonalActivity.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayToPersonalActivity.this)) || (isFaceLock))) {
@@ -650,7 +652,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
         try {
             paySlideToConfirm.setInteractionEnabled(true);
             paySlideToConfirm.setTransition(R.id.start, R.id.start);
-//            tvLable.setText("Slide to Confirm");
+            tvLable.setText("Slide to Confirm");
             tvLable.setVisibility(View.VISIBLE);
             tv_lable_verify.setVisibility(View.GONE);
             paySlideToConfirm.setProgress(0);

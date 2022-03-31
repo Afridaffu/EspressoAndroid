@@ -32,8 +32,8 @@ public class AnimatedGradientTextView extends TextView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-//        gradientManager.stopGradient();
-//        gradientManager.startGradient();
+        gradientManager.stopGradient();
+        gradientManager.startGradient();
     }
 
     @Override
@@ -59,23 +59,23 @@ public class AnimatedGradientTextView extends TextView {
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
-//        if (visibility == VISIBLE) {
-//            if (getScaleX() != 0 && getScaleY() != 0) {
-//                gradientManager.startGradient();
-//            }
-//        } else {
-//            gradientManager.stopGradient();
-//        }
+        if (visibility == VISIBLE) {
+            if (getScaleX() != 0 && getScaleY() != 0) {
+                gradientManager.startGradient();
+            }
+        } else {
+            gradientManager.stopGradient();
+        }
     }
 
     @Override
     public void onScreenStateChanged(int screenState) {
         super.onScreenStateChanged(screenState);
-//        if (screenState == SCREEN_STATE_OFF) {
-//            gradientManager.stopGradient();
-//        } else if (screenState == SCREEN_STATE_ON) {
-//            gradientManager.startGradient();
-//        }
+        if (screenState == SCREEN_STATE_OFF) {
+            gradientManager.stopGradient();
+        } else if (screenState == SCREEN_STATE_ON) {
+            gradientManager.startGradient();
+        }
     }
 
 }
