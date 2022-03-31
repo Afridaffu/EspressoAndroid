@@ -712,7 +712,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
             if (!dataItem.getRemarks().equals("")) {
                 messageLL.setVisibility(View.VISIBLE);
-                messageTV.setText(dataItem.getRemarks());
+                messageTV.setText("\""+dataItem.getRemarks()+"\"");
                 myUserIDTV.setText(dataItem.getFromUser() + " Says:");
             } else {
                 messageLL.setVisibility(View.GONE);

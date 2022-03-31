@@ -630,6 +630,13 @@ public class PayToPersonalActivity extends AppCompatActivity {
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                changeSlideState();
+            }
+        });
     }
 
     private void payTransaction() {
@@ -744,6 +751,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
             super.onResume();
             isCancel = false;
             changeSlideState();
+            if (prevDialog != null){
+                prevDialog.dismiss();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
