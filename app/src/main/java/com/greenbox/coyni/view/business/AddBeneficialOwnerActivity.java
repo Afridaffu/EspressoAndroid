@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -272,6 +273,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         dobtil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(Utils.isKeyboardVisible)
+                    Utils.hideKeypad(AddBeneficialOwnerActivity.this);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -285,7 +288,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         dobET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(Utils.isKeyboardVisible)
+                    Utils.hideKeypad(AddBeneficialOwnerActivity.this);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -700,7 +704,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         try {
             long years = 568025136000L;
             com.ideyalabs.wheelpicker.DatePicker picker = new com.ideyalabs.wheelpicker.DatePicker(AddBeneficialOwnerActivity.this);
-            picker.show(getWindow());
             Date maxDate = new Date(System.currentTimeMillis() - years);
             picker.getPickerView().setMaxDate(maxDate);
             if (!dateOfBirth.equals("")) {
@@ -737,6 +740,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 }
             });
 
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    picker.show(getWindow());
+                }
+            }, 500);
         } catch (Exception e) {
             e.printStackTrace();
         }

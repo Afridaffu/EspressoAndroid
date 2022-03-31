@@ -202,11 +202,32 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
             userNameTV.setText(getResources().getString(R.string.dba_name, userName));
 
-            if (userName != null && userName.length() > 21) {
-                userNameTV.setText(userName.substring(0, 21) + " ");
+            if (userName != null && userName.length() > 20) {
+                userNameTV.setText(userName.substring(0, 20));
             } else {
                 userNameTV.setText(userName);
             }
+
+            userNameTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (userNameTV.getText().toString().contains("...")) {
+                        if (userName.length() == 21 || userName.length() > 21) {
+                            userNameTV.setText(userName.substring(0, 20));
+                        } else {
+                            userNameTV.setText(userName);
+                        }
+                    } else {
+                        if (userName.length() == 21) {
+                            userNameTV.setText(userName.substring(0, 20) + "...");
+                        } else if (userName.length() > 22) {
+                            userNameTV.setText(userName.substring(0, 22) + "...");
+                        } else {
+                            userNameTV.setText(userName);
+                        }
+                    }
+                }
+            });
         }
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getImage() != null) {

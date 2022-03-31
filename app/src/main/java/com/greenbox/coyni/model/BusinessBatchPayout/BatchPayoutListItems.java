@@ -2,8 +2,13 @@ package com.greenbox.coyni.model.BusinessBatchPayout;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.greenbox.coyni.model.ListItem;
+import com.greenbox.coyni.model.transaction.TransactionListPosted;
 
-public class BatchPayoutListItems {
+import java.io.Serializable;
+import java.util.List;
+
+public class BatchPayoutListItems extends ListItem implements Serializable, Comparable<BatchPayoutListItems> {
     @SerializedName("batchId")
     @Expose
     private String batchId;
@@ -28,6 +33,10 @@ public class BatchPayoutListItems {
     @SerializedName("reserve")
     @Expose
     private String reserve;
+
+    public BatchPayoutListItems(List<BatchPayoutListItems> items) {
+    }
+    private int type = ListItem.TYPE_GENERAL;
 
     public String getBatchId() {
         return batchId;
@@ -94,6 +103,17 @@ public class BatchPayoutListItems {
     }
 
 
+    public int getType() {
+        return type;
+    }
 
+    public void setType(int type) {
+        this.type = type;
+    }
 
+    @Override
+    public int compareTo(BatchPayoutListItems batchPayoutListItems) {
+        return createdAt.compareTo(batchPayoutListItems.createdAt);
+//        return getTotalAmount().compareTo(batchPayoutListItems.totalAmount);
+    }
 }

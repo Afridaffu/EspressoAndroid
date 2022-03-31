@@ -184,7 +184,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         });
     }
 
-
     private void showFiltersPopup() {
         PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
@@ -328,7 +327,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         try {
             currentPage = 0;
             noMorePayoutTransactions.setVisibility(View.GONE);
-
             BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
             batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
         } catch (Exception ex) {

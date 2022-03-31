@@ -304,7 +304,12 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
-            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+//            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+
+            if (objData.getDescriptorName() != null)
+                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+            else
+                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as coyni.");
 
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override

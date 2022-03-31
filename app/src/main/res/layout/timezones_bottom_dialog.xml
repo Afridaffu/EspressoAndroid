@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/opensans_bold"
-            android:text="Done"
+            android:text="Save"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />

@@ -2,15 +2,23 @@ package com.greenbox.coyni.view;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -437,7 +445,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",BuyTokenActivity.this,tvError,17);
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -453,7 +462,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD",BuyTokenActivity.this,tvError,17);
+
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -962,11 +973,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                return value = false;
 //            }
             if (tvCYN.getVisibility() == View.VISIBLE && Double.parseDouble(strPay.replace(",", "")) < cynValidation) {
-                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",BuyTokenActivity.this,tvError,17);
+
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (tvCYN.getVisibility() == View.GONE && Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
-                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD",BuyTokenActivity.this,tvError,17);
+
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
@@ -1062,10 +1077,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+//                        tv_lable.setVisibility(View.GONE);
+//                        tv_lable.setText("Verifying");
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
                         if (!isBuyTokenAPICalled) {
                             //buyToken();
+                            tv_lable.setText("Verifying");
                             isBuyTokenAPICalled = true;
                             prevDialog.dismiss();
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(BuyTokenActivity.this)) {
@@ -1780,5 +1797,19 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
 
         return selectedCard;
+    }
+
+    public static void setSpannableText(String text, Context context, TextView spannableTV, int start) {
+
+        SpannableString ss = new SpannableString(text);
+
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        ss.setSpan(new RelativeSizeSpan(1f), start, ss.length(), 0);
+        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.error_red)), start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableTV.setText(ss);
+        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableTV.setHighlightColor(Color.TRANSPARENT);
     }
 }

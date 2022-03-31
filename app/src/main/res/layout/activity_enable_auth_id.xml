@@ -206,7 +206,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:fontFamily="@font/opensans_bold"
+                android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
                 android:text="Don’t Remind Me Again"
                 android:textColor="@color/primary_color"

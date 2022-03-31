@@ -125,7 +125,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/_7sdp"
-                android:layout_marginEnd="@dimen/_15sdp"
                 android:src="@drawable/ic_custom_tick"
                 app:tint="@color/primary_green" />
         </LinearLayout>

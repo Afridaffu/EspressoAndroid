@@ -283,7 +283,7 @@
     <string name="businesstoken">Business Token</string>
     <string name="ac">Account.</string>
     <string name="outAt">out at.</string>
-    <string name="nextpayout"> Next Payout.</string>
+    <string name="nextpayout"> Next Payout</string>
     <string name="lastpayout"> Last Payout</string>
     <string name="batchnow"> Batch Now</string>
     <string name="manual"> Manual</string>
@@ -383,7 +383,7 @@
     <string name="transaction_details">Transaction Details</string>
     <string name="canceled_bank_withdraw">Canceled Bank withdraw</string>
     <string name="_100_00">100.00</string>
-    <string name="cyn">(CYN)</string>
+    <string name="cyn">CYN</string>
     <string name="_1d3hsm734h"><u>1d3hsM734h…</u></string>
     <color name="background_color">#8ef2f5f8</color>
     <string name="rolling_reserves_with_a_rolling_reserve"><b>ROLLING RESERVES:</b> With a rolling reserve</string>
@@ -634,5 +634,6 @@
     <string name="amount_released">Amount Released</string>
     <string name="canceled_description">Release Scheduled for <b>%s</b> for the amount of<b> %s CYN</b> has been canceled due to lack of funds in the reserve balance.</string>
     <string name="scheduled_release_has_been_canceled">Scheduled Release Has Been Canceled</string>
+    <string name="time">11:59pm</string>
 
 </resources>
