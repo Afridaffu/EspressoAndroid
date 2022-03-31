@@ -384,14 +384,14 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             }
         });
 
-
-
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
-                    if (btResp != null) {
+
+                if (btResp != null) {
+
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
-                            
+
                             LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                             LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                             LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
