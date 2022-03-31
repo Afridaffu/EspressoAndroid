@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,8 +49,9 @@ import java.util.List;
 public class BusinessBatchPayoutSearchActivity extends BaseActivity implements TextWatcher {
 
     ImageView filterIconIV, datePickIV, closeBtnIV;
-    TextView applyFilterBtnCV, noPayoutTransactions, noMorePayoutTransactions, payoutLoadMoreTV;
+    TextView applyFilterBtnCV, noPayoutTransactions, noMorePayoutTransactions, payoutLoadMoreTV, cynTV;
     private ProgressBar payoutProgressBarLoadMore;
+    private NestedScrollView nestedScrollView;
     private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
     EditText filterdatePickET, searchET;
     LinearLayout dateRangePickerLL;
@@ -76,6 +78,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         setContentView(R.layout.activity_business_batch_payout_search);
         initFields();
         initObserver();
+        loadData();
 
     }
 
@@ -94,10 +97,14 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         noMorePayoutTransactions = findViewById(R.id.payoutNoMoreTransactions);
         payoutProgressBarLoadMore = findViewById(R.id.payoutProgressBarLoadMore);
         payoutLoadMoreTV = findViewById(R.id.payoutLoadMoreTV);
+        cynTV = findViewById(R.id.CynTV);
+        nestedScrollView = findViewById(R.id.nestedsV);
+
 
         recyclerViewPayouts.setLayoutManager(new LinearLayoutManager(this));
 
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+        showProgressDialog();
         businessDashboardViewModel.getPayoutListData();
 
         searchET.addTextChangedListener(this);
@@ -121,6 +128,34 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             }
 
         });
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
+                    Log.e("scrollY", scrollY + "  " + v.getChildAt(0).getMeasuredHeight() + " " + v.getMeasuredHeight());
+                    try {
+                        Log.e("total abcd", total + "");
+                        Log.e("currentPage acbd", currentPage + "");
+                        if (total - 1 > currentPage) {
+                            payoutProgressBarLoadMore.setVisibility(View.VISIBLE);
+                            payoutLoadMoreTV.setVisibility(View.VISIBLE);
+                            currentPage = currentPage + 1;
+                            Log.e("CurrentPage", currentPage + "");
+                            BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
+                            batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
+                            batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
+
+                            noMorePayoutTransactions.setVisibility(View.GONE);
+                        } else {
+                            noMorePayoutTransactions.setVisibility(View.VISIBLE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
 
         refreshpageSL.setColorSchemeColors(getResources().getColor(R.color.primary_green));
 
@@ -136,7 +171,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
                     batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
                     batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
-
+                    cynTV.setVisibility(View.VISIBLE);
                     businessDashboardViewModel.getPayoutListData();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -144,9 +179,11 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                 refreshpageSL.setRefreshing(false);
                 showProgressDialog();
                 searchET.setText("");
+                cynTV.setVisibility(View.VISIBLE);
             }
         });
     }
+
 
     private void showFiltersPopup() {
         PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this);
@@ -155,11 +192,15 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             public void onDialogClicked(String action, Object value) {
                 if (action.equals("dates")) {
                     rangeDates = (RangeDates) value;
-                    showProgressDialog();
-                    String fromDate = Utils.formatDate(rangeDates.getUpdatedFromDate());
-                    String toDate = Utils.formatDate(rangeDates.getUpdatedToDate());
-                    filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
-                    businessDashboardViewModel.getPayoutlistdata(fromDate, toDate);
+                    if (rangeDates == null) {
+//                        recyclerViewPayouts.setVisibility(View.GONE);
+                    } else {
+                        String fromDate = Utils.formatDate(rangeDates.getUpdatedFromDate());
+                        String toDate = Utils.formatDate(rangeDates.getUpdatedToDate());
+                        filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
+                        showProgressDialog();
+                        businessDashboardViewModel.getPayoutlistdata(fromDate, toDate);
+                    }
                 }
                 payoutList.clear();
             }
@@ -176,6 +217,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     dismissDialog();
                     if (batchPayoutList != null) {
                         if (batchPayoutList.getStatus().equalsIgnoreCase("SUCCESS")) {
+                            payoutProgressBarLoadMore.setVisibility(View.GONE);
+                            payoutLoadMoreTV.setVisibility(View.GONE);
                             if (batchPayoutList.getData().getItems() != null) {
                                 payoutList = batchPayoutList.getData().getItems();
                                 batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
@@ -191,14 +234,17 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                                     }
 
                                 });
-                                if (payoutList.size() > 0)
-                                    batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
-                                recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
-                                recyclerViewPayouts.setVisibility(View.VISIBLE);
-                                noMorePayoutTransactions.setVisibility(View.GONE);
-                            } else {
-                                recyclerViewPayouts.setVisibility(View.GONE);
-                                noMorePayoutTransactions.setVisibility(View.VISIBLE);
+                                if (payoutList.size() > 0) {
+                                    recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
+                                    recyclerViewPayouts.setVisibility(View.VISIBLE);
+                                    noMorePayoutTransactions.setVisibility(View.GONE);
+                                    cynTV.setVisibility(View.VISIBLE);
+                                }else {
+                                    recyclerViewPayouts.setVisibility(View.GONE);
+                                    noPayoutTransactions.setVisibility(View.VISIBLE);
+                                    cynTV.setVisibility(View.GONE);
+
+                                }
 
                             }
                         } else {
@@ -236,15 +282,21 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (charSequence.length() >= 14) {
+        if (charSequence.length() > 12) {
             payoutList.clear();
             BatchPayoutRequest batchPayoutRequest = new BatchPayoutRequest();
             batchPayoutRequest.setBatchId(charSequence.toString());
             payoutAPI(charSequence.toString());
-        } else if (charSequence.length() > 0 && charSequence.length() < 20) {
-            noMorePayoutTransactions.setVisibility(View.VISIBLE);
+            cynTV.setVisibility(View.VISIBLE);
+            noPayoutTransactions.setVisibility(View.GONE);
+        } else if (charSequence.length() > 0 && charSequence.length() < 12) {
+            noPayoutTransactions.setVisibility(View.VISIBLE);
+            cynTV.setVisibility(View.GONE);
+            recyclerViewPayouts.setVisibility(View.GONE);
         } else if (charSequence.toString().trim().length() == 0) {
             payoutList.clear();
+            noPayoutTransactions.setVisibility(View.GONE);
+            recyclerViewPayouts.setVisibility(View.VISIBLE);
             businessDashboardViewModel.getPayoutListData();
         }
     }
@@ -276,6 +328,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         try {
             currentPage = 0;
             noMorePayoutTransactions.setVisibility(View.GONE);
+
             BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
             batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
         } catch (Exception ex) {
