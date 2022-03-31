@@ -1057,9 +1057,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
 //                        tv_lable.setText("Verifying");
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+//                        tv_lable.setVisibility(View.GONE);
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
                         if (!isAuthenticationCalled) {
+                            tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
                             prevDialog.dismiss();
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {

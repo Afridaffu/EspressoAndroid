@@ -63,6 +63,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     public MutableLiveData<AddBusinessUserResponse> getBusinessAddCustomer() {
         return getBusinessAddCustomer;
     }
+
     public MutableLiveData<AddBusinessUserResponse> getBusinessAddDBAResponse() {
         return getBusinessAddDBAResponse;
     }
@@ -82,7 +83,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
     public void uploadIdentityImage(MultipartBody.Part idFile, RequestBody idType, RequestBody idNumber) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<IdentityImageResponse> mCall = apiService.uploadIdentityImage(idFile,idType,idNumber);
+            Call<IdentityImageResponse> mCall = apiService.uploadIdentityImage(idFile, idType, idNumber);
             mCall.enqueue(new Callback<IdentityImageResponse>() {
                 @Override
                 public void onResponse(Call<IdentityImageResponse> call, Response<IdentityImageResponse> response) {
@@ -250,6 +251,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
     public void getAddBusinessUser() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -258,7 +260,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
                     try {
-                        Log.d("businessreg","rrrrr"+response);
+                        Log.d("businessreg", "rrrrr" + response);
                         if (response.isSuccessful()) {
                             AddBusinessUserResponse obj = response.body();
                             getBusinessAddCustomer.setValue(obj);
@@ -294,7 +296,7 @@ public class IdentityVerificationViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<AddBusinessUserResponse> call, Response<AddBusinessUserResponse> response) {
                     try {
-                        Log.d("businessreg","rrrrr"+response);
+                        Log.d("businessreg", "rrrrr" + response);
                         if (response.isSuccessful()) {
                             AddBusinessUserResponse obj = response.body();
                             getBusinessAddDBAResponse.setValue(obj);

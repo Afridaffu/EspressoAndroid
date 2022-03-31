@@ -90,6 +90,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     DashboardViewModel dashboardViewModel;
 
     private int dbaID = 0;
+    private TextView merchantBalanceTV;
+    private String merchantBalance;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,7 +99,20 @@ public class BusinessDashboardFragment extends BaseFragment {
         initFields();
         initObservers();
         hideAllStatusViews();
+        //getMerchantBalance();
         return mCurrentView;
+    }
+
+    private void getMerchantBalance() {
+        Double amt = 0.0;
+        if (myApplication.getGBTBalance() != null) {
+            amt += myApplication.getGBTBalance();
+        }
+        if (myApplication.getMerchantBalance() != null) {
+            amt += myApplication.getMerchantBalance();
+        }
+        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(amt)));
+
     }
 
     @Override
@@ -140,6 +155,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutHistory);
         businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
         mDashboardViewModel = new ViewModelProvider(getActivity()).get(DashboardViewModel.class);
+        merchantBalanceTV = mCurrentView.findViewById(R.id.merchant_balance_tv);
+
 
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         payoutTimeTV = mCurrentView.findViewById(R.id.payoutTimeTV);
@@ -391,6 +408,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void setBusinessData() {
         businessDashboardViewModel.getPayoutListData();
+        getMerchantBalance();
         mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
             @Override

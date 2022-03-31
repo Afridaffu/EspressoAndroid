@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -107,6 +108,15 @@ public class MyApplication extends Application {
     BOResp beneficialOwnersResponse;
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
+    Double merchantBalance = 0.0;
+
+    public Double getMerchantBalance() {
+        return merchantBalance;
+    }
+
+    public void setMerchantBalance(Double merchantBalance) {
+        this.merchantBalance = merchantBalance;
+    }
 
     public int getDbaOwnerId() {
         return dbaOwnerId;

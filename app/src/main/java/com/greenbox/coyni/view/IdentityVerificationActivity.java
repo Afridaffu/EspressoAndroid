@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputType;
@@ -154,7 +155,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         backbtn.setVisibility(VISIBLE);
                         closebtn.setVisibility(GONE);
                         mailAddr1.requestFocus();
-                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                     }
                 }
 
@@ -247,9 +249,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
     private void setToDateWheelPicker(TextInputEditText dobET) {
         try {
+//            Utils.hideKeypad(IdentityVerificationActivity.this);
             long years = 568025136000L;
             DatePicker picker = new DatePicker(IdentityVerificationActivity.this);
-            picker.show(getWindow());
             Date maxDate = new Date(System.currentTimeMillis() - years);
             picker.getPickerView().setMaxDate(maxDate);
             if (!dateOfBirth.equals("")) {
@@ -296,6 +298,19 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
                 }
             });
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.CENTER;
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    picker.show(getWindow());
+                }
+            }, 500);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -713,6 +728,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         ssnET.setHint("");
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(IdentityVerificationActivity.this);
                         if (ssnET.getText().toString().trim().length() == 4) {
@@ -831,27 +847,33 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             idveriDOBConLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(IdentityVerificationActivity.this);
 //                    setToDate(dobET);
                     setToDateWheelPicker(dobET);
+//                    showWheelDatePicker(IdentityVerificationActivity.this);
                 }
             });
 
             dobET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(IdentityVerificationActivity.this);
 //                    setToDate(dobET);
                     setToDateWheelPicker(dobET);
+//                    showWheelDatePicker(IdentityVerificationActivity.this);
                 }
             });
 
@@ -860,8 +882,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
                         ssnET.clearFocus();
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(IdentityVerificationActivity.this);
 //                        setToDate(dobET);
                         setToDateWheelPicker(dobET);
+//                        showWheelDatePicker(IdentityVerificationActivity.this);
                     }
                 }
             });
@@ -1493,4 +1518,5 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             // No super
         }
     }
+
 }

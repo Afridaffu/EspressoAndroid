@@ -156,15 +156,18 @@ public class AddRecipientActivity extends AppCompatActivity {
                         String search_key = s.toString();
                         List<RegUsersResponseData> filterList = new ArrayList<>();
                         List<RecentUsersData> filtersRecentList = new ArrayList<>();
-                        int sIndex = 0, wIndex = -1;
+//                        int sIndex = 0, wIndex = -1;
+                        boolean sIndex = false, wIndex = false;
                         if (contactsList != null && contactsList.size() > 0) {
                             for (int i = 0; i < contactsList.size(); i++) {
-                                wIndex = -1;
-                                sIndex = contactsList.get(i).getUserName().toLowerCase().indexOf(search_key.toLowerCase());
+                                wIndex = false;
+//                                sIndex = contactsList.get(i).getUserName().toLowerCase().indexOf(search_key.toLowerCase());
+                                sIndex = contactsList.get(i).getUserName().toLowerCase().startsWith(search_key.toLowerCase());
                                 if (contactsList.get(i).getWalletAddress() != null) {
-                                    wIndex = contactsList.get(i).getWalletAddress().toLowerCase().indexOf(search_key.toLowerCase());
+//                                    wIndex = contactsList.get(i).getWalletAddress().toLowerCase().indexOf(search_key.toLowerCase());
+                                    wIndex = contactsList.get(i).getWalletAddress().toLowerCase().startsWith(search_key.toLowerCase());
                                 }
-                                if (sIndex >= 0 || wIndex == 0) {
+                                if (sIndex || wIndex) {
                                     filterList.add(contactsList.get(i));
                                 }
                             }
@@ -178,12 +181,12 @@ public class AddRecipientActivity extends AppCompatActivity {
                         }
                         if (usersList != null && usersList.size() > 0) {
                             for (int i = 0; i < usersList.size(); i++) {
-                                wIndex = -1;
-                                sIndex = usersList.get(i).getUserName().toLowerCase().indexOf(search_key.toLowerCase());
+                                wIndex = false;
+                                sIndex = usersList.get(i).getUserName().toLowerCase().startsWith(search_key.toLowerCase());
                                 if (usersList.get(i).getWalletAddress() != null) {
-                                    wIndex = usersList.get(i).getWalletAddress().toLowerCase().indexOf(search_key.toLowerCase());
+                                    wIndex = usersList.get(i).getWalletAddress().toLowerCase().startsWith(search_key.toLowerCase());
                                 }
-                                if (sIndex >= 0 || wIndex == 0) {
+                                if (sIndex  || wIndex ) {
                                     filtersRecentList.add(usersList.get(i));
                                 }
                             }
@@ -485,7 +488,7 @@ public class AddRecipientActivity extends AppCompatActivity {
                         Utils.displayAlert(getString(R.string.internet), AddRecipientActivity.this, "", "");
                     }
                 }
-            }else {
+            } else {
                 rvContacts.setVisibility(View.GONE);
                 tvContactMsg.setVisibility(View.GONE);
                 tvNoContacts.setVisibility(View.VISIBLE);

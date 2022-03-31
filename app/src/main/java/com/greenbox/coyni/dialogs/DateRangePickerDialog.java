@@ -92,7 +92,7 @@ public class DateRangePickerDialog extends BaseDialog {
                     getOnDialogClickListener().onDialogClicked("Done", strFromDate + " - " + strToDate);
                     rangeDates = new RangeDates();
                     rangeDates.setUpdatedToDate(strToDate);
-                    rangeDates.setUpdatedFromDate(strToDate);
+                    rangeDates.setUpdatedFromDate(strFromDate);
                     rangeDates.setFullDate(strSelectedDate);
                     getOnDialogClickListener().onDialogClicked(Utils.datePicker, rangeDates);
                     dismiss();

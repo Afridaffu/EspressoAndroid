@@ -249,6 +249,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             TextView tvBalance = findViewById(R.id.tvBBalance);
             TextView tvLearnMore = findViewById(R.id.tvBLearnMore);
             TextView tvHeading = findViewById(R.id.tvBHeading);
+            TextView tvDescription = findViewById(R.id.tvDescriptionBuy);
             LinearLayout layoutReference = findViewById(R.id.layoutBReference);
             ImageView imgLogo = findViewById(R.id.imgBLogo);
             ImageView imgRefCopy = findViewById(R.id.imgBRefCopy);
@@ -258,18 +259,57 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             } else {
                 tvReferenceID.setText(objData.getGbxTransactionId());
             }
+
+            String strMessage = "";
             if (objData.getType().toLowerCase().contains("bank")) {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
+                strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account. Learn More";
             } else {
                 tvHeading.setText("Transaction In Progress");
                 imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
+                strMessage = "We are processing your request, please allow a few minutes for your coyni debit/credit card purchase to be reflected in your token account. Learn More";
             }
+
+            SpannableString ss = new SpannableString(strMessage);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.populateLearnMore(GiftCardBindingLayoutActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(Color.parseColor("#00a6a2"));
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
+
+            tvDescription.setText(ss);
+            tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+
             Double bal = cynValue + objMyApplication.getGBTBalance();
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
-            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+//            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+
+            if (objData.getDescriptorName() != null)
+                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+            else
+                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as coyni.");
 
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override

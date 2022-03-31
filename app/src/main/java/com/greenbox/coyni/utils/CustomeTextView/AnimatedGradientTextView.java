@@ -39,12 +39,20 @@ public class AnimatedGradientTextView extends TextView {
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
-        if (visibility == VISIBLE) {
-            if (getScaleX() != 0 && getScaleY() != 0) {
-                gradientManager.startGradient();
-            }
-        } else {
+//        if (visibility == VISIBLE) {
+//            if (getScaleX() != 0 && getScaleY() != 0) {
+//                gradientManager.startGradient();
+//            }
+//        } else {
+//            gradientManager.stopGradient();
+//        }
+
+        if (visibility == GONE) {
             gradientManager.stopGradient();
+            changedView.setVisibility(GONE);
+        } else if (visibility == VISIBLE) {
+            gradientManager.startGradient();
+            changedView.setVisibility(VISIBLE);
         }
     }
 
