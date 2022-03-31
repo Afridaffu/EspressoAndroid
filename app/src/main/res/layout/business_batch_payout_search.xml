@@ -20,7 +20,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:text="Sent to business token account"
                     android:textColor="@color/primary_black"
@@ -77,7 +77,7 @@
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginStart="@dimen/_6sdp"
                 android:layout_marginEnd="@dimen/_6sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:background="@color/blue_light" />
         </LinearLayout>
 
