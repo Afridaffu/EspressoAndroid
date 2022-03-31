@@ -70,6 +70,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     MerchantTransactionListActivity merchantTransactionListActivity;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,7 +193,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
                                 });
                                 if (payoutList.size() > 0)
-                                    batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
                                 recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
                                 recyclerViewPayouts.setVisibility(View.VISIBLE);
                                 noMorePayoutTransactions.setVisibility(View.GONE);

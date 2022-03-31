@@ -83,7 +83,10 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
             holder.payoutMoneyTV.setText(Utils.convertTwoDecimal(objData.getTotalAmount()));
         }
         if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")) {
-            holder.payoutDateTV.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
+//            holder.payoutDateTV.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
+
+            String date = objData.getCreatedAt();
+            holder.payoutDateTV.setText(objMyApplication.convertZoneDateTime(date,"yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
         }
 
         holder.statusTV.setText(objData.getStatus());
