@@ -17,6 +17,7 @@ import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
@@ -26,10 +27,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     private OnItemClickListener listener;
     //private BusinessAccountsListInfo headerInfo;
     private AccountsData accountsData;
+    private int selectedID;
 
-    public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData) {
+    public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData,int selectedID) {
         this.context = context;
         this.accountsData = accountsData;
+        this.selectedID = selectedID;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -66,6 +69,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         BaseProfile groupProfile = accountsData.getGroupData().get(groupPosition);
         ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
         ProfilesResponse.Profiles detailInfo = profilesList.get(childPosition);
+
         if (view == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = infalInflater.inflate(R.layout.business_profile_accounts_item_child, null);
@@ -76,7 +80,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         ImageView profileImage = view.findViewById(R.id.profile_img);
         ImageView imvTickIcon = view.findViewById(R.id.tickIcon);
         TextView statusTV = view.findViewById(R.id.statusTV);
-        LinearLayout statusLL = view.findViewById(R.id.statusLL);
         LinearLayout childView = view.findViewById(R.id.ll_child_view);
         LinearLayout addDBA = view.findViewById(R.id.ll_add_dba);
 
@@ -85,6 +88,20 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
             childItem.setText(detailInfo.getCompanyName());
+            if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
+                profileImage.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(detailInfo.getImage())
+                        .placeholder(R.drawable.ic_case)
+                        .into(profileImage);
+            } else {
+                profileImage.setVisibility(View.VISIBLE);
+                profileImageText.setVisibility(View.GONE);
+                Glide.with(context)
+                        .load(detailInfo.getImage())
+                        .placeholder(R.drawable.ic_case)
+                        .into(profileImage);
+            }
         } else if (detailInfo.getAccountType().equals(Utils.PERSONAL)) {
             if (detailInfo != null && detailInfo.getFullName() != null) {
                 childItem.setText(detailInfo.getFullName());
@@ -97,6 +114,20 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             } else {
                 childItem.setText("Null Company Name");
             }
+            if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
+                profileImage.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(detailInfo.getImage())
+                        .placeholder(R.drawable.acct_profile)
+                        .into(profileImage);
+            } else {
+                profileImage.setVisibility(View.VISIBLE);
+                profileImageText.setVisibility(View.GONE);
+                Glide.with(context)
+                        .load(detailInfo.getImage())
+                        .placeholder(R.drawable.acct_profile)
+                        .into(profileImage);
+            }
         }
 
         if (isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
@@ -105,54 +136,40 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             addDBA.setVisibility(View.GONE);
         }
 
-        if (detailInfo.isSelected()) {
+        if (selectedID == detailInfo.getId()) {
             imvTickIcon.setVisibility(View.VISIBLE);
-            statusLL.setVisibility(View.GONE);
+            statusTV.setVisibility(View.GONE);
         } else {
             imvTickIcon.setVisibility(View.GONE);
             if (!detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-                    statusLL.setVisibility(View.VISIBLE);
-                    statusLL.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
+                    statusTV.setVisibility(View.VISIBLE);
+                    statusTV.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.default_red));
 
                 } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
-                    statusLL.setVisibility(View.VISIBLE);
-                    statusLL.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
+                    statusTV.setVisibility(View.VISIBLE);
+                    statusTV.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.under_review_blue));
 
                 } else {
-                    statusLL.setVisibility(View.VISIBLE);
+                    statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
                 }
             } else {
-                statusLL.setVisibility(View.GONE);
+                statusTV.setVisibility(View.GONE);
             }
         }
-        if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
-            profileImage.setVisibility(View.VISIBLE);
-            Glide.with(context)
-                    .load(detailInfo.getImage())
-                    .placeholder(R.drawable.acct_profile)
-                    .into(profileImage);
-        } else {
-            profileImage.setVisibility(View.VISIBLE);
-            // profileImageText.setVisibility(View.VISIBLE);
 
-            Glide.with(context)
-                    .load(detailInfo.getImage())
-                    .placeholder(R.drawable.acct_profile)
-                    .into(profileImage);
-        }
 
         childView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listener != null) {
-                    listener.onChildClicked(detailInfo.getAccountType(), groupProfile.getId());
+                if (listener != null) {
+                    listener.onChildClicked(detailInfo.getAccountType(), detailInfo.getId());
                 }
             }
         });
@@ -160,8 +177,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         addDBA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listener != null) {
-                    listener.onAddDbaClicked(detailInfo.getAccountType(), groupProfile.getId());
+                if (listener != null) {
+                    listener.onAddDbaClicked(detailInfo.getAccountType(), detailInfo.getId());
                 }
             }
         });
@@ -194,45 +211,83 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         }
 
         TextView heading = view.findViewById(R.id.title);
+        TextView personalText = view.findViewById(R.id.b_imageTextTV);
         ImageView profileImage = view.findViewById(R.id.profile_img);
+        ImageView arrowImg = view.findViewById(R.id.arrowImg);
+        ImageView tickIcon = view.findViewById(R.id.tickIcon);
         LinearLayout groupView = view.findViewById(R.id.ll_group_view);
 
+        LogUtils.d("BusinessProfileRecyclerAdapter","isselectedId"+selectedID);
+
+
         if (headerInfo.getAccountType().equals(Utils.SHARED)) {
+            arrowImg.setVisibility(View.VISIBLE);
             heading.setText(R.string.shared_account);
+            profileImage.setVisibility(View.VISIBLE);
+            profileImage.setImageResource(R.drawable.shared_icon);
+
         } else if (headerInfo.getAccountType().equals(Utils.PERSONAL)) {
+
+            if(selectedID == headerInfo.getId() ) {
+                    arrowImg.setVisibility(View.GONE);
+                    tickIcon.setVisibility(View.VISIBLE);
+            } else{
+                arrowImg.setVisibility(View.GONE);
+                tickIcon.setVisibility(View.GONE);
+            }
             if (headerInfo != null && headerInfo.getFullName() != null) {
                 heading.setText(headerInfo.getFullName());
             } else {
                 heading.setText("Null Full Name");
             }
+            if(headerInfo.getImage()!=null ){
+                personalText.setVisibility(View.GONE);
+                profileImage.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(headerInfo.getImage())
+                        .placeholder(R.drawable.ic_case)
+                        .into(profileImage);
+            } else {
+                personalText.setVisibility(View.VISIBLE);
+                profileImage.setVisibility(View.GONE);
+                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
+//
+                personalText.setText(userName);
+
+            }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
+            arrowImg.setVisibility(View.VISIBLE);
             if (headerInfo != null && headerInfo.getCompanyName() != null) {
                 heading.setText(headerInfo.getCompanyName());
             } else {
                 heading.setText("Null Company Name");
             }
-        }
-
-        groupView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listener != null) {
-                    listener.onGroupClicked(headerInfo.getAccountType(), headerInfo.getId());
-                }
+            if(headerInfo.getImage()!=null ){
+                personalText.setVisibility(View.GONE);
+                profileImage.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(headerInfo.getImage())
+                        .placeholder(R.drawable.ic_case)
+                        .into(profileImage);
+            } else {
+                personalText.setVisibility(View.GONE);
+                profileImage.setVisibility(View.VISIBLE);
+                profileImage.setImageResource(R.drawable.ic_case);
             }
-        });
-
-        if (headerInfo != null && headerInfo.getImage() != null && !headerInfo.getImage().trim().equals("")) {
-            // profileImageText.setVisibility(View.GONE);
-            profileImage.setVisibility(View.VISIBLE);
-            Glide.with(context)
-                    .load(headerInfo.getImage())
-                    .placeholder(R.drawable.ic_case)
-                    .into(profileImage);
-        } else {
-            profileImage.setVisibility(View.VISIBLE);
-            profileImage.setImageResource(R.drawable.ic_case);
         }
+
+        if (headerInfo.getAccountType().equals(Utils.PERSONAL)) {
+            groupView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId());
+                    }
+                }
+            });
+        }
+
+
 
         return view;
     }
@@ -252,7 +307,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     }
 
     public interface OnItemClickListener {
-        public void onGroupClicked(String accountType, Integer id);
+
+        public void onGroupClicked(int position, String accountType, Integer id);
 
         public void onChildClicked(String accountType, Integer id);
 

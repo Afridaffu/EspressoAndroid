@@ -163,28 +163,28 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 //            }
 //        });
 
-        businessPersonalProfileAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-                businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
-                childid = personalAccountList.get(0).getId();
-                SelectedDBAName = personalAccountList.get(0).getFullName();
-                for (int k = 0; k < subSet.size(); k++) {
-                    for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
-                        if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
-                            subSet.get(k).getSubsetName().get(j).setIsSelected(true);
-                        } else {
-                            subSet.get(k).getSubsetName().get(j).setIsSelected(false);
-                        }
-                    }
-                }
-                LogUtils.d(TAG, "subSetChildClick" + subSet);
-                changeAccount(childid);
-                profilesListAdapter.notifyDataSetChanged();
-
-            }
-        });
+//        businessPersonalProfileAccount.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+//                businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
+//                childid = personalAccountList.get(0).getId();
+//                SelectedDBAName = personalAccountList.get(0).getFullName();
+//                for (int k = 0; k < subSet.size(); k++) {
+//                    for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
+//                        if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
+//                            subSet.get(k).getSubsetName().get(j).setIsSelected(true);
+//                        } else {
+//                            subSet.get(k).getSubsetName().get(j).setIsSelected(false);
+//                        }
+//                    }
+//                }
+//                LogUtils.d(TAG, "subSetChildClick" + subSet);
+//                changeAccount(childid);
+//                profilesListAdapter.notifyDataSetChanged();
+//
+//            }
+//        });
     }
 
     private void changeAccount(int childID) {
@@ -274,21 +274,29 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private void setProfilesAdapter() {
         AccountsData accountsData = new AccountsData(profilesList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, accountsData);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, accountsData,myApplication.getLoginUserId());
+
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onGroupClicked(String accountType, Integer id) {
+            public void onGroupClicked(int position, String accountType, Integer id) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+                //profilesListView.expandGroup(position);
+                changeAccount(id);
+
             }
 
             @Override
             public void onChildClicked(String accountType, Integer id) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+                changeAccount(id);
+
             }
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+                changeAccount(id);
+
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
@@ -402,52 +410,52 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                 }
             }
         });
-        
+
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
-
                 if (btResp != null) {
+                    if (btResp.getStatus().toLowerCase().toString().equals("success")) {
 
-                        if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                        LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
+                        LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
+                        LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
 
-                            LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
-                            LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
-                            LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
+                        Utils.setStrAuth(btResp.getData().getJwtToken());
+                        myApplication.setLoginUserId(btResp.getData().getUserId());
+                        businessIdentityVerificationViewModel.getBusinessTracker();
 
-                            Utils.setStrAuth(btResp.getData().getJwtToken());
-                            businessIdentityVerificationViewModel.getBusinessTracker();
-
-                            if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT ) {
-                                if(btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
-                                     myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
-                                    Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                     startActivity(intent);
-                                 } else {
-                                    myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
-                                    Log.e(TAG, new Gson().toJson(myApplication.getBusinessTrackerResponse()));
-                                    Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                 }
+                        if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
+                           // if (btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                                myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+//                            } else {
+//                                myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+//                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                startActivity(intent);
+//                            }
 
 
                         } else {
                             myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
                             Log.e(TAG, new Gson().toJson(myApplication.getBusinessTrackerResponse()));
-                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
 
 
                     } else {
-                        Intent i = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+
+                        Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", "");
+
                     }
 
+                } else {
+                    Utils.displayAlert(getString(R.string.something_went_wrong), BusinessCreateAccountsActivity.this, "", "");
                 }
             }
         });
