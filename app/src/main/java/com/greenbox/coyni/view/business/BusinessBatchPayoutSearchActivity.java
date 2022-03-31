@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BatchPayoutListAdapter;
 import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.TransactionListPendingAdapter;
+import com.greenbox.coyni.dialogs.MerchantTransactionsFilterDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayoutTransactionsDetailsFiltersDialog;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
@@ -29,6 +31,7 @@ import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListData;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
+import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.LogUtils;
@@ -47,12 +50,16 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     ImageView filterIconIV, datePickIV, closeBtnIV;
     TextView applyFilterBtnCV, noPayoutTransactions, noMorePayoutTransactions, payoutLoadMoreTV;
     private ProgressBar payoutProgressBarLoadMore;
+    private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
     EditText filterdatePickET, searchET;
     LinearLayout dateRangePickerLL;
     SwipeRefreshLayout refreshpageSL;
     private int totalItemCount, currentPage = 1, total = 0;
     Date startDateD = null;
     Date endDateD = null;
+    private String strFromDate = "", strToDate = "";
+    private Boolean isFilters = false;
+    private RangeDates rangeDates;
     RecyclerView recyclerViewPayouts;
     private List<BatchPayoutListItems> payoutList = new ArrayList<>();
     private BusinessBatchPayoutSearchActivity businessBatchPayoutSearchActivity;
@@ -63,27 +70,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     MerchantTransactionListActivity merchantTransactionListActivity;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_batch_payout_search);
         initFields();
         initObserver();
-
-        BatchPayoutListAdapter payoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
-        RecyclerView recyclerView = findViewById(R.id.payoutRecyclerView);
-//       recyclerViewPayouts.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(payoutListAdapter);
-
-        payoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, Object obj) {
-                LogUtils.v(TAG, "Position is " + position);
-                Intent i = new Intent(BusinessBatchPayoutSearchActivity.this, BusinessBatchPayoutIdDetailsActivity.class);
-                startActivity(i);
-            }
-        });
 
     }
 
@@ -95,6 +88,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         dateRangePickerLL = findViewById(R.id.dateRangePickerLL);
         datePickIV = findViewById(R.id.datePickIV);
         recyclerViewPayouts = findViewById(R.id.payoutRecyclerView);
+        recyclerViewPayouts.setVisibility(View.GONE);
         refreshpageSL = findViewById(R.id.payoutRefreshLayout);
         searchET = findViewById(R.id.payoutSearchET);
         noPayoutTransactions = findViewById(R.id.payoutNoTransactions);
@@ -105,7 +99,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         recyclerViewPayouts.setLayoutManager(new LinearLayoutManager(this));
 
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
-        BatchPayoutRequest batchPayoutRequest = null;
         businessDashboardViewModel.getPayoutListData();
 
         searchET.addTextChangedListener(this);
@@ -121,8 +114,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         filterIconIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 showFiltersPopup();
             }
+
         });
 
         refreshpageSL.setColorSchemeColors(getResources().getColor(R.color.primary_green));
@@ -133,22 +131,22 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                 try {
                     noMorePayoutTransactions.setVisibility(View.GONE);
 
-                    filterIconIV.setVisibility(View.GONE);
-                    filterIconIV.setImageResource(R.drawable.ic_filtericon);
+                    filterIconIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+//                    filterIconIV.setImageResource(R.drawable.ic_filtericon);
 
                     BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
                     batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
                     batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
 
-
+                    businessDashboardViewModel.getPayoutListData();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                refreshpageSL.setRefreshing(false);
+                showProgressDialog();
+                searchET.setText("");
             }
         });
-
-
     }
 
     private void showFiltersPopup() {
@@ -156,14 +154,20 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                if (action.equals("Date_SELECTED")) {
-                    LogUtils.v(TAG, "Date Selected " + value);
+                if (action.equals("dates")) {
+                    rangeDates = (RangeDates) value;
+                    showProgressDialog();
+                    String fromDate = Utils.formatDate(rangeDates.getUpdatedFromDate());
+                    String toDate = Utils.formatDate(rangeDates.getUpdatedToDate());
                     filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
+                    businessDashboardViewModel.getPayoutlistdata(fromDate, toDate);
                 }
+                payoutList.clear();
             }
         });
         dialog.show();
     }
+
 
     private void initObserver() {
         try {
@@ -179,7 +183,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                                 batchPayoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
                                     @Override
                                     public void onItemClick(int position, Object obj) {
-                                        LogUtils.d(TAG,"onitemclick"+position +obj.toString());
+                                        LogUtils.d(TAG, "onitemclick" + position + obj.toString());
 
                                         BatchPayoutListItems batchPayoutListItem = (BatchPayoutListItems) obj;
                                         showBatchPayoutDetails(batchPayoutListItem);
@@ -188,8 +192,14 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                                     }
 
                                 });
-                                batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
+                                if (payoutList.size() > 0)
                                 recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
+                                recyclerViewPayouts.setVisibility(View.VISIBLE);
+                                noMorePayoutTransactions.setVisibility(View.GONE);
+                            } else {
+                                recyclerViewPayouts.setVisibility(View.GONE);
+                                noMorePayoutTransactions.setVisibility(View.VISIBLE);
+
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutSearchActivity.this, "", batchPayoutList.getError().getFieldErrors().get(0));
@@ -214,6 +224,11 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         businessDashboardViewModel.getPayoutlistData(search);
     }
 
+    private void payoutAPI(String fromDate, String toDate) {
+        showProgressDialog();
+        businessDashboardViewModel.getPayoutlistdata(fromDate, toDate);
+    }
+
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -226,7 +241,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             BatchPayoutRequest batchPayoutRequest = new BatchPayoutRequest();
             batchPayoutRequest.setBatchId(charSequence.toString());
             payoutAPI(charSequence.toString());
-        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+        } else if (charSequence.length() > 0 && charSequence.length() < 20) {
+            noMorePayoutTransactions.setVisibility(View.VISIBLE);
         } else if (charSequence.toString().trim().length() == 0) {
             payoutList.clear();
             businessDashboardViewModel.getPayoutListData();
@@ -244,6 +260,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         }
 
     }
+
     private void showBatchPayoutDetails(BatchPayoutListItems items) {
         try {
             Intent i = new Intent(this, BusinessBatchPayoutIdDetailsActivity.class);

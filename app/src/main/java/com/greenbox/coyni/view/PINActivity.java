@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     Dialog prevDialog;
     private DatabaseHandler dbHandler;
     LoginViewModel loginViewModel;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -748,6 +750,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tvForgot:
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 showProgressDialog();
                 loginViewModel.emailotpresend(Utils.getUserEmail(PINActivity.this));
 //                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
