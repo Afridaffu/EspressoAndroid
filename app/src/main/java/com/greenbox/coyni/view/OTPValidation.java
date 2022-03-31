@@ -412,6 +412,16 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                         loginViewModel.updatePhoneotpValidate(updatePhoneValidateRequest);
                                     }
                                 }
+                            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("login")) {
+                                if (OTP_TYPE.equals("MOBILE")) {
+                                    if (charSequence.length() == 6) {
+                                        Utils.hideKeypad(OTPValidation.this);
+                                        SmsRequest smsRequest = new SmsRequest();
+                                        smsRequest.setEmail(EMAIL.trim());
+                                        smsRequest.setOtp(charSequence.toString().trim());
+                                        loginViewModel.smsotpLoginValidate(smsRequest);
+                                    }
+                                }
                             } else {
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {

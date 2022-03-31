@@ -8,26 +8,40 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListData;
+import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.TransactionListActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
+import com.greenbox.coyni.view.business.EditEmail;
+import com.greenbox.coyni.view.business.PayoutDetailsTransactionList;
 
 import org.w3c.dom.Text;
 
 public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
-    LinearLayout datePickLL;
-    TextView resetFilterTV;
-    ImageView datePickIV;
+    private LinearLayout datePickLL;
+    private TextView resetFilterTV;
+    private ImageView datePickIV;
     public CardView applyFilterBtnCV;
-    EditText filterDatePickET;
+    private EditText filterDatePickET;
     private Context context;
-    public boolean isfilterdatePickET = false,isapplyEnabled= false;
-//    public static PayoutTransactionsDetailsFiltersDialog payoutTransactionsDetailsFiltersDialog;
-//    public static DateRangePickerDialog dateRangePickerDialog;
+    private MyApplication objMyApplication;
+
+    private Boolean isFilters = false;
+
+    private String tempStrSelectedDate = "";
+    public boolean isfilterdatePickET = false, isapplyEnabled = false;
+
+    private RangeDates rangeDates;
+    //    public static PayoutTransactionsDetailsFiltersDialog payoutTransactionsDetailsFiltersDialog;
+    public static DateRangePickerDialog dateRangePickerDialog;
 
     public PayoutTransactionsDetailsFiltersDialog(Context context) {
         super(context);
@@ -38,6 +52,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payout_transactions_filter);
+        objMyApplication = (MyApplication) context.getApplicationContext();
 
         datePickLL = findViewById(R.id.payoutDateRangePickerLL);
         datePickIV = findViewById(R.id.datePickIV);
@@ -49,15 +64,23 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
                 showCalendarDialog();
-//                getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
+                //getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
 //                dismiss();
             }
         });
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
-//                getOnDialogClickListener().onDialogClicked("Date_SELECTED", dateSelected);
+//                getOnDialogClickListener().onDialogClicked("Date_SELECTED", strSelectedDate);
+                if (rangeDates == null) {
+                    Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    getOnDialogClickListener().onDialogClicked("dates", rangeDates);
+                    dismiss();
+
+
+                }
             }
         });
         resetFilterTV.setOnClickListener(new View.OnClickListener() {
@@ -67,16 +90,15 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
             }
         });
     }
+
     private void showCalendarDialog() {
         DateRangePickerDialog dialog = new DateRangePickerDialog(context);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                if(action.equals("Done")) {
-                    filterDatePickET.setText("");
-//                    showFiltersPopup();
-//                    getOnDialogClickListener().onDialogClicked("Filter_applied", null);
-//                    dismiss();
+                if (action.equals(Utils.datePicker)) {
+                    rangeDates = (RangeDates) value;
+                    filterDatePickET.setText(rangeDates.getFullDate());
                 }
             }
         });

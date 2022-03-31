@@ -1,6 +1,9 @@
 package com.greenbox.coyni.model.BusinessBatchPayout;
 
 public class BatchPayoutRequest {
+
+    private String batchId;
+
     public String getBatchId() {
         return batchId;
     }
@@ -9,6 +12,6 @@ public class BatchPayoutRequest {
         this.batchId = batchId;
     }
 
-    private String batchId;
+
 
 }

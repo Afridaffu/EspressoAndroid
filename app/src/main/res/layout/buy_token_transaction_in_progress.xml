@@ -147,20 +147,22 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvDescriptionBuy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="left"
                 android:paddingLeft="@dimen/_10sdp"
-                android:text="We are processing your request, please allow a few \nminutes for your Coyni Debit/Credit card purchase to be "
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_10sdp" />
+<!--            android:text="We are processing your request, please allow a few \nminutes for your Coyni Debit/Credit card purchase to be "-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -181,6 +183,7 @@
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_10sdp" />
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -156,7 +156,6 @@ public class TeamActivity extends BaseActivity {
                         if (teamResponseModel.getStatus().equalsIgnoreCase("SUCCESS")) {
                             if (teamResponseModel.getData().size() > 0) {
                                 datumList = teamResponseModel.getData();
-
                                 recyclerViewTeam.setVisibility(View.VISIBLE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
                                 recyclerViewTeam.setLayoutManager(layoutManager);

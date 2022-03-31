@@ -123,7 +123,7 @@ public class TeamMemberActivity extends BaseActivity {
                     try {
                         if (teamInfoAddModel != null) {
                             if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.invitation_canceled), R.drawable.ic_custom_tick, "Cancel");
+                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.invitation_canceled), R.drawable.ic_custom_tick, "");
                                 new Handler().postDelayed(() -> {
                                     try {
                                         finish();
@@ -155,7 +155,7 @@ public class TeamMemberActivity extends BaseActivity {
                     try {
                         if (teamInfoAddModel != null) {
                             if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.Removed_success), R.drawable.ic_custom_tick, "Delete");
+                                Utils.showCustomToast(TeamMemberActivity.this, getResources().getString(R.string.Removed_success), R.drawable.ic_custom_tick, "");
                                 new Handler().postDelayed(() -> {
                                     try {
                                         finish();
@@ -301,6 +301,7 @@ public class TeamMemberActivity extends BaseActivity {
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(getString(R.string.yes))) {
                     customConfirmationDialog.dismiss();
+                    showProgressDialog();
                     teamViewModel.deleteTeamMember(teamMemberId);
                 }
             }
