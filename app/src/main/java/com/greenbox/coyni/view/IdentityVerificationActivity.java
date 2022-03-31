@@ -249,6 +249,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
     private void setToDateWheelPicker(TextInputEditText dobET) {
         try {
+//            Utils.hideKeypad(IdentityVerificationActivity.this);
             long years = 568025136000L;
             DatePicker picker = new DatePicker(IdentityVerificationActivity.this);
             Date maxDate = new Date(System.currentTimeMillis() - years);
@@ -298,16 +299,18 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 }
             });
 
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.CENTER;
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        picker.show(getWindow());
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                    picker.show(getWindow());
                 }
-            }, 1000);
+            }, 500);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -844,35 +847,33 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             idveriDOBConLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Utils.isKeyboardVisible) {
-                        Utils.hideKeypad(IdentityVerificationActivity.this);
-                        Utils.hideKeypad(IdentityVerificationActivity.this);
-                    }
 
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(IdentityVerificationActivity.this);
 //                    setToDate(dobET);
                     setToDateWheelPicker(dobET);
+//                    showWheelDatePicker(IdentityVerificationActivity.this);
                 }
             });
 
             dobET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Utils.isKeyboardVisible) {
-                        Utils.hideKeypad(IdentityVerificationActivity.this);
-                        Utils.hideKeypad(IdentityVerificationActivity.this);
-                    }
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(IdentityVerificationActivity.this);
 //                    setToDate(dobET);
                     setToDateWheelPicker(dobET);
+//                    showWheelDatePicker(IdentityVerificationActivity.this);
                 }
             });
 
@@ -880,13 +881,12 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        if (Utils.isKeyboardVisible) {
-                            Utils.hideKeypad(IdentityVerificationActivity.this);
-                            Utils.hideKeypad(IdentityVerificationActivity.this);
-                        }
                         ssnET.clearFocus();
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(IdentityVerificationActivity.this);
 //                        setToDate(dobET);
                         setToDateWheelPicker(dobET);
+//                        showWheelDatePicker(IdentityVerificationActivity.this);
                     }
                 }
             });
@@ -1518,4 +1518,5 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             // No super
         }
     }
+
 }
