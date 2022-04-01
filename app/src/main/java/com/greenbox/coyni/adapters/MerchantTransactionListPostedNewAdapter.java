@@ -204,7 +204,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             e.printStackTrace();
         }
 
-        holder.createdDate.setText(Utils.convertDate(objData.getCreatedAt()));
+        holder.createdDate.setText(Utils.convertMerchantDate(objData.getCreatedAt()));
 
         //type transaction
         if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
