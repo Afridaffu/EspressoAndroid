@@ -116,7 +116,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
-    public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
+    public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
     public static final String TOKEN = "TOKEN", MERCHANT = "MERCHANT";
 
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};

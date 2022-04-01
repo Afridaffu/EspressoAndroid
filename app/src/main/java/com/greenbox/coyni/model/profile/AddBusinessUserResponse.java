@@ -51,9 +51,18 @@ public class AddBusinessUserResponse {
         private boolean isAgreementSigned;
 
         private int accountType;
+        private int userId;
         private int dbaOwnerId;
         private String jwtToken;
         private String accountStatus;
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
 
         public String getAccountStatus() {
             return accountStatus;

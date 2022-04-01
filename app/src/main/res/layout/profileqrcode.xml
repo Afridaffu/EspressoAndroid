@@ -55,12 +55,18 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/_24sdp">
 
+                    <LinearLayout
+                        android:id="@+id/profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_14sdp"
+                        android:background="@drawable/corner_radius_forqr"
+                        android:padding="@dimen/_2sdp"
+                        android:layout_centerHorizontal="true">
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cvProfile"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/_14sdp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_20sdp">
 
@@ -85,14 +91,14 @@
                                 android:scaleType="fitXY"
                                 android:visibility="visible" />
                         </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
+                    </androidx.cardview.widget.CardView></LinearLayout>
 
 
                     <TextView
                         android:id="@+id/tvName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/cvProfile"
+                        android:layout_below="@+id/profile"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/opensans_semibold"

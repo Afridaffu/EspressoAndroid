@@ -91,6 +91,7 @@ import okhttp3.RequestBody;
 
 public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisibilityListener, BusinessProfileRecyclerAdapter.OnSelectListner {
 
+    private static Dialog bottomDialog;
     ImageView editProfileIV, userProfileIV, mIvUserIcon;
     private TextView userAddressTV, userPhoneNumTV, userEmailIdTV, imageTextTV, userNameTV, defualtAccountDialogPersonalNameTV,
             mTvUserIconText;
@@ -207,6 +208,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             }
 
             editProfileIV.setOnClickListener(view -> {
+
                 if (checkAndRequestPermissions(this)) {
 //                    chooseImage(this);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -419,7 +421,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     userPhoneNumTV.setText(phoneFormat);
                     business_userPhneNoTV.setText(phoneFormat);
 
-                    LogUtils.d(TAG,"profiledata"+profile);
+                    LogUtils.d(TAG, "profiledata" + profile);
 
 //                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
 //
@@ -499,7 +501,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
 
-                    if(personalAccountList.get(0).isSelected()){
+                    if (personalAccountList.get(0).isSelected()) {
                         businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
                     } else {
                         businessPersonalProfileTickIcon.setVisibility(View.GONE);
@@ -514,7 +516,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             LogUtils.d(TAG, "GroupChildClick" + i + "....." + i1 + "....." + l);
                             childid = subSet.get(i).getSubsetName().get(i1).getId();
                             SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
-                            for(int k=0;k<subSet.size();k++) {
+                            for (int k = 0; k < subSet.size(); k++) {
                                 for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
                                     if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
                                         subSet.get(k).getSubsetName().get(j).setIsSelected(true);
@@ -533,7 +535,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         try {
                             brandsGV.setVisibility(View.VISIBLE);
                             LogUtils.d(TAG, "subSet" + subSet);
-                            listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
+                            //listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
                             brandsGV.setAdapter(listAdapter);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -578,7 +580,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
                             childid = personalAccountList.get(0).getId();
                             SelectedDBAName = personalAccountList.get(0).getFullName();
-                            for(int k=0;k<subSet.size();k++) {
+                            for (int k = 0; k < subSet.size(); k++) {
                                 for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
                                     if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
                                         subSet.get(k).getSubsetName().get(j).setIsSelected(true);
@@ -771,21 +773,21 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         }
 
 
-    //                    myApplicationObj.setMyProfile(profile);
-    //                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
-    //                        userProfileIV.setVisibility(View.VISIBLE);
-    //                        imageTextTV.setVisibility(View.GONE);
-    //                        Glide.with(UserDetailsActivity.this)
-    //                                .load(profile.getData().getImage())
-    //                                .into(userProfileIV);
-    //                    } else {
-    //                        userProfileIV.setVisibility(View.GONE);
-    //                        imageTextTV.setVisibility(View.VISIBLE);
-    //                        String imageText ="";
-    //                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
-    //                                profile.getData().getLastName().substring(0,1).toUpperCase();
-    //                        imageTextTV.setText(imageText);
-    //                    }
+                        //                    myApplicationObj.setMyProfile(profile);
+                        //                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
+                        //                        userProfileIV.setVisibility(View.VISIBLE);
+                        //                        imageTextTV.setVisibility(View.GONE);
+                        //                        Glide.with(UserDetailsActivity.this)
+                        //                                .load(profile.getData().getImage())
+                        //                                .into(userProfileIV);
+                        //                    } else {
+                        //                        userProfileIV.setVisibility(View.GONE);
+                        //                        imageTextTV.setVisibility(View.VISIBLE);
+                        //                        String imageText ="";
+                        //                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
+                        //                                profile.getData().getLastName().substring(0,1).toUpperCase();
+                        //                        imageTextTV.setText(imageText);
+                        //                    }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -832,11 +834,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     for (ProfilesResponse.Profiles c : filterList) {
                         if (c.getAccountType().equals(Utils.BUSINESS)) {
                             businessAccountList.add(c);
-                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(),c.getAccountStatus());
+                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(), c.getAccountStatus());
                         } else {
                             personalAccountList.add(c);
-                            for(int i=0;i<personalAccountList.size();i++){
-                                if(personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)){
+                            for (int i = 0; i < personalAccountList.size(); i++) {
+                                if (personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)) {
                                     personalAccountList.get(i).setSelected(true);
                                     business_defaultaccountET.setText(personalAccountList.get(i).getFullName());
                                 } else {
@@ -854,7 +856,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
     }
 
-    private int addDetails(String mainSet, String subSet, String image, int id,String accountStatus) {
+    private int addDetails(String mainSet, String subSet, String image, int id, String accountStatus) {
 
         int groupPosition = 0;
         try {
@@ -1114,11 +1116,12 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             case REQUEST_ID_MULTIPLE_PERMISSIONS:
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "", "");
+//                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "", "");
+                        displayAlertNew("Requires Access to Camera.", UserDetailsActivity.this, "");
 
                 } else if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Your Storage.", UserDetailsActivity.this, "", "");
+                        displayAlertNew("Requires Access to Your Storage.", UserDetailsActivity.this, "");
 
                 } else {
 //                    chooseImage(this);
@@ -1346,6 +1349,59 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             Utils.isKeyboardVisible = false;
         }
         Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
+    }
+
+
+    public static void displayAlertNew(String msg, final Context context, String headerText) {
+        // custom dialog
+        if (bottomDialog == null) {
+            bottomDialog = new Dialog(context);
+            bottomDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            bottomDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+            bottomDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView header = bottomDialog.findViewById(R.id.tvHead);
+            TextView message = bottomDialog.findViewById(R.id.tvMessage);
+            CardView actionCV = bottomDialog.findViewById(R.id.cvAction);
+            TextView actionText = bottomDialog.findViewById(R.id.tvAction);
+
+            if (!headerText.equals("")) {
+                header.setVisibility(View.VISIBLE);
+                header.setText(headerText);
+            }
+
+            actionCV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    bottomDialog.dismiss();
+                }
+            });
+
+            message.setText(msg);
+            Window window = bottomDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            bottomDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            bottomDialog.setCanceledOnTouchOutside(true);
+            bottomDialog.show();
+
+            bottomDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    bottomDialog = null;
+                }
+            });
+        }
     }
 
 }

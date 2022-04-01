@@ -130,7 +130,6 @@
                             android:id="@+id/linearLayout"
                             android:layout_width="@dimen/_50sdp"
                             android:layout_height="@dimen/_50sdp"
-                            android:background="@drawable/corecircle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -138,11 +137,12 @@
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/userProfileCV"
-                                android:layout_width="@dimen/_48sdp"
-                                android:layout_height="@dimen/_48sdp"
+                                android:layout_width="@dimen/_46sdp"
+                                android:layout_height="@dimen/_46sdp"
                                 android:layout_alignParentRight="true"
                                 android:layout_gravity="center"
-                                app:cardCornerRadius="@dimen/_24sdp"
+                                app:cardCornerRadius="@dimen/_23sdp"
+                                android:elevation="0dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -154,18 +154,19 @@
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
                                     android:src="@drawable/ic_profile_male_user"
-                                    android:visibility="visible" />
+                                    android:visibility="gone" />
 
                                 <TextView
                                     android:id="@+id/imageTextTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="VT"
-                                    android:textColor="@color/primary_black"
+                                    android:gravity="center"
+                                    android:background="@color/primary_green"
+                                    android:textColor="@color/white"
                                     android:textSize="@dimen/_18ssp"
-                                    android:visibility="gone" />
+                                    android:visibility="visible" />
 
                             </androidx.cardview.widget.CardView>
                         </androidx.constraintlayout.widget.ConstraintLayout>

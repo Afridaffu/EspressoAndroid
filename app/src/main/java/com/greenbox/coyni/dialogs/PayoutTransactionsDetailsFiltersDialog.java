@@ -3,6 +3,7 @@ package com.greenbox.coyni.dialogs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     private EditText filterDatePickET;
     private Context context;
     private MyApplication objMyApplication;
+    private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
 
     private Boolean isFilters = false;
 
@@ -63,9 +65,14 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         datePickLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+                if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
+                    return;
+                }
                 showCalendarDialog();
-                //getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
-//                dismiss();
             }
         });
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
