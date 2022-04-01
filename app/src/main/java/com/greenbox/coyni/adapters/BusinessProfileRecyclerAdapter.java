@@ -26,7 +26,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     private AccountsData accountsData;
     private int selectedID;
 
-    public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData,int selectedID) {
+    public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData, int selectedID) {
         this.context = context;
         this.accountsData = accountsData;
         this.selectedID = selectedID;
@@ -214,7 +214,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         ImageView tickIcon = view.findViewById(R.id.tickIcon);
         LinearLayout groupView = view.findViewById(R.id.ll_group_view);
 
-        LogUtils.d("BusinessProfileRecyclerAdapter","isselectedId"+selectedID);
+        LogUtils.d("BusinessProfileRecyclerAdapter", "isselectedId" + selectedID);
 
 
         if (headerInfo.getAccountType().equals(Utils.SHARED)) {
@@ -224,11 +224,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             profileImage.setImageResource(R.drawable.shared_icon);
 
         } else if (headerInfo.getAccountType().equals(Utils.PERSONAL)) {
-
-            if(selectedID == headerInfo.getId() ) {
-                    arrowImg.setVisibility(View.GONE);
-                    tickIcon.setVisibility(View.VISIBLE);
-            } else{
+            if (selectedID == headerInfo.getId()) {
+                arrowImg.setVisibility(View.GONE);
+                tickIcon.setVisibility(View.VISIBLE);
+            } else {
                 arrowImg.setVisibility(View.GONE);
                 tickIcon.setVisibility(View.GONE);
             }
@@ -237,7 +236,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             } else {
                 heading.setText("Null Full Name");
             }
-            if(headerInfo.getImage()!=null ){
+            if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);
                 profileImage.setVisibility(View.VISIBLE);
                 Glide.with(context)
@@ -259,7 +258,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             } else {
                 heading.setText("Null Company Name");
             }
-            if(headerInfo.getImage()!=null ){
+            if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);
                 profileImage.setVisibility(View.VISIBLE);
                 Glide.with(context)

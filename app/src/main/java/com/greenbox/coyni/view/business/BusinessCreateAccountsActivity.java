@@ -10,7 +10,6 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
@@ -42,36 +41,34 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class BusinessCreateAccountsActivity extends BaseActivity implements BusinessProfileRecyclerAdapter.OnSelectListner {
+public class BusinessCreateAccountsActivity extends BaseActivity {
 
-    private TextView userShortInfoTV, defualtAccountDialogPersonalNameTV, userNameTV, userBalanceTV, businessPersonalAccountNameTv, mTvUserIconText;
+    private TextView userShortInfoTV, defualtAccountDialogPersonalNameTV, userNameTV,
+            userBalanceTV, mTvUserIconText;
     private ImageView imgProfile, accountsCloseIV, mIvUserIcon;
-    private LinearLayout llOpenAccount, businessPersonalProfileAccount, businessSharedProfileAccount;
+    private LinearLayout llOpenAccount, businessSharedProfileAccount;
     private MyApplication myApplication;
     private DashboardViewModel dashboardViewModel;
     private ExpandableListView profilesListView, sharedEL;
     private List<ProfilesResponse.Profiles> profilesList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> sharedAccountList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> dbaList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> dbaAccountList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
-    private BusinessProfileRecyclerAdapter giftCardsAdapter;
-    private String personalAccountExist;
+    private final List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private final List<ProfilesResponse.Profiles> sharedAccountList = new ArrayList<>();
+    private final List<ProfilesResponse.Profiles> dbaList = new ArrayList<>();
+    private final List<ProfilesResponse.Profiles> dbaAccountList = new ArrayList<>();
+    private final List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private ImageView businessPersonalProfileTickIcon;
     private LoginViewModel loginViewModel;
     private int childid;
     private String SelectedDBAName;
-    private String accountTypeId = "";
-    private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
-    private LinkedHashMap<String, BusinessAccountsListInfo> mainSetShared = new LinkedHashMap<String, BusinessAccountsListInfo>();
-    private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
-    private ArrayList<BusinessAccountsListInfo> subSetShared = new ArrayList<BusinessAccountsListInfo>();
+    private final String accountTypeId = "";
+    private final LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
+    private final LinkedHashMap<String, BusinessAccountsListInfo> mainSetShared = new LinkedHashMap<String, BusinessAccountsListInfo>();
+    private final ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
+    private final ArrayList<BusinessAccountsListInfo> subSetShared = new ArrayList<BusinessAccountsListInfo>();
     private BusinessProfileRecyclerAdapter profilesListAdapter;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private IdentityVerificationViewModel identityVerificationViewModel;
     private String userName;
-    private ScrollView expandablescrollview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +88,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                     finish();
                 }
             });
+
             llOpenAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -110,7 +108,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
     private void initFields() {
         try {
-            expandablescrollview = findViewById(R.id.activity_expandable_scroll_view);
             llOpenAccount = findViewById(R.id.ll_open_account);
             userShortInfoTV = findViewById(R.id.tvUserInfo);
             imgProfile = findViewById(R.id.imgProfile);
@@ -118,12 +115,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             userBalanceTV = findViewById(R.id.userBalanceTV);
             accountsCloseIV = findViewById(R.id.accountsCloseIV);
             profilesListView = findViewById(R.id.recyclerView);
-            // sharedEL = findViewById(R.id.shared_recyclerView);
-            businessPersonalAccountNameTv = findViewById(R.id.business_personal_account_name);
             mIvUserIcon = findViewById(R.id.profile_img);
             mTvUserIconText = findViewById(R.id.b_imageTextTV);
-            businessPersonalProfileAccount = findViewById(R.id.profileLL);
-            //  businessSharedProfileAccount = findViewById(R.id.sharedLL);
             myApplication = (MyApplication) getApplicationContext();
             businessPersonalProfileTickIcon = findViewById(R.id.tickIcon);
             defualtAccountDialogPersonalNameTV = findViewById(R.id.defualt_account_dialog_personal_name);
@@ -254,6 +247,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     private void setUserBalance(WalletResponseData walletResponse) {
         try {
             String strAmount = "";
+            if(walletResponse == null) {
+                return;
+            }
             List<WalletInfo> walletInfo = walletResponse.getWalletNames();
             LogUtils.d(TAG, "setUserBalance" + walletInfo.toString());
             if (walletInfo != null && walletInfo.size() > 0) {
@@ -275,15 +271,14 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 
         AccountsData accountsData = new AccountsData(profilesList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, accountsData,myApplication.getLoginUserId());
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this,
+                accountsData, myApplication.getLoginUserId());
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onGroupClicked(int position, String accountType, Integer id) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
-                //profilesListView.expandGroup(position);
                 changeAccount(id);
-
             }
 
             @Override
@@ -301,6 +296,14 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
+        setInitialListViewHeight(profilesListView);
+        profilesListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                setListViewHeight(parent, groupPosition);
+                return false;
+            }
+        });
     }
 
     public void initObservers() {
@@ -369,33 +372,28 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
 //                        businessSharedProfileAccount.setVisibility(View.GONE);
 //                    }
 
-                    if (personalAccountList.size() != 0) {
-                        businessPersonalProfileAccount.setVisibility(View.VISIBLE);
-                        personalAccountExist = "true";
-                        String iconText = "";
-                        if (personalAccountList.get(0).getCompanyName() != null
-                        ) {
-                            String firstName = personalAccountList.get(0).getCompanyName();
-                            iconText = firstName.substring(0, 1).toUpperCase();
-                            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-
-                        }
-                        if (personalAccountList.get(0).getImage() != null) {
-                            mTvUserIconText.setVisibility(View.GONE);
-                            mIvUserIcon.setVisibility(View.VISIBLE);
-                            Glide.with(BusinessCreateAccountsActivity.this)
-                                    .load(personalAccountList.get(0).getImage())
-                                    .placeholder(R.drawable.ic_profile_male_user)
-                                    .into(mIvUserIcon);
-                        } else {
-                            mTvUserIconText.setVisibility(View.VISIBLE);
-                            mIvUserIcon.setVisibility(View.GONE);
-                            mTvUserIconText.setText(iconText);
-                        }
-                    } else {
-                        personalAccountExist = "false";
-                        businessPersonalProfileAccount.setVisibility(View.GONE);
-                    }
+//                    if (personalAccountList.size() != 0) {
+//                        String iconText = "";
+//                        if (personalAccountList.get(0).getCompanyName() != null
+//                        ) {
+//                            String firstName = personalAccountList.get(0).getCompanyName();
+//                            iconText = firstName.substring(0, 1).toUpperCase();
+//                            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+//
+//                        }
+//                        if (personalAccountList.get(0).getImage() != null) {
+//                            mTvUserIconText.setVisibility(View.GONE);
+//                            mIvUserIcon.setVisibility(View.VISIBLE);
+//                            Glide.with(BusinessCreateAccountsActivity.this)
+//                                    .load(personalAccountList.get(0).getImage())
+//                                    .placeholder(R.drawable.ic_profile_male_user)
+//                                    .into(mIvUserIcon);
+//                        } else {
+//                            mTvUserIconText.setVisibility(View.VISIBLE);
+//                            mIvUserIcon.setVisibility(View.GONE);
+//                            mTvUserIconText.setText(iconText);
+//                        }
+//                    }
                 }
             }
         });
@@ -404,7 +402,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             @Override
             public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
                 if (businessTrackerResponse != null) {
-                    if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
+                    if (businessTrackerResponse.getStatus().toLowerCase().equals("success")) {
                         myApplication.setBusinessTrackerResponse(businessTrackerResponse);
 
                     }
@@ -416,7 +414,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
                 if (btResp != null) {
-                    if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                    if (btResp.getStatus().toLowerCase().equals("success")) {
 
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
@@ -427,11 +425,11 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
                         businessIdentityVerificationViewModel.getBusinessTracker();
 
                         if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
-                           // if (btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                                myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
-                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
+                            // if (btResp.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                            myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
+                            Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
 //                            } else {
 //                                myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
 //                                Intent intent = new Intent(BusinessCreateAccountsActivity.this, BusinessDashboardActivity.class);
@@ -481,9 +479,30 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         }
     }
 
-    private void setListViewHeight(ExpandableListView listView,
-                                   int group) {
-        ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
+    private void setInitialListViewHeight(ExpandableListView listView) {
+        ExpandableListAdapter listAdapter = listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10)
+            height = 200;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+    private void setListViewHeight(ExpandableListView listView, int group) {
+        ExpandableListAdapter listAdapter = listView.getExpandableListAdapter();
         int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
@@ -514,55 +533,5 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
         params.height = height;
         listView.setLayoutParams(params);
         listView.requestLayout();
-
-    }
-
-    private int addDetails(String mainSet, String subSet, String image, int id, String accountStatus) {
-
-        int groupPosition = 0;
-
-        try {
-            LogUtils.d(TAG, "adddetails" + mainSet + subSet + id + accountTypeId);
-            groupPosition = 0;
-            BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
-            if (headerInfo == null) {
-                headerInfo = new BusinessAccountsListInfo();
-                headerInfo.setName(mainSet);
-                headerInfo.setMainImage(image);
-                headerInfo.setId(id);
-                this.mainSet.put(mainSet, headerInfo);
-                this.subSet.add(headerInfo);
-            }
-
-            ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
-            int listSize = subList.size();
-            listSize++;
-
-            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-            detailInfo.setName(subSet);
-            detailInfo.setDbaImage(image);
-            detailInfo.setId(id);
-            detailInfo.setAccountSttaus(accountStatus);
-
-            detailInfo.setIsSelected(false);
-
-            subList.add(detailInfo);
-            headerInfo.setSubsetName(subList);
-            groupPosition = this.subSet.indexOf(headerInfo);
-
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
-        return groupPosition;
-    }
-
-
-    @Override
-    public void selectedItem(int id) {
-
-        LogUtils.d(TAG, "accounttttt" + id);
-        identityVerificationViewModel.getPostAddDBABusiness(id);
-
     }
 }
