@@ -2,9 +2,11 @@ package com.greenbox.coyni.model;
 
 import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.utils.ProfileComparator;
 import com.greenbox.coyni.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class AccountsData {
     }
 
     public ArrayList<BaseProfile> getGroupData() {
+        Collections.sort(groupData, new ProfileComparator());
         return groupData;
     }
 
