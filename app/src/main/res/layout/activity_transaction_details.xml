@@ -45,5 +45,9 @@
         android:id="@+id/businessPayout"
         layout="@layout/activity_merchant_payout"
         android:visibility="gone" />
+    <include
+        android:id="@+id/reservePayout"
+        layout="@layout/activity_reserve_payout"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

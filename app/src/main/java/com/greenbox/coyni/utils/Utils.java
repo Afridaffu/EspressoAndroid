@@ -304,6 +304,10 @@ public class Utils {
     public static final String canceled = "Canceled";
     public static final String expired = "Expired";
 
+    public static final String open = "Open";
+    public static final String released = "Released";
+    public  static final String onhold = "On Hold";
+
     public static final String applyFilter = "apply";
     public static final String datePicker = "DatePicker";
 
