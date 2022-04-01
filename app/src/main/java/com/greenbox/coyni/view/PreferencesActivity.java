@@ -28,6 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
@@ -37,6 +38,7 @@ import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -60,14 +62,14 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     public static CustomerProfileViewModel customerProfileViewModel;
     private int timeZoneID = 0;
     public static PreferencesActivity preferencesActivity;
-    private ExpandableListView brandsGV;
+    private ExpandableListView profilesListView;
     private ImageView editProfileIV, userProfileIV, mIvUserIcon;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private int childid;
     private String SelectedDBAName = "";
-    private BusinessProfileRecyclerAdapter listAdapter;
+    private BusinessProfileRecyclerAdapter profilesListAdapter;
     private ImageView businessPersonalProfileTickIcon;
     LinearLayout emailLL, phoneLL, addressLL, userDetailsCloseLL, businessPersonalProfileAccount;
     Long mLastClickTime = 0L;
@@ -91,6 +93,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     }
 
     public void initFields() {
+
         try {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -135,7 +138,6 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
             });
 
             accountET.setOnClickListener(view -> {
-
                 try {
                     final Dialog dialog = new Dialog(PreferencesActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -146,7 +148,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
 //                    int width = mertics.widthPixels;
 
                     CardView doneButton = dialog.findViewById(R.id.default_DoneBtn);
-                    brandsGV = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
+                    profilesListView = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
                     mIvUserIcon = dialog.findViewById(R.id.profile_img);
                     mTvUserIconText = dialog.findViewById(R.id.b_imageTextTV);
                     businessPersonalProfileAccount = dialog.findViewById(R.id.profileLL);
@@ -160,15 +162,15 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                     wlp.gravity = Gravity.BOTTOM;
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     windowAccount.setAttributes(wlp);
+//
+//                    if (personalAccountList.get(0).isSelected()) {
+//                        businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
+//                    } else {
+//                        businessPersonalProfileTickIcon.setVisibility(View.GONE);
+//
+//                    }
 
-                    if (personalAccountList.get(0).isSelected()) {
-                        businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
-                    } else {
-                        businessPersonalProfileTickIcon.setVisibility(View.GONE);
-
-                    }
-
-                    brandsGV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                    profilesListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                         @Override
                         public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                             businessPersonalProfileTickIcon.setVisibility(View.GONE);
@@ -186,19 +188,22 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                                 }
                             }
                             LogUtils.d("TAG", "subSetChildClick" + subSet);
-                            listAdapter.notifyDataSetChanged();
+                            profilesListAdapter.notifyDataSetChanged();
                             return true;
                         }
                     });
+                    profilesListView.setVisibility(View.VISIBLE);
+                    LogUtils.d("TAG", "subSet" + subSet);
+                    setProfilesAdapter();
 
-                    if (businessAccountList.size() != 0) {
-                        brandsGV.setVisibility(View.VISIBLE);
-                        LogUtils.d("TAG", "subSet" + subSet);
-                        listAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, subSet, PreferencesActivity.this);
-                        brandsGV.setAdapter(listAdapter);
-                    } else {
-                        brandsGV.setVisibility(View.GONE);
-                    }
+//                    if (filterList.size() != 0) {
+//                        profilesListView.setVisibility(View.VISIBLE);
+//                        LogUtils.d("TAG", "subSet" + subSet);
+//                        setProfilesAdapter();
+//
+//                    } else {
+//                        profilesListView.setVisibility(View.GONE);
+//                    }
 
                     if (personalAccountList.size() != 0) {
                         businessPersonalProfileAccount.setVisibility(View.VISIBLE);
@@ -246,7 +251,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                                 }
                             }
                             LogUtils.d("TAG", "subSetChildClick" + subSet);
-                            listAdapter.notifyDataSetChanged();
+                            profilesListAdapter.notifyDataSetChanged();
 
                         }
                     });
@@ -311,8 +316,8 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
             dashboardViewModel.mePreferences();
 
             //  dashboardViewModel.getProfiles();
-
             // Business Preferences
+
             if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 timezonetext.setVisibility(View.VISIBLE);
                 defaultaccLL.setVisibility(View.GONE);
@@ -326,6 +331,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void initObservers() {
@@ -431,6 +437,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
 ////                    accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getEntityName()));
                     accountET.setText(Utils.capitalize(profilesResponse.getData().get(0).getFullName()));
                     globalProfileResp = profilesResponse;
+
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
 //                        if (profilesResponse.getData().size() > 1) {
 //                            disableView.setVisibility(View.VISIBLE);
@@ -450,23 +457,25 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
 //                        }
 
                         filterList = profilesResponse.getData();
-                        for (ProfilesResponse.Profiles c : filterList) {
-                            if (c.getAccountType().equals(Utils.BUSINESS)) {
-                                businessAccountList.add(c);
-                                addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId());
-                            } else {
-                                personalAccountList.add(c);
-                                for (int i = 0; i < personalAccountList.size(); i++) {
-                                    if (personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)) {
-                                        personalAccountList.get(i).setSelected(true);
-                                    } else {
-                                        personalAccountList.get(i).setSelected(false);
 
-                                    }
-                                }
-                            }
 
-                        }
+//                        for (ProfilesResponse.Profiles c : filterList) {
+//                            if (c.getAccountType().equals(Utils.BUSINESS)) {
+//                                businessAccountList.add(c);
+//                                addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId());
+//                            } else {
+//                                personalAccountList.add(c);
+//                                for (int i = 0; i < personalAccountList.size(); i++) {
+//                                    if (personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)) {
+//                                        personalAccountList.get(i).setSelected(true);
+//                                    } else {
+//                                        personalAccountList.get(i).setSelected(false);
+//
+//                                    }
+//                                }
+//                            }
+//
+//                        }
 
                     }
                 }
@@ -481,6 +490,42 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                 }
             }
         });
+    }
+
+    private void setProfilesAdapter() {
+
+        AccountsData accountsData = new AccountsData(filterList);
+        profilesListView.setVisibility(View.VISIBLE);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData,myApplicationObj.getLoginUserId());
+
+        profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onGroupClicked(int position, String accountType, Integer id) {
+                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
+                 //profilesListView.expandGroup(position);
+                // changeAccount(id);
+                childid = id;
+
+            }
+
+            @Override
+            public void onChildClicked(String accountType, Integer id) {
+                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
+              //  changeAccount(id);
+                childid = id;
+
+
+            }
+
+            @Override
+            public void onAddDbaClicked(String accountType, Integer id) {
+                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
+              //  changeAccount(id);
+                childid = id;
+
+            }
+        });
+        profilesListView.setAdapter(profilesListAdapter);
 
     }
 
@@ -526,4 +571,5 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     public void selectedItem(int id) {
 
     }
+
 }
