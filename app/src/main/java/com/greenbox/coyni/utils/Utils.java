@@ -91,10 +91,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -102,6 +104,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -1542,15 +1545,35 @@ public class Utils {
             }
         });
     }
-    
+
 
     public static String convertPayoutDate(String date) {
         String strDate = "";
         try {
+
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
             spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
             strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public static String convertUTCtoPST(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+            spf.setTimeZone(gmtTime);
+            Date newDate = spf.parse(date);
+            SimpleDateFormat sp = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+            TimeZone pstTime = TimeZone.getTimeZone("PST");
+            sp.setTimeZone(pstTime);
+            strDate = sp.format(newDate);
+            return strDate;
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1569,5 +1592,28 @@ public class Utils {
         spannableTV.setText(ss);
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+
+
+    public static String addNxtDay(String date) {
+        String strDate = "";
+        try {
+
+            Calendar calendar = Calendar.getInstance();
+            Date today = calendar.getTime();
+
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            Date tomorrow = calendar.getTime();
+
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ ");
+
+            String todayAsString = dateFormat.format(today);
+            String tomorrowAsString = dateFormat.format(tomorrow);
+
+            return tomorrowAsString;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
     }
 }

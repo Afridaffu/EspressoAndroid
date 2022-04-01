@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     Dialog prevDialog;
     private DatabaseHandler dbHandler;
     LoginViewModel loginViewModel;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -748,6 +750,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tvForgot:
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 showProgressDialog();
                 loginViewModel.emailotpresend(Utils.getUserEmail(PINActivity.this));
 //                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
@@ -1045,24 +1051,30 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         }.start();
     }
 
+//    private void SetDontRemind() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
+//            dsDontRemind.moveToFirst();
+//            if (dsDontRemind.getCount() > 0) {
+//                if (dsDontRemind.getString(1).equals("true")) {
+//                    isDontRemind = true;
+//                } else {
+//                    isDontRemind = false;
+//                }
+//            }
+//        } catch (Exception ex) {
+//            if (ex.getMessage().toString().contains("no such table")) {
+//                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+//            }
+//        }
+//    }
+
     private void SetDontRemind() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
-            dsDontRemind.moveToFirst();
-            if (dsDontRemind.getCount() > 0) {
-                if (dsDontRemind.getString(1).equals("true")) {
-                    isDontRemind = true;
-                } else {
-                    isDontRemind = false;
-                }
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
-            }
-        }
+        String value = dbHandler.getTableDontRemind();
+        isDontRemind = value != null && value.equals("true");
+
     }
 
     private void launchDashboard() {
