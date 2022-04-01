@@ -80,7 +80,7 @@ public class OnboardActivity extends BaseActivity {
             onboardActivity = this;
             dbHandler = DatabaseHandler.getInstance(OnboardActivity.this);
             //Temporary fix to handle table creation
-            dbHandler.initializeDB();
+//            dbHandler.initializeDB();
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -97,10 +97,16 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setIsTouchEnabled(false);
                 Utils.setIsFaceEnabled(false);
             }
-            SetDB();
-            SetToken();
-            SetFaceLock();
-            SetTouchId();
+//            SetDB();
+//            SetToken();
+//            SetFaceLock();
+//            SetTouchId();
+
+            setDB();
+            setToken();
+            setFaceLock();
+            setTouchId();
+
             isBiometric = Utils.checkBiometric(OnboardActivity.this);
             Utils.setIsBiometric(isBiometric);
 
@@ -359,6 +365,14 @@ public class OnboardActivity extends BaseActivity {
         }
     }
 
+    private void setDB() {
+        String value = dbHandler.getTableUserDetails();
+
+        if (value != null && !value.equals("")){
+            strFirstUser = value;
+        }
+    }
+
     private void SetToken() {
         try {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
@@ -371,6 +385,11 @@ public class OnboardActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void setToken() {
+        strToken = dbHandler.getPermanentToken();
+        objMyApplication.setStrMobileToken(strToken);
     }
 
     private void SetFaceLock() {
@@ -394,6 +413,23 @@ public class OnboardActivity extends BaseActivity {
         }
     }
 
+    private void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void SetTouchId() {
         try {
             isTouchId = false;
@@ -410,6 +446,23 @@ public class OnboardActivity extends BaseActivity {
                     objMyApplication.setLocalBiometric(false);
                 }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

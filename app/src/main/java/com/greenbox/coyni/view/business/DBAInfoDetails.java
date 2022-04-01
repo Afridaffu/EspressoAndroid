@@ -353,9 +353,17 @@ public class DBAInfoDetails extends BaseActivity {
                         } else {
                             emailTV.setText("");
                         }
-                        if (dbaInfoResp.getData().getWebsite() != null) {
+//                        if (dbaInfoResp.getData().getWebsite() != null) {
+//                            webSiteTV.setText("https://" + dbaInfoResp.getData().getWebsite());
+//                        } else {
+//                            webSiteTV.setText("");
+//                        }
+
+                        if (dbaInfoResp.getData().getWebsite() != null && !dbaInfoResp.getData().getWebsite().equals("")) {
+                            webLL.setVisibility(View.VISIBLE);
                             webSiteTV.setText("https://" + dbaInfoResp.getData().getWebsite());
                         } else {
+                            webLL.setVisibility(View.GONE);
                             webSiteTV.setText("");
                         }
 //                        if (dbaInfoResp.getData().getPhoneNumberDto().getPhoneNumber() != null) {

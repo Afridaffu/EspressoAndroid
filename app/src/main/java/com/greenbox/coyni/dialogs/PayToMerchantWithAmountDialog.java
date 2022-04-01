@@ -103,9 +103,9 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-//                        tv_lable.setText("Verifying");
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+                        tv_lable.setText("Verifying");
+//                        tv_lable.setVisibility(View.GONE);
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
                         dismiss();
                         getOnDialogClickListener().onDialogClicked(pay, null);
                     }
