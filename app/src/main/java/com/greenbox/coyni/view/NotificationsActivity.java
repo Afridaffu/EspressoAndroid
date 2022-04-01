@@ -702,13 +702,13 @@ public class NotificationsActivity extends AppCompatActivity {
             MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
 
             amountTV.setText(Utils.convertTwoDecimal(dataItem.getAmount().toString()));
-            payingToTV.setText("Paying " + dataItem.getToUser());
+            payingToTV.setText("Paying " + dataItem.getFromUser());
             if (dataItem.getRequesterWalletId().length() > Integer.parseInt(getString(R.string.waddress_length))) {
                 requesterIDTV.setText(dataItem.getRequesterWalletId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
             } else {
                 requesterIDTV.setText(dataItem.getRequesterWalletId());
             }
-            balanceTV.setText("Available: " + objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + " CYN");
+            balanceTV.setText("Available: " + Utils.convertBigDecimalUSDC(String.valueOf(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount())) + " CYN");
 
             if (!dataItem.getRemarks().equals("")) {
                 messageLL.setVisibility(View.VISIBLE);

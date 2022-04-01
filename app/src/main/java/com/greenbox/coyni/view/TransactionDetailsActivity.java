@@ -738,7 +738,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
 
         withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+//        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+
+        if (objData.getWithdrawAmount().toLowerCase().contains("cyn")){
+            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        }
+        else {
+            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+
+        }
 //        if (objData.getDescription().equals("")) {
 //            withbankdescription.setVisibility(View.GONE);
 //        } else {
@@ -775,7 +783,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 //        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("USD", "").trim());
 //        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
 
-        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+//        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+        if (objData.getWithdrawAmount().toLowerCase().contains("cyn")){
+            withBankWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        }
+        else {
+            withBankWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+
+        }
+
         withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
         withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()));
 

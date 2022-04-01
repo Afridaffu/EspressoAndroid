@@ -91,6 +91,8 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
     Date endDateD = null;
     public static TransactionListActivity transactionListActivity;
 
+    boolean isSwipeToRefresh = false;
+
 //    ProgressDialog progressDialog;
 
     @Override
@@ -141,6 +143,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                     try {
                         noMoreTransactionTV.setVisibility(View.GONE);
 
+                        isSwipeToRefresh = true;
                         globalPending.clear();
                         globalPosted.clear();
                         transactionType.clear();
@@ -167,10 +170,14 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                         objMyApplication.initializeTransactionSearch();
                         objMyApplication.setTransactionListSearch(transactionListRequest);
 
+                        if (searchET.getText().length() > 0 && !searchET.getText().equals("")){
+                            searchET.setText("");
+                        }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+//                    swipeRefreshLayout.setRefreshing(false);
                 }
             });
 
@@ -289,10 +296,12 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             pendingTxt.setVisibility(View.GONE);
             noTransactionTV.setVisibility(View.VISIBLE);
         } else if (charSequence.toString().trim().length() == 0) {
-            globalPending.clear();
-            globalPosted.clear();
-            objMyApplication.getTransactionListSearch().setPageNo("0");
-            transactionsAPI(objMyApplication.getTransactionListSearch());
+            if (!isSwipeToRefresh) {
+                globalPending.clear();
+                globalPosted.clear();
+                objMyApplication.getTransactionListSearch().setPageNo("0");
+                transactionsAPI(objMyApplication.getTransactionListSearch());
+            }
         }
     }
 
@@ -429,6 +438,9 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                swipeRefreshLayout.setRefreshing(false);
+                isSwipeToRefresh = false;
             }
         });
     }

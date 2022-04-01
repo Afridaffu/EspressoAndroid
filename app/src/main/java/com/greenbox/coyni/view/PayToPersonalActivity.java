@@ -759,4 +759,13 @@ public class PayToPersonalActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (pDialog != null){
+            pDialog.dismiss();
+        }
+    }
 }
