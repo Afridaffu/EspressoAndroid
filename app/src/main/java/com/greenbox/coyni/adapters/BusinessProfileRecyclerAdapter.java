@@ -8,7 +8,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.AccountsData;
@@ -23,9 +22,7 @@ import java.util.ArrayList;
 public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    //private ArrayList<BusinessAccountsListInfo> mainSetName;
     private OnItemClickListener listener;
-    //private BusinessAccountsListInfo headerInfo;
     private AccountsData accountsData;
     private int selectedID;
 
@@ -66,6 +63,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                              View view, ViewGroup parent) {
+
         BaseProfile groupProfile = accountsData.getGroupData().get(groupPosition);
         ArrayList<ProfilesResponse.Profiles> profilesList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(groupProfile.getId());
         ProfilesResponse.Profiles detailInfo = profilesList.get(childPosition);
@@ -84,7 +82,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         LinearLayout addDBA = view.findViewById(R.id.ll_add_dba);
 
         LogUtils.d("isLastChild", "isLastChild" + isLastChild);
-
 
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
             childItem.setText(detailInfo.getCompanyName());
@@ -287,8 +284,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             });
         }
 
-
-
         return view;
     }
 
@@ -314,6 +309,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
         public void onAddDbaClicked(String accountType, Integer id);
     }
+
 
 }
 

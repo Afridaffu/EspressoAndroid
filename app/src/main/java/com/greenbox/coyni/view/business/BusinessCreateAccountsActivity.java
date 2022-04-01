@@ -272,6 +272,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity implements Busi
     }
 
     private void setProfilesAdapter() {
+
         AccountsData accountsData = new AccountsData(profilesList);
         profilesListView.setVisibility(View.VISIBLE);
         profilesListAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this, accountsData,myApplication.getLoginUserId());
