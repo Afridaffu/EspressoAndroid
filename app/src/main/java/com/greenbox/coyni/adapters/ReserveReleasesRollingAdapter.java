@@ -113,6 +113,7 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
             } else {
                 holder.dateTime.setText("Release: " + Utils.convertPayoutDate(objData.getCreatedAt()));
 
+
             }
         }
 

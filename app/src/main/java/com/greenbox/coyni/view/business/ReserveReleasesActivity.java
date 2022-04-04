@@ -20,6 +20,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.adapters.ReserveReleaseManualListAdapter;
 import com.greenbox.coyni.adapters.ReserveReleasesRollingAdapter;
+import com.greenbox.coyni.dialogs.MerchantTransactionsFilterDialog;
 import com.greenbox.coyni.dialogs.ReserveReleaseDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ReserveReleasesFilterDialog;
@@ -131,8 +132,8 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     }
 
     private void showFiltersPopup() {
-
         ReserveReleasesFilterDialog showReserveReleaseDialog = new ReserveReleasesFilterDialog(ReserveReleasesActivity.this);
+
         showReserveReleaseDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
