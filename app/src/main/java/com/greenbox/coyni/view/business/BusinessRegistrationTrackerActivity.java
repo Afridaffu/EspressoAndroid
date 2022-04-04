@@ -413,7 +413,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 //                            }
                             reloadTrackerDashboard(btResp);
 
-                        }
+                        } else {
+                        Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessRegistrationTrackerActivity.this, "", btResp.getError().getFieldErrors().get(0));
+                    }
                     }
                 }
             });

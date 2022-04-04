@@ -57,6 +57,7 @@ import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
 import com.greenbox.coyni.dialogs.BaseDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
@@ -89,7 +90,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisibilityListener, BusinessProfileRecyclerAdapter.OnSelectListner {
+public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     private static Dialog bottomDialog;
     ImageView editProfileIV, userProfileIV, mIvUserIcon;
@@ -99,7 +100,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private TextInputEditText business_defaultaccountET;
     private MyApplication myApplicationObj;
     private DatabaseHandler dbHandler;
-    private ExpandableListView brandsGV;
+    private ExpandableListView profilesListView;
 
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
@@ -133,11 +134,14 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private CustomerProfileViewModel customerProfileViewModel;
-    private String accountTypeId = "";
+    private int accountTypeId;
     private int childid;
     private String SelectedDBAName;
-    private BusinessProfileRecyclerAdapter listAdapter;
+    private BusinessProfileRecyclerAdapter profilesListAdapter;
     private ImageView businessPersonalProfileTickIcon;
+    private String preferenceName;
+    private String childName;
+    private ProfilesResponse globalProfileResp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -485,7 +489,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 //                    int width = mertics.widthPixels;
 
                     CardView doneButton = dialog.findViewById(R.id.default_DoneBtn);
-                    brandsGV = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
+                    profilesListView = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
                     mIvUserIcon = dialog.findViewById(R.id.profile_img);
                     mTvUserIconText = dialog.findViewById(R.id.b_imageTextTV);
                     businessPersonalProfileAccount = dialog.findViewById(R.id.profileLL);
@@ -501,99 +505,102 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
 
-                    if (personalAccountList.get(0).isSelected()) {
-                        businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
-                    } else {
-                        businessPersonalProfileTickIcon.setVisibility(View.GONE);
+//                    if (personalAccountList.get(0).isSelected()) {
+//                        businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
+//                    } else {
+//                        businessPersonalProfileTickIcon.setVisibility(View.GONE);
+//
+//                    }
 
-                    }
+                    LogUtils.d("TAG", "subSet" + subSet);
+                    setProfilesAdapter();
 
-                    brandsGV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-                        @Override
-                        public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                            businessPersonalProfileTickIcon.setVisibility(View.GONE);
-                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-                            LogUtils.d(TAG, "GroupChildClick" + i + "....." + i1 + "....." + l);
-                            childid = subSet.get(i).getSubsetName().get(i1).getId();
-                            SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
-                            for (int k = 0; k < subSet.size(); k++) {
-                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
-                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
-                                    } else {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
-                                    }
-                                }
-                            }
-                            LogUtils.d(TAG, "subSetChildClick" + subSet);
-                            listAdapter.notifyDataSetChanged();
-                            return true;
-                        }
-                    });
-
-                    if (businessAccountList.size() != 0) {
-                        try {
-                            brandsGV.setVisibility(View.VISIBLE);
-                            LogUtils.d(TAG, "subSet" + subSet);
-                            //listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
-                            brandsGV.setAdapter(listAdapter);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        brandsGV.setVisibility(View.GONE);
-                    }
-
-                    if (personalAccountList.size() != 0) {
-                        businessPersonalProfileAccount.setVisibility(View.VISIBLE);
-                        personalAccountExist = "true";
-                        String iconText = "";
-                        if (personalAccountList.get(0).getCompanyName() != null
-                        ) {
-                            String firstName = personalAccountList.get(0).getCompanyName();
-                            iconText = firstName.substring(0, 1).toUpperCase();
-                            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-
-                        }
-                        if (personalAccountList.get(0).getImage() != null) {
-                            mTvUserIconText.setVisibility(View.GONE);
-                            mIvUserIcon.setVisibility(View.VISIBLE);
-                            Glide.with(UserDetailsActivity.this)
-                                    .load(personalAccountList.get(0).getImage())
-                                    .placeholder(R.drawable.ic_profile_male_user)
-                                    .into(mIvUserIcon);
-                        } else {
-                            mTvUserIconText.setVisibility(View.VISIBLE);
-                            mIvUserIcon.setVisibility(View.GONE);
-                            mTvUserIconText.setText(iconText);
-                        }
-                        defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getFullName());
-                    } else {
-                        personalAccountExist = "false";
-                        businessPersonalProfileAccount.setVisibility(View.GONE);
-                    }
-
-                    businessPersonalProfileAccount.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-                            businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
-                            childid = personalAccountList.get(0).getId();
-                            SelectedDBAName = personalAccountList.get(0).getFullName();
-                            for (int k = 0; k < subSet.size(); k++) {
-                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
-                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
-                                    } else {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
-                                    }
-                                }
-                            }
-                            LogUtils.d(TAG, "subSetChildClick" + subSet);
-                            listAdapter.notifyDataSetChanged();
-
-                        }
-                    });
+//                    profilesListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+//                        @Override
+//                        public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+//                            businessPersonalProfileTickIcon.setVisibility(View.GONE);
+//                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+//                            LogUtils.d(TAG, "GroupChildClick" + i + "....." + i1 + "....." + l);
+//                            childid = subSet.get(i).getSubsetName().get(i1).getId();
+//                            SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
+//                            for (int k = 0; k < subSet.size(); k++) {
+//                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
+//                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
+//                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
+//                                    } else {
+//                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
+//                                    }
+//                                }
+//                            }
+//                            LogUtils.d(TAG, "subSetChildClick" + subSet);
+//                            profilesListAdapter.notifyDataSetChanged();
+//                            return true;
+//                        }
+//                    });
+//
+////                    if (businessAccountList.size() != 0) {
+////                        try {
+////                            brandsGV.setVisibility(View.VISIBLE);
+////                            LogUtils.d(TAG, "subSet" + subSet);
+////                            //listAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, subSet, UserDetailsActivity.this);
+////                            brandsGV.setAdapter(listAdapter);
+////                        } catch (Exception e) {
+////                            e.printStackTrace();
+////                        }
+////                    } else {
+////                        brandsGV.setVisibility(View.GONE);
+////                    }
+//
+//                    if (personalAccountList.size() != 0) {
+//                        businessPersonalProfileAccount.setVisibility(View.VISIBLE);
+//                        personalAccountExist = "true";
+//                        String iconText = "";
+//                        if (personalAccountList.get(0).getCompanyName() != null
+//                        ) {
+//                            String firstName = personalAccountList.get(0).getCompanyName();
+//                            iconText = firstName.substring(0, 1).toUpperCase();
+//                            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+//
+//                        }
+//                        if (personalAccountList.get(0).getImage() != null) {
+//                            mTvUserIconText.setVisibility(View.GONE);
+//                            mIvUserIcon.setVisibility(View.VISIBLE);
+//                            Glide.with(UserDetailsActivity.this)
+//                                    .load(personalAccountList.get(0).getImage())
+//                                    .placeholder(R.drawable.ic_profile_male_user)
+//                                    .into(mIvUserIcon);
+//                        } else {
+//                            mTvUserIconText.setVisibility(View.VISIBLE);
+//                            mIvUserIcon.setVisibility(View.GONE);
+//                            mTvUserIconText.setText(iconText);
+//                        }
+//                        defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getFullName());
+//                    } else {
+//                        personalAccountExist = "false";
+//                        businessPersonalProfileAccount.setVisibility(View.GONE);
+//                    }
+//
+//                    businessPersonalProfileAccount.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
+//                            businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
+//                            childid = personalAccountList.get(0).getId();
+//                            SelectedDBAName = personalAccountList.get(0).getFullName();
+//                            for (int k = 0; k < subSet.size(); k++) {
+//                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
+//                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
+//                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
+//                                    } else {
+//                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
+//                                    }
+//                                }
+//                            }
+//                            LogUtils.d(TAG, "subSetChildClick" + subSet);
+//                            profilesListAdapter.notifyDataSetChanged();
+//
+//                        }
+//                    });
 
                     dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
@@ -627,16 +634,39 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         }
     }
 
-    @Override
-    public void selectedItem(int id) {
-        LogUtils.d("profilesss", "profiles" + id);
-        UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
-        userPreferenceModel.setLocalCurrency(0);
-        userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-        userPreferenceModel.setPreferredAccount(id);
-        customerProfileViewModel.updatePreferences(userPreferenceModel);
+    private void setProfilesAdapter() {
+
+        boolean showDBA=false;
+        AccountsData accountsData = new AccountsData(filterList);
+        profilesListView.setVisibility(View.VISIBLE);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData,myApplicationObj.getLoginUserId(),showDBA);
+
+        profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onGroupClicked(int position, String accountType, Integer id,String fullname) {
+                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id +"fullname"+ fullname);
+                childid = id;
+                SelectedDBAName = fullname;
+            }
+
+            @Override
+            public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
+                LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId()+"detailInfo"+ detailInfo.getDbaName());
+                childid = detailInfo.getId();
+                SelectedDBAName=detailInfo.getDbaName();
+            }
+
+            @Override
+            public void onAddDbaClicked(String accountType, Integer id) {
+                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
+                childid = id;
+
+            }
+        });
+        profilesListView.setAdapter(profilesListAdapter);
 
     }
+
 
     public void initObservers() {
 
@@ -680,7 +710,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             }
         });
 
-
         dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
             @Override
             public void onChanged(Preferences preferences) {
@@ -714,7 +743,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             myApplicationObj.setStrPreference("AST");
                         }
                     }
-                    accountTypeId = preferences.getData().getPreferredAccount();
+                    accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
                     dashboardViewModel.getProfiles();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -772,22 +801,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
                         }
 
-
-                        //                    myApplicationObj.setMyProfile(profile);
-                        //                    if (profile.getData().getImage() != null && !profile.getData().getImage().trim().equals("")) {
-                        //                        userProfileIV.setVisibility(View.VISIBLE);
-                        //                        imageTextTV.setVisibility(View.GONE);
-                        //                        Glide.with(UserDetailsActivity.this)
-                        //                                .load(profile.getData().getImage())
-                        //                                .into(userProfileIV);
-                        //                    } else {
-                        //                        userProfileIV.setVisibility(View.GONE);
-                        //                        imageTextTV.setVisibility(View.VISIBLE);
-                        //                        String imageText ="";
-                        //                        imageText = imageText+profile.getData().getFirstName().substring(0,1).toUpperCase()+
-                        //                                profile.getData().getLastName().substring(0,1).toUpperCase();
-                        //                        imageTextTV.setText(imageText);
-                        //                    }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -799,9 +812,14 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             @Override
             public void onChanged(UserPreference userPreference) {
                 if (userPreference != null) {
+
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), UserDetailsActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
+                        LogUtils.d(TAG,"userPreference"+userPreference);
+                        if (SelectedDBAName.equals(""))
+                            business_defaultaccountET.setText("");
+                        else
                         business_defaultaccountET.setText(SelectedDBAName);
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
@@ -831,74 +849,20 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
                     filterList = profilesResponse.getData();
+                    LogUtils.v(TAG,"getProfileRespMutableLiveData"+profilesResponse.getData());
+                    LogUtils.v(TAG,"accountTypeId"+accountTypeId);
+                    globalProfileResp = profilesResponse;
                     for (ProfilesResponse.Profiles c : filterList) {
-                        if (c.getAccountType().equals(Utils.BUSINESS)) {
-                            businessAccountList.add(c);
-                            addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId(), c.getAccountStatus());
-                        } else {
-                            personalAccountList.add(c);
-                            for (int i = 0; i < personalAccountList.size(); i++) {
-                                if (personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)) {
-                                    personalAccountList.get(i).setSelected(true);
-                                    business_defaultaccountET.setText(personalAccountList.get(i).getFullName());
-                                } else {
-                                    personalAccountList.get(i).setSelected(false);
-
-                                }
-                            }
+                        if(c.getId()== accountTypeId){
+                            SelectedDBAName = c.getDbaName();
+                            business_defaultaccountET.setText(c.getDbaName());
                         }
-
                     }
 
                 }
             }
         });
 
-    }
-
-    private int addDetails(String mainSet, String subSet, String image, int id, String accountStatus) {
-
-        int groupPosition = 0;
-        try {
-            LogUtils.d("ADDDETAILS", "adddetails" + mainSet + subSet + id + accountTypeId);
-            groupPosition = 0;
-            BusinessAccountsListInfo headerInfo = this.mainSet.get(mainSet);
-
-            if (headerInfo == null) {
-                headerInfo = new BusinessAccountsListInfo();
-                headerInfo.setName(mainSet);
-                headerInfo.setMainImage(image);
-                this.mainSet.put(mainSet, headerInfo);
-                this.subSet.add(headerInfo);
-            }
-
-            ArrayList<BusinessAccountDbaInfo> subList = headerInfo.getSubsetName();
-            int listSize = subList.size();
-            listSize++;
-
-            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-            detailInfo.setName(subSet);
-            detailInfo.setDbaImage(image);
-            detailInfo.setId(id);
-            detailInfo.setAccountSttaus(accountStatus);
-
-            if (detailInfo.getId() == Integer.parseInt(accountTypeId)) {
-                detailInfo.setIsSelected(true);
-                business_defaultaccountET.setText(subSet);
-
-            } else {
-                detailInfo.setIsSelected(false);
-            }
-
-            subList.add(detailInfo);
-
-            headerInfo.setSubsetName(subList);
-            groupPosition = this.subSet.indexOf(headerInfo);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
-        return groupPosition;
     }
 
     private void bindImage(String imageString) {

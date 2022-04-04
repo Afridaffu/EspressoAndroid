@@ -78,6 +78,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     private String accountTypeId = "";
     private String personalAccountExist;
     ProfilesResponse globalProfileResp;
+    private String childName;
 
 
     @Override
@@ -162,99 +163,8 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                     wlp.gravity = Gravity.BOTTOM;
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     windowAccount.setAttributes(wlp);
-//
-//                    if (personalAccountList.get(0).isSelected()) {
-//                        businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
-//                    } else {
-//                        businessPersonalProfileTickIcon.setVisibility(View.GONE);
-//
-//                    }
 
-                    profilesListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-                        @Override
-                        public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
-                            businessPersonalProfileTickIcon.setVisibility(View.GONE);
-                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-                            LogUtils.d("TAG", "GroupChildClick" + i + "....." + i1 + "....." + l);
-                            childid = subSet.get(i).getSubsetName().get(i1).getId();
-                            SelectedDBAName = subSet.get(i).getSubsetName().get(i1).getName();
-                            for (int k = 0; k < subSet.size(); k++) {
-                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
-                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
-                                    } else {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
-                                    }
-                                }
-                            }
-                            LogUtils.d("TAG", "subSetChildClick" + subSet);
-                            profilesListAdapter.notifyDataSetChanged();
-                            return true;
-                        }
-                    });
-                    profilesListView.setVisibility(View.VISIBLE);
-                    LogUtils.d("TAG", "subSet" + subSet);
                     setProfilesAdapter();
-
-//                    if (filterList.size() != 0) {
-//                        profilesListView.setVisibility(View.VISIBLE);
-//                        LogUtils.d("TAG", "subSet" + subSet);
-//                        setProfilesAdapter();
-//
-//                    } else {
-//                        profilesListView.setVisibility(View.GONE);
-//                    }
-
-                    if (personalAccountList.size() != 0) {
-                        businessPersonalProfileAccount.setVisibility(View.VISIBLE);
-                        personalAccountExist = "true";
-                        String iconText = "";
-                        if (personalAccountList.get(0).getCompanyName() != null
-                        ) {
-                            String firstName = personalAccountList.get(0).getCompanyName();
-                            iconText = firstName.substring(0, 1).toUpperCase();
-                            String username = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-
-                        }
-                        if (personalAccountList.get(0).getImage() != null) {
-                            mTvUserIconText.setVisibility(View.GONE);
-                            mIvUserIcon.setVisibility(View.VISIBLE);
-                            Glide.with(PreferencesActivity.this)
-                                    .load(personalAccountList.get(0).getImage())
-                                    .placeholder(R.drawable.ic_profile_male_user)
-                                    .into(mIvUserIcon);
-                        } else {
-                            mTvUserIconText.setVisibility(View.VISIBLE);
-                            mIvUserIcon.setVisibility(View.GONE);
-                            mTvUserIconText.setText(iconText);
-                        }
-                        defualtAccountDialogPersonalNameTV.setText(personalAccountList.get(0).getFullName());
-                    } else {
-                        personalAccountExist = "false";
-                        businessPersonalProfileAccount.setVisibility(View.GONE);
-                    }
-
-                    businessPersonalProfileAccount.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            BusinessAccountDbaInfo detailInfo = new BusinessAccountDbaInfo();
-                            businessPersonalProfileTickIcon.setVisibility(View.VISIBLE);
-                            childid = personalAccountList.get(0).getId();
-                            SelectedDBAName = personalAccountList.get(0).getFullName();
-                            for (int k = 0; k < subSet.size(); k++) {
-                                for (int j = 0; j < subSet.get(k).getSubsetName().size(); j++) {
-                                    if (subSet.get(k).getSubsetName().get(j).getId() == childid) {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(true);
-                                    } else {
-                                        subSet.get(k).getSubsetName().get(j).setIsSelected(false);
-                                    }
-                                }
-                            }
-                            LogUtils.d("TAG", "subSetChildClick" + subSet);
-                            profilesListAdapter.notifyDataSetChanged();
-
-                        }
-                    });
 
                     dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
@@ -439,43 +349,8 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                     globalProfileResp = profilesResponse;
 
                     if (profilesResponse.getStatus().equals("SUCCESS")) {
-//                        if (profilesResponse.getData().size() > 1) {
-//                            disableView.setVisibility(View.VISIBLE);
-//                            accountDDIV.setVisibility(View.VISIBLE);
-//                            accountET.setClickable(true);
-//                            accountET.setEnabled(true);
-//                            Utils.setUpperHintColor(accountTIL, getColor(R.color.black));
-//
-//                        } else {
-//                            Log.e("else", "else");
-//                            accountDDIV.setVisibility(View.VISIBLE);
-//                            disableView.setVisibility(View.VISIBLE);
-//                            accountET.setClickable(true);
-//                            accountET.setEnabled(true);
-//                            Log.e("else", "else");
-//                            Utils.setUpperHintColor(accountTIL, getColor(R.color.xdark_gray));
-//                        }
 
                         filterList = profilesResponse.getData();
-
-
-//                        for (ProfilesResponse.Profiles c : filterList) {
-//                            if (c.getAccountType().equals(Utils.BUSINESS)) {
-//                                businessAccountList.add(c);
-//                                addDetails(String.valueOf(c.getCompanyName()), c.getDbaName(), c.getImage(), c.getId());
-//                            } else {
-//                                personalAccountList.add(c);
-//                                for (int i = 0; i < personalAccountList.size(); i++) {
-//                                    if (personalAccountList.get(i).getId() == Integer.parseInt(accountTypeId)) {
-//                                        personalAccountList.get(i).setSelected(true);
-//                                    } else {
-//                                        personalAccountList.get(i).setSelected(false);
-//
-//                                    }
-//                                }
-//                            }
-//
-//                        }
 
                     }
                 }
@@ -493,34 +368,30 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     }
 
     private void setProfilesAdapter() {
-
+        boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData,myApplicationObj.getLoginUserId());
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData,myApplicationObj.getLoginUserId(),showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onGroupClicked(int position, String accountType, Integer id) {
+            public void onGroupClicked(int position, String accountType, Integer id,String fullname) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-                 //profilesListView.expandGroup(position);
-                // changeAccount(id);
                 childid = id;
+                SelectedDBAName = fullname;
 
             }
 
             @Override
-            public void onChildClicked(String accountType, Integer id) {
-                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-              //  changeAccount(id);
-                childid = id;
-
-
+            public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
+                LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId());
+                childid = detailInfo.getId();
+                SelectedDBAName = detailInfo.getDbaName();
             }
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-              //  changeAccount(id);
                 childid = id;
 
             }
