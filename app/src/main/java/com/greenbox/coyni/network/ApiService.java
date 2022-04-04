@@ -544,17 +544,17 @@ public interface ApiService {
     @POST("api/v2/business/fees")
     Call<CompanyInfoUpdateResp> fees();
 
-    @GET("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutListData();
+//    @POST("api/v2/transactions/admin/totalPayout")
+//    Call<BatchPayoutListResponse> getPayoutListData();
 
 //    @POST("api/v2/transactions/business-activity")
 //    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
-
-    @GET("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
-
-    @GET("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+//
+//    @POST("api/v2/transactions/admin/totalPayout")
+//    Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
+//
+//    @POST("api/v2/transactions/admin/totalPayout")
+//    Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
 }
 

@@ -33,6 +33,33 @@ public class BatchPayoutListItems extends ListItem implements Serializable, Comp
     @SerializedName("reserve")
     @Expose
     private String reserve;
+//    private String reserveId;
+//    private String scheduledRelease;
+//    private String reserveAmount;
+//
+//    public String getReserveId() {
+//        return reserveId;
+//    }
+//
+//    public void setReserveId(String reserveId) {
+//        this.reserveId = reserveId;
+//    }
+//
+//    public String getScheduledRelease() {
+//        return scheduledRelease;
+//    }
+//
+//    public void setScheduledRelease(String scheduledRelease) {
+//        this.scheduledRelease = scheduledRelease;
+//    }
+//
+//    public String getReserveAmount() {
+//        return reserveAmount;
+//    }
+//
+//    public void setReserveAmount(String reserveAmount) {
+//        this.reserveAmount = reserveAmount;
+//    }
 
     public BatchPayoutListItems(List<BatchPayoutListItems> items) {
     }
