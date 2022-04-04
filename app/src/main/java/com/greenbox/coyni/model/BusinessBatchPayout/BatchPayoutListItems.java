@@ -32,34 +32,24 @@ public class BatchPayoutListItems extends ListItem implements Serializable, Comp
     private String sentTo;
     @SerializedName("reserve")
     @Expose
-    private String reserve;
-//    private String reserveId;
-//    private String scheduledRelease;
-//    private String reserveAmount;
-//
-//    public String getReserveId() {
-//        return reserveId;
-//    }
-//
-//    public void setReserveId(String reserveId) {
-//        this.reserveId = reserveId;
-//    }
-//
-//    public String getScheduledRelease() {
-//        return scheduledRelease;
-//    }
-//
-//    public void setScheduledRelease(String scheduledRelease) {
-//        this.scheduledRelease = scheduledRelease;
-//    }
-//
-//    public String getReserveAmount() {
-//        return reserveAmount;
-//    }
-//
-//    public void setReserveAmount(String reserveAmount) {
-//        this.reserveAmount = reserveAmount;
-//    }
+    private String scheduledRelease;
+    private String reserveAmount;
+
+    public String getScheduledRelease() {
+        return scheduledRelease;
+    }
+
+    public void setScheduledRelease(String scheduledRelease) {
+        this.scheduledRelease = scheduledRelease;
+    }
+
+    public String getReserveAmount() {
+        return reserveAmount;
+    }
+
+    public void setReserveAmount(String reserveAmount) {
+        this.reserveAmount = reserveAmount;
+    }
 
     public BatchPayoutListItems(List<BatchPayoutListItems> items) {
     }
@@ -120,15 +110,6 @@ public class BatchPayoutListItems extends ListItem implements Serializable, Comp
     public void setSentTo(String sentTo) {
         this.sentTo = sentTo;
     }
-
-    public String getReserve() {
-        return reserve;
-    }
-
-    public void setReserve(String reserve) {
-        this.reserve = reserve;
-    }
-
 
     public int getType() {
         return type;
