@@ -10,10 +10,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
-import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
@@ -336,7 +335,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public void getPayoutListData() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BatchPayoutListResponse> call = apiService.getPayoutListData();
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(new EmptyRequest());
             call.enqueue(new Callback<BatchPayoutListResponse>() {
                 @Override
                 public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
