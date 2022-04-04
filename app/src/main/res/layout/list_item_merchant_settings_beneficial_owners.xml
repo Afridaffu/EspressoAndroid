@@ -52,6 +52,7 @@
                         android:layout_gravity="top"
                         android:layout_toRightOf="@+id/nameTx"
                         android:contentDescription="@string/primary"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:src="@drawable/ic_icon_awesome_star"
                         android:visibility="gone" />
 

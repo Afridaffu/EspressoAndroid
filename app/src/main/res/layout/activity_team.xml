@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     tools:context=".view.business.TeamActivity">
 
     <LinearLayout
@@ -151,11 +151,17 @@
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>
 
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:scrollbars="none"
+                android:fillViewport="true">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTeam"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTeam"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+            </ScrollView>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

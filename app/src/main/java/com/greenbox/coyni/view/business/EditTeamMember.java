@@ -262,6 +262,7 @@ public class EditTeamMember extends BaseActivity {
                     } else {
                         focusedID = editEmailET.getId();
 //                        editEmailET.setHint("Email");
+                        editEmailLL.setVisibility(GONE);
                         editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_green));
                     }
