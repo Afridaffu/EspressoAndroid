@@ -138,6 +138,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
                     showProgressDialog();
                     teamInfoAddAPICall(prepareRequest());
+                    Utils.hideKeypad(AddNewTeamMemberActivity.this);
                 }
             }
         });

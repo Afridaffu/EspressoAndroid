@@ -154,6 +154,7 @@ public class EditTeamMember extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
                     showProgressDialog();
                     teamInfoAPICall(prepareRequest());
+                    Utils.hideKeypad(EditTeamMember.this);
                 }
 
             }

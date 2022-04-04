@@ -75,6 +75,19 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
                 showCalendarDialog();
             }
         });
+        filterDatePickET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+                if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
+                    return;
+                }
+                showCalendarDialog();
+            }
+        });
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

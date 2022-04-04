@@ -66,8 +66,8 @@ public class TeamMemberActivity extends BaseActivity {
                                 }
                                 txName.setText(firstName + " " + lastName);
                                 char first = firstName.charAt(0);
-                                char lastname = lastName.charAt(0);
-                                String imageName = String.valueOf(first) + String.valueOf(lastname);
+//                                char lastname = lastName.charAt(0);
+                                String imageName = String.valueOf(first);
                                 txImageName.setText(imageName);
                                 if (data.getRoleName() != null && !data.getRoleName().equals("")) {
                                     txRole.setText(data.getRoleName());
