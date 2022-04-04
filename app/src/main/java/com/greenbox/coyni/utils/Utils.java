@@ -1560,7 +1560,19 @@ public class Utils {
         }
         return strDate;
     }
+    public static String convertMerchantDate(String date) {
+        String strDate = "";
+        try {
 
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
     public static String convertUTCtoPST(String date) {
         String strDate = "";
         try {
