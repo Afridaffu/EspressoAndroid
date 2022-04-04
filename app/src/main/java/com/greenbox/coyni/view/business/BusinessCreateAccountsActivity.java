@@ -70,6 +70,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private IdentityVerificationViewModel identityVerificationViewModel;
     private String userName;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -77,7 +78,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_business_personal_accounts);
-
             initFields();
             showUserData();
             initObservers();
@@ -289,31 +289,29 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     private void setProfilesAdapter() {
-
+        boolean showDBA = true;
         AccountsData accountsData = new AccountsData(profilesList);
         profilesListView.setVisibility(View.VISIBLE);
         profilesListAdapter = new BusinessProfileRecyclerAdapter(BusinessCreateAccountsActivity.this,
-                accountsData, myApplication.getLoginUserId());
+                accountsData, myApplication.getLoginUserId(),showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onGroupClicked(int position, String accountType, Integer id) {
+            public void onGroupClicked(int position, String accountType, Integer id,String fullname) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
                 changeAccount(id);
             }
 
             @Override
-            public void onChildClicked(String accountType, Integer id) {
-                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
-                changeAccount(id);
-
+            public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
+                LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId());
+                changeAccount(detailInfo.getId());
             }
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
-                changeAccount(id);
-
+                addDBA(id);
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
@@ -325,6 +323,15 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 return false;
             }
         });
+    }
+
+    public void addDBA(int companyId){
+        LogUtils.d(TAG,"addDBA"+companyId);
+        if (companyId != 0) {
+            identityVerificationViewModel.getPostAddDBABusiness(companyId);
+        } else {
+
+        }
     }
 
     public void initObservers() {
@@ -485,6 +492,25 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
                     LogUtils.d(TAG, "addDBAresponse" + identityImageResponse);
+                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
+                                .putExtra("ADDBUSINESS", true)
+                                .putExtra("ADDDBA", true));
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
