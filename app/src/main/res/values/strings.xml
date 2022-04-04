@@ -578,7 +578,7 @@
     <string name="uploaded_on">Uploaded on </string>
     <string name="companys_name">Company’s Name</string>
     <string name="gift_card_name">Gift Card Name</string>
-
+    <string name="shared_account">Shared Account</string>
     <string name="back_button">back button</string>
     <string name="name_on_card">Name on Card</string>
     <string name="card_exp">Card Exp</string>

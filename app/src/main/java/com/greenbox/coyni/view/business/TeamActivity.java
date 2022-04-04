@@ -131,7 +131,6 @@ public class TeamActivity extends BaseActivity {
                 intent.putExtra(Utils.teamMemberId, datumList.get(position).getId());
                 intent.putExtra(Utils.teamStatus, datumList.get(position).getStatus());
                 startActivity(intent);
-
             };
         } catch (Exception ex) {
             ex.printStackTrace();
