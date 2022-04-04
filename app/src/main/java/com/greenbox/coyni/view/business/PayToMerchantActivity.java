@@ -37,6 +37,7 @@ import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.templates.TemplateRequest;
@@ -683,14 +684,13 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void payTransaction() {
         try {
-            TransferPayRequest request = new TransferPayRequest();
-            request.setTokens(payET.getText().toString().trim().replace(",", ""));
-            request.setRemarks("");
+            PaidOrderRequest request = new PaidOrderRequest();
+            request.setTokensAmount(Double.parseDouble(payET.getText().toString().trim().replace(",", "").trim()));
             request.setRecipientWalletId(recipientAddress);
-            objMyApplication.setTransferPayRequest(request);
-            objMyApplication.setWithdrawAmount(cynValue);
+//            objMyApplication.setTransferPayRequest(request);
+//            objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayToMerchantActivity.this)) {
-                payViewModel.sendTokens(request);
+                payViewModel.paidOrder(request);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
