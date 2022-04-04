@@ -528,17 +528,19 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             }
         });
 
-//        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
-//                    return;
-//                }
-//                mLastClickTimeFilters = SystemClock.elapsedRealtime();
-//                getOnDialogClickListener().onDialogClicked("Date_PICK_SELECTED", null);
-//                dismiss();
-//            }
-//        });
+        getDateFromPickerET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
+                if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
+                    return;
+                }
+                showCalendar();
+            }
+        });
     }
 
     public void showCalendar() {
