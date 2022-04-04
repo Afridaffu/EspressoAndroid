@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -107,6 +108,15 @@ public class MyApplication extends Application {
     BOResp beneficialOwnersResponse;
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
+    Double merchantBalance = 0.0;
+
+    public Double getMerchantBalance() {
+        return merchantBalance;
+    }
+
+    public void setMerchantBalance(Double merchantBalance) {
+        this.merchantBalance = merchantBalance;
+    }
 
     public int getDbaOwnerId() {
         return dbaOwnerId;
@@ -444,6 +454,32 @@ public class MyApplication extends Application {
                 SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date newDate = spf.parse(date);
                 spf = new SimpleDateFormat("hh:mm aa");
+                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
+                strDate = spf.format(newDate);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public String convertZoneDateTime(String date, String format, String requiredFormat) {
+        String strDate = "";
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneOffset.UTC);
+                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
+                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+                strDate = zonedTime.format(DATE_TIME_FORMATTER);
+            } else {
+                SimpleDateFormat spf = new SimpleDateFormat(format);
+                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newDate = spf.parse(date);
+                spf = new SimpleDateFormat(requiredFormat);
                 spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
                 strDate = spf.format(newDate);
             }

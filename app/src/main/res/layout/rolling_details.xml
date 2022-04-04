@@ -60,10 +60,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/_8sdp"
         android:layout_below="@id/dateTime_TV"
-        android:background="@color/vlight_gray"
         android:layout_marginStart="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        />
+        android:background="@color/vlight_gray" />
 </RelativeLayout>

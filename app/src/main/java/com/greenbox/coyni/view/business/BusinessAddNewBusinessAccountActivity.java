@@ -181,7 +181,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity implemen
                             if (c.getDbaOwner()==null && c.getAccountType().equals(Utils.BUSINESS) ) {
                                 businessAccountList.add(c);
                             } else {
-                            }
+         }
                         }
                     }
                 }

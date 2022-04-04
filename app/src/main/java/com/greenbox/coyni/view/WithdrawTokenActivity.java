@@ -70,6 +70,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -99,6 +100,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     BuyTokenViewModel buyTokenViewModel;
     DashboardViewModel dashboardViewModel;
     CoyniViewModel coyniViewModel;
+    DatabaseHandler dbHandler;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     ProgressDialog pDialog;
@@ -255,7 +257,11 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 12);
+                        tvCurrency.setLayoutParams(params1);
+
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
@@ -263,7 +269,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 0, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 10);
+                        tvCurrency.setLayoutParams(params1);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() >= 9) {
@@ -271,22 +280,19 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 10);
+                        tvCurrency.setLayoutParams(params1);
                     } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if (editable.length() <= 4) {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(15, 13, 0, 0);
-                        imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 25);
+                        tvCurrency.setLayoutParams(params1);
                     }
 
 //                    if (editable.length() > 8) {
@@ -341,6 +347,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            dbHandler = DatabaseHandler.getInstance(WithdrawTokenActivity.this);
             imgBankIcon = findViewById(R.id.imgBankIcon);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
@@ -371,8 +378,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             etAmount.setShowSoftInputOnFocus(false);
             avaBal = objMyApplication.getGBTBalance();
             tvAvailableBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
-            SetFaceLock();
-            SetTouchId();
+//            SetFaceLock();
+//            SetTouchId();
+            setFaceLock();
+            setTouchId();
             bindPayMethod(selectedCard);
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
@@ -647,49 +656,82 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             }
         });
     }
+//
+//    public void SetFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            dsFacePin.moveToFirst();
+//            if (dsFacePin.getCount() > 0) {
+//                String value = dsFacePin.getString(1);
+//                if (value.equals("true")) {
+//                    isFaceLock = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isFaceLock = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void SetTouchId() {
+//        try {
+//            isTouchId = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            dsTouchID.moveToFirst();
+//            if (dsTouchID.getCount() > 0) {
+//                String value = dsTouchID.getString(1);
+//                if (value.equals("true")) {
+//                    isTouchId = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isTouchId = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
-    public void SetFaceLock() {
+    public void setFaceLock() {
         try {
             isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void SetTouchId() {
+    public void setTouchId() {
         try {
             isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-
     private void selectPayMethod() {
         try {
             payDialog = new Dialog(WithdrawTokenActivity.this);
@@ -930,7 +972,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         Boolean value = true;
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",",""));
+            String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",", ""));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
                 tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 tvError.setVisibility(View.VISIBLE);
@@ -1053,9 +1095,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
 //                        tv_lable.setText("Verifying");
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+//                        tv_lable.setVisibility(View.GONE);
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
                         if (!isAuthenticationCalled) {
+                            tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
                             prevDialog.dismiss();
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(WithdrawTokenActivity.this)) {
@@ -1314,7 +1357,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 12);
+                tvCurrency.setLayoutParams(params1);
 
 
             } else if (editable.length() == 7 || editable.length() == 8) {
@@ -1322,21 +1368,30 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 0, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() >= 9) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() <= 4) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 13, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 25);
+                tvCurrency.setLayoutParams(params1);
 
             }
 
@@ -1602,7 +1657,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             };
             ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(clickableSpan, strMessage.indexOf("Learn More"), strMessage.length(), 0);
+            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             tvDescription.setText(ss);
 

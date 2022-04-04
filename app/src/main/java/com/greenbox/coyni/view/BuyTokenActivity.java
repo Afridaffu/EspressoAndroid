@@ -2,15 +2,23 @@ package com.greenbox.coyni.view;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -58,6 +66,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -77,6 +86,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
     RelativeLayout lyPayMethod, lyMainLayout;
     LinearLayout lyCDetails, lyBuyClose, lyBDetails;
+    DatabaseHandler dbHandler;
     EditText etAmount;
     CustomKeyboard ctKey;
     PaymentMethodsResponse paymentMethodsResponse;
@@ -157,7 +167,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 12);
+                        tvCurrency.setLayoutParams(params1);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
@@ -165,7 +178,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 0, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 10);
+                        tvCurrency.setLayoutParams(params1);
 
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() >= 9) {
@@ -173,22 +189,19 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    } else if (editable.length() <= 4) {
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 10);
+                        tvCurrency.setLayoutParams(params1);
+                    }  else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
                         imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-                    } else if (editable.length() <= 4) {
-                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(15, 13, 0, 0);
-                        imgConvert.setLayoutParams(params);
-                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params1.setMargins(0, 0, 0, 25);
+                        tvCurrency.setLayoutParams(params1);
                     }
 
 //                    if (editable.length() > 8) {
@@ -316,6 +329,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             objMyApplication = (MyApplication) getApplicationContext();
             selectedCard = objMyApplication.getSelectedCard();
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+            dbHandler = DatabaseHandler.getInstance(BuyTokenActivity.this);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
@@ -352,8 +366,10 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
-            SetFaceLock();
-            SetTouchId();
+//            SetFaceLock();
+//            SetTouchId();
+            setFaceLock();
+            setTouchId();
             etAmount.addTextChangedListener(this);
             etAmount.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -434,7 +450,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 convertUSDtoCYN();
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",BuyTokenActivity.this,tvError,17);
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -450,7 +467,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 etAmount.setGravity(Gravity.CENTER_VERTICAL);
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD",BuyTokenActivity.this,tvError,17);
+
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -676,47 +695,47 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         });
     }
 
-    public void SetFaceLock() {
-        try {
-            isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void SetTouchId() {
-        try {
-            isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public void SetFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            dsFacePin.moveToFirst();
+//            if (dsFacePin.getCount() > 0) {
+//                String value = dsFacePin.getString(1);
+//                if (value.equals("true")) {
+//                    isFaceLock = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isFaceLock = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void SetTouchId() {
+//        try {
+//            isTouchId = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            dsTouchID.moveToFirst();
+//            if (dsTouchID.getCount() > 0) {
+//                String value = dsTouchID.getString(1);
+//                if (value.equals("true")) {
+//                    isTouchId = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isTouchId = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 //    private void SetToken() {
 //        try {
@@ -959,11 +978,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //                return value = false;
 //            }
             if (tvCYN.getVisibility() == View.VISIBLE && Double.parseDouble(strPay.replace(",", "")) < cynValidation) {
-                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",BuyTokenActivity.this,tvError,17);
+
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (tvCYN.getVisibility() == View.GONE && Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
-                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+//                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD",BuyTokenActivity.this,tvError,17);
+
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
@@ -1059,10 +1082,12 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+//                        tv_lable.setVisibility(View.GONE);
+//                        tv_lable.setText("Verifying");
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
                         if (!isBuyTokenAPICalled) {
                             //buyToken();
+                            tv_lable.setText("Verifying");
                             isBuyTokenAPICalled = true;
                             prevDialog.dismiss();
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(BuyTokenActivity.this)) {
@@ -1689,29 +1714,40 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 12);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() == 7 || editable.length() == 8) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 0, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() >= 9) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() <= 4) {
                 etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 13, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 25);
+                tvCurrency.setLayoutParams(params1);
 
             }
 
@@ -1766,5 +1802,56 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
 
         return selectedCard;
+    }
+
+    public static void setSpannableText(String text, Context context, TextView spannableTV, int start) {
+
+        SpannableString ss = new SpannableString(text);
+
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        ss.setSpan(new RelativeSizeSpan(1f), start, ss.length(), 0);
+        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.error_red)), start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableTV.setText(ss);
+        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+    private void setToken() {
+        strToken = dbHandler.getPermanentToken();
+    }
+
+    private void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

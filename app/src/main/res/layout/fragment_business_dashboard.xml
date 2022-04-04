@@ -40,6 +40,7 @@
                         android:id="@+id/iv_user_icon_CV"
                         android:layout_width="@dimen/_36sdp"
                         android:layout_height="@dimen/_36sdp"
+                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_18sdp">
 
                         <ImageView
@@ -58,8 +59,8 @@
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:layout_gravity="center"
-                            android:text="KM"
                             android:fontFamily="@font/opensans_bold"
+                            android:text="KM"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_16sdp"
                             android:visibility="gone" />
@@ -316,8 +317,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_14sdp"
                                 android:layout_marginHorizontal="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_14sdp"
                                 android:background="@color/viewcolor" />
 
                             <LinearLayout
@@ -327,6 +328,7 @@
                                 android:orientation="horizontal">
 
                                 <TextView
+                                    android:id="@+id/merchant_balance_tv"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_10sdp"
@@ -432,8 +434,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_14sdp"
                                 android:layout_marginHorizontal="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_14sdp"
                                 android:background="@color/viewcolor" />
 
                             <LinearLayout
@@ -783,8 +785,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_18sdp"
                                 android:layout_marginHorizontal="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_18sdp"
                                 android:background="@color/viewcolor" />
 
                             <TextView
@@ -837,8 +839,8 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_14sdp"
                                 android:layout_marginHorizontal="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_14sdp"
                                 android:background="@color/viewcolor" />
 
                             <LinearLayout
@@ -915,9 +917,9 @@
                                         android:textSize="@dimen/_10ssp" />
 
                                     <TextView
+                                        android:id="@+id/payoutTimeTV"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-
                                         android:layout_weight="1"
                                         android:fontFamily="@font/opensans_bold"
                                         android:text=" 11:59:59 pm PST"
@@ -940,7 +942,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="@dimen/_10sdp"
                                     android:layout_weight="1"
-                                    android:background="@drawable/bg_et_inactive"
+                                    android:background="@drawable/batch_payout_bg"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
@@ -959,11 +961,12 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/nextPayoutAmountTV"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="6,890.43"
+                                            android:text="0.00"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_20ssp" />
 
@@ -980,20 +983,39 @@
 
                                     </LinearLayout>
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_regular"
-                                        android:text="06/24/2021 @ 11:59pm"
-                                        android:textColor="@color/dark_grey"
-                                        android:textSize="@dimen/_10ssp" />
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:id="@+id/nxtPayoutDatenTimeTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="@dimen/_14sdp"
+                                            android:fontFamily="@font/opensans_regular"
+                                            android:text="06/24/2021"
+                                            android:layout_marginStart="@dimen/_5sdp"
+                                            android:textColor="@color/dark_grey"
+                                            android:textSize="@dimen/_10ssp" />
+
+                                        <TextView
+                                            android:id="@+id/nxtPayoutTimeTV"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="@dimen/_14sdp"
+                                            android:fontFamily="@font/opensans_regular"
+                                            android:text="@string/time"
+                                            android:textColor="@color/dark_grey"
+                                            android:textSize="@dimen/_10ssp" />
+                                    </LinearLayout>
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:background="@drawable/bg_et_inactive"
+                                    android:background="@drawable/batch_payout_bg"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
@@ -1012,11 +1034,12 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/lastPayoutAmountTV"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="7,253.91"
+                                            android:text=""
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_20ssp" />
 
@@ -1032,8 +1055,10 @@
                                     </LinearLayout>
 
                                     <TextView
+                                        android:id="@+id/dasboardPayoutDate"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/_14sdp"
                                         android:fontFamily="@font/opensans_regular"
                                         android:text="06/23/2021 @ 11:59pm"
                                         android:textColor="@color/dark_grey"
@@ -1047,7 +1072,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_42sdp"
                                 android:layout_marginLeft="@dimen/_68sdp"
-                                android:layout_marginTop="@dimen/_15sdp"
                                 android:layout_marginRight="@dimen/_77sdp"
                                 app:cardBackgroundColor="@color/primary_green"
                                 app:cardCornerRadius="@dimen/_21sdp">
@@ -1064,262 +1088,16 @@
                             </androidx.cardview.widget.CardView>
 
                             <LinearLayout
+                                android:id="@+id/payoutsLayoutLL"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:layout_marginTop="@dimen/_22sdp"
                                 android:layout_weight="1"
-                                android:orientation="horizontal">
+                                android:orientation="vertical">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="06/23/2021 @ 2:20am"
 
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_5sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="@string/manual"
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="right"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_bold"
-                                        android:text="76,000.00"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="@string/currency"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_8ssp" />
-                                </LinearLayout>
                             </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="06/23/2021 @ 6:00am"
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="right"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_bold"
-                                        android:gravity="end"
-                                        android:text="199,000.00"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_11sdp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="@string/currency"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_8ssp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:layout_weight="1"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="06/23/2021 @ 11:59pm"
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_5sdp"
-                                    android:fontFamily="@font/opensans_regular"
-                                    android:text="@string/manual"
-                                    android:textColor="@color/primary_green"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="right"
-                                    android:layout_weight="1"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_bold"
-                                        android:text="1,900.00"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="@string/currency"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_8ssp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="06/23/2021 @ 11:59pm"
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:gravity="right"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_bold"
-                                        android:text="20.00"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="@string/currency"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_8ssp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:background="@color/blue_light" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_11sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="06/23/2021 @ 11:59pm"
-                                    android:textColor="@color/dark_grey"
-                                    android:textSize="@dimen/_10ssp" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="right"
-                                    android:layout_weight="1"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_bold"
-                                        android:text="3,300.00"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_11ssp" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/opensans_semibold"
-                                        android:text="@string/currency"
-                                        android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_8ssp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginHorizontal="@dimen/_10sdp"
-                                android:layout_marginTop="@dimen/_7sdp"
-                                android:background="@color/viewcolor" />
 
                             <TextView
                                 android:id="@+id/tv_PayoutHistory"

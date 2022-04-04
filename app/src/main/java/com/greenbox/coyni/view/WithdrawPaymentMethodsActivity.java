@@ -170,6 +170,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             ControlMethod("withdrawpay");
             withdrawPaymentMethod("card");
             strScreen = "withdrawpay";
+        } else if (strScreen != null && strScreen.equals("banksuccess")) {
+            //Added on 29-03-2022 - VT
         } else if (!isPayments) {
             getPaymentMethods();
         }
@@ -906,7 +908,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             lySelBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onBackPressed();
+//                    onBackPressed();
+                    //Added on 29-03-2022 - VT
+                    finish();
                 }
             });
 
@@ -1431,6 +1435,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 //                        }
                     }
                 }
+            } else {
+                isPayments = false;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1462,11 +1468,20 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         try {
             isBankSuccess = true;
             ControlMethod("banksuccess");
+
+            //Added 29-03-2022 - VT
+            strCurrent = strScreen = "banksuccess";
+            //Added 29-03-2022 - VT
+
             cvDone = findViewById(R.id.cvDone);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     isBankSuccess = false;
+                    //Added 29-03-2022 - VT
+                    strCurrent = "externalBank";
+                    strScreen = "withdrawpay";
+                    //Added 29-03-2022 - VT
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("withdrawmethod");
                         selectWithdrawMethod();

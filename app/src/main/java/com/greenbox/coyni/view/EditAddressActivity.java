@@ -590,6 +590,11 @@ public class EditAddressActivity extends AppCompatActivity {
                         address1ErrorLL.setVisibility(VISIBLE);
                         address1ErrorTV.setText("Field Required");
                     }
+
+                    if (address1ET.getText().toString().length() > 0 && !address1ET.getText().toString().substring(0, 1).equals(" ")) {
+                        address1ET.setText(address1ET.getText().toString().substring(0, 1).toUpperCase() + address1ET.getText().toString().substring(1).toLowerCase());
+                        address1ET.setSelection(address1ET.getText().toString().trim().length());
+                    }
                 } else {
 //                    address1ET.setHint("Address Line 1");
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -611,6 +616,10 @@ public class EditAddressActivity extends AppCompatActivity {
                     } else {
                         address2TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(address2TIL, getColor(R.color.light_gray));
+                    }
+                    if (address2ET.getText().toString().length() > 0 && !address2ET.getText().toString().substring(0, 1).equals(" ")) {
+                        address2ET.setText(address2ET.getText().toString().substring(0, 1).toUpperCase() + address2ET.getText().toString().substring(1).toLowerCase());
+                        address2ET.setSelection(address2ET.getText().toString().trim().length());
                     }
                 } else {
 //                    address2ET.setHint("Address Line 2");
@@ -636,6 +645,10 @@ public class EditAddressActivity extends AppCompatActivity {
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
                         cityErrorLL.setVisibility(VISIBLE);
                         cityErrorTV.setText("Field Required");
+                    }
+                    if (cityET.getText().toString().length() > 0 && !cityET.getText().toString().substring(0, 1).equals(" ")) {
+                        cityET.setText(cityET.getText().toString().substring(0, 1).toUpperCase() + cityET.getText().toString().substring(1).toLowerCase());
+                        cityET.setSelection(cityET.getText().toString().trim().length());
                     }
                 } else {
 //                    cityET.setHint("City");
@@ -1005,6 +1018,11 @@ public class EditAddressActivity extends AppCompatActivity {
                         b_address1ErrorLL.setVisibility(VISIBLE);
                         b_address1ErrorTV.setText("Field Required");
                     }
+
+                    if (b_address1ET.getText().toString().length() > 0 && !b_address1ET.getText().toString().substring(0, 1).equals(" ")) {
+                        b_address1ET.setText(b_address1ET.getText().toString().substring(0, 1).toUpperCase() + b_address1ET.getText().toString().substring(1).toLowerCase());
+                        b_address1ET.setSelection(b_address1ET.getText().toString().trim().length());
+                    }
                 } else {
 //                    b_address1ET.setHint("Address");
                     b_address1ErrorLL.setVisibility(GONE);
@@ -1045,12 +1063,17 @@ public class EditAddressActivity extends AppCompatActivity {
                         b_cityErrorLL.setVisibility(GONE);
                         b_cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                         Utils.setUpperHintColor(b_cityTIL, getColor(R.color.primary_black));
-
                     } else {
                         b_cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                         Utils.setUpperHintColor(b_cityTIL, getColor(R.color.light_gray));
                         b_cityErrorLL.setVisibility(VISIBLE);
                         b_cityErrorTV.setText("Field Required");
+                    }
+
+
+                    if (b_cityET.getText().toString().length() > 0 && !b_cityET.getText().toString().substring(0, 1).equals(" ")) {
+                        b_cityET.setText(b_cityET.getText().toString().substring(0, 1).toUpperCase() + b_cityET.getText().toString().substring(1).toLowerCase());
+                        b_cityET.setSelection(b_cityET.getText().toString().trim().length());
                     }
                 } else {
 //                    b_cityET.setHint("City");

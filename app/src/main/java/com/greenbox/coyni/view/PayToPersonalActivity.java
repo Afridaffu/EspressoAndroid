@@ -41,6 +41,7 @@ import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
@@ -58,6 +59,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     ProgressDialog pDialog;
     Dialog prevDialog;
     SQLiteDatabase mydatabase;
+    DatabaseHandler dbHandler;
     Cursor dsFacePin, dsTouchID;
     Boolean isFaceLock = false, isTouchId = false, isCancel = false;
     Double pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0, total = 0.0, cynValue = 0.0, avaBal = 0.0;
@@ -117,44 +119,79 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 break;
         }
     }
+//
+//    public void SetFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            dsFacePin.moveToFirst();
+//            if (dsFacePin.getCount() > 0) {
+//                String value = dsFacePin.getString(1);
+//                if (value.equals("true")) {
+//                    isFaceLock = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isFaceLock = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void SetTouchId() {
+//        try {
+//            isTouchId = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            dsTouchID.moveToFirst();
+//            if (dsTouchID.getCount() > 0) {
+//                String value = dsTouchID.getString(1);
+//                if (value.equals("true")) {
+//                    isTouchId = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isTouchId = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
-    public void SetFaceLock() {
+
+    public void setFaceLock() {
         try {
             isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void SetTouchId() {
+    public void setTouchId() {
         try {
             isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -167,6 +204,8 @@ public class PayToPersonalActivity extends AppCompatActivity {
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            dbHandler = DatabaseHandler.getInstance(PayToPersonalActivity.this);
+
             lyPayClose = findViewById(R.id.lyPayClose);
             tvCurrency = findViewById(R.id.tvCurrency);
             tvAmount = findViewById(R.id.tvAmount);
@@ -219,9 +258,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
                             motionLayout.transitionToState(motionLayout.getEndState());
                             paySlideToConfirm.setInteractionEnabled(false);
 //                            tvLable.setText("Verifying");
-                            tvLable.setVisibility(View.GONE);
-                            tv_lable_verify.setVisibility(View.VISIBLE);
+//                            tvLable.setVisibility(View.GONE);
+//                            tv_lable_verify.setVisibility(View.VISIBLE);
                             if (!isPayCalled) {
+                                tvLable.setText("Verifying");
                                 isPayCalled = true;
                                 if (payValidation()) {
                                     pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
@@ -255,6 +295,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 }
             }
             if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
+                InputFilter[] FilterArray = new InputFilter[1];
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                tvAmount.setFilters(FilterArray);
+
                 tvAmount.setText(getIntent().getStringExtra("amount"));
                 USFormat(tvAmount);
                 cynValue = Double.parseDouble(tvAmount.getText().toString().trim().replace(",", ""));
@@ -265,8 +309,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-            SetFaceLock();
-            SetTouchId();
+//            SetFaceLock();
+//            SetTouchId();
+            setFaceLock();
+            setTouchId();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -347,7 +393,35 @@ public class PayToPersonalActivity extends AppCompatActivity {
             tvTitle = findViewById(R.id.tvTitle);
             tvWAddress = findViewById(R.id.tvWAddress);
             userProfile = findViewById(R.id.imgProfile);
+            String strName = Utils.capitalize(userDetails.getData().getFullName());
+
+            if (strName.length() > 20)
+                tvName.setText(strName.substring(0, 20));
+            else
+                tvName.setText(strName);
+
             tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
+            tvName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (tvName.getText().toString().contains("...")) {
+                        if (strName.length() == 21 || strName.length() > 21) {
+                            tvName.setText(strName.substring(0, 20));
+                        } else {
+                            tvName.setText(strName);
+                        }
+                    } else {
+                        if (strName.length() == 21) {
+                            tvName.setText(strName.substring(0, 20) + "...");
+                        } else if (strName.length() > 22) {
+                            tvName.setText(strName.substring(0, 22) + "...");
+                        } else {
+                            tvName.setText(strName);
+                        }
+                    }
+                }
+            });
+
             strUserName = Utils.capitalize(userDetails.getData().getFullName());
             String imageTextNew = "";
             imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
@@ -433,11 +507,12 @@ public class PayToPersonalActivity extends AppCompatActivity {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-//                        tv_lable.setText("Verifying");
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
+//                        tv_lable.setVisibility(View.GONE);
+
+//                        tv_lable_verify.setVisibility(View.VISIBLE);
 //                        prevDialog.dismiss();
                         if (!isAuthenticationCalled) {
+                            tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToPersonalActivity.this)) {
                                 if (Utils.getIsBiometric() && ((isTouchId && Utils.isFingerPrint(PayToPersonalActivity.this)) || (isFaceLock))) {
@@ -618,7 +693,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
         try {
             paySlideToConfirm.setInteractionEnabled(true);
             paySlideToConfirm.setTransition(R.id.start, R.id.start);
-//            tvLable.setText("Slide to Confirm");
+            tvLable.setText("Slide to Confirm");
             tvLable.setVisibility(View.VISIBLE);
             tv_lable_verify.setVisibility(View.GONE);
             paySlideToConfirm.setProgress(0);
@@ -633,12 +708,16 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private void changeTextSize(String editable) {
         try {
             InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
             if (editable.length() == 5 || editable.length() == 6) {
                 tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 12);
+                tvCurrency.setLayoutParams(params1);
 
 
             } else if (editable.length() == 7 || editable.length() == 8) {
@@ -646,21 +725,31 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 0, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
 
             } else if (editable.length() >= 9) {
                 tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 6, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 10);
+                tvCurrency.setLayoutParams(params1);
+
 
             } else if (editable.length() <= 4) {
                 tvAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.setMargins(15, 13, 0, 0);
                 imgConvert.setLayoutParams(params);
-                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params1.setMargins(0, 0, 0, 25);
+                tvCurrency.setLayoutParams(params1);
 
             }
 

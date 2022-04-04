@@ -105,11 +105,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 if (strCurrent.equals("externalBank")) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
-                } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
-                    super.onBackPressed();
                 } else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
                     ControlMethod("paymentMethods");
                     strCurrent = "paymentMethods";
+                } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
+                    super.onBackPressed();
                 }
             } else {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
@@ -133,6 +133,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 strOnPauseScreen = "";
             } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
                 ControlMethod("addpayment");
+            } else if (strScreen != null && strScreen.equals("banksuccess")) {
+                //Added on 29-03-2022 - VT
             } else if (strScreen != null && !strScreen.equals("addpay")) {
                 if (!isPayments) {
                     getPaymentMethods();
@@ -296,6 +298,16 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
+
+                            if(objMyApplication.getSelectedCard()!=null) {
+                                //Added on 30-03-2022 - VT
+                                if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
+                                    objMyApplication.getSelectedCard().setRelink(false);
+                                } else {
+                                    objMyApplication.getSelectedCard().setExpired(false);
+                                }
+                            }
+                            //Added on 30-03-2022 - VT
                             dashboardViewModel.mePaymentMethods();
                             displaySuccess();
                         } else {
@@ -442,7 +454,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 imgLogo.setImageResource(R.drawable.ic_addpayment_method2);
                 tvMessage.setVisibility(VISIBLE);
                 tvExtBHead.setText("External Bank Account");
-                tvMessage.setText("There is no payment method currently \nlinked to your account. Please follow one of \nthe prompts below to link an account.");
+                tvMessage.setText("There is no payment method currently linked to your account. Please follow one of the prompts below to link an account.");
             } else {
                 imgLogo.setVisibility(View.GONE);
                 tvExtBHead.setText("Bank Account");
@@ -737,11 +749,20 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         try {
             isBankSuccess = true;
             ControlMethod("banksuccess");
+
+            //Added 29-03-2022 - VT
+            strCurrent = strScreen = "banksuccess";
+            //Added 29-03-2022 - VT
+
             cvDone = findViewById(R.id.cvDone);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     isBankSuccess = false;
+                    //Added 29-03-2022 - VT
+                    strCurrent = "externalBank";
+                    strScreen = "withdraw";
+                    //Added 29-03-2022 - VT
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";

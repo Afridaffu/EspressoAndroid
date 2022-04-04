@@ -130,7 +130,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                                 monthlyServiceFeeMerchant(transactionDetails);
                                 break;
                             case Utils.merchantPayouttxntype:
-//                                ControlMethod(Utils.merchantmayoutCM);
+                                controlMethod(Utils.merchantpayoutCM);
                                 merchantPayout(transactionDetails);
                                 break;
                         }
@@ -206,7 +206,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             refundDatetimetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
             refundfeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
             refundtotalAmounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
-            refundOTIdatetv.setText(objData.getData().getDateAndTime());
+            refundOTIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getDateAndTime()));
             refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
             refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("USD", "").trim()));
@@ -401,8 +401,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             mPItotalamounttv = findViewById(R.id.mPItotalamountTV);
             mPItotaltransactionstv = findViewById(R.id.mPItotaltransactionsTV);
             mPIdeposittotv = findViewById(R.id.mPIdeposittoTV);
-//            referencecopyLL = findViewById(R.id.referenceCopyLL);
-//            payoutcopyll = findViewById(R.id.payoutCopyLL);
+            referencecopyLL = findViewById(R.id.copuRefIDLL);
+            payoutcopyll = findViewById(R.id.copyPayoutIDLL);
 
 
             mPayoutheadertv.setText(objData.getData().getTransactionType() + " - " + objData.getData().getTransactionSubtype());
@@ -427,33 +427,51 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             }
             if (objData.getData().getReferenceId().length()>10) {
                 mreferenceIdtv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+                mPIdeposittotv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+                mPIdeposittotv.setPaintFlags(mPIdeposittotv.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+
+
             }else {
                 mreferenceIdtv.setText(objData.getData().getReferenceId());
+                mPIdeposittotv.setText(objData.getData().getReferenceId());
+
+            }
+            if (objData.getData().getPayoutId().length()>10) {
+                mPayoutIdtv.setText(objData.getData().getPayoutId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
+                mPayoutIdtv.setPaintFlags(mPayoutIdtv.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+
+            }else {
+                mPayoutIdtv.setText(objData.getData().getPayoutId());
             }
             merchantdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
+            merchantPIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getPayoutDate()));
+
             if (objData.getData().getGrossAmount() != null) {
-                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
+                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             }
-            if (objData.getData().getGrossAmount() != null) {
+            if (objData.getData().getTotalAmount() != null) {
                 mPItotalamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
             }
+            mPItotaltransactionstv.setText(objData.getData().getTotalTransactions());
+
             mpayoutll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
                 }
             });
-//            referencecopyLL.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Utils.copyText(objData.getData().getReferenceId(),MerchantTransactionDetailsActivity.this);
-//                }
-//            });
-//            payoutcopyll.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                }
-//            });
+            referencecopyLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.copyText(objData.getData().getReferenceId(),MerchantTransactionDetailsActivity.this);
+                }
+            });
+            payoutcopyll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.copyText(objData.getData().getPayoutId(),MerchantTransactionDetailsActivity.this);
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -484,7 +502,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     findViewById(R.id.MTDmerchantPayout).setVisibility(View.GONE);
                 }
                 break;
-                case Utils.merchantmayoutCM: {
+                case Utils.merchantpayoutCM: {
                     findViewById(R.id.MTDrefund).setVisibility(View.GONE);
                     findViewById(R.id.MTDsalesorder).setVisibility(View.GONE);
                     findViewById(R.id.MTDservicefee).setVisibility(View.GONE);

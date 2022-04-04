@@ -31,6 +31,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
@@ -44,6 +45,7 @@ public class EnableAuthID extends AppCompatActivity {
     String enableType, enableTypeCopy, strScreen = "";
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     SQLiteDatabase mydatabase;
+    DatabaseHandler dbHandler;
     ImageView succesCloseIV;
     CoyniViewModel coyniViewModel;
     ProgressDialog dialog;
@@ -64,6 +66,7 @@ public class EnableAuthID extends AppCompatActivity {
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             enableFaceCV = findViewById(R.id.enableFaceCV);
             dontRemindFace = findViewById(R.id.dontRemindFace);
+            dbHandler = DatabaseHandler.getInstance(EnableAuthID.this);
             successGetStartedCV = findViewById(R.id.successGetStartedCV);
 
             enableTouchCV = findViewById(R.id.enableTouchCV);
@@ -402,12 +405,55 @@ public class EnableAuthID extends AppCompatActivity {
         }
     }
 
+//    private void saveThumb(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblThumbPinLock");
+//            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void saveFace(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblFacePinLock");
+//            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void saveToken(String value) {
+//        try {
+//            objMyApplication.setStrMobileToken(value);
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
+//            mydatabase.execSQL("Delete from tblPermanentToken");
+//            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    private void saveDontRemind(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+//            mydatabase.execSQL("Delete from tblDontRemind");
+//            mydatabase.execSQL("INSERT INTO tblDontRemind(id,isDontRemind) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
     private void saveThumb(String value) {
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblThumbPinLock");
-            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+           dbHandler.clearThumbPinLockTable();
+           dbHandler.insertThumbPinLock(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -415,10 +461,8 @@ public class EnableAuthID extends AppCompatActivity {
 
     private void saveFace(String value) {
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblFacePinLock");
-            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
+            dbHandler.clearFacePinLockTable();
+            dbHandler.insertFacePinLock(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -427,10 +471,8 @@ public class EnableAuthID extends AppCompatActivity {
     private void saveToken(String value) {
         try {
             objMyApplication.setStrMobileToken(value);
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
-            mydatabase.execSQL("Delete from tblPermanentToken");
-            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+            dbHandler.clearPermanentTokenTable();
+            dbHandler.insertPermanentToken(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -438,10 +480,8 @@ public class EnableAuthID extends AppCompatActivity {
 
     private void saveDontRemind(String value) {
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
-            mydatabase.execSQL("Delete from tblDontRemind");
-            mydatabase.execSQL("INSERT INTO tblDontRemind(id,isDontRemind) VALUES(null,'" + value + "')");
+            dbHandler.clearTableDontRemind();
+            dbHandler.insertTableDontRemind(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -49,6 +49,7 @@ import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
@@ -67,6 +68,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     CoyniViewModel coyniViewModel;
     SQLiteDatabase mydatabase;
+    DatabaseHandler dbHandler;
     Double cynValue = 0.0;
 
     @Override
@@ -89,35 +91,64 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
+    //Shiva Changed
+    //    private void saveThumb(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblThumbPinLock");
+//            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
     private void saveThumb(String value) {
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblThumbPinLock");
-            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+            dbHandler.clearThumbPinLockTable();
+            dbHandler.insertThumbPinLock(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+
+//    private void saveFace(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblFacePinLock");
+//            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
     private void saveFace(String value) {
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblFacePinLock");
-            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
+            dbHandler.clearFacePinLockTable();
+            dbHandler.insertFacePinLock(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+//    private void saveToken(String value) {
+//        try {
+//            objMyApplication.setStrMobileToken(value);
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
+//            mydatabase.execSQL("Delete from tblPermanentToken");
+//            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void saveToken(String value) {
         try {
             objMyApplication.setStrMobileToken(value);
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
-            mydatabase.execSQL("Delete from tblPermanentToken");
-            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+            dbHandler.clearPermanentTokenTable();
+            dbHandler.insertPermanentToken(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -130,6 +161,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             giftCardAmountTV = findViewById(R.id.giftCardAmountTV);
             giftCardDescTV = findViewById(R.id.giftCardDescTV);
             refIDTV = findViewById(R.id.refIDTV);
+            dbHandler = DatabaseHandler.getInstance(GiftCardBindingLayoutActivity.this);
             gcProcessingTV = findViewById(R.id.gcProcessingTV);
             learnMoreTV = findViewById(R.id.learnMoreTV);
             refIDLL = findViewById(R.id.refIDLL);
@@ -249,6 +281,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             TextView tvBalance = findViewById(R.id.tvBBalance);
             TextView tvLearnMore = findViewById(R.id.tvBLearnMore);
             TextView tvHeading = findViewById(R.id.tvBHeading);
+            TextView tvDescription = findViewById(R.id.tvDescriptionBuy);
             LinearLayout layoutReference = findViewById(R.id.layoutBReference);
             ImageView imgLogo = findViewById(R.id.imgBLogo);
             ImageView imgRefCopy = findViewById(R.id.imgBRefCopy);
@@ -258,18 +291,57 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             } else {
                 tvReferenceID.setText(objData.getGbxTransactionId());
             }
+
+            String strMessage = "";
             if (objData.getType().toLowerCase().contains("bank")) {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
+                strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account. Learn More";
             } else {
                 tvHeading.setText("Transaction In Progress");
                 imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
+                strMessage = "We are processing your request, please allow a few minutes for your coyni debit/credit card purchase to be reflected in your token account. Learn More";
             }
+
+            SpannableString ss = new SpannableString(strMessage);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.populateLearnMore(GiftCardBindingLayoutActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(Color.parseColor("#00a6a2"));
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
+
+            tvDescription.setText(ss);
+            tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+
             Double bal = cynValue + objMyApplication.getGBTBalance();
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
-            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+//            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+
+            if (objData.getDescriptorName() != null)
+                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+            else
+                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as coyni.");
 
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -397,7 +469,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             };
             ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(clickableSpan, strMessage.indexOf("Learn More"), strMessage.length(), 0);
+//            ss.setSpan(clickableSpan, strMessage.indexOf("Learn More"), strMessage.length(), 0);
+            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
 
             tvDescription.setText(ss);
 

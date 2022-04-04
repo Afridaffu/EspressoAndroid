@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     Dialog prevDialog;
     private DatabaseHandler dbHandler;
     LoginViewModel loginViewModel;
+    Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -748,6 +750,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tvForgot:
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 showProgressDialog();
                 loginViewModel.emailotpresend(Utils.getUserEmail(PINActivity.this));
 //                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
@@ -914,12 +920,12 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void setErrorPIN() {
-        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
-        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
-        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
-        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
-        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
-        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+        circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
+        circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
 
         chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
@@ -947,7 +953,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle);
         } else {
-            circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            circleOneLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
             chooseCircleOne.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
@@ -955,7 +961,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle);
         } else {
-            circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            circleTwoLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
             chooseCircleTwo.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
@@ -963,7 +969,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle);
         } else {
-            circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            circleThreeLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
             chooseCircleThree.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
@@ -971,7 +977,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle);
         } else {
-            circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            circleFourLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
             chooseCircleFour.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
@@ -980,7 +986,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle);
         } else {
-            circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            circleFiveLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
             chooseCircleFive.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
@@ -988,7 +994,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
             chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle);
         } else {
-            circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle));
+            circleSixLL.setBackground(getDrawable(R.drawable.ic_outline_circle_error));
             chooseCircleSix.setBackgroundResource(R.drawable.ic_baseline_circle_error);
         }
 
@@ -1045,24 +1051,30 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         }.start();
     }
 
+//    private void SetDontRemind() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
+//            dsDontRemind.moveToFirst();
+//            if (dsDontRemind.getCount() > 0) {
+//                if (dsDontRemind.getString(1).equals("true")) {
+//                    isDontRemind = true;
+//                } else {
+//                    isDontRemind = false;
+//                }
+//            }
+//        } catch (Exception ex) {
+//            if (ex.getMessage().toString().contains("no such table")) {
+//                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+//            }
+//        }
+//    }
+
     private void SetDontRemind() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
-            dsDontRemind.moveToFirst();
-            if (dsDontRemind.getCount() > 0) {
-                if (dsDontRemind.getString(1).equals("true")) {
-                    isDontRemind = true;
-                } else {
-                    isDontRemind = false;
-                }
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
-            }
-        }
+        String value = dbHandler.getTableDontRemind();
+        isDontRemind = value != null && value.equals("true");
+
     }
 
     private void launchDashboard() {

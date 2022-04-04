@@ -96,7 +96,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
     String strName = "", strCardNo = "", strExpiry = "", strAdd1 = "", strAdd2 = "", strCity = "", strState = "", strZip = "", strCountry = "";
     TextInputEditText etName, etAddress1, etAddress2, etCity, etState, etZipCode, etCountry, etPreAmount;
     CardNumberEditText etCardNumber;
-    TextInputLayout etlState, etlName, etlExpiry, etlAddress1, etlAddress2, etlCity, etlZipCode;
+    TextInputLayout etlState, etlName, etlExpiry, etlAddress1, etlAddress2, etlCity, etlZipCode,etlAmount;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L;
@@ -1273,6 +1273,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
             tvMessage = preAuthDialog.findViewById(R.id.tvMessage);
             tvError = preAuthDialog.findViewById(R.id.tvError);
             etPreAmount = preAuthDialog.findViewById(R.id.etAmount);
+            etlAmount = preAuthDialog.findViewById(R.id.etlAmuont);
             ctKey = preAuthDialog.findViewById(R.id.ckb);
             ctKey.setKeyAction("Verify", BusinessAddCardActivity.this);
             ctKey.setScreenName("addcard");

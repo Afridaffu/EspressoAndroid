@@ -44,6 +44,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             DateItem dateItem = new DateItem();
             dateItem.setDate(datee);
 
+
             if (!consolidatedListData.contains(dateItem)) {
                 consolidatedListData.add(dateItem);
             }

@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputType;
@@ -29,11 +30,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.DatePicker;
+//import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -71,6 +73,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+import com.ideyalabs.wheelpicker.DatePicker;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,7 +119,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     private DashboardViewModel dashboardViewModel;
     private DatePicker datepicker;
     private LoginViewModel loginViewModel;
-    private String addBusiness="false";
+    private String addBusiness = "false";
 
     private IdentityPagerAdapter identityPagerAdapter;
     public static AutoScrollViewPager viewPager;
@@ -152,7 +155,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         backbtn.setVisibility(VISIBLE);
                         closebtn.setVisibility(GONE);
                         mailAddr1.requestFocus();
-                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                     }
                 }
 
@@ -164,9 +168,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-            if(getIntent().getStringExtra("ADDPERSONAL")!=null) {
+            if (getIntent().getStringExtra("ADDPERSONAL") != null) {
                 addBusiness = getIntent().getStringExtra("ADDPERSONAL");
-                LogUtils.d("addBusiness","addBusiness"+addBusiness);
+                LogUtils.d("addBusiness", "addBusiness" + addBusiness);
             }
 
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
@@ -202,44 +206,113 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     }
 
     private void setToDate(EditText dob) {
+//        try {
+//
+//            Calendar c = Calendar.getInstance();
+//            mYear = c.get(Calendar.YEAR);
+//            mMonth = c.get(Calendar.MONTH);
+//            mDay = c.get(Calendar.DAY_OF_MONTH);
+//
+//            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.CalendarDialogTheme,
+//                    new DatePickerDialog.OnDateSetListener() {
+//                        @Override
+//                        public void onDateSet(DatePicker view, int year,
+//                                              int monthOfYear, int dayOfMonth) {
+//                            try {
+//                                String dateToConvert = Utils.changeFormat(dayOfMonth) + "/" + Utils.changeFormat((monthOfYear + 1)) + "/" + year;
+//                                String convertedDate = convertDate(dateToConvert);
+//                                dob.setText(convertedDate);
+//                                isDOBSelected = true;
+//                                dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
+//                                enableNext();
+//                                ssnET.clearFocus();
+//                                datepicker = new DatePicker(IdentityVerificationActivity.this);
+//                                datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
+//                                Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_black));
+//                            } catch (Exception ex) {
+//                                ex.printStackTrace();
+//                            }
+//                        }
+//                    }, mYear, mMonth, mDay);
+//
+//            long years = 568025136000L;
+//            long yearsback = c.getTimeInMillis() - years;
+//            datePickerDialog.getDatePicker().setMaxDate(yearsback);
+//            if (datepicker != null) {
+//                datePickerDialog.updateDate(datepicker.getYear(), datepicker.getMonth() - 1, datepicker.getDayOfMonth());
+//            }
+//            datePickerDialog.show();
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+    }
+
+    private void setToDateWheelPicker(TextInputEditText dobET) {
         try {
-
-            Calendar c = Calendar.getInstance();
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.CalendarDialogTheme,
-                    new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year,
-                                              int monthOfYear, int dayOfMonth) {
-                            try {
-                                String dateToConvert = Utils.changeFormat(dayOfMonth) + "/" + Utils.changeFormat((monthOfYear + 1)) + "/" + year;
-                                String convertedDate = convertDate(dateToConvert);
-                                dob.setText(convertedDate);
-                                isDOBSelected = true;
-                                dateOfBirth = year + "-" + Utils.changeFormat((monthOfYear + 1)) + "-" + Utils.changeFormat(dayOfMonth);
-                                enableNext();
-                                ssnET.clearFocus();
-                                datepicker = new DatePicker(IdentityVerificationActivity.this);
-                                datepicker.init(year, monthOfYear + 1, dayOfMonth, null);
-                                Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_black));
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }, mYear, mMonth, mDay);
-
+//            Utils.hideKeypad(IdentityVerificationActivity.this);
             long years = 568025136000L;
-            long yearsback = c.getTimeInMillis() - years;
-            datePickerDialog.getDatePicker().setMaxDate(yearsback);
-            if (datepicker != null) {
-                datePickerDialog.updateDate(datepicker.getYear(), datepicker.getMonth() - 1, datepicker.getDayOfMonth());
+            DatePicker picker = new DatePicker(IdentityVerificationActivity.this);
+            Date maxDate = new Date(System.currentTimeMillis() - years);
+            picker.getPickerView().setMaxDate(maxDate);
+            if (!dateOfBirth.equals("")) {
+                picker.getPickerView().setDate(Integer.parseInt(dateOfBirth.split("-")[0]),
+                        Integer.parseInt(dateOfBirth.split("-")[1]) - 1,
+                        Integer.parseInt(dateOfBirth.split("-")[2]));
             }
-            datePickerDialog.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+//            dobTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//            dobTIL.setExpandedHintEnabled(false);
+//            Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_green));
+
+            picker.setContinueClickButtonListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        int mYear = picker.getPickerView().getCurrentData().getFirst();
+                        int mMonth = picker.getPickerView().getCurrentData().getSecond();
+                        int mDay = picker.getPickerView().getCurrentData().getThird();
+//                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth + 1)) + "/" + mYear;
+                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth)) + "/" + mYear;
+                        String convertedDate = convertDate(dateToConvert);
+                        dobET.setText(convertedDate);
+                        isDOBSelected = true;
+//                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth + 1)) + "-" + Utils.changeFormat(mDay);
+                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth)) + "-" + Utils.changeFormat(mDay);
+                        enableNext();
+                        ssnET.clearFocus();
+
+                        Utils.setUpperHintColor(dobTIL, getResources().getColor(R.color.primary_black));
+                        dobTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_black));
+//                        dobTIL.setExpandedHintEnabled(true);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    Log.e("WheelPicker", dateOfBirth);
+                    picker.hide();
+                }
+            });
+
+            picker.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+
+                }
+            });
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.CENTER;
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    picker.show(getWindow());
+                }
+            }, 500);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -632,7 +705,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             zipcodeErrorTV.setText("Field Required");
                         }
                     } else {
-                        if(!Utils.isKeyboardVisible)
+                        if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(IdentityVerificationActivity.this);
 //                        zipcode.setHint("Zip Code");
                         zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -655,6 +728,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         ssnET.setHint("");
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(IdentityVerificationActivity.this);
                         if (ssnET.getText().toString().trim().length() == 4) {
@@ -675,7 +749,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             ssnErrorTV.setText("Field Required");
                         }
                     } else {
-                        if(!Utils.isKeyboardVisible)
+                        if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(ssnTIL, getColor(R.color.primary_green));
@@ -773,25 +847,33 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             idveriDOBConLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
-                    setToDate(dobET);
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(IdentityVerificationActivity.this);
+//                    setToDate(dobET);
+                    setToDateWheelPicker(dobET);
+//                    showWheelDatePicker(IdentityVerificationActivity.this);
                 }
             });
 
             dobET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
-                    setToDate(dobET);
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(IdentityVerificationActivity.this);
+//                    setToDate(dobET);
+                    setToDateWheelPicker(dobET);
+//                    showWheelDatePicker(IdentityVerificationActivity.this);
                 }
             });
 
@@ -800,7 +882,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
                         ssnET.clearFocus();
-                        setToDate(dobET);
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(IdentityVerificationActivity.this);
+//                        setToDate(dobET);
+                        setToDateWheelPicker(dobET);
+//                        showWheelDatePicker(IdentityVerificationActivity.this);
                     }
                 }
             });
@@ -836,7 +922,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             closebtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                     finishMethod();
+                    finishMethod();
                 }
             });
 
@@ -994,7 +1080,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
     private void finishMethod() {
 
-        if(addBusiness.equalsIgnoreCase("true")){
+        if (addBusiness.equalsIgnoreCase("true")) {
             loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
         } else {
             finish();
@@ -1028,7 +1114,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     dialog.dismiss();
                     if (checkAndRequestPermissions((Activity) context)) {
                         identityType = 0;
-                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM","IDVE"));
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM", "IDVE"));
                     }
                 }
             });
@@ -1039,7 +1125,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     dialog.dismiss();
                     if (checkAndRequestPermissions((Activity) context)) {
                         identityType = 1;
-                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM","IDVE"));
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM", "IDVE"));
                     }
                 }
             });
@@ -1050,7 +1136,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     dialog.dismiss();
                     if (checkAndRequestPermissions((Activity) context)) {
                         identityType = 2;
-                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM","IDVE"));
+                        context.startActivity(new Intent(context, CameraActivity.class).putExtra("FROM", "IDVE"));
                     }
                 }
             });
@@ -1104,7 +1190,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         Utils.displayAlert("Requires Access to Your Storage.", IdentityVerificationActivity.this, "", "");
 
                     } else {
-                        startActivity(new Intent(this, CameraActivity.class).putExtra("FROM","IDVE"));
+                        startActivity(new Intent(this, CameraActivity.class).putExtra("FROM", "IDVE"));
                     }
                     break;
             }
@@ -1188,11 +1274,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse btResp) {
-                    LogUtils.d("addBusiness","addBusiness"+btResp);
+                    LogUtils.d("addBusiness", "addBusiness" + btResp);
                     if (btResp != null) {
-                        LogUtils.d("afternulll","addBusiness"+btResp.getStatus());
+                        LogUtils.d("afternulll", "addBusiness" + btResp.getStatus());
                         if (btResp.getStatus().toLowerCase().toString().equals("success") || btResp.getStatus().equals("SUCCESS")) {
-                            LogUtils.d("btResp","btResp"+btResp);
+                            LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
                             if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
                                     || respCode.equalsIgnoreCase("CI11") || respCode.equalsIgnoreCase("CA24")
@@ -1220,7 +1306,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
                             }
                         } else {
-                            LogUtils.d("elseeeee","addBusiness"+btResp);
+                            LogUtils.d("elseeeee", "addBusiness" + btResp);
                         }
                     }
                 }
@@ -1254,10 +1340,10 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         dialog.dismiss();
                     }
                     if (identityAddressResponse.getStatus().equalsIgnoreCase("success")) {
-                        LogUtils.d("addBusiness","addBusiness"+addBusiness);
+                        LogUtils.d("addBusiness", "addBusiness" + addBusiness);
                         respCode = identityAddressResponse.getData().getGiactResponseName();
 
-                        if(addBusiness.equalsIgnoreCase("true")){
+                        if (addBusiness.equalsIgnoreCase("true")) {
                             loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
                         } else {
                             if (respCode.equalsIgnoreCase("ND02") || respCode.equalsIgnoreCase("CA11")
@@ -1292,7 +1378,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         Utils.displayAlert(identityAddressResponse.getError().getErrorDescription(), IdentityVerificationActivity.this, "", identityAddressResponse.getError().getFieldErrors().get(0));
                     }
 
-                   identityVerificationViewModel.getStatusTracker();
+                    identityVerificationViewModel.getStatusTracker();
 
                 }
             });
@@ -1432,4 +1518,5 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             // No super
         }
     }
+
 }

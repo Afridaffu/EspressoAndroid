@@ -47,7 +47,7 @@
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_11sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp">
 
@@ -66,8 +66,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/linearLayout"
-                    android:layout_width="@dimen/_49sdp"
-                    android:layout_height="@dimen/_49sdp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/corecircle"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -77,8 +77,8 @@
 
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="@dimen/_47sdp"
-                        android:layout_height="@dimen/_47sdp"
+                        android:layout_width="@dimen/_46sdp"
+                        android:layout_height="@dimen/_46sdp"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
                         app:cardBackgroundColor="@color/white"

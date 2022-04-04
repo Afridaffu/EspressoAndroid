@@ -44,8 +44,6 @@ public class AdditionalInformationRequiredActivity extends BaseActivity {
     public static AdditionalInformationRequiredActivity additionalInformationRequiredActivity;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +52,7 @@ public class AdditionalInformationRequiredActivity extends BaseActivity {
         additionalInformationRequiredActivity = this;
         initFields();
     }
+
     private void initFields() {
         securitycardFileLL = findViewById(R.id.securitycardFileLL);
         actionReq2FileLL = findViewById(R.id.actionReq2FileLL);
