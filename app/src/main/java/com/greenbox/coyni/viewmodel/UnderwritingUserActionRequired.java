@@ -13,6 +13,7 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SyncAccount;
+import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -30,6 +31,8 @@ import com.greenbox.coyni.utils.LogUtils;
 
 import java.lang.reflect.Type;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,6 +49,7 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
     public MutableLiveData<ActionRequiredResponse> getUserAccountLimitsMutableLiveData() {
         return ActionRequiredResponseMutableLiveData;
     }
+
 
     public void postactionRequired() {
         try {
@@ -75,6 +79,41 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
                 public void onFailure(Call<ActionRequiredResponse> call, Throwable t) {
                     LogUtils.d("UnderwritingUserActionRequired","UnderwritingUserActionRequired"+t.getMessage());
                     LogUtils.d("UnderwritingUserActionRequired","UnderwritingUserActionRequired44"+t.toString());
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    apiErrorMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void submitActionRequired(RequestBody information,MultipartBody.Part documentsImageList[]) {
+
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<IdentityImageResponse> mCall = apiService.submitActionrequired(information, documentsImageList);
+            mCall.enqueue(new Callback<IdentityImageResponse>() {
+                @Override
+                public void onResponse(Call<IdentityImageResponse> call, Response<IdentityImageResponse> response) {
+                    LogUtils.d("UderWritingUserActionRequired","submitActionRequired"+response);
+                    if (response.isSuccessful()) {
+                        IdentityImageResponse obj = response.body();
+
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<IdentityImageResponse>() {
+                        }.getType();
+                        IdentityImageResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<IdentityImageResponse> call, Throwable t) {
+                    LogUtils.d("UderWritingUserActionRequired","submitActionRequired"+t.toString());
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

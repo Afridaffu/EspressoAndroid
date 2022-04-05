@@ -27,6 +27,17 @@ public class InformationChangeData {
     @Expose
     private List<ProposalsData> proposals;
 
+    private List<ProposalsSubmitRequestData> proposalsSubmit;
+
+
+    public List<ProposalsSubmitRequestData> getProposalsSubmit() {
+        return proposalsSubmit;
+    }
+
+    public void setProposalsSubmit(List<ProposalsSubmitRequestData> proposalsSubmit) {
+        this.proposalsSubmit = proposalsSubmit;
+    }
+
     public String  getId() {
         return id;
     }

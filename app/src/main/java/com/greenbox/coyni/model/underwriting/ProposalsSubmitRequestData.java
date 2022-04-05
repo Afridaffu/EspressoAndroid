@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ProposalsData {
+public class ProposalsSubmitRequestData {
 
     @SerializedName("dbId")
     @Expose
@@ -23,9 +23,6 @@ public class ProposalsData {
     @Expose
     private String lastName;
 
-    @SerializedName("properties")
-    @Expose
-    private List<ProposalsPropertiesData> properties;
 
     private List<ProposalsPropertiesSubmitRequestData> propertiesSubmitRequest;
 
@@ -60,14 +57,6 @@ public class ProposalsData {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public List<ProposalsPropertiesData> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(List<ProposalsPropertiesData> properties) {
-        this.properties = properties;
     }
 
     public List<ProposalsPropertiesSubmitRequestData> getPropertiesSubmitRequest() {

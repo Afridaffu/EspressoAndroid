@@ -571,11 +571,15 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onChanged(RemoveIdentityResponse imageResponse) {
                     if (imageResponse != null) {
                         showProgressDialog();
+
                         RequestBody requestBody = null;
                         MultipartBody.Part idFile = null;
+
                         requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), dbaFile);
                         idFile = MultipartBody.Part.createFormData("identityFile", dbaFile.getName(), requestBody);
+
                         RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identificationType + "");
+
                         RequestBody idNumber;
                         if(objMyApplication.getCompanyInfoResp().getData().getSsnOrEin()!=null) {
                              idNumber = RequestBody.create(MediaType.parse("text/plain"), objMyApplication.getCompanyInfoResp().getData().getSsnOrEin());

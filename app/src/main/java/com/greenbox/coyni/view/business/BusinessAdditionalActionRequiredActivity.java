@@ -17,16 +17,15 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
@@ -36,30 +35,31 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
-import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.bank.BankDeleteResponseData;
-import com.greenbox.coyni.model.bank.SignOn;
-import com.greenbox.coyni.model.bank.SyncAccount;
-import com.greenbox.coyni.model.cards.CardDeleteResponse;
-import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
-import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
+import com.greenbox.coyni.model.AdditonaActionRequiredRequest;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
-import com.greenbox.coyni.model.underwriting.AdditionalDocumentData;
+import com.greenbox.coyni.model.underwriting.InformationChangeData;
+import com.greenbox.coyni.model.underwriting.ProposalsData;
+import com.greenbox.coyni.model.underwriting.ProposalsPropertiesData;
+import com.greenbox.coyni.model.underwriting.ProposalsPropertiesSubmitRequestData;
+import com.greenbox.coyni.model.underwriting.ProposalsSubmitRequestData;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
-import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequired;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private static Object ActivityCompat;
-    LinearLayout additionalDocumentRequiredLL, websiteRevisionRequiredLL, informationRevisionLL, actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, sscfileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
+    LinearLayout additionalDocumentRequiredLL, websiteRevisionRequiredLL, informationRevisionLL, actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
     TextView fileUploadTV, actionReqFileTV, licenseTV, fileUploadedTV, remarksTV, acceptMsgTV, declineMsgTV, compnyNameTV, actionReqFileUpdatedOnTV, licenseUploadedTV;
     String selectedDocType = "", from = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
@@ -74,6 +74,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     public CheckBox checkboxCB, checkbox2CB, checkbox3CB;
     public CardView submitCV;
     private UnderwritingUserActionRequired underwritingUserActionRequired;
+
+    private HashMap<Integer, String> fileUpload;
+    private ActionRequiredResponse actionRequired;
+    private int documentID;
+    private LinearLayout selectedLayout=null;
+    private ArrayList<File> documentsFIle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,71 +104,120 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         informationRevisionLL = findViewById(R.id.information_revision);
 
         fileUploadTV = findViewById(R.id.sscuploadFileTV);
-//        actionReqFileTV = findViewById(R.id.actionReqFileTV);
-//        licenseTV = findViewById(R.id.licenseTV);
 
-        sscfileUploadedLL = findViewById(R.id.sscfileUploadedLL);
-//        actionReqFileUploadedLL = findViewById(R.id.actionReqFileUploadedLL);
-//        lincenseFileUploadedLL = findViewById(R.id.lincenseFileUploadedLL);
+
+
 
         fileUploadedTV = findViewById(R.id.sscfileUpdatedOnTV);
-        // actionReqFileUpdatedOnTV = findViewById(R.id.actionReqFileUpdatedOnTV);
 
         checkboxCB = findViewById(R.id.checkboxCB);
-//        checkbox2CB = findViewById(R.id.checkbox2CB);
-//        checkbox3CB = findViewById(R.id.checkbox3CB);
+
         submitCV = findViewById(R.id.submitCV);
 
-//        declindneLL = findViewById(R.id.declineDneLL);
-//        declineLL = findViewById(R.id.declineLL);
-//        acceptLL = findViewById(R.id.acceptLL);
-//        remarksTV = findViewById(R.id.remarksTV);
-//        acceptDeclineLL = findViewById(R.id.acceptDeclineLL);
-//        acceptMsgTV = findViewById(R.id.acceptMsgTV);
-//        declineMsgTV = findViewById(R.id.declineMsgTV);
-//        acceptdneLL = findViewById(R.id.acceptDneLL);
-//        compnyNameTV = findViewById(R.id.comapny_nameTV);
 
         underwritingUserActionRequired = new ViewModelProvider(this).get(UnderwritingUserActionRequired.class);
 
         underwritingUserActionRequired.postactionRequired();
 
-//        declineLL.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-//                    return;
-//
-//                }
-//                mLastClickTime = SystemClock.elapsedRealtime();
-//                displayComments();
-//
-//            }
-//
-//        });
-//        acceptLL.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                acceptDeclineLL.setVisibility(View.GONE);
-//                compnyNameTV.setVisibility(View.GONE);
-//                acceptdneLL.setVisibility(View.VISIBLE);
-//                acceptMsgTV.setVisibility(View.VISIBLE);
-//
-//            }
-//
-//        });
-
         LayoutInflater documentsRequiredInflater = getLayoutInflater();
+
+        fileUpload = new HashMap<Integer,String>();
+        documentsFIle = new ArrayList<>();
+
+
+        submitCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LogUtils.d(TAG,"submitCV"+fileUpload);
+                ArrayList<Integer> documentListId = new ArrayList<>();
+                ArrayList<Integer> websiteID = new ArrayList<>();
+                ArrayList<ProposalsPropertiesData> proposalsPropertiesData =new ArrayList<ProposalsPropertiesData>();
+                ArrayList<ProposalsSubmitRequestData> proposalsList=new ArrayList<>();
+
+
+                ProposalsData propsals= new ProposalsData();
+
+                AdditonaActionRequiredRequest request = new AdditonaActionRequiredRequest();
+
+                for(int i=0;i<=actionRequired.getData().getAdditionalDocument().size()-1;i++) {
+                    documentListId.add(actionRequired.getData().getAdditionalDocument().get(i).getDocumentId());
+
+                }
+                for(int i=0;i<=actionRequired.getData().getWebsiteChange().size()-1;i++) {
+                    websiteID.add(actionRequired.getData().getWebsiteChange().get(i).getId());
+                }
+
+                for(int i=0;i<=actionRequired.getData().getInformationChange().size()-1;i++) {
+
+                    InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
+                    List<ProposalsData> proposalsData = data.getProposals();
+
+                    for(int j=0; j< proposalsData.size();j++) {
+                        ProposalsData proposal = proposalsData.get(j);
+                        List<ProposalsPropertiesSubmitRequestData> list = new ArrayList<>();
+
+                        ProposalsPropertiesSubmitRequestData requestData = new ProposalsPropertiesSubmitRequestData();
+                        requestData.setUserAccepted(true);
+                        requestData.setName(proposal.getProperties().get(0).getName());
+                        requestData.setUserMessage("Accepted");
+                        list.add(requestData);
+
+                        ProposalsSubmitRequestData propsalsdata = new ProposalsSubmitRequestData();
+                        propsalsdata.setDbId(proposal.getDbId());
+                        propsalsdata.setType(proposal.getType());
+                        propsalsdata.setPropertiesSubmitRequest(list);
+
+                        proposalsList.add(propsalsdata);
+                    }
+
+
+                }
+
+                request.setProposals(proposalsList);
+                request.setDocumentIdList(documentListId);
+                request.setWebsiteUpdates(websiteID);
+                request.setReserveRuleAccepted(false);
+
+                //API CALL
+                RequestBody requestInformation = RequestBody.create(MediaType.parse("application/json"), String.valueOf(request));
+
+                MultipartBody.Part[] documentsImageList = new MultipartBody.Part[documentsFIle.size()];
+                for (int index = 0; index < documentsFIle.size(); index++) {
+                    LogUtils.d(TAG, "requestUploadSurvey: survey image " + index +
+                                    "  " +
+                                             documentsFIle
+                                            .get(index)
+                                            .getAbsolutePath());
+                    File file = new File(documentsFIle
+                            .get(index)
+                            .getAbsolutePath());
+
+                    RequestBody documentsBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                    documentsImageList[index] = MultipartBody.Part.createFormData("documents", file.getName(), documentsBody);
+                }
+
+                LogUtils.d(TAG,"requestUploadSurvey"+requestInformation);
+                LogUtils.d(TAG,"requestUploadSurveydoc"+documentsImageList);
+
+                underwritingUserActionRequired.submitActionRequired(requestInformation,documentsImageList);
+
+            }
+        });
+
 
     }
 
     private void initObserver() {
+
         underwritingUserActionRequired.getUserAccountLimitsMutableLiveData().observe(this,
                 new Observer<ActionRequiredResponse>() {
                     @Override
                     public void onChanged(ActionRequiredResponse actionRequiredResponse) {
                         try {
                             LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
+
+                            actionRequired = actionRequiredResponse;
 
                             if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
                                 if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
@@ -192,32 +248,55 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     }
 
     private void additionalRequiredDocuments(ActionRequiredResponse actionRequiredResponse) {
+
         additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
 
         LinearLayout.LayoutParams layoutParamss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
             View inf = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
             LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
-            sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
+            LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
+            LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
+
             TextView documentName = inf.findViewById(R.id.tvdocumentName);
             documentRequiredLL.setVisibility(View.VISIBLE);
             documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentName());
             additionalDocumentRequiredLL.addView(inf, layoutParamss);
+
+            sscFileUploadLL.setTag(i);
+
+            fileUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentId(), null);
+
+            sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = (int) view.getTag();
+                    documentID = actionRequiredResponse.getData().getAdditionalDocument().get(pos).getDocumentId();
+                    selectedLayout = sscfileUploadedLL;
+                    chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+                }
+            });
+            enableOrDisableNext();
         }
     }
 
     private void websiteChanges(ActionRequiredResponse actionRequiredResponse) {
         websiteRevisionRequiredLL.setVisibility(View.VISIBLE);
+
         LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
         for (int i = 0; i < actionRequiredResponse.getData().getWebsiteChange().size(); i++) {
             View inf1 = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
             LinearLayout websiteChangeLL = inf1.findViewById(R.id.website);
+            LinearLayout websiteCheckBoxLL = inf1.findViewById(R.id.websiteCheckBox);
             TextView tvheading = inf1.findViewById(R.id.tvheading);
             TextView tvDescription = inf1.findViewById(R.id.tvDescription);
+            CheckBox checkboxCB = inf1.findViewById(R.id.checkboxCB);
             ImageView imgWebsite = inf1.findViewById(R.id.imgWebsite);
             websiteChangeLL.setVisibility(View.VISIBLE);
             tvheading.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader());
             tvDescription.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getComment());
+
             if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1()!=null) {
                 imgWebsite.setVisibility(View.VISIBLE);
 
@@ -228,11 +307,30 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             }  else {
                 imgWebsite.setVisibility(View.GONE);
             }
+
+            fileUpload.put(actionRequiredResponse.getData().getWebsiteChange().get(i).getId(), null);
+
             websiteRevisionRequiredLL.addView(inf1, layoutParamss1);
+
+            checkboxCB.setTag(i);
+
+            checkboxCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    int pos = (int) compoundButton.getTag();
+                    checkboxCB.setSelected(true);
+                    LogUtils.d(TAG,"checkboxCB"+checkboxCB.isChecked());
+                    if(fileUpload.containsKey(actionRequiredResponse.getData().getWebsiteChange().get(pos).getId())) {
+                        fileUpload.replace(actionRequiredResponse.getData().getWebsiteChange().get(pos).getId(), "true");
+                    }
+                }
+            });
+
         }
     }
 
     private void informationRevision(ActionRequiredResponse actionRequiredResponse) {
+
         informationRevisionLL.setVisibility(View.VISIBLE);
         LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -244,6 +342,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             TextView comapnynameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
             TextView tvMessage = inf1.findViewById(R.id.tvMessage);
             websiteChangeLL.setVisibility(View.VISIBLE);
+
             if(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0)!=null) {
                 if (actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0) != null) {
                     comapny_nameTV.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getName());
@@ -252,6 +351,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvMessage.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getAdminMessage());
                 }
             }
+
+            fileUpload.put(i, null);
+
             informationRevisionLL.addView(inf1, layoutParamss1);
         }
     }
@@ -434,6 +536,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             TextView libraryTV = chooseFile.findViewById(R.id.libraryTV);
             TextView takePhotoTV = chooseFile.findViewById(R.id.takePhotoTV);
             TextView browseFileTV = chooseFile.findViewById(R.id.browseFileTV);
+
             libraryTV.setOnClickListener(view -> {
                 chooseFile.dismiss();
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -471,10 +574,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode != RESULT_OK) return;
             String path = "";
+            LogUtils.d(TAG,"onActivityResult"+data.getData());
             if (requestCode == ACTIVITY_CHOOSE_FILE) {
+                LogUtils.d(TAG,"ACTIVITYs_CHOOSE_FILE"+data.getData());
                 uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
-
             } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+                LogUtils.d(TAG,"PICK_IMAGE_REQUEST"+data.getData());
                 uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
             }
 
@@ -496,36 +601,38 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
 
     public void removeAndUploadAdditionalDoc(int docID) {
-        //        docTypeID = docID;
+        //docTypeID = docID;
         //identityVerificationViewModel.removeIdentityImage(docTypeID + "");
 
     }
 
 
     public void uploadDocumentFromLibrary(Uri uri, int reqType) {
+
         try {
             String FilePath = "";
             if (reqType == ACTIVITY_CHOOSE_FILE) {
                 FilePath = FileUtils.getReadablePathFromUri(getApplicationContext(), uri);
-
             } else {
                 FilePath = getRealPathFromURI(uri);
-
             }
             File mediaFile = new File(FilePath);
-            if (selectedDocType.equals("AAR-SSC")) {
-                adtionalSscFile = mediaFile;
-                removeAndUploadAdditionalDoc(1);
 
-            } else if (selectedDocType.equals("AAR-SecFile")) {
-                addtional2fFle = mediaFile;
-                removeAndUploadAdditionalDoc(2);
+            LogUtils.d(TAG,"uploadDocumentFromLibrary"+mediaFile);
+            LogUtils.d(TAG,"documentID"+documentID);
 
-            } else if (selectedDocType.equals("AAR-FBL")) {
-                businessLincenseFile = mediaFile;
-                removeAndUploadAdditionalDoc(3);
+            if(fileUpload.containsKey(documentID)) {
+                fileUpload.replace(documentID, mediaFile.getAbsolutePath());
+                documentsFIle.add(mediaFile);
 
             }
+           // fileUpload.put(documentID, mediaFile);
+
+            if(selectedLayout!=null) {
+                selectedLayout.setVisibility(View.VISIBLE);
+            }
+
+           LogUtils.d(TAG,"fileUpload"+fileUpload);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -583,7 +690,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     public void enableOrDisableNext() {
         try {
 
-            if (issscFileUploadLL && isactionReqFileUploadLL && isbusinessLicenseUploadLL && ischeckboxCB && ischeckbox2CB && ischeckbox3CB) {
+            if (!fileUpload.containsValue(null) || !fileUpload.containsValue("false")) {
                 isSubmitEnabled = true;
                 submitCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 

@@ -33,6 +33,15 @@ public class AdditionalDocumentData {
     @Expose
     private String isAccepted;
 
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public int getId() {
         return id;
