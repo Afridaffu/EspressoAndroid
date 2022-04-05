@@ -26,6 +26,7 @@ import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.Utils;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -44,6 +45,10 @@ public class PayViewModel extends AndroidViewModel {
 
     public PayViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public MutableLiveData<PaidOrderResp> getPaidOrderRespMutableLiveData() {
+        return paidOrderRespMutableLiveData;
     }
 
     public MutableLiveData<RegUsersResponse> getRegUsersResponseMutableLiveData() {
@@ -282,7 +287,7 @@ public class PayViewModel extends AndroidViewModel {
 
     public void paidOrder(PaidOrderRequest paidOrderRequest){
         ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-        Call<PaidOrderResp> mCall = apiService.paidOrder(paidOrderRequest,Utils.getStrToken());
+        Call<PaidOrderResp> mCall = apiService.paidOrder(paidOrderRequest);
         mCall.enqueue(new Callback<PaidOrderResp>() {
             @Override
             public void onResponse(Call<PaidOrderResp> call, Response<PaidOrderResp> response) {
@@ -296,10 +301,10 @@ public class PayViewModel extends AndroidViewModel {
                         Type type = new TypeToken<PaidOrderResp>(){
                         }.getType();
 
-                        PaidOrderResp errorResponse = gson.fromJson(response.errorBody().toString(),type);
+                        PaidOrderResp errorResponse = gson.fromJson(response.errorBody().string(),type);
                         paidOrderRespMutableLiveData.setValue(errorResponse);
                     }
-                } catch (JsonSyntaxException e) {
+                } catch (JsonSyntaxException | IOException e) {
                     e.printStackTrace();
                 }
             }

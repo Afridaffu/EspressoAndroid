@@ -562,6 +562,6 @@ public interface ApiService {
 
 
     @POST("/api/v2/node/paidOrder")
-    Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request, @Path("requestToken") String requestToken);
+    Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
 }
 
