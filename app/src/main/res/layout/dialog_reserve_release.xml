@@ -25,7 +25,8 @@
         android:paddingBottom="@dimen/_16sdp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/rollingTV"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
             android:text="@string/rolling"
@@ -34,6 +35,7 @@
             android:textSize="@dimen/_12ssp" />
 
         <ImageView
+            android:id="@+id/rollingIV"
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_13sdp"
             android:contentDescription="@string/rolling"
@@ -59,7 +61,8 @@
         android:paddingBottom="@dimen/_16sdp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/manualTV"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
             android:text="@string/manual"
@@ -67,6 +70,7 @@
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
         <ImageView
+            android:id="@+id/manualIV"
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_13sdp"
             android:contentDescription="@string/rolling"
@@ -75,18 +79,12 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
         <View
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/_21sdp"
             android:layout_marginEnd="@dimen/_21sdp"
             android:background="@color/blue_light"
             android:layout_marginBottom="@dimen/_27sdp"/>
-    </LinearLayout>
 
 </LinearLayout>

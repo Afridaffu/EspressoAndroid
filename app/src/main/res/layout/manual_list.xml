@@ -7,62 +7,64 @@
     tools:context=".view.business.ReserveReleasesActivity">
 
     <TextView
-        android:id="@+id/nameTv"
-        android:layout_width="wrap_content"
+        android:id="@+id/reasonTV"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_alignParentStart="true"
         android:layout_marginStart="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:layout_toStartOf="@id/ammont_TV"
         android:fontFamily="@font/opensans_semibold"
-        android:text="Reserve Release"
+        android:text="@string/reason_field"
         android:textColor="@color/primary_black"
-        android:textSize="@dimen/_11ssp" />
+        android:textSize="@dimen/_11ssp"
+        tools:ignore="RelativeOverlap" />
 
     <TextView
         android:id="@+id/ammont_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:layout_marginTop="@dimen/_9sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:fontFamily="@font/opensans_bold"
-        android:text="20,000.00"
-        android:textColor="@color/xdark_gray"
+        android:text="10,000.00"
+        android:textColor="@color/active_green"
         android:textSize="@dimen/_12ssp" />
 
     <TextView
-        android:id="@+id/status_TV"
-        android:layout_width="@dimen/_67sdp"
-        android:layout_height="@dimen/_17sdp"
-        android:layout_below="@+id/nameTv"
+        android:id="@+id/tokenAcTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reasonTV"
         android:layout_marginStart="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_7sdp"
-        android:background="@drawable/txn_completed_bg"
-        android:fontFamily="@font/opensans_bold"
-        android:gravity="center"
-        android:text="Open"
+        android:layout_marginTop="@dimen/_13sdp"
+        android:fontFamily="@font/opensans_semibold"
+        android:text="@string/business_token_account"
         android:textColor="@color/xdark_gray"
-        android:textSize="@dimen/_8ssp" />
+        android:textSize="@dimen/_9ssp" />
 
     <TextView
         android:id="@+id/dateTime_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ammont_TV"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_below="@id/reasonTV"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_13sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:fontFamily="@font/opensans_semibold"
-        android:text="Release: 06/23/2021 @ 2:20am"
+        android:text="06/23/2021 @ 2:20am"
         android:textColor="@color/xdark_gray"
         android:textSize="@dimen/_9ssp" />
 
     <View
+        android:id="@+id/Vview"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/dateTime_TV"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        android:background="@color/vlight_gray" />
+        android:background="@color/primary_light_gray" />
 </RelativeLayout>
