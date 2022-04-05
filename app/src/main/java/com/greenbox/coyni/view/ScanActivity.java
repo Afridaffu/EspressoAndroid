@@ -937,11 +937,14 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         == PackageManager.PERMISSION_GRANTED) {
                     mcodeScanner.startPreview();
                     scannerLayout.setVisibility(View.VISIBLE);
-
+                    if (errorDialog != null){
+                        errorDialog.dismiss();
+                    }
                 }
             } else {
                 isAlbumClicked = false;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
