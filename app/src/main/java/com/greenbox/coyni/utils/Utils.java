@@ -144,6 +144,32 @@ public class Utils {
         }
     }
 
+
+    public static final String OPEN_VAL = "Open";
+    public enum ROLLING_LIST_STATUS {
+
+        OPEN(1, "Open"),
+        ON_HOLD(7, "On Hold"),
+        RELEASED(8, "Released"),
+        CANCELLED(9,"Failed");
+
+        private int statusType;
+        private String status;
+
+        ROLLING_LIST_STATUS(int statusType, String status) {
+            this.status = status;
+            this.statusType = statusType;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public int getStatusType() {
+            return statusType;
+        }
+    }
+
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strDesc = "abcd";
@@ -265,6 +291,10 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
 
+    public static final int open = 1;
+    public  static final int onhold = 7;
+    public static final int released = 8;
+
     //Merchant Transaction Filter Type values
 
     public static final int mRefund = 9;
@@ -313,10 +343,6 @@ public class Utils {
     public static final String resendInvitation = "Resend Invitation";
     public static final String canceled = "Canceled";
     public static final String expired = "Expired";
-
-    public static final String open = "Open";
-    public static final String released = "Released";
-    public  static final String onhold = "On Hold";
 
     public static final String applyFilter = "apply";
     public static final String datePicker = "DatePicker";

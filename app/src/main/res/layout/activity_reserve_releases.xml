@@ -103,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/_14sdp"
-                        android:src="@drawable/ic_filter_enabled" />
+                        android:src="@drawable/ic_filtericon" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
