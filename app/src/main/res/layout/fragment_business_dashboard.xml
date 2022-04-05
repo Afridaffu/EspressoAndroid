@@ -251,7 +251,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:fontFamily="@font/opensans_regular"
-                                        android:text="You may now start sending, receiving,\nbuying, charging, and withdrawing\nCoyni in your token account today."
+                                        android:text="You may now start sending, receiving,\nbuying, charging, and withdrawing\ncoyni in your token account today."
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_11ssp" />
 

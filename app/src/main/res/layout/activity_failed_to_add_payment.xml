@@ -34,7 +34,7 @@
         android:layout_marginBottom="@dimen/_17sdp"
         android:fontFamily="@font/opensans_regular"
         android:gravity="center"
-        android:text="Thank you for your interest Coyni. However, we regret to inform you that your account has been deactivated."
+        android:text="Thank you for your interest coyni. However, we regret to inform you that your account has been deactivated."
         android:textColor="@color/primary_black"
         android:textSize="@dimen/_12ssp" />
 

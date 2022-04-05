@@ -70,7 +70,7 @@ public class DashboardActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
     public NotificationsViewModel notificationsViewModel;
-    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV, welcomeCoyniTV, buyTokenWelcomeCoyniTV;
     MyApplication objMyApplication;
     Dialog dialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
@@ -137,10 +137,14 @@ public class DashboardActivity extends AppCompatActivity {
             newUserGetStartedCV = findViewById(R.id.newUserGetStartedCV);
 
             welcomeCoyniCV = findViewById(R.id.welcomeCoyniCV);
+            welcomeCoyniTV = findViewById(R.id.welcomeCoyniTV);
             underReviewCV = findViewById(R.id.underReviewCV);
             additionalActionCV = findViewById(R.id.additionalActionCV);
             buyTokensCV = findViewById(R.id.buyTokensCV);
+            buyTokenWelcomeCoyniTV = findViewById(R.id.buyTokenWelcomeCoyniTV);
             cvPayRequest = findViewById(R.id.cvPayRequest);
+            Utils.setSpannableStringAtEnd("Welcome to coyni!", this, 10, welcomeCoyniTV);
+            Utils.setSpannableStringAtEnd("Welcome to coyni!", this, 10, buyTokenWelcomeCoyniTV);
 
             layoutMainMenu = findViewById(R.id.layoutMainMenu);
             layoutProfile = findViewById(R.id.layoutProfile);

@@ -125,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Can be used for making Coyni purchases\nor withdrawing funds."
+                        android:text="Can be used for making coyni purchases\nor withdrawing funds."
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/_9ssp" />
 

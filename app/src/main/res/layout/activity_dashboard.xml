@@ -404,10 +404,11 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/welcomeCoyniTV"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:text="Welcome to Coyni!"
+                                    android:text="Welcome to coyni!"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp" />
 
@@ -675,10 +676,11 @@
                                     android:orientation="horizontal">
 
                                     <TextView
+                                        android:id="@+id/buyTokenWelcomeCoyniTV"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_semibold"
-                                        android:text="Welcome to Coyni!"
+                                        android:text="Welcome to coyni!"
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_12ssp" />
 
@@ -690,7 +692,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_7sdp"
                                     android:fontFamily="@font/opensans_regular"
-                                    android:text="Start managing your money by Coyni tokens today!"
+                                    android:text="Start managing your money by coyni tokens today!"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -903,7 +905,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/opensans_semibold"
+                    android:fontFamily="@font/opensans_bold"
                     android:text="Get Started"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp"></TextView>

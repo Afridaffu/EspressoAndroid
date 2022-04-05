@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="end"
-                    android:text="Coyni Balance"
+                    android:text="coyni Balance"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
