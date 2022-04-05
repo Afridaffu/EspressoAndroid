@@ -8,8 +8,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.coyniusers.CoyniUsers;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
+import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.recentusers.RecentUsers;
@@ -23,6 +26,7 @@ import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.Utils;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -37,9 +41,14 @@ public class PayViewModel extends AndroidViewModel {
     private MutableLiveData<TemplateResponse> templateResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PayRequestResponse> payRequestResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UserRequestResponse> userRequestResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<PaidOrderResp> paidOrderRespMutableLiveData = new MutableLiveData<>();
 
     public PayViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public MutableLiveData<PaidOrderResp> getPaidOrderRespMutableLiveData() {
+        return paidOrderRespMutableLiveData;
     }
 
     public MutableLiveData<RegUsersResponse> getRegUsersResponseMutableLiveData() {
@@ -274,6 +283,40 @@ public class PayViewModel extends AndroidViewModel {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void paidOrder(PaidOrderRequest paidOrderRequest){
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<PaidOrderResp> mCall = apiService.paidOrder(paidOrderRequest);
+        mCall.enqueue(new Callback<PaidOrderResp>() {
+            @Override
+            public void onResponse(Call<PaidOrderResp> call, Response<PaidOrderResp> response) {
+                try {
+                    if (response.isSuccessful()){
+                        PaidOrderResp obj = response.body();
+                        paidOrderRespMutableLiveData.setValue(obj);
+                    }
+                    else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<PaidOrderResp>(){
+                        }.getType();
+
+                        PaidOrderResp errorResponse = gson.fromJson(response.errorBody().string(),type);
+                        paidOrderRespMutableLiveData.setValue(errorResponse);
+                    }
+                } catch (JsonSyntaxException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaidOrderResp> call, Throwable t) {
+
+                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                paidOrderRespMutableLiveData.setValue(null);
+                Utils.setStrToken("");
+            }
+        });
     }
 
 }

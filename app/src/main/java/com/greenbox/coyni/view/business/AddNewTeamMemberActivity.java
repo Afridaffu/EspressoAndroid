@@ -66,7 +66,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                 try {
                     if (teamInfoAddModel != null) {
                         if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent), R.drawable.ic_custom_tick, "");
+                            Utils.showCustomToast(AddNewTeamMemberActivity.this, getResources().getString(R.string.invitation_sent_with_exclamatory), R.drawable.ic_custom_tick, "");
                             new Handler().postDelayed(() -> {
                                 try {
                                     finish();
@@ -138,6 +138,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
                     showProgressDialog();
                     teamInfoAddAPICall(prepareRequest());
+                    Utils.hideKeypad(AddNewTeamMemberActivity.this);
                 }
             }
         });

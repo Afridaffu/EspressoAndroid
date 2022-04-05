@@ -25,11 +25,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     private OnItemClickListener listener;
     private AccountsData accountsData;
     private int selectedID;
+    private boolean showdba;
 
-    public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData, int selectedID) {
+    public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData, int selectedID, boolean showdba) {
         this.context = context;
         this.accountsData = accountsData;
         this.selectedID = selectedID;
+        this.showdba = showdba;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -126,9 +128,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                         .into(profileImage);
             }
         }
-
-        if (isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
-            addDBA.setVisibility(View.VISIBLE);
+        if(showdba) {
+            if (isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
+                addDBA.setVisibility(View.VISIBLE);
+            } else {
+                addDBA.setVisibility(View.GONE);
+            }
         } else {
             addDBA.setVisibility(View.GONE);
         }
@@ -165,8 +170,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         childView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (listener != null) {
-                    listener.onChildClicked(detailInfo.getAccountType(), detailInfo.getId());
+                    selectedID = detailInfo.getId();
+                    listener.onChildClicked(detailInfo);
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -175,7 +183,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onAddDbaClicked(detailInfo.getAccountType(), detailInfo.getId());
+                    listener.onAddDbaClicked(detailInfo.getAccountType(), groupProfile.getId());
                 }
             }
         });
@@ -277,7 +285,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId());
+                        selectedID = headerInfo.getId();
+                        listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(),headerInfo.getFullName());
+                        notifyDataSetChanged();
                     }
                 }
             });
@@ -302,9 +312,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
     public interface OnItemClickListener {
 
-        public void onGroupClicked(int position, String accountType, Integer id);
+        public void onGroupClicked(int position, String accountType, Integer id,String fullname);
 
-        public void onChildClicked(String accountType, Integer id);
+        public void onChildClicked(ProfilesResponse.Profiles detailInfo);
 
         public void onAddDbaClicked(String accountType, Integer id);
     }

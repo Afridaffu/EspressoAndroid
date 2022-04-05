@@ -80,7 +80,7 @@ public class BenificialOwnerDetails extends BaseActivity {
         }
         if (beneficialOwner.getSsn() != null && !beneficialOwner.getSsn().equals("")) {
             String converted = beneficialOwner.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
+            String hifened = converted.substring(0, 3) + "_" + converted.substring(3, 5) + "_" + converted.substring(5, converted.length());
             mSSN.setText(hifened);
         }
 
