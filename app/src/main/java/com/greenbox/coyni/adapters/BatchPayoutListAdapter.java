@@ -97,18 +97,22 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
         holder.statusTV.setText(objData.getStatus());
         switch (objData.getStatus().toLowerCase()) {
             case "closed":
-                holder.statusTV.setTextColor(context.getResources().getColor(R.color.completed_status));
+                holder.statusTV.setTextColor(context.getColor(R.color.completed_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
             case "in progress":
-                holder.statusTV.setTextColor(context.getResources().getColor(R.color.inprogress_status));
+                holder.statusTV.setTextColor(context.getColor(R.color.inprogress_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case "open":
-                holder.statusTV.setVisibility(View.GONE);
-                holder.statusTV.setTextColor(context.getResources().getColor(R.color.pending_status));
+                holder.statusTV.setTextColor(context.getColor(R.color.pending_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                 break;
+            case "failed":
+                holder.statusTV.setTextColor(context.getColor(R.color.failed_status));
+                holder.statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
+                break;
+
         }
     }
 
