@@ -141,7 +141,7 @@
                         android:layout_centerVertical="true"
                         android:text="@string/ownership_title"
                         android:textColor="@color/dark_gray"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_9ssp" />
                 </LinearLayout>
 
             </RelativeLayout>

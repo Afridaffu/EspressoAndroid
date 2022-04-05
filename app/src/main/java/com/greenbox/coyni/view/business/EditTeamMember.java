@@ -80,6 +80,7 @@ public class EditTeamMember extends BaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                Utils.hideKeypad(EditTeamMember.this);
             }
         });
         editFNameTil = findViewById(R.id.edit_fName_til);
@@ -153,6 +154,7 @@ public class EditTeamMember extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
                     showProgressDialog();
                     teamInfoAPICall(prepareRequest());
+                    Utils.hideKeypad(EditTeamMember.this);
                 }
 
             }
@@ -260,6 +262,7 @@ public class EditTeamMember extends BaseActivity {
                     } else {
                         focusedID = editEmailET.getId();
 //                        editEmailET.setHint("Email");
+                        editEmailLL.setVisibility(GONE);
                         editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(editEmailTil, getColor(R.color.primary_green));
                     }

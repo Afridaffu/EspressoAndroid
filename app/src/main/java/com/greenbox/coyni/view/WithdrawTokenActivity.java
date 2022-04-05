@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -31,6 +32,8 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -974,7 +977,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",", ""));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
-                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",WithdrawTokenActivity.this,tvError,17);
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
@@ -1803,7 +1807,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     if (tvError.getVisibility() == View.VISIBLE) {
                         lyBalance.setVisibility(View.GONE);
                         if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                            setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",WithdrawTokenActivity.this,tvError,17);
                         } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
                             tvError.setText("Amount entered exceeds available balance");
                         } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
@@ -1825,7 +1830,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     if (tvError.getVisibility() == View.VISIBLE) {
                         lyBalance.setVisibility(View.GONE);
                         if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+//                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                            setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",WithdrawTokenActivity.this,tvError,17);
                         } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
                             tvError.setText("Amount entered exceeds available balance");
                         } else if (tvError.getText().toString().trim().contains("Insufficient funds")) {
@@ -1846,4 +1852,19 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             ex.printStackTrace();
         }
     }
+
+    public static void setSpannableText(String text, Context context, TextView spannableTV, int start) {
+
+        SpannableString ss = new SpannableString(text);
+
+        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+        ss.setSpan(new RelativeSizeSpan(1f), start, ss.length(), 0);
+        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.error_red)), start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableTV.setText(ss);
+        spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+
 }

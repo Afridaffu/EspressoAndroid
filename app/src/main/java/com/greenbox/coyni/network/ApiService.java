@@ -72,6 +72,8 @@ import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
+import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -558,5 +560,10 @@ public interface ApiService {
 
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+
+
+
+    @POST("/api/v2/node/paidOrder")
+    Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
 }
 
