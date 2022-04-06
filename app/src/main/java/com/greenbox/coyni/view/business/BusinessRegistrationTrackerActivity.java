@@ -66,6 +66,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         try {
             super.onCreate(savedInstanceState);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
@@ -412,7 +413,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 //                            }
                             reloadTrackerDashboard(btResp);
 
-                        }
+                        } else {
+                        Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessRegistrationTrackerActivity.this, "", btResp.getError().getFieldErrors().get(0));
+                    }
                     }
                 }
             });

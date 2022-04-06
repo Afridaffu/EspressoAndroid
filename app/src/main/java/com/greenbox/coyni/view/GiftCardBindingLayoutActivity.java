@@ -2,11 +2,11 @@ package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
@@ -37,24 +37,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.RetEmailAdapter;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
-import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
-
-import java.util.List;
 
 public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     String strScreen = "", enableType = "";
@@ -67,6 +61,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     CoyniViewModel coyniViewModel;
     SQLiteDatabase mydatabase;
+    DatabaseHandler dbHandler;
     Double cynValue = 0.0;
 
     @Override
@@ -89,35 +84,64 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
+    //Shiva Changed
+    //    private void saveThumb(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblThumbPinLock");
+//            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
     private void saveThumb(String value) {
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblThumbPinLock");
-            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
+            dbHandler.clearThumbPinLockTable();
+            dbHandler.insertThumbPinLock(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+
+//    private void saveFace(String value) {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
+//            mydatabase.execSQL("Delete from tblFacePinLock");
+//            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
     private void saveFace(String value) {
         try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-            mydatabase.execSQL("Delete from tblFacePinLock");
-            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
+            dbHandler.clearFacePinLockTable();
+            dbHandler.insertFacePinLock(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+//    private void saveToken(String value) {
+//        try {
+//            objMyApplication.setStrMobileToken(value);
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
+//            mydatabase.execSQL("Delete from tblPermanentToken");
+//            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void saveToken(String value) {
         try {
             objMyApplication.setStrMobileToken(value);
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
-            mydatabase.execSQL("Delete from tblPermanentToken");
-            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
+            dbHandler.clearPermanentTokenTable();
+            dbHandler.insertPermanentToken(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -130,6 +154,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             giftCardAmountTV = findViewById(R.id.giftCardAmountTV);
             giftCardDescTV = findViewById(R.id.giftCardDescTV);
             refIDTV = findViewById(R.id.refIDTV);
+            dbHandler = DatabaseHandler.getInstance(GiftCardBindingLayoutActivity.this);
             gcProcessingTV = findViewById(R.id.gcProcessingTV);
             learnMoreTV = findViewById(R.id.learnMoreTV);
             refIDLL = findViewById(R.id.refIDLL);
@@ -235,10 +260,50 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                         requestSuccess();
                     }
                     break;
+                case "Success": {
+                    findViewById(R.id.inProgressContainer).setVisibility(View.VISIBLE);
+                    findViewById(R.id.failedContainer).setVisibility(View.GONE);
+                    findViewById(R.id.wdInProgressContainer).setVisibility(View.GONE);
+                    paidTransactionSucess();
+                }
+                break;
+                case "Failed": {
+                    findViewById(R.id.inProgressContainer).setVisibility(View.GONE);
+                    findViewById(R.id.failedContainer).setVisibility(View.VISIBLE);
+                    findViewById(R.id.wdInProgressContainer).setVisibility(View.GONE);
+                    failedPaidTransaction();
+                }
+                break;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void failedPaidTransaction() {
+        if (objMyApplication.getPaidOrderResp() != null){
+            tvMessage.setText(
+                    "The transaction failed due to error code:\n" +
+                    objMyApplication.getPaidOrderResp().getError().getErrorCode() + " - " +
+                    objMyApplication.getPaidOrderResp().getError().getErrorDescription() + ". Please try again.");
+        }
+
+
+        cvTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void paidTransactionSucess() {
     }
 
     private void buyInProgress(BuyTokenResponseData objData) {

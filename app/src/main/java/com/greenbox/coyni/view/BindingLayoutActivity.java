@@ -21,6 +21,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.RetEmailAdapter;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -39,6 +40,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
     CardView reTryAgainBtn, btnChangePassCV, nextGetStartedCV;
     CardView editEmailLogoutCV;
     SQLiteDatabase mydatabase;
+    DatabaseHandler dbHandler;
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
     TextView txvVerifyName,txvVerifyDescription;
@@ -71,6 +73,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             verifyAccountCloseLL = findViewById(R.id.verifyAccountCloseLL);
             retEmailRV = findViewById(R.id.retEmailRV);
             txvVerifyName = findViewById(R.id.txv_verify_name);
+            dbHandler = DatabaseHandler.getInstance(BindingLayoutActivity.this);
             txvVerifyDescription = findViewById(R.id.txv_verify_description);
 
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
@@ -228,12 +231,17 @@ public class BindingLayoutActivity extends AppCompatActivity {
 //            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
 //            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
 //            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-            mydatabase.execSQL("Delete from tblUserDetails;");
-            mydatabase.execSQL("Delete from tblRemember;");
-            mydatabase.execSQL("Delete from tblThumbPinLock;");
-            mydatabase.execSQL("Delete from tblFacePinLock;");
-            mydatabase.execSQL("Delete from tblPermanentToken;");
-            mydatabase.execSQL("Delete from tblDontRemind;");
+
+            //Shiva Changed
+//            mydatabase.execSQL("Delete from tblUserDetails;");
+//            mydatabase.execSQL("Delete from tblRemember;");
+//            mydatabase.execSQL("Delete from tblThumbPinLock;");
+//            mydatabase.execSQL("Delete from tblFacePinLock;");
+//            mydatabase.execSQL("Delete from tblPermanentToken;");
+//            mydatabase.execSQL("Delete from tblDontRemind;");
+
+            dbHandler.clearAllTables();
+
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.clear();

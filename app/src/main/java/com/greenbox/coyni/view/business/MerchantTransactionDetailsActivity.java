@@ -447,9 +447,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             merchantPIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getPayoutDate()));
 
             if (objData.getData().getGrossAmount() != null) {
-                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
+                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             }
-            if (objData.getData().getGrossAmount() != null) {
+            if (objData.getData().getTotalAmount() != null) {
                 mPItotalamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
             }
             mPItotaltransactionstv.setText(objData.getData().getTotalTransactions());

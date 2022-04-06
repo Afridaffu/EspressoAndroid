@@ -47,6 +47,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
@@ -83,6 +84,7 @@ public class DashboardActivity extends AppCompatActivity {
     String strName = "", strFirstUser = "";
     ConstraintLayout cvProfileSmall, cvProfile;
     SQLiteDatabase mydatabase;
+    DatabaseHandler databaseHandler;
     Cursor dsUserDetails;
     int globalCount = 0;
 
@@ -172,6 +174,7 @@ public class DashboardActivity extends AppCompatActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
+            databaseHandler = DatabaseHandler.getInstance(DashboardActivity.this);
             SetDB();
             if (strFirstUser.equals("")) {
                 saveFirstUser();
@@ -731,29 +734,47 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
+    //Shiva Changes
+//    private void SetDB() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
+//            dsUserDetails.moveToFirst();
+//            if (dsUserDetails.getCount() > 0) {
+//                strFirstUser = dsUserDetails.getString(1);
+//            }
+//        } catch (Exception ex) {
+//            if (ex.getMessage().toString().contains("no such table")) {
+//                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
+//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
+//            }
+//        }
+//    }
+
+    //SHIVA Changes
+
     private void SetDB() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
-            dsUserDetails.moveToFirst();
-            if (dsUserDetails.getCount() > 0) {
-                strFirstUser = dsUserDetails.getString(1);
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
-            }
-        }
+        strFirstUser = databaseHandler.getTableUserDetails();
     }
+//    private void saveFirstUser() {
+//        try {
+//            if (strFirstUser.equals("")) {
+//                strFirstUser = objMyApplication.getStrEmail();
+//            }
+//            mydatabase.execSQL("Delete from tblUserDetails");
+//            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     private void saveFirstUser() {
         try {
             if (strFirstUser.equals("")) {
                 strFirstUser = objMyApplication.getStrEmail();
             }
-            mydatabase.execSQL("Delete from tblUserDetails");
-            mydatabase.execSQL("INSERT INTO tblUserDetails(id,email) VALUES(null,'" + strFirstUser.toLowerCase() + "')");
+            databaseHandler.clearTableUserDetails();
+            databaseHandler.insertTableUserDetails(strFirstUser.toLowerCase());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

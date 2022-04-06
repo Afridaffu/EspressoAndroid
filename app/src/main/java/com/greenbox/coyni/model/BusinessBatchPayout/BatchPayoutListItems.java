@@ -2,8 +2,13 @@ package com.greenbox.coyni.model.BusinessBatchPayout;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.greenbox.coyni.model.ListItem;
+import com.greenbox.coyni.model.transaction.TransactionListPosted;
 
-public class BatchPayoutListItems {
+import java.io.Serializable;
+import java.util.List;
+
+public class BatchPayoutListItems implements Serializable, Comparable<BatchPayoutListItems> {
     @SerializedName("batchId")
     @Expose
     private String batchId;
@@ -27,8 +32,28 @@ public class BatchPayoutListItems {
     private String sentTo;
     @SerializedName("reserve")
     @Expose
-    private String reserve;
+    private String scheduledRelease;
 
+    private String reserveAmount;
+
+    public String getScheduledRelease() {
+        return scheduledRelease;
+    }
+
+    public void setScheduledRelease(String scheduledRelease) {
+        this.scheduledRelease = scheduledRelease;
+    }
+
+    public String getReserveAmount() {
+        return reserveAmount;
+    }
+
+    public void setReserveAmount(String reserveAmount) {
+        this.reserveAmount = reserveAmount;
+    }
+
+    public BatchPayoutListItems(List<BatchPayoutListItems> items) {
+    }
     public String getBatchId() {
         return batchId;
     }
@@ -85,15 +110,9 @@ public class BatchPayoutListItems {
         this.sentTo = sentTo;
     }
 
-    public String getReserve() {
-        return reserve;
+    @Override
+    public int compareTo(BatchPayoutListItems batchPayoutListItems) {
+        return createdAt.compareTo(batchPayoutListItems.createdAt);
+//        return getTotalAmount().compareTo(batchPayoutListItems.totalAmount);
     }
-
-    public void setReserve(String reserve) {
-        this.reserve = reserve;
-    }
-
-
-
-
 }

@@ -37,6 +37,8 @@ import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
+import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
@@ -315,6 +317,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                             case "Pay":
                                                 payTransaction();
                                                 break;
+                                            case "Paid":
+                                                paidTransaction();
+                                                break;
                                             case "Notifications":
                                                 Intent returnIntent = new Intent();
                                                 setResult(235, returnIntent);
@@ -480,6 +485,30 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             }
         });
 
+        payViewModel.getPaidOrderRespMutableLiveData().observe(this, new Observer<PaidOrderResp>() {
+            @Override
+            public void onChanged(PaidOrderResp paidOrderResp) {
+                if (paidOrderResp != null){
+                    objMyApplication.setPaidOrderResp(paidOrderResp);
+                    Utils.setStrToken("");
+                        if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
+                            startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "Success")
+                                    .putExtra("subtype", "paid"));
+
+                        } else {
+                            startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "Failed")
+                                    .putExtra("subtype", "paid"));
+                        }
+                        finish();
+                    }
+                    else {
+                        Utils.displayAlert("something went wrong", PINActivity.this, "", "");
+                    }
+                }
+        });
+
         businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
             @Override
             public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
@@ -631,6 +660,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         }
 
     }
+
 
     @Override
     public void onClick(View view) {
@@ -902,6 +932,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 case "buy":
                     request.setActionType(Utils.buyActionType);
                     break;
+                case "paid":
+                    request.setActionType(Utils.sendActionType);
+                    break;
             }
 //            if (strScreen.toLowerCase().equals("changepassword")) {
 //                request.setActionType(Utils.changeActionType);
@@ -1051,24 +1084,30 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         }.start();
     }
 
+//    private void SetDontRemind() {
+//        try {
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
+//            dsDontRemind.moveToFirst();
+//            if (dsDontRemind.getCount() > 0) {
+//                if (dsDontRemind.getString(1).equals("true")) {
+//                    isDontRemind = true;
+//                } else {
+//                    isDontRemind = false;
+//                }
+//            }
+//        } catch (Exception ex) {
+//            if (ex.getMessage().toString().contains("no such table")) {
+//                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
+//                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
+//            }
+//        }
+//    }
+
     private void SetDontRemind() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsDontRemind = mydatabase.rawQuery("Select * from tblDontRemind", null);
-            dsDontRemind.moveToFirst();
-            if (dsDontRemind.getCount() > 0) {
-                if (dsDontRemind.getString(1).equals("true")) {
-                    isDontRemind = true;
-                } else {
-                    isDontRemind = false;
-                }
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
-            }
-        }
+        String value = dbHandler.getTableDontRemind();
+        isDontRemind = value != null && value.equals("true");
+
     }
 
     private void launchDashboard() {
@@ -1115,6 +1154,20 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    private void paidTransaction() {
+
+        if (Utils.checkInternet(PINActivity.this)){
+            try {
+                PaidOrderRequest request = new PaidOrderRequest();
+                request.setRequestToken(Utils.getStrToken());
+                request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra("amount")));
+                request.setRecipientWalletId(getIntent().getStringExtra("wallet"));
+                payViewModel.paidOrder(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void buyToken() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {

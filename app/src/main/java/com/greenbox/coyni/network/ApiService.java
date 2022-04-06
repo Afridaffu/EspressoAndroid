@@ -2,8 +2,6 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
@@ -11,7 +9,7 @@ import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
-import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
+import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
@@ -22,6 +20,7 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
@@ -73,6 +72,8 @@ import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
+import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -544,17 +545,25 @@ public interface ApiService {
     @POST("api/v2/business/fees")
     Call<CompanyInfoUpdateResp> fees();
 
-    @GET("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutListData();
+    @POST("api/v2/transactions/admin/totalPayout")
+    Call<BatchPayoutListResponse> getPayoutListData(@Body EmptyRequest request);
+
+    @POST("api/v2/transactions/admin/totalPayout")
+    Call<BatchPayoutListResponse> getPayoutListData(@Body RollingListRequest request);
 
 //    @POST("api/v2/transactions/business-activity")
 //    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
 
-    @GET("api/v2/transactions/admin/totalPayout")
+    @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
 
-    @GET("api/v2/transactions/admin/totalPayout")
+    @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+
+
+
+    @POST("/api/v2/node/paidOrder")
+    Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
 }
 

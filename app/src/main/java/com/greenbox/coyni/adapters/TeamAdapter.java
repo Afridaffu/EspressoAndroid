@@ -56,8 +56,8 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                 lastName = objData.getLastName();
             }
             char first = firstName.charAt(0);
-            char last = lastName.charAt(0);
-            String imageName = String.valueOf(first) + String.valueOf(last);
+//            char last = lastName.charAt(0);
+            String imageName = String.valueOf(first);
             holder.txImageName.setText(imageName);
             holder.txName.setText(firstName +" "+lastName);
             if (objData.getRoleName() != null && !objData.getRoleName().equals("")) {

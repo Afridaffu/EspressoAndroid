@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view.business;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,10 +47,8 @@ public class ReserveDetailsActivity extends BaseActivity {
         releasedIDcopy = findViewById(R.id.releasedIDcopyLL);
         tvDBAName = findViewById(R.id.tvDBAName);
 
-
         recyclerViewRv = findViewById(R.id.recyclerviewRV);
-
-        cancel.setText(getResources().getString(R.string.canceled_description,"12/24/2020","6435.21"));
+        cancel.setText(Html.fromHtml( getResources().getString(R.string.canceled_description,"<font color='#151515'><b>12/24/2020</b></font>","<font color='#151515'><b>6435.21 CYN</b></font>")));
 
         backButton.setOnClickListener(v -> finish());
         lycopy.setOnClickListener(v -> Utils.copyText(reserveIDTV.getText().toString(), ReserveDetailsActivity.this));

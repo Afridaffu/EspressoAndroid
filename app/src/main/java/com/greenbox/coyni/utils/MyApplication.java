@@ -28,6 +28,8 @@ import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
+import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
@@ -96,6 +98,8 @@ public class MyApplication extends Application {
     BuyTokenResponse buyTokenResponse;
     PayRequestResponse payRequestResponse;
     TransferPayRequest transferPayRequest;
+    PaidOrderRequest paidOrderRequest;
+    PaidOrderResp paidOrderResp;
     List<Contacts> listContacts = new ArrayList<>();
     TransactionListRequest transactionListSearch = new TransactionListRequest();
     Double withdrawAmount;
@@ -109,6 +113,22 @@ public class MyApplication extends Application {
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
     Double merchantBalance = 0.0;
+
+    public void setPaidOrderRequest(PaidOrderRequest paidOrderRequest) {
+        this.paidOrderRequest = paidOrderRequest;
+    }
+
+    public PaidOrderRequest getPaidOrderRequest() {
+        return paidOrderRequest;
+    }
+
+    public PaidOrderResp getPaidOrderResp() {
+        return paidOrderResp;
+    }
+
+    public void setPaidOrderResp(PaidOrderResp paidOrderResp) {
+        this.paidOrderResp = paidOrderResp;
+    }
 
     public Double getMerchantBalance() {
         return merchantBalance;
@@ -454,6 +474,32 @@ public class MyApplication extends Application {
                 SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date newDate = spf.parse(date);
                 spf = new SimpleDateFormat("hh:mm aa");
+                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
+                strDate = spf.format(newDate);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public String convertZoneDateTime(String date, String format, String requiredFormat) {
+        String strDate = "";
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneOffset.UTC);
+                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
+                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+                strDate = zonedTime.format(DATE_TIME_FORMATTER);
+            } else {
+                SimpleDateFormat spf = new SimpleDateFormat(format);
+                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newDate = spf.parse(date);
+                spf = new SimpleDateFormat(requiredFormat);
                 spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
                 strDate = spf.format(newDate);
             }

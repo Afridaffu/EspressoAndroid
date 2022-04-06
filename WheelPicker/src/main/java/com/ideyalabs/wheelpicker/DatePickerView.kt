@@ -171,7 +171,7 @@ class DatePickerView @JvmOverloads constructor(
         get() = dayPickerView.selectedIndex + 1
 
     val month: Int
-        get() = monthPickerView.selectedIndex + 1
+        get() = monthPickerView.selectedIndex
 
     val year: Int
         get() = yearPickerView.selectedIndex

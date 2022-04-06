@@ -53,6 +53,7 @@ import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -74,6 +75,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
     CoyniViewModel coyniViewModel;
+    DatabaseHandler dbHandler;
     LinearLayout lyPayClose, lyBalance, payRequestLL, addNoteClickLL;
     ImageView imgProfile, imgConvert;
     TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV;
@@ -394,43 +396,77 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    public void SetFaceLock() {
+//    public void SetFaceLock() {
+//        try {
+//            isFaceLock = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
+//            dsFacePin.moveToFirst();
+//            if (dsFacePin.getCount() > 0) {
+//                String value = dsFacePin.getString(1);
+//                if (value.equals("true")) {
+//                    isFaceLock = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isFaceLock = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+//
+//    public void SetTouchId() {
+//        try {
+//            isTouchId = false;
+//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
+//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
+//            dsTouchID.moveToFirst();
+//            if (dsTouchID.getCount() > 0) {
+//                String value = dsTouchID.getString(1);
+//                if (value.equals("true")) {
+//                    isTouchId = true;
+//                    objMyApplication.setLocalBiometric(true);
+//                } else {
+//                    isTouchId = false;
+//                    objMyApplication.setLocalBiometric(false);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+    public void setFaceLock() {
         try {
             isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public void SetTouchId() {
+    public void setTouchId() {
         try {
             isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -459,6 +495,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            dbHandler = DatabaseHandler.getInstance(PayRequestActivity.this);
             fontSize = payRequestET.getTextSize();
             dollarFont = tvCurrency.getTextSize();
             availBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
@@ -561,8 +598,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     }
                 }
             });
-            SetFaceLock();
-            SetTouchId();
+//            SetFaceLock();
+//            SetTouchId();
+            setFaceLock();
+            setTouchId();
             calculateFee("10");
             if (Utils.checkInternet(PayRequestActivity.this)) {
                 TransactionLimitRequest obj = new TransactionLimitRequest();
@@ -1468,7 +1507,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             isAuthenticationCalled = false;
             if (!addNoteTV.getText().toString().trim().equals("")) {
                 lyMessage.setVisibility(View.VISIBLE);
-                messageNoteTV.setText(addNoteTV.getText().toString());
+                messageNoteTV.setText("\""+addNoteTV.getText().toString()+"\"");
             } else {
                 lyMessage.setVisibility(View.INVISIBLE);
             }

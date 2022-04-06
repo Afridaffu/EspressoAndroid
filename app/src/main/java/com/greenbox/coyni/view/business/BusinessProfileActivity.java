@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -57,6 +58,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
             businessResetPin, preferencesLL, beneficialOwnersLL;
+    private ConstraintLayout userProfileCL;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -108,6 +110,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             dbainfoLL = findViewById(R.id.DBAInformationLL);
             profileSV = findViewById(R.id.profileSV);
             cardViewSetting = findViewById(R.id.cardviewSetting);
+            userProfileCL = findViewById(R.id.linearLayout);
 
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             companyinfoLL = findViewById(R.id.companyInformationLL);
@@ -690,6 +693,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
             if (imageString != null && !imageString.trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
+                userProfileCL.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 profileText.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(imageString)

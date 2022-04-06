@@ -92,10 +92,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -103,6 +105,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -114,7 +117,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
-    public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "";
+    public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
     public static final String TOKEN = "TOKEN", MERCHANT = "MERCHANT";
 
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
@@ -139,6 +142,32 @@ public class Utils {
 
         public String getStatus() {
             return status;
+        }
+    }
+
+
+    public static final String OPEN_VAL = "Open";
+    public enum ROLLING_LIST_STATUS {
+
+        OPEN(1, "Open"),
+        ON_HOLD(7, "On Hold"),
+        RELEASED(8, "Released"),
+        CANCELLED(9,"Failed");
+
+        private int statusType;
+        private String status;
+
+        ROLLING_LIST_STATUS(int statusType, String status) {
+            this.status = status;
+            this.statusType = statusType;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public int getStatusType() {
+            return statusType;
         }
     }
 
@@ -262,6 +291,10 @@ public class Utils {
     public static final int cancelled = 4;//Not available
     public static final int inProgress = 0;
     public static final int failed = 3;
+
+    public static final int open = 1;
+    public  static final int onhold = 7;
+    public static final int released = 8;
 
     //Merchant Transaction Filter Type values
 
@@ -1563,10 +1596,42 @@ public class Utils {
     public static String convertPayoutDate(String date) {
         String strDate = "";
         try {
+
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
             spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
             strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+    public static String convertMerchantDate(String date) {
+        String strDate = "";
+        try {
+
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+    public static String convertUTCtoPST(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            TimeZone gmtTime = TimeZone.getTimeZone("GMT");
+            spf.setTimeZone(gmtTime);
+            Date newDate = spf.parse(date);
+            SimpleDateFormat sp = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+            TimeZone pstTime = TimeZone.getTimeZone("PST");
+            sp.setTimeZone(pstTime);
+            strDate = sp.format(newDate);
+            return strDate;
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1594,5 +1659,28 @@ public class Utils {
                 start, text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         spannable.setSpan(new StyleSpan(Typeface.BOLD), start, text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         textView.setText(spannable);
+    }
+
+
+    public static String addNxtDay(String date) {
+        String strDate = "";
+        try {
+
+            Calendar calendar = Calendar.getInstance();
+            Date today = calendar.getTime();
+
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            Date tomorrow = calendar.getTime();
+
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy @ ");
+
+            String todayAsString = dateFormat.format(today);
+            String tomorrowAsString = dateFormat.format(tomorrow);
+
+            return tomorrowAsString;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
     }
 }
