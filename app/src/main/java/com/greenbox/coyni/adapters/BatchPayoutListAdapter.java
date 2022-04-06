@@ -69,13 +69,13 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
 
     @Override
     public void onBindViewHolder(@NonNull BatchPayoutListAdapter.MyViewHolder holder, int position) {
-//        if (listItems.get().getStatus().equalsIgnoreCase("closed")) {
         holder.detailsLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listener.onItemClick(position, listItems.get(position));
             }
         });
+//        if (listItems.get().getStatus().equalsIgnoreCase("closed")) {
 
         BatchPayoutListItems objData = listItems.get(position);
 
@@ -94,7 +94,13 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
             }
         }
 
+//        if (objData.getStatus().equalsIgnoreCase("closed")) {
+//            holder.statusTV.setText(objData.getStatus());
+//            holder.statusTV.setTextColor(context.getColor(R.color.completed_status));
+//            holder.statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+//        }
         holder.statusTV.setText(objData.getStatus());
+
         switch (objData.getStatus().toLowerCase()) {
             case "closed":
                 holder.statusTV.setTextColor(context.getColor(R.color.completed_status));

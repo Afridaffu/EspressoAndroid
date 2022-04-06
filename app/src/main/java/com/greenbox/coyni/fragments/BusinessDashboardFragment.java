@@ -535,12 +535,12 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
             payoutsList.removeAllViews();
-            for (i = 0; i < 5; i++) {
+            int j=0, closedItems = 0;
+            while (j<listItems.size() && closedItems < 5) {
                 View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
-
-                if (listItems.get(i).getStatus().equalsIgnoreCase("closed")) {
+                if (listItems.get(j).getStatus().equalsIgnoreCase("closed")) {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
-                    String listDate = listItems.get(i).getCreatedAt();
+                    String listDate = listItems.get(j).getCreatedAt();
                     if (listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
                         payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
@@ -548,14 +548,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                         Log.d("listDate", listDate);
                     }
                     TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
-                    totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(i).getTotalAmount()));
-
+                    totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
                     payoutsList.addView(xmlView);
-
+                    closedItems++;
                 } else {
                     Log.d(TAG, "open and inprogress Batch Payouts");
 
                 }
+                j++;
             }
         } else {
             Log.d(TAG, "No Batch Payouts for this user");
