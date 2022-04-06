@@ -181,7 +181,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     || getIntent().getStringExtra("screen").equals("Withdraw")
                     || getIntent().getStringExtra("screen").equals("Pay"))
                     || getIntent().getStringExtra("screen").equals("Notifications")
-                    || getIntent().getStringExtra("screen").equals("Buy")) {
+                    || getIntent().getStringExtra("screen").equals("Buy")
+                    || getIntent().getStringExtra("screen").equals("Paid")) {
 
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
@@ -741,7 +742,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                         || getIntent().getStringExtra("screen").equals("Withdraw")
                         || getIntent().getStringExtra("screen").equals("Pay")
                         || getIntent().getStringExtra("screen").equals("Notifications")
-                        || getIntent().getStringExtra("screen").equals("buy"))) {
+                        || getIntent().getStringExtra("screen").equals("buy"))
+                        || getIntent().getStringExtra("screen").equals("Paid")) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
@@ -1156,12 +1158,13 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
 
     private void paidTransaction() {
 
+        PaidOrderRequest request = new PaidOrderRequest();
+        request.setRequestToken(Utils.getStrToken());
+        request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
+        request.setRecipientWalletId(getIntent().getStringExtra(Utils.wallet));
+
         if (Utils.checkInternet(PINActivity.this)){
             try {
-                PaidOrderRequest request = new PaidOrderRequest();
-                request.setRequestToken(Utils.getStrToken());
-                request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra("amount")));
-                request.setRecipientWalletId(getIntent().getStringExtra("wallet"));
                 payViewModel.paidOrder(request);
             } catch (Exception e) {
                 e.printStackTrace();
