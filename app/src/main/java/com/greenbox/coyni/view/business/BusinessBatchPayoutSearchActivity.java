@@ -32,6 +32,7 @@ import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListData;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
@@ -105,6 +106,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         showProgressDialog();
+
         businessDashboardViewModel.getPayoutListData();
 
         searchET.addTextChangedListener(this);

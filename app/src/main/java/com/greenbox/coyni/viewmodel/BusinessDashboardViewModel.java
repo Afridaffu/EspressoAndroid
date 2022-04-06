@@ -439,7 +439,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
-
     public void getPayoutlistdata(String fromDate, String toDate) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
