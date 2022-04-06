@@ -179,7 +179,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     request.setDeviceId(Utils.getDeviceID());
 //                    request.setMobileToken(strToken);
                     request.setMobileToken(objMyApplication.getStrMobileToken());
-                    request.setActionType(Utils.sendActionType);
+                    request.setActionType(Utils.paidActionType);
                     coyniViewModel.biometricToken(request);
                 } catch (Exception ex) {
                     ex.printStackTrace();
