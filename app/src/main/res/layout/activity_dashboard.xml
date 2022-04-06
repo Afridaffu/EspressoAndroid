@@ -403,14 +403,27 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical">
 
-                                <TextView
-                                    android:id="@+id/welcomeCoyniTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="Welcome to coyni!"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_12ssp" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <TextView
+                                        android:id="@+id/welcomeCoyniTV"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Welcome to"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_12ssp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_bold"
+                                        android:text=" coyni!"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_12ssp" />
+                                </LinearLayout>
+
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -672,20 +685,24 @@
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
+                                    android:layout_height="wrap_content">
                                     <TextView
                                         android:id="@+id/buyTokenWelcomeCoyniTV"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_semibold"
-                                        android:text="Welcome to coyni!"
+                                        android:text="Welcome to"
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_12ssp" />
 
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/opensans_bold"
+                                        android:text=" coyni!"
+                                        android:textColor="@color/primary_black"
+                                        android:textSize="@dimen/_12ssp" />
                                 </LinearLayout>
-
 
                                 <TextView
                                     android:layout_width="wrap_content"

@@ -143,8 +143,6 @@ public class DashboardActivity extends AppCompatActivity {
             buyTokensCV = findViewById(R.id.buyTokensCV);
             buyTokenWelcomeCoyniTV = findViewById(R.id.buyTokenWelcomeCoyniTV);
             cvPayRequest = findViewById(R.id.cvPayRequest);
-            Utils.setSpannableStringAtEnd("Welcome to coyni!", this, 10, welcomeCoyniTV);
-            Utils.setSpannableStringAtEnd("Welcome to coyni!", this, 10, buyTokenWelcomeCoyniTV);
 
             layoutMainMenu = findViewById(R.id.layoutMainMenu);
             layoutProfile = findViewById(R.id.layoutProfile);
