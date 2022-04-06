@@ -44,4 +44,13 @@ public class ProposalsPropertiesSubmitRequestData {
     public void setUserMessage(String userMessage) {
         this.userMessage = userMessage;
     }
+
+    @Override
+    public String toString() {
+        return "ProposalsPropertiesSubmitRequestData{" +
+                "name='" + name + '\'' +
+                ", isUserAccepted=" + isUserAccepted +
+                ", userMessage='" + userMessage + '\'' +
+                '}';
+    }
 }

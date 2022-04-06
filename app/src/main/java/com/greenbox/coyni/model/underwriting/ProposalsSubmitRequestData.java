@@ -66,4 +66,15 @@ public class ProposalsSubmitRequestData {
     public void setPropertiesSubmitRequest(List<ProposalsPropertiesSubmitRequestData> propertiesSubmitRequest) {
         this.propertiesSubmitRequest = propertiesSubmitRequest;
     }
+
+    @Override
+    public String toString() {
+        return "ProposalsSubmitRequestData{" +
+                "dbId=" + dbId +
+                ", type='" + type + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", propertiesSubmitRequest=" + propertiesSubmitRequest +
+                '}';
+    }
 }

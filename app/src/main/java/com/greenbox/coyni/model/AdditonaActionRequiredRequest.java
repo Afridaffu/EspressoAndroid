@@ -53,4 +53,14 @@ public class AdditonaActionRequiredRequest {
     public void setReserveRuleAccepted(boolean reserveRuleAccepted) {
         this.reserveRuleAccepted = reserveRuleAccepted;
     }
+
+    @Override
+    public String toString() {
+        return "AdditonaActionRequiredRequest{" +
+                "documentIdList=" + documentIdList +
+                ", websiteUpdates=" + websiteUpdates +
+                ", proposals=" + proposals +
+                ", reserveRuleAccepted=" + reserveRuleAccepted +
+                '}';
+    }
 }

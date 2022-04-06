@@ -44,10 +44,14 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
     }
 
     private MutableLiveData<ActionRequiredResponse> ActionRequiredResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ActionRequiredResponse> ActionRequiredSubmitResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<ActionRequiredResponse> getUserAccountLimitsMutableLiveData() {
         return ActionRequiredResponseMutableLiveData;
+    }
+ public MutableLiveData<ActionRequiredResponse> getSubmitActionRequired() {
+        return ActionRequiredSubmitResponseMutableLiveData;
     }
 
 
@@ -88,32 +92,37 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
         }
     }
 
-    public void submitActionRequired(RequestBody information,MultipartBody.Part documentsImageList[]) {
-
+    public void submitActionRequired(RequestBody information, MultipartBody.Part[] documentsImageList) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<IdentityImageResponse> mCall = apiService.submitActionrequired(information, documentsImageList);
-            mCall.enqueue(new Callback<IdentityImageResponse>() {
+            LogUtils.d("submitActionRequired","submitActionRequired"+documentsImageList);
+            LogUtils.d("submitActionRequired","submitActionRequired"+information.toString());
+            Call<ActionRequiredResponse> mCall = apiService.submitActionrequired(information, documentsImageList);
+            mCall.enqueue(new Callback<ActionRequiredResponse>() {
                 @Override
-                public void onResponse(Call<IdentityImageResponse> call, Response<IdentityImageResponse> response) {
+                public void onResponse(Call<ActionRequiredResponse> call, Response<ActionRequiredResponse> response) {
                     LogUtils.d("UderWritingUserActionRequired","submitActionRequired"+response);
                     if (response.isSuccessful()) {
-                        IdentityImageResponse obj = response.body();
+                        ActionRequiredResponse obj = response.body();
+                        ActionRequiredSubmitResponseMutableLiveData.setValue(obj);
+
 
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<IdentityImageResponse>() {
+                        Type type = new TypeToken<ActionRequiredResponse>() {
                         }.getType();
-                        IdentityImageResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        ActionRequiredResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
+                            ActionRequiredSubmitResponseMutableLiveData.setValue(errorResponse);
 
                         }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<IdentityImageResponse> call, Throwable t) {
-                    LogUtils.d("UderWritingUserActionRequired","submitActionRequired"+t.toString());
+                public void onFailure(Call<ActionRequiredResponse> call, Throwable t) {
+                    LogUtils.d("UderWritingUserActionRequired","submitActionRequired"+t.getMessage());
+                    LogUtils.d("UderWritingUserActionRequired","submitActionRequiredeeee"+t.getLocalizedMessage());
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }

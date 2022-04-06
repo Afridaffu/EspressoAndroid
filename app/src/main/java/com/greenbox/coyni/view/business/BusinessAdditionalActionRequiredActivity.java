@@ -36,6 +36,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.model.AdditonaActionRequiredRequest;
+import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.InformationChangeData;
 import com.greenbox.coyni.model.underwriting.ProposalsData;
@@ -48,6 +49,10 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequired;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +60,7 @@ import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
@@ -78,8 +84,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private HashMap<Integer, String> fileUpload;
     private ActionRequiredResponse actionRequired;
     private int documentID;
-    private LinearLayout selectedLayout=null;
+    private LinearLayout selectedLayout = null;
     private ArrayList<File> documentsFIle;
+    private JSONObject informationJSON;
 
 
     @Override
@@ -96,16 +103,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     private void initFields() {
 
-//        actionReqFileUploadLL = findViewById(R.id.actionReqFileUploadLL);
-//        businessLicenseUploadLL = findViewById(R.id.businessLicenseUploadLL);
 
         additionalDocumentRequiredLL = findViewById(R.id.ll_document_required);
         websiteRevisionRequiredLL = findViewById(R.id.website_revision_required);
         informationRevisionLL = findViewById(R.id.information_revision);
 
         fileUploadTV = findViewById(R.id.sscuploadFileTV);
-
-
 
 
         fileUploadedTV = findViewById(R.id.sscfileUpdatedOnTV);
@@ -121,7 +124,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         LayoutInflater documentsRequiredInflater = getLayoutInflater();
 
-        fileUpload = new HashMap<Integer,String>();
+        fileUpload = new HashMap<Integer, String>();
         documentsFIle = new ArrayList<>();
 
 
@@ -129,76 +132,142 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                LogUtils.d(TAG,"submitCV"+fileUpload);
+                LogUtils.d(TAG, "submitCV" + fileUpload);
                 ArrayList<Integer> documentListId = new ArrayList<>();
                 ArrayList<Integer> websiteID = new ArrayList<>();
-                ArrayList<ProposalsPropertiesData> proposalsPropertiesData =new ArrayList<ProposalsPropertiesData>();
-                ArrayList<ProposalsSubmitRequestData> proposalsList=new ArrayList<>();
+                ArrayList<ProposalsPropertiesData> proposalsPropertiesData = new ArrayList<ProposalsPropertiesData>();
+                ArrayList<ProposalsSubmitRequestData> proposalsList = new ArrayList<>();
 
 
-                ProposalsData propsals= new ProposalsData();
+                ProposalsData propsals = new ProposalsData();
 
                 AdditonaActionRequiredRequest request = new AdditonaActionRequiredRequest();
 
-                for(int i=0;i<=actionRequired.getData().getAdditionalDocument().size()-1;i++) {
-                    documentListId.add(actionRequired.getData().getAdditionalDocument().get(i).getDocumentId());
+                if (actionRequired.getData().getAdditionalDocument() != null) {
 
+                    for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
+                        documentListId.add(actionRequired.getData().getAdditionalDocument().get(i).getDocumentId());
+
+                    }
                 }
-                for(int i=0;i<=actionRequired.getData().getWebsiteChange().size()-1;i++) {
-                    websiteID.add(actionRequired.getData().getWebsiteChange().get(i).getId());
+
+                if (actionRequired.getData().getWebsiteChange() != null) {
+                    for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
+                        websiteID.add(actionRequired.getData().getWebsiteChange().get(i).getId());
+                    }
                 }
 
-                for(int i=0;i<=actionRequired.getData().getInformationChange().size()-1;i++) {
+                if (actionRequired.getData().getInformationChange() != null) {
 
-                    InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
-                    List<ProposalsData> proposalsData = data.getProposals();
+                    informationJSON = new JSONObject();
 
-                    for(int j=0; j< proposalsData.size();j++) {
-                        ProposalsData proposal = proposalsData.get(j);
-                        List<ProposalsPropertiesSubmitRequestData> list = new ArrayList<>();
+                    try {
 
-                        ProposalsPropertiesSubmitRequestData requestData = new ProposalsPropertiesSubmitRequestData();
-                        requestData.setUserAccepted(true);
-                        requestData.setName(proposal.getProperties().get(0).getName());
-                        requestData.setUserMessage("Accepted");
-                        list.add(requestData);
+                        informationJSON.put("reserveRuleAccepted", false);
 
-                        ProposalsSubmitRequestData propsalsdata = new ProposalsSubmitRequestData();
-                        propsalsdata.setDbId(proposal.getDbId());
-                        propsalsdata.setType(proposal.getType());
-                        propsalsdata.setPropertiesSubmitRequest(list);
+                        JSONArray proposals = new JSONArray();
+                        JSONObject proposalsobj = new JSONObject();
+                        proposalsobj.put("dbId", 278);
+                        proposalsobj.put("type", "COMPANY");
 
-                        proposalsList.add(propsalsdata);
+                        JSONArray proposalsobjARRAY = new JSONArray();
+                        JSONObject PROPERTIESARRAY = new JSONObject();
+                        PROPERTIESARRAY.put("isUserAccepted", 278);
+                        PROPERTIESARRAY.put("name", "COMPANY");
+                        PROPERTIESARRAY.put("userMessage", "COMPANY");
+
+                        proposalsobjARRAY.put(PROPERTIESARRAY);
+
+                        proposalsobj.put("properties", proposalsobjARRAY);
+
+                        proposals.put(proposalsobj);
+
+                        informationJSON.put("proposals", proposals);
+
+                        JSONArray website = new JSONArray();
+                              website.put(115);
+                              website.put(112);
+
+                        informationJSON.put("websiteUpdates", website);
+
+                    } catch (JSONException je) {
+                        je.printStackTrace();
                     }
 
+                    LogUtils.d(TAG, "jsonnn    " + informationJSON.toString());
 
+
+//                    for (int i = 0; i <= actionRequired.getData().getInformationChange().size() - 1; i++) {
+//
+//                        InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
+//                        List<ProposalsData> proposalsData = data.getProposals();
+//
+//                        for (int j = 0; j < proposalsData.size(); j++) {
+//                            ProposalsData proposal = proposalsData.get(j);
+//                            List<ProposalsPropertiesSubmitRequestData> list = new ArrayList<>();
+//
+//                            ProposalsPropertiesSubmitRequestData requestData = new ProposalsPropertiesSubmitRequestData();
+//                            requestData.setUserAccepted(true);
+//                            requestData.setName(proposal.getProperties().get(0).getName());
+//                            requestData.setUserMessage("Accepted");
+//                            list.add(requestData);
+//
+//                            ProposalsSubmitRequestData propsalsdata = new ProposalsSubmitRequestData();
+//                            propsalsdata.setDbId(proposal.getDbId());
+//                            propsalsdata.setType(proposal.getType());
+//                            propsalsdata.setPropertiesSubmitRequest(list);
+//
+//                            proposalsList.add(propsalsdata);
+//                        }
+//
+//
+//                    }
+//
+//                    request.setProposals(proposalsList);
+//                    request.setDocumentIdList(documentListId);
+//                    request.setWebsiteUpdates(websiteID);
+//                    request.setReserveRuleAccepted(false);
                 }
 
-                request.setProposals(proposalsList);
-                request.setDocumentIdList(documentListId);
-                request.setWebsiteUpdates(websiteID);
-                request.setReserveRuleAccepted(false);
 
+                LogUtils.d(TAG, "requestfffffffff" + String.valueOf(request).toString());
                 //API CALL
-                RequestBody requestInformation = RequestBody.create(MediaType.parse("application/json"), String.valueOf(request));
+//                OkHttpClient client = new OkHttpClient().newBuilder()
+//                        .build();
+//                MediaType mediaType = MediaType.parse("text/plain");
+//                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+//                        .addFormDataPart("information", null,
+//                                RequestBody.create(MediaType.parse("application/json"),
+//                                        { "documentIdList":"[2,3]",
+//                                           "proposals": [{"dbId": 278, "firstName":null,\"lastName\":null,\"properties\": [ {\"isUserAccepted\": true,\"name\": \"companyName\",
+//                    \"userMessage\": \"Accepted\" }],\"type\": \"COMPANY\"
+//                }
+//                ],\"reserveRuleAccepted\": false,\"websiteUpdates\": [ 111, 112] } ".getBytes()))
+//
+//            .addFormDataPart("documents","744_484_DRIVERS_LICENSE.jpg",
+//                            RequestBody.create(MediaType.parse("application/octet-stream"), new
+//
+//            File("/Users/ideyalabs/Downloads/744_484_DRIVERS_LICENSE.jpg")))
+//            .addFormDataPart("documents","744_491_PASSPORT.jpg",
+//              RequestBody.create(MediaType.parse("application/octet-stream"), new
+//                      File("/Users/ideyalabs/Downloads/744_491_PASSPORT.jpg"))).build();
 
-                MultipartBody.Part[] documentsImageList = new MultipartBody.Part[documentsFIle.size()];
-                for (int index = 0; index < documentsFIle.size(); index++) {
+                RequestBody requestInformation = RequestBody.create(MediaType.parse("application/json"), informationJSON.toString());
+                MultipartBody.Part[] documentsImageList = new MultipartBody.Part[1];
+                for (
+                        int index = 0; index < documentsFIle.size(); index++) {
                     LogUtils.d(TAG, "requestUploadSurvey: survey image " + index +
-                                    "  " +
-                                             documentsFIle
-                                            .get(index)
-                                            .getAbsolutePath());
-                    File file = new File(documentsFIle
-                            .get(index)
-                            .getAbsolutePath());
+                            "  " +
+                            documentsFIle
+                                    .get(index)
+                                    .getAbsolutePath());
 
-                    RequestBody documentsBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    documentsImageList[index] = MultipartBody.Part.createFormData("documents", file.getName(), documentsBody);
+                    RequestBody documentsBody = RequestBody.create(MediaType.parse("multipart/form-data"), documentsFIle.get(index));
+                    documentsImageList[index] = MultipartBody.Part.createFormData("documents", documentsFIle.get(index).getName(), documentsBody);
                 }
 
-                LogUtils.d(TAG,"requestUploadSurvey"+requestInformation);
-                LogUtils.d(TAG,"requestUploadSurveydoc"+documentsImageList);
+                LogUtils.d(TAG, "requestUploadSurvey" + requestInformation);
+                LogUtils.d(TAG, "requestUploadSurveydoc" + documentsImageList);
 
                 underwritingUserActionRequired.submitActionRequired(requestInformation,documentsImageList);
 
@@ -244,6 +313,28 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         }
                     }
                 });
+
+        try {
+            underwritingUserActionRequired.getSubmitActionRequired().observe(this, new Observer<ActionRequiredResponse>() {
+                @Override
+                public void onChanged(ActionRequiredResponse companyInfoResponse) {
+
+                    if (dialog != null)
+                        dismissDialog();
+                    if (companyInfoResponse != null) {
+                        if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
+
+                            finish();
+                        } else {
+                            Utils.displayAlert(companyInfoResponse.getError().getErrorDescription(),
+                                    BusinessAdditionalActionRequiredActivity.this, "", companyInfoResponse.getError().getFieldErrors().get(0));
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -297,14 +388,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             tvheading.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader());
             tvDescription.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getComment());
 
-            if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1()!=null) {
+            if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
                 imgWebsite.setVisibility(View.VISIBLE);
 
                 Glide.with(this)
                         .load(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1())
                         .placeholder(R.drawable.ic_profilelogo)
                         .into(imgWebsite);
-            }  else {
+            } else {
                 imgWebsite.setVisibility(View.GONE);
             }
 
@@ -319,14 +410,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     int pos = (int) compoundButton.getTag();
                     checkboxCB.setSelected(true);
-                    LogUtils.d(TAG,"checkboxCB"+checkboxCB.isChecked());
-                    if(fileUpload.containsKey(actionRequiredResponse.getData().getWebsiteChange().get(pos).getId())) {
+                    LogUtils.d(TAG, "checkboxCB" + checkboxCB.isChecked());
+                    if (fileUpload.containsKey(actionRequiredResponse.getData().getWebsiteChange().get(pos).getId())) {
                         fileUpload.replace(actionRequiredResponse.getData().getWebsiteChange().get(pos).getId(), "true");
                     }
                 }
             });
 
         }
+        enableOrDisableNext();
+
     }
 
     private void informationRevision(ActionRequiredResponse actionRequiredResponse) {
@@ -343,7 +436,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             TextView tvMessage = inf1.findViewById(R.id.tvMessage);
             websiteChangeLL.setVisibility(View.VISIBLE);
 
-            if(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0)!=null) {
+            if (actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0) != null) {
                 if (actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0) != null) {
                     comapny_nameTV.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getName());
                     comapnynameOriginal.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getOriginalValue());
@@ -357,7 +450,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             informationRevisionLL.addView(inf1, layoutParamss1);
         }
     }
-
 
 
     private void displayComments() {
@@ -377,8 +469,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
-
-
                 public void onClick(View view) {
                     cvvDialog.dismiss();
                     Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
@@ -574,12 +664,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode != RESULT_OK) return;
             String path = "";
-            LogUtils.d(TAG,"onActivityResult"+data.getData());
+            LogUtils.d(TAG, "onActivityResult" + data.getData());
             if (requestCode == ACTIVITY_CHOOSE_FILE) {
-                LogUtils.d(TAG,"ACTIVITYs_CHOOSE_FILE"+data.getData());
+                LogUtils.d(TAG, "ACTIVITYs_CHOOSE_FILE" + data.getData());
                 uploadDocumentFromLibrary(data.getData(), ACTIVITY_CHOOSE_FILE);
             } else if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
-                LogUtils.d(TAG,"PICK_IMAGE_REQUEST"+data.getData());
+                LogUtils.d(TAG, "PICK_IMAGE_REQUEST" + data.getData());
                 uploadDocumentFromLibrary(data.getData(), PICK_IMAGE_REQUEST);
             }
 
@@ -618,21 +708,21 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             }
             File mediaFile = new File(FilePath);
 
-            LogUtils.d(TAG,"uploadDocumentFromLibrary"+mediaFile);
-            LogUtils.d(TAG,"documentID"+documentID);
+            LogUtils.d(TAG, "uploadDocumentFromLibrary" + mediaFile);
+            LogUtils.d(TAG, "documentID" + documentID);
 
-            if(fileUpload.containsKey(documentID)) {
+            if (fileUpload.containsKey(documentID)) {
                 fileUpload.replace(documentID, mediaFile.getAbsolutePath());
                 documentsFIle.add(mediaFile);
 
             }
-           // fileUpload.put(documentID, mediaFile);
+            // fileUpload.put(documentID, mediaFile);
 
-            if(selectedLayout!=null) {
+            if (selectedLayout != null) {
                 selectedLayout.setVisibility(View.VISIBLE);
             }
 
-           LogUtils.d(TAG,"fileUpload"+fileUpload);
+            LogUtils.d(TAG, "fileUpload" + fileUpload);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -551,8 +551,8 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v2/underwriting/user/business/action-required")
-    Call<IdentityImageResponse> submitActionrequired(@Part("information") RequestBody type,
-                                                    @Part MultipartBody.Part[] filee);
+    Call<ActionRequiredResponse> submitActionrequired(@Part("information") RequestBody information,
+                                                    @Part MultipartBody.Part[] documentsImageList);
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();
