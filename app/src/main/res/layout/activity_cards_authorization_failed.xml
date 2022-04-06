@@ -44,7 +44,7 @@
                 android:gravity="center"
                 android:text="You failed the authorization attempt due to \nfraudulent concerns. For security reasons\n
 this account and associated email address, \nphone number, and credit/debit card\n
-number have locked. You will need to \ncontact Coyni customer support to unlock"
+number have locked. You will need to \ncontact coyni customer support to unlock"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 

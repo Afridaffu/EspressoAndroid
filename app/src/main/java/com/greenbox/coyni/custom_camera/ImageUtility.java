@@ -74,7 +74,7 @@ public class ImageUtility {
             bitmap = ThumbnailUtils.extractThumbnail(bitmap, CameraFragment.globalImageWidth, (int) (height * 2));
             photoImageView.setImageBitmap(bitmap);
             File mediaStorageDir = new File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Coyni");
+                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "coyni");
             if (!mediaStorageDir.exists()) {
                 if (!mediaStorageDir.mkdirs()) {
                     return null;
