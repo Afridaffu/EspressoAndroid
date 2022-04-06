@@ -531,7 +531,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
+                                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             }
@@ -624,10 +624,10 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                 Utils.displayAlert("Invalid request! Please add Credit Card only.", BusinessAddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", BusinessAddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA Debit cards", BusinessAddCardActivity.this, "", "");
                 return value = false;
             }
         } catch (Exception ex) {
