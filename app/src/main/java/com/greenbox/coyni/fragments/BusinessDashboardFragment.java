@@ -322,9 +322,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (getViewLifecycleOwner().getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
                     if (batchPayoutListResponse != null) {
                         if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
-//                        BatchPayoutListAdapter payoutListAdapter = new BatchPayoutListAdapter(getActivity(), payoutList);
                             if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
-//                                showReserveRelease(batchPayoutListResponse.getData().getItems());
+                                showReserveRelease(batchPayoutListResponse.getData().getItems());
                             } else {
                                 Log.d(TAG, "No items found");
                             }
@@ -534,9 +533,9 @@ public class BusinessDashboardFragment extends BaseFragment {
         if (listItems != null && listItems.size() > 0) {
             int i = 0;
             Collections.sort(listItems, Collections.reverseOrder());
-            boolean isOpen = false, isPaid = false;
+            boolean isOpen = false, isClosed = false;
             while (i<listItems.size()) {
-                if (listItems.get(i).getStatus().equalsIgnoreCase("paid")) {
+                if (listItems.get(i).getStatus().equalsIgnoreCase("open")) {
                     String amount = listItems.get(i).getTotalAmount();
                     nextPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
 
@@ -548,7 +547,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         Log.d("date format", date);
                     }
                     isOpen = true;
-                } else if (listItems.get(i).getStatus().equalsIgnoreCase("paid")) {
+                } else if (listItems.get(i).getStatus().equalsIgnoreCase("closed")) {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
@@ -559,10 +558,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                     } else {
                         Log.d("jkhj", date1);
                     }
-                    isPaid = true;
+                    isClosed = true;
                 }
 
-                if(isPaid && isOpen) {
+                if(isClosed && isOpen) {
                     break;
                 } else {
                     i++;
