@@ -219,7 +219,12 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                             payoutProgressBarLoadMore.setVisibility(View.GONE);
                             payoutLoadMoreTV.setVisibility(View.GONE);
                             if (batchPayoutList.getData().getItems() != null) {
-                                payoutList = batchPayoutList.getData().getItems();
+                                //payoutList = batchPayoutList.getData().getItems();
+                                for(int i=0;i<batchPayoutList.getData().getItems().size();i++) {
+                                    if(batchPayoutList.getData().getItems().get(i).getStatus().equalsIgnoreCase("closed")) {
+                                        payoutList.add(batchPayoutList.getData().getItems().get(i));
+                                    }
+                                }
                                 batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
                                 batchPayoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
                                     @Override
