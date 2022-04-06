@@ -299,9 +299,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 }
             });
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.CENTER;
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//            params.gravity = Gravity.CENTER;
 
             new Handler().postDelayed(new Runnable() {
                 @Override

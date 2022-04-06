@@ -70,7 +70,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Can be used for making Coyni purchases\n or withdrawing funds."
+                    android:text="Can be used for making coyni purchases\n or withdrawing funds."
                     android:textSize="@dimen/_10ssp"
                     android:fontFamily="@font/opensans_regular"
                     />

@@ -10,10 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
-import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
+import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
@@ -24,6 +24,8 @@ import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -333,10 +335,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void getPayoutListData() {
+    public void getPayoutListData(RollingListRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BatchPayoutListResponse> call = apiService.getPayoutListData();
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(request);
             call.enqueue(new Callback<BatchPayoutListResponse>() {
                 @Override
                 public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
@@ -367,6 +369,42 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+    public void getPayoutListData() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(new EmptyRequest());
+            call.enqueue(new Callback<BatchPayoutListResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+                    if (response.isSuccessful()) {
+                        BatchPayoutListResponse list = response.body();
+                        batchPayoutListMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BatchPayoutListResponse>() {
+                        }.getType();
+                        BatchPayoutListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        batchPayoutListMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+                    batchPayoutListMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getPayoutlistData(String searchKey) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);

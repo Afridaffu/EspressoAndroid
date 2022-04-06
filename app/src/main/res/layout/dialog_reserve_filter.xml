@@ -148,23 +148,23 @@
             android:id="@+id/dateRangePickerLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_50sdp"
             android:background="@drawable/bg_small_corners"
             android:gravity="center"
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/dateRangeET"
+                android:id="@+id/datePickET"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_square_withoutcolor_corners"
                 android:clickable="true"
-                android:focusable="false"
+                android:editable="false"
+                android:focusable="true"
                 android:fontFamily="@font/opensans_semibold"
                 android:hint="@string/date_range"
-                android:inputType="date"
                 android:textColor="@color/primary_black"
                 android:textColorHint="@color/light_gray"
                 android:textCursorDrawable="@drawable/cursor_color_text"
@@ -175,9 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/ic_calendar_icon"
-                android:contentDescription="@string/date_range"
-                />
+                android:src="@drawable/ic_calendar_icon" />
         </LinearLayout>
     </LinearLayout>
 

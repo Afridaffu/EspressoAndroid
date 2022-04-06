@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginBottom="@dimen/_20sdp"
-                android:text="Can be used for making Coyni purchases or withdrawing funds."
+                android:text="Can be used for making coyni purchases or withdrawing funds."
                 android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_9ssp" />
         </LinearLayout>

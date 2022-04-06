@@ -128,6 +128,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
             editEmailLogoutCV.setOnClickListener(view -> {
                 try {
+                    objMyApplication.setStrRetrEmail("");
                     dropAllTables();
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -190,6 +191,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.editEmailSuccessLayout).setVisibility(View.VISIBLE);
                     findViewById(R.id.changePasswordLayout).setVisibility(View.GONE);
                     findViewById(R.id.verifyYourAccount).setVisibility(View.GONE);
+                    objMyApplication.setStrRetrEmail("");
                     dropAllTables();
                 }
                 break;

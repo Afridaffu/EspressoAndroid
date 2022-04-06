@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BatchPayoutListAdapter;
-import com.greenbox.coyni.adapters.OnItemClickListener;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
@@ -42,7 +41,6 @@ import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
-import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
@@ -59,7 +57,6 @@ import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,13 +70,12 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mTvUserName, mTvUserIconText, mTvReserveList, mPayoutHistory, payoutTimeTV, nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView,
-            mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView,payoutsXmlLL,payoutsLayoutLL;
+            mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView, payoutsXmlLL, payoutsLayoutLL;
     private TextView mTvIdentityReviewCancelMessage, mTvProcessingVolume, mTvContactUs;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
-    private BusinessDashboardFragment businessDashboardFragment;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
-    private TextView mTvOfficiallyVerified, mTvMerchantTransactions,batchPayoutDateTV,payoutManualTV,payoutAmountTV,cynTV;
+    private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutManualTV, payoutAmountTV, cynTV;
     private TextView dasboardPayoutDate;
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
@@ -97,10 +93,22 @@ public class BusinessDashboardFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initFields();
-        initObservers();
+
         hideAllStatusViews();
-        //getMerchantBalance();
         return mCurrentView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        LogUtils.v(TAG, "onViewCreated");
+        initViewModels();
+        initObservers();
+    }
+
+    private void initViewModels() {
+        mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
     }
 
     private void getMerchantBalance() {
@@ -153,12 +161,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvContactUs = mCurrentView.findViewById(R.id.contactUSTV);
         mTvReserveList = mCurrentView.findViewById(R.id.tv_reserve_list);
         mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutHistory);
-        businessDashboardViewModel = new ViewModelProvider(getActivity()).get(BusinessDashboardViewModel.class);
-        mDashboardViewModel = new ViewModelProvider(getActivity()).get(DashboardViewModel.class);
         merchantBalanceTV = mCurrentView.findViewById(R.id.merchant_balance_tv);
-
-
-        businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         payoutTimeTV = mCurrentView.findViewById(R.id.payoutTimeTV);
         nextPayoutAmountTV = mCurrentView.findViewById(R.id.nextPayoutAmountTV);
         lastPayoutAmountTV = mCurrentView.findViewById(R.id.lastPayoutAmountTV);
@@ -171,7 +174,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         payoutAmountTV = mCurrentView.findViewById(R.id.payoutAmountTV);
         cynTV = mCurrentView.findViewById(R.id.cynTV);
         dasboardPayoutDate = mCurrentView.findViewById(R.id.dasboardPayoutDate);
-
 
 
         notificationsRL.setOnClickListener(view -> {
@@ -240,7 +242,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void initObservers() {
-        businessDashboardViewModel.getCancelApplicationResponseMutableLiveData().observe(getActivity(), new Observer<CancelApplicationResponse>() {
+        businessDashboardViewModel.getCancelApplicationResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<CancelApplicationResponse>() {
             @Override
             public void onChanged(CancelApplicationResponse cancelApplicationResponse) {
                 ((BusinessDashboardActivity) getActivity()).dismissDialog();
@@ -264,7 +266,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        mDashboardViewModel.getProfileMutableLiveData().observe(getActivity(), new Observer<Profile>() {
+        mDashboardViewModel.getProfileMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
                 ((BusinessDashboardActivity) getActivity()).dismissDialog();
@@ -423,7 +425,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), BusinessBatchPayoutSearchActivity.class));
             }
         });
-       // showBatchPayouts();
+        // showBatchPayouts();
     }
 
     private void showIdentityVerificationReview() {
@@ -493,7 +495,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
-        if(listItems!=null && listItems.size() > 0) {
+        if (listItems != null && listItems.size() > 0) {
             Collections.sort(listItems, Collections.reverseOrder());
             if (listItems.get(0).getStatus().equalsIgnoreCase("open")) {
                 String amount = listItems.get(0).getTotalAmount();
@@ -508,22 +510,21 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
             payoutsList.removeAllViews();
-                for (int i = 0; i < listItems.size() && i < 5; i++) {
-                    View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
+            for (int i = 0; i < listItems.size() && i < 5; i++) {
+                View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
 
-                    TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
-                    String listDate = listItems.get(i).getCreatedAt();
-                    payoutDate.setText(myApplication.convertZoneDateTime(listDate, "yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
+                TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
+                String listDate = listItems.get(i).getCreatedAt();
+                payoutDate.setText(myApplication.convertZoneDateTime(listDate, "yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
 
-                    TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
-                    totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(i).getTotalAmount()));
+                TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
+                totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(i).getTotalAmount()));
 
-                    payoutsList.addView(xmlView);
+                payoutsList.addView(xmlView);
 
-                }
             }
-        else {
-            Log.d(TAG,"No Batch Payouts for this user");
+        } else {
+            Log.d(TAG, "No Batch Payouts for this user");
         }
     }
 }

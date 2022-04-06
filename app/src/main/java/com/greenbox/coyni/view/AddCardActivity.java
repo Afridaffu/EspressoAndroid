@@ -563,7 +563,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             }
@@ -677,14 +677,14 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 displayAlert("Invalid request! Please add Credit Card only.", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
                 Utils.displayAlert("Please enter a valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
                 return value = false;
             }
         } catch (Exception ex) {
