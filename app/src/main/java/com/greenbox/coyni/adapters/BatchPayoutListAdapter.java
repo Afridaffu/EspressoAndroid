@@ -2,7 +2,9 @@ package com.greenbox.coyni.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +52,7 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
 
         public MyViewHolder(View view) {
             super(view);
-            detailsLL = view.findViewById(R.id.detailsLL);
+            detailsLL = view.findViewById(R.id.payoutLL);
             payoutSentTextTV = view.findViewById(R.id.payoutSentText);
             payoutMoneyTV = view.findViewById(R.id.payoutMoneyTV);
             statusTV = view.findViewById(R.id.payoutListState);
@@ -73,6 +75,7 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
                 listener.onItemClick(position, listItems.get(position));
             }
         });
+//        if (listItems.get().getStatus().equalsIgnoreCase("closed")) {
 
         BatchPayoutListItems objData = listItems.get(position);
 
@@ -83,25 +86,37 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
             holder.payoutMoneyTV.setText(Utils.convertTwoDecimal(objData.getTotalAmount()));
         }
         if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")) {
-//            holder.payoutDateTV.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
-
             String date = objData.getCreatedAt();
-            holder.payoutDateTV.setText(objMyApplication.convertZoneDateTime(date,"yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
+            if (date.contains(".")) {
+                String resDate = date.substring(0, date.lastIndexOf("."));
+                holder.payoutDateTV.setText(objMyApplication.convertZoneDateTime(resDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+            } else {
+            }
         }
 
+//        if (objData.getStatus().equalsIgnoreCase("closed")) {
+//            holder.statusTV.setText(objData.getStatus());
+//            holder.statusTV.setTextColor(context.getColor(R.color.completed_status));
+//            holder.statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+//        }
         holder.statusTV.setText(objData.getStatus());
+
         switch (objData.getStatus().toLowerCase()) {
-            case "paid":
-                holder.statusTV.setTextColor(context.getResources().getColor(R.color.completed_status));
+            case "closed":
+                holder.statusTV.setTextColor(context.getColor(R.color.completed_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                 break;
             case "in progress":
-                holder.statusTV.setTextColor(context.getResources().getColor(R.color.inprogress_status));
+                holder.statusTV.setTextColor(context.getColor(R.color.inprogress_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                 break;
             case "open":
-                holder.statusTV.setTextColor(context.getResources().getColor(R.color.pending_status));
+                holder.statusTV.setTextColor(context.getColor(R.color.pending_status));
                 holder.statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
+                break;
+            case "failed":
+                holder.statusTV.setTextColor(context.getColor(R.color.failed_status));
+                holder.statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                 break;
 
         }
