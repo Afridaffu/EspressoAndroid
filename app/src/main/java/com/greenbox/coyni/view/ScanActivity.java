@@ -16,6 +16,7 @@ import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
@@ -263,13 +264,19 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
             if (Utils.checkInternet(ScanActivity.this)) {
                 TransactionLimitRequest obj = new TransactionLimitRequest();
-                obj.setTransactionType(Integer.parseInt(Utils.payType));
-                obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
+//                obj.setTransactionType(Integer.parseInt(Utils.payType));
+//                obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
 //                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 dialog = Utils.showProgressDialog(ScanActivity.this);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                    TransactionLimitRequest obj = new TransactionLimitRequest();
+                    obj.setTransactionType(Utils.saleOrder);
+                    obj.setTransactionSubType(Utils.saleOrderToken);
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 } else {
+//                    TransactionLimitRequest obj = new TransactionLimitRequest();
+                    obj.setTransactionType(Utils.paidInvoice);
+//                    obj.setTransactionSubType(null);
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
                 }
             }
@@ -342,8 +349,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         scannerLayout.setVisibility(View.GONE);
                         flashLL.setVisibility(View.GONE);
                         closeBtnScanCode.setVisibility(View.GONE);
-                        mcodeScanner.setFlashEnabled(false);
-                        mcodeScanner.stopPreview();
+                        if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                            mcodeScanner.setFlashEnabled(false);
+                            mcodeScanner.stopPreview();
+                        }
                         if (scanAmountLL.getVisibility() == View.VISIBLE) {
                             scanMeRequestAmount.setText("");
                             scanAmountLL.setVisibility(View.GONE);
@@ -701,23 +710,23 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             }
         });
 
-        payViewModel.getPayRequestResponseMutableLiveData().observe(this, payRequestResponse -> {
+        payViewModel.getPaidOrderRespMutableLiveData().observe(this, paidOrderResp -> {
             try {
-                if (payRequestResponse != null) {
+                if (paidOrderResp != null) {
                     if (dialog != null) {
                         dialog.dismiss();
                     }
                     Utils.setStrToken("");
-                    objMyApplication.setPayRequestResponse(payRequestResponse);
-                    if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+                    objMyApplication.setPaidOrderResp(paidOrderResp);
+                    if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
                         startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "success")
-                                .putExtra("subtype", "pay"));
+                                .putExtra("status", "Success")
+                                .putExtra("subtype", "paid"));
 
                     } else {
                         startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "failed")
-                                .putExtra("subtype", "pay"));
+                                .putExtra("status", "Failed")
+                                .putExtra("subtype", "paid"));
                     }
                 } else {
                     Utils.displayAlert("something went wrong", ScanActivity.this, "", "");
@@ -726,6 +735,33 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 ex.printStackTrace();
             }
         });
+
+
+//        payViewModel.getPayRequestResponseMutableLiveData().observe(this, payRequestResponse -> {
+//            try {
+//                if (payRequestResponse != null) {
+//                    if (dialog != null) {
+//                        dialog.dismiss();
+//                    }
+//                    Utils.setStrToken("");
+//                    objMyApplication.setPayRequestResponse(payRequestResponse);
+//                    if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
+//                        startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
+//                                .putExtra("status", "success")
+//                                .putExtra("subtype", "pay"));
+//
+//                    } else {
+//                        startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
+//                                .putExtra("status", "failed")
+//                                .putExtra("subtype", "pay"));
+//                    }
+//                } else {
+//                    Utils.displayAlert("something went wrong", ScanActivity.this, "", "");
+//                }
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        });
 
         coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, biometricTokenResponse -> {
             if (biometricTokenResponse != null) {
@@ -859,8 +895,10 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        mcodeScanner.startPreview();
-                        scannerLayout.setVisibility(View.VISIBLE);
+                        if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                            mcodeScanner.startPreview();
+                            scannerLayout.setVisibility(View.VISIBLE);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1094,11 +1132,17 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mcodeScanner.stopPreview();
-        scannerLayout.setVisibility(View.GONE);
+        try {
+            if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                mcodeScanner.stopPreview();
+                scannerLayout.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 101) {
+//        if (resultCode == RESULT_OK) {
+            if (requestCode == 101 && resultCode == RESULT_OK) {
                 try {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContentResolver().openInputStream(imageUri);
@@ -1157,7 +1201,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     e.printStackTrace();
                     Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
-            } else if (requestCode == 251) {
+            } else if (requestCode == 251 && resultCode == RESULT_OK) {
                 try {
                     //payTransaction();
                     dialog = Utils.showProgressDialog(ScanActivity.this);
@@ -1170,44 +1214,52 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            } else if (requestCode == 0) {
+            } else if (resultCode == 0) {
                 try {
-                    payTransaction();
+//                    payTransaction();
                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "Pay"));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (requestCode == 251) {
-                try {
-                    //payTransaction();
-                    dialog = Utils.showProgressDialog(ScanActivity.this);
-                    BiometricTokenRequest request = new BiometricTokenRequest();
-                    request.setDeviceId(Utils.getDeviceID());
-//                    request.setMobileToken(strToken);
-                    request.setMobileToken(objMyApplication.getStrMobileToken());
-                    request.setActionType(Utils.sendActionType);
-                    coyniViewModel.biometricToken(request);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else if (requestCode == 0) {
-                try {
-                    payTransaction();
-                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "Pay"));
+                            .putExtra("screen", "Paid")
+                            .putExtra(Utils.wallet,strScanWallet)
+                            .putExtra(Utils.amount,strQRAmount.replace(",","").trim()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        } else {
-            //Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
-            mcodeScanner.startPreview();
-            scannerLayout.setVisibility(View.VISIBLE);
-
-        }
+//            else if (requestCode == 251) {
+//                try {
+//                    //payTransaction();
+//                    dialog = Utils.showProgressDialog(ScanActivity.this);
+//                    BiometricTokenRequest request = new BiometricTokenRequest();
+//                    request.setDeviceId(Utils.getDeviceID());
+////                    request.setMobileToken(strToken);
+//                    request.setMobileToken(objMyApplication.getStrMobileToken());
+//                    request.setActionType(Utils.sendActionType);
+//                    coyniViewModel.biometricToken(request);
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            } else if (requestCode == 0) {
+//                try {
+//                    payTransaction();
+//                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
+//                            .putExtra("TYPE", "ENTER")
+//                            .putExtra("screen", "Paid")
+//                            .putExtra(Utils.wallet,strScanWallet)
+//                            .putExtra(Utils.amount,strQRAmount.replace(",","").trim()));
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        else {
+//            //Toast.makeText(ScanActivity.this, "You haven't picked QR ", Toast.LENGTH_LONG).show();
+//            if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//                mcodeScanner.startPreview();
+//                scannerLayout.setVisibility(View.VISIBLE);
+//            }
+//
+//            }
     }
 
     public static boolean checkAndRequestPermissions(final Activity context) {
@@ -1394,9 +1446,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
             errorDialog.setOnDismissListener(dialogInterface -> {
                 isQRScan = false;
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CAMERA)
-                        == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     mcodeScanner.startPreview();
                 }
                 scannerLayout.setVisibility(View.VISIBLE);
@@ -1409,7 +1459,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance, String btypeValue) {
         isQRScan = false;
-        mcodeScanner.stopPreview();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                mcodeScanner.stopPreview();
+            }
         PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance, btypeValue);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
@@ -1423,17 +1475,21 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                 if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
                                     Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
-                                    payTransaction();
+//                                    payTransaction();
                                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
-                                            .putExtra("screen", "Pay"));
+                                            .putExtra("screen", "Paid")
+                                            .putExtra(Utils.wallet,strScanWallet)
+                                            .putExtra(Utils.amount,strQRAmount.replace(",","").trim()));
 
                                 }
                             } else {
-                                payTransaction();
+//                                payTransaction();
                                 startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "Pay"));
+                                        .putExtra("screen", "Paid")
+                                        .putExtra(Utils.wallet,strScanWallet)
+                                        .putExtra(Utils.amount,strQRAmount.replace(",","").trim()));
                             }
                         }
                     }
@@ -1448,9 +1504,12 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 isAuthenticationCalled = false;
-                mcodeScanner.startPreview();
-                scannerLayout.setVisibility(View.VISIBLE);
-            }
+                if (ContextCompat.checkSelfPermission(ScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    mcodeScanner.startPreview();
+                    scannerLayout.setVisibility(View.VISIBLE);
+                }
+
+                }
         });
 
     }
@@ -1492,12 +1551,23 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void calculateFee(String strAmount) {
         try {
-            TransferFeeRequest request = new TransferFeeRequest();
-            request.setTokens(strAmount.trim().replace(",", ""));
-            request.setTxnType(Utils.payType);
-            request.setTxnSubType(Utils.paySubType);
-            if (Utils.checkInternet(ScanActivity.this)) {
-                buyTokenViewModel.transferFee(request);
+            if (Utils.PERSONAL_ACCOUNT == objMyApplication.getAccountType()) {
+                TransferFeeRequest request = new TransferFeeRequest();
+                request.setTokens(strAmount.trim().replace(",", ""));
+                request.setTxnType(String.valueOf(Utils.saleOrder));
+                request.setTxnSubType(String.valueOf(Utils.saleOrderToken));
+                if (Utils.checkInternet(ScanActivity.this)) {
+                    buyTokenViewModel.transferFee(request);
+                }
+            }
+            else if (Utils.BUSINESS_ACCOUNT == objMyApplication.getAccountType()){
+                TransferFeeRequest request = new TransferFeeRequest();
+                request.setTokens(strAmount.trim().replace(",", ""));
+                request.setTxnType(String.valueOf(Utils.paidInvoice));
+                request.setTxnSubType(null);
+                if (Utils.checkInternet(ScanActivity.this)) {
+                    buyTokenViewModel.transferFee(request);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1506,14 +1576,23 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void payTransaction() {
         try {
-            TransferPayRequest request = new TransferPayRequest();
-            request.setTokens(strQRAmount.trim().replace(",", ""));
-            request.setRemarks("");
+//            TransferPayRequest request = new TransferPayRequest();
+//            request.setTokens(strQRAmount.trim().replace(",", ""));
+//            request.setRemarks("");
+//            request.setRecipientWalletId(strScanWallet);
+//            objMyApplication.setTransferPayRequest(request);
+//            objMyApplication.setWithdrawAmount(cynValue);
+//            if (Utils.checkInternet(ScanActivity.this)) {
+//                payViewModel.sendTokens(request);
+//            }
+            PaidOrderRequest request = new PaidOrderRequest();
+            request.setTokensAmount(Double.parseDouble(strQRAmount.trim().replace(",", "").trim()));
             request.setRecipientWalletId(strScanWallet);
-            objMyApplication.setTransferPayRequest(request);
-            objMyApplication.setWithdrawAmount(cynValue);
+            request.setRequestToken(Utils.getStrToken());
+            objMyApplication.setPaidOrderRequest(request);
+//            objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(ScanActivity.this)) {
-                payViewModel.sendTokens(request);
+                payViewModel.paidOrder(request);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

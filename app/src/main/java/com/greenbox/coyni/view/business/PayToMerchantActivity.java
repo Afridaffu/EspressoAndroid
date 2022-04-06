@@ -16,7 +16,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -45,7 +44,6 @@ import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
-import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
@@ -193,8 +191,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
                             .putExtra("screen", "Paid")
-                            .putExtra("wallet",recipientAddress)
-                            .putExtra("amount",payET.getText().toString().replace(",","").trim()));
+                            .putExtra(Utils.wallet,recipientAddress)
+                            .putExtra(Utils.amount,payET.getText().toString().replace(",","").trim()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -999,8 +997,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                                 startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Paid")
-                                        .putExtra("wallet",recipientAddress)
-                                        .putExtra("amount",payET.getText().toString().replace(",","").trim()));
+                                        .putExtra(Utils.wallet,recipientAddress)
+                                        .putExtra(Utils.amount,payET.getText().toString().replace(",","").trim()));
 
                             }
                         } else {
@@ -1008,8 +1006,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                             startActivity(new Intent(PayToMerchantActivity.this, PINActivity.class)
                                     .putExtra("TYPE", "ENTER")
                                     .putExtra("screen", "Paid")
-                                    .putExtra("wallet",recipientAddress)
-                                    .putExtra("amount",payET.getText().toString().replace(",","").trim()));
+                                    .putExtra(Utils.wallet,recipientAddress)
+                                    .putExtra(Utils.amount,payET.getText().toString().replace(",","").trim()));
                         }
                     }
                     LogUtils.v("Scan", "onDialog Clicked " + action);

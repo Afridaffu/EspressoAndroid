@@ -177,7 +177,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_125sdp"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_18sdp"
                 android:layout_marginRight="@dimen/_10sdp"
@@ -298,7 +298,7 @@
                                 <EditText
                                     android:id="@+id/etAmount"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="@dimen/_72sdp"
                                     android:background="@color/white"
                                     android:fontFamily="@font/opensans_bold"
                                     android:gravity="center_vertical|right"

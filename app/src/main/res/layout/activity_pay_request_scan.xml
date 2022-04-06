@@ -253,8 +253,10 @@
                         android:layout_below="@+id/cvProfile"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_20sdp"
+                        android:textAlignment="center"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text=""
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_14ssp" />
 

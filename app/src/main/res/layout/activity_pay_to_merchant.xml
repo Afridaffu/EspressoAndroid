@@ -53,7 +53,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <LinearLayout
                 android:id="@+id/layoutLL"
                 android:layout_width="match_parent"
@@ -136,15 +135,11 @@
 
                 </LinearLayout>
 
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="none">
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_124sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_26sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
                     android:layout_marginRight="@dimen/_10sdp"
                     android:background="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
@@ -189,7 +184,7 @@
                                 <EditText
                                     android:id="@+id/merchantAmountET"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="@dimen/_72sdp"
                                     android:background="@color/white"
                                     android:fontFamily="@font/opensans_bold"
                                     android:gravity="center_vertical|end"
@@ -277,7 +272,7 @@
                             android:layout_height="@dimen/_1sdp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/_15sdp"
-                            android:layout_marginTop="@dimen/_20sdp"
+                            android:layout_marginTop="@dimen/_14sdp"
                             android:layout_marginRight="@dimen/_15sdp"
                             android:layout_marginBottom="@dimen/_20sdp"
                             android:background="#d8e2f0" />
@@ -286,7 +281,6 @@
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
-                </ScrollView>
             </LinearLayout>
 
             <com.greenbox.coyni.utils.keyboards.CustomKeyboard
