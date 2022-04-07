@@ -48,7 +48,6 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text="200.00"
                 android:textColor="@color/primary_color"
                 android:textSize="@dimen/_35sdp" />
 
@@ -92,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="end"
-                    android:text="Coyni Balance"
+                    android:text="coyni Balance"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11ssp" />
 
@@ -100,7 +99,7 @@
                     android:id="@+id/balanceTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
+                    android:fontFamily="@font/opensans_regular"
                     android:gravity="end"
                     android:text="Available:"
                     android:textColor="@color/dark_grey"

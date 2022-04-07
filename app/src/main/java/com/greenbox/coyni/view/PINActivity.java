@@ -37,6 +37,8 @@ import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
+import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
@@ -179,7 +181,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     || getIntent().getStringExtra("screen").equals("Withdraw")
                     || getIntent().getStringExtra("screen").equals("Pay"))
                     || getIntent().getStringExtra("screen").equals("Notifications")
-                    || getIntent().getStringExtra("screen").equals("Buy")) {
+                    || getIntent().getStringExtra("screen").equals("Buy")
+                    || getIntent().getStringExtra("screen").equals("Paid")) {
 
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
@@ -314,6 +317,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                                 break;
                                             case "Pay":
                                                 payTransaction();
+                                                break;
+                                            case "Paid":
+                                                paidTransaction();
                                                 break;
                                             case "Notifications":
                                                 Intent returnIntent = new Intent();
@@ -480,6 +486,30 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             }
         });
 
+        payViewModel.getPaidOrderRespMutableLiveData().observe(this, new Observer<PaidOrderResp>() {
+            @Override
+            public void onChanged(PaidOrderResp paidOrderResp) {
+                if (paidOrderResp != null){
+                    objMyApplication.setPaidOrderResp(paidOrderResp);
+                    Utils.setStrToken("");
+                        if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
+                            startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "Success")
+                                    .putExtra("subtype", "paid"));
+
+                        } else {
+                            startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                    .putExtra("status", "Failed")
+                                    .putExtra("subtype", "paid"));
+                        }
+                        finish();
+                    }
+                    else {
+                        Utils.displayAlert("something went wrong", PINActivity.this, "", "");
+                    }
+                }
+        });
+
         businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
             @Override
             public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
@@ -632,6 +662,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
 
     }
 
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -711,7 +742,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                         || getIntent().getStringExtra("screen").equals("Withdraw")
                         || getIntent().getStringExtra("screen").equals("Pay")
                         || getIntent().getStringExtra("screen").equals("Notifications")
-                        || getIntent().getStringExtra("screen").equals("buy"))) {
+                        || getIntent().getStringExtra("screen").equals("buy"))
+                        || getIntent().getStringExtra("screen").equals("Paid")) {
                     onBackPressed();
                 } else if (getIntent().getStringExtra("screen") != null &&
                         (getIntent().getStringExtra("screen").equals("ResetPIN"))) {
@@ -901,6 +933,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     break;
                 case "buy":
                     request.setActionType(Utils.buyActionType);
+                    break;
+                case "paid":
+                    request.setActionType(Utils.sendActionType);
                     break;
             }
 //            if (strScreen.toLowerCase().equals("changepassword")) {
@@ -1121,6 +1156,21 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    private void paidTransaction() {
+
+        PaidOrderRequest request = new PaidOrderRequest();
+        request.setRequestToken(Utils.getStrToken());
+        request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
+        request.setRecipientWalletId(getIntent().getStringExtra(Utils.wallet));
+
+        if (Utils.checkInternet(PINActivity.this)){
+            try {
+                payViewModel.paidOrder(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void buyToken() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {

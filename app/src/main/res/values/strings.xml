@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Coyni</string>
+    <string name="app_name">coyni</string>
     <string name="internet">Check your internet connection</string>
     <string name="password_strength_weak">Weak</string>
     <string name="password_strength_medium">Medium</string>
@@ -36,7 +36,7 @@
     <string name="sorrytxt">Sorry We Can’t Find Anything on File</string>
     <string name="tryagain">Try Again</string>
     <string name="thank_you_for_submission">Thank you for your submission to the coyni review\nteam. No additional information needed at this time.\nPlease check back here for updates. If you wish to</string>
-    <string name="coyni_account">Coyni Account</string>
+    <string name="coyni_account">coyni Account</string>
     <string name="cancel_merchant">cancel your merchant application </string>
     <string name="thank_you_for_intrest">Thank you for your interest in coyni. Please allow\nus up to 3 business days for further review of\nyour account. Within that time you may receive a\nnotification and/or email if further information is\nneeded.</string>
     <string name="foundacc">We’ve Found Your Account!</string>
@@ -47,7 +47,7 @@
     <string name="status_unverified">Account Status: </string>
     <string name="unveri">Unverified</string>
     <string name="cp_almost">You’re almost there!</string>
-    <string name="cp_setup">Finish the set up your account in\nless than 5 min.</string>
+    <string name="cp_setup">Finish the set up your account in less than 5 min.</string>
     <string name="cp_getstarted">Get Started</string>
     <string name="setting">Settings</string>
     <string name="setting_userdetails">User Details</string>
@@ -240,7 +240,7 @@
     <string name="when_you_send_or_receive_money">When you send or receive money from a source \noutside the coyni environment, it can take up to \na few minutes to complete those requests. \nTransactions made within the coyni environment \n(token to token transactions) happen instantly. \nHere is some information on specific transaction \ntypes that you might encounter:</string>
     <string name="bank_accounts"><b>Bank Accounts:</b> All Bank account transactions \ntypically take up to 3 business days to process. </string>
     <string name="add_bank_account">Add Bank Account</string>
-    <string name="coyni_uses_fiserv">Coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
+    <string name="coyni_uses_fiserv">coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
     <string name="i_m_ready">I’m Ready</string>
     <string name="your_bank_account_has_been_successfully">Your bank account has been successfully \nauthorized and added to your merchant \napplication.</string>
     <string name="wells_fargo">Wells Fargo</string>
@@ -313,7 +313,7 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="an_account">There is no payment method currently linked to your account. Please follow one of the prompts below to link an account.</string>
-    <string name="making_coyni_purchases">Can be used for making Coyni purchases \nor withdrawing funds.</string>
+    <string name="making_coyni_purchases">Can be used for making coyni purchases \nor withdrawing funds.</string>
     <string name="buying_tokens">Used for buying tokens or withdrawing \nfunds.</string>
     <string name="can_only_be_used_for_instant_pay_withdraw">Can only be used for instant pay withdraw.</string>
     <string name="add_a_signet_account">Add A Signet Account</string>
@@ -516,7 +516,7 @@
     <string name="rolling_releases">Rolling Releases</string>
     <string name="search_by_reserve_id">Search By Reserve ID</string>
     <string name="manual_releases">Manual Releases</string>
-    <string name="reason_field">Reason field on the manual \nrelease flow. Limited to 120char \nand this is exactly 121 characters \nhere including the spaces.</string>
+    <string name="reason_field">Reason field on the manual release flow. Limited to 120char and this is exactly 121 characters here including the spaces.</string>
     <string name="reason_field_on_the_manual_release_flow">Reason field on the manual \nrelease flow.</string>
     <string name="transaction_amount">Transaction Amount</string>
     <string name="partial_refund">Partial Refund</string>
@@ -632,7 +632,7 @@
     <string name="daily_batch_ids">Daily Batch IDs</string>
     <string name="release_on">Release On</string>
     <string name="amount_released">Amount Released</string>
-    <string name="canceled_description">Release Scheduled for <b>%s</b> for the amount of<b> %s CYN</b> has been canceled due to lack of funds in the reserve balance.</string>
+    <string name="canceled_description">Release Scheduled for %s for the amount of %s has been canceled due to lack of funds in the reserve balance.</string>
     <string name="scheduled_release_has_been_canceled">Scheduled Release Has Been Canceled</string>
     <string name="time">11:59pm</string>
 

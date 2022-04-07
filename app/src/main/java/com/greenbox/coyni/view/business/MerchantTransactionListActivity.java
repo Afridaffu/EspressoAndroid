@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -50,30 +49,20 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     private NestedScrollView nestedScrollView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
-    private int totalItemCount, currentPage = 1, total = 0;
+    private int currentPage = 1, total = 0;
     private ExpandableHeightRecyclerView rvTransactionsPending, getRvTransactionsPosted;
-    private Boolean isFilters = false, isRefresh = false, isNoData = false, isAPICalled = false;
+    private Boolean isFilters = false;
     private MyApplication objMyApplication;
     private LinearLayout layoutTransactionspending, layoutTransactionsposted, clearTextLL;
     private TextView noTransactionTV, noMoreTransactionTV;
     private DashboardViewModel dashboardViewModel;
-    private TransactionList transactionList;
     private TextView pendingTxt, loadMoreTV;
     private ImageView closeBtn, filterIV;
-    private List<TransactionListPosted> globalData = new ArrayList<>();
     private EditText searchET;
     private List<TransactionListPending> globalPending = new ArrayList<>();
     private List<TransactionListPosted> globalPosted = new ArrayList<>();
-
-    private ArrayList<Integer> transactionType = new ArrayList<Integer>();
-    private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
-    private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
-
-    private String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
-    private long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
-    private Date startDateD = null;
-    private Date endDateD = null;
     private View bottomCorners;
+    private TransactionListRequest filterTransactionList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,37 +95,21 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                 public void onRefresh() {
                     try {
                         noMoreTransactionTV.setVisibility(View.GONE);
-
                         globalPending.clear();
                         globalPosted.clear();
-                        transactionType.clear();
-                        transactionSubType.clear();
-                        txnStatus.clear();
                         currentPage = 0;
-                        strFromDate = "";
-                        strToDate = "";
-                        strStartAmount = "";
-                        strEndAmount = "";
-                        startDateD = null;
-                        endDateD = null;
-                        startDateLong = 0L;
-                        endDateLong = 0L;
-                        strSelectedDate = "";
+                        filterTransactionList = null;
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-
                         TransactionListRequest transactionListRequest = new TransactionListRequest();
+                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
                         transactionListRequest.setPageNo(String.valueOf(currentPage));
                         transactionListRequest.setWalletCategory(Utils.walletCategory);
                         transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-
-                        transactionsAPI(transactionListRequest);
-                        objMyApplication.initializeTransactionSearch();
-                        objMyApplication.setTransactionListSearch(transactionListRequest);
-
+                        getTransactions(transactionListRequest);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+
                 }
             });
 
@@ -146,22 +119,17 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                 @Override
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-                        Log.e("scrollY", scrollY + "  " + v.getChildAt(0).getMeasuredHeight() + " " + v.getMeasuredHeight());
                         try {
-                            Log.e("total abcd", total + "");
-                            Log.e("currentPage acbd", currentPage + "");
                             if (total - 1 > currentPage) {
                                 progressBar.setVisibility(View.VISIBLE);
                                 loadMoreTV.setVisibility(View.VISIBLE);
                                 currentPage = currentPage + 1;
-                                Log.e("CurrentPage", currentPage + "");
                                 TransactionListRequest transactionListRequest = new TransactionListRequest();
                                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
+                                transactionListRequest.setTransactionType(getDefaultTransactionTypes());
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-                                transactionsAPI(transactionListRequest);
-                                objMyApplication.initializeTransactionSearch();
-                                objMyApplication.setTransactionListSearch(transactionListRequest);
+                                getTransactions(transactionListRequest);
 
                                 noMoreTransactionTV.setVisibility(View.GONE);
                             } else {
@@ -193,18 +161,16 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             globalPosted.clear();
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setWalletCategory(Utils.walletCategory);
+            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setGbxTransactionId(charSequence.toString());
-            transactionsAPI(transactionListRequest);
+            getTransactions(transactionListRequest);
         } else if (charSequence.length() > 0 && charSequence.length() < 30) {
             layoutTransactionsposted.setVisibility(View.GONE);
             layoutTransactionspending.setVisibility(View.GONE);
             pendingTxt.setVisibility(View.GONE);
             noTransactionTV.setVisibility(View.VISIBLE);
         } else if (charSequence.toString().trim().length() == 0) {
-            globalPending.clear();
-            globalPosted.clear();
-            objMyApplication.getTransactionListSearch().setPageNo("0");
-            transactionsAPI(objMyApplication.getTransactionListSearch());
+            loadData();
         }
     }
 
@@ -245,6 +211,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onChanged(TransactionList transactionList) {
                 dismissDialog();
+                swipeRefreshLayout.setRefreshing(false);
                 try {
                     if (transactionList != null) {
                         if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -337,36 +304,20 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         try {
             globalPending.clear();
             globalPosted.clear();
-            transactionType.clear();
-            transactionSubType.clear();
-            txnStatus.clear();
             currentPage = 0;
-            strFromDate = "";
-            strToDate = "";
-            strStartAmount = "";
-            strEndAmount = "";
-            startDateD = null;
-            endDateD = null;
-            startDateLong = 0L;
-            endDateLong = 0L;
-            strSelectedDate = "";
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
-
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-
-            transactionsAPI(transactionListRequest);
-            objMyApplication.initializeTransactionSearch();
-            objMyApplication.setTransactionListSearch(transactionListRequest);
-
+            transactionListRequest.setPageNo(String.valueOf(currentPage));
+            getTransactions(transactionListRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void transactionsAPI(TransactionListRequest transactionListRequest) {
+    private void getTransactions(TransactionListRequest transactionListRequest) {
         showProgressDialog();
         dashboardViewModel.meTransactionList(transactionListRequest);
     }
@@ -387,15 +338,24 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     }
 
     private void showFilterDialog() {
-        MerchantTransactionsFilterDialog filterDialog = new MerchantTransactionsFilterDialog(MerchantTransactionListActivity.this);
+        if(filterTransactionList != null && filterTransactionList.isManualUpdate()) {
+            filterTransactionList.setTransactionType(new ArrayList<>());
+            filterTransactionList.setManualUpdate(false);
+        }
+        MerchantTransactionsFilterDialog filterDialog = new MerchantTransactionsFilterDialog(MerchantTransactionListActivity.this, filterTransactionList);
         filterDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.applyFilter)) {
                     globalPending.clear();
                     globalPosted.clear();
-                    TransactionListRequest listRequest = (TransactionListRequest) value;
-                    if (listRequest != null) {
+                    filterTransactionList = (TransactionListRequest) value;
+                    if(filterTransactionList.getTransactionType() == null
+                            || filterTransactionList.getTransactionType().size() <= 0) {
+                        filterTransactionList.setTransactionType(getDefaultTransactionTypes());
+                        filterTransactionList.setManualUpdate(true);
+                    }
+                    if (filterTransactionList != null) {
                         isFilters = true;
                     }
                     if (isFilters) {
@@ -403,11 +363,13 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     } else {
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                     }
-
-                    transactionsAPI(listRequest);
+                    getTransactions(filterTransactionList);
                 } else if (action.equals("Date_SELECTED")) {
                     LogUtils.v(TAG, "Date Selected " + value);
                     filterIV.setImageResource(R.drawable.ic_filter_enabled);
+                } else if (action.equals(Utils.resetFilter)) {
+                    filterTransactionList = null;
+                    loadData();
                 }
             }
         });

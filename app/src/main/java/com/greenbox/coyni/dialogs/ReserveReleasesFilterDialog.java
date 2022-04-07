@@ -1,158 +1,176 @@
 package com.greenbox.coyni.dialogs;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.chip.Chip;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.RangeDates;
+import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 
 import java.util.ArrayList;
 
 public class ReserveReleasesFilterDialog extends BaseDialog {
 
-    Context context;
-    private ArrayList<Integer> transactionType = new ArrayList<Integer>();
+    private Context context;
     private boolean isFilters = false;
+    private Chip openC, releasedC, onHoldC, canceledC;
+    private CardView applyFilter;
+    private TextView resetFilter, dateRange;
+    private LinearLayout dateClick;
+    private RangeDates rangeDates;
+    private DateRangePickerDialog dateRangePickerDialog;
+    private ReserveFilter filter;
 
-
-    public ReserveReleasesFilterDialog(@NonNull Context context) {
+    public ReserveReleasesFilterDialog(Context context, ReserveFilter filter) {
         super(context);
-    }
-
-    public ReserveReleasesFilterDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
         this.context = context;
+        this.filter = filter;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_reserve_filter);
+
+        if(filter == null) {
+            filter = new ReserveFilter();
+        }
+
         initFields();
     }
 
     private void initFields() {
 
-        Chip OpenC = findViewById(R.id.OpenC);
-        Chip releasedC = findViewById(R.id.releasedC);
-        Chip onHoldC = findViewById(R.id.onHoldC);
-        Chip canceledC = findViewById(R.id.canceledC);
-        CardView applyFilter = findViewById(R.id.applyFilterBtnCV);
-        TextView resetFilter = findViewById(R.id.resetFiltersTV);
+        openC = findViewById(R.id.OpenC);
+        releasedC = findViewById(R.id.releasedC);
+        onHoldC = findViewById(R.id.onHoldC);
+        canceledC = findViewById(R.id.canceledC);
+        applyFilter = findViewById(R.id.applyFilterBtnCV);
+        resetFilter = findViewById(R.id.resetFiltersTV);
+        dateClick = findViewById(R.id.dateRangePickerLL);
+        dateRange = findViewById(R.id.datePickET);
 
-//        if (isFilters) {
-//            if (transactionType.size() > 0) {
-//                for (int i = 0; i < transactionType.size(); i++) {
-//                    switch (transactionType.get(i)) {
-//                        case 1:
-//                            OpenC.setChecked(true);
-//                            break;
-//
-//                        case 2:
-//                            releasedC.setChecked(true);
-//                            break;
-//
-//                        case 3:
-//                            onHoldC.setChecked(true);
-//                            break;
-//
-//                        case 4:
-//                            canceledC.setChecked(true);
-//                            break;
-//
-//                    }
-//                }
-//            }
-//
-//        }
+        if(filter.isFilterApplied) {
+            openC.setChecked(filter.isOpen());
+            onHoldC.setChecked(filter.isOnHold());
+            releasedC.setChecked(filter.isReleased());
+            canceledC.setChecked(filter.isCancelled());
+            //Show dates
+        }
 
-        OpenC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        openC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    transactionType.add(1);
-                } else {
-                    transactionType.remove(Integer.valueOf(1));
-                }
+                filter.isFilterApplied = true;
+                filter.setOpen(isChecked);
             }
         });
-//            OpenC.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    LogUtils.d("Dialogg", "dialog" + OpenC.isCheckable());
-//                    transactionType.add(1);
-//                }
-//            });
         releasedC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    transactionType.add(2);
-                } else {
-                    transactionType.remove(Integer.valueOf(2));
-                }
+                filter.isFilterApplied = true;
+                filter.setReleased(isChecked);
             }
         });
         onHoldC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    transactionType.add(3);
-                } else {
-                    transactionType.remove(Integer.valueOf(3));
-                }
+                filter.isFilterApplied = true;
+                filter.setOnHold(isChecked);
             }
         });
         canceledC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    transactionType.add(4);
-                } else {
-                    transactionType.remove(Integer.valueOf(4));
+                filter.isFilterApplied = true;
+                filter.setCancelled(isChecked);
+            }
+        });
+        dateClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
+                    return;
                 }
+                showCalendarDialog();
+            }
+        });
+
+        dateRange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
+                    return;
+                }
+                showCalendarDialog();
             }
         });
 
         applyFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isFilters = false;
 
-                if (transactionType.size() > 0) {
-                    isFilters = true;
+                LogUtils.d("TAG","applyFilter"+filter.isFilterApplied);
+                LogUtils.d("TAG","applyFilterdateRange"+dateRange);
 
-                    // transactionListRequest.setTransactionType(transactionType);
+                if (!filter.isFilterApplied) {
+                    dismiss();
+                    //Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (getOnDialogClickListener() != null) {
+                        getOnDialogClickListener().onDialogClicked("ApplyFilter", filter);
+                        dismiss();
+                    }
                 }
-
-                if (getOnDialogClickListener() != null) {
-                    getOnDialogClickListener().onDialogClicked("ApplyFilter", "");
-                }
-                dismiss();
             }
         });
 
         resetFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtils.d("Dialogg", "resetFilter" + transactionType.size());
-                //transactionType.clear();
-                isFilters = false;
-                OpenC.setChecked(false);
+                //LogUtils.d("Dialogg", "resetFilter" + transactionStatus.size());
+                openC.setChecked(false);
                 onHoldC.setChecked(false);
                 canceledC.setChecked(false);
                 releasedC.setChecked(false);
+                dateRange.setText("");
+                filter.isFilterApplied = false;
+                if (getOnDialogClickListener() != null) {
+                    getOnDialogClickListener().onDialogClicked("ResetFilter", filter);
+                }
             }
         });
 
     }
+    private void showCalendarDialog() {
 
+        dateRangePickerDialog = new DateRangePickerDialog(context);
+        dateRangePickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                if(action.equalsIgnoreCase(Utils.datePicker)) {
+                    filter.isFilterApplied = true;
+                    rangeDates = (RangeDates) value;
+                    dateRange.setText(rangeDates.getFullDate());
+                }
+
+            }
+        });
+
+        dateRangePickerDialog.show();
+    }
 
 }

@@ -531,7 +531,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
+                                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             }
@@ -624,10 +624,10 @@ public class BusinessAddCardActivity extends AppCompatActivity {
                 Utils.displayAlert("Invalid request! Please add Credit Card only.", BusinessAddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", BusinessAddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", BusinessAddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA Debit cards", BusinessAddCardActivity.this, "", "");
                 return value = false;
             }
         } catch (Exception ex) {
@@ -1280,7 +1280,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {

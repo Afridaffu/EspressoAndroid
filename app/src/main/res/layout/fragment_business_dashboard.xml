@@ -251,7 +251,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:fontFamily="@font/opensans_regular"
-                                        android:text="You may now start sending, receiving,\nbuying, charging, and withdrawing\nCoyni in your token account today."
+                                        android:text="You may now start sending, receiving,\nbuying, charging, and withdrawing\ncoyni in your token account today."
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_11ssp" />
 
@@ -999,15 +999,15 @@
                                             android:textColor="@color/dark_grey"
                                             android:textSize="@dimen/_10ssp" />
 
-                                        <TextView
-                                            android:id="@+id/nxtPayoutTimeTV"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginBottom="@dimen/_14sdp"
-                                            android:fontFamily="@font/opensans_regular"
-                                            android:text="@string/time"
-                                            android:textColor="@color/dark_grey"
-                                            android:textSize="@dimen/_10ssp" />
+<!--                                        <TextView-->
+<!--                                            android:id="@+id/nxtPayoutTimeTV"-->
+<!--                                            android:layout_width="wrap_content"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:layout_marginBottom="@dimen/_14sdp"-->
+<!--                                            android:fontFamily="@font/opensans_regular"-->
+<!--                                            android:text="@string/time"-->
+<!--                                            android:textColor="@color/dark_grey"-->
+<!--                                            android:textSize="@dimen/_10ssp" />-->
                                     </LinearLayout>
                                 </LinearLayout>
 
@@ -1055,7 +1055,7 @@
                                     </LinearLayout>
 
                                     <TextView
-                                        android:id="@+id/dasboardPayoutDate"
+                                        android:id="@+id/lastPayoutDate"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginBottom="@dimen/_14sdp"

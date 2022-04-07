@@ -529,7 +529,7 @@ public class EditEmailActivity extends AppCompatActivity {
                     dialog.dismiss();
 //                    b_newEmailErrorLL.setVisibility(VISIBLE);
 //                    b_newEmailErrorTV.setText("Please enter a new email ");
-                    Utils.displayAlertNew("Please enter a new email ",EditEmailActivity.this,"Coyni");
+                    Utils.displayAlertNew("Please enter a new email ",EditEmailActivity.this,"coyni");
                 }
                 else {
                     b_newEmailErrorTV.setText("");

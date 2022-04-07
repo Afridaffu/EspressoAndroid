@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.hardware.fingerprint.FingerprintManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -144,6 +145,32 @@ public class Utils {
         }
     }
 
+
+    public static final String OPEN_VAL = "Open";
+    public enum ROLLING_LIST_STATUS {
+
+        OPEN(1, "Open"),
+        ON_HOLD(7, "On Hold"),
+        RELEASED(8, "Released"),
+        CANCELED(10,"Canceled");
+
+        private int statusType;
+        private String status;
+
+        ROLLING_LIST_STATUS(int statusType, String status) {
+            this.status = status;
+            this.statusType = statusType;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public int getStatusType() {
+            return statusType;
+        }
+    }
+
     public static String strLang = "en-US";
     public static String strCode = "12345";
     public static String strDesc = "abcd";
@@ -265,6 +292,11 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
 
+    public static final int reserveRelease = 16;
+    public static final int open = 1;
+    public  static final int onHold = 7;
+    public static final int released = 8;
+
     //Merchant Transaction Filter Type values
 
     public static final int mRefund = 9;
@@ -314,7 +346,11 @@ public class Utils {
     public static final String canceled = "Canceled";
     public static final String expired = "Expired";
 
+    public static final String wallet = "wallet";
+    public static final String amount = "amount";
+
     public static final String applyFilter = "apply";
+    public static final String resetFilter = "resetFilter";
     public static final String datePicker = "DatePicker";
 
 
@@ -601,7 +637,7 @@ public class Utils {
                     context.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
                 }
             } else
-                displayAlert("You enabled the Security permission in Coyni App. Please enable the Security settings in device for making the transactions.", context, "", "");
+                displayAlert("You enabled the Security permission in coyni App. Please enable the Security settings in device for making the transactions.", context, "", "");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -775,10 +811,30 @@ public class Utils {
         return colorState;
     }
 
+//    public static void setUpperHintColor(TextInputLayout til, int color) {
+//        try {
+//            Field field = til.getClass().getDeclaredField("defaultHintTextColor");
+//            field.setAccessible(true);
+//            int[][] states = new int[][]{
+//                    new int[]{}
+//            };
+//            int[] colors = new int[]{
+//                    color
+//            };
+//            ColorStateList myList = new ColorStateList(states, colors);
+//            field.set(til, myList);
+//
+//            Method method = til.getClass().getDeclaredMethod("updateLabelState", boolean.class);
+//            method.setAccessible(true);
+//            method.invoke(til, true);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     public static void setUpperHintColor(TextInputLayout til, int color) {
         try {
-            Field field = til.getClass().getDeclaredField("defaultHintTextColor");
-            field.setAccessible(true);
             int[][] states = new int[][]{
                     new int[]{}
             };
@@ -786,12 +842,7 @@ public class Utils {
                     color
             };
             ColorStateList myList = new ColorStateList(states, colors);
-            field.set(til, myList);
-
-            Method method = til.getClass().getDeclaredMethod("updateLabelState", boolean.class);
-            method.setAccessible(true);
-            method.invoke(til, true);
-
+            til.setDefaultHintTextColor(myList);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1604,6 +1655,15 @@ public class Utils {
         spannableTV.setText(ss);
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+
+    public static void setSpannableStringAtEnd(String text, Context context, int start, TextView textView) {
+
+        SpannableString spannable = new SpannableString(text);
+        spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.primary_black)),
+                start, text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        spannable.setSpan(new StyleSpan(Typeface.BOLD), start, text.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        textView.setText(spannable);
     }
 
 

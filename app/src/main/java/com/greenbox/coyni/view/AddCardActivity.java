@@ -563,7 +563,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
                                 etCardNumber.setText("");
                                 etCardNumber.hideBrandIcon();
                             }
@@ -677,14 +677,14 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 displayAlert("Invalid request! Please add Credit Card only.", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && !objCard.getData().getCardBrand().toLowerCase().contains("american") && !objCard.getData().getCardBrand().toLowerCase().contains("discover")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA, AMERICAN EXPRESS and DISCOVER", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!etCVV.getText().toString().equals("") && etCVV.getText().toString().length() < 3) {
                 etCVV.requestFocus();
                 Utils.displayAlert("Please enter a valid CVV/CVC.", AddCardActivity.this, "", "");
                 return value = false;
             } else if (!objCard.getData().getCardBrand().toLowerCase().equals("visa") && !objCard.getData().getCardBrand().toLowerCase().contains("master") && getIntent().getStringExtra("card") != null && getIntent().getStringExtra("card").equals("debit")) {
-                Utils.displayAlert("Coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
+                Utils.displayAlert("coyni system supports only MASTERCARD, VISA Debit cards", AddCardActivity.this, "", "");
                 return value = false;
             }
         } catch (Exception ex) {
@@ -1196,7 +1196,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         isAddress1 = true;
                         address1ErrorLL.setVisibility(GONE);
                         etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_black));
                     } else {
                         isAddress1 = false;
                     }
@@ -1237,7 +1237,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     if (charSequence.length() > 0) {
-                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1279,7 +1279,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         isCity = true;
                         cityErrorLL.setVisibility(GONE);
                         etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_black));
                     } else {
                         isCity = false;
                     }
@@ -1495,7 +1495,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {

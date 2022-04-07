@@ -10,20 +10,23 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
-import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
+import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -43,8 +46,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<CancelApplicationResponse> cancelApplicationResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> batchPayoutListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutIdDetailsResponse> batchPayoutIdDetailsResponseMutableLiveData = new MutableLiveData<>();
-
-
+    private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
@@ -82,6 +84,9 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData(){
         return batchPayoutIdDetailsResponseMutableLiveData;
+    }
+    public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData(){
+        return manualListResponseMutableLiveData;
     }
 
     public MutableLiveData<Fees> getFeesMutableLiveData() {
@@ -333,10 +338,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void getPayoutListData() {
+    public void getPayoutListData(RollingListRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BatchPayoutListResponse> call = apiService.getPayoutListData();
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(request);
             call.enqueue(new Callback<BatchPayoutListResponse>() {
                 @Override
                 public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
@@ -367,6 +372,77 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+    public void getManualListData() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ManualListResponse> call = apiService.getManualListData(new EmptyRequest());
+            call.enqueue(new Callback<ManualListResponse>() {
+                @Override
+                public void onResponse(Call<ManualListResponse> call, Response<ManualListResponse> response) {
+                    if (response.isSuccessful()) {
+                        ManualListResponse list = response.body();
+                        manualListResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ManualListResponse>() {
+                        }.getType();
+                        ManualListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        manualListResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ManualListResponse> call, Throwable t) {
+                    manualListResponseMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getPayoutListData() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(new EmptyRequest());
+            call.enqueue(new Callback<BatchPayoutListResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+                    if (response.isSuccessful()) {
+                        BatchPayoutListResponse list = response.body();
+                        batchPayoutListMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BatchPayoutListResponse>() {
+                        }.getType();
+                        BatchPayoutListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        batchPayoutListMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+                    batchPayoutListMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getPayoutlistData(String searchKey) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);

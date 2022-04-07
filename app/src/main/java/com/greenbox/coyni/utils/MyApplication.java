@@ -28,6 +28,8 @@ import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
+import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
@@ -96,6 +98,8 @@ public class MyApplication extends Application {
     BuyTokenResponse buyTokenResponse;
     PayRequestResponse payRequestResponse;
     TransferPayRequest transferPayRequest;
+    PaidOrderRequest paidOrderRequest;
+    PaidOrderResp paidOrderResp;
     List<Contacts> listContacts = new ArrayList<>();
     TransactionListRequest transactionListSearch = new TransactionListRequest();
     Double withdrawAmount;
@@ -109,6 +113,22 @@ public class MyApplication extends Application {
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
     Double merchantBalance = 0.0;
+
+    public void setPaidOrderRequest(PaidOrderRequest paidOrderRequest) {
+        this.paidOrderRequest = paidOrderRequest;
+    }
+
+    public PaidOrderRequest getPaidOrderRequest() {
+        return paidOrderRequest;
+    }
+
+    public PaidOrderResp getPaidOrderResp() {
+        return paidOrderResp;
+    }
+
+    public void setPaidOrderResp(PaidOrderResp paidOrderResp) {
+        this.paidOrderResp = paidOrderResp;
+    }
 
     public Double getMerchantBalance() {
         return merchantBalance;

@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.business.ReservePayoutActivity"
+    android:background="@color/et_bg_gray"
     android:orientation="vertical"
-    android:background="@color/et_bg_gray">
+    tools:context=".view.business.ReservePayoutActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,14 +33,14 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_back"
-                    android:contentDescription="@string/buy_token"/>
+                    android:contentDescription="@string/buy_token"
+                    android:src="@drawable/ic_back" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_22sdp"
+                android:layout_marginStart="@dimen/_22sdp"
                 android:layout_marginBottom="@dimen/_11sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/transaction_details"
@@ -60,14 +60,14 @@
                 android:paddingBottom="@dimen/_77sdp">
 
                 <androidx.cardview.widget.CardView
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_11sdp"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_11sdp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/payreqStatusTV"
+                                android:id="@+id/respayStatusTV"
                                 android:layout_width="@dimen/_68sdp"
                                 android:layout_height="@dimen/_14sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
@@ -174,12 +174,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="07/27/2020 10:36:14"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
+                                android:text="07/27/2020 10:36:14"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -207,7 +208,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:fontFamily="@font/opensans_semibold"
-                                    android:gravity="right"
+                                    android:gravity="end"
                                     android:text="1d3hsM734h…"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
@@ -215,12 +216,14 @@
                                 <ImageView
                                     android:layout_width="@dimen/_11sdp"
                                     android:layout_height="@dimen/_11sdp"
-                                    android:layout_gravity="right|center"
-                                    android:layout_marginLeft="@dimen/_6sdp"
-                                    android:src="@drawable/ic_copy" />
+                                    android:layout_gravity="end|center"
+                                    android:layout_marginStart="@dimen/_6sdp"
+                                    android:src="@drawable/ic_copy"
+                                    android:contentDescription="@string/reserve_id"/>
                             </LinearLayout>
 
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -241,9 +244,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="20% / 10days Rolling"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
+                                android:text="20% / 10days Rolling"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
@@ -252,10 +255,10 @@
                             android:id="@+id/DepositToLL"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="end"
                             android:layout_marginTop="@dimen/_18sdp"
                             android:orientation="horizontal"
-                            android:visibility="visible"
-                            android:layout_gravity="right">
+                            android:visibility="visible">
 
                             <TextView
                                 android:id="@+id/DepositTV"
@@ -263,52 +266,54 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:fontFamily="@font/opensans_regular"
-                                android:gravity="left"
+                                android:gravity="start"
                                 android:text="@string/deposit_to"
                                 android:textColor="@color/xdark_gray"
                                 android:textSize="@dimen/_11ssp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:fontFamily="@font/opensans_semibold"
-                                    android:text="Business Token Account"
-                                    android:gravity="right"
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:text="@string/business_token_account"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
                         </LinearLayout>
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
                             android:text="123456677"
-                            android:gravity="right"
                             android:textColor="@color/primary_green"
                             android:textSize="@dimen/_10ssp" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_22sdp"
+                    android:layout_marginTop="@dimen/_11sdp"
+                    android:layout_marginEnd="@dimen/_22sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="start"
                     android:text="@string/reserve_information"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/opensans_bold"
-                    android:layout_marginStart="@dimen/_22sdp"
-                    android:layout_marginEnd="@dimen/_22sdp"
-                    android:layout_marginTop="@dimen/_11sdp"
-                    android:gravity="left"/>
+                    android:textSize="@dimen/_12ssp" />
 
                 <androidx.cardview.widget.CardView
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_11sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_11sdp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -339,7 +344,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="1840.00 CYN"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
@@ -369,7 +374,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="07/27/2020 10:36:14"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_11ssp" />
@@ -398,7 +403,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:gravity="right"
+                                android:gravity="end"
                                 android:text="1d3hsM734h…"
                                 android:textColor="@color/primary_green"
                                 android:textSize="@dimen/_11ssp" />
@@ -407,10 +412,8 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
 
 </LinearLayout>

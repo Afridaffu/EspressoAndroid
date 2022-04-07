@@ -8,7 +8,7 @@ import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import java.io.Serializable;
 import java.util.List;
 
-public class BatchPayoutListItems extends ListItem implements Serializable, Comparable<BatchPayoutListItems> {
+public class BatchPayoutListItems implements Serializable, Comparable<BatchPayoutListItems> {
     @SerializedName("batchId")
     @Expose
     private String batchId;
@@ -32,12 +32,28 @@ public class BatchPayoutListItems extends ListItem implements Serializable, Comp
     private String sentTo;
     @SerializedName("reserve")
     @Expose
-    private String reserve;
+    private String scheduledRelease;
+
+    private String reserveAmount;
+
+    public String getScheduledRelease() {
+        return scheduledRelease;
+    }
+
+    public void setScheduledRelease(String scheduledRelease) {
+        this.scheduledRelease = scheduledRelease;
+    }
+
+    public String getReserveAmount() {
+        return reserveAmount;
+    }
+
+    public void setReserveAmount(String reserveAmount) {
+        this.reserveAmount = reserveAmount;
+    }
 
     public BatchPayoutListItems(List<BatchPayoutListItems> items) {
     }
-    private int type = ListItem.TYPE_GENERAL;
-
     public String getBatchId() {
         return batchId;
     }
@@ -92,23 +108,6 @@ public class BatchPayoutListItems extends ListItem implements Serializable, Comp
 
     public void setSentTo(String sentTo) {
         this.sentTo = sentTo;
-    }
-
-    public String getReserve() {
-        return reserve;
-    }
-
-    public void setReserve(String reserve) {
-        this.reserve = reserve;
-    }
-
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     @Override
