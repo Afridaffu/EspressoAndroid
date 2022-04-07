@@ -176,7 +176,7 @@ public class DashboardActivity extends AppCompatActivity {
             notificationsViewModel = new ViewModelProvider(this).get(NotificationsViewModel.class);
             databaseHandler = DatabaseHandler.getInstance(DashboardActivity.this);
             SetDB();
-            if (strFirstUser.equals("")) {
+            if (strFirstUser == null || strFirstUser.equals("")) {
                 saveFirstUser();
             }
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
@@ -439,34 +439,38 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void initObserver() {
 
-        dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
-            @Override
-            public void onChanged(Profile profile) {
-                if (profile != null) {
-//                    progressDialog.dismiss();
-                    objMyApplication.setMyProfile(profile);
-                    identityVerificationViewModel.getStatusTracker();
-                    objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-                    strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-//                    if (strName != null && strName.length() > 21) {
-//                        tvUserName.setText( strName.substring(0, 21) + "...");
-//                        tvUserNameSmall.setText( strName.substring(0, 21) + "...");
-//                    } else {
-//                        tvUserName.setText( strName);
-//                        tvUserNameSmall.setText( strName);
-//                    }
-                    if (objMyApplication.getStrUserName().length() > 20) {
-                        tvUserName.setText(strName.substring(0, 20));
-                        tvUserNameSmall.setText(strName.substring(0, 20));
-                    } else {
-                        tvUserName.setText(strName);
-                        tvUserNameSmall.setText(strName);
+        try {
+            dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
+                @Override
+                public void onChanged(Profile profile) {
+                    if (profile != null) {
+                        //                    progressDialog.dismiss();
+                        objMyApplication.setMyProfile(profile);
+                        identityVerificationViewModel.getStatusTracker();
+                        objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                        strName = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                        //                    if (strName != null && strName.length() > 21) {
+                        //                        tvUserName.setText( strName.substring(0, 21) + "...");
+                        //                        tvUserNameSmall.setText( strName.substring(0, 21) + "...");
+                        //                    } else {
+                        //                        tvUserName.setText( strName);
+                        //                        tvUserNameSmall.setText( strName);
+                        //                    }
+                        if (objMyApplication.getStrUserName().length() > 20) {
+                            tvUserName.setText(strName.substring(0, 20));
+                            tvUserNameSmall.setText(strName.substring(0, 20));
+                        } else {
+                            tvUserName.setText(strName);
+                            tvUserNameSmall.setText(strName);
+                        }
+                        bindImage();
                     }
-                    bindImage();
+                    new FetchData(DashboardActivity.this).execute();
                 }
-                new FetchData(DashboardActivity.this).execute();
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        dashboardViewModel.getWalletResponseMutableLiveData().observe(this, new Observer<WalletResponse>() {
 //            @Override
@@ -477,195 +481,219 @@ public class DashboardActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
-            @Override
-            public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                if (businessWalletResponse != null) {
-                    objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                    getBalance(businessWalletResponse.getData());
+        try {
+            businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
+                @Override
+                public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                    if (businessWalletResponse != null) {
+                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                        getBalance(businessWalletResponse.getData());
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
-            @Override
-            public void onChanged(TrackerResponse trackerResponse) {
+        try {
+            identityVerificationViewModel.getGetStatusTracker().observe(this, new Observer<TrackerResponse>() {
+                @Override
+                public void onChanged(TrackerResponse trackerResponse) {
 
-                if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
-                    objMyApplication.setTrackerResponse(trackerResponse);
+                    if (trackerResponse != null && trackerResponse.getStatus().equalsIgnoreCase("success")) {
+                        objMyApplication.setTrackerResponse(trackerResponse);
 
-                    if (trackerResponse.getData().isPersonIdentified()) {
+                        if (trackerResponse.getData().isPersonIdentified()) {
+                            cvHeaderRL.setVisibility(View.VISIBLE);
+                            cvSmallHeaderRL.setVisibility(View.GONE);
+                            getStartedCV.setVisibility(View.GONE);
+                            transactionsNSV.setVisibility(View.VISIBLE);
+
+                            if (trackerResponse.getData().isPaymentModeAdded()) {
+                                welcomeCoyniCV.setVisibility(View.GONE);
+                                underReviewCV.setVisibility(View.GONE);
+                                additionalActionCV.setVisibility(View.GONE);
+                                buyTokensCV.setVisibility(View.GONE);
+
+                                dashboardViewModel.getLatestTxns();
+
+                            } else {
+                                welcomeCoyniCV.setVisibility(View.VISIBLE);
+                                underReviewCV.setVisibility(View.GONE);
+                                additionalActionCV.setVisibility(View.GONE);
+                                buyTokensCV.setVisibility(View.GONE);
+                                txnRV.setVisibility(View.GONE);
+                                noTxnTV.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                                cvHeaderRL.setVisibility(View.GONE);
+                                cvSmallHeaderRL.setVisibility(View.VISIBLE);
+                                getStartedCV.setVisibility(View.VISIBLE);
+                                transactionsNSV.setVisibility(View.GONE);
+                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
+                                cvHeaderRL.setVisibility(View.VISIBLE);
+                                cvSmallHeaderRL.setVisibility(View.GONE);
+                                getStartedCV.setVisibility(View.GONE);
+                                transactionsNSV.setVisibility(View.VISIBLE);
+
+                                welcomeCoyniCV.setVisibility(View.GONE);
+                                underReviewCV.setVisibility(View.VISIBLE);
+                                additionalActionCV.setVisibility(View.GONE);
+                                buyTokensCV.setVisibility(View.GONE);
+
+                            } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
+                                cvHeaderRL.setVisibility(View.VISIBLE);
+                                cvSmallHeaderRL.setVisibility(View.GONE);
+                                getStartedCV.setVisibility(View.GONE);
+                                transactionsNSV.setVisibility(View.VISIBLE);
+
+                                welcomeCoyniCV.setVisibility(View.GONE);
+                                underReviewCV.setVisibility(View.GONE);
+                                additionalActionCV.setVisibility(View.VISIBLE);
+                                buyTokensCV.setVisibility(View.GONE);
+
+                            }
+
+
+                        }
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
+                @Override
+                public void onChanged(LatestTxnResponse latestTxnResponse) {
+                    latestTxnRefresh.setRefreshing(false);
+                    if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
                         cvHeaderRL.setVisibility(View.VISIBLE);
                         cvSmallHeaderRL.setVisibility(View.GONE);
                         getStartedCV.setVisibility(View.GONE);
                         transactionsNSV.setVisibility(View.VISIBLE);
 
-                        if (trackerResponse.getData().isPaymentModeAdded()) {
-                            welcomeCoyniCV.setVisibility(View.GONE);
-                            underReviewCV.setVisibility(View.GONE);
-                            additionalActionCV.setVisibility(View.GONE);
-                            buyTokensCV.setVisibility(View.GONE);
+                        welcomeCoyniCV.setVisibility(View.GONE);
+                        underReviewCV.setVisibility(View.GONE);
+                        additionalActionCV.setVisibility(View.GONE);
 
-                            dashboardViewModel.getLatestTxns();
-
-                        } else {
-                            welcomeCoyniCV.setVisibility(View.VISIBLE);
-                            underReviewCV.setVisibility(View.GONE);
-                            additionalActionCV.setVisibility(View.GONE);
-                            buyTokensCV.setVisibility(View.GONE);
+                        if (latestTxnResponse.getData().size() == 0) {
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
-                            cvHeaderRL.setVisibility(View.GONE);
-                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
-                            getStartedCV.setVisibility(View.VISIBLE);
-                            transactionsNSV.setVisibility(View.GONE);
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
-                            cvHeaderRL.setVisibility(View.VISIBLE);
-                            cvSmallHeaderRL.setVisibility(View.GONE);
-                            getStartedCV.setVisibility(View.GONE);
-                            transactionsNSV.setVisibility(View.VISIBLE);
+                            buyTokensCV.setVisibility(View.VISIBLE);
 
-                            welcomeCoyniCV.setVisibility(View.GONE);
-                            underReviewCV.setVisibility(View.VISIBLE);
-                            additionalActionCV.setVisibility(View.GONE);
+                        } else if (latestTxnResponse.getData().size() > 4) {
                             buyTokensCV.setVisibility(View.GONE);
-
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
-                            cvHeaderRL.setVisibility(View.VISIBLE);
-                            cvSmallHeaderRL.setVisibility(View.GONE);
-                            getStartedCV.setVisibility(View.GONE);
-                            transactionsNSV.setVisibility(View.VISIBLE);
-
-                            welcomeCoyniCV.setVisibility(View.GONE);
-                            underReviewCV.setVisibility(View.GONE);
-                            additionalActionCV.setVisibility(View.VISIBLE);
+                            txnRV.setVisibility(View.VISIBLE);
+                            viewMoreLL.setVisibility(View.VISIBLE);
+                            noTxnTV.setVisibility(View.GONE);
+                            LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(latestTxnResponse, DashboardActivity.this);
+                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(DashboardActivity.this);
+                            txnRV.setLayoutManager(mLayoutManager);
+                            txnRV.setItemAnimator(new DefaultItemAnimator());
+                            txnRV.setAdapter(latestTxnAdapter);
+                        } else if (latestTxnResponse.getData().size() <= 4) {
                             buyTokensCV.setVisibility(View.GONE);
-
+                            txnRV.setVisibility(View.VISIBLE);
+                            viewMoreLL.setVisibility(View.GONE);
+                            noTxnTV.setVisibility(View.GONE);
+                            LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(latestTxnResponse, DashboardActivity.this);
+                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(DashboardActivity.this);
+                            txnRV.setLayoutManager(mLayoutManager);
+                            txnRV.setItemAnimator(new DefaultItemAnimator());
+                            txnRV.setAdapter(latestTxnAdapter);
                         }
 
-
                     }
                 }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            }
-        });
-
-        dashboardViewModel.getGetUserLatestTxns().observe(this, new Observer<LatestTxnResponse>() {
-            @Override
-            public void onChanged(LatestTxnResponse latestTxnResponse) {
-                latestTxnRefresh.setRefreshing(false);
-                if (latestTxnResponse != null && latestTxnResponse.getStatus().equalsIgnoreCase("success")) {
-                    cvHeaderRL.setVisibility(View.VISIBLE);
-                    cvSmallHeaderRL.setVisibility(View.GONE);
-                    getStartedCV.setVisibility(View.GONE);
-                    transactionsNSV.setVisibility(View.VISIBLE);
-
-                    welcomeCoyniCV.setVisibility(View.GONE);
-                    underReviewCV.setVisibility(View.GONE);
-                    additionalActionCV.setVisibility(View.GONE);
-
-                    if (latestTxnResponse.getData().size() == 0) {
-                        txnRV.setVisibility(View.GONE);
-                        noTxnTV.setVisibility(View.VISIBLE);
-                        buyTokensCV.setVisibility(View.VISIBLE);
-
-                    } else if (latestTxnResponse.getData().size() > 4) {
-                        buyTokensCV.setVisibility(View.GONE);
-                        txnRV.setVisibility(View.VISIBLE);
-                        viewMoreLL.setVisibility(View.VISIBLE);
-                        noTxnTV.setVisibility(View.GONE);
-                        LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(latestTxnResponse, DashboardActivity.this);
-                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(DashboardActivity.this);
-                        txnRV.setLayoutManager(mLayoutManager);
-                        txnRV.setItemAnimator(new DefaultItemAnimator());
-                        txnRV.setAdapter(latestTxnAdapter);
-                    } else if (latestTxnResponse.getData().size() <= 4) {
-                        buyTokensCV.setVisibility(View.GONE);
-                        txnRV.setVisibility(View.VISIBLE);
-                        viewMoreLL.setVisibility(View.GONE);
-                        noTxnTV.setVisibility(View.GONE);
-                        LatestTxnAdapter latestTxnAdapter = new LatestTxnAdapter(latestTxnResponse, DashboardActivity.this);
-                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(DashboardActivity.this);
-                        txnRV.setLayoutManager(mLayoutManager);
-                        txnRV.setItemAnimator(new DefaultItemAnimator());
-                        txnRV.setAdapter(latestTxnAdapter);
-                    }
-
-                }
-            }
-        });
-
-        customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
-            @Override
-            public void onChanged(SignOn signOn) {
-                try {
-                    if (signOn != null) {
-                        if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
-                            objMyApplication.setSignOnData(signOn.getData());
-                            objMyApplication.setStrSignOnError("");
-                        } else {
-                            objMyApplication.setSignOnData(null);
-                            objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+        try {
+            customerProfileViewModel.getSignOnMutableLiveData().observe(this, new Observer<SignOn>() {
+                @Override
+                public void onChanged(SignOn signOn) {
+                    try {
+                        if (signOn != null) {
+                            if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
+                                objMyApplication.setSignOnData(signOn.getData());
+                                objMyApplication.setStrSignOnError("");
+                            } else {
+                                objMyApplication.setSignOnData(null);
+                                objMyApplication.setStrSignOnError(signOn.getError().getErrorDescription());
+                            }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
-            @Override
-            public void onChanged(Preferences preferences) {
+        try {
+            dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
+                @Override
+                public void onChanged(Preferences preferences) {
 
-                try {
-                    if (preferences != null) {
-                        if (preferences.getData().getTimeZone() == 0) {
-                            objMyApplication.setTempTimezone(getString(R.string.PST));
-                            objMyApplication.setTempTimezoneID(0);
-                            objMyApplication.setStrPreference("PST");
-                        } else if (preferences.getData().getTimeZone() == 1) {
-                            objMyApplication.setTempTimezone(getString(R.string.MST));
-                            objMyApplication.setTempTimezoneID(1);
-                            objMyApplication.setStrPreference("America/Denver");
-                        } else if (preferences.getData().getTimeZone() == 2) {
-                            objMyApplication.setTempTimezone(getString(R.string.CST));
-                            objMyApplication.setTempTimezoneID(2);
-                            objMyApplication.setStrPreference("CST");
-                        } else if (preferences.getData().getTimeZone() == 3) {
-                            objMyApplication.setTempTimezone(getString(R.string.EST));
-                            objMyApplication.setTempTimezoneID(3);
-                            objMyApplication.setStrPreference("America/New_York");
-                        } else if (preferences.getData().getTimeZone() == 4) {
-                            objMyApplication.setTempTimezone(getString(R.string.HST));
-                            objMyApplication.setTempTimezoneID(4);
-                            objMyApplication.setStrPreference("HST");
-                        } else if (preferences.getData().getTimeZone() == 5) {
-                            objMyApplication.setTempTimezone(getString(R.string.AST));
-                            objMyApplication.setTempTimezoneID(5);
-                            objMyApplication.setStrPreference("AST");
+                    try {
+                        if (preferences != null) {
+                            if (preferences.getData().getTimeZone() == 0) {
+                                objMyApplication.setTempTimezone(getString(R.string.PST));
+                                objMyApplication.setTempTimezoneID(0);
+                                objMyApplication.setStrPreference("PST");
+                            } else if (preferences.getData().getTimeZone() == 1) {
+                                objMyApplication.setTempTimezone(getString(R.string.MST));
+                                objMyApplication.setTempTimezoneID(1);
+                                objMyApplication.setStrPreference("America/Denver");
+                            } else if (preferences.getData().getTimeZone() == 2) {
+                                objMyApplication.setTempTimezone(getString(R.string.CST));
+                                objMyApplication.setTempTimezoneID(2);
+                                objMyApplication.setStrPreference("CST");
+                            } else if (preferences.getData().getTimeZone() == 3) {
+                                objMyApplication.setTempTimezone(getString(R.string.EST));
+                                objMyApplication.setTempTimezoneID(3);
+                                objMyApplication.setStrPreference("America/New_York");
+                            } else if (preferences.getData().getTimeZone() == 4) {
+                                objMyApplication.setTempTimezone(getString(R.string.HST));
+                                objMyApplication.setTempTimezoneID(4);
+                                objMyApplication.setStrPreference("HST");
+                            } else if (preferences.getData().getTimeZone() == 5) {
+                                objMyApplication.setTempTimezone(getString(R.string.AST));
+                                objMyApplication.setTempTimezoneID(5);
+                                objMyApplication.setStrPreference("AST");
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-            }
-        });
-
-        dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
-            @Override
-            public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
-                if (paymentMethodsResponse != null) {
-//                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
-                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
-                    objMyApplication.setPaymentMethodsResponse(objResponse);
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
+                @Override
+                public void onChanged(PaymentMethodsResponse paymentMethodsResponse) {
+                    if (paymentMethodsResponse != null) {
+                        //                    objMyApplication.setPaymentMethodsResponse(paymentMethodsResponse);
+                        PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(paymentMethodsResponse);
+                        objMyApplication.setPaymentMethodsResponse(objResponse);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
             notificationsViewModel.getNotificationsMutableLiveData().observe(this, new Observer<Notifications>() {
@@ -770,7 +798,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void saveFirstUser() {
         try {
-            if (strFirstUser.equals("")) {
+            if (strFirstUser == null || strFirstUser.equals("")) {
                 strFirstUser = objMyApplication.getStrEmail();
             }
             databaseHandler.clearTableUserDetails();

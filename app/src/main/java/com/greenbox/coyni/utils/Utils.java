@@ -288,7 +288,7 @@ public class Utils {
 
     public static final int pending = 1;
     public static final int completed = 2;
-    public static final int cancelled = 4;//Not available
+    public static final int cancelled = 5;
     public static final int inProgress = 0;
     public static final int failed = 3;
 
