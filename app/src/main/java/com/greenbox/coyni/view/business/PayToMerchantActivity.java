@@ -341,7 +341,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void initObservers() {
         dashboardViewModel.getUserDetailsMutableLiveData().observe(this, userDetails -> {
-            if (userDetails != null) {
+            if (userDetails != null && userDetails.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                 bindUserInfo(userDetails);
                 details = userDetails;
 
@@ -691,6 +691,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT){
                     request.setTxnType(String.valueOf(Utils.saleOrder));
                     request.setTxnSubType(String.valueOf(Utils.saleOrderToken));
+                }
+                else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT){
+                    request.setTxnType(String.valueOf(Utils.paidInvoice));
                 }
                 buyTokenViewModel.transferFee(request);
             }
