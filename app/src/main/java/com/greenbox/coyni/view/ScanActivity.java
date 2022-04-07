@@ -558,14 +558,14 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
+                        scannerLayout.setVisibility(View.GONE);
+                        isAlbumClicked = true;
                         if (checkAndRequestPermissions(ScanActivity.this)) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-
-                            isAlbumClicked = true;
-
                             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                             photoPickerIntent.setType("image/*");
                             startActivityForResult(photoPickerIntent, 101);
@@ -952,7 +952,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             } else if (requestCode == 101) {
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    Utils.displayAlert("Requires Access to Your Storage.", ScanActivity.this, "", "");
+                   displayAlert("Requires Access to Your Storage.", "coyni");
                 } else {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                     photoPickerIntent.setType("image/*");
@@ -1214,7 +1214,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            } else if (resultCode == 0) {
+            } else if (requestCode == 251 && resultCode == RESULT_CANCELED) {
                 try {
 //                    payTransaction();
                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
@@ -1225,6 +1225,12 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+            else if (requestCode == 101 && resultCode == RESULT_CANCELED){
+                if (mcodeScanner != null) {
+                    mcodeScanner.startPreview();
+                }
+                scannerLayout.setVisibility(View.VISIBLE);
             }
 //            else if (requestCode == 251) {
 //                try {
@@ -1551,9 +1557,11 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void calculateFee(String strAmount) {
         try {
+            TransferFeeRequest request = new TransferFeeRequest();
+            request.setTokens(strAmount.trim().replace(",", ""));
             if (Utils.PERSONAL_ACCOUNT == objMyApplication.getAccountType()) {
-                TransferFeeRequest request = new TransferFeeRequest();
-                request.setTokens(strAmount.trim().replace(",", ""));
+//                TransferFeeRequest request = new TransferFeeRequest();
+//                request.setTokens(strAmount.trim().replace(",", ""));
                 request.setTxnType(String.valueOf(Utils.saleOrder));
                 request.setTxnSubType(String.valueOf(Utils.saleOrderToken));
                 if (Utils.checkInternet(ScanActivity.this)) {
@@ -1561,8 +1569,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 }
             }
             else if (Utils.BUSINESS_ACCOUNT == objMyApplication.getAccountType()){
-                TransferFeeRequest request = new TransferFeeRequest();
-                request.setTokens(strAmount.trim().replace(",", ""));
+//                TransferFeeRequest request = new TransferFeeRequest();
+//                request.setTokens(strAmount.trim().replace(",", ""));
                 request.setTxnType(String.valueOf(Utils.paidInvoice));
                 request.setTxnSubType(null);
                 if (Utils.checkInternet(ScanActivity.this)) {
