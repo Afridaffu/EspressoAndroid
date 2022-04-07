@@ -1084,6 +1084,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
+            request.setSourceWalletId(objMyApplication.getGbtWallet().getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
@@ -1100,6 +1101,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
+            request.setSourceWalletId(objMyApplication.getGbtWallet().getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
         } catch (Exception ex) {

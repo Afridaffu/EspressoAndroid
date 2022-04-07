@@ -405,7 +405,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         descriptorLL = findViewById(R.id.descriptorLL);
         headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
 
-        amount.setText(objData.getYouGet().replace("CYN", ""));
+        amount.setText(objData.getYouGet().replace("CYN", "").trim());
 
         status.setText(objData.getStatus());
         cancelTxnCV.setVisibility(View.GONE);
