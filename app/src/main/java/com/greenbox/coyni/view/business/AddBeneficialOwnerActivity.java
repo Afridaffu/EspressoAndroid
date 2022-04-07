@@ -273,7 +273,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         dobtil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Utils.isKeyboardVisible)
+                if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(AddBeneficialOwnerActivity.this);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
@@ -288,7 +288,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         dobET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Utils.isKeyboardVisible)
+                if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(AddBeneficialOwnerActivity.this);
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
@@ -710,6 +710,13 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 picker.getPickerView().setDate(Integer.parseInt(dateOfBirth.split("-")[0]),
                         Integer.parseInt(dateOfBirth.split("-")[1]) - 1,
                         Integer.parseInt(dateOfBirth.split("-")[2]));
+            } else {
+                Calendar c = Calendar.getInstance();
+                c.setTimeInMillis(System.currentTimeMillis() - years);
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+                picker.getPickerView().setDate(mYear, mMonth, mDay);
             }
 
             picker.setContinueClickButtonListener(new View.OnClickListener() {
@@ -719,13 +726,13 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                         int mYear = picker.getPickerView().getCurrentData().getFirst();
                         int mMonth = picker.getPickerView().getCurrentData().getSecond();
                         int mDay = picker.getPickerView().getCurrentData().getThird();
-//                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth + 1)) + "/" + mYear;
-                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth)) + "/" + mYear;
+                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth + 1)) + "/" + mYear;
+//                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth)) + "/" + mYear;
                         String convertedDate = convertDate(dateToConvert);
                         dobET.setText(convertedDate);
                         isDOBSelected = true;
-//                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth + 1)) + "-" + Utils.changeFormat(mDay);
-                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth)) + "-" + Utils.changeFormat(mDay);
+                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth + 1)) + "-" + Utils.changeFormat(mDay);
+//                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth)) + "-" + Utils.changeFormat(mDay);
                         enableOrDisableNext();
                         ssnET.clearFocus();
 //                        datepicker = new DatePicker(IdentityVerificationActivity.this);
@@ -764,7 +771,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isfname = true;
                     fnameLL.setVisibility(GONE);
                     fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
 //                    String str = fnameET.getText().toString();
 //                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                        fnameET.setText(fnameET.getText().toString().replaceAll(" ", ""));
@@ -810,7 +817,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     islname = true;
                     lnameLL.setVisibility(GONE);
                     lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
 //                        String str = lnameET.getText().toString();
 //                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                            lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
@@ -963,7 +970,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isAddress1 = true;
                     address1ErrorLL.setVisibility(GONE);
 //                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
                 } else {
 //                    address1ErrorLL.setVisibility(VISIBLE);
 //                    address1ErrorTV.setText("Field Required");
@@ -1002,7 +1009,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
-                    Utils.setUpperHintColor(address2TIL, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(address2TIL, getResources().getColor(R.color.primary_black));
                 }
                 enableOrDisableSave();
             }
@@ -1037,7 +1044,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 if (charSequence.length() > 0) {
                     isCity = true;
 //                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                     cityErrorLL.setVisibility(GONE);
                 } else {
 //                    cityErrorLL.setVisibility(VISIBLE);
@@ -1080,7 +1087,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     if (charSequence.length() > 0) {
-                        Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
 //                        stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         isState = true;
                     } else {
@@ -1110,7 +1117,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
 //                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
                 } else if (charSequence.length() > 0 && charSequence.length() < 5) {
                     isZipcode = false;
 //                    zipcodeErrorLL.setVisibility(GONE);

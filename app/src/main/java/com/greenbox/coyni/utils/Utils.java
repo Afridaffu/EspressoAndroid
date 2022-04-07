@@ -152,7 +152,7 @@ public class Utils {
         OPEN(1, "Open"),
         ON_HOLD(7, "On Hold"),
         RELEASED(8, "Released"),
-        CANCELLED(9,"Failed");
+        CANCELED(10,"Canceled");
 
         private int statusType;
         private String status;
@@ -292,8 +292,9 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
 
+    public static final int reserveRelease = 16;
     public static final int open = 1;
-    public  static final int onhold = 7;
+    public  static final int onHold = 7;
     public static final int released = 8;
 
     //Merchant Transaction Filter Type values

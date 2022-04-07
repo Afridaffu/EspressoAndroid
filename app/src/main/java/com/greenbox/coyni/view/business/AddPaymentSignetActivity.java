@@ -616,7 +616,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     if (charSequence.length() > 0) {
-                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -703,10 +703,10 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0) {
                         isState = true;
                         stateErrorLL.setVisibility(GONE);
-                        Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
                     } else {
                         isState = false;
-                        Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
+//                        Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {
