@@ -173,6 +173,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     etEmail.setText(objMyApplication.getStrRetrEmail());
                     if (isEmailValid(etEmail.getText().toString().trim())) {
                         etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                         layoutEmailError.setVisibility(GONE);
                     }
                 }
@@ -189,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
         }
-        
+
     }
 
     @Override
@@ -435,8 +436,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
             etPassword.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
+                    if (i2 - i1 > 1) {
+                        etPassword.setText(s);
+                        etPassword.setSelection(s.toString().length());
+                    }
                 }
 
                 @Override

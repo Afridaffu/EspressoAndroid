@@ -76,12 +76,13 @@
 
                             <TextView
                                 android:id="@+id/tvUserInfoSmall"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="VT"
-                                android:textColor="@color/primary_black"
+                                android:background="@color/primary_green"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/_14sdp"
                                 android:visibility="gone" />
                         </androidx.cardview.widget.CardView>

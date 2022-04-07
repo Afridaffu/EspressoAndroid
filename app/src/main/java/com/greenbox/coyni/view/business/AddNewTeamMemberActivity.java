@@ -294,7 +294,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isFirstName = true;
                     editFNameLL.setVisibility(GONE);
                     editFNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
                 } else {
                     isFirstName = false;
                 }
@@ -337,7 +337,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isLastName = true;
                     editLNameLL.setVisibility(GONE);
                     editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
                 } else {
                     isLastName = false;
                 }

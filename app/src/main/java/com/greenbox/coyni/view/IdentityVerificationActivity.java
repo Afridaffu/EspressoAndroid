@@ -117,7 +117,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     private MyApplication myApplicationObj;
     private Long mLastClickTime = 0L;
     private DashboardViewModel dashboardViewModel;
-    private DatePicker datepicker;
+    private DatePicker picker;
     private LoginViewModel loginViewModel;
     private String addBusiness = "false";
 
@@ -251,13 +251,20 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
         try {
 //            Utils.hideKeypad(IdentityVerificationActivity.this);
             long years = 568025136000L;
-            DatePicker picker = new DatePicker(IdentityVerificationActivity.this);
+            picker = new DatePicker(IdentityVerificationActivity.this);
             Date maxDate = new Date(System.currentTimeMillis() - years);
             picker.getPickerView().setMaxDate(maxDate);
             if (!dateOfBirth.equals("")) {
                 picker.getPickerView().setDate(Integer.parseInt(dateOfBirth.split("-")[0]),
                         Integer.parseInt(dateOfBirth.split("-")[1]) - 1,
                         Integer.parseInt(dateOfBirth.split("-")[2]));
+            } else {
+                Calendar c = Calendar.getInstance();
+                c.setTimeInMillis(System.currentTimeMillis() - years);
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+                picker.getPickerView().setDate(mYear, mMonth, mDay);
             }
 
 //            dobTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
@@ -271,13 +278,13 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         int mYear = picker.getPickerView().getCurrentData().getFirst();
                         int mMonth = picker.getPickerView().getCurrentData().getSecond();
                         int mDay = picker.getPickerView().getCurrentData().getThird();
-//                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth + 1)) + "/" + mYear;
-                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth)) + "/" + mYear;
+                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth + 1)) + "/" + mYear;
+//                        String dateToConvert = Utils.changeFormat(mDay) + "/" + Utils.changeFormat((mMonth)) + "/" + mYear;
                         String convertedDate = convertDate(dateToConvert);
                         dobET.setText(convertedDate);
                         isDOBSelected = true;
-//                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth + 1)) + "-" + Utils.changeFormat(mDay);
-                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth)) + "-" + Utils.changeFormat(mDay);
+                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth + 1)) + "-" + Utils.changeFormat(mDay);
+//                        dateOfBirth = mYear + "-" + Utils.changeFormat((mMonth)) + "-" + Utils.changeFormat(mDay);
                         enableNext();
                         ssnET.clearFocus();
 
@@ -355,12 +362,12 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     try {
                         if (charSequence.toString().trim().length() > 0 && charSequence.toString().trim().length() < 4) {
                             isSSNSelected = false;
-                            Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.toString().trim().length() == 4) {
                             isSSNSelected = true;
                             ssnErrorLL.setVisibility(GONE);
                             //                        ssnTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(ssnTIL, getResources().getColor(R.color.primary_black));
                         } else {
                             isSSNSelected = false;
                         }
@@ -389,7 +396,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             isMailAddr1 = true;
                             address1ErrorLL.setVisibility(GONE);
                             //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(mailingAddTIL, getResources().getColor(R.color.primary_black));
                         } else {
 //                            address1ErrorLL.setVisibility(VISIBLE);
 //                            address1ErrorTV.setText("Field Required");
@@ -436,7 +443,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     try {
                         if (charSequence.length() > 0) {
 
-                            Utils.setUpperHintColor(mailingAddlineoptTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(mailingAddlineoptTIL, getResources().getColor(R.color.primary_black));
                         }
 //                else{
 //                    address2ErrorLL.setVisibility(VISIBLE);
@@ -484,7 +491,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             isCity = true;
                             cityErrorLL.setVisibility(GONE);
                             //                        cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                         } else {
 //                            cityErrorLL.setVisibility(VISIBLE);
 //                            cityErrorTV.setText("Field Required");
@@ -566,12 +573,12 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             isZip = true;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() < 5 && charSequence.length() > 0) {
                             isZip = false;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZip = false;
 //                            zipcodeErrorLL.setVisibility(VISIBLE);

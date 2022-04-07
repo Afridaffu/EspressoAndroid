@@ -420,7 +420,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
                                 if (confirmPasswordET.getText().toString().trim().length() > 0 && passwordET.getText().toString().trim().length() > 0) {
                                     passwordTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
+//                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
 
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
                                     confPasswordTIL.setHint("Password doesn’t match");

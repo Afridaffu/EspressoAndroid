@@ -33,21 +33,20 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
     private String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
 
-    private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
-    private int totalItemCount, currentPage = 1, total = 0;
+    private Long mLastClickTimeFilters = 0L;
     private String dateSelected = null;
     private MyApplication objMyApplication;
     private Context context;
-    private TransactionListRequest transactionListRequest = new TransactionListRequest();
+    private TransactionListRequest filterTransactionListRequest = null;
     private EditText getDateFromPickerET;
     private RangeDates rangeDates;
     private Activity activity;
-    private int isShowing = 0;
     private DateRangePickerDialog dateRangePickerDialog;
 
-    public MerchantTransactionsFilterDialog(Context context) {
+    public MerchantTransactionsFilterDialog(Context context, TransactionListRequest filterTransactionListRequest) {
         super(context);
         this.context = context;
+        this.filterTransactionListRequest = filterTransactionListRequest;
         activity = (Activity) context;
     }
 
@@ -79,59 +78,63 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         getDateFromPickerET = findViewById(R.id.datePickET);
         TextView resetFiltersTV = findViewById(R.id.resetFiltersTV);
 
-        if (isFilters) {
+        if (filterTransactionListRequest != null) {
+            isFilters = true;
+            transactionType = filterTransactionListRequest.getTransactionType();
+            if (transactionType == null) {
+                transactionType = new ArrayList<>();
+            }
             if (transactionType.size() > 0) {
                 for (int i = 0; i < transactionType.size(); i++) {
                     switch (transactionType.get(i)) {
                         case Utils.saleOrder:
                             transTypeSalesOrderToken.setChecked(true);
                             break;
-
                         case Utils.refund:
                             transTypeRefund.setChecked(true);
                             break;
-
                         case Utils.merchantPayout:
                             transTypeMerchantPayout.setChecked(true);
                             break;
-
                         case Utils.monthlyServiceFee:
                             transTypeMonthlyServiceFee.setChecked(true);
                             break;
-
-
                     }
                 }
             }
-
-
+            transactionSubType = filterTransactionListRequest.getTransactionSubType();
+            if (transactionSubType == null) {
+                transactionSubType = new ArrayList<>();
+            }
+            txnStatus = filterTransactionListRequest.getTxnStatus();
+            if (txnStatus == null) {
+                txnStatus = new ArrayList<>();
+            }
             if (txnStatus.size() > 0) {
                 for (int i = 0; i < txnStatus.size(); i++) {
                     switch (txnStatus.get(i)) {
                         case Utils.completed:
                             transStatusCompleted.setChecked(true);
                             break;
-
                         case Utils.refund:
                             transStatusRefund.setChecked(true);
                             break;
-
                         case Utils.cancelled:
                             transStatusPartialRefund.setChecked(true);
                             break;
-
                     }
                 }
             }
-
-            if (!strStartAmount.trim().equals("")) {
+            strStartAmount = filterTransactionListRequest.getFromAmount();
+            if (strStartAmount != null && !strStartAmount.trim().equals("")) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlendecimal)));
                 transAmountStartET.setFilters(FilterArray);
                 transAmountStartET.setText(strStartAmount);
             }
 
-            if (!strEndAmount.trim().equals("")) {
+            strEndAmount = filterTransactionListRequest.getToAmount();
+            if (strEndAmount != null && !strEndAmount.trim().equals("")) {
                 InputFilter[] FilterArray = new InputFilter[1];
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlendecimal)));
                 transAmountEndET.setFilters(FilterArray);
@@ -142,9 +145,15 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 getDateFromPickerET.setText(strSelectedDate);
             }
         } else {
-            transactionType.clear();
-            transactionSubType.clear();
-            txnStatus.clear();
+            if(transactionType != null) {
+                transactionType.clear();
+            }
+            if(transactionSubType != null) {
+                transactionSubType.clear();
+            }
+            if(txnStatus != null) {
+                txnStatus.clear();
+            }
             strFromDate = "";
             strToDate = "";
             strStartAmount = "";
@@ -152,14 +161,21 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             isFilters = false;
             strSelectedDate = "";
         }
+
         resetFiltersTV.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
                 return;
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime();
-            transactionType.clear();
-            transactionSubType.clear();
-            txnStatus.clear();
+            if(transactionType != null) {
+                transactionType.clear();
+            }
+            if(transactionSubType != null) {
+                transactionSubType.clear();
+            }
+            if(txnStatus != null) {
+                txnStatus.clear();
+            }
             strFromDate = "";
             strToDate = "";
             strStartAmount = "";
@@ -187,14 +203,9 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             transAmountStartET.setText("");
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
-            currentPage = 0;
-            total = 0;
-            TransactionListRequest transactionListRequest = new TransactionListRequest();
-            transactionListRequest.setPageNo(String.valueOf(currentPage));
-            transactionListRequest.setWalletCategory(Utils.walletCategory);
-            transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-            objMyApplication.initializeTransactionSearch();
-            objMyApplication.setTransactionListSearch(transactionListRequest);
+            getOnDialogClickListener().onDialogClicked(Utils.resetFilter, null);
+            dismiss();
+
         });
 
         transTypeSalesOrderToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -452,38 +463,38 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                total = 0;
+                filterTransactionListRequest = new TransactionListRequest();
                 isFilters = false;
                 transAmountStartET.clearFocus();
                 transAmountEndET.clearFocus();
 
                 if (transactionType.size() > 0) {
                     isFilters = true;
-                    transactionListRequest.setTransactionType(transactionType);
+                    filterTransactionListRequest.setTransactionType(transactionType);
                 }
                 if (transactionSubType.size() > 0) {
                     isFilters = true;
-                    transactionListRequest.setTransactionSubType(transactionSubType);
+                    filterTransactionListRequest.setTransactionSubType(transactionSubType);
                 }
                 if (txnStatus.size() > 0) {
                     isFilters = true;
-                    transactionListRequest.setTxnStatus(txnStatus);
+                    filterTransactionListRequest.setTxnStatus(txnStatus);
                 }
                 if (!transAmountStartET.getText().toString().trim().equals("")) {
                     isFilters = true;
-                    transactionListRequest.setFromAmount(transAmountStartET.getText().toString().replace(",", ""));
-                    transactionListRequest.setFromAmountOperator(">=");
+                    filterTransactionListRequest.setFromAmount(transAmountStartET.getText().toString().replace(",", ""));
+                    filterTransactionListRequest.setFromAmountOperator(">=");
                 } else {
                     strStartAmount = "";
                 }
                 if (!transAmountEndET.getText().toString().trim().equals("")) {
                     isFilters = true;
-                    transactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
-                    transactionListRequest.setToAmountOperator("<=");
+                    filterTransactionListRequest.setToAmount(transAmountEndET.getText().toString().replace(",", ""));
+                    filterTransactionListRequest.setToAmountOperator("<=");
 
                     if (transAmountStartET.getText().toString().trim().equals("") || transAmountStartET.getText().toString().trim().equals("0.00")) {
-                        transactionListRequest.setFromAmount("0.00");
-                        transactionListRequest.setFromAmountOperator(">=");
+                        filterTransactionListRequest.setFromAmount("0.00");
+                        filterTransactionListRequest.setFromAmountOperator(">=");
                         strStartAmount = "0.00";
                     }
                 } else {
@@ -491,11 +502,11 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 }
                 if (!strFromDate.equals("")) {
                     isFilters = true;
-                    transactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
+                    filterTransactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
                 }
                 if (!strToDate.equals("")) {
                     isFilters = true;
-                    transactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
+                    filterTransactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                 }
 
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
@@ -509,7 +520,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                         strEndAmount = "";
                     }
                 }
-                getOnDialogClickListener().onDialogClicked(Utils.applyFilter, transactionListRequest);
+                getOnDialogClickListener().onDialogClicked(Utils.applyFilter, filterTransactionListRequest);
                 dismiss();
             }
         });
