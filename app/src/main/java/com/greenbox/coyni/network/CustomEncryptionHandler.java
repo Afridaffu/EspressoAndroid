@@ -47,6 +47,7 @@ public class CustomEncryptionHandler implements Interceptor {
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
+
         Request request = chain.request();
         RequestBody requestBody = request.body();
         String method = request.method();
@@ -61,6 +62,8 @@ public class CustomEncryptionHandler implements Interceptor {
         requestBuild.header(KEY_APP_VERSION, Utils.getAppVersion());
         requestBuild.header(KEY_ACCEPT_LANGUAGE, Utils.getStrLang());
         requestBuild.header(KEY_REQUEST_ID, randomReqId);
+        // TODO Check this tag is required or not
+        requestBuild.header("Requested-portal", "customer");
 
         if (BuildConfig.SKIP_ENCRYPTION) {
             requestBuild.header(KEY_SKIP_DECRYPTION, "true");

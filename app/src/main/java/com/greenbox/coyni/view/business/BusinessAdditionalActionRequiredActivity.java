@@ -25,14 +25,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.model.AdditonaActionRequiredRequest;
@@ -45,6 +50,7 @@ import com.greenbox.coyni.model.underwriting.ProposalsPropertiesSubmitRequestDat
 import com.greenbox.coyni.model.underwriting.ProposalsSubmitRequestData;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequired;
@@ -54,14 +60,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private static Object ActivityCompat;
@@ -87,6 +99,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private LinearLayout selectedLayout = null;
     private ArrayList<File> documentsFIle;
     private JSONObject informationJSON;
+    private MyApplication application;
 
 
     @Override
@@ -97,12 +110,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         businessAdditionalActionRequired = this;
         initFields();
         initObserver();
+        enableOrDisableNext();
 
     }
 
 
     private void initFields() {
-
 
         additionalDocumentRequiredLL = findViewById(R.id.ll_document_required);
         websiteRevisionRequiredLL = findViewById(R.id.website_revision_required);
@@ -127,133 +140,170 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         fileUpload = new HashMap<Integer, String>();
         documentsFIle = new ArrayList<>();
 
+        application = new MyApplication();
+
 
         submitCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 LogUtils.d(TAG, "submitCV" + fileUpload);
-                ArrayList<Integer> documentListId = new ArrayList<>();
-                ArrayList<Integer> websiteID = new ArrayList<>();
-                ArrayList<ProposalsPropertiesData> proposalsPropertiesData = new ArrayList<ProposalsPropertiesData>();
-                ArrayList<ProposalsSubmitRequestData> proposalsList = new ArrayList<>();
 
-
-                ProposalsData propsals = new ProposalsData();
-
-                AdditonaActionRequiredRequest request = new AdditonaActionRequiredRequest();
-
-                if (actionRequired.getData().getAdditionalDocument() != null) {
-
-                    for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
-                        documentListId.add(actionRequired.getData().getAdditionalDocument().get(i).getDocumentId());
-
-                    }
-                }
-
-                if (actionRequired.getData().getWebsiteChange() != null) {
-                    for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
-                        websiteID.add(actionRequired.getData().getWebsiteChange().get(i).getId());
-                    }
-                }
-
-                if (actionRequired.getData().getInformationChange() != null) {
-
-                    informationJSON = new JSONObject();
-
-                    try {
-
-                        informationJSON.put("reserveRuleAccepted", false);
-
-                        JSONArray proposals = new JSONArray();
-                        JSONObject proposalsobj = new JSONObject();
-                        proposalsobj.put("dbId", 278);
-                        proposalsobj.put("type", "COMPANY");
-
-                        JSONArray proposalsobjARRAY = new JSONArray();
-                        JSONObject PROPERTIESARRAY = new JSONObject();
-                        PROPERTIESARRAY.put("isUserAccepted", 278);
-                        PROPERTIESARRAY.put("name", "COMPANY");
-                        PROPERTIESARRAY.put("userMessage", "COMPANY");
-
-                        proposalsobjARRAY.put(PROPERTIESARRAY);
-
-                        proposalsobj.put("properties", proposalsobjARRAY);
-
-                        proposals.put(proposalsobj);
-
-                        informationJSON.put("proposals", proposals);
-
-                        JSONArray website = new JSONArray();
-                              website.put(115);
-                              website.put(112);
-
-                        informationJSON.put("websiteUpdates", website);
-
-                    } catch (JSONException je) {
-                        je.printStackTrace();
-                    }
-
-                    LogUtils.d(TAG, "jsonnn    " + informationJSON.toString());
-
-
-//                    for (int i = 0; i <= actionRequired.getData().getInformationChange().size() - 1; i++) {
+//                if(actionRequired.getData()!=null) {
 //
-//                        InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
-//                        List<ProposalsData> proposalsData = data.getProposals();
+//                    if (actionRequired.getData().getAdditionalDocument() != null) {
+//                        for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
+//                            documentListId.add(actionRequired.getData().getAdditionalDocument().get(i).getDocumentId());
 //
-//                        for (int j = 0; j < proposalsData.size(); j++) {
-//                            ProposalsData proposal = proposalsData.get(j);
-//                            List<ProposalsPropertiesSubmitRequestData> list = new ArrayList<>();
+//                        }
+//                    }
 //
-//                            ProposalsPropertiesSubmitRequestData requestData = new ProposalsPropertiesSubmitRequestData();
-//                            requestData.setUserAccepted(true);
-//                            requestData.setName(proposal.getProperties().get(0).getName());
-//                            requestData.setUserMessage("Accepted");
-//                            list.add(requestData);
+//                    if (actionRequired.getData().getWebsiteChange() != null) {
+//                        for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
+//                            websiteID.add(actionRequired.getData().getWebsiteChange().get(i).getId());
+//                        }
+//                    }
 //
-//                            ProposalsSubmitRequestData propsalsdata = new ProposalsSubmitRequestData();
-//                            propsalsdata.setDbId(proposal.getDbId());
-//                            propsalsdata.setType(proposal.getType());
-//                            propsalsdata.setPropertiesSubmitRequest(list);
+//                    if (actionRequired.getData().getInformationChange() != null) {
+//                        informationJSON = new JSONObject();
+//                        LogUtils.d(TAG, "jsonnn    " + informationJSON.toString());
+//                        informationJSON = new JSONObject();
+//                        try {
+//                            //informationJSON.put("reserveRuleAccepted", false);
+//                            JSONArray website = new JSONArray();
+//                            website.put(actionRequired.getData().getInformationChange().get(0).get);
+//                            website.put(120);
 //
-//                            proposalsList.add(propsalsdata);
+//                            JSONArray documents = new JSONArray();
+//                            documents.put(2);
+//                            documents.put(3);
+//
+//                            informationJSON.put("documentIdList", documents);
+//                            informationJSON.put("websiteUpdates", website);
+//
+//                            JSONArray proposals = new JSONArray();
+//                            JSONObject proposalsobj = new JSONObject();
+//                            proposalsobj.put("dbId", 283);
+//                            proposalsobj.put("type", "COMPANY");
+//
+//                            JSONArray proposalsobjARRAY = new JSONArray();
+//                            JSONObject PROPERTIESARRAY = new JSONObject();
+//                            PROPERTIESARRAY.put("isUserAccepted", true);
+//                            PROPERTIESARRAY.put("name", "companyName");
+//                            PROPERTIESARRAY.put("userMessage", "accepted");
+//
+//                            proposalsobjARRAY.put(PROPERTIESARRAY);
+//
+//                            proposalsobj.put("properties", proposalsobjARRAY);
+//
+//                            proposals.put(proposalsobj);
+//
+//                            informationJSON.put("proposals", proposals);
+//
+//                        } catch (JSONException je) {
+//                            je.printStackTrace();
 //                        }
 //
 //
+////                    for (int i = 0; i <= actionRequired.getData().getInformationChange().size() - 1; i++) {
+////
+////                        InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
+////                        List<ProposalsData> proposalsData = data.getProposals();
+////
+////                        for (int j = 0; j < proposalsData.size(); j++) {
+////                            ProposalsData proposal = proposalsData.get(j);
+////                            List<ProposalsPropertiesSubmitRequestData> list = new ArrayList<>();
+////
+////                            ProposalsPropertiesSubmitRequestData requestData = new ProposalsPropertiesSubmitRequestData();
+////                            requestData.setUserAccepted(true);
+////                            requestData.setName(proposal.getProperties().get(0).getName());
+////                            requestData.setUserMessage("Accepted");
+////                            list.add(requestData);
+////
+////                            ProposalsSubmitRequestData propsalsdata = new ProposalsSubmitRequestData();
+////                            propsalsdata.setDbId(proposal.getDbId());
+////                            propsalsdata.setType(proposal.getType());
+////                            propsalsdata.setPropertiesSubmitRequest(list);
+////
+////                            proposalsList.add(propsalsdata);
+////                        }
+////
+////
+////                    }
+////
+////                    request.setProposals(proposalsList);
+////                    request.setDocumentIdList(documentListId);
+////                    request.setWebsiteUpdates(websiteID);
+////                    request.setReserveRuleAccepted(false);
 //                    }
-//
-//                    request.setProposals(proposalsList);
-//                    request.setDocumentIdList(documentListId);
-//                    request.setWebsiteUpdates(websiteID);
-//                    request.setReserveRuleAccepted(false);
+//                }
+
+                informationJSON = new JSONObject();
+                try {
+
+                    JSONArray documents = new JSONArray();
+                    JSONArray website = new JSONArray();
+
+                    if (actionRequired.getData().getAdditionalDocument() != null) {
+                        for (int i = 0; i <= actionRequired.getData().getAdditionalDocument().size() - 1; i++) {
+                            documents.put(actionRequired.getData().getAdditionalDocument().get(i).getDocumentId());
+                        }
+                    }
+
+                    if (actionRequired.getData().getWebsiteChange() != null) {
+                        for (int i = 0; i <= actionRequired.getData().getWebsiteChange().size() - 1; i++) {
+                            website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
+                        }
+                    }
+
+                    informationJSON.put("documentIdList", documents);
+                    informationJSON.put("websiteUpdates", website);
+
+                    JSONArray proposals = new JSONArray();
+                    JSONObject proposalsobj = new JSONObject();
+
+                    JSONArray proposalsobjARRAY = new JSONArray();
+                    JSONObject PROPERTIESARRAY = new JSONObject();
+
+                    if (actionRequired.getData().getInformationChange() != null) {
+                        for (int i = 0; i <= actionRequired.getData().getInformationChange().size() - 1; i++) {
+
+                            InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
+                            List<ProposalsData> proposalsData = data.getProposals();
+
+                            for (int j = 0; j < proposalsData.size(); j++) {
+                                ProposalsData proposal = proposalsData.get(j);
+                                List<ProposalsPropertiesSubmitRequestData> list = new ArrayList<>();
+
+                                ProposalsPropertiesSubmitRequestData requestData = new ProposalsPropertiesSubmitRequestData();
+                                PROPERTIESARRAY.put("isUserAccepted", true);
+                                PROPERTIESARRAY.put("name", proposal.getProperties().get(0).getName());
+                                PROPERTIESARRAY.put("userMessage", "accepted");
+                                proposalsobjARRAY.put(PROPERTIESARRAY);
+
+                                ProposalsSubmitRequestData propsalsdata = new ProposalsSubmitRequestData();
+                                proposalsobj.put("dbId", proposal.getDbId());
+                                proposalsobj.put("type", proposal.getType());
+                                proposalsobj.put("properties", proposalsobjARRAY);
+
+                                proposals.put(proposalsobj);
+
+                                informationJSON.put("proposals", proposals);
+
+                            }
+
+
+                        }
+                    }
+
+                } catch (JSONException je) {
+                    je.printStackTrace();
                 }
 
 
-                LogUtils.d(TAG, "requestfffffffff" + String.valueOf(request).toString());
-                //API CALL
-//                OkHttpClient client = new OkHttpClient().newBuilder()
-//                        .build();
-//                MediaType mediaType = MediaType.parse("text/plain");
-//                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-//                        .addFormDataPart("information", null,
-//                                RequestBody.create(MediaType.parse("application/json"),
-//                                        { "documentIdList":"[2,3]",
-//                                           "proposals": [{"dbId": 278, "firstName":null,\"lastName\":null,\"properties\": [ {\"isUserAccepted\": true,\"name\": \"companyName\",
-//                    \"userMessage\": \"Accepted\" }],\"type\": \"COMPANY\"
-//                }
-//                ],\"reserveRuleAccepted\": false,\"websiteUpdates\": [ 111, 112] } ".getBytes()))
-//
-//            .addFormDataPart("documents","744_484_DRIVERS_LICENSE.jpg",
-//                            RequestBody.create(MediaType.parse("application/octet-stream"), new
-//
-//            File("/Users/ideyalabs/Downloads/744_484_DRIVERS_LICENSE.jpg")))
-//            .addFormDataPart("documents","744_491_PASSPORT.jpg",
-//              RequestBody.create(MediaType.parse("application/octet-stream"), new
-//                      File("/Users/ideyalabs/Downloads/744_491_PASSPORT.jpg"))).build();
+                LogUtils.d(TAG, "jsonnn    " + informationJSON.toString());
 
-                RequestBody requestInformation = RequestBody.create(MediaType.parse("application/json"), informationJSON.toString());
-                MultipartBody.Part[] documentsImageList = new MultipartBody.Part[1];
+                MultipartBody.Part[] documentsImageList = new MultipartBody.Part[documentsFIle.size()];
                 for (
                         int index = 0; index < documentsFIle.size(); index++) {
                     LogUtils.d(TAG, "requestUploadSurvey: survey image " + index +
@@ -262,20 +312,85 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     .get(index)
                                     .getAbsolutePath());
 
-                    RequestBody documentsBody = RequestBody.create(MediaType.parse("multipart/form-data"), documentsFIle.get(index));
+                    RequestBody documentsBody = RequestBody.create(MediaType.parse("application/octet-stream"), documentsFIle.get(index));
                     documentsImageList[index] = MultipartBody.Part.createFormData("documents", documentsFIle.get(index).getName(), documentsBody);
                 }
 
-                LogUtils.d(TAG, "requestUploadSurvey" + requestInformation);
-                LogUtils.d(TAG, "requestUploadSurveydoc" + documentsImageList);
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .build();
+                MediaType mediaType = MediaType.parse("multipart/form-data,multipart/form-data; boundary=dba24cc2-bdec-41a5-8e8e-cf925ccf5088,application/json");
 
-                underwritingUserActionRequired.submitActionRequired(requestInformation,documentsImageList);
+//                RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+//                        .addFormDataPart("information", null,
+//                                RequestBody.create(MediaType.parse("application/json"), informationJSON.toString().getBytes()))
+//                        .build();
+                MultipartBody.Builder buildernew = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("information", null,
+                                RequestBody.create(MediaType.parse("application/json"), informationJSON.toString().getBytes()));   //Here you can add the fix number of data.
+
+                for (int i = 0; i < documentsFIle.size(); i++) {
+                   // File f = new File(documentsFIle.get(i),documentsFIle.get(i).getName() + ".jpg");
+                        buildernew.addFormDataPart("documents", documentsFIle.get(i).getName() +".jpg", RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
+                        LogUtils.d(TAG,"documentsssfffff"+new File(String.valueOf(documentsFIle.get(i))));
+
+                }
+
+                LogUtils.d(TAG,"documentsss"+documentsFIle.get(0).getName());
+                LogUtils.d(TAG,"documentsss56787656"+documentsFIle);
+
+                MultipartBody requestBody = buildernew.build();
+
+                Request request = new Request.Builder()
+                        .url("http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com/api/v2/underwriting/user/business/action-required")
+                        .method("POST", requestBody)
+                        .addHeader("Accept-Language", "en-us")
+                        .addHeader("SkipDecryption", "true")
+                        .addHeader("X-REQUESTID", "1212")
+                        .addHeader("Requested-portal", "")
+                        .addHeader("Referer", Utils.getStrReferer())
+                        .addHeader("Authorization", "Bearer " + Utils.getStrAuth())
+                        .build();
+               LogUtils.d(TAG,"request"+request);
+               LogUtils.d(TAG,"upload"+requestBody.toString());
+
+               Call call = client.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        LogUtils.d(TAG,"callback"+e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                         LogUtils.d(TAG,"callback"+response.body());
+                        JSONObject jsonObj = null;
+                        try {
+                            jsonObj = new JSONObject(response.body().string());
+                            LogUtils.d("callback","---->>JSONException"+jsonObj);
+
+                        } catch (JSONException e) {
+                            LogUtils.d("ws","---->>JSONException"+jsonObj);
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            LogUtils.d("ws","---->>IOException"+jsonObj);
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
 
             }
         });
 
 
+
     }
+
+    private void fail() {
+
+    }
+
 
     private void initObserver() {
 
@@ -284,10 +399,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     @Override
                     public void onChanged(ActionRequiredResponse actionRequiredResponse) {
                         try {
-                            LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
-
+                           // LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
                             actionRequired = actionRequiredResponse;
-
                             if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
                                 if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
                                         actionRequiredResponse.getData().getAdditionalDocument().size() != 0) {

@@ -146,11 +146,14 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -552,8 +555,9 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v2/underwriting/user/business/action-required")
-    Call<ActionRequiredResponse> submitActionrequired(@Part("information") RequestBody information,
-                                                    @Part MultipartBody.Part[] documentsImageList);
+    Call<ActionRequiredResponse> submitActionrequired(
+            @Part("information") RequestBody information
+    );
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();

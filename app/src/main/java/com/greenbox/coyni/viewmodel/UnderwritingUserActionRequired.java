@@ -1,6 +1,7 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,9 @@ import com.greenbox.coyni.utils.LogUtils;
 
 import java.lang.reflect.Type;
 
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +56,6 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
  public MutableLiveData<ActionRequiredResponse> getSubmitActionRequired() {
         return ActionRequiredSubmitResponseMutableLiveData;
     }
-
 
     public void postactionRequired() {
         try {
@@ -97,7 +99,8 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             LogUtils.d("submitActionRequired","submitActionRequired"+documentsImageList);
             LogUtils.d("submitActionRequired","submitActionRequired"+information.toString());
-            Call<ActionRequiredResponse> mCall = apiService.submitActionrequired(information, documentsImageList);
+
+            Call<ActionRequiredResponse> mCall = apiService.submitActionrequired(information);
             mCall.enqueue(new Callback<ActionRequiredResponse>() {
                 @Override
                 public void onResponse(Call<ActionRequiredResponse> call, Response<ActionRequiredResponse> response) {
