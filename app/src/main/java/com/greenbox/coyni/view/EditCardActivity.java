@@ -480,7 +480,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
 //                        etAddress2.setHint("Billing Address Line 2 (Optional)");
                         etAddress2.setSelection(etAddress2.getText().length());
                         etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                     } else {
                         if (etAddress2.getText().length() > 0) {
                             etAddress2.setHint("");
@@ -698,9 +698,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (etAddress2.getText().toString().length() > 0) {
-                    Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
-                } else {
-                    Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
+                    Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                 }
             }
 

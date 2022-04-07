@@ -288,7 +288,7 @@ public class EditTeamMember extends BaseActivity {
                     isFirstName = true;
                     editFNameLL.setVisibility(GONE);
                     editFNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
                 } else {
                     isFirstName = false;
                 }
@@ -332,7 +332,7 @@ public class EditTeamMember extends BaseActivity {
                     isLastName = true;
                     editLNameLL.setVisibility(GONE);
                     editLNameTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
                 } else {
                     isLastName = false;
                 }
@@ -375,7 +375,7 @@ public class EditTeamMember extends BaseActivity {
                     editEmailLL.setVisibility(GONE);
                     editEmailTil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        emailTIL.setHintTextColor(colorState);
-                    Utils.setUpperHintColor(editEmailTil, getResources().getColor(R.color.primary_black));
+//                    Utils.setUpperHintColor(editEmailTil, getResources().getColor(R.color.primary_black));
 
                 } else if (editEmailET.getText().toString().trim().length() == 0) {
 //                    editEmailLL.setVisibility(VISIBLE);

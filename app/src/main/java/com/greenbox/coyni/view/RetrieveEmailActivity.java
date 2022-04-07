@@ -91,7 +91,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         if (charSequence == firstName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 firstNameErrorLL.setVisibility(GONE);
-                Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_black));
+//                Utils.setUpperHintColor(firstTIL, getResources().getColor(R.color.primary_black));
 //                String str = firstName.getText().toString();
 //                if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                    firstName.setText(firstName.getText().toString().replaceAll(" ", ""));
@@ -106,7 +106,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
         } else if (charSequence == lastName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                 lastNameErrorLL.setVisibility(GONE);
-                Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_black));
+//                Utils.setUpperHintColor(lastTIL, getResources().getColor(R.color.primary_black));
 //                String str = lastName.getText().toString();
 //                if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                    lastName.setText(lastName.getText().toString().replaceAll(" ", ""));

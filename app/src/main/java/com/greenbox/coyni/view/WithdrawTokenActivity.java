@@ -1672,7 +1672,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText("$ " + Utils.USNumberFormat(cynValue));
-//            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+//            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName().toLowerCase() + ".");
             tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as coyni.");
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);

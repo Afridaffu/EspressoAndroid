@@ -959,7 +959,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (charSequence.toString().trim().length() > 0) {
                         iscompanyName = true;
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_black));
                     } else {
 //                        companynameerrorTV.setText("Field Required");
                         iscompanyName = false;
@@ -1002,7 +1002,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         iscompanyEmail = false;
                         companyemailErrorLL.setVisibility(GONE);
-                        Utils.setUpperHintColor(companyemailtil, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(companyemailtil, getResources().getColor(R.color.primary_black));
 
                     } else if (companyemailET.getText().toString().trim().length() == 0) {
 //                        companyemailErrorLL.setVisibility(VISIBLE);
@@ -1042,7 +1042,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(businessTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(businessTIL, getResources().getColor(R.color.primary_black));
                             isBusinessEntity = true;
                         } else {
                             isBusinessEntity = false;
@@ -1073,7 +1073,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             isCompanyAdress1 = true;
                             address1ErrorLL.setVisibility(GONE);
                             //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(companyaddresstil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(companyaddresstil, getResources().getColor(R.color.primary_black));
                         } else {
 //                            address1ErrorLL.setVisibility(VISIBLE);
 //                            address1ErrorTV.setText("Field Required");
@@ -1119,7 +1119,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(companyaddress2til, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(companyaddress2til, getResources().getColor(R.color.primary_black));
                         }
                         enableOrDisableAddressNext();
                     } catch (Resources.NotFoundException e) {
@@ -1161,7 +1161,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (charSequence.length() > 0) {
                             isCity = true;
                             cityErrorLL.setVisibility(GONE);
-                            Utils.setUpperHintColor(citytil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(citytil, getResources().getColor(R.color.primary_black));
                         } else {
 //                            cityErrorLL.setVisibility(VISIBLE);
 //                            cityErrorTV.setText("Field Required");
@@ -1206,7 +1206,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(statetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(statetil, getResources().getColor(R.color.primary_black));
 //                            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                             isState = true;
                         } else {
@@ -1237,12 +1237,12 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             isZipcode = true;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() < 5 && charSequence.length() > 0) {
                             isZipcode = false;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZipcode = false;
 //                            zipcodeErrorLL.setVisibility(VISIBLE);

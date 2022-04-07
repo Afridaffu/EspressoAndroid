@@ -274,7 +274,8 @@
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusTopStart="12dp"
                         app:boxStrokeColor="@color/primary_green"
-                        app:hintTextColor="@color/primary_green">
+                        app:hintTextColor="@color/primary_green"
+                        >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAddress2"

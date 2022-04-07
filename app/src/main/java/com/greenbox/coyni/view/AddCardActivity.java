@@ -1196,7 +1196,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         isAddress1 = true;
                         address1ErrorLL.setVisibility(GONE);
                         etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlAddress1, getResources().getColor(R.color.primary_black));
                     } else {
                         isAddress1 = false;
                     }
@@ -1237,7 +1237,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     if (charSequence.length() > 0) {
-                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1279,7 +1279,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         isCity = true;
                         cityErrorLL.setVisibility(GONE);
                         etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_black));
                     } else {
                         isCity = false;
                     }
@@ -1495,7 +1495,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName() + " and enter the amount below.");
+            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
