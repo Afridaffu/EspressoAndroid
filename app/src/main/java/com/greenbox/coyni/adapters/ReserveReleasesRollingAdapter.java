@@ -67,7 +67,7 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
                 holder.amount.setTextColor(context.getColor(R.color.active_green));
                 holder.statusType.setTextColor(context.getColor(R.color.completed_status));
                 holder.statusType.setBackgroundResource(R.drawable.txn_completed_bg);
-            } else if(objData.getStatus().equalsIgnoreCase(Utils.ROLLING_LIST_STATUS.CANCELLED.getStatus())) {
+            } else if(objData.getStatus().equalsIgnoreCase(Utils.ROLLING_LIST_STATUS.CANCELED.getStatus())) {
                 holder.amount.setTextColor(context.getColor(R.color.active_black));
                 holder.statusType.setTextColor(context.getColor(R.color.failed_status));
                 holder.statusType.setBackgroundResource(R.drawable.txn_failed_bg);
