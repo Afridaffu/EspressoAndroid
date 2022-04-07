@@ -686,6 +686,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             request.setTokens(tvAmount.getText().toString().trim().replace(",", ""));
             request.setRemarks("");
             request.setRecipientWalletId(strAddress);
+            request.setSourceWalletId(objMyApplication.getGbtWallet().getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayToPersonalActivity.this)) {
