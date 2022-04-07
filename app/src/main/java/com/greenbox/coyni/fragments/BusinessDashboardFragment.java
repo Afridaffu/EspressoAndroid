@@ -39,6 +39,7 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
+import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
@@ -85,8 +86,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     RecyclerView recyclerViewPayouts;
     List<BatchPayoutListItems> listItems;
     DashboardViewModel dashboardViewModel;
-    private TextView nextReleaseTV,nextReleaseAmountTV,nextReleaseDateTV,lastReleaseTV,lastReleaseAmountTV,lastReleaseDateTV,reserveListDateTV,reserveListAmountTV;
-    private LinearLayout reserveReleaseListLL,reserveDetailsLL;
+    private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV, lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV;
+    private LinearLayout reserveReleaseListLL, reserveDetailsLL;
 
     private int dbaID = 0;
     private TextView merchantBalanceTV;
@@ -443,8 +444,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
-        businessDashboardViewModel.getPayoutListData();
-
+//        RollingListRequest listRequest = new RollingListRequest();
+//        listRequest.setPayoutType(Utils.batchNow);
+//        businessDashboardViewModel.getPayoutListData(listRequest);
+        batchReq();
+        reserveReq();
         getMerchantBalance();
         mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
@@ -529,12 +533,24 @@ public class BusinessDashboardFragment extends BaseFragment {
         customConfirmationDialog.show();
     }
 
+    private void batchReq() {
+        RollingListRequest listRequest = new RollingListRequest();
+        listRequest.setPayoutType(Utils.batchNow);
+        businessDashboardViewModel.getPayoutListData(listRequest);
+    }
+
+    private void reserveReq() {
+        RollingListRequest listRequest = new RollingListRequest();
+        listRequest.setPayoutType(Utils.reserveRelease);
+        businessDashboardViewModel.getPayoutListData(listRequest);
+    }
+
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
         if (listItems != null && listItems.size() > 0) {
             int i = 0;
             Collections.sort(listItems, Collections.reverseOrder());
-            boolean isOpen = false, isClosed = false;
-            while (i<listItems.size()) {
+            boolean isOpen = false, isPaid = false;
+            while (i < listItems.size()) {
                 if (listItems.get(i).getStatus().equalsIgnoreCase("open")) {
                     String amount = listItems.get(i).getTotalAmount();
                     nextPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
@@ -547,7 +563,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         Log.d("date format", date);
                     }
                     isOpen = true;
-                } else if (listItems.get(i).getStatus().equalsIgnoreCase("closed")) {
+                } else if (listItems.get(i).getStatus().equalsIgnoreCase("paid")) {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
@@ -558,10 +574,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                     } else {
                         Log.d("jkhj", date1);
                     }
-                    isClosed = true;
+                    isPaid = true;
                 }
 
-                if(isClosed && isOpen) {
+                if (isPaid && isOpen) {
                     break;
                 } else {
                     i++;
@@ -570,10 +586,10 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
             payoutsList.removeAllViews();
-            int j=0, closedItems = 0;
-            while (j<listItems.size() && closedItems < 5) {
+            int j = 0, paidItems = 0;
+            while (j < listItems.size() && paidItems < 5) {
                 View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
-                if (listItems.get(j).getStatus().equalsIgnoreCase("closed")) {
+                if (listItems.get(j).getStatus().equalsIgnoreCase("paid")) {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                     String listDate = listItems.get(j).getCreatedAt();
                     if (listDate.contains(".")) {
@@ -585,7 +601,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
                     totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
                     payoutsList.addView(xmlView);
-                    closedItems++;
+                    paidItems++;
                 } else {
                     Log.d(TAG, "open and inprogress Batch Payouts");
 
@@ -602,13 +618,14 @@ public class BusinessDashboardFragment extends BaseFragment {
             int i = 0;
             Collections.sort(listItems, Collections.reverseOrder());
             boolean isOpen = false, isReleased = false;
-            while (i<listItems.size()) {
+            while (i < listItems.size()) {
                 if (listItems.get(i).getStatus().equalsIgnoreCase("open")) {
                     String amount = listItems.get(i).getTotalAmount();
                     nextReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
                     String date = listItems.get(i).getCreatedAt();
-                    if (date.contains("HH")) {
-                        String res = date.substring(0, date.lastIndexOf("HH"));
+//                    nextReleaseDateTV.setText(myApplication.reserveDate(date));
+                    if (date.contains(".")) {
+                        String res = date.substring(0, date.lastIndexOf("."));
                         nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
                     } else {
                         Log.d("date format", date);
@@ -619,16 +636,17 @@ public class BusinessDashboardFragment extends BaseFragment {
                     lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
                     String date1 = listItems.get(i).getCreatedAt();
-                    if (date1.contains("HH")) {
-                        String res = date1.substring(0, date1.lastIndexOf("HH"));
-                        lastReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+//                    lastReleaseDateTV.setText(myApplication.reserveDate(date1));
+                    if (date1.contains(".")) {
+                        String res = date1.substring(0, date1.lastIndexOf("."));
+                        lastReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
                     } else {
                         Log.d("jkhj", date1);
                     }
                     isReleased = true;
                 }
 
-                if(isReleased && isOpen) {
+                if (isReleased && isOpen) {
                     break;
                 } else {
                     i++;
@@ -637,15 +655,16 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             LinearLayout payoutsList = mCurrentView.findViewById(R.id.reserveReleaseListLL);
             payoutsList.removeAllViews();
-            int j=0, releasedItems = 0;
-            while (j<listItems.size() && releasedItems < 5) {
+            int j = 0, releasedItems = 0;
+            while (j < listItems.size() && releasedItems < 5) {
                 View xmlView = getLayoutInflater().inflate(R.layout.dashboard_reserve_release_list, null);
                 if (listItems.get(j).getStatus().equalsIgnoreCase("released")) {
-                    TextView payoutDate = xmlView.findViewById(R.id.reserveListDateTV);
+                    TextView releaseDate = xmlView.findViewById(R.id.reserveListDateTV);
                     String listDate = listItems.get(j).getCreatedAt();
-                    if (listDate.contains("HH")) {
-                        String listD = listDate.substring(0, listDate.lastIndexOf("HH"));
-                        payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+//                    releaseDate.setText(myApplication.reserveDate(listDate));
+                    if (listDate.contains(".")) {
+                        String listD = listDate.substring(0, listDate.lastIndexOf("."));
+                        releaseDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
                     } else {
                         Log.d("listDate", listDate);
                     }
