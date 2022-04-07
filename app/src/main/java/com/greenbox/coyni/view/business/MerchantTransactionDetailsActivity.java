@@ -303,6 +303,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MerchantTransactionDetailsActivity.this, RefundTransactionActivity.class);
+                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, selectedTransaction);
                     startActivity(intent);
                 }
             });

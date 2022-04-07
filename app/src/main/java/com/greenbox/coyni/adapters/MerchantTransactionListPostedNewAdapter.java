@@ -189,48 +189,48 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
 
     private void setItemViewData(TransactionListPosted objData, ItemViewHolder holder) {
         String strType = "";
-        String[] data = objData.getTxnTypeDn().replace("****", "-").split("-");
-        try {
-            if (data.length > 1) {
-                holder.txnTypeDnExtention.setVisibility(View.VISIBLE);
-                holder.txnTypeDn.setText(data[0]);
-                holder.txnTypeDnExtention.setText("**" + data[1]);
-                holder.txnTypeDn.setVisibility(View.VISIBLE);
-            } else {
-                holder.txnTypeDn.setText(objData.getTxnTypeDn());
-                // holder.txnTypeDnExtention.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        String[] data = objData.getTxnTypeDn().replace("****", "-").split("-");
+//        try {
+//            if (data.length > 1) {
+//                holder.txnTypeDnExtention.setVisibility(View.VISIBLE);
+//                holder.txnTypeDn.setText(data[0]);
+//                holder.txnTypeDnExtention.setText("**" + data[1]);
+//                holder.txnTypeDn.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.txnTypeDn.setText(objData.getTxnTypeDn());
+//                // holder.txnTypeDnExtention.setVisibility(View.GONE);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         holder.createdDate.setText(Utils.convertMerchantDate(objData.getCreatedAt()));
 
         //type transaction
-        if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
-            strType = "withdraw";
-        } else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
-            if (objData.getTxnSubTypeDn().toLowerCase().contains("send") || objData.getTxnSubTypeDn().toLowerCase().contains("sent")) {
-                strType = "pay";
-            } else {
-                strType = "receive";
-            }
-        } else if (objData.getTxnTypeDn().toLowerCase().contains("buy")) {
-            strType = "buy";
-        } else {
-            strType = objData.getTxnTypeDn().toLowerCase();
-        }
-
-        if (strType.contains("pay") || strType.equals("withdraw")) {
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
-            holder.amount.setTextColor(Color.parseColor("#000000"));
-        } else if (strType.contains("buy") || strType.equals("receive")) {
-            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
-            holder.amount.setTextColor(Color.parseColor("#008a05"));
-
-        } else {
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()));
-        }
+//        if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
+//            strType = "withdraw";
+//        } else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
+//            if (objData.getTxnSubTypeDn().toLowerCase().contains("send") || objData.getTxnSubTypeDn().toLowerCase().contains("sent")) {
+//                strType = "pay";
+//            } else {
+//                strType = "receive";
+//            }
+//        } else if (objData.getTxnTypeDn().toLowerCase().contains("buy")) {
+//            strType = "buy";
+//        } else {
+//            strType = objData.getTxnTypeDn().toLowerCase();
+//        }
+//
+//        if (strType.contains("pay") || strType.equals("withdraw")) {
+//            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
+//            holder.amount.setTextColor(Color.parseColor("#000000"));
+//        } else if (strType.contains("buy") || strType.equals("receive")) {
+//            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
+//            holder.amount.setTextColor(Color.parseColor("#008a05"));
+//
+//        } else {
+//            holder.amount.setText(convertTwoDecimal(objData.getAmount()));
+//        }
         holder.txnStatus.setText(objData.getTxnStatusDn());
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:

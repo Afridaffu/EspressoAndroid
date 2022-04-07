@@ -2,8 +2,6 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
@@ -11,7 +9,6 @@ import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
-import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoRequest;
@@ -121,6 +118,8 @@ import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
+import com.greenbox.coyni.model.transaction.RefundDataResponce;
+import com.greenbox.coyni.model.transaction.RefundReferenceRequest;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
@@ -556,5 +555,8 @@ public interface ApiService {
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+
+    @POST("api/v2/node/refund/verify")
+    Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
 }
 
