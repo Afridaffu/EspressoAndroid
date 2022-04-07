@@ -570,10 +570,10 @@ public class BusinessDashboardFragment extends BaseFragment {
 
             LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
             payoutsList.removeAllViews();
-            int j=0, paidItems = 0;
-            while (j<listItems.size() && paidItems < 5) {
+            int j=0, closedItems = 0;
+            while (j<listItems.size() && closedItems < 5) {
                 View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
-                if (listItems.get(j).getStatus().equalsIgnoreCase("paid")) {
+                if (listItems.get(j).getStatus().equalsIgnoreCase("closed")) {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
                     String listDate = listItems.get(j).getCreatedAt();
                     if (listDate.contains(".")) {
@@ -585,7 +585,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
                     totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
                     payoutsList.addView(xmlView);
-                    paidItems++;
+                    closedItems++;
                 } else {
                     Log.d(TAG, "open and inprogress Batch Payouts");
 
