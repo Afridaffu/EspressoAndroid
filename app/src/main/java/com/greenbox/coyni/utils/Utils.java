@@ -289,7 +289,7 @@ public class Utils {
 
     public static final int pending = 1;
     public static final int completed = 2;
-    public static final int cancelled = 4;//Not available
+    public static final int cancelled = 5;
     public static final int inProgress = 0;
     public static final int failed = 3;
     public static final int paid = 5;
@@ -322,6 +322,7 @@ public class Utils {
     public static final String buyActionType = "BUY";
     public static final String sendActionType = "SEND";
     public static final String pinActionType = "COYNIPIN";
+    public static final String paidActionType = "PAIDORDER";
 
     public static final String OPEN = "open";
     public static final String PAID = "paid";
@@ -358,6 +359,7 @@ public class Utils {
     public static final String amount = "amount";
 
     public static final String applyFilter = "apply";
+    public static final String resetFilter = "resetFilter";
     public static final String datePicker = "DatePicker";
 
 

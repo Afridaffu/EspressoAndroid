@@ -132,6 +132,7 @@
                             android:layout_height="@dimen/_50sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            android:background="@drawable/corecircle"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
@@ -163,8 +164,8 @@
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="VT"
                                     android:gravity="center"
-                                    android:background="@color/primary_green"
-                                    android:textColor="@color/white"
+                                    android:background="@color/blue_light"
+                                    android:textColor="@color/primary_green"
                                     android:textSize="@dimen/_18ssp"
                                     android:visibility="visible" />
 

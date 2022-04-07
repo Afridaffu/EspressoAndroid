@@ -15,6 +15,7 @@ import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsRespons
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
 import com.greenbox.coyni.model.EmptyRequest;
+import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
@@ -380,6 +381,40 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<ManualListResponse> call = apiService.getManualListData(new EmptyRequest());
+            call.enqueue(new Callback<ManualListResponse>() {
+                @Override
+                public void onResponse(Call<ManualListResponse> call, Response<ManualListResponse> response) {
+                    if (response.isSuccessful()) {
+                        ManualListResponse list = response.body();
+                        manualListResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ManualListResponse>() {
+                        }.getType();
+                        ManualListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        manualListResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ManualListResponse> call, Throwable t) {
+                    manualListResponseMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void getManualListData(SearchKeyRequest searchKey) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ManualListResponse> call = apiService.getManualListData(searchKey);
             call.enqueue(new Callback<ManualListResponse>() {
                 @Override
                 public void onResponse(Call<ManualListResponse> call, Response<ManualListResponse> response) {
