@@ -319,6 +319,7 @@ public class Utils {
     public static final String buyActionType = "BUY";
     public static final String sendActionType = "SEND";
     public static final String pinActionType = "COYNIPIN";
+    public static final String paidActionType = "PAIDORDER";
 
     public static final int boTargetPercentage = 51;
 

@@ -90,7 +90,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
     RelativeLayout lyPayMethod, lyMainLayout;
-    LinearLayout lyCDetails, lyBuyClose, lyBDetails;
+    LinearLayout lyCDetails, lyBuyClose, lyBDetails,layoutETAmount;
     DatabaseHandler dbHandler;
     EditText etAmount;
     CustomKeyboard ctKey;
@@ -169,6 +169,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
                     if (editable.length() == 5 || editable.length() == 6) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                        layoutETAmount.setPadding(0,35,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -180,6 +181,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                        layoutETAmount.setPadding(0,50,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 0, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -191,6 +193,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() >= 9) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        layoutETAmount.setPadding(0,52,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -200,6 +203,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         tvCurrency.setLayoutParams(params1);
                     } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        layoutETAmount.setPadding(0,0,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -341,6 +345,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
+            layoutETAmount = findViewById(R.id.lyamountview1);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
             tvLimit = findViewById(R.id.tvLimit);
