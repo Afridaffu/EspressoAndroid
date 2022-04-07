@@ -14,6 +14,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsData;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
@@ -113,6 +115,13 @@ public class MyApplication extends Application {
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
     Double merchantBalance = 0.0;
+    public SignOnData getObjSignOnData() {
+        return objSignOnData;
+    }
+
+    public void setObjSignOnData(SignOnData objSignOnData) {
+        this.objSignOnData = objSignOnData;
+    }
 
     public void setPaidOrderRequest(PaidOrderRequest paidOrderRequest) {
         this.paidOrderRequest = paidOrderRequest;
@@ -179,6 +188,7 @@ public class MyApplication extends Application {
 
     WalletInfo gbtWallet;
     Double GBTBalance = 0.0;
+    Double reserveBalance = 0.0;
 
     public void setAgreementsPdf(AgreementsPdf agreementsPdf) {
         this.agreementsPdf = agreementsPdf;
@@ -405,6 +415,14 @@ public class MyApplication extends Application {
         this.GBTBalance = GBTBalance;
     }
 
+    public Double getReserveBalance() {
+        return reserveBalance;
+    }
+
+    public void setReserveBalance(Double reserveBalance) {
+        this.reserveBalance = reserveBalance;
+    }
+
 
     public String transactionDate(String date) {
         String strDate = "";
@@ -507,6 +525,32 @@ public class MyApplication extends Application {
         }
         return strDate;
     }
+
+    public String payoutDetailsDate(String date) {
+        String strDate = "";
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneOffset.UTC);
+                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
+                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+                strDate = zonedTime.format(DATE_TIME_FORMATTER);
+            } else {
+                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date newDate = spf.parse(date);
+                spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
+                strDate = spf.format(newDate);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
 
 
     public String convertZoneDateTime(String date, String format, String requiredFormat) {

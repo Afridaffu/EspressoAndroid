@@ -451,7 +451,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="@dimen/_10sdp"
                                     android:layout_weight="1"
-                                    android:background="@drawable/bg_et_inactive"
+                                    android:background="@drawable/batch_payout_bg"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
@@ -496,7 +496,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:background="@drawable/bg_et_inactive"
+                                    android:background="@drawable/batch_payout_bg"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
@@ -780,6 +780,36 @@
                                             android:textSize="@dimen/_10ssp" />
                                     </LinearLayout>
                                 </LinearLayout>
+
+                            </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginHorizontal="@dimen/_13sdp"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="@string/sales_orders"
+                                android:textColor="@color/dark_grey"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <SeekBar
+                                android:layout_width="@dimen/_140sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_35sdp"
+                                android:layout_marginTop="@dimen/_20sdp"
+                                android:layout_marginEnd="@dimen/_35sdp"
+                                android:max="5"
+                                android:progress="1"
+                                android:scaleX="2"
+                                android:scaleY="2" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/_18sdp"
+                                android:orientation="horizontal">
+
                             </LinearLayout>
 
                             <View
@@ -1164,11 +1194,11 @@
                                 android:orientation="horizontal">
 
                                 <TextView
+                                    android:id="@+id/tv_reserve_balance"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_10sdp"
                                     android:fontFamily="@font/opensans_bold"
-                                    android:text="258,232.23"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_24ssp" />
 
@@ -1234,7 +1264,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginRight="@dimen/_10sdp"
                                     android:layout_weight="1"
-                                    android:background="@drawable/bg_et_inactive"
+                                    android:background="@drawable/batch_payout_bg"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
@@ -1279,6 +1309,7 @@
                                         android:id="@+id/nextReleaseDateTV"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/_14sdp"
                                         android:fontFamily="@font/opensans_regular"
                                         android:text=""
                                         android:textColor="@color/dark_grey"
@@ -1289,7 +1320,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:background="@drawable/bg_et_inactive"
+                                    android:background="@drawable/batch_payout_bg"
                                     android:gravity="center"
                                     android:orientation="vertical">
 
@@ -1333,6 +1364,7 @@
                                         android:id="@+id/lastReleaseDateTV"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/_14sdp"
                                         android:fontFamily="@font/opensans_regular"
                                         android:text=""
                                         android:textColor="@color/dark_grey"
@@ -1346,7 +1378,6 @@
                                 android:id="@+id/reserveReleaseListLL"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_11sdp"
                                 android:orientation="vertical">
 
                             </LinearLayout>

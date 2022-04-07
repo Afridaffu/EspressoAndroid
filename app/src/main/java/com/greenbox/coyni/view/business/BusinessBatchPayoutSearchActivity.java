@@ -241,8 +241,10 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
                                         BatchPayoutListItems batchPayoutListItem = (BatchPayoutListItems) obj;
                                         showBatchPayoutDetails(batchPayoutListItem);
-//                                        businessDashboardViewModel.batchPayoutIdDetails();
-                                        //Navigate to intent
+
+//                                        BatchPayoutDetailsRequest batchPayoutDetailsRequest = new BatchPayoutDetailsRequest();
+//                                        businessDashboardViewModel.batchPayoutIdDetails(batchPayoutDetailsRequest);
+//                                        //Navigate to intent
                                     }
 
                                 });
@@ -329,6 +331,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     private void showBatchPayoutDetails(BatchPayoutListItems items) {
         try {
             Intent i = new Intent(this, BusinessBatchPayoutIdDetailsActivity.class);
+            i.putExtra(Utils.SELECTED_BATCH_PAYOUT, items);
             startActivity(i);
         } catch (Exception e) {
             e.printStackTrace();

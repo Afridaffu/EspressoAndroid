@@ -2,6 +2,8 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
@@ -555,8 +557,8 @@ public interface ApiService {
     @POST("api/v2/reserve/manual-release/all")
     Call<ManualListResponse> getManualListData(@Body EmptyRequest request);
 
-//    @POST("api/v2/transactions/business-activity")
-//    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
+    @POST("api/v2/transactions/merchatPayout/summary")
+    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
 
     @POST("api/v2/transactions/admin/totalPayout")
