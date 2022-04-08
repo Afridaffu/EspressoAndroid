@@ -4,6 +4,7 @@ import com.greenbox.coyni.model.Error;
 import com.greenbox.coyni.model.userrequest.UserReqRespData;
 
 public class CompanyInfoUpdateResp {
+
     private String status;
     private String timestamp;
     private Data data;

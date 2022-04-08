@@ -4,6 +4,7 @@ package com.greenbox.coyni.model.login;
 import com.greenbox.coyni.model.Error;
 
 public class LoginResponse {
+
     private String status;
     private String timestamp;
     private LoginData data;

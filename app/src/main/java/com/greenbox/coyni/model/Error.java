@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Error {
+
     private String errorCode;
     private String errorDescription;
     private List<String> fieldErrors = new ArrayList<>();

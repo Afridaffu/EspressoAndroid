@@ -133,6 +133,8 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.userrequest.UserRequest;
@@ -148,11 +150,14 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -549,6 +554,18 @@ public interface ApiService {
     @POST("api/v2/business/fees")
     Call<CompanyInfoUpdateResp> fees();
 
+    @GET("api/v2/underwriting/user/action-required")
+    Call<ActionRequiredResponse> postAdditionActionRequired();
+
+    @Multipart
+    @POST("api/v2/underwriting/user/business/action-required")
+    Call<ActionRequiredResponse> submitActionrequired(
+            @Part("information") RequestBody information
+    );
+
+    @GET("api/v2/transactions/admin/totalPayout")
+    Call<BatchPayoutListResponse> getPayoutListData();
+
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData(@Body EmptyRequest request);
 
@@ -572,5 +589,6 @@ public interface ApiService {
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
+
 }
 
