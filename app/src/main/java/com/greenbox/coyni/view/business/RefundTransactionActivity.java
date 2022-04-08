@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -39,6 +40,8 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class RefundTransactionActivity extends BaseActivity implements TextWatcher {
@@ -264,7 +267,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 dismissDialog();
                 if (refundDataResponce != null) {
                     if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
-
+//
 
                     } else {
                         if (!refundDataResponce.getError().getErrorDescription().equals("")) {
@@ -391,6 +394,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                             isRefundProcessCalled = true;
                             refundProcessAPI(refundTransaction());
                             tv_lable.setText("Verifying");
+                            startActivity(new Intent(RefundTransactionActivity.this, MerchantTransactionListActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//                            finish();
                         }
 
                     }
