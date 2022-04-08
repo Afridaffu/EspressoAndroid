@@ -47,6 +47,7 @@ public class CustomEncryptionHandler implements Interceptor {
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
+
         Request request = chain.request();
         RequestBody requestBody = request.body();
         String method = request.method();
@@ -61,6 +62,8 @@ public class CustomEncryptionHandler implements Interceptor {
         requestBuild.header(KEY_APP_VERSION, Utils.getAppVersion());
         requestBuild.header(KEY_ACCEPT_LANGUAGE, Utils.getStrLang());
         requestBuild.header(KEY_REQUEST_ID, randomReqId);
+        // TODO Check this tag is required or not
+        requestBuild.header("Requested-portal", "customer");
 
         if (BuildConfig.SKIP_ENCRYPTION) {
             requestBuild.header(KEY_SKIP_DECRYPTION, "true");
@@ -69,9 +72,6 @@ public class CustomEncryptionHandler implements Interceptor {
             requestBuild.header(KEY_CONTENT_TYPE, TEXT_PLAIN);
         }
 
-        /*Encryption should be skipped when SKIP_ENCRYPTION is set to true and for GET requests.
-         As per the requirement while developing this feature, encryption should not be done for
-         Multipart requests. Changes needs to done for Multipart requests based on Backend changes*/
         Response response = null;
         if (BuildConfig.SKIP_ENCRYPTION || !ArrayUtils.contains(methodsAllowed, method)
                 || requestBody instanceof MultipartBody) {
@@ -82,7 +82,9 @@ public class CustomEncryptionHandler implements Interceptor {
             request = requestBuild.build();
             response = chain.proceed(request);
         }
+
         MediaType mediaType = MediaType.parse(APPLICATION_JSON);
+
         if (response.code() == 400 && response.body() != null) {
             String errorResponse = response.peekBody(2048).string();
             if (!Utils.isValidJson(errorResponse)) {
@@ -91,6 +93,7 @@ public class CustomEncryptionHandler implements Interceptor {
                         .build();
             }
         }
+
         return response;
     }
 

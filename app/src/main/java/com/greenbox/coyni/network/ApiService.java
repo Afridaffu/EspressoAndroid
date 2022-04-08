@@ -2,6 +2,8 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOPatchResp;
 import com.greenbox.coyni.model.BeneficialOwners.BORequest;
@@ -21,6 +23,7 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.EmptyRequest;
+import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
@@ -130,6 +133,8 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.userrequest.UserRequest;
@@ -145,11 +150,14 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -546,6 +554,18 @@ public interface ApiService {
     @POST("api/v2/business/fees")
     Call<CompanyInfoUpdateResp> fees();
 
+    @GET("api/v2/underwriting/user/action-required")
+    Call<ActionRequiredResponse> postAdditionActionRequired();
+
+    @Multipart
+    @POST("api/v2/underwriting/user/business/action-required")
+    Call<ActionRequiredResponse> submitActionrequired(
+            @Part("information") RequestBody information
+    );
+
+    @GET("api/v2/transactions/admin/totalPayout")
+    Call<BatchPayoutListResponse> getPayoutListData();
+
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData(@Body EmptyRequest request);
 
@@ -555,19 +575,20 @@ public interface ApiService {
     @POST("api/v2/reserve/manual-release/all")
     Call<ManualListResponse> getManualListData(@Body EmptyRequest request);
 
-//    @POST("api/v2/transactions/business-activity")
-//    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
+    @POST("api/v2/transactions/merchatPayout/summary")
+    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
-
+    @POST("api/v2/reserve/manual-release/all")
+    Call<ManualListResponse> getManualListData(@Body SearchKeyRequest searchKey);
+    
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
 
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
 
-
-
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
+
 }
 

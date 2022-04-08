@@ -177,18 +177,19 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_135sdp"
+                android:layout_height="@dimen/_145sdp"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_18sdp"
                 android:layout_marginRight="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_28sdp"
+                android:layout_marginBottom="@dimen/_32sdp"
                 android:background="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
 
 <!--                    <LinearLayout-->
 <!--                        android:id="@+id/linearLayoutnew"-->
@@ -263,8 +264,8 @@
                     <RelativeLayout
                         android:id="@+id/payLL"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="@dimen/_20sdp"
-                        android:layout_height="@dimen/_72sdp"
+                        android:layout_marginTop="@dimen/_13ssp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
@@ -293,13 +294,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:gravity="bottom"
                                 android:orientation="horizontal">
 
                                 <EditText
                                     android:id="@+id/etAmount"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="@dimen/_72sdp"
                                     android:background="@color/white"
                                     android:cursorVisible="true"
                                     android:fontFamily="@font/opensans_bold"
@@ -339,24 +339,26 @@
 
                     </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/tvError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:text="Amount entered exceeds your daily limit"
-                        android:textColor="@color/error"
-                        android:textSize="@dimen/_10ssp"
-                        android:visibility="invisible"/>
-
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_1sdp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_13ssp"
                         android:layout_marginRight="@dimen/_15sdp"
                         android:background="#d8e2f0" />
+
+                    <TextView
+                        android:id="@+id/tvError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:text="Amount entered exceeds your daily limit"
+                        android:textColor="@color/error"
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="invisible"></TextView>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

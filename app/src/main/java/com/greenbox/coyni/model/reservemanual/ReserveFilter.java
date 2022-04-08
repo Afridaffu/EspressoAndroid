@@ -5,7 +5,9 @@ import java.io.Serializable;
 public class ReserveFilter implements Serializable {
 
     public boolean isFilterApplied = false;
-    private  boolean isOpen = false, isOnHold = false, isReleased =false, isCancelled = false;
+    private  boolean isOpen = false, isOnHold = false, isReleased =false, isCancelled = false, isDate = false;
+    private String updatedFromDate;
+    private String updatedToDate;
 
     public boolean isOpen() {
         return isOpen;
@@ -37,5 +39,29 @@ public class ReserveFilter implements Serializable {
 
     public void setCancelled(boolean cancelled) {
         isCancelled = cancelled;
+    }
+
+    public String getUpdatedFromDate() {
+        return updatedFromDate;
+    }
+
+    public void setUpdatedFromDate(String updatedFromDate) {
+        this.updatedFromDate = updatedFromDate;
+    }
+
+    public String getUpdatedToDate() {
+        return updatedToDate;
+    }
+
+    public void setUpdatedToDate(String updatedToDate) {
+        this.updatedToDate = updatedToDate;
+    }
+
+    public boolean isDate() {
+        return isDate;
+    }
+
+    public void setDate(boolean date) {
+        isDate = date;
     }
 }

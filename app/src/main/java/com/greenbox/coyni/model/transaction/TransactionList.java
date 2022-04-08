@@ -6,6 +6,7 @@ import com.greenbox.coyni.model.Error;
 import java.io.Serializable;
 
 public class TransactionList  {
+
         @SerializedName("status")
         @Expose
         private String status;

@@ -40,6 +40,7 @@ public class RetakeActivity extends AppCompatActivity {
 
         Log.e("From", getIntent().getStringExtra("FROM"));
         String from = getIntent().getStringExtra("FROM");
+
         retakeCloseIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,12 +61,8 @@ public class RetakeActivity extends AppCompatActivity {
                     AddBeneficialOwnerActivity.identityFile = null;
                     AddBeneficialOwnerActivity.isFileSelected = false;
                     AddBeneficialOwnerActivity.enableOrDisableNext();
-                }else if (from.equals("AAR-SSC")) {
-                    BusinessAdditionalActionRequiredActivity.adtionalSscFile = null;
-                }else if (from.equals("AAR-SecFile")){
-                    BusinessAdditionalActionRequiredActivity.addtional2fFle = null;
-                }else if (from.equals("AAR-FBL")){
-                    BusinessAdditionalActionRequiredActivity.businessLincenseFile = null;
+                }else if (from.equals("BAARA")) {
+                    BusinessAdditionalActionRequiredActivity.mediaFile = null;
                 }
                 else if(from.equals("AAR-securityCard")){
                     AdditionalInformationRequiredActivity.securityFile = null;
@@ -100,12 +97,10 @@ public class RetakeActivity extends AppCompatActivity {
                 } else if (from.equals("ADD_BO")) {
                     AddBeneficialOwnerActivity.addBeneficialOwnerActivity.removeAndUploadBODoc();
                     AddBeneficialOwnerActivity.enableOrDisableNext();
-                } else if(from.equals("AAR-SSC")){
-                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(1);
-                }else if(from.equals("AAR-SecFile")) {
-                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(2);
+                } else if (from.equals("BAARA")) {
+                   // BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(0);
                 }else if(from.equals("AAR-FBL")) {
-                    BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(3);
+                  //  BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.removeAndUploadAdditionalDoc(3);
                 }
                 else if(from.equals("AAR-securityCard")){
                     AdditionalInformationRequiredActivity.additionalInformationRequiredActivity.removeAndUploadAdditionalDoc(0);
@@ -136,8 +131,8 @@ public class RetakeActivity extends AppCompatActivity {
                     AddBeneficialOwnerActivity.identityFile = null;
                     AddBeneficialOwnerActivity.isFileSelected = false;
                     AddBeneficialOwnerActivity.enableOrDisableNext();
-                }else if (from.equals("AAR-SSC")) {
-                    BusinessAdditionalActionRequiredActivity.adtionalSscFile = null;
+                }else if (from.equals("BAARA")) {
+                    //BusinessAdditionalActionRequiredActivity.adtionalSscFile = null;
                 }else if (from.equals("AAR-SecFile")){
                     BusinessAdditionalActionRequiredActivity.addtional2fFle = null;
                 }else if (from.equals("AAR-FBL")){
