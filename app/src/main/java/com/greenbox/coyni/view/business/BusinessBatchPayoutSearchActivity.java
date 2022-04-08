@@ -218,7 +218,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
     private void initObserver() {
         try {
-            businessDashboardViewModel.getBatchPayoutListMutableLiveData().observe(this, new Observer<BatchPayoutListResponse>() {
+            businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(this, new Observer<BatchPayoutListResponse>() {
                 @Override
                 public void onChanged(BatchPayoutListResponse batchPayoutList) {
                     dismissDialog();

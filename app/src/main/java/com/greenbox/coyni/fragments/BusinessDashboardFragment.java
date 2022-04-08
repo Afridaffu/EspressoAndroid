@@ -299,7 +299,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBatchPayoutListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
+        businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
                 if (batchPayoutListResponse != null) {
