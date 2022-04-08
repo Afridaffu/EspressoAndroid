@@ -558,10 +558,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:layout_marginRight="@dimen/_21sdp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:text="@string/cyn"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/cyn_under_payout"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
                 <androidx.core.widget.NestedScrollView

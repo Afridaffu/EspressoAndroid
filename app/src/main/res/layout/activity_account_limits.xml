@@ -419,7 +419,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_55sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
@@ -668,7 +667,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginBottom="@dimen/_44sdp"
+                        android:layout_marginBottom="@dimen/_24sdp"
                         android:orientation="horizontal">
 
                         <TextView

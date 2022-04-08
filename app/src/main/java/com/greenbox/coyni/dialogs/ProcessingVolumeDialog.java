@@ -14,6 +14,12 @@ public class ProcessingVolumeDialog extends BaseDialog {
         super(context);
     }
 
+    private String todayValue = "Today";
+    private String yesterdayValue = "Yesterday";
+    private String monthDate = "Month to Date";
+    private String lastMonthDate = "Last Month";
+    private String customDate = "Custom Date Range";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,15 +27,15 @@ public class ProcessingVolumeDialog extends BaseDialog {
 
         initFields();
 
-        tvToday.setOnClickListener(v -> setSelectedValue(((TextView) v).getText().toString()));
+        tvToday.setOnClickListener(v -> setSelectedValue(todayValue));
 
-        tvYesterday.setOnClickListener(v -> setSelectedValue(((TextView) v).getText().toString()));
+        tvYesterday.setOnClickListener(v -> setSelectedValue(yesterdayValue));
 
-        tvMonthToDate.setOnClickListener(v -> setSelectedValue(((TextView) v).getText().toString()));
+        tvMonthToDate.setOnClickListener(v -> setSelectedValue(monthDate));
 
-        tvLastMonth.setOnClickListener(v -> setSelectedValue(((TextView) v).getText().toString()));
+        tvLastMonth.setOnClickListener(v -> setSelectedValue(lastMonthDate));
 
-        tvCustomDate.setOnClickListener(v -> setSelectedValue(((TextView) v).getText().toString()));
+        tvCustomDate.setOnClickListener(v -> setSelectedValue(customDate));
     }
 
     private void initFields() {
