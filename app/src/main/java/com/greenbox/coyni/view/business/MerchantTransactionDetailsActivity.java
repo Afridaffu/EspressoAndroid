@@ -190,7 +190,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     break;
             }
             if(objData.getData().getRefundAmount()!=null) {
-                refundamounttv.setText(Utils.convertTwoDecimal(objData.getData().getRefundAmount().replace("USD", "").trim()));
+                refundamounttv.setText(Utils.convertTwoDecimal(objData.getData().getRefundAmount().replace("CYN", "").trim()));
             }
 
             if (objData.getData().getReferenceId().length()>10) {
@@ -286,7 +286,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 salesAmount_TV.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             }
             salesfeesTV.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
-            salesnetamountTV.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("USD", "").trim()));
+            salesnetamountTV.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("CYN", "").trim()));
             salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
 //            salesreserveTV.setText(Utils.convertTwoDecimal(objData.getData().getReserve().replace("CYN", "").trim()));
             salessendernameTVTV.setText(objData.getData().getSenderName());

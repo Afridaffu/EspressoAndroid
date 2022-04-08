@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
@@ -52,7 +53,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private Long mLastClickTime = 0L, bankId, cardId;
     private float fontSize, dollarFont;
     private DashboardViewModel dashboardViewModel;
-    private Dialog pDialog, prevDialog, cvvDialog, insuffDialog, insuffTokenDialog;
+    private Dialog pDialog, refundDialog, cvvDialog, insuffDialog, insuffTokenDialog;
     private Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     private Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     boolean isamount = false, isremarks = false, isfullamount = false, ishalfamount = false, isrefundClick = false, isrefundClickable = false;
@@ -60,7 +61,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private TransactionListPosted selectedTransaction;
     private String refundamount = "", refundreason = "", gbxid = "", recipientAddress = "", strUserName = "", walletbalance = "";
     private int processingFee, wallettype;
-    private boolean isAuthenticationCalled = false, insufficientTokenBalance = false, insufficientMerchantBalance = false;
+    private boolean isRefundProcessCalled = false, insufficientTokenBalance = false, insufficientMerchantBalance = false;
 
 
     @Override
@@ -99,18 +100,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         objMyApplication = (MyApplication) getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-
         refundET.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    Utils.hideSoftKeyboard(RefundTransactionActivity.this);
-
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                return;
+            public void onClick(View v) {
+                Utils.hideSoftKeyboard(RefundTransactionActivity.this);
             }
         });
+
         if (selectedTransaction.getAmount() != null && !selectedTransaction.getAmount().equals("")) {
             double value = Double.parseDouble(selectedTransaction.getAmount().replace("CYN", "").trim());
             refundcurrencyTV.setText("" + value);
@@ -189,6 +185,11 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 //        showProgressDialog();
         dashboardViewModel.refundDetails(refundrefrequest);
     }
+    private void refundProcessAPI(RefundReferenceRequest refundrefrequest) {
+//        showProgressDialog();
+        dashboardViewModel.refundprocessDetails(refundrefrequest);
+    }
+
 
     public RefundReferenceRequest prepareReq() {
         RefundReferenceRequest refundrefrequest = new RefundReferenceRequest();
@@ -207,7 +208,20 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         return refundrefrequest;
     }
+    public RefundReferenceRequest refundTransaction() {
+        RefundReferenceRequest request = new RefundReferenceRequest();
+        try {
+            request.setAmount(Double.parseDouble(refundamount));
+            request.setRemarks(refundreason);
+            request.setGbxTransactionId(gbxid);
+            request.setWalletType(wallettype);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return request;
+    }
     public void setRefundAmountClick() {
         if (isrefundClickable) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -244,13 +258,32 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             }
 
         });
+        dashboardViewModel.getRefundProcessMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
+            @Override
+            public void onChanged(RefundDataResponce refundDataResponce) {
+                dismissDialog();
+                if (refundDataResponce != null) {
+                    if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
 
+
+                    } else {
+                        if (!refundDataResponce.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
+                        }
+                    }
+                }
+            }
+
+        });
     }
 
     private void refundInfo(RefundDataResponce refundDataResponce) {
         try {
             if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
                 recipientAddress = refundDataResponce.getData().getReferenceId();
+
             }
 
             if (refundDataResponce.getData().getWalletBalance() != null && refundDataResponce.getData().getWalletBalance().equals("")) {
@@ -262,12 +295,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             insufficientMerchantBalance = refundDataResponce.getData().getInsufficientMerchantBalance();
             insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
             if (!insufficientMerchantBalance && !insufficientTokenBalance) {
-//                refundPreview
+                refundPreview();
             } else if (insufficientMerchantBalance && !insufficientTokenBalance) {
                 insufficientMerchantBalancedialog();
             } else {
-                refundPreview();
-//                insufficientTokenBalancedialog();
+
+                insufficientTokenBalancedialog();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -293,39 +326,38 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
     private void refundPreview() {
         try {
-            prevDialog = new Dialog(RefundTransactionActivity.this);
-            prevDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            prevDialog.setContentView(R.layout.refund_preview_dialog);
-            prevDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            refundDialog = new Dialog(RefundTransactionActivity.this);
+            refundDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            refundDialog.setContentView(R.layout.refund_preview_dialog);
+            refundDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
             DisplayMetrics mertics = getResources().getDisplayMetrics();
             int width = mertics.widthPixels;
 
-            TextView amountPayTV = prevDialog.findViewById(R.id.amountPayTV);
-            TextView userefundTV = prevDialog.findViewById(R.id.userRefundTV);
-            TextView tvProcessingFee = prevDialog.findViewById(R.id.tvProcessingFee);
-            TextView recipAddreTV = prevDialog.findViewById(R.id.recipAddreTV);
-            TextView tvTotal = prevDialog.findViewById(R.id.tvTotal);
-            TextView messageNoteTV = prevDialog.findViewById(R.id.messageNoteTV);
-            LinearLayout copyRecipientLL = prevDialog.findViewById(R.id.copyRecipientLL);
-            LinearLayout refundPreviewLL = prevDialog.findViewById(R.id.refundpreviewLL);
-            LinearLayout lyMessage = prevDialog.findViewById(R.id.lyMessage);
-            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirmm);
-            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
-            TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
+            TextView amountPayTV = refundDialog.findViewById(R.id.amountPayTV);
+            TextView userefundTV = refundDialog.findViewById(R.id.userRefundTV);
+            TextView tvProcessingFee = refundDialog.findViewById(R.id.tvProcessingFee);
+            TextView recipaddreTV = refundDialog.findViewById(R.id.recipAddreTV);
+            TextView tvTotal = refundDialog.findViewById(R.id.tvTotal);
+            TextView messageNoteTV = refundDialog.findViewById(R.id.messageNoteTV);
+            LinearLayout copyRecipientLL = refundDialog.findViewById(R.id.copyRecipientLL);
+            LinearLayout refundPreviewLL = refundDialog.findViewById(R.id.refundpreviewLL);
+            LinearLayout lyMessage = refundDialog.findViewById(R.id.lyMessage);
+            MotionLayout slideToConfirm = refundDialog.findViewById(R.id.slideToConfirmm);
+            AnimatedGradientTextView tv_lable = refundDialog.findViewById(R.id.tv_lable);
+            TextView tv_lable_verify = refundDialog.findViewById(R.id.tv_lable_verify);
 
-            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
+            CardView im_lock_ = refundDialog.findViewById(R.id.im_lock_);
             userefundTV.setText(strUserName);
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(processingFee));
-//
             String enteredAmount = Utils.convertBigDecimalUSDC(refundET.getText().toString().replace(",", ""));
             amountPayTV.setText(Utils.USNumberFormat(Double.parseDouble(enteredAmount)));
             tvProcessingFee.setText(Utils.USNumberFormat(Double.parseDouble(strPFee)) + " " + getString(R.string.currency));
             total = cynValue + Double.parseDouble(strPFee);
             tvTotal.setText(Utils.USNumberFormat(total) + " " + getString(R.string.currency));
-            recipAddreTV.setText(recipientAddress);
-            isAuthenticationCalled = false;
+            recipaddreTV.setText(recipientAddress);
+            isRefundProcessCalled = false;
             if (!etremarksTV.getText().toString().trim().equals("")) {
                 lyMessage.setVisibility(View.VISIBLE);
                 messageNoteTV.setText(etremarksTV.getText().toString());
@@ -348,33 +380,19 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-
                     if (progress > Utils.slidePercentage) {
                         im_lock_.setAlpha(1.0f);
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
-                        tv_lable.setVisibility(View.GONE);
-                        tv_lable_verify.setVisibility(View.VISIBLE);
-                        prevDialog.dismiss();
-                        if (!isAuthenticationCalled) {
+                        if(!isRefundProcessCalled) {
+                            refundDialog.dismiss();
                             tv_lable.setText("Verifying");
-                            isAuthenticationCalled = true;
-//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayRequestActivity.this)) {
-//                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(PayRequestActivity.this)) || (isFaceLock))) {
-//                                    Utils.checkAuthentication(PayRequestActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                                } else {
-//                                    startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
-//                                            .putExtra("TYPE", "ENTER")
-//                                            .putExtra("screen", "Pay"));
-//                                }
-//                            } else {
-//                                startActivity(new Intent(PayRequestActivity.this, PINActivity.class)
-//                                        .putExtra("TYPE", "ENTER")
-//                                        .putExtra("screen", "Pay"));
-//                            }
+                            isRefundProcessCalled = true;
+                            refundProcessAPI(refundTransaction());
+                            tv_lable.setText("Verifying");
                         }
+
                     }
                 }
 
@@ -389,7 +407,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 }
             });
 
-            Window window = prevDialog.getWindow();
+            Window window = refundDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
             WindowManager.LayoutParams wlp = window.getAttributes();
@@ -398,14 +416,16 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
             window.setAttributes(wlp);
 
-            prevDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            refundDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-            prevDialog.setCanceledOnTouchOutside(true);
-            prevDialog.show();
+            refundDialog.setCanceledOnTouchOutside(true);
+            refundDialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+
 
     private void changeTextSize(String editable) {
         try {

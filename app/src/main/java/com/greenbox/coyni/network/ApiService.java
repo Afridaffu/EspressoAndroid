@@ -575,6 +575,8 @@ public interface ApiService {
     @POST("api/v2/node/refund/verify")
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
 
+    @POST("api/v2/node/refund/process")
+    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
 
 
     @POST("/api/v2/node/paidOrder")

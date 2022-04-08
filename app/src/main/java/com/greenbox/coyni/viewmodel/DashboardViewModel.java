@@ -61,6 +61,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<LatestTxnResponse> getUserLatestTxns = new MutableLiveData<>();
     private MutableLiveData<TransactionDetails> transactionDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RefundDataResponce> refundDetailsMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<RefundDataResponce> refundProcessMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -140,6 +141,9 @@ public class DashboardViewModel extends AndroidViewModel {
     }
     public  MutableLiveData<RefundDataResponce> getRefundDetailsMutableLiveData(){
         return refundDetailsMutableLiveData;
+    }
+    public  MutableLiveData<RefundDataResponce> getRefundProcessMutableLiveData(){
+        return refundProcessMutableLiveData;
     }
 
     public void meProfile() {
@@ -737,5 +741,40 @@ public class DashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+    public void refundprocessDetails(RefundReferenceRequest refundrefrequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<RefundDataResponce> call = apiService.getRefundProcess(refundrefrequest);
+            call.enqueue(new Callback<RefundDataResponce>() {
+                @Override
+                public void onResponse(Call<RefundDataResponce> call, Response<RefundDataResponce> r) {
+                    if (r.isSuccessful()) {
+                        RefundDataResponce data = r.body();
+                        refundProcessMutableLiveData.setValue(data);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<RefundDataResponce>() {
+                        }.getType();
+                        RefundDataResponce errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(r.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        refundProcessMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RefundDataResponce> call, Throwable t) {
+                    refundProcessMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

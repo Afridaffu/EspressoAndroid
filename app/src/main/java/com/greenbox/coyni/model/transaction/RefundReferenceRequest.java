@@ -5,6 +5,7 @@ public class RefundReferenceRequest {
     private String gbxTransactionId;
     private String refundReason;
     private Double refundAmount;
+    private Integer walletType;
 
     public String getGbxTransactionId() {
         return gbxTransactionId;
@@ -29,5 +30,14 @@ public class RefundReferenceRequest {
     public void setAmount(Double refundAmount) {
         this.refundAmount = refundAmount;
     }
+
+    public Integer getWalletType() {
+        return walletType;
+    }
+
+    public void setWalletType(Integer walletType) {
+        this.walletType = walletType;
+    }
+
 
 }
