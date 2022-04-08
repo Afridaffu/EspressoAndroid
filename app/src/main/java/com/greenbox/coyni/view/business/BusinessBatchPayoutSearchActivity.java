@@ -32,6 +32,8 @@ import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListData;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
+import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
@@ -104,8 +106,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         recyclerViewPayouts.setLayoutManager(new LinearLayoutManager(this));
 
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
-        showProgressDialog();
-        businessDashboardViewModel.getPayoutListData();
+        getBatchListData();
+
+//        showProgressDialog();
+//
+//        RollingListRequest listRequest = new RollingListRequest();
+//        listRequest.setPayoutType(Utils.batchNow);
+//        businessDashboardViewModel.getPayoutListData(listRequest);
 
         searchET.addTextChangedListener(this);
 
@@ -172,7 +179,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
                     batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
                     cynTV.setVisibility(View.VISIBLE);
-                    businessDashboardViewModel.getPayoutListData();
+//                    businessDashboardViewModel.getPayoutListData(listRequest);
+                    getBatchListData();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -219,12 +227,12 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                             payoutProgressBarLoadMore.setVisibility(View.GONE);
                             payoutLoadMoreTV.setVisibility(View.GONE);
                             if (batchPayoutList.getData().getItems() != null) {
-                                //payoutList = batchPayoutList.getData().getItems();
-                                for(int i=0;i<batchPayoutList.getData().getItems().size();i++) {
-                                    if(batchPayoutList.getData().getItems().get(i).getStatus().equalsIgnoreCase("closed")) {
-                                        payoutList.add(batchPayoutList.getData().getItems().get(i));
-                                    }
-                                }
+                                payoutList = batchPayoutList.getData().getItems();
+//                                for(int i=0;i<batchPayoutList.getData().getItems().size();i++) {
+//                                    if(batchPayoutList.getData().getItems().get(i).getStatus().equalsIgnoreCase("paid")) {
+//                                        payoutList.add(batchPayoutList.getData().getItems().get(i));
+//                                    }
+//                                }
                                 batchPayoutListAdapter = new BatchPayoutListAdapter(BusinessBatchPayoutSearchActivity.this, payoutList);
                                 batchPayoutListAdapter.setOnItemClickListener(new OnItemClickListener() {
                                     @Override
@@ -233,8 +241,10 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
                                         BatchPayoutListItems batchPayoutListItem = (BatchPayoutListItems) obj;
                                         showBatchPayoutDetails(batchPayoutListItem);
-//                                        businessDashboardViewModel.batchPayoutIdDetails();
-                                        //Navigate to intent
+
+//                                        BatchPayoutDetailsRequest batchPayoutDetailsRequest = new BatchPayoutDetailsRequest();
+//                                        businessDashboardViewModel.batchPayoutIdDetails(batchPayoutDetailsRequest);
+//                                        //Navigate to intent
                                     }
 
                                 });
@@ -264,10 +274,10 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
     }
 
-    private void payoutAPI() {
-        showProgressDialog();
-        businessDashboardViewModel.getPayoutListData();
-    }
+//    private void payoutAPI() {
+//        showProgressDialog();
+//        businessDashboardViewModel.getPayoutListData();
+//    }
 
     private void payoutAPI(String search) {
         showProgressDialog();
@@ -301,7 +311,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             payoutList.clear();
             noPayoutTransactions.setVisibility(View.GONE);
             recyclerViewPayouts.setVisibility(View.VISIBLE);
-            businessDashboardViewModel.getPayoutListData();
+//            businessDashboardViewModel.getPayoutListData(li);
+            getBatchListData();
         }
     }
 
@@ -320,11 +331,22 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     private void showBatchPayoutDetails(BatchPayoutListItems items) {
         try {
             Intent i = new Intent(this, BusinessBatchPayoutIdDetailsActivity.class);
+            i.putExtra(Utils.SELECTED_BATCH_PAYOUT, items);
             startActivity(i);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+    private void getBatchListData(){
+        showProgressDialog();
+        RollingListRequest listRequest = new RollingListRequest();
+        listRequest.setPayoutType(Utils.batchNow);
+        ArrayList<Integer> status = new ArrayList<>();
+        status.add(Utils.paid);
+        //status.add(4);
+        listRequest.setStatus(status);
+        businessDashboardViewModel.getPayoutListData(listRequest);
     }
 
 

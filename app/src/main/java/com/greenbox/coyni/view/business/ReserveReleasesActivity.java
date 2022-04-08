@@ -3,6 +3,8 @@ package com.greenbox.coyni.view.business;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -28,13 +30,17 @@ import com.greenbox.coyni.dialogs.ReserveReleasesFilterDialog;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListData;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
+import com.greenbox.coyni.model.RangeDates;
+import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.reservemanual.ManualData;
 import com.greenbox.coyni.model.reservemanual.ManualItem;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -42,7 +48,7 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReserveReleasesActivity extends BaseActivity {
+public class ReserveReleasesActivity extends BaseActivity implements TextWatcher {
 
     private ImageView ivFilterIcon;
     private LinearLayout closeBtnIV, rollingLL;
@@ -169,20 +175,36 @@ public class ReserveReleasesActivity extends BaseActivity {
         listRequest.setPayoutType(Utils.reserveRelease);
         ArrayList<Integer> status = new ArrayList<>();
         if (reserveFilter != null && reserveFilter.isFilterApplied) {
-            if (reserveFilter.isOpen()) {
+
+            if(!reserveFilter.isOpen() && !reserveFilter.isOnHold()
+                    && !reserveFilter.isReleased() && !reserveFilter.isCancelled()) {
                 status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
-            }
-            if (reserveFilter.isOnHold()) {
                 status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
-            }
-            if (reserveFilter.isReleased()) {
                 status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
-            }
-            if (reserveFilter.isCancelled()) {
                 status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+            } else {
+                if (reserveFilter.isOpen()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
+                }
+                if (reserveFilter.isOnHold()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
+                }
+                if (reserveFilter.isReleased()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
+                }
+                if (reserveFilter.isCancelled()) {
+                    status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
+                }
+            }
+            if(reserveFilter.getUpdatedToDate() != null && reserveFilter.getUpdatedFromDate() != null) {
+                if (!reserveFilter.getUpdatedToDate().isEmpty() && !reserveFilter.getUpdatedFromDate().isEmpty()) {
+                    String strFromDate = Utils.formatDate(reserveFilter.getUpdatedFromDate());
+                    listRequest.setFromDate(strFromDate);
+                    String strToDate = Utils.formatDate(reserveFilter.getUpdatedToDate());
+                   listRequest.setToDate(strToDate);
+                }
             }
 
-            //Add dates condition here
         } else {
             status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
 
@@ -217,6 +239,9 @@ public class ReserveReleasesActivity extends BaseActivity {
         loadMore = findViewById(R.id.loadMoreTV);
         view = findViewById(R.id.viewV);
         changeName = findViewById(R.id.tvChangeName);
+
+        searchET.addTextChangedListener(this);
+
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
 
         reserveNestedScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -310,7 +335,6 @@ public class ReserveReleasesActivity extends BaseActivity {
                                 } else {
                                     noTransactions.setVisibility(View.VISIBLE);
                                 }
-
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.something_went_wrong), ReserveReleasesActivity.this, "", manualListResponse.getError().getFieldErrors().get(0));
@@ -322,7 +346,6 @@ public class ReserveReleasesActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void showFiltersPopup() {
@@ -343,5 +366,46 @@ public class ReserveReleasesActivity extends BaseActivity {
             }
         });
         showReserveReleaseDialog.show();
+    }
+    private void manualAPI(String search) {
+        SearchKeyRequest request = new SearchKeyRequest();
+        request.setSearchKey(search);
+        businessDashboardViewModel.getManualListData(request);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        if(isRolling) {
+
+        } else {
+            if (charSequence.length() == 15 ) {
+                manualItems.clear();
+                manualAPI(charSequence.toString());
+                noTransactions.setVisibility(View.GONE);
+                reserveRecyclerView.setVisibility(View.VISIBLE);
+            } else if (charSequence.length() > 0 && charSequence.length() < 15) {
+                noTransactions.setVisibility(View.VISIBLE);
+                reserveRecyclerView.setVisibility(View.GONE);
+            } else if (charSequence.toString().trim().length() == 0) {
+                manualItems.clear();
+                noTransactions.setVisibility(View.GONE);
+                reserveRecyclerView.setVisibility(View.VISIBLE);
+                businessDashboardViewModel.getManualListData();
+            }
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+        if (editable == searchET.getEditableText()) {
+
+        }
+
     }
 }

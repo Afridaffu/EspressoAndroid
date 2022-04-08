@@ -111,12 +111,12 @@ public class ImageUtility {
 //                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
             } else if (from.equals("DBA_INFO")) {
                 DBAInfoAcivity.dbaFile = mediaFile;
-//                DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
+              // DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
             } else if (from.equals("ADD_BO")) {
                 AddBeneficialOwnerActivity.identityFile = mediaFile;
 //                DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
-            } else if(from.equals("AAR-SSC")) {
-                BusinessAdditionalActionRequiredActivity.adtionalSscFile = mediaFile;
+            } else if(from.equals("BAARA")) {
+                BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(mediaFile);
             }
             else if(from.equals("AAR-SecFile")) {
                 BusinessAdditionalActionRequiredActivity.addtional2fFle = mediaFile;

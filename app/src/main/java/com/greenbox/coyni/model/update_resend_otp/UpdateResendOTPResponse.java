@@ -4,6 +4,7 @@ import com.greenbox.coyni.model.Error;
 import com.greenbox.coyni.model.register.EmailResendResponseData;
 
 public class UpdateResendOTPResponse {
+
     private String status;
     private String timestamp;
     private Dataa data;
