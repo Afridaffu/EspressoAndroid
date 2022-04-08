@@ -374,6 +374,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         mImageParameters.mDisplayOrientation = displayOrientation;
         mImageParameters.mLayoutOrientation = degrees;
 
+
         mCamera.setDisplayOrientation(mImageParameters.mDisplayOrientation);
     }
 

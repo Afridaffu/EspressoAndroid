@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
@@ -85,7 +86,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         return batchPayoutListMutableLiveData;
     }
 
-    public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData(){
+    public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData() {
         return batchPayoutIdDetailsResponseMutableLiveData;
     }
     public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
@@ -414,7 +415,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-
     public void getManualListData() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -484,40 +484,40 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void getPayoutListData() {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(new EmptyRequest());
-            call.enqueue(new Callback<BatchPayoutListResponse>() {
-                @Override
-                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
-                    if (response.isSuccessful()) {
-                        BatchPayoutListResponse list = response.body();
-                        batchPayoutListMutableLiveData.setValue(list);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<BatchPayoutListResponse>() {
-                        }.getType();
-                        BatchPayoutListResponse errorResponse = null;
-                        try {
-                            errorResponse = gson.fromJson(response.errorBody().string(), type);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        batchPayoutListMutableLiveData.setValue(errorResponse);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
-                    batchPayoutListMutableLiveData.setValue(null);
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public void getPayoutListData() {
+//        try {
+//            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+//            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(new EmptyRequest());
+//            call.enqueue(new Callback<BatchPayoutListResponse>() {
+//                @Override
+//                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+//                    if (response.isSuccessful()) {
+//                        BatchPayoutListResponse list = response.body();
+//                        batchPayoutListMutableLiveData.setValue(list);
+//                    } else {
+//                        Gson gson = new Gson();
+//                        Type type = new TypeToken<BatchPayoutListResponse>() {
+//                        }.getType();
+//                        BatchPayoutListResponse errorResponse = null;
+//                        try {
+//                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        batchPayoutListMutableLiveData.setValue(errorResponse);
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+//                    batchPayoutListMutableLiveData.setValue(null);
+//                }
+//            });
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void getPayoutlistData(String searchKey) {
         try {
@@ -553,10 +553,11 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
     public void getPayoutlistdata(String fromDate, String toDate) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BatchPayoutListResponse> call = apiService.getPayoutlistdata(fromDate,toDate);
+            Call<BatchPayoutListResponse> call = apiService.getPayoutlistdata(fromDate, toDate);
             call.enqueue(new Callback<BatchPayoutListResponse>() {
                 @Override
                 public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
@@ -589,31 +590,45 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     }
 
 
-//    public void batchPayoutIdDetails(BatchPayoutDetailsRequest batchPayoutDetailsRequest){
-//
-//        ApiService apiService = AuthApiClient.getInstance().create((ApiService.class));
-//        Call<BatchPayoutIdDetailsResponse> call = apiService.batchPayoutIdDetails(batchPayoutDetailsRequest);
-//        call.enqueue(new Callback<BatchPayoutIdDetailsResponse>() {
-//            @Override
-//            public void onResponse(Call<BatchPayoutIdDetailsResponse> call, Response<BatchPayoutIdDetailsResponse> response) {
-//                try{
-//                    if(response.isSuccessful()){
-//
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<BatchPayoutIdDetailsResponse> call, Throwable t) {
-//
-//            }
-//        });
-//
-//    }
+    public void batchPayoutIdDetails(BatchPayoutDetailsRequest batchPayoutDetailsRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create((ApiService.class));
+            Call<BatchPayoutIdDetailsResponse> call = apiService.batchPayoutIdDetails(batchPayoutDetailsRequest);
+            call.enqueue(new Callback<BatchPayoutIdDetailsResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutIdDetailsResponse> call, Response<BatchPayoutIdDetailsResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BatchPayoutIdDetailsResponse list = response.body();
+                            batchPayoutIdDetailsResponseMutableLiveData.setValue(list);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BatchPayoutListResponse>() {
+                            }.getType();
+                            BatchPayoutIdDetailsResponse errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            batchPayoutIdDetailsResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutIdDetailsResponse> call, Throwable t) {
+                    batchPayoutIdDetailsResponseMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
 
