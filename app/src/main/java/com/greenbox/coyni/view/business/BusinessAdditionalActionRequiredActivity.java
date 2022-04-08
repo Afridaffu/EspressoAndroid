@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,36 +25,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
-import com.greenbox.coyni.model.AdditonaActionRequiredRequest;
-import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.InformationChangeData;
 import com.greenbox.coyni.model.underwriting.ProposalsData;
-import com.greenbox.coyni.model.underwriting.ProposalsPropertiesData;
 import com.greenbox.coyni.model.underwriting.ProposalsPropertiesSubmitRequestData;
 import com.greenbox.coyni.model.underwriting.ProposalsSubmitRequestData;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.AdditionalActionUploadActivity;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequired;
 
 import org.json.JSONArray;
@@ -64,7 +53,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,41 +68,35 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
-    private static Object ActivityCompat;
-    public File saveFIleFromCamera;
     public ScrollView scrollview;
-    LinearLayout additionReservedLL,llapprovedreserved,llHeading,llBottomView,additionalDocumentRequiredLL, websiteRevisionRequiredLL, informationRevisionLL, actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
-    TextView fileUploadTV, actionReqFileTV, licenseTV, fileUploadedTV, remarksTV, acceptMsgTV, declineMsgTV, compnyNameTV, actionReqFileUpdatedOnTV, licenseUploadedTV;
-    String selectedDocType = "", from = "";
+    LinearLayout additionReservedLL, llapprovedreserved, llHeading, llBottomView, additionalDocumentRequiredLL, websiteRevisionRequiredLL, informationRevisionLL, actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
+    String selectedDocType = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     private static final int ACTIVITY_CHOOSE_FILE = 3;
     private static final int PICK_IMAGE_REQUEST = 4;
     Long mLastClickTime = 0L;
-    public int docTypeID = 0;
     public static BusinessAdditionalActionRequiredActivity businessAdditionalActionRequired;
-    public static File adtionalSscFile = null, addtional2fFle = null, businessLincenseFile = null;
-    public boolean issscFileUploadLL = false, isactionReqFileUploadLL = false, isbusinessLicenseUploadLL = false, ischeckbox2CB = false, ischeckbox3CB = false, ischeckboxCB = false, isSubmitEnabled = false;
+    public static File addtional2fFle = null, businessLincenseFile = null;
+    public boolean isSubmitEnabled = false;
     private EditText addNoteET;
-    public CheckBox checkboxCB, checkbox2CB, checkbox3CB;
     public CardView submitCV;
     private UnderwritingUserActionRequired underwritingUserActionRequired;
-
     private HashMap<Integer, String> fileUpload;
     private ActionRequiredResponse actionRequired;
     private int documentID;
     private LinearLayout selectedLayout = null;
     public static ArrayList<File> documentsFIle;
     private JSONObject informationJSON;
-    private MyApplication application;
     private ImageView imvAcceptTick;
     private TextView tvdeclinedMsg;
     private TextView tvRemarks;
     private LinearLayout llDecline;
     private LinearLayout llAccept;
     private String currentDateTimeString;
-    private boolean userAccepted=false;
-    public static  File mediaFile;
-    private boolean reservedRuleAccepted=false;
+    private boolean userAccepted = false;
+    public static File mediaFile;
+    private boolean reservedRuleAccepted = false;
+    private ImageView imvCLose;
 
 
     @Override
@@ -140,41 +122,32 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         additionalDocumentRequiredLL = findViewById(R.id.ll_document_required);
         websiteRevisionRequiredLL = findViewById(R.id.website_revision_required);
         informationRevisionLL = findViewById(R.id.information_revision);
-
-        fileUploadTV = findViewById(R.id.sscuploadFileTV);
-
-        fileUploadedTV = findViewById(R.id.sscfileUpdatedOnTV);
-
-        checkboxCB = findViewById(R.id.checkboxCB);
-
+        imvCLose = findViewById(R.id.imvCLose);
         submitCV = findViewById(R.id.submitCV);
 
         underwritingUserActionRequired = new ViewModelProvider(this).get(UnderwritingUserActionRequired.class);
         underwritingUserActionRequired.postactionRequired();
 
-        LayoutInflater documentsRequiredInflater = getLayoutInflater();
-
         fileUpload = new HashMap<Integer, String>();
         documentsFIle = new ArrayList<>();
-        application = new MyApplication();
+
+        imvCLose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         submitCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LogUtils.d(TAG, "submitCV" + fileUpload);
-
                 postSubmitAPiCall();
-
-
             }
         });
-
-
-
-
     }
 
-    private void postSubmitAPiCall(){
+    private void postSubmitAPiCall() {
 
         informationJSON = new JSONObject();
         try {
@@ -193,18 +166,18 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     website.put(actionRequired.getData().getWebsiteChange().get(i).getId());
                 }
             }
-            if(actionRequired.getData().getReserveRule()!=null){
-                    informationJSON.put("reserveRuleAccepted", reservedRuleAccepted);
+            if (actionRequired.getData().getReserveRule() != null) {
+                informationJSON.put("reserveRuleAccepted", reservedRuleAccepted);
             }
 
-           String userMessage="";
-           if(tvRemarks!=null) {
-               if (tvRemarks.getText() != null && tvRemarks.getText().toString().trim().equals("")) {
-                   userMessage = "Accpted";
-               } else {
-                   userMessage = tvRemarks.getText().toString();
-               }
-           }
+            String userMessage = "";
+            if (tvRemarks != null) {
+                if (tvRemarks.getText() != null && tvRemarks.getText().toString().trim().equals("")) {
+                    userMessage = "Accepted";
+                } else {
+                    userMessage = tvRemarks.getText().toString();
+                }
+            }
 
             informationJSON.put("documentIdList", documents);
             informationJSON.put("websiteUpdates", website);
@@ -239,13 +212,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         proposals.put(proposalsobj);
 
                         informationJSON.put("proposals", proposals);
-
                     }
-
 
                 }
             }
-
 
 
         } catch (JSONException je) {
@@ -253,23 +223,18 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         }
 
         LogUtils.d(TAG, "jsonnn    " + informationJSON.toString());
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("multipart/form-data,multipart/form-data; boundary=dba24cc2-bdec-41a5-8e8e-cf925ccf5088,application/json");
-
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
         MultipartBody.Builder buildernew = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("information", null,
                         RequestBody.create(MediaType.parse("application/json"), informationJSON.toString().getBytes()));   //Here you can add the fix number of data.
 
         for (int i = 0; i < documentsFIle.size(); i++) {
-
-            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName() +".jpg", RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
-            LogUtils.d(TAG,"documentsssfffff"+new File(String.valueOf(documentsFIle.get(i))));
-
+            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName() + ".jpg", RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
+            LogUtils.d(TAG, "documentsssfffff" + new File(String.valueOf(documentsFIle.get(i))));
         }
 
-        LogUtils.d(TAG,"documentsss56787656"+documentsFIle);
+        LogUtils.d(TAG, "documentsss56787656" + documentsFIle);
 
         MultipartBody requestBody = buildernew.build();
 
@@ -284,25 +249,23 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 .addHeader("Authorization", "Bearer " + Utils.getStrAuth())
                 .build();
 
-        LogUtils.d(TAG,"request"+request);
-        LogUtils.d(TAG,"upload"+requestBody.toString());
+        LogUtils.d(TAG, "request" + request);
+        LogUtils.d(TAG, "upload" + requestBody.toString());
 
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                LogUtils.d(TAG,"callback"+e.getMessage());
+                LogUtils.d(TAG, "callback" + e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                LogUtils.d(TAG,"callback"+response.body());
+                LogUtils.d(TAG, "callback" + response.body());
                 JSONObject jsonObj = null;
                 try {
                     jsonObj = new JSONObject(response.body().string());
-                    LogUtils.d("callback","---->>JSONException"+jsonObj);
-                    // {"status":"ERROR","timestamp":"2022-04-08T08:04:25.796+00:00","data":null,"error":{"errorCode":"000005","errorDescription":"Sorry! You are not eligible to perform this operation.","fieldErrors":null}}
-                    //{"status":"SUCCESS","timestamp":"2022-04-08T08:04:23.970+00:00","data":"Successfully saved all user action.","error":null}
+                    LogUtils.d("callback", "---->>JSONException" + jsonObj);
                     String status = jsonObj.getString("status");
                     if (status.toLowerCase().toString().equalsIgnoreCase("success")) {
                         finish();
@@ -312,12 +275,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                 BusinessAdditionalActionRequiredActivity.this, "", "");
                     }
                 } catch (JSONException e) {
-                    LogUtils.d("ws","---->>JSONException"+jsonObj);
+                    LogUtils.d("ws", "---->>JSONException" + jsonObj);
                     Utils.displayAlert(e.getMessage(),
                             BusinessAdditionalActionRequiredActivity.this, "", "");
                     e.printStackTrace();
                 } catch (IOException e) {
-                    LogUtils.d("ws","---->>IOException"+jsonObj);
+                    LogUtils.d("ws", "---->>IOException" + jsonObj);
                     Utils.displayAlert(e.getMessage(),
                             BusinessAdditionalActionRequiredActivity.this, "", "");
                     e.printStackTrace();
@@ -328,10 +291,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     }
 
-    private void fail() {
-
-    }
-
     private void initObserver() {
 
         underwritingUserActionRequired.getUserAccountLimitsMutableLiveData().observe(this,
@@ -339,42 +298,33 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     @Override
                     public void onChanged(ActionRequiredResponse actionRequiredResponse) {
                         try {
-                           // LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
+                            // LogUtils.d(TAG, "ActionRequiredResponse" + actionRequiredResponse.getData().getWebsiteChange().size());
                             actionRequired = actionRequiredResponse;
+                            if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
 
-                          if(actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")){
+                                if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
+                                    if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
+                                            actionRequiredResponse.getData().getAdditionalDocument().size() != 0) {
+                                        additionalRequiredDocuments(actionRequiredResponse);
+                                    }
+                                    if (actionRequiredResponse.getData().getWebsiteChange() != null
+                                            && actionRequiredResponse.getData().getWebsiteChange().size() != 0) {
+                                        websiteChanges(actionRequiredResponse);
+                                    }
+                                    if (actionRequiredResponse.getData().getInformationChange() != null
+                                            && actionRequiredResponse.getData().getInformationChange().size() != 0) {
+                                        informationRevision(actionRequiredResponse);
+                                    }
+                                    if (actionRequiredResponse.getData().getReserveRule() != null) {
+                                        showReserveRule(actionRequiredResponse);
+                                    }
+                                }
 
-                              if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
-                                  if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
-                                          actionRequiredResponse.getData().getAdditionalDocument().size() != 0) {
+                            } else {
 
-                                      additionalRequiredDocuments(actionRequiredResponse);
+                                Utils.displayAlert(actionRequiredResponse.getError().getErrorDescription(), BusinessAdditionalActionRequiredActivity.this, "", actionRequiredResponse.getError().getFieldErrors().get(0));
 
-                                  }
-                                  if (actionRequiredResponse.getData().getWebsiteChange() != null
-                                          && actionRequiredResponse.getData().getWebsiteChange().size() != 0) {
-
-                                      websiteChanges(actionRequiredResponse);
-
-                                  }
-                                  if (actionRequiredResponse.getData().getInformationChange() != null
-                                          && actionRequiredResponse.getData().getInformationChange().size() != 0) {
-
-                                      informationRevision(actionRequiredResponse);
-
-                                  }
-                                  if (actionRequiredResponse.getData().getReserveRule() != null) {
-
-                                      showReserveRule(actionRequiredResponse);
-
-                                  }
-                              }
-
-                          } else {
-
-                              Utils.displayAlert(actionRequiredResponse.getError().getErrorDescription(), BusinessAdditionalActionRequiredActivity.this, "", actionRequiredResponse.getError().getFieldErrors().get(0));
-
-                          }
+                            }
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -441,7 +391,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
 
                     }
-                   // chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
+                    // chooseFilePopup(BusinessAdditionalActionRequiredActivity.this, selectedDocType);
                 }
             });
             enableOrDisableNext();
@@ -516,7 +466,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             tvdeclinedMsg = inf1.findViewById(R.id.declineMsgTV);
             tvRemarks = inf1.findViewById(R.id.remarksTV);
             llDecline = inf1.findViewById(R.id.declineLL);
-            llAccept= inf1.findViewById(R.id.acceptLL);
+            llAccept = inf1.findViewById(R.id.acceptLL);
 
             websiteChangeLL.setVisibility(View.VISIBLE);
 
@@ -531,7 +481,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
             fileUpload.put(i, null);
 
-             int pos = i;
+            int pos = i;
 
             informationRevisionLL.addView(inf1, layoutParamss1);
 
@@ -545,7 +495,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvacceptMsg.setVisibility(View.VISIBLE);
                     llAccept.setVisibility(View.GONE);
                     llDecline.setVisibility(View.GONE);
-                    tvacceptMsg.setText(getResources().getString(R.string.Accepted)+" "+currentDateTimeString);
+                    tvacceptMsg.setText(getResources().getString(R.string.Accepted) + " " + currentDateTimeString);
 
                     if (fileUpload.containsKey(pos)) {
                         fileUpload.replace(pos, "true");
@@ -567,26 +517,26 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     private void showReserveRule(ActionRequiredResponse actionRequiredResponse) {
 
-            llHeading.setVisibility(View.GONE);
-            llBottomView.setVisibility(View.GONE);
-            scrollview.setVisibility(View.GONE);
-            llapprovedreserved.setVisibility(View.VISIBLE);
+        llHeading.setVisibility(View.GONE);
+        llBottomView.setVisibility(View.GONE);
+        scrollview.setVisibility(View.GONE);
+        llapprovedreserved.setVisibility(View.VISIBLE);
 
-            LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            View reserverRule = getLayoutInflater().inflate(R.layout.activity_business_application_approved, null);
+        View reserverRule = getLayoutInflater().inflate(R.layout.activity_business_application_approved, null);
 
-            TextView tv_mv = reserverRule.findViewById(R.id.tvMonthlyVolume);
-            TextView tv_ht = reserverRule.findViewById(R.id.tvhighticket);
-            TextView tv_reserveamount = reserverRule.findViewById(R.id.tvreserveAMountTransaction);
-            TextView tv_reserveperiod = reserverRule.findViewById(R.id.tvreservePeriod);
-            CardView cardAccept = reserverRule.findViewById(R.id.cardAccept);
-            TextView tvcardDeclined = reserverRule.findViewById(R.id.cardDeclined);
+        TextView tv_mv = reserverRule.findViewById(R.id.tvMonthlyVolume);
+        TextView tv_ht = reserverRule.findViewById(R.id.tvhighticket);
+        TextView tv_reserveamount = reserverRule.findViewById(R.id.tvreserveAMountTransaction);
+        TextView tv_reserveperiod = reserverRule.findViewById(R.id.tvreservePeriod);
+        CardView cardAccept = reserverRule.findViewById(R.id.cardAccept);
+        TextView tvcardDeclined = reserverRule.findViewById(R.id.cardDeclined);
 
-            tv_mv.setText(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume());
-            tv_ht.setText(actionRequiredResponse.getData().getReserveRule().getHighTicket());
-            tv_reserveamount.setText(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString().replace("0*$","")+" %");
-            tv_reserveperiod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod()+" "+"days");
+        tv_mv.setText(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume());
+        tv_ht.setText(actionRequiredResponse.getData().getReserveRule().getHighTicket());
+        tv_reserveamount.setText(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString().replace("0*$", "") + " %");
+        tv_reserveperiod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 
         llapprovedreserved.addView(reserverRule, layoutParamss1);
 
@@ -614,100 +564,100 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     private void displayComments(int position) {
 
-            Dialog cvvDialog = new Dialog(BusinessAdditionalActionRequiredActivity.this);
-            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-            cvvDialog.setContentView(R.layout.add_note_layout);
-            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            DisplayMetrics mertics = getResources().getDisplayMetrics();
-            int width = mertics.widthPixels;
+        Dialog cvvDialog = new Dialog(BusinessAdditionalActionRequiredActivity.this);
+        cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        cvvDialog.setContentView(R.layout.add_note_layout);
+        cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        DisplayMetrics mertics = getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
 
-            addNoteET = cvvDialog.findViewById(R.id.addNoteET);
-            CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
-            TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
-            LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
+        addNoteET = cvvDialog.findViewById(R.id.addNoteET);
+        CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
+        TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
+        LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
 
 
-            cancelBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cvvDialog.dismiss();
+                Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+
+            }
+        });
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    tvRemarks.setText(addNoteET.getText().toString().trim());
                     cvvDialog.dismiss();
                     Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-
-                }
-            });
-            doneBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        tvRemarks.setText(addNoteET.getText().toString().trim());
-                        cvvDialog.dismiss();
-                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                        imvAcceptTick.setVisibility(View.VISIBLE);
-                        imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
-                        tvRemarks.setVisibility(View.VISIBLE);
-                        llAccept.setVisibility(View.GONE);
-                        tvdeclinedMsg.setVisibility(View.VISIBLE);
-                        tvdeclinedMsg.setText(getResources().getString(R.string.Decline)+" "+currentDateTimeString);
-                        llDecline.setVisibility(View.GONE);
-                        if (fileUpload.containsKey(position)) {
-                            fileUpload.replace(position, "true");
-                        }
-                        userAccepted = false;
-                        enableOrDisableNext();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    imvAcceptTick.setVisibility(View.VISIBLE);
+                    imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
+                    tvRemarks.setVisibility(View.VISIBLE);
+                    llAccept.setVisibility(View.GONE);
+                    tvdeclinedMsg.setVisibility(View.VISIBLE);
+                    tvdeclinedMsg.setText(getResources().getString(R.string.Decline) + " " + currentDateTimeString);
+                    llDecline.setVisibility(View.GONE);
+                    if (fileUpload.containsKey(position)) {
+                        fileUpload.replace(position, "true");
                     }
+                    userAccepted = false;
+                    enableOrDisableNext();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            });
-            addNoteET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() == 0) {
-                        addNoteTIL.setCounterEnabled(false);
-                    } else {
-                        addNoteTIL.setCounterEnabled(true);
-
-                    }
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    try {
-                        String str = addNoteET.getText().toString();
-                        if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
-                            addNoteET.setText("");
-                            addNoteET.setSelection(addNoteET.getText().length());
-
-                        } else if (str.length() > 0 && str.contains(".")) {
-                            addNoteET.setText(addNoteET.getText().toString().replaceAll("\\.", ""));
-                            addNoteET.setSelection(addNoteET.getText().length());
-
-                        } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
-                            addNoteET.setText("");
-                            addNoteET.setSelection(addNoteET.getText().length());
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-            if (!tvRemarks.getText().toString().trim().equals("")) {
-                addNoteET.setText(tvRemarks.getText().toString().trim());
-                addNoteET.setSelection(addNoteET.getText().toString().trim().length());
             }
-            Window window = cvvDialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-            WindowManager.LayoutParams wlp = window.getAttributes();
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
-            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-            cvvDialog.show();
+        });
+        addNoteET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 0) {
+                    addNoteTIL.setCounterEnabled(false);
+                } else {
+                    addNoteTIL.setCounterEnabled(true);
+
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    String str = addNoteET.getText().toString();
+                    if (str.length() > 0 && str.substring(0, 1).equals(" ")) {
+                        addNoteET.setText("");
+                        addNoteET.setSelection(addNoteET.getText().length());
+
+                    } else if (str.length() > 0 && str.contains(".")) {
+                        addNoteET.setText(addNoteET.getText().toString().replaceAll("\\.", ""));
+                        addNoteET.setSelection(addNoteET.getText().length());
+
+                    } else if (str.length() > 0 && str.contains("http") || str.length() > 0 && str.contains("https")) {
+                        addNoteET.setText("");
+                        addNoteET.setSelection(addNoteET.getText().length());
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        if (!tvRemarks.getText().toString().trim().equals("")) {
+            addNoteET.setText(tvRemarks.getText().toString().trim());
+            addNoteET.setSelection(addNoteET.getText().toString().trim().length());
+        }
+        Window window = cvvDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+        cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        cvvDialog.show();
 
     }
 
@@ -857,7 +807,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     public void saveFileFromCamera(File cameraFIle) {
 
-        LogUtils.d(TAG,"camera"+cameraFIle);
+        LogUtils.d(TAG, "camera" + cameraFIle);
 
         String FilePath = String.valueOf(cameraFIle);
 
@@ -898,7 +848,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 fileUpload.replace(documentID, mediaFile.getAbsolutePath());
                 documentsFIle.add(mediaFile);
             }
-            // fileUpload.put(documentID, mediaFile);
 
             if (selectedLayout != null) {
                 selectedLayout.setVisibility(View.VISIBLE);
@@ -913,55 +862,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     }
 
-    public void fileOnClick(View view) {
-        selectedDocType = "AAR-SSC";
-        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                return;
-
-            }
-            mLastClickTime = SystemClock.elapsedRealtime();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
-            chooseFilePopup(this, selectedDocType);
-
-        }
-
-    }
-
-    public void actionReqOnClick(View view) {
-        selectedDocType = "AAR-SecFile";
-        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                return;
-
-            }
-            mLastClickTime = SystemClock.elapsedRealtime();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
-            chooseFilePopup(this, selectedDocType);
-
-        }
-    }
-
-    public void licenseOnClick(View view) {
-        selectedDocType = "AAR-FBL";
-        if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                return;
-            }
-            mLastClickTime = SystemClock.elapsedRealtime();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
-            chooseFilePopup(this, selectedDocType);
-
-        }
-    }
-
 
     public void enableOrDisableNext() {
         try {
-            LogUtils.d(TAG,"fileUpload"+fileUpload);
+            LogUtils.d(TAG, "fileUpload" + fileUpload);
             if (fileUpload.containsValue(null)) {
                 isSubmitEnabled = false;
                 submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
