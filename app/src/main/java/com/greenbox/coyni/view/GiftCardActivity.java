@@ -215,7 +215,7 @@ public class GiftCardActivity extends AppCompatActivity implements OnKeyboardVis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(Utils.isKeyboardVisible)
-            Utils.hideKeypad(this);
+//        if(Utils.isKeyboardVisible)
+//            Utils.hideKeypad(this);
     }
 }

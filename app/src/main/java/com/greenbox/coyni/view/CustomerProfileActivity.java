@@ -797,12 +797,14 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (resultCode == RESULT_OK) {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "CHOOSE")
-                            .putExtra("screen", "ResetPIN");
+                            .putExtra("screen", "ResetPIN")
+                            .putExtra("AUTH_TYPE","TOUCH");
                     startActivity(i);
                 } else {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "ResetPIN");
+                            .putExtra("screen", "ResetPIN")
+                            .putExtra("AUTH_TYPE","PIN");
                     startActivity(i);
                 }
             }

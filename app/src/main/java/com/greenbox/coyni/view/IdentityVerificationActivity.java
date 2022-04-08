@@ -1052,7 +1052,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 //                        addressObj.setState(state.getText().toString().trim());
                         addressObj.setState(Utils.tempStateName);
                         addressObj.setStateCode(Utils.tempStateCode);
-                        addressObj.setCountry("us");
+//                        addressObj.setCountry("us");
+                        addressObj.setCountry(Utils.getStrCCode());
                         addressObj.setZipCode(zipcode.getText().toString().trim());
 
                         PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
