@@ -462,7 +462,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                         if (charSequence.toString().trim().length() > 0) {
 
 //                            amountTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
                             Double walletAmount = 0.0;
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                                 walletAmount = Double.parseDouble(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
@@ -568,7 +568,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                         isFirstName = true;
                         firstNameErrorLL.setVisibility(GONE);
 //                        firstNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(firstNameTIL, getResources().getColor(R.color.primary_black));
                     } else if (firstNameET.getText().toString().trim().length() == 0) {
 //                        firstNameErrorLL.setVisibility(VISIBLE);
 //                        firstNameErrorTV.setText("Field Required");
@@ -614,7 +614,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                         isLastName = true;
                         lastNameErrorLL.setVisibility(GONE);
 //                        lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(lastNameTIL, getResources().getColor(R.color.primary_black));
                     } else if (lastNameET.getText().toString().trim().length() == 0) {
 //                        lastNameErrorLL.setVisibility(VISIBLE);
 //                        lastNameErrorTV.setText("Field Required");
@@ -655,7 +655,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                     if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         emailErrorLL.setVisibility(GONE);
 //                        emailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(emailTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(emailTIL, getResources().getColor(R.color.primary_black));
 
                     } else if (emailET.getText().toString().trim().length() == 0) {
 //                        emailErrorLL.setVisibility(VISIBLE);

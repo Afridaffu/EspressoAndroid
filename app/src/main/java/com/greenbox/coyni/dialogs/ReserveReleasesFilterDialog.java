@@ -68,7 +68,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             onHoldC.setChecked(filter.isOnHold());
             releasedC.setChecked(filter.isReleased());
             canceledC.setChecked(filter.isCancelled());
-            //Show dates
+
         }
 
         openC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -123,8 +123,8 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             @Override
             public void onClick(View v) {
 
-                LogUtils.d("TAG","applyFilter"+filter.isFilterApplied);
-                LogUtils.d("TAG","applyFilterdateRange"+dateRange);
+//                LogUtils.d("TAG","applyFilter"+filter.isFilterApplied);
+//                LogUtils.d("TAG","applyFilterdateRange"+dateRange);
 
                 if (!filter.isFilterApplied) {
                     dismiss();
@@ -164,6 +164,8 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                 if(action.equalsIgnoreCase(Utils.datePicker)) {
                     filter.isFilterApplied = true;
                     rangeDates = (RangeDates) value;
+                    filter.setUpdatedFromDate(rangeDates.getUpdatedFromDate());
+                    filter.setUpdatedToDate(rangeDates.getUpdatedToDate());
                     dateRange.setText(rangeDates.getFullDate());
                 }
 

@@ -65,6 +65,7 @@ public class CustomerTimeZonesAdapter extends RecyclerView.Adapter<CustomerTimeZ
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             holder.tvPreference.setText(listCountries.get(position).getTimezone());
+
             if (listCountries.get(position).isSelected()) {
                 holder.tickIcon.setVisibility(View.VISIBLE);
             } else {

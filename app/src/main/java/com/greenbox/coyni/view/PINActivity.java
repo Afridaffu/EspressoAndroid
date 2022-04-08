@@ -935,7 +935,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     request.setActionType(Utils.buyActionType);
                     break;
                 case "paid":
-                    request.setActionType(Utils.sendActionType);
+                    request.setActionType(Utils.paidActionType);
                     break;
             }
 //            if (strScreen.toLowerCase().equals("changepassword")) {

@@ -6,7 +6,7 @@ public class TransactionListRequest {
     private String walletCategory;
     private String pageSize;
     private String pageNo;
-
+    private boolean isManualUpdate = false;
     private String fromAmount;
     private String fromAmountOperator;
 
@@ -142,5 +142,13 @@ public class TransactionListRequest {
 
     public void setGbxTransactionId(String gbxTransactionId) {
         this.gbxTransactionId = gbxTransactionId;
+    }
+
+    public boolean isManualUpdate() {
+        return isManualUpdate;
+    }
+
+    public void setManualUpdate(boolean manualUpdate) {
+        isManualUpdate = manualUpdate;
     }
 }

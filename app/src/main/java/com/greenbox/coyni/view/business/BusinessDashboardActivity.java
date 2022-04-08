@@ -285,6 +285,7 @@ public class BusinessDashboardActivity extends BaseActivity {
 
             businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
             businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
+            businessDashboardViewModel.meMerchantWallet(Utils.RESERVE);
 
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
@@ -379,6 +380,8 @@ public class BusinessDashboardActivity extends BaseActivity {
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
                             if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
                                 objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE)) {
+                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             } else {
                                 objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                                 objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());

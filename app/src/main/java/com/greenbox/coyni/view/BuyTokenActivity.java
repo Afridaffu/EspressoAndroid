@@ -14,11 +14,15 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -35,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -85,7 +90,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
     RelativeLayout lyPayMethod, lyMainLayout;
-    LinearLayout lyCDetails, lyBuyClose, lyBDetails;
+    LinearLayout lyCDetails, lyBuyClose, lyBDetails,layoutETAmount;
     DatabaseHandler dbHandler;
     EditText etAmount;
     CustomKeyboard ctKey;
@@ -164,6 +169,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
                     if (editable.length() == 5 || editable.length() == 6) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
+                        layoutETAmount.setPadding(0,35,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -175,6 +181,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
+                        layoutETAmount.setPadding(0,50,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 0, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -186,6 +193,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() >= 9) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                        layoutETAmount.setPadding(0,52,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -193,8 +201,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params1.setMargins(0, 0, 0, 10);
                         tvCurrency.setLayoutParams(params1);
-                    }  else if (editable.length() <= 4) {
+                    } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
+                        layoutETAmount.setPadding(0,0,0,0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -336,6 +345,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             imgBankIcon = findViewById(R.id.imgBankIcon);
+            layoutETAmount = findViewById(R.id.lyamountview1);
             imgArrow = findViewById(R.id.imgArrow);
             imgConvert = findViewById(R.id.imgConvert);
             tvLimit = findViewById(R.id.tvLimit);
@@ -451,7 +461,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
 //                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",BuyTokenActivity.this,tvError,17);
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
                                     } else {
                                         if (strLimit.equals("daily")) {
                                             tvError.setText("Amount entered exceeds your daily limit");
@@ -468,7 +478,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                                 if (tvError.getVisibility() == View.VISIBLE) {
                                     if (tvError.getText().toString().trim().contains("Minimum Amount")) {
 //                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
-                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD",BuyTokenActivity.this,tvError,17);
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
 
                                     } else {
                                         if (strLimit.equals("daily")) {
@@ -979,13 +989,13 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            }
             if (tvCYN.getVisibility() == View.VISIBLE && Double.parseDouble(strPay.replace(",", "")) < cynValidation) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN",BuyTokenActivity.this,tvError,17);
+                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
 
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (tvCYN.getVisibility() == View.GONE && Double.parseDouble(strPay.replace(",", "")) < usdValidation) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
-                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD",BuyTokenActivity.this,tvError,17);
+                setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
 
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
@@ -1285,23 +1295,71 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             ImageView imgLogo = prevDialog.findViewById(R.id.imgBLogo);
             ImageView imgRefCopy = prevDialog.findViewById(R.id.imgBRefCopy);
             CardView cvDone = prevDialog.findViewById(R.id.cvBDone);
+            TextView tvDescription = prevDialog.findViewById(R.id.tvDescriptionBuy);
+
             if (objData.getGbxTransactionId().length() > 10) {
                 tvReferenceID.setText(objData.getGbxTransactionId().substring(0, 10) + "...");
             } else {
                 tvReferenceID.setText(objData.getGbxTransactionId());
             }
+
+            String strMessage = "";
             if (objData.getType().toLowerCase().contains("bank")) {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
+                strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account. Learn More";
             } else {
                 tvHeading.setText("Transaction In Progress");
                 imgLogo.setImageResource(R.drawable.ic_in_progress_icon);
+                strMessage = "We are processing your request, please allow a few minutes for your coyni debit/credit card purchase to be reflected in your token account. Learn More";
             }
+
+            SpannableString ss = new SpannableString(strMessage);
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Utils.populateLearnMore(BuyTokenActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(Color.parseColor("#00a6a2"));
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(new ForegroundColorSpan(Color.parseColor("#00a6a2")), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new UnderlineSpan(), strMessage.indexOf("Learn More"), strMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(clickableSpan, strMessage.length() - 10, strMessage.length() - 1, 0);
+
+            tvDescription.setText(ss);
+            tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+
+
             Double bal = cynValue + objMyApplication.getGBTBalance();
             String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));
             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strBal)) + " " + getString(R.string.currency));
             tvAmount.setText(Utils.USNumberFormat(cynValue));
-            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nBank statement as " + objData.getDescriptorName() + ".");
+
+            try {
+                if (objData.getDescriptorName() != null)
+                    tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
+                else
+                    tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement.");
+            } catch (Exception e) {
+                tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement.");
+            }
+
+
+//            tvMessage.setText("This total amount of " + tvAmount.getText().toString().trim() + " will appear on your\nbank statement as " + objData.getDescriptorName().toLowerCase() + ".");
             Window window = prevDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -1810,13 +1868,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
         final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
         ss.setSpan(new RelativeSizeSpan(1f), start, ss.length(), 0);
-        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ss.setSpan(bss, start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(context.getColor(R.color.error_red)), start, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         spannableTV.setText(ss);
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
     }
+
     private void setToken() {
         strToken = dbHandler.getPermanentToken();
     }

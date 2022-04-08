@@ -39,7 +39,9 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
+import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
 import com.greenbox.coyni.model.DialogAttributes;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.LogUtils;
@@ -57,6 +59,7 @@ import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -76,17 +79,18 @@ public class BusinessDashboardFragment extends BaseFragment {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutManualTV, payoutAmountTV, cynTV;
-    private TextView dasboardPayoutDate;
+    private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV;
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
     private BatchPayoutListAdapter batchPayoutListAdapter;
-    RecyclerView recyclerViewPayouts;
-    List<BatchPayoutListItems> listItems;
-    DashboardViewModel dashboardViewModel;
+    private RecyclerView recyclerViewPayouts;
+    private List<BatchPayoutListItems> listItems;
+    private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV, lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV;
+    private LinearLayout reserveReleaseListLL, reserveDetailsLL;
+    private boolean isBatch = false;
 
     private int dbaID = 0;
-    private TextView merchantBalanceTV;
     private String merchantBalance;
 
     @Override
@@ -162,6 +166,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvReserveList = mCurrentView.findViewById(R.id.tv_reserve_list);
         mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutHistory);
         merchantBalanceTV = mCurrentView.findViewById(R.id.merchant_balance_tv);
+        mTvReserveBalance = mCurrentView.findViewById(R.id.tv_reserve_balance);
         payoutTimeTV = mCurrentView.findViewById(R.id.payoutTimeTV);
         nextPayoutAmountTV = mCurrentView.findViewById(R.id.nextPayoutAmountTV);
         lastPayoutAmountTV = mCurrentView.findViewById(R.id.lastPayoutAmountTV);
@@ -173,7 +178,20 @@ public class BusinessDashboardFragment extends BaseFragment {
         payoutManualTV = mCurrentView.findViewById(R.id.payoutManualTV);
         payoutAmountTV = mCurrentView.findViewById(R.id.payoutAmountTV);
         cynTV = mCurrentView.findViewById(R.id.cynTV);
-        dasboardPayoutDate = mCurrentView.findViewById(R.id.dasboardPayoutDate);
+        lastPayoutDate = mCurrentView.findViewById(R.id.lastPayoutDate);
+
+
+        nextReleaseTV = mCurrentView.findViewById(R.id.nextReleaseTV);
+        nextReleaseAmountTV = mCurrentView.findViewById(R.id.nextReleaseAmountTV);
+        nextReleaseDateTV = mCurrentView.findViewById(R.id.nextReleaseDateTV);
+        lastReleaseTV = mCurrentView.findViewById(R.id.lastReleaseTV);
+        lastReleaseAmountTV = mCurrentView.findViewById(R.id.lastReleaseAmountTV);
+        lastReleaseDateTV = mCurrentView.findViewById(R.id.lastReleaseDateTV);
+        reserveListDateTV = mCurrentView.findViewById(R.id.reserveListDateTV);
+        reserveListAmountTV = mCurrentView.findViewById(R.id.reserveListAmountTV);
+        reserveListDateTV = mCurrentView.findViewById(R.id.reserveListDateTV);
+        reserveReleaseListLL = mCurrentView.findViewById(R.id.reserveReleaseListLL);
+        reserveDetailsLL = mCurrentView.findViewById(R.id.reserveDetailsLL);
 
 
         notificationsRL.setOnClickListener(view -> {
@@ -284,21 +302,28 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.getBatchPayoutListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
-                if (getViewLifecycleOwner().getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
-                    if (batchPayoutListResponse != null) {
-                        if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
-//                        BatchPayoutListAdapter payoutListAdapter = new BatchPayoutListAdapter(getActivity(), payoutList);
-                            if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
-                                showBatchPayouts(batchPayoutListResponse.getData().getItems());
-                            } else {
-                                Log.d(TAG, "No items found");
-                            }
+                if (batchPayoutListResponse != null) {
+                    if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
+                        if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
+                            showData(batchPayoutListResponse.getData().getItems());
+                        } else {
+                            Log.d(TAG, "No items found");
                         }
-                        Log.d(TAG, "Error");
                     }
+                    Log.d(TAG, "Error");
                 }
+
             }
         });
+    }
+
+    private void showData(List<BatchPayoutListItems> items) {
+        if(isBatch) {
+            showBatchPayouts(items);
+            reserveReq();
+        } else {
+            showReserveRelease(items);
+        }
     }
 
     private void startTracker() {
@@ -409,7 +434,10 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
-        businessDashboardViewModel.getPayoutListData();
+//        RollingListRequest listRequest = new RollingListRequest();
+//        listRequest.setPayoutType(Utils.batchNow);
+//        businessDashboardViewModel.getPayoutListData(listRequest);
+        batchReq();
         getMerchantBalance();
         mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
@@ -494,37 +522,164 @@ public class BusinessDashboardFragment extends BaseFragment {
         customConfirmationDialog.show();
     }
 
+    private void batchReq() {
+        isBatch = true;
+        RollingListRequest listRequest = new RollingListRequest();
+        listRequest.setPayoutType(Utils.batchNow);
+        businessDashboardViewModel.getPayoutListData(listRequest);
+    }
+
+    private void reserveReq() {
+        isBatch = false;
+        RollingListRequest listRequest = new RollingListRequest();
+        listRequest.setPayoutType(Utils.reserveRelease);
+        businessDashboardViewModel.getPayoutListData(listRequest);
+    }
+
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
         if (listItems != null && listItems.size() > 0) {
+            int i = 0;
             Collections.sort(listItems, Collections.reverseOrder());
-            if (listItems.get(0).getStatus().equalsIgnoreCase("open")) {
-                String amount = listItems.get(0).getTotalAmount();
-                lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
+            boolean isOpen = false, isPaid = false;
+            while (i < listItems.size()) {
+                if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
+                    String amount = listItems.get(i).getTotalAmount();
+                    nextPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
 
-                String date = listItems.get(0).getCreatedAt();
-                dasboardPayoutDate.setText(myApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
+                    String date = listItems.get(i).getCreatedAt();
+                    if (date.contains(".")) {
+                        String res = date.substring(0, date.lastIndexOf("."));
+                        nxtPayoutDatenTimeTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+                    } else {
+                        Log.d("date format", date);
+                    }
+                    isOpen = true;
+                } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
+                    String Amount = listItems.get(i).getTotalAmount();
+                    lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
+                    String date1 = listItems.get(i).getCreatedAt();
+                    if (date1.contains(".")) {
+                        String res = date1.substring(0, date1.lastIndexOf("."));
+                        lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+                    } else {
+                        Log.d("jkhj", date1);
+                    }
+                    isPaid = true;
+                }
+
+                if (isPaid && isOpen) {
+                    break;
+                } else {
+                    i++;
+                }
             }
-            String date = listItems.get(0).getCreatedAt();
-            nxtPayoutDatenTimeTV.setText(Utils.addNxtDay((date)));
 
             LinearLayout payoutsList = mCurrentView.findViewById(R.id.payoutsLayoutLL);
             payoutsList.removeAllViews();
-            for (int i = 0; i < listItems.size() && i < 5; i++) {
+            int j = 0, paidItems = 0;
+            while (j < listItems.size() && paidItems < 5) {
                 View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
+                if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID)) {
+                    TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
+                    String listDate = listItems.get(j).getCreatedAt();
+                    if (listDate.contains(".")) {
+                        String listD = listDate.substring(0, listDate.lastIndexOf("."));
+                        payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+                    } else {
+                        Log.d("listDate", listDate);
+                    }
+                    TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
+                    totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
+                    payoutsList.addView(xmlView);
+                    paidItems++;
+                } else {
+                    Log.d(TAG, "open and inprogress Batch Payouts");
 
-                TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
-                String listDate = listItems.get(i).getCreatedAt();
-                payoutDate.setText(myApplication.convertZoneDateTime(listDate, "yyyy-MM-dd HH:mm:ss.S", "MM/dd/yyyy @ hh:mma"));
-
-                TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
-                totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(i).getTotalAmount()));
-
-                payoutsList.addView(xmlView);
-
+                }
+                j++;
             }
         } else {
             Log.d(TAG, "No Batch Payouts for this user");
+        }
+    }
+
+    private void showReserveReleaseBalance() {
+        Double amt = 0.0;
+        if (myApplication.getReserveBalance() != null) {
+            amt += myApplication.getReserveBalance();
+        }
+        mTvReserveBalance.setText(Utils.convertBigDecimalUSDC(String.valueOf(amt)));
+    }
+
+    private void showReserveRelease(List<BatchPayoutListItems> listItems) {
+        showReserveReleaseBalance();
+        if (listItems != null && listItems.size() > 0) {
+            int i = 0;
+            Collections.sort(listItems, Collections.reverseOrder());
+            boolean isOpen = false, isReleased = false;
+            while (i < listItems.size()) {
+                if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
+                    String amount = listItems.get(i).getTotalAmount();
+                    nextReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
+                    String date = listItems.get(i).getCreatedAt();
+//                    nextReleaseDateTV.setText(myApplication.reserveDate(date));
+                    if (date.contains(".")) {
+                        String res = date.substring(0, date.lastIndexOf("."));
+                        nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+                    } else {
+                        Log.d("date format", date);
+                    }
+                    isOpen = true;
+                } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.RELEASED) && !isReleased) {
+                    String Amount = listItems.get(i).getTotalAmount();
+                    lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
+
+                    String date1 = listItems.get(i).getCreatedAt();
+//                    lastReleaseDateTV.setText(myApplication.reserveDate(date1));
+                    if (date1.contains(".")) {
+                        String res = date1.substring(0, date1.lastIndexOf("."));
+                        lastReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+                    } else {
+                        Log.d("jkhj", date1);
+                    }
+                    isReleased = true;
+                }
+
+                if (isReleased && isOpen) {
+                    break;
+                } else {
+                    i++;
+                }
+            }
+
+            LinearLayout payoutsList = mCurrentView.findViewById(R.id.reserveReleaseListLL);
+            payoutsList.removeAllViews();
+            int j = 0, releasedItems = 0;
+            while (j < listItems.size() && releasedItems < 5) {
+                View xmlView = getLayoutInflater().inflate(R.layout.dashboard_reserve_release_list, null);
+                if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.RELEASED)) {
+                    TextView releaseDate = xmlView.findViewById(R.id.reserveListDateTV);
+                    String listDate = listItems.get(j).getCreatedAt();
+//                    releaseDate.setText(myApplication.reserveDate(listDate));
+                    if (listDate.contains(".")) {
+                        String listD = listDate.substring(0, listDate.lastIndexOf("."));
+                        releaseDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+                    } else {
+                        Log.d("listDate", listDate);
+                    }
+                    TextView totalAmount = xmlView.findViewById(R.id.reserveListAmountTV);
+                    totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
+                    payoutsList.addView(xmlView);
+                    releasedItems++;
+                } else {
+                    Log.d(TAG, "reserver release");
+
+                }
+                j++;
+            }
+        } else {
+            Log.d(TAG, "No reserve for this user");
         }
     }
 }

@@ -118,7 +118,7 @@ import java.util.regex.Pattern;
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
-    public static final String TOKEN = "TOKEN", MERCHANT = "MERCHANT";
+    public static final String TOKEN = "TOKEN", MERCHANT = "MERCHANT", RESERVE = "RESERVE";
 
     //public static enum BUSINESS_ACCOUNT_STATUS {Unverified};
     public static enum BUSINESS_ACCOUNT_STATUS {
@@ -153,7 +153,7 @@ public class Utils {
         OPEN(1, "Open"),
         ON_HOLD(7, "On Hold"),
         RELEASED(8, "Released"),
-        CANCELLED(9,"Failed");
+        CANCELED(10,"Canceled");
 
         private int statusType;
         private String status;
@@ -185,6 +185,7 @@ public class Utils {
     public static Boolean isTouchEnabled;
     public static Boolean isBiometric = false;
     public static final String transInProgress = "inprogress";
+    public static final String SELECTED_BATCH_PAYOUT = "selectedBatchPayout";
     public static final String transPending = "pending";
     public static final String transCompleted = "completed";
     public static final String transOpen = "open";
@@ -289,12 +290,15 @@ public class Utils {
 
     public static final int pending = 1;
     public static final int completed = 2;
-    public static final int cancelled = 4;//Not available
+    public static final int cancelled = 5;
     public static final int inProgress = 0;
     public static final int failed = 3;
+    public static final int paid = 5;
 
+    public static final int reserveRelease = 16;
+    public static final int batchNow = 7;
     public static final int open = 1;
-    public  static final int onhold = 7;
+    public  static final int onHold = 7;
     public static final int released = 8;
 
     //Merchant Transaction Filter Type values
@@ -319,6 +323,12 @@ public class Utils {
     public static final String buyActionType = "BUY";
     public static final String sendActionType = "SEND";
     public static final String pinActionType = "COYNIPIN";
+    public static final String paidActionType = "PAIDORDER";
+
+    public static final String OPEN = "open";
+    public static final String PAID = "paid";
+    public static final String CLOSED = "closed";
+    public static final String RELEASED = "released";
 
     public static final int boTargetPercentage = 51;
 
@@ -350,6 +360,7 @@ public class Utils {
     public static final String amount = "amount";
 
     public static final String applyFilter = "apply";
+    public static final String resetFilter = "resetFilter";
     public static final String datePicker = "DatePicker";
 
 

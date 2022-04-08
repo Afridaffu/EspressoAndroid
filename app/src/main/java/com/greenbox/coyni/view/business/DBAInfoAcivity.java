@@ -874,7 +874,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     if (charSequence.toString().trim().length() > 0) {
                         isdbaName = true;
                         dbanameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(dbanameTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(dbanameTIL, getResources().getColor(R.color.primary_black));
                     } else {
                         dbanameTV.setText("Field Required");
                         isdbaName = false;
@@ -916,7 +916,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
                         dbaemailLL.setVisibility(GONE);
                         isdbaEmail = true;
-                        Utils.setUpperHintColor(dbaemailTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(dbaemailTIL, getResources().getColor(R.color.primary_black));
                     } else if (dbaemailET.getText().toString().trim().length() == 0) {
                         isdbaEmail = false;
                     }
@@ -946,7 +946,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() > 0) {
-                        Utils.setUpperHintColor(businessTypeTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(businessTypeTIL, getResources().getColor(R.color.primary_black));
                         isBusinessType = true;
                     } else {
                         isBusinessType = false;
@@ -969,7 +969,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                     if (charSequence.length() > 0) {
                         timezoneTIL.setHint("Time Zone");
-                        Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
+//                        Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
                         isTimeZone = true;
                     } else {
                         timezoneTIL.setHint("Select Time Zone");
@@ -997,7 +997,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             isCompanyAdress1 = true;
                             address1ErrorLL.setVisibility(GONE);
                             //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(companyaddresstil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(companyaddresstil, getResources().getColor(R.color.primary_black));
                         } else {
                             //                            address1ErrorLL.setVisibility(VISIBLE);
                             //                            address1ErrorTV.setText("Field Required");
@@ -1042,7 +1042,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(companyaddress2til, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(companyaddress2til, getResources().getColor(R.color.primary_black));
                         }
                         enableOrDisableAddressNext();
                     } catch (Resources.NotFoundException e) {
@@ -1084,7 +1084,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (charSequence.length() > 0) {
                             isCity = true;
                             cityErrorLL.setVisibility(GONE);
-                            Utils.setUpperHintColor(citytil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(citytil, getResources().getColor(R.color.primary_black));
                         } else {
                             //                            cityErrorLL.setVisibility(VISIBLE);
                             //                            cityErrorTV.setText("Field Required");
@@ -1127,7 +1127,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-                            Utils.setUpperHintColor(statetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(statetil, getResources().getColor(R.color.primary_black));
                             //                            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             isState = true;
                         } else {
@@ -1158,12 +1158,12 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             isZipcode = true;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() < 5 && charSequence.length() > 0) {
                             isZipcode = false;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZipcode = false;
                             //                            zipcodeErrorLL.setVisibility(VISIBLE);

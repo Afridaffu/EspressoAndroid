@@ -17,9 +17,11 @@ public class ReserveReleaseDialog extends BaseDialog {
     private ImageView rollingIV,manualIV;
     private static final String reserveRolling = "Rolling";
     private static final String reserveManual = "Manual";
+    private boolean isRolling = true;
 
-    public ReserveReleaseDialog(@NonNull Context context) {
+    public ReserveReleaseDialog(@NonNull Context context, boolean isRolling) {
         super(context);
+        this.isRolling = isRolling;
     }
 
     public ReserveReleaseDialog(@NonNull Context context, int themeResId) {
@@ -37,20 +39,32 @@ public class ReserveReleaseDialog extends BaseDialog {
         rollingIV = findViewById(R.id.rollingIV);
         manualIV = findViewById(R.id.manualIV);
 
+        if(isRolling) {
+            rollingIV.setVisibility(View.VISIBLE);
+            manualIV.setVisibility(View.GONE);
+        } else {
+            rollingIV.setVisibility(View.GONE);
+            manualIV.setVisibility(View.VISIBLE);
+        }
+
         rolling.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rollingIV.setVisibility(View.VISIBLE);
-                manualIV.setVisibility(View.GONE);
-                getOnDialogClickListener().onDialogClicked(reserveRolling, null);
+                if(!isRolling) {
+                    rollingIV.setVisibility(View.VISIBLE);
+                    manualIV.setVisibility(View.GONE);
+                    getOnDialogClickListener().onDialogClicked(reserveRolling, null);
+                }
             }
         });
         manual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                manualIV.setVisibility(View.VISIBLE);
-                rollingIV.setVisibility(View.GONE);
-                getOnDialogClickListener().onDialogClicked(reserveManual, null);
+                if(isRolling) {
+                    manualIV.setVisibility(View.VISIBLE);
+                    rollingIV.setVisibility(View.GONE);
+                    getOnDialogClickListener().onDialogClicked(reserveManual, null);
+                }
             }
         });
 
