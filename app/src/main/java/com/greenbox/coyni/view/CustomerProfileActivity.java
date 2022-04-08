@@ -1117,7 +1117,7 @@ public class CustomerProfileActivity extends BaseActivity {
 
             if (imageString != null && !imageString.trim().equals("")) {
                 profileIV.setVisibility(View.VISIBLE);
-                userProfile.setBackground(getResources().getDrawable(R.drawable.corecircle));
+//                userProfile.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 imageTextTV.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(imageString)

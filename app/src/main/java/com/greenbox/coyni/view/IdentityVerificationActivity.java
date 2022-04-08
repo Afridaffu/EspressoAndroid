@@ -117,7 +117,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     private MyApplication myApplicationObj;
     private Long mLastClickTime = 0L;
     private DashboardViewModel dashboardViewModel;
-    private DatePicker datepicker;
+    private DatePicker picker;
     private LoginViewModel loginViewModel;
     private String addBusiness = "false";
 
@@ -251,7 +251,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
         try {
 //            Utils.hideKeypad(IdentityVerificationActivity.this);
             long years = 568025136000L;
-            DatePicker picker = new DatePicker(IdentityVerificationActivity.this);
+            picker = new DatePicker(IdentityVerificationActivity.this);
             Date maxDate = new Date(System.currentTimeMillis() - years);
             picker.getPickerView().setMaxDate(maxDate);
             if (!dateOfBirth.equals("")) {

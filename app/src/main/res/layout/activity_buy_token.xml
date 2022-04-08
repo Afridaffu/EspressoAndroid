@@ -177,7 +177,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_125sdp"
+                android:layout_height="@dimen/_145sdp"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_18sdp"
                 android:layout_marginRight="@dimen/_10sdp"
@@ -187,8 +187,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
 <!--                    <LinearLayout-->
 <!--                        android:id="@+id/linearLayoutnew"-->
@@ -353,7 +354,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_22sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:text="Amount entered exceeds your daily limit"
                         android:textColor="@color/error"
                         android:textSize="@dimen/_10ssp"
