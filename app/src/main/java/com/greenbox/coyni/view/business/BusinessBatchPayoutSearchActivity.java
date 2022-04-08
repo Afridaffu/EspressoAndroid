@@ -346,7 +346,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         status.add(Utils.paid);
         //status.add(4);
         listRequest.setStatus(status);
-        businessDashboardViewModel.getPayoutListData(listRequest);
+        businessDashboardViewModel.getRollingListData(listRequest);
     }
 
 
