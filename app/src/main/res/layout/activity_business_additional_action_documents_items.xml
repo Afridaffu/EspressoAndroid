@@ -201,62 +201,55 @@
                             android:layout_marginStart="@dimen/_7sdp"
                             android:layout_weight="1"
                             android:orientation="horizontal"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <ImageView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
+                                android:id="@+id/imvAccepttick"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/_6sdp"
                                 android:layout_weight="1"
+                                android:visibility="gone"
                                 android:src="@drawable/ic_active_complete" />
 
                             <TextView
+                                android:id="@+id/comapny_nameTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_20sdp"
                                 android:layout_marginBottom="@dimen/_8sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/company_name"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
+
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/declineDneLL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_7sdp"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
+<!--                        <LinearLayout-->
+<!--                            android:id="@+id/declineDneLL"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="@dimen/_7sdp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:visibility="visible">-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/_6sdp"
-                                android:layout_weight="1"
-                                android:src="@drawable/ic_decline" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginEnd="@dimen/_6sdp"-->
+<!--                                android:layout_weight="1"-->
+<!--                                android:src="@drawable/ic_decline" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_8sdp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:text="@string/company_name"
-                                android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_11ssp" />
-                        </LinearLayout>
-
-
-                        <TextView
-                            android:id="@+id/comapny_nameTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_30sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:text="@string/company_name"
-                            android:textColor="@color/dark_grey"
-                            android:textSize="@dimen/_11ssp" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginBottom="@dimen/_8sdp"-->
+<!--                                android:fontFamily="@font/opensans_semibold"-->
+<!--                                android:text=""-->
+<!--                                android:textColor="@color/dark_grey"-->
+<!--                                android:textSize="@dimen/_11ssp" />-->
+<!--                        </LinearLayout>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -388,7 +381,6 @@
                                     android:textSize="@dimen/_10ssp" />
                             </LinearLayout>
 
-
                         </LinearLayout>
 
                         <TextView
@@ -417,7 +409,6 @@
                             android:textSize="@dimen/_11sdp"
                             android:visibility="gone" />
 
-
                         <TextView
                             android:id="@+id/remarksTV"
                             android:layout_width="wrap_content"
@@ -429,7 +420,6 @@
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_10sdp"
                             android:visibility="gone" />
-
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

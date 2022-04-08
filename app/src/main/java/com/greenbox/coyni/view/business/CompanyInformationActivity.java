@@ -1733,7 +1733,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
             libraryTV.setOnClickListener(view -> {
                 chooseFile.dismiss();
-
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);

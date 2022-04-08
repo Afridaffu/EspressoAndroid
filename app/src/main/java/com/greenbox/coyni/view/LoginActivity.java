@@ -189,9 +189,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
         }
-
-        etEmail.setText("action@gmail.com");
-        etPassword.setText("Admin@123");
+        
     }
 
     @Override

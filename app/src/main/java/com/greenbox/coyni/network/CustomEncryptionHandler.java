@@ -72,9 +72,6 @@ public class CustomEncryptionHandler implements Interceptor {
             requestBuild.header(KEY_CONTENT_TYPE, TEXT_PLAIN);
         }
 
-        /*Encryption should be skipped when SKIP_ENCRYPTION is set to true and for GET requests.
-         As per the requirement while developing this feature, encryption should not be done for
-         Multipart requests. Changes needs to done for Multipart requests based on Backend changes*/
         Response response = null;
         if (BuildConfig.SKIP_ENCRYPTION || !ArrayUtils.contains(methodsAllowed, method)
                 || requestBody instanceof MultipartBody) {
@@ -85,7 +82,9 @@ public class CustomEncryptionHandler implements Interceptor {
             request = requestBuild.build();
             response = chain.proceed(request);
         }
+
         MediaType mediaType = MediaType.parse(APPLICATION_JSON);
+
         if (response.code() == 400 && response.body() != null) {
             String errorResponse = response.peekBody(2048).string();
             if (!Utils.isValidJson(errorResponse)) {
@@ -94,6 +93,7 @@ public class CustomEncryptionHandler implements Interceptor {
                         .build();
             }
         }
+
         return response;
     }
 

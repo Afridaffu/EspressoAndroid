@@ -10,16 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:id="@+id/llapprovedreserved"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/_100sdp"
             android:scrollbars="none"
+            android:id="@+id/scrollview"
             tools:ignore="UselessParent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/lladditionReserve"
+                android:visibility="visible"
                 android:layout_marginBottom="@dimen/_100sdp"
                 android:orientation="vertical">
 
@@ -27,6 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:id="@+id/llHeading"
+                    android:visibility="visible"
                     android:paddingStart="@dimen/_21sdp"
                     android:paddingEnd="@dimen/_19sdp">
 
@@ -185,8 +199,10 @@
         </ScrollView>
 
         <LinearLayout
+            android:id="@+id/llBottomView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             android:layout_alignParentBottom="true"
             android:background="@drawable/topradius"
             android:orientation="vertical">
@@ -225,5 +241,7 @@
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/_11ssp" />
         </LinearLayout>
+
+
     </RelativeLayout>
 </LinearLayout>

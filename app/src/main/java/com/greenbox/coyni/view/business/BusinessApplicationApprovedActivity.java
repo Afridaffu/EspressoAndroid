@@ -19,7 +19,7 @@ public class BusinessApplicationApprovedActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_application_approved);
 
-        businessApprovedDecline = findViewById(R.id.business_approved_decline);
+        businessApprovedDecline = findViewById(R.id.cardDeclined);
 
         businessApprovedDecline.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,8 +2,6 @@ package com.greenbox.coyni.model.underwriting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.greenbox.coyni.model.transaction.TransactionListPending;
-import com.greenbox.coyni.model.transaction.TransactionListPosted;
 
 import java.util.List;
 
@@ -23,6 +21,19 @@ public class ActionRequiredDataResponse {
     @SerializedName("informationChange")
     @Expose
     private List<InformationChangeData> informationChange;
+
+    @SerializedName("reserveRule")
+    @Expose
+    private ReseveRuleData reserveRule;
+
+
+    public ReseveRuleData getReserveRule() {
+        return reserveRule;
+    }
+
+    public void setReserveRule(ReseveRuleData reserveRule) {
+        this.reserveRule = reserveRule;
+    }
 
     public int getStatus() {
         return status;
@@ -64,6 +75,7 @@ public class ActionRequiredDataResponse {
                 ", additionalDocument=" + additionalDocument +
                 ", websiteChange=" + websiteChange +
                 ", informationChange=" + informationChange +
+                ", reserverule =" + reserveRule +
                 '}';
     }
 }
