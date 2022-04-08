@@ -132,7 +132,7 @@
                     android:layout_marginLeft="@dimen/_11sdp"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:layout_marginRight="@dimen/_11sdp"
-                    android:layout_marginBottom="@dimen/_31sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
                     android:background="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="0dp">
