@@ -126,6 +126,8 @@ import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamResponseModel;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
+import com.greenbox.coyni.model.transaction.RefundDataResponce;
+import com.greenbox.coyni.model.transaction.RefundReferenceRequest;
 import com.greenbox.coyni.model.transaction.TransactionDetails;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
@@ -580,12 +582,19 @@ public interface ApiService {
 
     @POST("api/v2/reserve/manual-release/all")
     Call<ManualListResponse> getManualListData(@Body SearchKeyRequest searchKey);
-    
+
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
 
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+
+    @POST("api/v2/node/refund/verify")
+    Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
+
+    @POST("api/v2/node/refund/process")
+    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
+
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);

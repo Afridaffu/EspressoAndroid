@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/top_rounded_bg"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragments.PayAmountBottomSheet">
 
     <View
         android:layout_width="@dimen/_40sdp"
@@ -15,21 +17,33 @@
         android:background="@drawable/bg_core_colorfill" />
 
     <LinearLayout
+        android:id="@+id/refundpreviewLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="center"
-            android:text="@string/refund_preview"
+            android:text="Refund Preview"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/userRefundTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -38,10 +52,10 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/amountPayTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_bold"
-            android:text=""
             android:textColor="@color/primary_color"
             android:textSize="@dimen/_35sdp" />
 
@@ -49,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:layout_marginLeft="@dimen/_6sdp"
             android:fontFamily="@font/opensans_bold"
             android:paddingTop="@dimen/_24sdp"
             android:paddingBottom="@dimen/_9sdp"
@@ -62,20 +77,21 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_22sdp"
-        android:layout_marginHorizontal="@dimen/_21sdp"
         android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="0.8"
             android:fontFamily="@font/opensans_regular"
-            android:text="@string/recipient_s_address"
+            android:text="Recipient’s Address"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/_11ssp" />
 
         <LinearLayout
+            android:id="@+id/copyRecipientLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
@@ -83,6 +99,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/recipAddreTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -96,16 +113,17 @@
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
                 android:layout_marginStart="@dimen/_4sdp"
-                android:contentDescription="@string/recipient_s_address"
                 android:src="@drawable/ic_copy" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lyProcessing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-      android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_17sdp"
+        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <TextView
@@ -114,7 +132,7 @@
             android:layout_marginRight="@dimen/_10sdp"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_regular"
-            android:text="@string/processingfee"
+            android:text="Processing Fee"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/_11ssp" />
 
@@ -125,7 +143,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:gravity="right"
-            android:text="1.00 CYN"
+            android:text=""
             android:textColor="@color/primary_black"
             android:textFontWeight="1"
             android:textSize="@dimen/_11ssp" />
@@ -135,8 +153,9 @@
         android:id="@+id/lyTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_17sdp"
+        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="horizontal">
 
         <TextView
@@ -144,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_bold"
-            android:text="@string/total"
+            android:text="Total "
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp" />
 
@@ -155,8 +174,8 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_bold"
             android:gravity="right"
-            android:text="161.00 CYN"
-            android:textColor="@color/primary_color"
+            android:text=""
+            android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
@@ -164,8 +183,9 @@
         android:id="@+id/lyMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       android:layout_marginHorizontal="@dimen/_21sdp"
+        android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_17sdp"
+        android:layout_marginRight="@dimen/_11sdp"
         android:orientation="vertical">
 
         <TextView
@@ -173,7 +193,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
-            android:text="@string/reason_for_refund"
+            android:text="Reason for Refund"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/_11ssp" />
 
@@ -183,13 +203,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_6sdp"
             android:fontFamily="@font/opensans_regular"
-            android:text="@string/request_by_customer"
+            android:text=""
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
     </LinearLayout>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/slideToConfirm"
+        android:id="@+id/slideToConfirmm"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_48sdp"
         android:layout_marginLeft="@dimen/_20sdp"
@@ -204,21 +224,63 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+<!--        <TextView-->
+<!--            android:id="@+id/tv_lable"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:ellipsize="end"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingEnd="16dp"-->
+<!--            android:paddingRight="16dp"-->
+<!--            android:text="Slide to Confirm"-->
+<!--            android:textColor="@color/primary_green"-->
+<!--            android:textSize="@dimen/_15sdp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
+
         <TextView
-            android:id="@+id/tv_lable"
+            android:id="@+id/tv_lable_verify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:gravity="center"
-            android:text="@string/slide_to_confirm"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Verifying"
             android:textColor="@color/primary_green"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/im_lock"
             app:layout_constraintStart_toEndOf="@+id/im_lock"
-            app:layout_constraintTop_toTopOf="@+id/im_lock" />
+            app:layout_constraintTop_toTopOf="@+id/im_lock"
+            android:visibility="gone"/>
 
+        <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
+            android:id="@+id/tv_lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:text="Slide to Confirm"
+            android:textColor="@color/primary_green"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:angle="45"
+            app:chainUseRtl="true"
+            app:colors="@array/default_gradient_colors"
+            app:layout_constraintBottom_toBottomOf="@id/im_lock"
+            app:layout_constraintStart_toEndOf="@+id/im_lock"
+            app:layout_constraintTop_toTopOf="@+id/im_lock"
+            app:speed="500"
+            app:maxFPS="24"
+            app:simultaneousColors="8"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/im_lock"
