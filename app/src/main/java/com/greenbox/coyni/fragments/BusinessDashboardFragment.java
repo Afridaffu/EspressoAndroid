@@ -299,7 +299,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBatchPayoutListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
+        businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
                 if (batchPayoutListResponse != null) {
@@ -526,14 +526,14 @@ public class BusinessDashboardFragment extends BaseFragment {
         isBatch = true;
         RollingListRequest listRequest = new RollingListRequest();
         listRequest.setPayoutType(Utils.batchNow);
-        businessDashboardViewModel.getPayoutListData(listRequest);
+        businessDashboardViewModel.getRollingListData(listRequest);
     }
 
     private void reserveReq() {
         isBatch = false;
         RollingListRequest listRequest = new RollingListRequest();
         listRequest.setPayoutType(Utils.reserveRelease);
-        businessDashboardViewModel.getPayoutListData(listRequest);
+        businessDashboardViewModel.getRollingListData(listRequest);
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
