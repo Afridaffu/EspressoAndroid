@@ -274,10 +274,14 @@ public class OnboardActivity extends BaseActivity {
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
                                 if (loginResponse.getData().getPasswordExpired()) {
-                                    Intent i = new Intent(OnboardActivity.this, PINActivity.class);
+//                                    Intent i = new Intent(OnboardActivity.this, PINActivity.class);
+//                                    i.putExtra("screen", "loginExpiry");
+//                                    i.putExtra("TYPE", "ENTER");
+//                                    startActivity(i);
+                                    Intent i = new Intent(OnboardActivity.this, CreatePasswordActivity.class);
                                     i.putExtra("screen", "loginExpiry");
-                                    i.putExtra("TYPE", "ENTER");
                                     startActivity(i);
+                                    finish();
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {

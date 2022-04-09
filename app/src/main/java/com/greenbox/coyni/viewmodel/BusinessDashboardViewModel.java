@@ -22,6 +22,7 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
+import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
@@ -48,6 +49,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<CancelApplicationResponse> cancelApplicationResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> batchPayoutListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutIdDetailsResponse> batchPayoutIdDetailsResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BatchPayoutListResponse> rollingListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
 
@@ -87,8 +89,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData() {
         return batchPayoutIdDetailsResponseMutableLiveData;
     }
-
-    public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData() {
+    public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
+        return rollingListResponseMutableLiveData;
+    }
+    public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData(){
         return manualListResponseMutableLiveData;
     }
 
@@ -341,17 +345,16 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void getPayoutListData(RollingListRequest request) {
+    public void getRollingListData(RollingListRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(request);
+            Call<BatchPayoutListResponse> call = apiService.getRollingListData(request);
             call.enqueue(new Callback<BatchPayoutListResponse>() {
                 @Override
                 public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
                     if (response.isSuccessful()) {
                         BatchPayoutListResponse list = response.body();
-                        batchPayoutListMutableLiveData.setValue(list);
-
+                        rollingListResponseMutableLiveData.setValue(list);
                     } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<BatchPayoutListResponse>() {
@@ -362,13 +365,48 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        batchPayoutListMutableLiveData.setValue(errorResponse);
+                        rollingListResponseMutableLiveData.setValue(errorResponse);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
-                    batchPayoutListMutableLiveData.setValue(null);
+                    rollingListResponseMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getRollingListData(RollingSearchRequest searchKeyReq) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BatchPayoutListResponse> call = apiService.getRollingListData(searchKeyReq);
+            call.enqueue(new Callback<BatchPayoutListResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+                    if (response.isSuccessful()) {
+                        BatchPayoutListResponse list = response.body();
+                        rollingListResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BatchPayoutListResponse>() {
+                        }.getType();
+                        BatchPayoutListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        rollingListResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+                    rollingListResponseMutableLiveData.setValue(null);
                 }
             });
 
@@ -578,7 +616,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                 }
 
                 @Override

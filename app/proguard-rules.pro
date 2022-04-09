@@ -20,6 +20,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+#-keep public class com.greenbox.coyni.model.** {
+#    public protected private *;
+#}
+
 -keep public class com.greenbox.coyni.model.** {
-    public protected private *;
+    *;
 }

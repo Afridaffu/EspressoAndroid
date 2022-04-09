@@ -183,7 +183,6 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     || getIntent().getStringExtra("screen").equals("Notifications")
                     || getIntent().getStringExtra("screen").equals("Buy")
                     || getIntent().getStringExtra("screen").equals("Paid")) {
-
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -489,25 +488,24 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         payViewModel.getPaidOrderRespMutableLiveData().observe(this, new Observer<PaidOrderResp>() {
             @Override
             public void onChanged(PaidOrderResp paidOrderResp) {
-                if (paidOrderResp != null){
+                if (paidOrderResp != null) {
                     objMyApplication.setPaidOrderResp(paidOrderResp);
                     Utils.setStrToken("");
-                        if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
-                            startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
-                                    .putExtra("status", "Success")
-                                    .putExtra("subtype", "paid"));
+                    if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
+                        startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "Success")
+                                .putExtra("subtype", "paid"));
 
-                        } else {
-                            startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
-                                    .putExtra("status", "Failed")
-                                    .putExtra("subtype", "paid"));
-                        }
-                        finish();
+                    } else {
+                        startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "Failed")
+                                .putExtra("subtype", "paid"));
                     }
-                    else {
-                        Utils.displayAlert("something went wrong", PINActivity.this, "", "");
-                    }
+                    finish();
+                } else {
+                    Utils.displayAlert("something went wrong", PINActivity.this, "", "");
                 }
+            }
         });
 
         businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
@@ -766,7 +764,11 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                         tvHead.setText("Choose your PIN");
                         clearControls();
                         passcode = "";
-                        imgBack.setImageResource(R.drawable.ic_back);
+                        if (getIntent().getStringExtra("AUTH_TYPE") != null && getIntent().getStringExtra("AUTH_TYPE").equals("TOUCH")) {
+                            imgBack.setImageResource(R.drawable.ic_close);
+                        } else{
+                            imgBack.setImageResource(R.drawable.ic_back);
+                        }
                         resetPINValue = "CHOOSE";
                     }
                 } else {
@@ -829,6 +831,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                 tvHead.setText("Confirm your PIN");
                                 clearPassCode();
                                 resetPINValue = "CONFIRM";
+                                if (getIntent().getStringExtra("AUTH_TYPE") != null && getIntent().getStringExtra("AUTH_TYPE").equals("TOUCH")) {
+                                    imgBack.setImageResource(R.drawable.ic_back);
+                                }
                                 break;
                             case "CONFIRM":
                                 strConfirm = passcode;
@@ -1163,7 +1168,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
         request.setRecipientWalletId(getIntent().getStringExtra(Utils.wallet));
 
-        if (Utils.checkInternet(PINActivity.this)){
+        if (Utils.checkInternet(PINActivity.this)) {
             try {
                 payViewModel.paidOrder(request);
             } catch (Exception e) {
@@ -1171,6 +1176,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     }
+
     private void buyToken() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {

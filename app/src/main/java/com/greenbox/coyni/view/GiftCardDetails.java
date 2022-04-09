@@ -116,6 +116,9 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
     Dialog prevDialog;
     Long mLastClickTime = 0L;
     boolean isAuthenticationCalled = false;
+    private MotionLayout withDrawSlideToConfirm;
+    private AnimatedGradientTextView tv_lable;
+    private CardView im_lock,im_lock_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +129,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.WHITE);
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(this);
             initFields();
             initObservers();
 
@@ -1058,11 +1063,12 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
             TextView subTotalTV = prevDialog.findViewById(R.id.subTotalTV);
             TextView feeTV = prevDialog.findViewById(R.id.feeTV);
             TextView totalTV = prevDialog.findViewById(R.id.totalTV);
-            AnimatedGradientTextView tv_lable = prevDialog.findViewById(R.id.tv_lable);
+            tv_lable = prevDialog.findViewById(R.id.tv_lable);
             TextView tv_lable_verify = prevDialog.findViewById(R.id.tv_lable_verify);
-            CardView im_lock_ = prevDialog.findViewById(R.id.im_lock_);
+            im_lock_ = prevDialog.findViewById(R.id.im_lock_);
+            im_lock = prevDialog.findViewById(R.id.im_lock);
 
-            MotionLayout slideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
+            withDrawSlideToConfirm = prevDialog.findViewById(R.id.slideToConfirm);
 
             String strPFee = "";
             strPFee = Utils.convertBigDecimalUSDC(String.valueOf(fee));
@@ -1076,7 +1082,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 
             isAuthenticationCalled = false;
 
-            slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
+            withDrawSlideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
                 @Override
                 public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
 
@@ -1089,7 +1095,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                         im_lock_.setAlpha(1.0f);
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
-                        slideToConfirm.setInteractionEnabled(false);
+                        withDrawSlideToConfirm.setInteractionEnabled(false);
 //                        tv_lable.setVisibility(GONE);
 //                        tv_lable.setText("Verifying");
 //                        tv_lable_verify.setVisibility(VISIBLE);
@@ -1398,5 +1404,24 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
         super.onResume();
         if (Utils.isKeyboardVisible)
             Utils.hideKeypad(this);
+
+        if (prevDialog != null) {
+            changeSlideState();
+        }
     }
+
+    private void changeSlideState() {
+        try {
+            withDrawSlideToConfirm.setInteractionEnabled(true);
+            withDrawSlideToConfirm.setTransition(R.id.start, R.id.start);
+            tv_lable.setText("Slide to Confirm");
+            tv_lable.setVisibility(View.VISIBLE);
+            withDrawSlideToConfirm.setProgress(0);
+            im_lock.setAlpha(1.0f);
+            isAuthenticationCalled = false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

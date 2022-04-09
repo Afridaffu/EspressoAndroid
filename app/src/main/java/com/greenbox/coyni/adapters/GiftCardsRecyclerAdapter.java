@@ -64,6 +64,8 @@ public class GiftCardsRecyclerAdapter extends RecyclerView.Adapter<GiftCardsRecy
                 @Override
                 public void onClick(View v) {
                     try {
+                        if(Utils.isKeyboardVisible)
+                            Utils.hideKeypad(mContext);
                         if (objData != null) {
                             GiftCardActivity giftCardActivity = (GiftCardActivity) mContext;
                             Intent i = new Intent(mContext, GiftCardDetails.class);
