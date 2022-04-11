@@ -529,8 +529,8 @@
     <string name="additional_data_message">The coyni team requires your additional action to further verify you.</string>
     <string name="in_progress">In progress</string>
     <string name="insufficient_funds">Insufficient Funds</string>
-    <string name="merchant_insufficient_funds">Insufficient funds in your Merchant\n Balance and your Business Token Account \nto cover this refund. Please add tokens to \ncontinue. </string>
-    <string name="insufficient_funds_note">Would you like to use your Business \nToken account to cover the difference for\n this refund</string>
+    <string name="merchant_insufficient_funds">Insufficient funds in your Merchant \nBalance and your Business Token Account \nto cover this refund. Please add tokens to \ncontinue. </string>
+    <string name="insufficient_funds_note">Would you like to use your Business \nToken account to cover the difference for \nthis refund</string>
     <string name="refund_preview">Refund Preview </string>
     <string name="total">Total </string>
     <string name="business_tokenaccount">Business Token Account </string>

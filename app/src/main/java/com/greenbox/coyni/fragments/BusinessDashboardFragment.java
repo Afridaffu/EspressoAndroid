@@ -299,7 +299,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-        businessDashboardViewModel.getBatchPayoutListMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
+        businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
             public void onChanged(BatchPayoutListResponse batchPayoutListResponse) {
                 if (batchPayoutListResponse != null) {
@@ -367,7 +367,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                 showIdentityVerificationReview();
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus()) || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
                 showAdditionalActionView();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
@@ -526,14 +526,14 @@ public class BusinessDashboardFragment extends BaseFragment {
         isBatch = true;
         RollingListRequest listRequest = new RollingListRequest();
         listRequest.setPayoutType(Utils.batchNow);
-        businessDashboardViewModel.getPayoutListData(listRequest);
+        businessDashboardViewModel.getRollingListData(listRequest);
     }
 
     private void reserveReq() {
         isBatch = false;
         RollingListRequest listRequest = new RollingListRequest();
         listRequest.setPayoutType(Utils.reserveRelease);
-        businessDashboardViewModel.getPayoutListData(listRequest);
+        businessDashboardViewModel.getRollingListData(listRequest);
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {

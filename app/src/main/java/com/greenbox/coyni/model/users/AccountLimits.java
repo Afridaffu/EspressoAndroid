@@ -6,8 +6,6 @@ import com.greenbox.coyni.model.Error;
 
 public class AccountLimits {
 
-
-
     @SerializedName("status")
     @Expose
     private String status;
