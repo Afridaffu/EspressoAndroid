@@ -1168,6 +1168,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
         request.setRecipientWalletId(getIntent().getStringExtra(Utils.wallet));
 
+        objMyApplication.setWithdrawAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
+
         if (Utils.checkInternet(PINActivity.this)) {
             try {
                 payViewModel.paidOrder(request);

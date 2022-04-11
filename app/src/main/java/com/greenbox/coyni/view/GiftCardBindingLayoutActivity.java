@@ -264,7 +264,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                     findViewById(R.id.inProgressContainer).setVisibility(View.VISIBLE);
                     findViewById(R.id.failedContainer).setVisibility(View.GONE);
                     findViewById(R.id.wdInProgressContainer).setVisibility(View.GONE);
-                    paidTransactionSucess();
+                    paidTransactionSuccess();
                 }
                 break;
                 case "Failed": {
@@ -303,8 +303,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
     }
 
-    private void paidTransactionSucess() {
-    }
 
     private void buyInProgress(BuyTokenResponseData objData) {
         try {
@@ -600,6 +598,68 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void paidTransactionSuccess() {
+
+        ImageView imgLogo = findViewById(R.id.imgLogo);
+        TextView giftCardTypeTV = findViewById(R.id.giftCardTypeTV);
+        TextView tvReference = findViewById(R.id.refIDTV);
+        CardView doneCV = findViewById(R.id.doneCV);
+
+        giftCardTypeTV.setText("Transaction Successful");
+        imgLogo.setImageResource(R.drawable.ic_success_icon);
+        LinearLayout lyReference = findViewById(R.id.refIDLL);
+
+        TextView giftCardAmountTV = findViewById(R.id.giftCardAmountTV);
+        TextView giftCardDescTV = findViewById(R.id.giftCardDescTV);
+        TextView goneTV = findViewById(R.id.goneTV);
+        TextView tvCurrency = findViewById(R.id.tvCurrency);
+        TextView gcProcessingTV = findViewById(R.id.gcProcessingTV);
+        LinearLayout lyMessage = findViewById(R.id.lyMessage);
+        Double cynValue = 0.0;
+        cynValue = objMyApplication.getWithdrawAmount();
+
+        gcProcessingTV.setVisibility(View.GONE);
+        lyMessage.setVisibility(View.GONE);
+        goneTV.setVisibility(View.GONE);
+        giftCardDescTV.setVisibility(View.GONE);
+        tvCurrency.setVisibility(View.VISIBLE);
+
+        giftCardAmountTV.setText(Utils.USNumberFormat(cynValue));
+        if (objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId().length() > 10) {
+            tvReference.setText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId().substring(0, 10) + "...");
+        } else {
+            tvReference.setText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId());
+        }
+        lyReference.setOnClickListener(view -> {
+            try {
+                Utils.copyText(objMyApplication.getPaidOrderResp().getPaidResponseData().getGbxTransactionId(), GiftCardBindingLayoutActivity.this);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        doneCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dashboardNavigation();
+            }
+        });
+
+        if (!objMyApplication.getBiometric()) {
+            if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
+                if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
+                    enableType = "TOUCH";
+                    loadSecurePay("TOUCH");
+                } else {
+
+                    enableType = "FACE";
+                    loadSecurePay("FACE");
+                }
+            }
         }
     }
 

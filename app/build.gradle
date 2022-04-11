@@ -171,4 +171,6 @@ dependencies {
     //iOS Style DatePicker
     implementation project(path: ':WheelPicker')
 //    implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1'
+
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
 }

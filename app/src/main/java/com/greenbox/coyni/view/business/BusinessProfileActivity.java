@@ -693,7 +693,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
             if (imageString != null && !imageString.trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
-                userProfileCL.setBackground(getResources().getDrawable(R.drawable.corecircle));
+//                userProfileCL.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 profileText.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(imageString)
