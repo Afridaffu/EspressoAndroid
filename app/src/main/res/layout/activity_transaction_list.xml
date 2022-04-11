@@ -73,7 +73,7 @@
                         android:cursorVisible="true"
                         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                         android:fontFamily="@font/opensans_regular"
-                        android:hint="Reference ID."
+                        android:hint="Reference ID"
                         android:imeOptions="actionDone"
                         android:maxLength="35"
                         android:maxLines="1"

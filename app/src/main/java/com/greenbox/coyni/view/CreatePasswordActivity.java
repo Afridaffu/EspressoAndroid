@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -42,6 +43,7 @@ import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -74,6 +76,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
     LinearLayout layoutMain;
     boolean isSuccessLayout = false;
     String strScreen = "", oldPassword = "";
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,8 +168,14 @@ public class CreatePasswordActivity extends AppCompatActivity {
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBackPressed();
-                    finish();
+                    if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                        Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
+                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(loginIntent);
+                    } else {
+                        onBackPressed();
+                        finish();
+                    }
                 }
             });
 //            Utils.setCustomSelectionActionModeCallback(passwordET);
@@ -393,8 +402,7 @@ public class CreatePasswordActivity extends AppCompatActivity {
 //                                confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 if (confirmPasswordET.getText().toString().trim().length() == 0) {
                                     Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.light_gray));
-                                }
-                                else {
+                                } else {
                                     Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 }
@@ -406,10 +414,9 @@ public class CreatePasswordActivity extends AppCompatActivity {
                                 passwordTIL.setHint("New Password");
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
 
-                                if (confirmPasswordET.getText().toString().trim().length()==0){
+                                if (confirmPasswordET.getText().toString().trim().length() == 0) {
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-                                }
-                                else {
+                                } else {
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
                                 }
                                 confPasswordTIL.setHint("Confirm Password");
@@ -605,6 +612,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
             cvSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     try {
                         Utils.hideKeypad(CreatePasswordActivity.this, v);
                         dialog = new ProgressDialog(CreatePasswordActivity.this, R.style.MyAlertDialogStyle);
@@ -636,6 +647,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
             cvLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Intent i = new Intent(CreatePasswordActivity.this, LoginActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);

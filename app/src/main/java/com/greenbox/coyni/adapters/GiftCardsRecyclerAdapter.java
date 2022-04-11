@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.GiftCardActivity;
 import com.greenbox.coyni.view.GiftCardDetails;
 import com.greenbox.coyni.view.LoginActivity;
+import com.greenbox.coyni.view.WithdrawTokenActivity;
 
 import java.util.List;
 
@@ -64,8 +66,8 @@ public class GiftCardsRecyclerAdapter extends RecyclerView.Adapter<GiftCardsRecy
                 @Override
                 public void onClick(View v) {
                     try {
-                        if(Utils.isKeyboardVisible)
-                            Utils.hideKeypad(mContext);
+//                        if(Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(mContext);
                         if (objData != null) {
                             GiftCardActivity giftCardActivity = (GiftCardActivity) mContext;
                             Intent i = new Intent(mContext, GiftCardDetails.class);

@@ -132,7 +132,7 @@
                         android:layout_marginTop="@dimen/_13sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Set amount to request a payment or scan QR\n code to pay"
+                        android:text="Set amount to request a payment or scan QR\n code to pay."
                         android:textAlignment="center"
                         android:textColor="@color/xdark_gray"
                         android:textSize="@dimen/_11ssp" />
@@ -265,7 +265,7 @@
                         android:id="@+id/divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/_40sdp"
                         android:background="@color/at_gray" />
 
                     <RelativeLayout
@@ -303,7 +303,7 @@
                             android:layout_width="1dp"
                             android:layout_height="@dimen/_35sdp"
                             android:layout_centerInParent="true"
-                            android:background="@color/vlight_gray"/>
+                            android:background="@color/vlight_gray" />
 
                         <LinearLayout
                             android:id="@+id/lyShare"
@@ -338,6 +338,7 @@
 
         </RelativeLayout>
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/b_saveToAlbumLL"
         android:layout_width="@dimen/_286sdp"

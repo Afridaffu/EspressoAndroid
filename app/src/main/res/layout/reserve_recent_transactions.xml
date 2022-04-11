@@ -62,5 +62,5 @@
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_9sdp"
         android:layout_marginEnd="@dimen/_11sdp"
-        android:background="@color/vlight_gray" />
+        android:background="@color/blue_light" />
 </RelativeLayout>

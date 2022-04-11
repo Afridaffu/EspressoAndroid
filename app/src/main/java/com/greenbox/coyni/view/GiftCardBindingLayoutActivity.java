@@ -438,6 +438,10 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             learnMoreTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     Utils.populateLearnMore(GiftCardBindingLayoutActivity.this);
                 }
             });

@@ -62,7 +62,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
         }
     }
 
-
     private void initialization() {
         try {
             setKeyboardVisibilityListener(ForgotPasswordActivity.this);
@@ -83,7 +82,9 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBackPressed();
+                    finish();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(ForgotPasswordActivity.this);
                 }
             });
             fromStr = getIntent().getStringExtra("screen");
@@ -286,10 +287,4 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
         Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (Utils.isKeyboardVisible)
-            Utils.hideKeypad(this);
-    }
 }

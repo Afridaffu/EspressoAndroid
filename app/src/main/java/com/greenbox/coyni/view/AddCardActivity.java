@@ -104,14 +104,15 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     TextInputLayout etlState, etlName, etlExpiry, etlCVV, etlAddress1, etlAddress2, etlCity, etlZipCode, etlAmount;
     MaskEditText etExpiry;
     ConstraintLayout clStates;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeDialog = 0L;
+    ;
     Dialog preDialog, preAuthDialog;
     CardResponseData cardResponseData;
     ProgressDialog progressDialog;
     public static AddCardActivity addCardActivity;
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;
-    Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
+    Boolean isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false, isInvalid = false;
     public Boolean isCard = false, isScan = false, isCardClear = false, isLicense = false;
     TextView tvError;
     private BlinkCardRecognizer mRecognizer;
@@ -446,6 +447,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             etCardNumber.getCardReaderIVRef().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddCardActivity.this);
                     if (!isLicense) {
                         startScanning();
                     } else {
@@ -795,20 +798,25 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_black));
                                 } else {
                                     isExpiry = false;
-                                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                                    Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
-                                    expiryErrorLL.setVisibility(VISIBLE);
-                                    expiryErrorTV.setText("Please enter a valid Expiry Date");
+                                    if (!isInvalid) {
+                                        etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                        Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
+                                        expiryErrorLL.setVisibility(VISIBLE);
+                                        expiryErrorTV.setText("Please enter a valid Expiry Date");
+                                    }
                                 }
                             } else {
                                 isExpiry = false;
-                                etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                if (!isInvalid) {
+                                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 //                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
-                                Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
-                                expiryErrorLL.setVisibility(VISIBLE);
-                                expiryErrorTV.setText("Field Required");
+                                    Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
+                                    expiryErrorLL.setVisibility(VISIBLE);
+                                    expiryErrorTV.setText("Field Required");
+                                }
                             }
                         } else {
+                            isInvalid = false;
                             etExpiry.setHint("MM/YY");
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
@@ -829,14 +837,16 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             etCVV.setHint("");
                             if (etCVV.getText().toString().trim().length() < 3) {
                                 isCvv = false;
-                                etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                                cvvErrorLL.setVisibility(VISIBLE);
-                                if (etCVV.getText().toString().trim().length() == 0) {
-                                    cvvErrorTV.setText("Field Required");
-                                    Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
-                                } else {
-                                    cvvErrorTV.setText("Please enter a valid CVV");
-                                    Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
+                                if (!isInvalid) {
+                                    etlCVV.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                    cvvErrorLL.setVisibility(VISIBLE);
+                                    if (etCVV.getText().toString().trim().length() == 0) {
+                                        cvvErrorTV.setText("Field Required");
+                                        Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
+                                    } else {
+                                        cvvErrorTV.setText("Please enter a valid CVV");
+                                        Utils.setUpperHintColor(etlCVV, getColor(R.color.error_red));
+                                    }
                                 }
                             } else {
                                 isCvv = true;
@@ -845,6 +855,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                                 Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_black));
                             }
                         } else {
+                            isInvalid = false;
                             etCVV.setHint("123");
                             etlCVV.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlCVV, getColor(R.color.primary_green));
@@ -1822,10 +1833,14 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             header.setVisibility(View.VISIBLE);
             header.setText(headerText);
         }
-
+        isInvalid = true;
         actionCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 try {
                     dialog.dismiss();
                     if (layoutAddress.getVisibility() == View.VISIBLE) {
@@ -1844,6 +1859,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etState.setText("");
                         etZipCode.setText("");
                         etZipCode.clearFocus();
+                        etCardNumber.requestCNETFocus();
 
 
                         Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
@@ -1851,6 +1867,12 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                         Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
                         Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));
+
+                        Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
+                        expiryErrorLL.setVisibility(GONE);
+
+                        Utils.setUpperHintColor(etlCVV, getColor(R.color.light_gray));
+                        cvvErrorLL.setVisibility(GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
