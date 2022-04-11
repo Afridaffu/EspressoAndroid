@@ -81,6 +81,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     case "failed bank withdraw":
                         txnType = Utils.failedWithdraw;
                         break;
+                    case "paid order":
+                        txnType = Utils.paidInvoice;
                 }
             }
             if (getIntent().getStringExtra("txnSubType") != null && !getIntent().getStringExtra("txnSubType").equals("")) {
