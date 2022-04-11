@@ -130,6 +130,7 @@
                             android:layout_height="@dimen/_50sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            android:background="@drawable/corecircle"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
@@ -152,7 +153,7 @@
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
                                     android:src="@drawable/ic_profile_male_user"
-                                    android:visibility="visible" />
+                                    android:visibility="gone" />
 
                                 <TextView
                                     android:id="@+id/b_imageTextTV"
@@ -161,10 +162,10 @@
                                     android:gravity="center"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text="AO"
-                                    android:background="@color/primary_green"
-                                    android:textColor="@color/white"
+                                    android:background="@color/blue_light"
+                                    android:textColor="@color/primary_green"
                                     android:textSize="@dimen/_18ssp"
-                                    android:visibility="gone" />
+                                    android:visibility="visible" />
 
                             </androidx.cardview.widget.CardView>
                         </androidx.constraintlayout.widget.ConstraintLayout>

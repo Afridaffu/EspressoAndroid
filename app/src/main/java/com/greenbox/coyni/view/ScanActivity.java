@@ -264,19 +264,13 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
             if (Utils.checkInternet(ScanActivity.this)) {
                 TransactionLimitRequest obj = new TransactionLimitRequest();
-//                obj.setTransactionType(Integer.parseInt(Utils.payType));
-//                obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
+                obj.setTransactionType(Utils.saleOrder);
+                obj.setTransactionSubType(Utils.saleOrderToken);
 //                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 dialog = Utils.showProgressDialog(ScanActivity.this);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-//                    TransactionLimitRequest obj = new TransactionLimitRequest();
-                    obj.setTransactionType(Utils.saleOrder);
-                    obj.setTransactionSubType(Utils.saleOrderToken);
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 } else {
-//                    TransactionLimitRequest obj = new TransactionLimitRequest();
-                    obj.setTransactionType(Utils.paidInvoice);
-//                    obj.setTransactionSubType(null);
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
                 }
             }
@@ -1463,6 +1457,55 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
+    private void displayAlertNew(String msg, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(ScanActivity.this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = dialog.findViewById(R.id.tvHead);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        CardView actionCV = dialog.findViewById(R.id.cvAction);
+        TextView actionText = dialog.findViewById(R.id.tvAction);
+        actionText.setText("Buy Token");
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                objMyApplication.setStrScreen("payRequest");
+                Intent i = new Intent(ScanActivity.this, BuyTokenPaymentMethodsActivity.class);
+                i.putExtra("screen", "payRequest");
+                startActivity(i);
+                //finish();
+            }
+        });
+
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance, String btypeValue) {
         isQRScan = false;
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -1559,20 +1602,14 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         try {
             TransferFeeRequest request = new TransferFeeRequest();
             request.setTokens(strAmount.trim().replace(",", ""));
+            request.setTxnType(String.valueOf(Utils.saleOrder));
+            request.setTxnSubType(String.valueOf(Utils.saleOrderToken));
             if (Utils.PERSONAL_ACCOUNT == objMyApplication.getAccountType()) {
-//                TransferFeeRequest request = new TransferFeeRequest();
-//                request.setTokens(strAmount.trim().replace(",", ""));
-                request.setTxnType(String.valueOf(Utils.saleOrder));
-                request.setTxnSubType(String.valueOf(Utils.saleOrderToken));
                 if (Utils.checkInternet(ScanActivity.this)) {
                     buyTokenViewModel.transferFee(request);
                 }
             }
             else if (Utils.BUSINESS_ACCOUNT == objMyApplication.getAccountType()){
-//                TransferFeeRequest request = new TransferFeeRequest();
-//                request.setTokens(strAmount.trim().replace(",", ""));
-                request.setTxnType(String.valueOf(Utils.paidInvoice));
-                request.setTxnSubType(null);
                 if (Utils.checkInternet(ScanActivity.this)) {
                     buyTokenViewModel.transferFee(request);
                 }
@@ -1598,7 +1635,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             request.setRecipientWalletId(strScanWallet);
             request.setRequestToken(Utils.getStrToken());
             objMyApplication.setPaidOrderRequest(request);
-//            objMyApplication.setWithdrawAmount(cynValue);
+            objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(ScanActivity.this)) {
                 payViewModel.paidOrder(request);
             }
@@ -1639,7 +1676,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 //                value = false;
 //            } else
             if (cynValue > avaBal) {
-                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+                displayAlertNew("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 Utils.displayAlert("Amount entered exceeds transaction limit.", ScanActivity.this, "Oops!", "");
