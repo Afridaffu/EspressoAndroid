@@ -299,10 +299,13 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                                 });
                                 if (rollingList.size() > 0) {
                                     noTransactions.setVisibility(View.GONE);
+                                    reserveRecyclerView.setVisibility(View.VISIBLE);
                                     reserveRecyclerView.setAdapter(reserveReleasesRollingAdapter);
                                     reserveRecyclerView.setLayoutManager(new LinearLayoutManager(ReserveReleasesActivity.this));
                                 } else {
                                     noTransactions.setVisibility(View.VISIBLE);
+                                    reserveRecyclerView.setVisibility(View.GONE);
+                                    noMoreTransactions.setVisibility(View.GONE);
                                 }
 
                             }
@@ -330,9 +333,11 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                                 if (manualItems.size() > 0) {
                                     noTransactions.setVisibility(View.GONE);
                                     noMoreTransactions.setVisibility(View.GONE);
+                                    reserveRecyclerView.setVisibility(View.VISIBLE);
                                     reserveRecyclerView.setAdapter(reserveReleaseManualListAdapter);
                                     reserveRecyclerView.setLayoutManager(new LinearLayoutManager(ReserveReleasesActivity.this));
                                 } else {
+                                    reserveRecyclerView.setVisibility(View.GONE);
                                     noTransactions.setVisibility(View.VISIBLE);
                                     noMoreTransactions.setVisibility(View.GONE);
                                 }
@@ -354,6 +359,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         showReserveReleaseDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
+                searchET.setText("");
 //                LogUtils.d(TAG, "onclickkk" + action + value);
                 if (action.equalsIgnoreCase(applyFilter)) {
                     reserveFilter = (ReserveFilter) value;
@@ -390,18 +396,19 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
 
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        int id_length = charSequence.toString().trim().length();
         if(isRolling) {
-            if (charSequence.length() == 14 ) {
+            if (id_length >= 14 && id_length<=34 ) {
                 rollingList.clear();
                 RollingAPI(charSequence.toString());
                 noTransactions.setVisibility(View.GONE);
                 noMoreTransactions.setVisibility(View.GONE);
                 reserveRecyclerView.setVisibility(View.VISIBLE);
-            } else if (charSequence.length() > 0 && charSequence.length() <= 14) {
+            } else if (id_length > 0 && id_length <10) {
                 noTransactions.setVisibility(View.VISIBLE);
                 noMoreTransactions.setVisibility(View.GONE);
                 reserveRecyclerView.setVisibility(View.GONE);
-            } else if (charSequence.toString().trim().length() == 0) {
+            } else if (id_length == 0) {
                 rollingList.clear();
                 noTransactions.setVisibility(View.GONE);
                 noMoreTransactions.setVisibility(View.GONE);
@@ -411,17 +418,16 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             }
 
         } else {
-            if (charSequence.length() == 15 ) {
+            if (id_length >= 10 && id_length<=34 ) {
                 manualItems.clear();
                 manualAPI(charSequence.toString());
-                noTransactions.setVisibility(View.GONE);
                 noMoreTransactions.setVisibility(View.GONE);
                 reserveRecyclerView.setVisibility(View.VISIBLE);
-            } else if (charSequence.length() > 0 && charSequence.length() < 15) {
+            } else if (id_length > 0 && id_length < 10) {
                 noTransactions.setVisibility(View.VISIBLE);
                 noMoreTransactions.setVisibility(View.GONE);
                 reserveRecyclerView.setVisibility(View.GONE);
-            } else if (charSequence.toString().trim().length() == 0) {
+            } else if (id_length == 0) {
                 manualItems.clear();
                 noTransactions.setVisibility(View.GONE);
                 noMoreTransactions.setVisibility(View.GONE);

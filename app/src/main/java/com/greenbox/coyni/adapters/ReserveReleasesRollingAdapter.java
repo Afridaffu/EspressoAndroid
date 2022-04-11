@@ -40,8 +40,7 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
     public ReserveReleasesRollingAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View rollingDetails = inflater.inflate(R.layout.rolling_list, parent, false);
-        MyViewHolder myViewHolder = new MyViewHolder(rollingDetails);
-        return myViewHolder;
+        return new MyViewHolder(rollingDetails);
     }
 
     @Override
