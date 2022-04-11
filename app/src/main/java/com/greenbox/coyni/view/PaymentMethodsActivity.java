@@ -175,6 +175,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 displayError();
             } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                 ControlMethod("addpayment");
+                strCurrent = "addpayment";
                 addPayment();
                 hideorShowNoTokenText();
             } else {

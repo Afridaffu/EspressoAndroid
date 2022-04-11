@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
@@ -50,6 +51,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
     MyApplication objMyApplication;
     LinearLayout layoutPwdError;
     TextView tvPwdError;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +160,10 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
             saveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     if (btnEnabled) {
                         dialog = Utils.showProgressDialog(ConfirmPasswordActivity.this);
                         PasswordRequest passwordRequest = new PasswordRequest();

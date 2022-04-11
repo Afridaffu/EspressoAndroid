@@ -517,6 +517,10 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         Utils.populateLearnMore(SelectPaymentMethodActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
