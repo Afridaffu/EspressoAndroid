@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.databinding.BuyTokenTransactionFailedBinding;
 import com.greenbox.coyni.dialogs.RefunInsufficeintTokenDialog;
 import com.greenbox.coyni.dialogs.RefundInsufficientMerchnatDialog;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
@@ -188,6 +189,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 //        showProgressDialog();
         dashboardViewModel.refundDetails(refundrefrequest);
     }
+
     private void refundProcessAPI(RefundReferenceRequest refundrefrequest) {
 //        showProgressDialog();
         dashboardViewModel.refundprocessDetails(refundrefrequest);
@@ -211,6 +213,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         return refundrefrequest;
     }
+
     public RefundReferenceRequest refundTransaction() {
         RefundReferenceRequest request = new RefundReferenceRequest();
         try {
@@ -225,6 +228,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         return request;
     }
+
     public void setRefundAmountClick() {
         if (isrefundClickable) {
             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -267,17 +271,24 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 dismissDialog();
                 if (refundDataResponce != null) {
                     if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
-//
-
+                        Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
+                        i.putExtra("amount", refundET.getText().toString());
+                        i.putExtra("gbxTransID", refundDataResponce.getData().getReferenceId());
+                        startActivity(i);
                     } else {
-                        if (!refundDataResponce.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
-                        } else {
-                            Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
-                        }
+                        Intent intent = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
+                        startActivity(intent);
+                    }
+
+                } else {
+                    if (!refundDataResponce.getError().getErrorDescription().equals("")) {
+                        Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                    } else {
+                        Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
                     }
                 }
             }
+
 
         });
     }
@@ -299,6 +310,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
             if (!insufficientMerchantBalance && !insufficientTokenBalance) {
                 refundPreview();
+//                insufficientMerchantBalancedialog();
             } else if (insufficientMerchantBalance && !insufficientTokenBalance) {
                 insufficientMerchantBalancedialog();
             } else {
@@ -388,14 +400,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        if(!isRefundProcessCalled) {
+                        if (!isRefundProcessCalled) {
                             refundDialog.dismiss();
                             tv_lable.setText("Verifying");
                             isRefundProcessCalled = true;
                             refundProcessAPI(refundTransaction());
                             tv_lable.setText("Verifying");
-                            startActivity(new Intent(RefundTransactionActivity.this, MerchantTransactionListActivity.class)
-                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 //                            finish();
                         }
 
@@ -430,7 +440,6 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             ex.printStackTrace();
         }
     }
-
 
 
     private void changeTextSize(String editable) {
