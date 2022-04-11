@@ -1,31 +1,24 @@
 package com.greenbox.coyni.dialogs;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.google.android.material.chip.Chip;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
-import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.ReserveReleasesActivity;
-
-import java.util.ArrayList;
 
 public class ReserveReleasesFilterDialog extends BaseDialog {
 
     private Context context;
-    private boolean isFilters = false;
     private Chip openC, releasedC, onHoldC, canceledC;
     private CardView applyFilter;
     private TextView resetFilter, dateRange;
@@ -33,6 +26,8 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
     private RangeDates rangeDates;
     private DateRangePickerDialog dateRangePickerDialog;
     private ReserveFilter filter;
+    private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
+
 
     public ReserveReleasesFilterDialog(Context context, ReserveFilter filter) {
         super(context);
@@ -102,6 +97,10 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         dateClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
                     return;
                 }
@@ -112,6 +111,10 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         dateRange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 if (dateRangePickerDialog != null && dateRangePickerDialog.isShowing()) {
                     return;
                 }
@@ -122,9 +125,6 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         applyFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-//                LogUtils.d("TAG","applyFilter"+filter.isFilterApplied);
-//                LogUtils.d("TAG","applyFilterdateRange"+dateRange);
 
                 if (!filter.isFilterApplied) {
                     dismiss();

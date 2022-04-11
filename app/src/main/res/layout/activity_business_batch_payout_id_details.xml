@@ -141,8 +141,10 @@
                         <TextView
                             android:id="@+id/payoutStatusTV"
                             android:layout_width="@dimen/_68sdp"
-                            android:layout_height="@dimen/_14sdp"
+                            android:layout_height="wrap_content"
                             android:background="@drawable/txn_completed_bg"
+                            android:paddingTop="@dimen/_3sdp"
+                            android:paddingBottom="@dimen/_3sdp"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
                             android:text=""
@@ -337,11 +339,11 @@
                     android:layout_marginTop="@dimen/_11sdp"
                     android:layout_marginRight="@dimen/_12sdp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/opensans_bold"
+                    android:fontFamily="@font/opensans_regular"
                     android:gravity="right"
-                    android:text="@string/cyn"
+                    android:text="@string/cyn_under_payout"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_9ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <androidx.cardview.widget.CardView

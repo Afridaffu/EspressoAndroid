@@ -113,33 +113,35 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayoutRL"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/reserveNestedSV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fillViewport="true"
             android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/_11sdp"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:layout_marginRight="@dimen/_11sdp"
-                    android:layout_marginBottom="@dimen/_31sdp"
+                    android:layout_marginBottom="@dimen/_24sdp"
                     android:background="@color/white"
+                    android:visibility="visible"
                     app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -181,8 +183,8 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvRollingList"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_20sdp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="@dimen/_2sdp"
                             android:background="@color/white"
                             android:nestedScrollingEnabled="false"
                             android:scrollbars="none"
@@ -190,54 +192,53 @@
 
                         </androidx.recyclerview.widget.RecyclerView>
 
+                        <TextView
+                            android:id="@+id/noTransactionsTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center"
+                            android:text="@string/you_have_no_transactions"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_10ssp"
+                            android:visibility="gone" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBarLoadMoreTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/loadMoreTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_12sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center"
+                            android:text="@string/load_more"
+                            android:textColor="@color/primary_green"
+                            android:textSize="@dimen/_10ssp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/noMoreTransactionsTV"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/_12sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:gravity="center"
+                            android:text="@string/you_have_no_more_transactions"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_10ssp"
+                            android:visibility="gone" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp" />
+
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
-
-                <TextView
-                    android:id="@+id/noTransactionsTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="center"
-                    android:text="@string/you_have_no_transactions"
-                    android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/_10ssp"
-                    android:visibility="gone" />
-
-                <ProgressBar
-                    android:id="@+id/progressBarLoadMoreTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/loadMoreTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="center"
-                    android:text="@string/load_more"
-                    android:textColor="@color/primary_green"
-                    android:textSize="@dimen/_10ssp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/noMoreTransactionsTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:gravity="center"
-                    android:text="@string/you_have_no_more_transactions"
-                    android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/_10ssp"
-                    android:visibility="gone" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30sdp" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
