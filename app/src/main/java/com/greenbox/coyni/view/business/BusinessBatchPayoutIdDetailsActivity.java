@@ -106,46 +106,16 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                     onBackPressed();
                 }
             });
-
-            payoutRefIdLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Utils.copyText(objData.getPayoutReferenceId(), BusinessBatchPayoutIdDetailsActivity.this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            payoutTokenNoLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Utils.copyText(objData.getTokenAccount(), BusinessBatchPayoutIdDetailsActivity.this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            payoutRefIdLL.setOnClickListener(v -> Utils.copyText(payoutRefIdTV.getText().toString(), BusinessBatchPayoutIdDetailsActivity.this));
+            payoutTokenNoLL.setOnClickListener(v -> Utils.copyText(payoutTokenIdTV.getText().toString(), BusinessBatchPayoutIdDetailsActivity.this));
             if(objData.getReserveWalletId()!=null) {
-                payoutReserveIdLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            Utils.copyText(objData.getReserveWalletId(), BusinessBatchPayoutIdDetailsActivity.this);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }else {
+                payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(ReserveIdTV.getText().toString(), BusinessBatchPayoutIdDetailsActivity.this));
+            }else{
                 reserveIDLL.setVisibility(View.GONE);
             }
 
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
-//        transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
             transactionsAPI(transactionListRequest);

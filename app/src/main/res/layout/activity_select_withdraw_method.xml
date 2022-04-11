@@ -44,9 +44,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp"
@@ -56,10 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/_10sdp"
             android:paddingTop="@dimen/_10sdp"
-            android:paddingRight="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_30sdp">
+            android:paddingBottom="@dimen/_26sdp">
 
             <RelativeLayout
                 android:id="@+id/lyExternal"
@@ -70,7 +68,7 @@
                 android:paddingStart="@dimen/_11sdp"
                 android:paddingTop="@dimen/_11sdp"
                 android:paddingEnd="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingBottom="@dimen/_1sdp">
 
                 <ImageView
                     android:id="@+id/imgBankIcon"
@@ -106,7 +104,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Can be used for withdrawing funds from your coyni account"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_10ssp" />
 
                 </LinearLayout>
 
@@ -122,7 +120,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:background="@color/viewcolor"></View>
 
             <RelativeLayout
@@ -133,7 +131,7 @@
                 android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_16sdp"
                 android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingBottom="@dimen/_1sdp">
 
                 <ImageView
                     android:id="@+id/imgDCardLogo"
@@ -166,7 +164,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Use a Visa or Mastercard debit cards for instant coyni withdraws via Instant Pay"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_10ssp" />
 
                 </LinearLayout>
                 <ImageView
@@ -180,7 +178,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:background="@color/viewcolor"></View>
             <RelativeLayout
                 android:id="@+id/lyGiftCard"
@@ -189,7 +187,7 @@
                 android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_15sdp"
                 android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingBottom="@dimen/_1sdp">
 
                 <ImageView
                     android:id="@+id/imgCCardLogo"
@@ -223,7 +221,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="Purchase gift cards from over 100 popular stores, restaurants, and more"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_10ssp" />
 
                 </LinearLayout>
 
@@ -240,7 +238,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:background="@color/viewcolor"></View>
 
             <RelativeLayout
@@ -250,7 +248,7 @@
                 android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_15sdp"
                 android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingBottom="@dimen/_1sdp">
 
                 <ImageView
                     android:id="@+id/imgSignetAcLogo"
@@ -282,7 +280,7 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/signet_ac_withdrawing_funds"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_10ssp" />
 
                 </LinearLayout>
 
@@ -298,7 +296,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:background="@color/viewcolor"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

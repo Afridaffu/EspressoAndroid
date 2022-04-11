@@ -636,5 +636,8 @@
     <string name="scheduled_release_has_been_canceled">Scheduled Release Has Been Canceled</string>
     <string name="time">11:59pm</string>
     <string name="sales_orders">Sales Orders</string>
+    <string name="signet">Signet</string>
+    <string name="withdraw_tokens">Withdraw Tokens</string>
+    <string name="cyn_under_payout">(CYN)</string>
 
 </resources>
