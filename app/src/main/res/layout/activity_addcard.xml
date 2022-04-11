@@ -40,7 +40,7 @@
                 android:layout_width="@dimen/_83sdp"
                 android:layout_height="@dimen/_4sdp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_22sdp"
+                android:layout_marginLeft="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_40sdp"
                 android:layout_marginBottom="@dimen/_28sdp"
                 android:background="@drawable/bg_core_colorfill" />
