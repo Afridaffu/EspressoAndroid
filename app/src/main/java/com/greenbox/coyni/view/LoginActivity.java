@@ -126,6 +126,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     @Override
     protected void onResume() {
         super.onResume();
+
         if (dialog != null) {
             dialog.dismiss();
         }

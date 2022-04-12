@@ -198,14 +198,19 @@ public class EnableAuthID extends AppCompatActivity {
                                 BIOMETRIC_STRONG);
                         startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                     } else {
-                        dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
-                        BiometricRequest biometricRequest = new BiometricRequest();
-                        biometricRequest.setBiometricEnabled(true);
-                        biometricRequest.setDeviceId(Utils.getDeviceID());
-                        coyniViewModel.saveBiometric(biometricRequest);
+
+                            dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
+                            dialog.setIndeterminate(false);
+                            dialog.setMessage("Please wait...");
+                            dialog.show();
+                            BiometricRequest biometricRequest = new BiometricRequest();
+                            biometricRequest.setBiometricEnabled(true);
+                            biometricRequest.setDeviceId(Utils.getDeviceID());
+                            try {
+                                coyniViewModel.saveBiometric(biometricRequest);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -303,16 +308,16 @@ public class EnableAuthID extends AppCompatActivity {
     }
 
     public void initObserver() {
-        try {
 
-            coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
-                @Override
-                public void onChanged(BiometricResponse biometricResponse) {
+        coyniViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<BiometricResponse>() {
+            @Override
+            public void onChanged(BiometricResponse biometricResponse) {
+                try {
                     dialog.dismiss();
                     if (biometricResponse != null) {
                         Log.e("bio resp", new Gson().toJson(biometricResponse));
                         saveToken(biometricResponse.getData().getToken());
-//                        Utils.generateUUID(EnableAuthID.this);
+                        //                        Utils.generateUUID(EnableAuthID.this);
                         if (!objMyApplication.isDeviceID()) {
                             Utils.generateUUID(EnableAuthID.this);
                         }
@@ -363,24 +368,27 @@ public class EnableAuthID extends AppCompatActivity {
                         }
                         objMyApplication.setBiometric(true);
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
+            }
+        });
 
-            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-                @Override
-                public void onChanged(BusinessTrackerResponse btResp) {
+        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
+            @Override
+            public void onChanged(BusinessTrackerResponse btResp) {
 
+                try {
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(btResp);
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     @Override
@@ -452,8 +460,8 @@ public class EnableAuthID extends AppCompatActivity {
 
     private void saveThumb(String value) {
         try {
-           dbHandler.clearThumbPinLockTable();
-           dbHandler.insertThumbPinLock(value);
+            dbHandler.clearThumbPinLockTable();
+            dbHandler.insertThumbPinLock(value);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -489,17 +497,17 @@ public class EnableAuthID extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (enableType.equals("SUCCESS") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-
-        } else {
-            try {
-                Intent intent = new Intent(EnableAuthID.this, OnboardActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+//        if (enableType.equals("SUCCESS") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//
+//        } else {
+//            try {
+//                Intent intent = new Intent(EnableAuthID.this, OnboardActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
 
     }
 

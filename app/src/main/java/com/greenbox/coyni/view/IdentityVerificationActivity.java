@@ -36,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -95,7 +96,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
     private TextView idveriUItext, idveriUItextSuc, exitBtn, btnExit, ssnErrorTV;
     private ConstraintLayout idveriDOBConLayout, stateCL;
     private LinearLayout bottomSheet, fileSelectedLL, ssnErrorLL, swipeLL, bottomNaviLL;
-    private ScrollView firstIVeri;
+    private RelativeLayout firstIVeri;
     public static CardView btnNext, btnSubmit;
     private ScrollView secondIVeri;
     private View viewLeft, viewRight;
