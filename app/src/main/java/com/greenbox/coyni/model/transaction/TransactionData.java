@@ -97,6 +97,8 @@ public class TransactionData {
     private String dateAndTime;
     private String refundAmount;
     private String depositTo;
+    private String payoutCreatedDate;
+    private String payoutUpdatedDate;
     private String amountSent;
 
 
@@ -495,6 +497,22 @@ public class TransactionData {
 
     public void setFailedReason(String failedReason) {
         this.failedReason = failedReason;
+    }
+
+    public String getPayoutCreatedDate() {
+        return payoutCreatedDate;
+    }
+
+    public void setPayoutCreatedDate(String payoutCreatedDate) {
+        this.payoutCreatedDate = payoutCreatedDate;
+    }
+
+    public String getPayoutUpdatedDate() {
+        return payoutUpdatedDate;
+    }
+
+    public void setPayoutUpdatedDate(String payoutUpdatedDate) {
+        this.payoutUpdatedDate = payoutUpdatedDate;
     }
 
     public String getAchReferenceId() {

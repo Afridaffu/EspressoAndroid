@@ -321,16 +321,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             calculateFee("10");
             if (Utils.checkInternet(PayToMerchantActivity.this)) {
                 TransactionLimitRequest obj = new TransactionLimitRequest();
-//                obj.setTransactionType(Integer.parseInt(Utils.payType));
-//                obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
-//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                obj.setTransactionType(Utils.saleOrder);
+                obj.setTransactionSubType(Utils.saleOrderToken);
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                    obj.setTransactionType(Utils.saleOrder);
-                    obj.setTransactionSubType(Utils.saleOrderToken);
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 } else {
-                    obj.setTransactionType(Utils.paidInvoice);
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
                 }
             }
@@ -688,7 +684,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             TransferFeeRequest request = new TransferFeeRequest();
             request.setTokens(strAmount.trim().replace(",", ""));
             if (Utils.checkInternet(PayToMerchantActivity.this)) {
-                request.setTxnType(String.valueOf(Utils.paidInvoice));
+                request.setTxnType(String.valueOf(Utils.saleOrder));
                 request.setTxnSubType(Utils.tokenType);
                 buyTokenViewModel.transferFee(request);
             }
@@ -766,7 +762,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
-            if (objLimit.getTokenLimitFlag()) {
+            if (objLimit != null && objLimit.getTokenLimitFlag()) {
                 Double week = 0.0, daily = 0.0;
                 if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("unlimited")) {
                     week = Double.parseDouble(objLimit.getWeeklyAccountLimit());

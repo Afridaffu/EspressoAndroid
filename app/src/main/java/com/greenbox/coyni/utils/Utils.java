@@ -371,6 +371,13 @@ public class Utils {
     public static final int mTOS = 7;
     public static final int mAgmt = 5;
 
+    //Cards
+    public static final String MASTERCARD = "MASTERCARD";
+    public static final String VISA = "VISA";
+    public static final String AMERICANEXPRESS = "AMERICAN EXPRESS";
+    public static final String DISCOVER = "DISCOVER";
+
+
 
     public static String getStrLang() {
         return strLang;

@@ -300,9 +300,9 @@
                         android:paddingBottom="@dimen/_11sdp">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/_30sdp"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/payout_date"
                             android:textColor="@color/dark_grey"
@@ -310,7 +310,7 @@
 
                         <TextView
                             android:id="@+id/merchantPIdateTV"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_semibold"

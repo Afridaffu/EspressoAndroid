@@ -162,6 +162,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
 
                         TransactionListRequest transactionListRequest = new TransactionListRequest();
+                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
                         transactionListRequest.setPageNo(String.valueOf(currentPage));
                         transactionListRequest.setWalletCategory(Utils.walletCategory);
                         transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -200,6 +201,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                                 currentPage = currentPage + 1;
                                 Log.e("CurrentPage", currentPage + "");
                                 TransactionListRequest transactionListRequest = new TransactionListRequest();
+                                transactionListRequest.setTransactionType(getDefaultTransactionTypes());
                                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -716,6 +718,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             currentPage = 0;
             total = 0;
             TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setPageNo(String.valueOf(currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -1550,7 +1553,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
 
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
-//            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+            transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setPageNo(String.valueOf(currentPage));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
@@ -1588,10 +1591,11 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
     private ArrayList<Integer> getDefaultTransactionTypes() {
         ArrayList<Integer> transactionType = new ArrayList<>();
         transactionType.add(Utils.payRequest);
-//        transactionType.add(Utils.withdraw);
-//        transactionType.add(Utils.buyTokens);
-//        transactionType.add(Utils.refund);
-//        transactionType.add(Utils.paidInvoice);
+        transactionType.add(Utils.withdraw);
+        transactionType.add(Utils.buyTokens);
+        transactionType.add(Utils.refund);
+        transactionType.add(Utils.paidInvoice);
+        transactionType.add(Utils.businessPayout);
         return transactionType;
     }
 
@@ -1599,11 +1603,11 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
         ArrayList<Integer> transactionType = new ArrayList<>();
         transactionType.add(Utils.sent);
         transactionType.add(Utils.received);
-//        transactionType.add(Utils.debitCard);
-//        transactionType.add(Utils.creditCard);
-//        transactionType.add(Utils.bankAccount);
-//        transactionType.add(Utils.instantPay);
-//        transactionType.add(Utils.giftCard);
+        transactionType.add(Utils.debitCard);
+        transactionType.add(Utils.creditCard);
+        transactionType.add(Utils.bankAccount);
+        transactionType.add(Utils.instantPay);
+        transactionType.add(Utils.giftCard);
 
         return transactionType;
     }
