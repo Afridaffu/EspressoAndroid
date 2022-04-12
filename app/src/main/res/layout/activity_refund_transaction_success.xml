@@ -25,8 +25,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_55sdp"
-                android:layout_marginBottom="@dimen/_23sdp"
+                android:layout_marginTop="@dimen/_62sdp"
+                android:layout_marginBottom="@dimen/_30sdp"
                 android:src="@drawable/ic_success_icon" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_marginBottom="@dimen/_7sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
-                android:text="Transaction Successful"
+                android:text="@string/trans_successful"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="CYN"
+                    android:text="@string/currency"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11sdp" />
             </LinearLayout>
@@ -69,7 +69,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_17sdp"
                 android:orientation="horizontal"
                 android:padding="@dimen/_10sdp">
 
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="Reference ID"
+                    android:text="@string/reference_id"
                     android:textColor="@color/xdark_gray"
                     android:textSize="@dimen/_11ssp" />
 
@@ -114,9 +114,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp"
-                android:fontFamily="@font/opensans_regular"
+                android:fontFamily="@font/opensans_semibold"
                 android:gravity="center"
-                android:text="A new refund transaction was generated."
+                android:text="@string/new_trans"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 
@@ -127,7 +127,7 @@
                 android:layout_marginTop="@dimen/_12sdp"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
-                android:text="View refund transaction"
+                android:text="@string/refund_trans"
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_11ssp" />
 
@@ -207,7 +207,7 @@
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_33sdp"
         android:layout_marginRight="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_26sdp"
         app:cardBackgroundColor="@color/primary_green"
         app:cardCornerRadius="@dimen/_21sdp">
 
@@ -216,7 +216,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/opensans_bold"
-            android:text="Done"
+            android:text="@string/done"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp" />
     </androidx.cardview.widget.CardView>

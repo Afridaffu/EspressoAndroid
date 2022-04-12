@@ -1,9 +1,11 @@
 package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
@@ -22,12 +24,10 @@ public class RefundTransactionFailed extends BaseActivity {
         cvtryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(RefundTransactionFailed.this,RefundTransactionActivity.class);
-                startActivity(i);
+                startActivity(new Intent(RefundTransactionFailed.this, RefundTransactionActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
-
-
 
     }
 }

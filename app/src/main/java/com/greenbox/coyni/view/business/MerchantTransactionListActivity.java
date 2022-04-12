@@ -333,7 +333,9 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
     private void showTransactionDetails(TransactionListPosted selectedTransaction) {
         Intent inDetails = new Intent(MerchantTransactionListActivity.this, MerchantTransactionDetailsActivity.class);
-        inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, selectedTransaction);
+        inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, selectedTransaction.getGbxTransactionId());
+        inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, selectedTransaction.getTxnTypeDn());
+        inDetails.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, selectedTransaction.getTxnSubTypeDn());
         startActivity(inDetails);
     }
 
