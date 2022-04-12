@@ -231,6 +231,7 @@ public class Utils {
     public static final String tokensub = "token";
     public static final String transfersub = "transfer";
     public static final String Success = "Success";
+    public static final String Swiped = "Swiped";
     //    controll methods in merchanttransactiondetails
     public static final String refundCM = "refundCM";
     public static final String saleorderCM = "saleorderCM";

@@ -46,10 +46,11 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/openAmountTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_bold"
-                android:text="6,890.43"
+                android:text=""
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_35ssp" />
 
@@ -59,6 +60,7 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/cyn"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_11ssp" />
         </LinearLayout>
@@ -66,54 +68,79 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_11sdp"
-            android:layout_marginTop="@dimen/_21sdp"
-            android:gravity="center"
+            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="horizontal">
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_22sdp"
+                android:text="Send to"
+                android:textColor="@color/dark_gray"
                 android:fontFamily="@font/opensans_regular"
-                android:singleLine="true"
-                android:text="@string/send_to"
-                android:textColor="#505050"
+                android:layout_gravity="center" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/sentToDescriptionTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/opensans_semibold"
+                android:text="@string/business_token_account"
+                android:textColor="@color/primary_black"
+                android:layout_marginEnd="@dimen/_22sdp"
+                android:gravity="end"
+                android:layout_marginBottom="@dimen/_2sdp"
                 android:textSize="@dimen/_11ssp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_11sdp"
-                android:gravity="end"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:text="@string/business_token_account"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp" />
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/_22sdp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_semibold"
                     android:text="@string/available_balance"
+                    android:textSize="@dimen/_9ssp"
+                    android:textColor="@color/dark_gray"/>
+
+                <TextView
+                    android:id="@+id/availBalTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="@string/avail_bal"
+                    android:textColor="@color/dark_gray"
+                    android:layout_marginStart="@dimen/_2sdp"
+                    android:textSize="@dimen/_9ssp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="CYN"
+                    android:textColor="@color/dark_gray"
+                    android:layout_marginStart="@dimen/_2sdp"
                     android:textSize="@dimen/_9ssp" />
             </LinearLayout>
         </LinearLayout>
+        </LinearLayout>
 
         <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/slideToConfirm"
+            android:id="@+id/slideToConfirmm"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_48sdp"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_55sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_25sdp"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
             android:background="@drawable/shape_round_rectable"
             android:elevation="@dimen/_2sdp"
             app:layoutDescription="@xml/activity_swipe_unloack_scene"
@@ -122,21 +149,47 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <TextView
-                android:id="@+id/tv_lable"
+                android:id="@+id/tv_lable_verify"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:paddingEnd="16dp"
-                android:text="@string/slide_to_confirm"
-                android:textColor="@color/primary_color"
-                android:textSize="@dimen/_15ssp"
+                android:paddingRight="16dp"
+                android:text="Verifying"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/im_lock"
                 app:layout_constraintStart_toEndOf="@+id/im_lock"
-                app:layout_constraintTop_toTopOf="@+id/im_lock" />
+                app:layout_constraintTop_toTopOf="@+id/im_lock"
+                android:visibility="gone"/>
+
+            <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
+                android:id="@+id/tv_lable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:gravity="center"
+                android:paddingEnd="16dp"
+                android:paddingRight="16dp"
+                android:text="Slide to Confirm"
+                android:textColor="@color/primary_green"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:angle="45"
+                app:chainUseRtl="true"
+                app:colors="@array/default_gradient_colors"
+                app:layout_constraintBottom_toBottomOf="@id/im_lock"
+                app:layout_constraintStart_toEndOf="@+id/im_lock"
+                app:layout_constraintTop_toTopOf="@+id/im_lock"
+                app:speed="500"
+                app:maxFPS="24"
+                app:simultaneousColors="8"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/im_lock"
@@ -146,7 +199,7 @@
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginBottom="@dimen/_2sdp"
                 app:cardBackgroundColor="@color/slidebtn_bg"
-                app:cardCornerRadius="@dimen/_22sdp"
+                app:cardCornerRadius="@dimen/_21sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -159,6 +212,7 @@
 
             </androidx.cardview.widget.CardView>
 
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/im_lock_"
                 android:layout_width="@dimen/_44sdp"
@@ -168,7 +222,7 @@
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:visibility="invisible"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="@dimen/_22sdp"
+                app:cardCornerRadius="@dimen/_20sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">

@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -74,6 +75,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     private DatabaseHandler dbHandler;
     LoginViewModel loginViewModel;
     Long mLastClickTime = 0L;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,6 +326,11 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                                 Intent returnIntent = new Intent();
                                                 setResult(235, returnIntent);
                                                 finish();
+                                            case "BatchNow":
+                                                Intent in = new Intent();
+                                                setResult(RESULT_OK, in);
+                                                finish();
+                                                break;
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -740,6 +747,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                         || getIntent().getStringExtra("screen").equals("Withdraw")
                         || getIntent().getStringExtra("screen").equals("Pay")
                         || getIntent().getStringExtra("screen").equals("Notifications")
+                        || getIntent().getStringExtra("screen").equals("BatchNow")
                         || getIntent().getStringExtra("screen").equals("buy"))
                         || getIntent().getStringExtra("screen").equals("Paid")) {
                     onBackPressed();
