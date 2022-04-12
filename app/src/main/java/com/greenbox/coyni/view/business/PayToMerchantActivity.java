@@ -709,7 +709,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             request.setRecipientWalletId(recipientAddress);
             request.setRequestToken(Utils.getStrToken());
             objMyApplication.setPaidOrderRequest(request);
-//            objMyApplication.setWithdrawAmount(cynValue);
+            objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayToMerchantActivity.this)) {
                 payViewModel.paidOrder(request);
             }

@@ -4,14 +4,14 @@ import com.greenbox.coyni.model.BaseResponse;
 
 public class PaidOrderResp extends BaseResponse {
 
-    private PaidResponseData paidResponseData;
+    private PaidResponseData data;
 
 
     public PaidResponseData getPaidResponseData() {
-        return paidResponseData;
+        return data;
     }
 
     public void setPaidResponseData(PaidResponseData paidResponseData) {
-        this.paidResponseData = paidResponseData;
+        this.data = paidResponseData;
     }
 }

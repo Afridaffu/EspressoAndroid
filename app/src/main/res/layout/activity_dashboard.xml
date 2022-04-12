@@ -45,7 +45,7 @@
                         android:layout_width="@dimen/_32sdp"
                         android:layout_height="@dimen/_32sdp"
                         android:layout_alignParentRight="true"
-                        android:background="@drawable/dashboard_profile_bg"
+                        android:background="@drawable/corecircle"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,8 @@
                             android:layout_height="@dimen/_29sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="@dimen/_15sdp"
+                            app:cardCornerRadius="@dimen/_14sdp"
+                            app:cardBackgroundColor="@color/primary_green"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +72,7 @@
                                 android:layout_height="match_parent"
                                 android:scaleType="fitXY"
                                 android:src="@drawable/ic_profile_male_user"
-                                android:visibility="visible" />
+                                android:visibility="gone" />
 
                             <TextView
                                 android:id="@+id/tvUserInfoSmall"
@@ -80,11 +80,11 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="VT"
+                                android:text="TT"
                                 android:background="@color/primary_green"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_14sdp"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
                         </androidx.cardview.widget.CardView>
 
 
@@ -151,7 +151,7 @@
                         android:layout_width="@dimen/_32sdp"
                         android:layout_height="@dimen/_32sdp"
                         android:layout_alignParentRight="true"
-                        android:background="@drawable/dashboard_profile_bg"
+                        android:background="@drawable/corecircle"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -159,8 +159,8 @@
 
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="@dimen/_27sdp"
-                            android:layout_height="@dimen/_27sdp"
+                            android:layout_width="@dimen/_28sdp"
+                            android:layout_height="@dimen/_28sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
                             app:cardBackgroundColor="@color/white"
@@ -181,11 +181,12 @@
 
                             <TextView
                                 android:id="@+id/tvUserInfo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
                                 android:fontFamily="@font/opensans_bold"
-                                android:textColor="@color/primary_black"
+                                android:textColor="@color/white"
+                                android:background="@color/primary_green"
                                 android:textSize="@dimen/_14sdp"
                                 android:visibility="gone"
                                 tools:text="VT" />

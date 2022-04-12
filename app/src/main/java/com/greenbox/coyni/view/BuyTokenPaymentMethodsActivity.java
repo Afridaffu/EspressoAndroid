@@ -105,11 +105,11 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 if (strCurrent.equals("externalBank")) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
+                } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
+                    super.onBackPressed();
                 } else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
                     ControlMethod("paymentMethods");
                     strCurrent = "paymentMethods";
-                } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
-                    super.onBackPressed();
                 }
             } else {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
@@ -299,7 +299,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
 
-                            if(objMyApplication.getSelectedCard()!=null) {
+                            if (objMyApplication.getSelectedCard() != null) {
                                 //Added on 30-03-2022 - VT
                                 if (objMyApplication.getSelectedCard().getPaymentMethod().toLowerCase().equals("bank")) {
                                     objMyApplication.getSelectedCard().setRelink(false);
@@ -548,6 +548,10 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             tvLearnMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     try {
                         Utils.populateLearnMore(BuyTokenPaymentMethodsActivity.this);
                     } catch (Exception ex) {

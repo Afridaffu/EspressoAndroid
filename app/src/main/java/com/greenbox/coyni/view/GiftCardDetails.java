@@ -118,7 +118,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
     boolean isAuthenticationCalled = false;
     private MotionLayout withDrawSlideToConfirm;
     private AnimatedGradientTextView tv_lable;
-    private CardView im_lock,im_lock_;
+    private CardView im_lock, im_lock_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +129,6 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.WHITE);
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
             initFields();
             initObservers();
 
@@ -1402,8 +1400,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
     @Override
     protected void onResume() {
         super.onResume();
-        if (Utils.isKeyboardVisible)
-            Utils.hideKeypad(this);
+//        if (Utils.isKeyboardVisible)
+//            Utils.hideKeypad(this);
 
         if (prevDialog != null) {
             changeSlideState();

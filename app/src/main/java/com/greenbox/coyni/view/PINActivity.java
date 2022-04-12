@@ -130,6 +130,11 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     tvHead.setText("Choose your PIN");
                     clearControls();
                     passcode = "";
+                    if (getIntent().getStringExtra("AUTH_TYPE") != null && getIntent().getStringExtra("AUTH_TYPE").equals("TOUCH")) {
+                        imgBack.setImageResource(R.drawable.ic_close);
+                    } else{
+                        imgBack.setImageResource(R.drawable.ic_back);
+                    }
                     break;
             }
         } catch (Exception ex) {
@@ -376,12 +381,21 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
+//                                        try {
+//                                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                                                finish();
+//                                            } else {
+//                                                launchDashboard();
+//                                            }
+//                                        } catch (Exception ex) {
+//                                            ex.printStackTrace();
+//                                        }
+
                                         try {
-                                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                                finish();
-                                            } else {
-                                                launchDashboard();
-                                            }
+                                            dbHandler.clearAllTables();
+                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(i);
                                         } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
@@ -1167,6 +1181,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         request.setRequestToken(Utils.getStrToken());
         request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
         request.setRecipientWalletId(getIntent().getStringExtra(Utils.wallet));
+
+        objMyApplication.setWithdrawAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
 
         if (Utils.checkInternet(PINActivity.this)) {
             try {
