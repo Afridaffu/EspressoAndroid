@@ -17,6 +17,8 @@ import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
+import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
@@ -52,9 +54,14 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchPayoutListResponse> rollingListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BusinessActivityResp> businessActivityRespMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public MutableLiveData<BusinessActivityResp> getBusinessActivityRespMutableLiveData() {
+        return businessActivityRespMutableLiveData;
     }
 
     public MutableLiveData<PaymentMethodsResponse> getPaymentMethodsResponseMutableLiveData() {
@@ -89,10 +96,12 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData() {
         return batchPayoutIdDetailsResponseMutableLiveData;
     }
+
     public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
         return rollingListResponseMutableLiveData;
     }
-    public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData(){
+
+    public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData() {
         return manualListResponseMutableLiveData;
     }
 
@@ -449,6 +458,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
     public void getManualListData(SearchKeyRequest searchKey) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -627,6 +637,39 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void businessActivity(BusinessActivityRequest businessActivityRequest) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<BusinessActivityResp> call = apiService.businessActivity(businessActivityRequest);
+        call.enqueue(new Callback<BusinessActivityResp>() {
+            @Override
+            public void onResponse(Call<BusinessActivityResp> call, Response<BusinessActivityResp> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        BusinessActivityResp businessActivityResp = response.body();
+                        businessActivityRespMutableLiveData.setValue(businessActivityResp);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BusinessActivityResp>() {
+                        }.getType();
+
+                        BusinessActivityResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        businessActivityRespMutableLiveData.setValue(errorResponse);
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    businessActivityRespMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BusinessActivityResp> call, Throwable t) {
+                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                paymentMethodsResponseMutableLiveData.setValue(null);
+            }
+        });
     }
 
 
