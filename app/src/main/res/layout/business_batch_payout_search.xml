@@ -42,7 +42,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
                 android:orientation="horizontal"
                 android:layout_gravity="center">
 
@@ -56,7 +55,7 @@
                     android:gravity="center"
                     android:text=""
                     android:textColor="@color/active_green"
-                    android:textSize="@dimen/_7ssp" />
+                    android:textSize="@dimen/_8ssp" />
 
                 <TextView
                     android:id="@+id/payoutDate"
@@ -64,14 +63,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_marginBottom="@dimen/_6sdp"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="end"
                     android:layout_gravity="center_horizontal"
                     android:text="06/23/2021 @ 2:20am"
                     android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <View
@@ -80,6 +78,7 @@
                 android:layout_marginStart="@dimen/_6sdp"
                 android:layout_marginEnd="@dimen/_6sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:background="@color/blue_light" />
         </LinearLayout>
 

@@ -82,7 +82,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
-    private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutManualTV, payoutAmountTV, cynTV;
+    private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutAmountTV, cynTV;
     private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV;
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
@@ -186,7 +186,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         payoutsXmlLL = mCurrentView.findViewById((R.id.payoutsXmlLL));
         payoutsLayoutLL = mCurrentView.findViewById((R.id.payoutsLayoutLL));
         batchPayoutDateTV = mCurrentView.findViewById(R.id.batchPayoutDateTV);
-        payoutManualTV = mCurrentView.findViewById(R.id.payoutManualTV);
         payoutAmountTV = mCurrentView.findViewById(R.id.payoutAmountTV);
         cynTV = mCurrentView.findViewById(R.id.cynTV);
         lastPayoutDate = mCurrentView.findViewById(R.id.lastPayoutDate);
@@ -714,12 +713,23 @@ public class BusinessDashboardFragment extends BaseFragment {
                 View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
                 if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID)) {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
+                    TextView payoutManualTV = xmlView.findViewById(R.id.payoutManualTV);
                     String listDate = listItems.get(j).getCreatedAt();
                     if (listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
                         payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
                     } else {
                         Log.d("listDate", listDate);
+                    }
+                    try {
+                        String type = listItems.get(j).getProcessType();
+                        if (type != null && type.equalsIgnoreCase(Utils.processType)) {
+                            payoutManualTV.setVisibility(View.VISIBLE);
+                        } else {
+                            payoutManualTV.setVisibility(View.GONE);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     TextView totalAmount = xmlView.findViewById(R.id.payoutAmountTV);
                     totalAmount.setText(Utils.convertBigDecimalUSDC(listItems.get(j).getTotalAmount()));
