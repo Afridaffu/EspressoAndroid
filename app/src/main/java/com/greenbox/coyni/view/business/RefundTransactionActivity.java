@@ -71,8 +71,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private double value, value1;
     private int enteramout, textamount;
     private static final String ACTION = "RefundPreviewDialog";
-    private static final  String ACTIONN = "insuffintmerchantbalancedialog";
-
+    private static final  String ACTIONN = "insuffintmerchantbalancedialog ";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -326,8 +325,11 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
             }
 
-            if (refundDataResponce.getData().getWalletBalance() != null && refundDataResponce.getData().getWalletBalance().equals("")) {
+            if (refundDataResponce.getData().getWalletBalance() != null && !refundDataResponce.getData().getWalletBalance().equals("")) {
                 walletbalance = refundDataResponce.getData().getWalletBalance();
+            }
+            if (refundDataResponce.getData().getProcessingFee() != null) {
+                processingFee = refundDataResponce.getData().getProcessingFee();
             }
             if (refundDataResponce.getData().getWalletType() != null) {
                 wallettype = refundDataResponce.getData().getWalletType();
@@ -336,6 +338,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
             if (!insufficientMerchantBalance && !insufficientTokenBalance) {
                 refundPreview();
+//                insufficientTokenBalancedialog();
             } else if (insufficientMerchantBalance && !insufficientTokenBalance) {
                 insufficientMerchantBalancedialog();
             } else {
@@ -357,7 +360,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onDialogClicked(String action, Object value) {
                     if (action.equalsIgnoreCase(ACTIONN)) {
                         Intent i = new Intent(RefundTransactionActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "refund");
+//                        i.putExtra("screen", "refund");
                         startActivity(i);
                     }
                 }
