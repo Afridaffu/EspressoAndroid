@@ -49,10 +49,16 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_merchant_transaction_details);
-
+            if (getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID) != null) {
                 gbxID = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID);
+            } else {
+                gbxID = "";
+            }
+            if (getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE) != null) {
                 txnTypeStr = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE);
-
+            } else {
+                txnTypeStr = "";
+            }
             if (getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE) != null) {
                 txnSubTypeStr = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE);
             } else {
