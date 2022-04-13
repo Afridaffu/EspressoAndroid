@@ -96,10 +96,10 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (txnSubTypeStr != null) {
                 switch (txnSubTypeStr.toLowerCase()) {
                     case Utils.tokensub:
-                        txnSubType = Integer.valueOf(Utils.token);
+                        txnSubType = Utils.token;
                         break;
                     case Utils.transfersub:
-                        txnSubType = Integer.valueOf(Utils.transfer);
+                        txnSubType = Utils.transfer;
                         break;
                     case Utils.sentt:
                         txnSubType = Utils.sent;
@@ -109,7 +109,6 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
 
                 }
             }
-
 
             if (Utils.checkInternet(MerchantTransactionDetailsActivity.this)) {
                 showProgressDialog();
@@ -211,22 +210,25 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             }
 
             if (objData.getData().getReferenceId().length() > 10) {
-                refundOTIrefrencetv.setText(objData.getData().getReferenceId().substring(0, 10) + "...");
-                refundOTIrefrencetv.setPaintFlags(refundOTIrefrencetv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 refundreferencetv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
             } else {
                 refundreferencetv.setText(objData.getData().getReferenceId());
-                refundOTIrefrencetv.setText(objData.getData().getReferenceId());
+            }
+            if (objData.getData().getSaleOrderReferenceId().length()>10){
+                refundOTIrefrencetv.setText(objData.getData().getSaleOrderReferenceId().substring(0, 10) + "...");
+                refundOTIrefrencetv.setPaintFlags(refundOTIrefrencetv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            }else {
+                refundOTIrefrencetv.setText(objData.getData().getSaleOrderReferenceId());
             }
             refundreciptantNametv.setText(Utils.capitalize(objData.getData().getRecipientName()));
             refundReciptantEmailtv.setText(objData.getData().getRecipientEmail());
             refundDatetimetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
             refundfeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
             refundtotalAmounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
-            refundOTIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getDateAndTime()));
-            refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
+            refundOTIdatetv.setText(objData.getData().getSaleOrderDateAndTime());
+            refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getSaleOrderGrossAmount().replace("CYN", "").trim()));
             refundOTIFeetv.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
-            refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("USD", "").trim()));
+            refundOTINetamounttv.setText(Utils.convertTwoDecimal(objData.getData().getSaleOrderNetAmount().replace("CYN", "").trim()));
             refundReasontv.setText(objData.getData().getRemarks());
             if (objData.getData().getRemarks().equals("")) {
                 refundReasontv.setVisibility(View.GONE);
@@ -256,7 +258,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         try {
             ImageView refundIV;
             TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
-            LinearLayout saleorderclosell, SalesReferencecopyLL;
+            LinearLayout saleorderclosell, SalesReferencecopyLL,salesreserveLL;
 
             SalesReferencecopyLL = findViewById(R.id.SalesReferenceCopyLL);
             saleorderclosell = findViewById(R.id.Saleorderclosell);
@@ -268,6 +270,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             salesReferenceidTV = findViewById(R.id.SalesReferenceidTV);
             salesfeesTV = findViewById(R.id.SalesfeesidTV);
             salesreserveTV = findViewById(R.id.SalesreserveTV);
+            salesreserveLL = findViewById(R.id.salesreservell);
             salesnetamountTV = findViewById(R.id.SalesnetamountTV);
             salesMerchantBalanceTV = findViewById(R.id.SalesMerchantBalanceTV);
             salessendernameTVTV = findViewById(R.id.SalessendernameTVTV);
@@ -305,7 +308,12 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             salesfeesTV.setText(Utils.convertTwoDecimal(objData.getData().getFees().replace("CYN", "").trim()));
             salesnetamountTV.setText(Utils.convertTwoDecimal(objData.getData().getNetAmount().replace("CYN", "").trim()));
             salesMerchantBalanceTV.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
-//            salesreserveTV.setText(Utils.convertTwoDecimal(objData.getData().getReserve().replace("CYN", "").trim()));
+            if (objData.getData().getReserve() != null && !objData.getData().getReserve().equals("")) {
+                salesreserveLL.setVisibility(View.VISIBLE);
+                salesreserveTV.setText(Utils.convertTwoDecimal(objData.getData().getReserve().replace("CYN", "").trim()));
+            }else {
+                salesreserveLL.setVisibility(View.GONE);
+            }
             salessendernameTVTV.setText(objData.getData().getSenderName());
             salessenderemailTV.setText(objData.getData().getSenderEmail());
 
