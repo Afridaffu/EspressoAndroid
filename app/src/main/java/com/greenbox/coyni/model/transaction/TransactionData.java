@@ -83,8 +83,12 @@ public class TransactionData {
     private String payoutDate;
     private String totalTransactions;
     private String failedReason;
+    private String merchantId;
+    private String dbaName;
+    private String paidAmount;
+    private String customerServicePhoneNo;
+    private String customerServiceMail;
     private String achReferenceId;
-
 
 
     //    MerchantTransaction newly added fields
@@ -108,6 +112,26 @@ public class TransactionData {
 
     public String getCardExpiryDate() {
         return cardExpiryDate;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public String getDbaName() {
+        return dbaName;
+    }
+
+    public String getCustomerServicePhoneNo() {
+        return customerServicePhoneNo;
+    }
+
+    public String getCustomerServiceMail() {
+        return customerServiceMail;
+    }
+
+    public String getPaidAmount() {
+        return paidAmount;
     }
 
     public void setCardExpiryDate(String cardExpiryDate) {
@@ -213,6 +237,7 @@ public class TransactionData {
     public void setDepositid(String depositId) {
         this.depositId = depositId;
     }
+
     public String getDepositid() {
         return depositId;
     }
@@ -241,7 +266,9 @@ public class TransactionData {
         this.amountReceived = amountReceived;
     }
 
-    public String getSenderName() { return senderName; }
+    public String getSenderName() {
+        return senderName;
+    }
 
     public void setSenderName(String senderName) {
         this.senderName = senderName;
@@ -528,48 +555,63 @@ public class TransactionData {
     public String getFees() {
         return fees;
     }
+
     public void setFees(String fees) {
         this.fees = fees;
     }
+
     public String getNetAmount() {
         return netAmount;
     }
+
     public void setNetAmount(String netAmount) {
         this.netAmount = netAmount;
     }
+
     public String getSenderEmail() {
         return senderEmail;
     }
+
     public void setSenderEmail(String senderEmail) {
         this.senderEmail = senderEmail;
     }
+
     public String getReserve() {
         return reserve;
     }
+
     public void setReserve(String reserve) {
         this.reserve = reserve;
     }
+
     public String getGrossAmount() {
         return grossAmount;
     }
+
     public void setGrossAmount(String grossAmount) {
         this.grossAmount = grossAmount;
     }
+
     public String getDateAndTime() {
         return dateAndTime;
     }
+
     public void setDateAndTime(String dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
+
     public String getRefundAmount() {
         return refundAmount;
     }
+
     public void setRefundAmount(String refundAmount) {
         this.refundAmount = refundAmount;
     }
+
     public String getAmountSent() {
         return amountSent;
     }
+
     public void setAmountSent(String amountSent) {
         this.amountSent = amountSent;
     }

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.res.Resources;
@@ -46,7 +45,29 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private static final String BUSINESS_PAYOUT = "businessPayout";
     private static final String CANCELLED_WITH = "cancelledWithdrawBank";
     private static final String FAILED_WITH = "failedWithdrawBank";
+    private static final String PAID_ORDER_TOKEN = "PaidOrderToken";
 
+    // Transaction Types
+    private static final String pay_request = "pay / request";
+    private static final String buy_tokens = "buy tokens";
+    private static final String buy_token = "buy token";
+    private static final String withdraw = "withdraw";
+    private static final String business_payout = "business payout";
+    private static final String canceled_bank_withdraw = "canceled bank withdraw";
+    private static final String failed_bank_withdraw = "failed bank withdraw";
+    private static final String paid_order = "paid order";
+    private static final String refund = "refund";
+
+    // Transaction SubTypes
+    private static final String sent = "sent";
+    private static final String received = "received";
+    private static final String bank_account = "bank account";
+    private static final String credit_card = "credit card";
+    private static final String debit_card = "debit card";
+    private static final String signet = "signet";
+    private static final String gift_card = "gift card";
+    private static final String instant_pay = "instant pay";
+    private static final String token = "token";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,58 +94,58 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(Utils.txnType).equals("")) {
                 //txnType = Integer.parseInt(getIntent().getStringExtra("txnType"));
                 switch (getIntent().getStringExtra(Utils.txnType).toLowerCase()) {
-                    case "pay / request":
+                    case pay_request:
                         txnType = Integer.parseInt(Utils.payType);
                         break;
-                    case "buy token":
-                    case "buy tokens":
+                    case buy_token:
+                    case buy_tokens:
                         txnType = Integer.parseInt(Utils.addType);
                         break;
-                    case "withdraw":
+                    case withdraw:
                         txnType = Integer.parseInt(Utils.withdrawType);
                         break;
-                    case "business payout":
+                    case business_payout:
                         txnType = Integer.parseInt(Utils.businessType);
                         break;
-                    case "merchant payout":
-                        txnType = Integer.parseInt(Utils.merchantType);
-                        break;
-                    case "canceled bank withdraw":
+                    case canceled_bank_withdraw:
                         txnType = Utils.cancelledWithdraw;
                         break;
-                    case "failed bank withdraw":
+                    case failed_bank_withdraw:
                         txnType = Utils.failedWithdraw;
                         break;
-                    case "paid order":
+                    case paid_order:
                         txnType = Utils.paidInvoice;
                 }
             }
             if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(Utils.txnSubType).equals("")) {
                 //txnSubType = Integer.parseInt(getIntent().getStringExtra("txnSubType"));
                 switch (getIntent().getStringExtra(Utils.txnSubType).toLowerCase()) {
-                    case "sent":
+                    case sent:
                         txnSubType = Integer.parseInt(Utils.paySubType);
                         break;
-                    case "received":
+                    case received:
                         txnSubType = Integer.parseInt(Utils.requestSubType);
                         break;
-                    case "bank account":
+                    case bank_account:
                         txnSubType = Integer.parseInt(Utils.bankType);
                         break;
-                    case "credit card":
+                    case credit_card:
                         txnSubType = Integer.parseInt(Utils.creditType);
                         break;
-                    case "debit card":
+                    case debit_card:
                         txnSubType = Integer.parseInt(Utils.debitType);
                         break;
-                    case "gift card":
+                    case gift_card:
                         txnSubType = Integer.parseInt(Utils.giftcardType);
                         break;
-                    case "instant pay":
+                    case instant_pay:
                         txnSubType = Integer.parseInt(Utils.instantType);
                         break;
-                    case "signet":
+                    case signet:
                         txnSubType = Integer.parseInt(Utils.signetType);
+                        break;
+                    case token:
+                        txnSubType = Integer.parseInt(Utils.tokenType);
                         break;
                     default:
                         txnSubType = null;
@@ -150,64 +171,70 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
             if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase("Success")) {
                 switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
-                    case "pay / request":
+                    case pay_request:
                         ControlMethod(PAY_REQUEST);
                         payRequest(transactionDetails.getData());
                         break;
-                    case "buy token":
-                    case "buy tokens":
+                    case buy_token:
+                    case buy_tokens:
                         switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                            case "credit card":
-                            case "debit card":
+                            case credit_card:
+                            case debit_card:
                                 ControlMethod(BUY_TOKEN);
                                 buyTokenCreditDebit(transactionDetails.getData());
                                 break;
-                            case "bank account":
+                            case bank_account:
                                 ControlMethod(BUY_BANK);
                                 buyTokenBankAccount(transactionDetails.getData());
                                 break;
-                            case "signet":
+                            case signet:
                                 ControlMethod(BUY_SIGNET);
                                 buyTokenSignet(transactionDetails.getData());
                                 break;
                         }
                         break;
-                    case "withdraw":
+                    case withdraw:
                         switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                            case "gift card":
+                            case gift_card:
                                 ControlMethod(WITH_GIFT);
                                 withdrawGiftCard(transactionDetails.getData());
                                 break;
-                            case "instant pay":
+                            case instant_pay:
                                 ControlMethod(WITH_Instant);
                                 withdrawInstant(transactionDetails.getData());
                                 break;
-                            case "bank account":
+                            case bank_account:
                                 ControlMethod(WITH_BANK);
                                 withdrawBank(transactionDetails.getData());
                                 break;
-                            case "signet":
+                            case signet:
                                 ControlMethod(WITH_SIGNET);
                                 withdrawSignet(transactionDetails.getData());
                                 break;
                         }
                         break;
-                    case "business payout": {
+                    case business_payout: {
 
                         ControlMethod(BUSINESS_PAYOUT);
                         businessPayout(transactionDetails.getData());
                     }
                     break;
-                    case "canceled bank withdraw": {
+                    case canceled_bank_withdraw: {
                         ControlMethod(CANCELLED_WITH);
                         cancelledWithdraw(transactionDetails.getData());
                     }
                     break;
-                    case "failed bank withdraw": {
+                    case failed_bank_withdraw: {
                         ControlMethod(FAILED_WITH);
                         failedWithdraw(transactionDetails.getData());
                     }
                     break;
+                    case paid_order:
+                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
+                            case token:
+                                ControlMethod(PAID_ORDER_TOKEN);
+                                paidOrderToken(transactionDetails.getData());
+                        }
                 }
             }
         });
@@ -226,7 +253,99 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("SetTextI18n")
+    private void paidOrderToken(TransactionData paidOrderData) {
+        TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone;
+        LinearLayout mReferenceCopy, mMerchantAccountCopy;
+
+        mTransactionType = findViewById(R.id.transaction_types);
+        mPaidAmount = findViewById(R.id.paid_amount);
+        mPaidStatus = findViewById(R.id.paid_status);
+        mPaidDateAndTime = findViewById(R.id.paid_date_time);
+        mAccountBalance = findViewById(R.id.account_balance);
+        mReferenceID = findViewById(R.id.paid_reference_id);
+        mMerchantAccountID = findViewById(R.id.merchant_account_id);
+        mDbaName = findViewById(R.id.dba_name);
+        mCustomerServiceEmail = findViewById(R.id.customer_service_email);
+        mCustomerServicePhone = findViewById(R.id.customer_service_phone);
+        mReferenceCopy = findViewById(R.id.copy_ref_ll);
+        mMerchantAccountCopy = findViewById(R.id.copy_merchant_id);
+
+
+        if (paidOrderData.getTransactionType() != null && paidOrderData.getTransactionSubtype() != null) {
+            mTransactionType.setText(paidOrderData.getTransactionType() + " - " + paidOrderData.getTransactionSubtype());
+        }
+
+        if (paidOrderData.getPaidAmount() != null) {
+            mPaidAmount.setText(Utils.convertTwoDecimal(paidOrderData.getPaidAmount().replace("CYN", "").trim()));
+        }
+
+        if (paidOrderData.getStatus() != null) {
+            mPaidStatus.setText(paidOrderData.getStatus());
+            switch (paidOrderData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+        }
+
+        if (paidOrderData.getCreatedDate() != null) {
+            mPaidDateAndTime.setText(objMyApplication.convertZoneLatestTxn(paidOrderData.getCreatedDate()));
+        }
+
+        if (paidOrderData.getAccountBalance() != null) {
+            mAccountBalance.setText(Utils.convertTwoDecimal(paidOrderData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        }
+
+        if (paidOrderData.getReferenceId() != null) {
+            if (paidOrderData.getReferenceId().length() > 10)
+                mReferenceID.setText(paidOrderData.getReferenceId().substring(0, 10) + "...");
+            else
+                mReferenceID.setText(paidOrderData.getReferenceId());
+
+            mReferenceCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(paidOrderData.getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
+
+        if (paidOrderData.getMerchantId() != null) {
+            mMerchantAccountID.setText(paidOrderData.getMerchantId());
+        }
+
+        if (paidOrderData.getDbaName() != null) {
+            if (paidOrderData.getDbaName().length() > 20)
+                mDbaName.setText(paidOrderData.getDbaName().substring(0, 20) + "...");
+            else
+                mDbaName.setText(paidOrderData.getDbaName());
+        }
+
+        if (paidOrderData.getCustomerServiceMail() != null) {
+            if (paidOrderData.getCustomerServiceMail().length() > 20) {
+                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail().substring(0, 20) + "...");
+            } else {
+                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail());
+            }
+        }
+        if (paidOrderData.getCustomerServicePhoneNo() != null) {
+            mCustomerServicePhone.setText(paidOrderData.getCustomerServicePhoneNo());
+        }
+    }
+
     private void payRequest(TransactionData objData) {
         try {
             TextView headerTV, amount, descrptn, completed, datetime, fee, total, balance;
@@ -257,7 +376,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     amount.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN", "").trim()));
                     //                amount.setText(objData.getAmount().replace("CYN", "").trim());
                     name.setText(objData.getRecipientName());
-                    accountadress.setText((objData.getRecipientWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
+                    accountadress.setText((objData.getRecipientWalletAddress().substring(0, 10)) + "...");
                     fee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
                     total.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
                     lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this));
@@ -266,7 +385,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.payreqTAmountLL).setVisibility(View.GONE);
                     findViewById(R.id.payreqPfLL).setVisibility(View.GONE);
                     name.setText(objData.getSenderName());
-                    accountadress.setText((objData.getSenderWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
+                    accountadress.setText((objData.getSenderWalletAddress().substring(0, 10) + "..."));
                     lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getSenderWalletAddress(), TransactionDetailsActivity.this));
                 }
             }
@@ -302,19 +421,19 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (objData.getStatus() != null) {
                 completed.setText(objData.getStatus());
                 switch (objData.getStatus().toLowerCase()) {
-                    case "completed":
+                    case Utils.transCompleted:
                         completed.setTextColor(getResources().getColor(R.color.completed_status));
                         completed.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
-                    case "in progress":
+                    case Utils.transinprogress:
                         completed.setTextColor(getResources().getColor(R.color.inprogress_status));
                         completed.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case "pending":
+                    case Utils.transPending:
                         completed.setTextColor(getResources().getColor(R.color.pending_status));
                         completed.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case "failed":
+                    case Utils.transFailed:
                         completed.setTextColor(getResources().getColor(R.color.failed_status));
                         completed.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
@@ -328,7 +447,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private void buyTokenCreditDebit(TransactionData objData) {
         TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmountTV, successadd, chargeback;
         TextView refid, name, descriptorName, cardNumber, expiryDate, depositIDTV;
@@ -370,19 +488,19 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             status.setText(objData.getStatus());
 
             switch (objData.getStatus().toLowerCase()) {
-                case "completed":
+                case Utils.transCompleted:
                     status.setTextColor(getResources().getColor(R.color.completed_status));
                     status.setBackgroundResource(R.drawable.txn_completed_bg);
                     break;
-                case "in progress":
+                case Utils.transinprogress:
                     status.setTextColor(getResources().getColor(R.color.inprogress_status));
                     status.setBackgroundResource(R.drawable.txn_inprogress_bg);
                     break;
-                case "pending":
+                case Utils.transPending:
                     status.setTextColor(getResources().getColor(R.color.pending_status));
                     status.setBackgroundResource(R.drawable.txn_pending_bg);
                     break;
-                case "failed":
+                case Utils.transFailed:
                     status.setTextColor(getResources().getColor(R.color.failed_status));
                     status.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
@@ -465,16 +583,15 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 depositIDTV.setText(objData.getDepositId());
             }
 
-            depositID.setOnClickListener(view -> Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this));
+            depositID.setOnClickListener(view -> Utils.copyText(objData.getDepositId(), TransactionDetailsActivity.this));
         }
 
         lyPRClose.setOnClickListener(view -> onBackPressed());
     }
 
-    @SuppressLint("SetTextI18n")
     private void buyTokenBankAccount(TransactionData objData) {
-        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseamount, successadd, chargeback;
-        TextView refid, name, accountadress, descriptorname, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
+        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmount, successAdd, chargeback;
+        TextView refId, name, accountAddress, descriptorName, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
         LinearLayout lyPRClose, btBankReference, btBankDepositID, descriptorLL;
         ImageView previousBtn, depositIDIV;
 
@@ -482,13 +599,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         amount = findViewById(R.id.btbankamountTV);
         status = findViewById(R.id.btbankStatusTV);
         datetime = findViewById(R.id.btbankDatetimeTV);
-        purchaseamount = findViewById(R.id.btBankpurchaseamntTV);
+        purchaseAmount = findViewById(R.id.btBankpurchaseamntTV);
         fee = findViewById(R.id.btBankprocessingfeeTV);
         total = findViewById(R.id.btbankTotalTV);
-        refid = findViewById(R.id.btbankRefidTV);
+        refId = findViewById(R.id.btbankRefidTV);
         btBankReference = findViewById(R.id.btbankReferenceLL);
         btBankDepositID = findViewById(R.id.btbankDepositIDLL);
-        descriptorname = findViewById(R.id.btbankDescrptorTV);
+        descriptorName = findViewById(R.id.btbankDescrptorTV);
         depositIDTV = findViewById(R.id.btbankDepositIDTV);
         lyPRClose = findViewById(R.id.btbankprevious);
         bankAccNumTV = findViewById(R.id.btbankaccountTV);
@@ -542,7 +659,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         if (objData.getYouGet() != null) {
-            purchaseamount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
+            purchaseAmount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
         }
 
         if (objData.getProcessingFee() != null) {
@@ -559,9 +676,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         if (objData.getReferenceId() != null) {
             if (objData.getReferenceId().length() > 10) {
-                refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+                refId.setText(objData.getReferenceId().substring(0, 10) + "...");
             } else {
-                refid.setText(objData.getReferenceId());
+                refId.setText(objData.getReferenceId());
             }
 
             btBankReference.setOnClickListener(new View.OnClickListener() {
@@ -577,7 +694,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         if (objData.getDescriptorName() != null) {
-            descriptorname.setText(objData.getDescriptorName());
+            descriptorName.setText(objData.getDescriptorName());
         }
 
         if (objData.getDepositId() != null) {
@@ -622,7 +739,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     private void buyTokenSignet(TransactionData objData) {
         TextView headerText, amount, status, date, purchaseAmount, processingFee, totalAmount, depositID, referenceID, descriptorName, nameOnAccount, walletID;
-        LinearLayout copyRefID, copyDepositeID;
+        LinearLayout copyRefID, copyDepositId;
         headerText = findViewById(R.id.buySignetHeaderTV);
         amount = findViewById(R.id.signetAmountTV);
         status = findViewById(R.id.signetStatusTV);
@@ -636,35 +753,31 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         nameOnAccount = findViewById(R.id.signetNameOnAccountTV);
         walletID = findViewById(R.id.signetWalletIdTV);
         copyRefID = findViewById(R.id.copyRefID);
-        copyDepositeID = findViewById(R.id.copyDepositID);
+        copyDepositId = findViewById(R.id.copyDepositID);
 
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawGiftCard(TransactionData objData) {
         TextView headerMsdTV, amountTV;
-        TextView status, dateandtime, withGiftcardname, subtotal, fee, grandtotal, refid, withid, recipientname, email;
-        LinearLayout previous, giftCardWithdrawID, giftcardReferenceID;
-        ImageView withIdIV, refIDIV;
+        TextView status, dateAndTime, withGiftCardName, subtotal, fee, grandTotal, refId, withId, recipientName, email;
+        LinearLayout previous, giftCardWithdrawID, giftCardReferenceID;
 
         headerMsdTV = findViewById(R.id.withGiftheadTV);
         amountTV = findViewById(R.id.withdrawGiftamount);
         status = findViewById(R.id.withdrawGiftStatusTV);
-        dateandtime = findViewById(R.id.withGiftdateTimeTV);
-        withGiftcardname = findViewById(R.id.withdrawGiftcardnameTV);
+        dateAndTime = findViewById(R.id.withGiftdateTimeTV);
+        withGiftCardName = findViewById(R.id.withdrawGiftcardnameTV);
         subtotal = findViewById(R.id.withdrawGiftsubtotatlTV);
         fee = findViewById(R.id.withdrawGiftprofeeTV);
-        grandtotal = findViewById(R.id.withdrawGiftgrandtotalTV);
-        refid = findViewById(R.id.withdrawGiftrefidTV);
-        withid = findViewById(R.id.withgiftid);
-        recipientname = findViewById(R.id.withGiftRecipientNameTV);
+        grandTotal = findViewById(R.id.withdrawGiftgrandtotalTV);
+        refId = findViewById(R.id.withdrawGiftrefidTV);
+        withId = findViewById(R.id.withgiftid);
+        recipientName = findViewById(R.id.withGiftRecipientNameTV);
         email = findViewById(R.id.withGiftReciEmailTV);
         giftCardWithdrawID = findViewById(R.id.giftCardwithdrawIDLL);
-        giftcardReferenceID = findViewById(R.id.giftcardReferenceIDLL);
+        giftCardReferenceID = findViewById(R.id.giftcardReferenceIDLL);
         previous = findViewById(R.id.withGiftprevious);
-        withIdIV = findViewById(R.id.withdrawGiftIdIV);
-        refIDIV = findViewById(R.id.withdrawRefIDIV);
 
         if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
             headerMsdTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
@@ -698,17 +811,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         if (objData.getGiftCardName() != null) {
-            withGiftcardname.setText(objData.getGiftCardName());
+            withGiftCardName.setText(objData.getGiftCardName());
         }
 
         if (objData.getReferenceId() != null) {
             if (objData.getReferenceId().length() > 10) {
-                refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+                refId.setText(objData.getReferenceId().substring(0, 10) + "...");
             } else {
-                refid.setText(objData.getReferenceId());
+                refId.setText(objData.getReferenceId());
             }
 
-            giftcardReferenceID.setOnClickListener(new View.OnClickListener() {
+            giftCardReferenceID.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
@@ -717,7 +830,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         if (objData.getRecipientName() != null) {
-            recipientname.setText(Utils.capitalize(objData.getRecipientName()));
+            recipientName.setText(Utils.capitalize(objData.getRecipientName()));
         }
 
         if (objData.getRecipientEmail() != null) {
@@ -727,7 +840,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         Double subtotall = null;
         if (objData.getTotalPaidAmount() != null) {
             subtotall = Double.parseDouble(objData.getTotalPaidAmount().replace("CYN", "").trim());
-            grandtotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotall)));
+            grandTotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotall)));
         }
 
         if (objData.getGiftCardAmount() != null) {
@@ -739,14 +852,14 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         if (objData.getCreatedDate() != null) {
-            dateandtime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
         }
 
         if (objData.getWithdrawId() != null) {
             if (objData.getWithdrawId().length() > 10) {
-                withid.setText(objData.getWithdrawId().substring(0, 10) + "...");
+                withId.setText(objData.getWithdrawId().substring(0, 10) + "...");
             } else {
-                withid.setText(objData.getWithdrawId());
+                withId.setText(objData.getWithdrawId());
             }
             giftCardWithdrawID.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -765,98 +878,95 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawInstant(TransactionData objData) {
         LinearLayout previous, withdrawID, referenceID;
-        TextView withiheader, withiamount, withidescription, withistatus, withidatetime, withiwithdrawalAmount, withiprocefee, withitotal, withiaccountbal, withiwithdrawalId, withirefId;
-        TextView withicardHolderName, withicardnumber, withiexpirydate;
-        ImageView withiwithdrawalid, withirefIDIV, withicardbrand;
+        TextView withHeader, withAmount, withDescription, withStatus, withDateTime, withWithdrawalAmount, withProcessFee, withTotal, withAccountBal, withWithdrawalId, withRefId;
+        TextView withCardHolderName, withCardNumber, withExpiryDate;
+        ImageView withCardBrand;
 
         previous = findViewById(R.id.withInstantprevious);
-        withiheader = findViewById(R.id.withinheaderTV);
-        withiamount = findViewById(R.id.withinamount);
-        withidescription = findViewById(R.id.withindescrptnTV);
-        withistatus = findViewById(R.id.withinstatus);
-        withidatetime = findViewById(R.id.withindateTimeTV);
-        withiwithdrawalAmount = findViewById(R.id.withinwithdrawamount);
-        withiprocefee = findViewById(R.id.withinprocessingfee);
-        withitotal = findViewById(R.id.withintotalamount);
-        withiaccountbal = findViewById(R.id.withinaccountbal);
-        withiwithdrawalId = findViewById(R.id.withinwithdrawidTV);
-        withiwithdrawalid = findViewById(R.id.withinwithIDIV);
-        withirefId = findViewById(R.id.withinrefid);
-        withirefIDIV = findViewById(R.id.withinrefIDIV);
+        withHeader = findViewById(R.id.withinheaderTV);
+        withAmount = findViewById(R.id.withinamount);
+        withDescription = findViewById(R.id.withindescrptnTV);
+        withStatus = findViewById(R.id.withinstatus);
+        withDateTime = findViewById(R.id.withindateTimeTV);
+        withWithdrawalAmount = findViewById(R.id.withinwithdrawamount);
+        withProcessFee = findViewById(R.id.withinprocessingfee);
+        withTotal = findViewById(R.id.withintotalamount);
+        withAccountBal = findViewById(R.id.withinaccountbal);
+        withWithdrawalId = findViewById(R.id.withinwithdrawidTV);
+        withRefId = findViewById(R.id.withinrefid);
         withdrawID = findViewById(R.id.withiwithdrawalLL);
         referenceID = findViewById(R.id.withiReferenceIDLL);
-        withicardHolderName = findViewById(R.id.withincardholdername);
-        withicardbrand = findViewById(R.id.withincardbrandIV);
-        withicardnumber = findViewById(R.id.withincardnumTV);
-        withiexpirydate = findViewById(R.id.withinexpdateTV);
+        withCardHolderName = findViewById(R.id.withincardholdername);
+        withCardBrand = findViewById(R.id.withincardbrandIV);
+        withCardNumber = findViewById(R.id.withincardnumTV);
+        withExpiryDate = findViewById(R.id.withinexpdateTV);
 
 
         if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
-            withiheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
+            withHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         }
 
         if (objData.getReceivedAmount() != null) {
-            withiamount.setText(Utils.convertTwoDecimal(objData.getReceivedAmount().replace("USD", "").trim()));
+            withAmount.setText(Utils.convertTwoDecimal(objData.getReceivedAmount().replace("USD", "").trim()));
         }
 
         if (objData.getRemarks() != null && !objData.getRemarks().equals("")) {
-            withidescription.setText("\"" + objData.getRemarks() + "\"");
+            withDescription.setText("\"" + objData.getRemarks() + "\"");
         } else {
-            withidescription.setVisibility(View.GONE);
+            withDescription.setVisibility(View.GONE);
         }
 
         if (objData.getStatus() != null) {
-            withistatus.setText(objData.getStatus());
+            withStatus.setText(objData.getStatus());
             switch (objData.getStatus().toLowerCase()) {
-                case "completed":
-                    withistatus.setTextColor(getResources().getColor(R.color.completed_status));
-                    withistatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                case Utils.transCompleted:
+                    withStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_completed_bg);
                     break;
-                case "in progress":
-                case "inprogress":
-                    withistatus.setTextColor(getResources().getColor(R.color.inprogress_status));
-                    withistatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                case Utils.transinprogress:
+                case Utils.transInProgress:
+                    withStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
                     break;
-                case "pending":
-                    withistatus.setTextColor(getResources().getColor(R.color.pending_status));
-                    withistatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                case Utils.transPending:
+                    withStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                     break;
-                case "failed":
-                    withistatus.setTextColor(getResources().getColor(R.color.failed_status));
-                    withistatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                case Utils.transFailed:
+                    withStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
         }
 
         if (objData.getCreatedDate() != null) {
-            withidatetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+            withDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
         }
 
         if (objData.getWithdrawAmount() != null) {
-            withiwithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()) + " CYN");
+            withWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()) + " CYN");
         }
 
         if (objData.getProcessingFee() != null) {
-            withiprocefee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
+            withProcessFee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
         }
 
         if (objData.getTotalAmount() != null) {
-            withitotal.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
+            withTotal.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
         }
 
 
         if (objData.getAccountBalance() != null) {
-            withiaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+            withAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
         }
 
         if (objData.getWithdrawalId() != null) {
             if (objData.getWithdrawalId().length() > 10) {
-                withiwithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+                withWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
             } else {
-                withiwithdrawalId.setText(objData.getWithdrawalId());
+                withWithdrawalId.setText(objData.getWithdrawalId());
             }
 
             withdrawID.setOnClickListener(view -> Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this));
@@ -864,9 +974,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         if (objData.getReferenceId() != null) {
             if (objData.getReferenceId().length() > 10) {
-                withirefId.setText(objData.getReferenceId().substring(0, 10) + "...");
+                withRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
             } else {
-                withirefId.setText(objData.getReferenceId());
+                withRefId.setText(objData.getReferenceId());
             }
 
             referenceID.setOnClickListener(new View.OnClickListener() {
@@ -878,32 +988,32 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         if (objData.getCardHolderName() != null) {
-            withicardHolderName.setText(objData.getCardHolderName());
+            withCardHolderName.setText(objData.getCardHolderName());
         }
 
         if (objData.getCardNumber() != null) {
-            withicardnumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
+            withCardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
         }
 
         if (objData.getCardBrand() != null) {
             switch (objData.getCardBrand()) {
                 case Utils.MASTERCARD:
-                    withicardbrand.setImageResource(R.drawable.ic_master);
+                    withCardBrand.setImageResource(R.drawable.ic_master);
                     break;
                 case Utils.VISA:
-                    withicardbrand.setImageResource(R.drawable.ic_visa);
+                    withCardBrand.setImageResource(R.drawable.ic_visa);
                     break;
                 case Utils.AMERICANEXPRESS:
-                    withicardbrand.setImageResource(R.drawable.ic_amex);
+                    withCardBrand.setImageResource(R.drawable.ic_amex);
                     break;
                 case Utils.DISCOVER:
-                    withicardbrand.setImageResource(R.drawable.ic_discover);
+                    withCardBrand.setImageResource(R.drawable.ic_discover);
                     break;
             }
         }
 
         if (objData.getCardExpiryDate() != null) {
-            withiexpirydate.setText(objData.getCardExpiryDate());
+            withExpiryDate.setText(objData.getCardExpiryDate());
         }
 
         previous.setOnClickListener(new View.OnClickListener() {
@@ -915,11 +1025,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawBank(TransactionData objData) {
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
         TextView withBankNameOnAccount, withBankName, withBankAccount;
-//        ImageView withbankwithdrawalid, withbankrefIDIV;
+
         LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
 
         withBankHeader = findViewById(R.id.withBankHeaderTV);
@@ -1058,7 +1167,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawSignet(TransactionData objData) {
 
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
@@ -1093,11 +1201,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         if (objData.getWithdrawAmount() != null) {
             withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
         }
-//        if (objData.getDescription().equals("")) {
-//            withbankdescription.setVisibility(View.GONE);
-//        } else {
-//            withbankdescription.setText("\"" + objData.getDescription() + "\"");
-//        }
+
         if (objData.getStatus() != null) {
             withBankStatus.setText(objData.getStatus());
             switch (objData.getStatus().toLowerCase()) {
@@ -1206,7 +1310,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void businessPayout(TransactionData businessPayoutData) {
         try {
             TextView headerNameTV, amountTV, statusTV, dateAndTime, payoutID, refID, payoutDate, totalAmount, totalTransactions, depositID;
@@ -1237,21 +1340,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (businessPayoutData.getStatus() != null) {
                 statusTV.setText(businessPayoutData.getStatus());
                 switch (businessPayoutData.getStatus().toLowerCase()) {
-                    case "completed":
+                    case Utils.transCompleted:
                         statusTV.setTextColor(getResources().getColor(R.color.completed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
-                    case "in progress":
-                    case "inprogress":
+                    case Utils.transinprogress:
+                    case Utils.transInProgress:
                         statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
                         statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case "pending":
+                    case Utils.transPending:
                         statusTV.setTextColor(getResources().getColor(R.color.pending_status));
                         statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case "failed":
-                    case "cancelled":
+                    case Utils.transFailed:
+                    case Utils.transCancelled:
                         statusTV.setTextColor(getResources().getColor(R.color.failed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
@@ -1337,7 +1440,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void failedWithdraw(TransactionData failedData) {
         try {
             TextView transactionTypeTV, amountTV, statusTV, dateAndTime, refID, reasonFailed, achWithTV, achRefID, withdrawAmountTV, processingFeeTV, totalAmountTV;
@@ -1368,21 +1470,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (failedData.getStatus() != null) {
                 statusTV.setText(failedData.getStatus());
                 switch (failedData.getStatus().toLowerCase()) {
-                    case "completed":
+                    case Utils.transCompleted:
                         statusTV.setTextColor(getResources().getColor(R.color.completed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
-                    case "in progress":
-                    case "inprogress":
+                    case Utils.transinprogress:
+                    case Utils.transInProgress:
                         statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
                         statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case "pending":
+                    case Utils.transPending:
                         statusTV.setTextColor(getResources().getColor(R.color.pending_status));
                         statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case "failed":
-                    case "cancelled":
+                    case Utils.transFailed:
+                    case Utils.transCancelled:
                         statusTV.setTextColor(getResources().getColor(R.color.failed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
@@ -1462,7 +1564,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void cancelledWithdraw(TransactionData cancelledData) {
         try {
             TextView transactionTypeTV, amountTV, statusTV, dateAndTime, refID, reasonFailed, achWithTV, achRefID, withdrawAmountTV, processingFeeTV, totalAmountTV;
@@ -1493,21 +1594,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (cancelledData.getStatus() != null) {
                 statusTV.setText(cancelledData.getStatus());
                 switch (cancelledData.getStatus().toLowerCase()) {
-                    case "completed":
+                    case Utils.transCompleted:
                         statusTV.setTextColor(getResources().getColor(R.color.completed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
-                    case "in progress":
-                    case "inprogress":
+                    case Utils.transinprogress:
+                    case Utils.transInProgress:
                         statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
                         statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case "pending":
+                    case Utils.transPending:
                         statusTV.setTextColor(getResources().getColor(R.color.pending_status));
                         statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case "failed":
-                    case "cancelled":
+                    case Utils.transFailed:
+                    case Utils.transCancelled:
                         statusTV.setTextColor(getResources().getColor(R.color.failed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
@@ -1596,6 +1697,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_TOKEN: {
@@ -1607,6 +1709,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_BANK: {
@@ -1618,6 +1721,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_SIGNET: {
@@ -1629,6 +1733,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.VISIBLE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_GIFT: {
@@ -1640,6 +1745,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_Instant: {
@@ -1651,6 +1757,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_BANK:
@@ -1663,6 +1770,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.VISIBLE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case BUSINESS_PAYOUT: {
@@ -1674,6 +1782,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.VISIBLE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
                 }
                 break;
                 case CANCELLED_WITH:
@@ -1687,7 +1796,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.VISIBLE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
 
+                }
+                break;
+                case PAID_ORDER_TOKEN: {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.VISIBLE);
                 }
                 break;
             }

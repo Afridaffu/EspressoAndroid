@@ -49,5 +49,9 @@
         android:id="@+id/reservePayout"
         layout="@layout/activity_reserve_payout"
         android:visibility="gone" />
+    <include
+        android:id="@+id/paidOrderToken"
+        layout="@layout/paid_order_token_transaction_details"
+        android:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
