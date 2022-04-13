@@ -220,6 +220,8 @@ public class Utils {
     public static final String cancel = "Cancelled";
     public static final String requestSub = "REQUEST TOKEN";
     public static final String SUCCESS = "SUCCESS";
+    public static final String Verifying = "Verifying";
+    public static final String gbxTransID = "gbxTransID";
     public static final String gbxTxnIdType = "gbxTxnIdType";
     public static final String txnType = "txnType";
     public static final String txnSubType = "txnSubType";
@@ -312,6 +314,9 @@ public class Utils {
     public static final int msRefund = 1;
     public static final int mPartialRefund = 2;
     public static final String SELECTED_MERCHANT_TRANSACTION = "Selected_Merchant_transaction";
+    public static final String SELECTED_MERCHANT_TRANSACTION_GBX_ID = "Selected_Merchant_transaction_gbx_ID";
+    public static final String SELECTED_MERCHANT_TRANSACTION_TXN_TYPE = "Selected_Merchant_transaction_txn_type";
+    public static final String SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE = "Selected_Merchant_transaction_txn_sub_type";
     public static final float slidePercentage = 0.3f;
 
     public static boolean isKeyboardVisible = false;
@@ -361,6 +366,7 @@ public class Utils {
 
     public static final String wallet = "wallet";
     public static final String amount = "amount";
+    public static final String sentt = "sent";
 
     public static final String applyFilter = "apply";
     public static final String resetFilter = "resetFilter";

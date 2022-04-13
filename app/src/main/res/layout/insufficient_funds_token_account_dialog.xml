@@ -44,6 +44,7 @@
         android:textSize="@dimen/_12ssp" />
 
     <LinearLayout
+        android:id="@+id/TOKenaccountLL"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_67sdp"
         android:layout_marginTop="@dimen/_11sdp"
@@ -77,16 +78,41 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
-
-            <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Account Balance 9,999.00CYN"
+                android:text="Account Balance"
                 android:textAlignment="textStart"
                 android:textColor="@color/dark_grey"
                 android:textSize="@dimen/_10ssp" />
+            <TextView
+                android:id="@+id/AccountbalanceTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/opensans_semibold"
+                android:text=""
+                android:textAlignment="textStart"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_10ssp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/opensans_semibold"
+                    android:text="CYN"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <ImageView

@@ -474,8 +474,12 @@
     <string name="reset_all_filters">Reset all filters</string>
     <string name="transaction_status">Transaction Status</string>
     <string name="open">Open</string>
+    <string name="trans_successful">Transaction Successful</string>
+    <string name="refund_trans"><u>View refund transaction</u></string>
     <string name="released">Released</string>
     <string name="on_hold">On Hold</string>
+    <string name="new_trans">A new refund transaction was generated.</string>
+    <string name="gbxtrnsid">gbxTransID</string>
     <string name="canceled">Canceled</string>
     <string name="release_date">Release Date</string>
     <string name="date_range">Date Range</string>
