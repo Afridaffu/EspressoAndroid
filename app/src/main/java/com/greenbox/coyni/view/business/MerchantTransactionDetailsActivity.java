@@ -38,7 +38,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
     private String strGbxTxnIdType = "";
     private int txnType;
     private Integer txnSubType;
-    private TransactionListPosted selectedTransaction;
+    private String gbxID, txnTypeStr, txnSubTypeStr;
+    private TransactionData transactionData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,22 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_merchant_transaction_details);
-            selectedTransaction = (TransactionListPosted) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
+            if (getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID) != null) {
+                gbxID = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID);
+            } else {
+                gbxID = "";
+            }
+            if (getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE) != null) {
+                txnTypeStr = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE);
+            } else {
+                txnTypeStr = "";
+            }
+            if (getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE) != null) {
+                txnSubTypeStr = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE);
+            } else {
+                txnSubTypeStr = "";
+            }
+//            transactionData = (TransactionData) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
             initialization();
             initObserver();
         } catch (Exception e) {
@@ -61,9 +77,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
-            if (selectedTransaction != null && !selectedTransaction.equals("")) {
-                //txnType = Integer.parseInt(getIntent().getStringExtra("txnType"));
-                switch (selectedTransaction.getTxnTypeDn().toLowerCase()) {
+            if (txnTypeStr != null) {
+                switch (txnTypeStr.toLowerCase()) {
                     case Utils.refundtxntype:
                         txnType = Utils.refund;
                         break;
@@ -78,15 +93,16 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                         break;
                 }
             }
-            if (selectedTransaction != null && !selectedTransaction.equals("")) {
-                //txnSubType = Integer.parseInt(getIntent().getStringExtra("txnSubType"));
-                switch (selectedTransaction.getTxnSubTypeDn().toLowerCase()) {
-
+            if (txnSubTypeStr != null) {
+                switch (txnSubTypeStr.toLowerCase()) {
                     case Utils.tokensub:
                         txnSubType = Integer.valueOf(Utils.token);
                         break;
                     case Utils.transfersub:
                         txnSubType = Integer.valueOf(Utils.transfer);
+                        break;
+                    case Utils.sentt:
+                        txnSubType = Utils.sent;
                         break;
                     default:
                         txnSubType = null;
@@ -94,9 +110,10 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 }
             }
 
+
             if (Utils.checkInternet(MerchantTransactionDetailsActivity.this)) {
                 showProgressDialog();
-                dashboardViewModel.getTransactionDetails(selectedTransaction.getGbxTransactionId(), txnType, txnSubType);
+                dashboardViewModel.getTransactionDetails(gbxID, txnType, txnSubType);
 
             } else {
                 Utils.displayAlert(getString(R.string.internet), MerchantTransactionDetailsActivity.this, "", "");
@@ -114,9 +131,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 @Override
                 public void onChanged(TransactionDetails transactionDetails) {
                     dismissDialog();
-                    if (transactionDetails != null && transactionDetails.getData() != null && transactionDetails.getStatus().equalsIgnoreCase(Utils.SUCCESS)){
-                        switch (transactionDetails.getData().getTransactionType().toLowerCase()){
-
+                    if (transactionDetails != null && transactionDetails.getData() != null && transactionDetails.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        transactionData = transactionDetails.getData();
+                        switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
                             case Utils.refundtxntype:
                                 controlMethod(Utils.refundCM);
                                 refundMerchant(transactionDetails);
@@ -149,7 +166,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         try {
             ImageView refundcopyIV;
             TextView refundheadertv, refundamounttv, refundReasontv, refundStatustv, refundDatetimetv, refundreferencetv, refundfeetv, refundtotalAmounttv, refundreciptantNametv, refundReciptantEmailtv, refundOTIdatetv, refundOTIgrossamounttv, refundOTIFeetv, refundOTINetamounttv, refundOTIrefrencetv;
-            LinearLayout refundCloseLL,refundcopyLL;
+            LinearLayout refundCloseLL, refundcopyLL;
 
             refundheadertv = findViewById(R.id.RefundheaderTV);
             refundcopyLL = findViewById(R.id.RefundcopyLL);
@@ -189,15 +206,15 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     refundStatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            if(objData.getData().getRefundAmount()!=null) {
+            if (objData.getData().getRefundAmount() != null) {
                 refundamounttv.setText(Utils.convertTwoDecimal(objData.getData().getRefundAmount().replace("CYN", "").trim()));
             }
 
-            if (objData.getData().getReferenceId().length()>10) {
-                refundOTIrefrencetv.setText(objData.getData().getReferenceId().substring(0,10)+"...");
-                refundOTIrefrencetv.setPaintFlags(refundOTIrefrencetv.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+            if (objData.getData().getReferenceId().length() > 10) {
+                refundOTIrefrencetv.setText(objData.getData().getReferenceId().substring(0, 10) + "...");
+                refundOTIrefrencetv.setPaintFlags(refundOTIrefrencetv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                 refundreferencetv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-            }else {
+            } else {
                 refundreferencetv.setText(objData.getData().getReferenceId());
                 refundOTIrefrencetv.setText(objData.getData().getReferenceId());
             }
@@ -226,7 +243,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             refundcopyLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.copyText(objData.getData().getReferenceId(),MerchantTransactionDetailsActivity.this);
+                    Utils.copyText(objData.getData().getReferenceId(), MerchantTransactionDetailsActivity.this);
                 }
             });
         } catch (Exception ex) {
@@ -239,7 +256,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
         try {
             ImageView refundIV;
             TextView salesheaderTV, salesAmount_TV, salesStatusTV, salesDatetimeTV, salesReferenceidTV, salesfeesTV, salesreserveTV, salesnetamountTV, salesMerchantBalanceTV, salessendernameTVTV, salessenderemailTV;
-            LinearLayout saleorderclosell,SalesReferencecopyLL;
+            LinearLayout saleorderclosell, SalesReferencecopyLL;
 
             SalesReferencecopyLL = findViewById(R.id.SalesReferenceCopyLL);
             saleorderclosell = findViewById(R.id.Saleorderclosell);
@@ -276,9 +293,9 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     salesStatusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            if (objData.getData().getReferenceId().length()>10) {
+            if (objData.getData().getReferenceId().length() > 10) {
                 salesReferenceidTV.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-            }else {
+            } else {
                 salesReferenceidTV.setText(objData.getData().getReferenceId());
             }
             salesDatetimeTV.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
@@ -303,7 +320,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MerchantTransactionDetailsActivity.this, RefundTransactionActivity.class);
-                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, selectedTransaction);
+                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION, transactionData);
+                    intent.putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, gbxID);
                     startActivity(intent);
                 }
             });
@@ -322,8 +340,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
     private void monthlyServiceFeeMerchant(TransactionDetails objData) {
         try {
             ImageView msFeecopyIV;
-            TextView MSFheadertv, MSFamounttv,MSFstatustv, MSFdatetv, MSfreferenceIdtv, MSFmerchantbalancetv;
-            LinearLayout msfeeclosell,msFeecopyLL;
+            TextView MSFheadertv, MSFamounttv, MSFstatustv, MSFdatetv, MSfreferenceIdtv, MSFmerchantbalancetv;
+            LinearLayout msfeeclosell, msFeecopyLL;
 
             msFeecopyLL = findViewById(R.id.MSFeecopyLL);
             msfeeclosell = findViewById(R.id.Msfeeclosell);
@@ -355,17 +373,16 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     MSFstatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            if(objData.getData().getGrossAmount()!=null) {
+            if (objData.getData().getGrossAmount() != null) {
                 MSFamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
             }
-            if (objData.getData().getReferenceId().length()>10) {
+            if (objData.getData().getReferenceId().length() > 10) {
                 MSfreferenceIdtv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-            }else {
+            } else {
                 MSfreferenceIdtv.setText(objData.getData().getReferenceId());
             }
             MSFdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
             MSFmerchantbalancetv.setText(Utils.convertTwoDecimal(objData.getData().getAccountBalance().replace("CYN", "").trim()));
-
 
 
             msfeeclosell.setOnClickListener(new View.OnClickListener() {
@@ -377,7 +394,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             msFeecopyLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.copyText(objData.getData().getReferenceId(),MerchantTransactionDetailsActivity.this);
+                    Utils.copyText(objData.getData().getReferenceId(), MerchantTransactionDetailsActivity.this);
                 }
             });
         } catch (Exception ex) {
@@ -388,7 +405,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
     private void merchantPayout(TransactionDetails objData) {
         try {
             TextView mPayoutheadertv, merchantamounttv, merchantstatustv, merchantdatetv, mPayoutIdtv, mreferenceIdtv, merchantPIdatetv, mPItotalamounttv, mPItotaltransactionstv, mPIdeposittotv, salessenderemailTV;
-            LinearLayout mpayoutll,referencecopyLL,payoutcopyll;
+            LinearLayout mpayoutll, referencecopyLL, payoutcopyll;
 
 
             mpayoutll = findViewById(R.id.Mpayoutll);
@@ -426,22 +443,22 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                     merchantstatustv.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
             }
-            if (objData.getData().getReferenceId().length()>10) {
+            if (objData.getData().getReferenceId().length() > 10) {
                 mreferenceIdtv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
                 mPIdeposittotv.setText(objData.getData().getReferenceId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-                mPIdeposittotv.setPaintFlags(mPIdeposittotv.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+                mPIdeposittotv.setPaintFlags(mPIdeposittotv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
 
-            }else {
+            } else {
                 mreferenceIdtv.setText(objData.getData().getReferenceId());
                 mPIdeposittotv.setText(objData.getData().getReferenceId());
 
             }
-            if (objData.getData().getPayoutId().length()>10) {
+            if (objData.getData().getPayoutId().length() > 10) {
                 mPayoutIdtv.setText(objData.getData().getPayoutId().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "...");
-                mPayoutIdtv.setPaintFlags(mPayoutIdtv.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+                mPayoutIdtv.setPaintFlags(mPayoutIdtv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-            }else {
+            } else {
                 mPayoutIdtv.setText(objData.getData().getPayoutId());
             }
             merchantdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
@@ -464,13 +481,13 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             referencecopyLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.copyText(objData.getData().getReferenceId(),MerchantTransactionDetailsActivity.this);
+                    Utils.copyText(objData.getData().getReferenceId(), MerchantTransactionDetailsActivity.this);
                 }
             });
             payoutcopyll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.copyText(objData.getData().getPayoutId(),MerchantTransactionDetailsActivity.this);
+                    Utils.copyText(objData.getData().getPayoutId(), MerchantTransactionDetailsActivity.this);
                 }
             });
         } catch (Exception ex) {
