@@ -379,7 +379,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 LogUtils.d(TAG, "onclickkk" + action + value);
                 if (action.equalsIgnoreCase(getString(R.string.bank_delete_relink))) {
                     try {
-                        dialog.dismiss();
+                        dismissDialog();
                         if (objMyApplication.getStrSignOnError().equals("") && objMyApplication.getSignOnData() != null && objMyApplication.getSignOnData().getUrl() != null) {
                             isBank = true;
                             Intent i = new Intent(ReviewApplicationActivity.this, WebViewActivity.class);
@@ -392,7 +392,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         ex.printStackTrace();
                     }
                 } else {
-                    dialog.dismiss();
+                   dismissDialog();
                 }
             }
         });
@@ -417,9 +417,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onChanged(SignOn signOn) {
                 try {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+                    dismissDialog();
                     if (signOn != null) {
                         if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
                             objMyApplication.setSignOnData(signOn.getData());

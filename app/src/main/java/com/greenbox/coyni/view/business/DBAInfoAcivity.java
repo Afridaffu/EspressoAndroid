@@ -516,8 +516,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
                 @Override
                 public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
-
-                    if (dialog != null)
                         dismissDialog();
                     if (dbaInfoUpdateResp != null) {
                         if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
@@ -598,9 +596,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             businessIdentityVerificationViewModel.getPostDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
                 @Override
                 public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
-
-                    if (dialog != null)
-                        dismissDialog();
+                    dismissDialog();
                     if (dbaInfoUpdateResp != null) {
                         if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
                             isPostSuccess = true;

@@ -336,9 +336,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             underwritingUserActionRequired.getSubmitActionRequired().observe(this, new Observer<ActionRequiredResponse>() {
                 @Override
                 public void onChanged(ActionRequiredResponse companyInfoResponse) {
-
-                    if (dialog != null)
-                        dismissDialog();
+                    dismissDialog();
                     if (companyInfoResponse != null) {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             finish();
