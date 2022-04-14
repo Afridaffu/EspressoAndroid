@@ -35,14 +35,17 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AccountLimitsActivity;
 import com.greenbox.coyni.view.AgreementsActivity;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
+import com.greenbox.coyni.view.CustomerProfileActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -50,10 +53,11 @@ import com.greenbox.coyni.view.UserDetailsActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import org.jetbrains.annotations.Nullable;
 
-public class BusinessProfileActivity extends AppCompatActivity {
+public class BusinessProfileActivity extends BaseActivity {
 
     private LinearLayout feesLL, teamLL, bpbackBtn, switchOffLL, switchOnLL,
             paymentMethodsLL, cpagreeementsLL, companyinfoLL, dbainfoLL, accountlimitsLL,
@@ -81,6 +85,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
     private TextView tvVersion;
     private ScrollView profileSV;
     private String fullname = "";
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +136,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             business_userProfileCV = findViewById(R.id.business_userProfileCV);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
-
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             isBiometric = Utils.getIsBiometric();
             setToken();
             setFaceLock();
@@ -396,12 +401,8 @@ public class BusinessProfileActivity extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        isLoggedOut = true;
-                        myApplication.setStrRetrEmail("");
-                        dropAllTables();
-                        Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+                        showProgressDialog();
+                        loginViewModel.logout();
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -667,6 +668,24 @@ public class BusinessProfileActivity extends AppCompatActivity {
                 }
             }
         });
+
+        loginViewModel.getLogoutLiveData().observe(this, new Observer<LogoutResponse>() {
+            @Override
+            public void onChanged(LogoutResponse logoutResponse) {
+                dismissDialog();
+                if (logoutResponse != null) {
+                    if (logoutResponse.getStatus().toLowerCase().equals("success")) {
+                        onLogoutSuccess();
+                    } else {
+                        if (!logoutResponse.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(logoutResponse.getError().getErrorDescription(), BusinessProfileActivity.this, "", "");
+                        } else {
+                            Utils.displayAlert(logoutResponse.getError().getFieldErrors().get(0), BusinessProfileActivity.this, "", "");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -680,6 +699,15 @@ public class BusinessProfileActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void onLogoutSuccess() {
+        isLoggedOut = true;
+        myApplication.setStrRetrEmail("");
+        dropAllTables();
+        Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 
     private void bindImage(String imageString) {
@@ -762,7 +790,7 @@ public class BusinessProfileActivity extends AppCompatActivity {
 
     private void dropAllTables() {
         try {
-            enableBiometric(false);
+//            enableBiometric(false);
             dbHandler.clearAllTables();
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();

@@ -72,6 +72,7 @@ import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
@@ -187,6 +188,9 @@ public interface ApiService {
 
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
+
+    @POST("api/v2/user/logout")
+    Call<LogoutResponse> logout();
 
     @POST("api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
