@@ -35,7 +35,8 @@
                 android:text="@string/manual"
                 android:textColor="@color/primary_green"
                 android:textSize="@dimen/_10ssp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                />
 
             <LinearLayout
                 android:layout_width="wrap_content"

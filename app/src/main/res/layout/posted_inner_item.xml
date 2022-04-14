@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingStart="@dimen/_11sdp"
-        android:paddingTop="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
         android:paddingEnd="@dimen/_11sdp"
-        android:paddingBottom="@dimen/_10sdp">
+        android:paddingBottom="@dimen/_5sdp">
 
         <LinearLayout
             android:id="@+id/topLL"
@@ -69,8 +69,7 @@
             android:layout_width="@dimen/_68sdp"
             android:layout_height="@dimen/_14sdp"
             android:layout_below="@id/topLL"
-
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
             android:text="Pending"
@@ -84,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/topLL"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_toLeftOf="@id/balanceTV"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
@@ -99,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/topLL"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:textColor="@color/light_gray"
@@ -112,7 +111,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/_5sdp">
 
         <View
             android:layout_width="@dimen/_11sdp"
@@ -125,7 +125,6 @@
             android:layout_height="1dp"
             android:layout_below="@id/balanceTV"
             android:layout_weight="1"
-
             android:background="@color/blue_light" />
 
         <View
