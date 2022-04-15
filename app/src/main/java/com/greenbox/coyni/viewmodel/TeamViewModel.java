@@ -14,7 +14,7 @@ import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
-import com.greenbox.coyni.model.team.TeamResponseModel;
+import com.greenbox.coyni.model.team.TeamListResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -29,7 +29,7 @@ public class TeamViewModel extends AndroidViewModel {
         super(application);
     }
 
-    private MutableLiveData<TeamResponseModel> teamRetrieveMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<TeamListResponse> teamRetrieveMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamDelMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamInfoAddModel> teamAddMutableLiveData = new MutableLiveData<>();
@@ -37,7 +37,7 @@ public class TeamViewModel extends AndroidViewModel {
     private MutableLiveData<TeamInfoAddModel> teamCancelMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<TeamGetDataModel> teamGetMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<TeamResponseModel> getTeamRetrieveMutableLiveData() {
+    public MutableLiveData<TeamListResponse> getTeamRetrieveMutableLiveData() {
         return teamRetrieveMutableLiveData;
     }
 
@@ -61,23 +61,23 @@ public class TeamViewModel extends AndroidViewModel {
         return teamGetMutableLiveData;
     }
 
-    public void retrieveTeamInfo(TeamRequest teamRequest) {
+    public void retrieveTeamInfo() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamResponseModel> mCall = apiService.getTeamData(teamRequest);
-            mCall.enqueue(new Callback<TeamResponseModel>() {
+            Call<TeamListResponse> mCall = apiService.getTeamData();
+            mCall.enqueue(new Callback<TeamListResponse>() {
                 @Override
-                public void onResponse(Call<TeamResponseModel> call, Response<TeamResponseModel> response) {
+                public void onResponse(Call<TeamListResponse> call, Response<TeamListResponse> response) {
                     Log.d("TeamInfo", response.toString());
                     try {
                         if (response.isSuccessful()) {
-                            TeamResponseModel obj = response.body();
+                            TeamListResponse obj = response.body();
                             teamRetrieveMutableLiveData.setValue(obj);
                         } else {
                             Gson gson = new Gson();
-                            Type type = new TypeToken<TeamResponseModel>() {
+                            Type type = new TypeToken<TeamListResponse>() {
                             }.getType();
-                            TeamResponseModel errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            TeamListResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
                             teamRetrieveMutableLiveData.setValue(errorResponse);
                         }
                     } catch (Exception ex) {
@@ -87,7 +87,7 @@ public class TeamViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<TeamResponseModel> call, Throwable t) {
+                public void onFailure(Call<TeamListResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     teamRetrieveMutableLiveData.setValue(null);
                 }
