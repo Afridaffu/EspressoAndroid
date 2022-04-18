@@ -616,6 +616,8 @@
     <string name="arrow_right">ArrowRight</string>
     <string name="invitation_sent">Invitation has sent\</string>
     <string name="invitation_sent_with_exclamatory">Invitation has sent!\</string>
+    <string name="team_member_update_successful">Team member updated successfully</string>
+    <string name="please_modify_details">Please modify the details to update.</string>
     <string name="Successfully_Closed_Batch">Successfully Closed Batch\</string>
     <string name="Removed_success">Removed Successfully\</string>
     <string name="invitation_canceled">Invitation Cancelled\</string>
