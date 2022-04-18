@@ -715,8 +715,13 @@ public class BusinessProfileActivity extends BaseActivity {
             profileImage.setVisibility(View.GONE);
             profileText.setVisibility(View.VISIBLE);
             String imageTextNew = "";
-            imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            if(myApplication.getMyProfile().getData().getFirstName() != null && !myApplication.getMyProfile().getData().getFirstName().equals("")) {
+                imageTextNew = myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase();
+            }
+            if(myApplication.getMyProfile().getData().getLastName() != null && !myApplication.getMyProfile().getData().getLastName().equals("")) {
+                imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            }
+
             profileText.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
@@ -730,10 +735,6 @@ public class BusinessProfileActivity extends BaseActivity {
             } else {
                 profileImage.setVisibility(View.GONE);
                 profileText.setVisibility(View.VISIBLE);
-                String imageText = "";
-                imageText = imageText + myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-                profileText.setText(imageText);
             }
 
         } catch (Exception ex) {

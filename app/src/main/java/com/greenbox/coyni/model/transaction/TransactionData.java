@@ -111,6 +111,11 @@ public class TransactionData implements Serializable {
     private String saleOrderReferenceId;
     private String saleOrderDateAndTime;
     private String saleOrderReserve;
+    private String releasedDate;
+    private String amountReleased;
+    private String reserveRule;
+    private String reservedOn;
+    private String reserveId;
 
 
     public String getWithdrawId() {
@@ -139,6 +144,26 @@ public class TransactionData implements Serializable {
 
     public String getPaidAmount() {
         return paidAmount;
+    }
+
+    public String getReleasedDate() {
+        return releasedDate;
+    }
+
+    public String getReserveRule() {
+        return reserveRule;
+    }
+
+    public String getAmountReleased() {
+        return amountReleased;
+    }
+
+    public String getReservedOn() {
+        return reservedOn;
+    }
+
+    public String getReserveId() {
+        return reserveId;
     }
 
     public void setCardExpiryDate(String cardExpiryDate) {

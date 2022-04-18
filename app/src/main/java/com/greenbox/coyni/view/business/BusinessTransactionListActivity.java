@@ -1594,6 +1594,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
         transactionType.add(Utils.refund);
         transactionType.add(Utils.paidInvoice);
         transactionType.add(Utils.businessPayout);
+        transactionType.add(Utils.reserveRelease);
         return transactionType;
     }
 

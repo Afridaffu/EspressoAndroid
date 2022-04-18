@@ -11,7 +11,7 @@ public class Data {
 
     private List<BeneficialOwnerInfo> beneficialOwnerInfo = null;
 
-    private Bankaccount bankaccount;
+    private List<BankAccount> bankaccount;
 
     private Agreements agreements;
 
@@ -39,11 +39,11 @@ public class Data {
         this.beneficialOwnerInfo = beneficialOwnerInfo;
     }
 
-    public Bankaccount getBankaccount() {
+    public List<BankAccount> getBankaccount() {
         return bankaccount;
     }
 
-    public void setBankaccount(Bankaccount bankaccount) {
+    public void setBankaccount(List<BankAccount> bankaccount) {
         this.bankaccount = bankaccount;
     }
 
