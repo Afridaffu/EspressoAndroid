@@ -46,6 +46,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private static final String CANCELLED_WITH = "cancelledWithdrawBank";
     private static final String FAILED_WITH = "failedWithdrawBank";
     private static final String PAID_ORDER_TOKEN = "PaidOrderToken";
+    private static final String REFUND_RECEIVED = "RefundReceived";
+    private static final String RESERVE_RELEASE = "ReserveRelease";
 
     // Transaction Types
     private static final String pay_request = "pay / request";
@@ -57,6 +59,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private static final String failed_bank_withdraw = "failed bank withdraw";
     private static final String paid_order = "paid order";
     private static final String refund = "refund";
+    private static final String reserve_release = "reserve release";
 
     // Transaction SubTypes
     private static final String sent = "sent";
@@ -115,6 +118,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         break;
                     case paid_order:
                         txnType = Utils.paidInvoice;
+                        break;
+                    case refund:
+                        txnType = Utils.refund;
+                        break;
+                    case reserve_release:
+                        txnType = Utils.reserveRelease;
+                        break;
                 }
             }
             if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(Utils.txnSubType).equals("")) {
@@ -230,11 +240,22 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     }
                     break;
                     case paid_order:
-                        switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                            case token:
-                                ControlMethod(PAID_ORDER_TOKEN);
-                                paidOrderToken(transactionDetails.getData());
+                        if (token.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
+                            ControlMethod(PAID_ORDER_TOKEN);
+                            paidOrderToken(transactionDetails.getData());
                         }
+                        break;
+                    case refund: {
+                        ControlMethod(REFUND_RECEIVED);
+                        refundReceived(transactionDetails.getData());
+                    }
+                    break;
+                    case reserve_release: {
+                        ControlMethod(RESERVE_RELEASE);
+                        reserveRelease(transactionDetails.getData());
+                    }
+                    break;
+
                 }
             }
         });
@@ -251,6 +272,124 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 ex.printStackTrace();
             }
         });
+    }
+
+    private void refundReceived(TransactionData data) {
+    }
+
+    private void reserveRelease(TransactionData reserveData) {
+        TextView type, reserveAmount, status, date, referenceId, reserveRules, depositTo, tokenType;
+        TextView reserveHeld, reservedOn, reserveId;
+
+        LinearLayout reserveIDCopy;
+
+        type = findViewById(R.id.reserve_type);
+        reserveAmount = findViewById(R.id.reserve_amount);
+        status = findViewById(R.id.reserve_status);
+        date = findViewById(R.id.released_on);
+        referenceId = findViewById(R.id.reference_id);
+        reserveRules = findViewById(R.id.reserve_rules);
+        depositTo = findViewById(R.id.deposit_to);
+        tokenType = findViewById(R.id.token_account_type);
+
+        reserveHeld = findViewById(R.id.reserve_held_amount);
+        reservedOn = findViewById(R.id.reserved_on_date);
+        reserveId = findViewById(R.id.reserve_id);
+
+        reserveIDCopy = findViewById(R.id.reserve_id_copy);
+
+
+        if (reserveData.getTransactionType() != null) {
+            type.setText(reserveData.getTransactionType());
+        }
+        if (reserveData.getStatus() != null) {
+            status.setText(reserveData.getStatus());
+
+            switch (reserveData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    status.setTextColor(getResources().getColor(R.color.completed_status));
+                    status.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    status.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    status.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    status.setTextColor(getResources().getColor(R.color.pending_status));
+                    status.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    status.setTextColor(getResources().getColor(R.color.failed_status));
+                    status.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+        }
+
+        if (reserveData.getReleasedDate() != null) {
+            date.setText(objMyApplication.convertZoneLatestTxn(reserveData.getReleasedDate()));
+        }
+
+
+        if (reserveData.getReferenceId() != null) {
+            if (reserveData.getReferenceId().length() > 10) {
+                referenceId.setText(reserveData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                referenceId.setText(reserveData.getReserveId());
+            }
+        }
+
+        if (reserveData.getReserveRule() != null) {
+            reserveRules.setText(reserveData.getReserveRule());
+        }
+
+        String depositTO;
+        if (reserveData.getDepositTo() != null) {
+            if (reserveData.getDepositTo().toLowerCase().contains("token account")) {
+                tokenType.setText(reserveData.getDepositTo().split("Token")[0] + "Token Account");
+            }
+            depositTO = reserveData.getDepositTo().split("Account")[1].trim();
+            if (depositTO.length() > 10)
+                depositTo.setText(Html.fromHtml("<u>" + depositTO.substring(0, 10) + "..." + "</u>"));
+            else
+                depositTo.setText(Html.fromHtml("<u>" + depositTO + "</u>"));
+        }
+
+        if (reserveData.getTotalAmount() != null) {
+            if (reserveData.getTotalAmount().contains("CYN"))
+                reserveAmount.setText(Utils.convertTwoDecimal(reserveData.getTotalAmount().replace("CYN", "").trim()));
+            else
+                reserveAmount.setText(Utils.convertTwoDecimal(reserveData.getTotalAmount().replace("USD", "").trim()));
+        }
+
+        if (reserveData.getAmountReleased() != null) {
+            if (reserveData.getAmountReleased().contains("CYN"))
+                reserveHeld.setText(Utils.convertTwoDecimal(reserveData.getAmountReleased().replace("CYN", "").trim()) + " CYN");
+            else
+                reserveHeld.setText(Utils.convertTwoDecimal(reserveData.getAmountReleased().replace("USD", "").trim()) + " CYN");
+        }
+
+        if (reserveData.getReservedOn() != null) {
+            reservedOn.setText(objMyApplication.convertZoneReservedOn(reserveData.getReservedOn()));
+        }
+
+        String reserveID = "";
+        if (reserveData.getReserveId() != null) {
+            if (reserveData.getReserveId().length() > 10) {
+                reserveID = reserveData.getReserveId().substring(0, 10) + "...";
+                reserveId.setText(Html.fromHtml("<u>" + reserveID + "</u>"));
+            } else {
+                reserveID = reserveData.getReserveId();
+                reserveId.setText(Html.fromHtml("<u>" + reserveID + "</u>"));
+            }
+        }
+
+        reserveIDCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.copyText(reserveData.getReserveId(), TransactionDetailsActivity.this);
+            }
+        });
+
     }
 
     private void paidOrderToken(TransactionData paidOrderData) {
@@ -1697,7 +1836,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_TOKEN: {
@@ -1709,7 +1850,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_BANK: {
@@ -1721,7 +1864,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
                 case BUY_SIGNET: {
@@ -1733,7 +1878,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.VISIBLE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+
                 }
                 break;
                 case WITH_GIFT: {
@@ -1745,7 +1893,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_Instant: {
@@ -1757,7 +1907,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
                 case WITH_BANK:
@@ -1770,7 +1922,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.VISIBLE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+
                 }
                 break;
                 case BUSINESS_PAYOUT: {
@@ -1782,7 +1937,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.VISIBLE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
                 case CANCELLED_WITH:
@@ -1797,6 +1954,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.VISIBLE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
 
                 }
                 break;
@@ -1811,6 +1969,21 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
                     findViewById(R.id.paidOrderToken).setVisibility(View.VISIBLE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                }
+                break;
+                case RESERVE_RELEASE: {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.VISIBLE);
                 }
                 break;
             }
