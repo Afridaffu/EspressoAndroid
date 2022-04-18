@@ -18,8 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.TeamAdapter;
 import com.greenbox.coyni.model.team.TeamData;
-import com.greenbox.coyni.model.team.TeamRequest;
-import com.greenbox.coyni.model.team.TeamResponseModel;
+import com.greenbox.coyni.model.team.TeamListResponse;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
@@ -29,7 +28,7 @@ import java.util.List;
 
 public class TeamActivity extends BaseActivity {
 
-    private LinearLayout bpbackBtn, addTeamMemberL, clearTextLL;
+    private LinearLayout bpBackBtn, addTeamMemberL, clearTextLL;
     private TeamViewModel teamViewModel;
     private RecyclerView recyclerViewTeam;
     private TeamAdapter teamAdapter;
@@ -46,15 +45,14 @@ public class TeamActivity extends BaseActivity {
         initFields();
         initObservers();
         setOnClickListener();
-
     }
 
     private void initFields() {
-        bpbackBtn = findViewById(R.id.bpbackBtn);
+        bpBackBtn = findViewById(R.id.bpbackBtn);
         addTeamMemberL = findViewById(R.id.addTeamMemberL);
         searchET = findViewById(R.id.searchET);
         clearTextLL = findViewById(R.id.clearTextLL);
-        bpbackBtn.setOnClickListener(new View.OnClickListener() {
+        bpBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -140,34 +138,32 @@ public class TeamActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        TeamRequest request = new TeamRequest();
         showProgressDialog();
-        teamViewModel.retrieveTeamInfo(request);
+        teamViewModel.retrieveTeamInfo();
     }
 
     private void initObservers() {
-
         try {
-            teamViewModel.getTeamRetrieveMutableLiveData().observe(this, new Observer<TeamResponseModel>() {
+            teamViewModel.getTeamRetrieveMutableLiveData().observe(this, new Observer<TeamListResponse>() {
                 @Override
-                public void onChanged(TeamResponseModel teamResponseModel) {
+                public void onChanged(TeamListResponse teamResponseModel) {
                     dismissDialog();
-                    if (teamResponseModel != null) {
-                        if (teamResponseModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            if (teamResponseModel.getData().size() > 0) {
-                                datumList = teamResponseModel.getData();
-                                recyclerViewTeam.setVisibility(View.VISIBLE);
-                                LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
-                                recyclerViewTeam.setLayoutManager(layoutManager);
-                                teamAdapter = new TeamAdapter(TeamActivity.this, datumList, memberClickListener);
-                                recyclerViewTeam.setAdapter(teamAdapter);
-
-                            } else {
-                                recyclerViewTeam.setVisibility(View.GONE);
-                            }
+                    if (teamResponseModel != null && teamResponseModel.getStatus() != null
+                            && teamResponseModel.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (teamResponseModel.getData() != null
+                                && teamResponseModel.getData().getItems() != null
+                                && teamResponseModel.getData().getItems().size() > 0) {
+                            datumList = teamResponseModel.getData().getItems();
+                            recyclerViewTeam.setVisibility(View.VISIBLE);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
+                            recyclerViewTeam.setLayoutManager(layoutManager);
+                            teamAdapter = new TeamAdapter(TeamActivity.this, datumList, memberClickListener);
+                            recyclerViewTeam.setAdapter(teamAdapter);
                         } else {
-                            Utils.displayAlert(teamResponseModel.getError().getErrorDescription(), TeamActivity.this, "", teamResponseModel.getError().getFieldErrors().get(0));
+                            recyclerViewTeam.setVisibility(View.GONE);
                         }
+                    } else {
+                        Utils.displayAlert(teamResponseModel.getError().getErrorDescription(), TeamActivity.this, "", teamResponseModel.getError().getFieldErrors().get(0));
                     }
                 }
             });

@@ -88,9 +88,7 @@ public class AccountLimitsActivity extends BaseActivity {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onChanged(AccountLimits accountLimits) {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+                    dismissDialog();
                     try {
                         if (accountLimits.getData() != null && accountLimits.getStatus().equalsIgnoreCase("SUCCESS")) {
 
