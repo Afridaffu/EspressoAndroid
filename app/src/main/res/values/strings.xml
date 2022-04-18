@@ -616,6 +616,8 @@
     <string name="arrow_right">ArrowRight</string>
     <string name="invitation_sent">Invitation has sent\</string>
     <string name="invitation_sent_with_exclamatory">Invitation has sent!\</string>
+    <string name="team_member_update_successful">Team member updated successfully</string>
+    <string name="please_modify_details">Please modify the details to update.</string>
     <string name="Successfully_Closed_Batch">Successfully Closed Batch\</string>
     <string name="Removed_success">Removed Successfully\</string>
     <string name="invitation_canceled">Invitation Cancelled\</string>
@@ -645,5 +647,10 @@
     <string name="withdraw_tokens">Withdraw Tokens</string>
     <string name="cyn_under_payout">(CYN)</string>
     <string name="avail_bal">12132.2323</string>
+    <string name="account_balance">Account Balance</string>
+    <string name="merchant_account_id">Merchant Account ID</string>
+    <string name="dba_name_text">DBA Name</string>
+    <string name="customer_service_phone">Customer Service Phone</string>
+    <string name="description">If you are experiencing any issues with your transaction please contact the merchant on file or contact “coyni” customer service by click</string>
 
 </resources>

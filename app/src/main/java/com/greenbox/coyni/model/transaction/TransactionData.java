@@ -85,6 +85,11 @@ public class TransactionData implements Serializable {
     private String payoutDate;
     private String totalTransactions;
     private String failedReason;
+    private String merchantId;
+    private String dbaName;
+    private String paidAmount;
+    private String customerServicePhoneNo;
+    private String customerServiceMail;
     private String achReferenceId;
 
 
@@ -98,12 +103,19 @@ public class TransactionData implements Serializable {
     private String dateAndTime;
     private String refundAmount;
     private String depositTo;
+    private String payoutCreatedDate;
+    private String payoutUpdatedDate;
     private String amountSent;
     private String saleOrderGrossAmount;
     private String saleOrderNetAmount;
     private String saleOrderReferenceId;
     private String saleOrderDateAndTime;
     private String saleOrderReserve;
+    private String releasedDate;
+    private String amountReleased;
+    private String reserveRule;
+    private String reservedOn;
+    private String reserveId;
 
 
     public String getWithdrawId() {
@@ -112,6 +124,46 @@ public class TransactionData implements Serializable {
 
     public String getCardExpiryDate() {
         return cardExpiryDate;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public String getDbaName() {
+        return dbaName;
+    }
+
+    public String getCustomerServicePhoneNo() {
+        return customerServicePhoneNo;
+    }
+
+    public String getCustomerServiceMail() {
+        return customerServiceMail;
+    }
+
+    public String getPaidAmount() {
+        return paidAmount;
+    }
+
+    public String getReleasedDate() {
+        return releasedDate;
+    }
+
+    public String getReserveRule() {
+        return reserveRule;
+    }
+
+    public String getAmountReleased() {
+        return amountReleased;
+    }
+
+    public String getReservedOn() {
+        return reservedOn;
+    }
+
+    public String getReserveId() {
+        return reserveId;
     }
 
     public void setCardExpiryDate(String cardExpiryDate) {
@@ -504,6 +556,22 @@ public class TransactionData implements Serializable {
 
     public void setFailedReason(String failedReason) {
         this.failedReason = failedReason;
+    }
+
+    public String getPayoutCreatedDate() {
+        return payoutCreatedDate;
+    }
+
+    public void setPayoutCreatedDate(String payoutCreatedDate) {
+        this.payoutCreatedDate = payoutCreatedDate;
+    }
+
+    public String getPayoutUpdatedDate() {
+        return payoutUpdatedDate;
+    }
+
+    public void setPayoutUpdatedDate(String payoutUpdatedDate) {
+        this.payoutUpdatedDate = payoutUpdatedDate;
     }
 
     public String getAchReferenceId() {

@@ -2,9 +2,9 @@ package com.greenbox.coyni.model.summary;
 
 import java.util.List;
 
-public class Bankaccount {
+public class BankaccountOld {
 
-    private List<Item> items = null;
+    private List<BankAccount> bankAccounts = null;
 
     private Integer currentPageNo;
 
@@ -14,12 +14,12 @@ public class Bankaccount {
 
     private Integer totalPages;
 
-    public List<Item> getItems() {
-        return items;
+    public List<BankAccount> getItems() {
+        return bankAccounts;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setItems(List<BankAccount> bankAccounts) {
+        this.bankAccounts = bankAccounts;
     }
 
     public Integer getCurrentPageNo() {
