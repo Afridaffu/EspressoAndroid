@@ -115,9 +115,12 @@ public class MyApplication extends Application {
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
     Double merchantBalance = 0.0;
+
     public SignOnData getObjSignOnData() {
         return objSignOnData;
     }
+
+    String selectedButTokenType = "";
 
     public void setObjSignOnData(SignOnData objSignOnData) {
         this.objSignOnData = objSignOnData;
@@ -550,7 +553,6 @@ public class MyApplication extends Application {
         }
         return strDate;
     }
-
 
 
     public String convertZoneDateTime(String date, String format, String requiredFormat) {
@@ -1210,6 +1212,14 @@ public class MyApplication extends Application {
             ex.printStackTrace();
         }
         return strNameHead;
+    }
+
+    public String getSelectedButTokenType() {
+        return selectedButTokenType;
+    }
+
+    public void setSelectedButTokenType(String selectedButTokenType) {
+        this.selectedButTokenType = selectedButTokenType;
     }
 
 }

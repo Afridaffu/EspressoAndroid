@@ -50,7 +50,6 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
 
     private void initFields() {
         objMyApplication = (MyApplication) getApplicationContext();
-        dialog = Utils.showProgressDialog(MerchantSettingsBeneficialOwnersActivity.this);
         bpbackBtn = findViewById(R.id.backLL);
         noDataTV = findViewById(R.id.noDataTV);
         beneficialOwnersRV = findViewById(R.id.rvBo);
@@ -61,6 +60,7 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
             }
         });
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+        showProgressDialog();
         businessIdentityVerificationViewModel.getBeneficialOwners();
 
     }
@@ -70,7 +70,7 @@ public class MerchantSettingsBeneficialOwnersActivity extends BaseActivity {
             businessIdentityVerificationViewModel.getBeneficialOwnersResponse().observe(this, new Observer<BOResp>() {
                 @Override
                 public void onChanged(BOResp boResp) {
-                    dialog.dismiss();
+                    dismissDialog();
                     if (boResp != null) {
                         if (boResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBeneficialOwnersResponse(boResp);

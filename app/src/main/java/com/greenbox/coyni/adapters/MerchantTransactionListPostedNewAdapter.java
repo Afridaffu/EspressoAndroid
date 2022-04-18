@@ -44,7 +44,6 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             DateItem dateItem = new DateItem();
             dateItem.setDate(datee);
 
-
             if (!consolidatedListData.contains(dateItem)) {
                 consolidatedListData.add(dateItem);
             }
@@ -164,7 +163,7 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
     }
 
     private void setItemViewData(TransactionListPosted objData, ItemViewHolder holder) {
-        String strType = "";
+
 //        String[] data = objData.getTxnTypeDn().replace("****", "-").split("-");
 //        try {
 //            if (data.length > 1) {
@@ -179,24 +178,12 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-
+        holder.txnTypeDn.setText(objData.getTxnTypeDn());
+        holder.amount.setText(convertTwoDecimal(objData.getAmount()));
         holder.createdDate.setText(Utils.convertMerchantDate(objData.getCreatedAt()));
 
         //type transaction
-//        if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
-//            strType = "withdraw";
-//        } else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
-//            if (objData.getTxnSubTypeDn().toLowerCase().contains("send") || objData.getTxnSubTypeDn().toLowerCase().contains("sent")) {
-//                strType = "pay";
-//            } else {
-//                strType = "receive";
-//            }
-//        } else if (objData.getTxnTypeDn().toLowerCase().contains("buy")) {
-//            strType = "buy";
-//        } else {
-//            strType = objData.getTxnTypeDn().toLowerCase();
-//        }
-//
+
 //        if (strType.contains("pay") || strType.equals("withdraw")) {
 //            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
 //            holder.amount.setTextColor(Color.parseColor("#000000"));

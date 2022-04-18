@@ -415,6 +415,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:fontFamily="@font/opensans_semibold"
+                                        android:layout_marginEnd="@dimen/_2sdp"
                                         android:text="@string/custom_date_range"
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_10ssp" />

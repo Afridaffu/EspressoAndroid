@@ -12,7 +12,7 @@ import com.greenbox.coyni.utils.LogUtils;
 public class BaseActivity extends AppCompatActivity {
 
     public final String TAG = getClass().getName();
-    public ProgressDialog dialog;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,14 +21,26 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog() {
+        showProgressDialog("Please wait...");
+    }
+
+    public void showProgressDialog(String message) {
+        showProgressDialog(message, false);
+    }
+
+    public void showProgressDialog(String message, boolean isCanceledOnTouchOutside) {
+        if (dialog != null && dialog.isShowing()) {
+            return;
+        }
         dialog = new ProgressDialog(BaseActivity.this, R.style.MyAlertDialogStyle);
         dialog.setIndeterminate(false);
-        dialog.setMessage("Please wait...");
+        dialog.setMessage(message);
+        dialog.setCanceledOnTouchOutside(isCanceledOnTouchOutside);
         dialog.show();
     }
 
     public void dismissDialog() {
-        if(dialog != null) {
+        if (dialog != null) {
             dialog.dismiss();
         }
     }

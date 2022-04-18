@@ -53,21 +53,18 @@ import java.util.List;
 
 public class OnboardActivity extends BaseActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
-    LinearLayout getStarted, layoutLogin;
-    Long mLastClickTime = 0L;
-    SQLiteDatabase mydatabase;
+    private LinearLayout getStarted, layoutLogin;
+    private Long mLastClickTime = 0L;
     private DatabaseHandler dbHandler;
-    Cursor dsPermanentToken, dsFacePin, dsTouchID, dsUserDetails;
-    String strToken = "", strDeviceID = "", strFirstUser = "";
-    Boolean isFaceLock = false, isTouchId = false;
+    private String strToken = "", strDeviceID = "", strFirstUser = "";
+    private Boolean isFaceLock = false, isTouchId = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
-    LoginViewModel loginViewModel;
-    ProgressDialog dialog;
+    private LoginViewModel loginViewModel;
     public static OnboardActivity onboardActivity;
-    Boolean isBiometric = false;
-    RelativeLayout layoutOnBoarding, layoutAuth;
-    MyApplication objMyApplication;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private Boolean isBiometric = false;
+    private RelativeLayout layoutOnBoarding, layoutAuth;
+    private MyApplication objMyApplication;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +76,6 @@ public class OnboardActivity extends BaseActivity {
             setContentView(R.layout.activity_onboard);
             onboardActivity = this;
             dbHandler = DatabaseHandler.getInstance(OnboardActivity.this);
-            //Temporary fix to handle table creation
-//            dbHandler.initializeDB();
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
@@ -97,10 +92,6 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setIsTouchEnabled(false);
                 Utils.setIsFaceEnabled(false);
             }
-//            SetDB();
-//            SetToken();
-//            SetFaceLock();
-//            SetTouchId();
 
             setDB();
             setToken();
@@ -110,7 +101,6 @@ public class OnboardActivity extends BaseActivity {
             isBiometric = Utils.checkBiometric(OnboardActivity.this);
             Utils.setIsBiometric(isBiometric);
 
-//            if (!isDeviceID()) {
             if (!objMyApplication.isDeviceID()) {
                 Utils.generateUUID(OnboardActivity.this);
             }
@@ -146,19 +136,6 @@ public class OnboardActivity extends BaseActivity {
                 }
             }
 
-//            if (!isDeviceID()) {
-//                Utils.generateUUID(OnboardActivity.this);
-//            }
-//            strDeviceID = Utils.getDeviceID();
-//            getStarted = findViewById(R.id.getStartedLL);
-//            layoutLogin = findViewById(R.id.layoutLogin);
-//            String url = BuildConfig.URL_PRODUCTION;
-//            String refererUrl = BuildConfig.Referer;
-//            Utils.setStrCCode(BuildConfig.Country_Code);
-//            if (!url.equals("")) {
-//                Utils.setStrURL_PRODUCTION(url);
-//                Utils.setStrReferer(refererUrl);
-//            }
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
@@ -261,7 +238,7 @@ public class OnboardActivity extends BaseActivity {
             loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
                 @Override
                 public void onChanged(LoginResponse loginResponse) {
-                    dialog.dismiss();
+                    dismissDialog();
                     try {
                         if (loginResponse != null) {
                             if (!loginResponse.getStatus().toLowerCase().equals("error")) {
@@ -353,22 +330,6 @@ public class OnboardActivity extends BaseActivity {
 
     }
 
-    private void SetDB() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
-            dsUserDetails.moveToFirst();
-            if (dsUserDetails.getCount() > 0) {
-                strFirstUser = dsUserDetails.getString(1);
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
-            }
-        }
-    }
-
     private void setDB() {
         String value = dbHandler.getTableUserDetails();
 
@@ -377,44 +338,9 @@ public class OnboardActivity extends BaseActivity {
         }
     }
 
-    private void SetToken() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-            dsPermanentToken.moveToFirst();
-            if (dsPermanentToken.getCount() > 0) {
-                strToken = dsPermanentToken.getString(1);
-                objMyApplication.setStrMobileToken(strToken);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private void setToken() {
         strToken = dbHandler.getPermanentToken();
         objMyApplication.setStrMobileToken(strToken);
-    }
-
-    private void SetFaceLock() {
-        try {
-            isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isFaceLock = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     private void setFaceLock() {
@@ -429,27 +355,6 @@ public class OnboardActivity extends BaseActivity {
                 objMyApplication.setLocalBiometric(false);
             }
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void SetTouchId() {
-        try {
-            isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    objMyApplication.setLocalBiometric(true);
-                } else {
-                    isTouchId = false;
-                    objMyApplication.setLocalBiometric(false);
-                }
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -474,11 +379,7 @@ public class OnboardActivity extends BaseActivity {
 
     private void login() {
         try {
-            dialog = new ProgressDialog(OnboardActivity.this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.getWindow().setGravity(Gravity.CENTER);
-            dialog.show();
+            showProgressDialog();
             BiometricLoginRequest request = new BiometricLoginRequest();
             request.setDeviceId(strDeviceID);
             request.setEnableBiometic(true);
@@ -489,16 +390,6 @@ public class OnboardActivity extends BaseActivity {
             ex.printStackTrace();
         }
     }
-
-//    private Boolean isDeviceID() {
-//        Boolean value = false;
-//        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
-//        value = prefs.getBoolean("isDevice", false);
-//        if (value) {
-//            Utils.setDeviceID(prefs.getString("deviceId", ""));
-//        }
-//        return value;
-//    }
 
     private void getVersionName() {
         try {

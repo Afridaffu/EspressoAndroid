@@ -257,6 +257,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             }
         }
         if (objData.getReserveWalletId() != null && !objData.getReserveWalletId().equals("")) {
+            reserveIDLL.setVisibility(View.VISIBLE);
             if (objData.getReserveWalletId().length() > 10) {
                 reserveIDLL.setVisibility(View.VISIBLE);
                 ReserveIdTV.setText(objData.getReserveWalletId().substring(0, 10));

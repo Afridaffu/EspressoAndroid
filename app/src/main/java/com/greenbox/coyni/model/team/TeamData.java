@@ -3,7 +3,6 @@ package com.greenbox.coyni.model.team;
 
 public class TeamData {
 
-
     private int id;
 
     private String firstName;

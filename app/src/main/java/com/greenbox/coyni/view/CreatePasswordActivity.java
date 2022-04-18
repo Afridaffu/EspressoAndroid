@@ -741,7 +741,15 @@ public class CreatePasswordActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (!isSuccessLayout) {
-            super.onBackPressed();
+//            super.onBackPressed();
+            if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(loginIntent);
+            } else {
+                onBackPressed();
+                finish();
+            }
         }
     }
 
