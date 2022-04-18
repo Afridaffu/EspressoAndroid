@@ -106,6 +106,11 @@ public class TransactionData implements Serializable {
     private String payoutCreatedDate;
     private String payoutUpdatedDate;
     private String amountSent;
+    private String saleOrderGrossAmount;
+    private String saleOrderNetAmount;
+    private String saleOrderReferenceId;
+    private String saleOrderDateAndTime;
+    private String saleOrderReserve;
 
 
     public String getWithdrawId() {
@@ -617,5 +622,51 @@ public class TransactionData implements Serializable {
     public void setAmountSent(String amountSent) {
         this.amountSent = amountSent;
     }
+
+
+    public String getSaleOrderGrossAmount() {
+        return saleOrderGrossAmount;
+    }
+
+    public void setSaleOrderGrossAmount(String saleOrderGrossAmount) {
+        this.saleOrderGrossAmount = saleOrderGrossAmount;
+    }
+
+
+    public String getSaleOrderNetAmount() {
+        return saleOrderNetAmount;
+    }
+
+    public void setSaleOrderNetAmount(String saleOrderNetAmount) {
+        this.saleOrderNetAmount = saleOrderNetAmount;
+    }
+
+
+    public String getSaleOrderReferenceId() {
+        return saleOrderReferenceId;
+    }
+
+    public void setSaleOrderReferenceId(String saleOrderReferenceId) {
+        this.saleOrderReferenceId = saleOrderReferenceId;
+    }
+
+
+    public String getSaleOrderDateAndTime() {
+        return saleOrderDateAndTime;
+    }
+
+    public void setSaleOrderDateAndTime(String saleOrderDateAndTime) {
+        this.saleOrderDateAndTime = saleOrderDateAndTime;
+    }
+
+
+    public String getSaleOrderReserve() {
+        return saleOrderReserve;
+    }
+
+    public void setSaleOrderReserve(String saleOrderReserve) {
+        this.saleOrderReserve = saleOrderReserve;
+    }
+
 
 }

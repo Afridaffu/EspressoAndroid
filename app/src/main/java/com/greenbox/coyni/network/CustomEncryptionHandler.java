@@ -85,7 +85,7 @@ public class CustomEncryptionHandler implements Interceptor {
 
         MediaType mediaType = MediaType.parse(APPLICATION_JSON);
 
-        if (response.code() == 400 && response.body() != null) {
+        if (response.code() != 200 && response.body() != null) {
             String errorResponse = response.peekBody(2048).string();
             if (!Utils.isValidJson(errorResponse)) {
                 response = response.newBuilder()

@@ -10,6 +10,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
+import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
+import com.greenbox.coyni.model.BatchNow.BatchNowSlideRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
@@ -28,6 +31,7 @@ import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
+import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
@@ -52,6 +56,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchPayoutListResponse> batchPayoutListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutIdDetailsResponse> batchPayoutIdDetailsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> rollingListResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BatchPayoutListResponse> batchNowResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessActivityResp> businessActivityRespMutableLiveData = new MutableLiveData<>();
@@ -71,7 +76,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<SignetResponse> getSignetResponseMutableLiveData() {
         return signetResponseMutableLiveData;
     }
-
 
     public MutableLiveData<BusinessWalletResponse> getBusinessWalletResponseMutableLiveData() {
         return businessWalletResponseMutableLiveData;
@@ -389,6 +393,41 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
+    public void getBatchNowData(BatchNowRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(request);
+            call.enqueue(new Callback<BatchPayoutListResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+                    if (response.isSuccessful()) {
+                        BatchPayoutListResponse list = response.body();
+                        batchNowResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BatchPayoutListResponse>() {
+                        }.getType();
+                        BatchPayoutListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        batchNowResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+                    batchNowResponseMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getRollingListData(RollingSearchRequest searchKeyReq) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -492,6 +531,41 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void batchNowSlideData(String batchId){
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<BatchNowResponse> call = apiService.getSlideBatchNow(batchId);
+        call.enqueue(new Callback<BatchNowResponse>() {
+            @Override
+            public void onResponse(Call<BatchNowResponse> call, Response<BatchNowResponse> response) {
+//                LogUtils.d("Modell","success"+response.isSuccessful());
+                if (response.isSuccessful()) {
+                    BatchNowResponse obj = response.body();
+                    batchNowSlideResponseMutableLiveData.setValue(obj);
+                    Log.e("Success", new Gson().toJson(obj));
+
+                } else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<BatchNowResponse>() {
+                    }.getType();
+                    BatchNowResponse errorResponse = null;
+                    try {
+                        errorResponse = gson.fromJson(response.errorBody().string(), type);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    batchNowSlideResponseMutableLiveData.setValue(errorResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BatchNowResponse> call, Throwable t) {
+                LogUtils.d("Modell","failuree"+t);
+                batchNowSlideResponseMutableLiveData.setValue(null);
+            }
+        });
+
     }
 
 //    public void getPayoutListData() {
@@ -599,7 +673,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-
     public void batchPayoutIdDetails(BatchPayoutDetailsRequest batchPayoutDetailsRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create((ApiService.class));
@@ -611,6 +684,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             BatchPayoutIdDetailsResponse list = response.body();
                             batchPayoutIdDetailsResponseMutableLiveData.setValue(list);
+//                            Log.e("Success", new Gson().toJson(list));
+
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<BatchPayoutListResponse>() {

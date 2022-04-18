@@ -2,6 +2,9 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
+import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
+import com.greenbox.coyni.model.BatchNow.BatchNowSlideRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
@@ -74,6 +77,7 @@ import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
@@ -189,6 +193,9 @@ public interface ApiService {
 
     @POST("api/v2/user/login")
     Call<LoginResponse> login(@Body LoginRequest loginRequest);
+
+    @POST("api/v2/user/logout")
+    Call<LogoutResponse> logout();
 
     @POST("api/v2/register/newcustomer")
     Call<CustRegisterResponse> custRegister(@Body CustRegisRequest custRegisRequest);
@@ -572,7 +579,7 @@ public interface ApiService {
     Call<BatchPayoutListResponse> getPayoutListData();
 
     @POST("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutListData(@Body EmptyRequest request);
+    Call<BatchPayoutListResponse> getPayoutListData(@Body BatchNowRequest request);
 
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getRollingListData(@Body RollingListRequest request);
@@ -601,6 +608,8 @@ public interface ApiService {
     @POST("api/v2/node/refund/process")
     Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
 
+    @POST("api/v2/transactions/merchant-payout/{batchId}")
+    Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);

@@ -83,7 +83,7 @@
                         android:text=""
                         android:textAlignment="center"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_10ssp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -279,13 +279,14 @@
                         android:paddingBottom="@dimen/_10sdp">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/reserve_id"
                             android:textColor="@color/xdark_gray"
-                            android:textSize="@dimen/_11ssp" />
+                            android:textSize="@dimen/_11ssp"
+                            />
 
                         <LinearLayout
                             android:id="@+id/payoutReserveIdLL"
@@ -351,7 +352,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_6sdp"
-                app:cardCornerRadius="@dimen/_10sdp">
+                app:cardCornerRadius="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_2sdp">
 
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/nestedSV"

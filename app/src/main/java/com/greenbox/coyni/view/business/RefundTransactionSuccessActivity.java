@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
@@ -15,6 +16,7 @@ public class RefundTransactionSuccessActivity extends AppCompatActivity {
 
     private TextView tvrAmount,tvrReferenceID,tvrMessage;
     private CardView cvrDone;
+    private LinearLayout layoutRReferenceLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class RefundTransactionSuccessActivity extends AppCompatActivity {
         tvrAmount = findViewById(R.id.tvRAmount);
         tvrReferenceID = findViewById(R.id.tvRReferenceID);
         tvrMessage = findViewById(R.id.tvRMessage);
+        layoutRReferenceLL = findViewById(R.id.layoutRReference);
 
         cvrDone = findViewById(R.id.cvRDone);
         cvrDone.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +60,12 @@ public class RefundTransactionSuccessActivity extends AppCompatActivity {
             else {
                 tvrReferenceID.setText(refID);
             }
+            layoutRReferenceLL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.copyText(refID,RefundTransactionSuccessActivity.this);
+                }
+            });
 
 //            tvrReferenceID.setText(getIntent().getStringExtra("gbxTransID"));
         }
