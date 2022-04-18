@@ -208,20 +208,20 @@ public class EditEmailActivity extends AppCompatActivity {
                 finish();
             });
 
-            contactUsTV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-//                        Utils.hideKeypad(EditEmailActivity.this);
-                        Utils.hideSoftKeyboard(EditEmailActivity.this);
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(Utils.mondayURL));
-                        startActivity(i);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+//            contactUsTV.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    try {
+////                        Utils.hideKeypad(EditEmailActivity.this);
+//                        Utils.hideSoftKeyboard(EditEmailActivity.this);
+//                        Intent i = new Intent(Intent.ACTION_VIEW);
+//                        i.setData(Uri.parse(Utils.mondayURL));
+//                        startActivity(i);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
 
 
         } catch (Exception e) {

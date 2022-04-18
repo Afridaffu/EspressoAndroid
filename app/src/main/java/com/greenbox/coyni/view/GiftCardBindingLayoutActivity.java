@@ -324,7 +324,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             }
 
             String strMessage = "";
-            if (objData.getType().toLowerCase().contains("bank")) {
+            if (objMyApplication.getSelectedButTokenType().toLowerCase().contains("bank")) {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
                 strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account. Learn More";
