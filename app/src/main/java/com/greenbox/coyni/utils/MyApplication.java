@@ -1221,4 +1221,5 @@ public class MyApplication extends Application {
     public void setSelectedButTokenType(String selectedButTokenType) {
         this.selectedButTokenType = selectedButTokenType;
     }
+
 }
