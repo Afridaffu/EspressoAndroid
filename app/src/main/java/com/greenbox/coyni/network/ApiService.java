@@ -36,6 +36,8 @@ import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
+import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
+import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
@@ -606,6 +608,9 @@ public interface ApiService {
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
+
+    @POST("/api/v2/transactions/business-activity")
+    Call<BusinessActivityResp> businessActivity(BusinessActivityRequest businessActivityRequest);
 
 }
 
