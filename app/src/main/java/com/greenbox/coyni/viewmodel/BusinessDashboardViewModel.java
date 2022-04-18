@@ -58,6 +58,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchPayoutListResponse> rollingListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> batchNowResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BatchNowResponse> batchNowSlideResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessActivityResp> businessActivityRespMutableLiveData = new MutableLiveData<>();
 
@@ -95,6 +96,14 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<BatchPayoutListResponse> getBatchPayoutListMutableLiveData() {
         return batchPayoutListMutableLiveData;
+    }
+
+    public MutableLiveData<BatchPayoutListResponse> getBatchNowResponseMutableLiveData() {
+        return batchNowResponseMutableLiveData;
+    }
+
+    public MutableLiveData<BatchPayoutListResponse> getBatchNowSlideResponseMutableLiveData() {
+        return batchNowResponseMutableLiveData;
     }
 
     public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData() {
@@ -533,7 +542,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void batchNowSlideData(String batchId){
+    public void batchNowSlideData(String batchId) {
         ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
         Call<BatchNowResponse> call = apiService.getSlideBatchNow(batchId);
         call.enqueue(new Callback<BatchNowResponse>() {
@@ -561,7 +570,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<BatchNowResponse> call, Throwable t) {
-                LogUtils.d("Modell","failuree"+t);
+                LogUtils.d("Modell", "failuree" + t);
                 batchNowSlideResponseMutableLiveData.setValue(null);
             }
         });
