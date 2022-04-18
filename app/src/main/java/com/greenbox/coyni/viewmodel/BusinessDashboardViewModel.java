@@ -98,13 +98,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         return batchPayoutListMutableLiveData;
     }
 
-    public MutableLiveData<BatchPayoutListResponse> getBatchNowResponseMutableLiveData() {
-        return batchNowResponseMutableLiveData;
-    }
-
-    public MutableLiveData<BatchPayoutListResponse> getBatchNowSlideResponseMutableLiveData() {
-        return batchNowResponseMutableLiveData;
-    }
 
     public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData() {
         return batchPayoutIdDetailsResponseMutableLiveData;
