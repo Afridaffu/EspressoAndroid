@@ -3,7 +3,9 @@ package com.greenbox.coyni.model.transaction;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TransactionData {
+import java.io.Serializable;
+
+public class TransactionData implements Serializable {
     @SerializedName("youPay")
     @Expose
     private String youPay;
@@ -86,7 +88,6 @@ public class TransactionData {
     private String achReferenceId;
 
 
-
     //    MerchantTransaction newly added fields
 
     private String fees;
@@ -98,6 +99,11 @@ public class TransactionData {
     private String refundAmount;
     private String depositTo;
     private String amountSent;
+    private String saleOrderGrossAmount;
+    private String saleOrderNetAmount;
+    private String saleOrderReferenceId;
+    private String saleOrderDateAndTime;
+    private String saleOrderReserve;
 
 
     public String getWithdrawId() {
@@ -211,6 +217,7 @@ public class TransactionData {
     public void setDepositid(String depositId) {
         this.depositId = depositId;
     }
+
     public String getDepositid() {
         return depositId;
     }
@@ -239,7 +246,9 @@ public class TransactionData {
         this.amountReceived = amountReceived;
     }
 
-    public String getSenderName() { return senderName; }
+    public String getSenderName() {
+        return senderName;
+    }
 
     public void setSenderName(String senderName) {
         this.senderName = senderName;
@@ -510,50 +519,111 @@ public class TransactionData {
     public String getFees() {
         return fees;
     }
+
     public void setFees(String fees) {
         this.fees = fees;
     }
+
     public String getNetAmount() {
         return netAmount;
     }
+
     public void setNetAmount(String netAmount) {
         this.netAmount = netAmount;
     }
+
     public String getSenderEmail() {
         return senderEmail;
     }
+
     public void setSenderEmail(String senderEmail) {
         this.senderEmail = senderEmail;
     }
+
     public String getReserve() {
         return reserve;
     }
+
     public void setReserve(String reserve) {
         this.reserve = reserve;
     }
+
     public String getGrossAmount() {
         return grossAmount;
     }
+
     public void setGrossAmount(String grossAmount) {
         this.grossAmount = grossAmount;
     }
+
     public String getDateAndTime() {
         return dateAndTime;
     }
+
     public void setDateAndTime(String dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
+
     public String getRefundAmount() {
         return refundAmount;
     }
+
     public void setRefundAmount(String refundAmount) {
         this.refundAmount = refundAmount;
     }
+
     public String getAmountSent() {
         return amountSent;
     }
+
     public void setAmountSent(String amountSent) {
         this.amountSent = amountSent;
     }
+
+
+    public String getSaleOrderGrossAmount() {
+        return saleOrderGrossAmount;
+    }
+
+    public void setSaleOrderGrossAmount(String saleOrderGrossAmount) {
+        this.saleOrderGrossAmount = saleOrderGrossAmount;
+    }
+
+
+    public String getSaleOrderNetAmount() {
+        return saleOrderNetAmount;
+    }
+
+    public void setSaleOrderNetAmount(String saleOrderNetAmount) {
+        this.saleOrderNetAmount = saleOrderNetAmount;
+    }
+
+
+    public String getSaleOrderReferenceId() {
+        return saleOrderReferenceId;
+    }
+
+    public void setSaleOrderReferenceId(String saleOrderReferenceId) {
+        this.saleOrderReferenceId = saleOrderReferenceId;
+    }
+
+
+    public String getSaleOrderDateAndTime() {
+        return saleOrderDateAndTime;
+    }
+
+    public void setSaleOrderDateAndTime(String saleOrderDateAndTime) {
+        this.saleOrderDateAndTime = saleOrderDateAndTime;
+    }
+
+
+    public String getSaleOrderReserve() {
+        return saleOrderReserve;
+    }
+
+    public void setSaleOrderReserve(String saleOrderReserve) {
+        this.saleOrderReserve = saleOrderReserve;
+    }
+
 
 }

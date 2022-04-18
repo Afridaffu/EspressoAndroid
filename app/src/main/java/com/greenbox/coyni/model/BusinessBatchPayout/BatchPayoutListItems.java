@@ -36,6 +36,16 @@ public class BatchPayoutListItems implements Serializable, Comparable<BatchPayou
 
     private String reserveAmount;
 
+    private String processType;
+
+    public String getProcessType() {
+        return processType;
+    }
+
+    public void setProcessType(String processType) {
+        this.processType = processType;
+    }
+
     public String getScheduledRelease() {
         return scheduledRelease;
     }

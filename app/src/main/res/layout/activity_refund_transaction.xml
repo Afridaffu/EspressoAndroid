@@ -70,13 +70,12 @@
                     android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_280sdp"
+                        android:layout_height="@dimen/_350sdp"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:background="@color/white"
-
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
@@ -95,8 +94,7 @@
                                 <LinearLayout
                                     android:id="@+id/lyAmount"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
+                                    android:layout_height="@dimen/_75sdp"
                                     android:layout_marginLeft="@dimen/_5sdp"
                                     android:orientation="horizontal">
 
@@ -109,6 +107,8 @@
                                         android:gravity="center_vertical|end"
                                         android:windowSoftInputMode="stateHidden"
                                         android:hint="0.00"
+                                        android:textIsSelectable="false"
+                                        android:clickable="false"
                                         android:inputType="numberDecimal"
                                         android:maxLength="8"
                                         android:singleLine="true"
@@ -149,7 +149,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_10sdp"
                                 android:orientation="horizontal">
 
 
@@ -169,7 +168,7 @@
                                     android:layout_marginStart="3sp"
                                     android:fontFamily="@font/opensans_bold"
                                     android:text=""
-                                    android:textColor="@color/balance"
+                                    android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp"
                                     android:visibility="visible" />
 
@@ -195,13 +194,13 @@
 
                                 <androidx.cardview.widget.CardView
                                     android:id="@+id/FullamountSOT"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginEnd="@dimen/_5sdp"
                                     android:layout_weight="1"
                                     android:clickable="true"
-                                    app:cardBackgroundColor="@color/slidebtn_bg"
-                                    app:cardCornerRadius="@dimen/_21sdp">
+                                    app:cardCornerRadius="@dimen/_21sdp"
+                                    app:cardBackgroundColor="@color/slidebtn_bg">
 
                                     <TextView
                                         android:id="@+id/FullamountTV"
@@ -218,12 +217,12 @@
 
                                 <androidx.cardview.widget.CardView
                                     android:id="@+id/HalfamountSOT"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_5sdp"
                                     android:layout_weight="1"
-                                    app:cardBackgroundColor="@color/slidebtn_bg"
-                                    app:cardCornerRadius="@dimen/_21sdp">
+                                    app:cardCornerRadius="@dimen/_21sdp"
+                                    app:cardBackgroundColor="@color/slidebtn_bg">
 
                                     <TextView
                                         android:id="@+id/halfamountTV"
@@ -263,7 +262,7 @@
                                     android:layout_height="@dimen/_54sdp"
                                     android:layout_marginLeft="@dimen/_15sdp"
                                     android:layout_marginRight="@dimen/_15sdp"
-                                    android:layout_marginBottom="@dimen/_95sdp"
+                                    android:layout_marginBottom="@dimen/_90sdp"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:hint="Requested by Customer "
                                     android:padding="@dimen/_6sdp"

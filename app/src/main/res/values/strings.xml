@@ -357,7 +357,7 @@
     <string name="closing_batch">Closing Batch</string>
     <string name="send_to">Send to</string>
     <string name="business_token_account">Business Token Account</string>
-    <string name="available_balance">Available Balance 99.00 CYN</string>
+    <string name="available_balance">Available Balance  </string>
     <string name="decline_reserve_rules">Decline Reserve Rules?</string>
     <string name="decline_reserve_rules_message">Are you sure you want to decline this reserve rule and cancel your merchant application? You will need to complete another application to apply again.</string>
     <string name="no_go_back">No, go back</string>
@@ -474,8 +474,12 @@
     <string name="reset_all_filters">Reset all filters</string>
     <string name="transaction_status">Transaction Status</string>
     <string name="open">Open</string>
+    <string name="trans_successful">Transaction Successful</string>
+    <string name="refund_trans"><u>View refund transaction</u></string>
     <string name="released">Released</string>
     <string name="on_hold">On Hold</string>
+    <string name="new_trans">A new refund transaction was generated.</string>
+    <string name="gbxtrnsid">gbxTransID</string>
     <string name="canceled">Canceled</string>
     <string name="release_date">Release Date</string>
     <string name="date_range">Date Range</string>
@@ -612,6 +616,7 @@
     <string name="arrow_right">ArrowRight</string>
     <string name="invitation_sent">Invitation has sent\</string>
     <string name="invitation_sent_with_exclamatory">Invitation has sent!\</string>
+    <string name="Successfully_Closed_Batch">Successfully Closed Batch\</string>
     <string name="Removed_success">Removed Successfully\</string>
     <string name="invitation_canceled">Invitation Cancelled\</string>
     <string name="confirmation_msg">Do you want to discard the changes?</string>
@@ -639,5 +644,6 @@
     <string name="signet">Signet</string>
     <string name="withdraw_tokens">Withdraw Tokens</string>
     <string name="cyn_under_payout">(CYN)</string>
+    <string name="avail_bal">12132.2323</string>
 
 </resources>

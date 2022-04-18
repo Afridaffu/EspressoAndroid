@@ -108,11 +108,7 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             });
             payoutRefIdLL.setOnClickListener(v -> Utils.copyText(payoutRefIdTV.getText().toString(), BusinessBatchPayoutIdDetailsActivity.this));
             payoutTokenNoLL.setOnClickListener(v -> Utils.copyText(payoutTokenIdTV.getText().toString(), BusinessBatchPayoutIdDetailsActivity.this));
-            if(objData.getReserveWalletId()!=null) {
-                payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(ReserveIdTV.getText().toString(), BusinessBatchPayoutIdDetailsActivity.this));
-            }else{
-                reserveIDLL.setVisibility(View.GONE);
-            }
+            payoutReserveIdLL.setOnClickListener(v -> Utils.copyText(ReserveIdTV.getText().toString(), BusinessBatchPayoutIdDetailsActivity.this));
 
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
@@ -228,8 +224,6 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
 
             }
         });
-
-
     }
 
     private void showDetails(BatchPayoutIdDetailsData objData) {
@@ -243,41 +237,33 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
         if (objData.getStatus() != null && !objData.getStatus().equals("")) {
             payoutStatusTV.setText(objData.getStatus());
         }
-//        payoutIDdateTimeTV.setText(objData.getPayoutDate());
-
-        String date = (objData.getPayoutDate());
-        payoutIDdateTimeTV.setText(objMyApplication.exportDate(date));
-//        if (objData.getPayoutDate() != null && !objData.getPayoutDate().equals("")) {
-//            String date = objData.getPayoutDate();
-//            if (date.contains(".")) {
-//                String resDate = date.substring(0, date.lastIndexOf("."));
-//                payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(resDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
-//            }
-//        }
+        String date = objData.getPayoutDate();
+        if (date.contains(".")) {
+            String formatedDate = date.substring(0, date.lastIndexOf("."));
+            payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formatedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a"));
+        }
         if (objData.getPayoutReferenceId() != null && !objData.getPayoutReferenceId().equals("")) {
-            if(objData.getPayoutReferenceId().length()>10) {
+            if (objData.getPayoutReferenceId().length() > 10) {
                 payoutRefIdTV.setText((objData.getPayoutReferenceId().substring(0, 10)));
-            }else{
+            } else {
                 payoutRefIdTV.setText(objData.getPayoutReferenceId());
             }
-
         }
         if (objData.getTokenAccount() != null && !objData.getTokenAccount().equals("")) {
-            if(objData.getTokenAccount().length()>10) {
+            if (objData.getTokenAccount().length() > 10) {
                 payoutTokenIdTV.setText(objData.getTokenAccount().substring(0, 10));
-            }else {
+            } else {
                 payoutTokenIdTV.setText(objData.getTokenAccount());
             }
         }
         if (objData.getReserveWalletId() != null && !objData.getReserveWalletId().equals("")) {
-            if(objData.getReserveWalletId().length()>10) {
+            if (objData.getReserveWalletId().length() > 10) {
                 ReserveIdTV.setText(objData.getReserveWalletId().substring(0, 10));
-            }else {
+            } else {
                 ReserveIdTV.setText(objData.getReserveWalletId());
             }
-        }else{
+        } else {
             reserveIDLL.setVisibility(View.GONE);
         }
-
     }
 }
