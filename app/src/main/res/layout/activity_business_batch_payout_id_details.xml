@@ -60,7 +60,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_14sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
                     android:orientation="vertical">
 
                     <TextView
@@ -232,7 +232,7 @@
                         android:orientation="horizontal"
                         android:paddingHorizontal="@dimen/_11sdp"
                         android:paddingTop="@dimen/_7sdp"
-                        android:paddingBottom="@dimen/_10sdp">
+                        android:paddingBottom="@dimen/_7sdp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -276,7 +276,8 @@
                         android:orientation="horizontal"
                         android:paddingHorizontal="@dimen/_11sdp"
                         android:paddingTop="@dimen/_7sdp"
-                        android:paddingBottom="@dimen/_10sdp">
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"

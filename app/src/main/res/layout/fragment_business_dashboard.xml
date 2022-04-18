@@ -1151,7 +1151,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginRight="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_90sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
