@@ -538,7 +538,7 @@ public interface ApiService {
     @POST("api/v2/team/retrieve")
     Call<TeamListResponse> getTeamData();
 
-    @PATCH("api/v2/team/{teamMemberId}")
+    @PATCH("api/v2/team/update/{teamMemberId}")
     Call<TeamInfoAddModel> updateTeamMember(@Body TeamRequest request, @Path("teamMemberId") Integer teamMemberId);
 
     @DELETE("api/v2/team/{teamMemberId}")
