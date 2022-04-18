@@ -55,6 +55,7 @@ import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.Agreements;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
+import com.greenbox.coyni.model.summary.BankAccount;
 import com.greenbox.coyni.model.summary.BeneficialOwnerInfo;
 import com.greenbox.coyni.model.summary.CompanyInfo;
 import com.greenbox.coyni.model.summary.DbaInfo;
@@ -66,7 +67,6 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.DashboardActivity;
-import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.viewmodel.ApplicationSubmissionViewModel;
 import com.greenbox.coyni.viewmodel.BankAccountsViewModel;
@@ -89,7 +89,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private TextView mDbNameTx, mBusinessTypeTx, mTimeZoneTx, mWebsiteTx, mMonthlyProcVolumeTx, mHighTicketTx, mAverageTicketTx, mCustomerServiceEmailTx, mCustomerServicePhoneTx, mDbAddressLineTx, mDbFillingDateTx, mWebsiteHeadTX;
     private TextView mPrivacyVno, mTermsVno, mMerchantsVno;
     private BankAccountsRecyclerAdapter accountsRecyclerAdapter;
-    private List<com.greenbox.coyni.model.summary.Item> bankItems = new ArrayList<>();
+    private List<BankAccount> bankBankAccounts = new ArrayList<>();
     private BenificialOwnersRecyclerAdapter benificialOwnersRecyclerAdapter;
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
@@ -662,14 +662,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                 noBoTV.setVisibility(View.VISIBLE);
                                 boLL.setVisibility(View.GONE);
                             }
-                            if (summaryModelResponse.getData().getBankaccount().getItems().size() > 0) {
+                            if (summaryModelResponse.getData().getBankaccount().size() > 0) {
                                 banksLL.setVisibility(View.VISIBLE);
                                 noBanksTv.setVisibility(View.GONE);
-                                bankItems = summaryModelResponse.getData().getBankaccount().getItems();
-                                Log.d("BankItems", bankItems.toString());
+                                bankBankAccounts = summaryModelResponse.getData().getBankaccount();
+                                Log.d("BankItems", bankBankAccounts.toString());
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(ReviewApplicationActivity.this);
 
-                                accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankItems, ReviewApplicationActivity.this);
+                                accountsRecyclerAdapter = new BankAccountsRecyclerAdapter(ReviewApplicationActivity.this, bankBankAccounts, ReviewApplicationActivity.this);
 
                                 bankRecyclerView.setNestedScrollingEnabled(false);
                                 bankRecyclerView.setLayoutManager(layoutManager);

@@ -1,6 +1,6 @@
 package com.greenbox.coyni.model.summary;
 
-public class Item {
+public class BankAccount {
 
     private Integer id;
 
