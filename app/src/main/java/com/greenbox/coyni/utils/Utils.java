@@ -331,6 +331,10 @@ public class Utils {
     public static final String pinActionType = "COYNIPIN";
     public static final String paidActionType = "PAIDORDER";
 
+    public static final String MERCHANT_TRANSACTION_PARTIAL_REFUND = "Partial Refund";
+    public static final String MERCHANT_TRANSACTION_COMPLETED = "Completed";
+    public static final String MERCHANT_TRANSACTION_FAILED = "Failed";
+
     public static final String OPEN = "open";
     public static final String PAID = "paid";
     public static final String CLOSED = "closed";
@@ -371,7 +375,6 @@ public class Utils {
     public static final String applyFilter = "apply";
     public static final String resetFilter = "resetFilter";
     public static final String datePicker = "DatePicker";
-
 
     public static final String position = "Position";
     public static final int cPP = 0;

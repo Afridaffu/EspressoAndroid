@@ -39,13 +39,12 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MerchantTransactionListActivity extends BaseActivity implements TextWatcher {
     private TransactionListPendingAdapter transactionListPendingAdapter;
     private MerchantTransactionListPostedNewAdapter transactionListPostedAdapter;
-    private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
+    private Long mLastClickTime = 0L;
     private NestedScrollView nestedScrollView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressBar;
@@ -53,7 +52,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     private ExpandableHeightRecyclerView rvTransactionsPending, getRvTransactionsPosted;
     private Boolean isFilters = false;
     private MyApplication objMyApplication;
-    private LinearLayout layoutTransactionspending, layoutTransactionsposted, clearTextLL;
+    private LinearLayout layoutTransactionsPending, layoutTransactionsPosted, clearTextLL;
     private TextView noTransactionTV, noMoreTransactionTV;
     private DashboardViewModel dashboardViewModel;
     private TextView pendingTxt, loadMoreTV;
@@ -165,8 +164,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             transactionListRequest.setGbxTransactionId(charSequence.toString());
             getTransactions(transactionListRequest);
         } else if (charSequence.length() > 0 && charSequence.length() < 30) {
-            layoutTransactionsposted.setVisibility(View.GONE);
-            layoutTransactionspending.setVisibility(View.GONE);
+            layoutTransactionsPosted.setVisibility(View.GONE);
+            layoutTransactionsPending.setVisibility(View.GONE);
             pendingTxt.setVisibility(View.GONE);
             noTransactionTV.setVisibility(View.VISIBLE);
         } else if (charSequence.toString().trim().length() == 0) {
@@ -197,8 +196,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         objMyApplication = (MyApplication) getApplicationContext();
         rvTransactionsPending = findViewById(R.id.transactionListPendingRV);
         getRvTransactionsPosted = findViewById(R.id.transactionListPostedRV);
-        layoutTransactionspending = findViewById(R.id.layoutLLPending);
-        layoutTransactionsposted = findViewById(R.id.layoutLLposted);
+        layoutTransactionsPending = findViewById(R.id.layoutLLPending);
+        layoutTransactionsPosted = findViewById(R.id.layoutLLposted);
         noTransactionTV = findViewById(R.id.noTransactions);
         noMoreTransactionTV = findViewById(R.id.noMoreTransactions);
         pendingTxt = findViewById(R.id.pendingTV);
@@ -242,8 +241,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     noTransactionTV.setVisibility(View.GONE);
                                 }
 
-                                layoutTransactionspending.setVisibility(globalPending.size() == 0 ? View.GONE : View.VISIBLE);
-                                layoutTransactionsposted.setVisibility(globalPosted.size() == 0 ? View.GONE : View.VISIBLE);
+                                layoutTransactionsPending.setVisibility(globalPending.size() == 0 ? View.GONE : View.VISIBLE);
+                                layoutTransactionsPosted.setVisibility(globalPosted.size() == 0 ? View.GONE : View.VISIBLE);
 
                                 if (globalPending.size() > 0) {
                                     transactionListPendingAdapter = new TransactionListPendingAdapter(globalPending, MerchantTransactionListActivity.this);
