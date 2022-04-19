@@ -647,6 +647,7 @@
     <string name="withdraw_tokens">Withdraw Tokens</string>
     <string name="cyn_under_payout">(CYN)</string>
     <string name="avail_bal">12132.2323</string>
+    <string name="full_payouts_history">Full Payouts History</string>
     <string name="account_balance">Account Balance</string>
     <string name="merchant_account_id">Merchant Account ID</string>
     <string name="dba_name_text">DBA Name</string>
