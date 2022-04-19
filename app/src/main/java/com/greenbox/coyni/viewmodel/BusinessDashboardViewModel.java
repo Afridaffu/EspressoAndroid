@@ -17,6 +17,7 @@ import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
+import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
@@ -57,6 +58,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchPayoutListResponse> batchNowResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ReserveListResponse> reserveListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchNowResponse> batchNowSlideResponseMutableLiveData = new MutableLiveData<>();
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
@@ -64,6 +66,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<PaymentMethodsResponse> getPaymentMethodsResponseMutableLiveData() {
         return paymentMethodsResponseMutableLiveData;
+    }
+
+    public MutableLiveData<ReserveListResponse> getReserveListResponseMutableLiveData(){
+        return reserveListResponseMutableLiveData;
     }
 
     public MutableLiveData<SignetResponse> getSignetResponseMutableLiveData() {
@@ -494,6 +500,40 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 }
             });
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getReserveList(){
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ReserveListResponse> call = apiService.getReserveListItems();
+            call.enqueue(new Callback<ReserveListResponse>() {
+                @Override
+                public void onResponse(Call<ReserveListResponse> call, Response<ReserveListResponse> response) {
+                    if (response.isSuccessful()) {
+                        ReserveListResponse list = response.body();
+                        reserveListResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ReserveListResponse>() {
+                        }.getType();
+                        ReserveListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        reserveListResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ReserveListResponse> call, Throwable t) {
+                    reserveListResponseMutableLiveData.setValue(null);
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
