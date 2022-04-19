@@ -266,7 +266,6 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 TransactionLimitRequest obj = new TransactionLimitRequest();
                 obj.setTransactionType(Utils.saleOrder);
                 obj.setTransactionSubType(Utils.saleOrderToken);
-//                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
                 dialog = Utils.showProgressDialog(ScanActivity.this);
                 if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
@@ -774,7 +773,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             }
             if (transactionLimitResponse != null) {
                 objResponse = transactionLimitResponse;
-                setDailyWeekLimit(objResponse.getData());
+                if (transactionLimitResponse.getData() != null) {
+                    setDailyWeekLimit(objResponse.getData());
+                }
             }
         });
 
@@ -784,7 +785,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 if (businessTypeResp != null && businessTypeResp.getStatus().equalsIgnoreCase("SUCCESS")) {
                     for (int i = 0; i < businessTypeResp.getData().size(); i++) {
                         try {
-                            if (details.getData().getBusinessType().toLowerCase().trim().equals(businessTypeResp.getData().get(i).getKey().toLowerCase().trim())) {
+                            if (details != null && details.getData().getBusinessType().toLowerCase().trim().equals(businessTypeResp.getData().get(i).getKey().toLowerCase().trim())) {
                                 businessTypeValue = businessTypeResp.getData().get(i).getValue();
                                 break;
                             }
@@ -946,7 +947,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             } else if (requestCode == 101) {
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                   displayAlert("Requires Access to Your Storage.", "coyni");
+                    displayAlert("Requires Access to Your Storage.", "coyni");
                 } else {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                     photoPickerIntent.setType("image/*");
@@ -969,7 +970,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                         == PackageManager.PERMISSION_GRANTED) {
                     mcodeScanner.startPreview();
                     scannerLayout.setVisibility(View.VISIBLE);
-                    if (errorDialog != null){
+                    if (errorDialog != null) {
                         errorDialog.dismiss();
                     }
                 }
@@ -1136,96 +1137,95 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         }
 
 //        if (resultCode == RESULT_OK) {
-            if (requestCode == 101 && resultCode == RESULT_OK) {
+        if (requestCode == 101 && resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 try {
-                    final Uri imageUri = data.getData();
-                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                    final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    Bitmap bMap = selectedImage;
+                    int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
+                    bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
+                    LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+                    //                    Reader reader = new QRCodeReader();
+                    Reader reader = new MultiFormatReader();
+
+                    Result result = reader.decode(bitmap);
+
+                    //strScanWallet = result.getText();
+                    strScanWallet = "";
+                    strQRAmount = "";
+                    if (isJSONValid(result.toString())) {
+                        JSONObject jsonObject = new JSONObject(result.toString());
+                        strScanWallet = jsonObject.get("referenceID").toString();
+                        strQRAmount = jsonObject.get("cynAmount").toString();
+                    } else {
+                        strScanWallet = result.toString();
+                    }
+                    Log.e("Image Text :- ", strScanWallet);
+                    //                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
+
                     try {
-                        Bitmap bMap = selectedImage;
-                        int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
-                        bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
-                        LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
-                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-                        //                    Reader reader = new QRCodeReader();
-                        Reader reader = new MultiFormatReader();
-
-                        Result result = reader.decode(bitmap);
-
-                        //strScanWallet = result.getText();
-                        strScanWallet = "";
-                        strQRAmount = "";
-                        if (isJSONValid(result.toString())) {
-                            JSONObject jsonObject = new JSONObject(result.toString());
-                            strScanWallet = jsonObject.get("referenceID").toString();
-                            strQRAmount = jsonObject.get("cynAmount").toString();
+                        if (!strScanWallet.equals(strWallet)) {
+                            isQRScan = true;
+                            getUserDetails(strScanWallet);
                         } else {
-                            strScanWallet = result.toString();
-                        }
-                        Log.e("Image Text :- ", strScanWallet);
-                        //                    Toast.makeText(getApplicationContext(),strScanWallet,Toast.LENGTH_LONG).show();
-
-                        try {
-                            if (!strScanWallet.equals(strWallet)) {
-                                isQRScan = true;
-                                getUserDetails(strScanWallet);
-                            } else {
-                                //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
-                                if (errorDialog == null) {
+                            //                            Utils.displayAlert("Tokens can not request to your own wallet", ScanActivity.this, "", "");
+                            if (errorDialog == null) {
 //                                    mcodeScanner.stopPreview();
 //                                    scannerLayout.setVisibility(View.GONE);
-                                    displayAlert(getString(R.string.tokens_msg), "");
-                                }
+                                displayAlert(getString(R.string.tokens_msg), "");
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
 
 
-                    } catch (Exception e) {
-                        if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
+                } catch (Exception e) {
+                    if (errorDialog == null && scanMeSV.getVisibility() == View.GONE) {
 //                            mcodeScanner.stopPreview();
 //                            scannerLayout.setVisibility(View.GONE);
-                            displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
-                        }
-                        e.printStackTrace();
+                        displayAlert("Try scanning a coyni QR code.", "Invalid QR code");
                     }
-                } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                 }
-            } else if (requestCode == 251 && resultCode == RESULT_OK) {
-                try {
-                    //payTransaction();
-                    dialog = Utils.showProgressDialog(ScanActivity.this);
-                    BiometricTokenRequest request = new BiometricTokenRequest();
-                    request.setDeviceId(Utils.getDeviceID());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(ScanActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == 251 && resultCode == RESULT_OK) {
+            try {
+                //payTransaction();
+                dialog = Utils.showProgressDialog(ScanActivity.this);
+                BiometricTokenRequest request = new BiometricTokenRequest();
+                request.setDeviceId(Utils.getDeviceID());
 //                    request.setMobileToken(strToken);
-                    request.setMobileToken(objMyApplication.getStrMobileToken());
-                    request.setActionType(Utils.paidActionType);
-                    coyniViewModel.biometricToken(request);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else if (requestCode == 251 && resultCode == RESULT_CANCELED) {
-                try {
+                request.setMobileToken(objMyApplication.getStrMobileToken());
+                request.setActionType(Utils.paidActionType);
+                coyniViewModel.biometricToken(request);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (requestCode == 251 && resultCode == RESULT_CANCELED) {
+            try {
 //                    payTransaction();
-                    startActivity(new Intent(ScanActivity.this, PINActivity.class)
-                            .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "Paid")
-                            .putExtra(Utils.wallet,strScanWallet)
-                            .putExtra(Utils.amount,strQRAmount.replace(",","").trim()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                startActivity(new Intent(ScanActivity.this, PINActivity.class)
+                        .putExtra("TYPE", "ENTER")
+                        .putExtra("screen", "Paid")
+                        .putExtra(Utils.wallet, strScanWallet)
+                        .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            else if (requestCode == 101 && resultCode == RESULT_CANCELED){
-                if (mcodeScanner != null) {
-                    mcodeScanner.startPreview();
-                }
-                scannerLayout.setVisibility(View.VISIBLE);
+        } else if (requestCode == 101 && resultCode == RESULT_CANCELED) {
+            if (mcodeScanner != null) {
+                mcodeScanner.startPreview();
             }
+            scannerLayout.setVisibility(View.VISIBLE);
+        }
 //            else if (requestCode == 251) {
 //                try {
 //                    //payTransaction();
@@ -1508,9 +1508,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, Double balance, String btypeValue) {
         isQRScan = false;
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                mcodeScanner.stopPreview();
-            }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            mcodeScanner.stopPreview();
+        }
         PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(ScanActivity.this, amount, userDetails, false, balance, btypeValue);
         payToMerchantWithAmountDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
@@ -1528,8 +1528,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                     startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
                                             .putExtra("screen", "Paid")
-                                            .putExtra(Utils.wallet,strScanWallet)
-                                            .putExtra(Utils.amount,strQRAmount.replace(",","").trim()));
+                                            .putExtra(Utils.wallet, strScanWallet)
+                                            .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
 
                                 }
                             } else {
@@ -1537,8 +1537,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                                 startActivity(new Intent(ScanActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
                                         .putExtra("screen", "Paid")
-                                        .putExtra(Utils.wallet,strScanWallet)
-                                        .putExtra(Utils.amount,strQRAmount.replace(",","").trim()));
+                                        .putExtra(Utils.wallet, strScanWallet)
+                                        .putExtra(Utils.amount, strQRAmount.replace(",", "").trim()));
                             }
                         }
                     }
@@ -1558,7 +1558,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                     scannerLayout.setVisibility(View.VISIBLE);
                 }
 
-                }
+            }
         });
 
     }
@@ -1608,8 +1608,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                 if (Utils.checkInternet(ScanActivity.this)) {
                     buyTokenViewModel.transferFee(request);
                 }
-            }
-            else if (Utils.BUSINESS_ACCOUNT == objMyApplication.getAccountType()){
+            } else if (Utils.BUSINESS_ACCOUNT == objMyApplication.getAccountType()) {
                 if (Utils.checkInternet(ScanActivity.this)) {
                     buyTokenViewModel.transferFee(request);
                 }
@@ -1706,7 +1705,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
 
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
-            if (objLimit.getTokenLimitFlag()) {
+            if (objLimit != null && objLimit.getTokenLimitFlag()) {
                 Double week = 0.0, daily = 0.0;
                 if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("unlimited")) {
                     week = Double.parseDouble(objLimit.getWeeklyAccountLimit());

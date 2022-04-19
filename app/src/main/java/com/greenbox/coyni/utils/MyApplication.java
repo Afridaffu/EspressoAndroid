@@ -57,6 +57,7 @@ import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -664,6 +665,32 @@ public class MyApplication extends Application {
         return strDate;
     }
 
+    public String convertZoneReservedOn(String date) {
+        String strDate = "";
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                        .toFormatter()
+                        .withZone(ZoneOffset.UTC);
+                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+                strDate = zonedTime.format(DATE_TIME_FORMATTER);
+            } else {
+                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date newDate = spf.parse(date);
+                spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
+                strDate = spf.format(newDate);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public String convertNewZoneDate(String date) {
         String strDate = "";
         try {
@@ -686,6 +713,34 @@ public class MyApplication extends Application {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+        return strDate;
+    }
+
+    public String convertPayoutDateTimeZone(String date) throws ParseException {
+        String strDate = "";
+
+//        SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date newDate = spf.parse(date);
+//        spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
+//        strDate = spf.format(newDate);
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.S")
+                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                    .toFormatter()
+                    .withZone(ZoneOffset.UTC);
+            ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+            DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mma");
+            zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
+            strDate = zonedTime.format(DATE_TIME_FORMATTER);
+        } else {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+            spf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
+            spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
+            strDate = spf.format(newDate);
         }
         return strDate;
     }

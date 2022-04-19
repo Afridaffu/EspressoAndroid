@@ -171,20 +171,20 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (strCurrent.equals("firstError")) {
-                displayError();
-            } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                ControlMethod("addpayment");
-                strCurrent = "addpayment";
-                addPayment();
-                hideorShowNoTokenText();
-            } else {
-                if (!isPayments) {
-                    getPaymentMethods();
+            if (!isBankSuccess) {
+                if (strCurrent.equals("firstError")) {
+                    displayError();
+                } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    ControlMethod("addpayment");
+                    strCurrent = "addpayment";
+                    addPayment();
+                    hideorShowNoTokenText();
+                } else {
+                    if (!isPayments) {
+                        getPaymentMethods();
+                    }
                 }
             }
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }

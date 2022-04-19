@@ -11,17 +11,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.summary.Item;
+import com.greenbox.coyni.model.summary.BankAccount;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.swipelayout.RecyclerSwipeAdapter;
 import com.greenbox.coyni.utils.swipelayout.SwipeLayout;
-import com.greenbox.coyni.view.business.AddBankAccount;
-import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 import java.util.List;
 
 public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccountsRecyclerAdapter.MyViewHolder> {
-    List<Item> banks;
+    List<BankAccount> banks;
     Context mContext;
     MyApplication objMyApplication;
     private OnSelectListner listener;
@@ -44,7 +42,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     }
 
 
-    public BankAccountsRecyclerAdapter(Context context, List<Item> list , OnSelectListner listener) {
+    public BankAccountsRecyclerAdapter(Context context, List<BankAccount> list , OnSelectListner listener) {
         this.mContext = context;
         this.banks = list;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
@@ -62,7 +60,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
-            Item objData = banks.get(position);
+            BankAccount objData = banks.get(position);
             holder.bankNameTx.setText(objData.getBankName());
 
             holder.accountNumberTx.setText(objData.getAccountNumber());
