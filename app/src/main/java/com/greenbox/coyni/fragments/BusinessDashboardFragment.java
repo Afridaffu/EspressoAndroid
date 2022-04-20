@@ -40,6 +40,7 @@ import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
+import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListData;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListItems;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
@@ -61,6 +62,7 @@ import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
+import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
@@ -70,28 +72,33 @@ import java.util.List;
 //Business Dashboard Fragment
 public class BusinessDashboardFragment extends BaseFragment {
 
-    private View mCurrentView, batchView,releaseView;
-    private TextView tv_PayoutNoHistory, tv_PayoutHistory, batchNoTransaction,nextReleaseNATV,lastReleaseNATV,releaseNoTransaction;
+    private View mCurrentView, batchView, releaseView;
+    private TextView tv_PayoutNoHistory, tv_PayoutHistory, batchNoTransaction, nextReleaseNATV,
+            lastReleaseNATV, releaseNoTransaction;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
     private CardView mIvUserIconCV, cvReserveView;
-    private TextView mTvUserName, mTvUserIconText, mTvReserveList, mPayoutHistory, payoutTimeTV, nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
+    private TextView mTvUserName, mTvUserIconText, mTvReserveList, mPayoutHistory, payoutTimeTV,
+            nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
     private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
             mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView,
-            mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView, payoutsXmlLL, payoutsLayoutLL;
+            mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView,
+            payoutsXmlLL, payoutsLayoutLL, monthlyVolumeViewLl;
     private TextView mTvIdentityReviewCancelMessage, mTvProcessingVolume, mTvContactUs;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutAmountTV, cynTV;
-    private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV;
+    private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV, mTvMonthlyVolume, mTvHighTickets;
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
     private BatchPayoutListAdapter batchPayoutListAdapter;
     private RecyclerView recyclerViewPayouts;
     private List<BatchPayoutListItems> listItems;
-    private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV, lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV;
+    private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV,
+            lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV;
     private LinearLayout reserveReleaseListLL, reserveDetailsLL;
     private BatchNowRequest batchNowRequest = null;
     private String openAmount = "", sent = "", availbal = "";
@@ -124,10 +131,11 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void initViewModels() {
         mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
     }
 
-    private String getMerchantBalance() {
+    private Double getMerchantBalance() {
         Double amt = 0.0;
         if (myApplication.getGBTBalance() != null) {
             amt += myApplication.getGBTBalance();
@@ -135,7 +143,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         if (myApplication.getMerchantBalance() != null) {
             amt += myApplication.getMerchantBalance();
         }
-        return Utils.convertBigDecimalUSDC(String.valueOf(amt));
+        return amt;
     }
 
     @Override
@@ -191,7 +199,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         lastPayoutDate = mCurrentView.findViewById(R.id.lastPayoutDate);
         sentToDescriptionTV = mCurrentView.findViewById(R.id.sentToDescriptionTV);
         cvReserveView = mCurrentView.findViewById(R.id.cv_reserve_view);
-
+        mTvMonthlyVolume = mCurrentView.findViewById(R.id.tv_monthly_volume);
+        mTvHighTickets = mCurrentView.findViewById(R.id.tv_high_tickets);
         nextReleaseTV = mCurrentView.findViewById(R.id.nextReleaseTV);
         nextReleaseAmountTV = mCurrentView.findViewById(R.id.nextReleaseAmountTV);
         nextReleaseDateTV = mCurrentView.findViewById(R.id.nextReleaseDateTV);
@@ -203,6 +212,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         reserveListDateTV = mCurrentView.findViewById(R.id.reserveListDateTV);
         reserveReleaseListLL = mCurrentView.findViewById(R.id.reserveReleaseListLL);
         reserveDetailsLL = mCurrentView.findViewById(R.id.reserveDetailsLL);
+        monthlyVolumeViewLl = mCurrentView.findViewById(R.id.tv_monthly_volume_view);
         dbHandler = DatabaseHandler.getInstance(getActivity());
 
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
@@ -347,14 +357,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (reserveListResponse != null) {
                     if (reserveListResponse.getStatus().equalsIgnoreCase(("SUCCESS"))) {
                         if (reserveListResponse.getData() != null && reserveListResponse.getData() != null) {
-//                            showReserveData(reserveListResponse.getData().getResponseList());
                             showReserveRelease(reserveListResponse.getData());
                         }
                     }
                 }
             }
         });
-
 
         businessDashboardViewModel.getBatchNowResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
@@ -368,6 +376,16 @@ public class BusinessDashboardFragment extends BaseFragment {
                     } else {
                         Log.d(TAG, "No items found");
                     }
+                }
+            }
+        });
+
+        businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(getViewLifecycleOwner(), new Observer<DBAInfoResp>() {
+            @Override
+            public void onChanged(DBAInfoResp dbaInfoResp) {
+                if (dbaInfoResp != null && dbaInfoResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    myApplication.setDbaInfoResp(dbaInfoResp);
+                    setMonthlyVolumeData();
                 }
             }
         });
@@ -485,12 +503,31 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlGetStartedView.setVisibility(View.VISIBLE);
     }
 
+    private void setMonthlyVolumeData() {
+        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                && myApplication.getMyProfile().getData().getCompanyName() != null) {
+            mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, myApplication.getMyProfile().getData().getCompanyName()));
+        }
+        DBAInfoResp resp = myApplication.getDbaInfoResp();
+        if (resp != null && resp.getData() != null) {
+            mTvMonthlyVolume.setText(Utils.convertBigDecimalUSDC(resp.getData().getMonthlyProcessingVolume()));
+            mTvHighTickets.setText(Utils.convertBigDecimalUSDC(resp.getData().getHighTicket()));
+        }
+    }
+
     private void setBusinessData() {
-        cvReserveView.setVisibility(showReserve ? View.VISIBLE:View.GONE);
+        cvReserveView.setVisibility(showReserve ? View.VISIBLE : View.GONE);
         batchReq();
         reserveReq();
-        merchantBalanceTV.setText(getMerchantBalance());
-        mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, "[Business Name]"));
+        Double merchantBalance = getMerchantBalance();
+        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
+        if (merchantBalance != null && merchantBalance == 0.00) {
+            businessIdentityVerificationViewModel.getDBAInfo();
+        } else {
+            monthlyVolumeViewLl.setVisibility(View.GONE);
+        }
+
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -498,13 +535,13 @@ public class BusinessDashboardFragment extends BaseFragment {
                 startActivity(inReleases);
             }
         });
+
         mPayoutHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), BusinessBatchPayoutSearchActivity.class));
             }
         });
-        // showBatchPayouts();
     }
 
     private void showIdentityVerificationReview() {
@@ -672,7 +709,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void reserveReq() {
-        if(showReserve) {
+        if (showReserve) {
             businessDashboardViewModel.getReserveList();
         }
     }
@@ -771,7 +808,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
         Log.d(TAG, "No Batch Payouts for this user");
 
-}
+    }
 
     private void showReserveReleaseBalance() {
         Double amt = 0.0;

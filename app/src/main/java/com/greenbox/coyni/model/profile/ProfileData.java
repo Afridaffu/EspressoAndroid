@@ -17,6 +17,8 @@ public class ProfileData {
     private String image;
     private String accountStatus;
     private String status;
+    private String dbaName;
+    private String companyName;
 
     public int getId() {
         return id;
@@ -146,6 +148,22 @@ public class ProfileData {
         this.status = status;
     }
 
+    public String getDbaName() {
+        return dbaName;
+    }
+
+    public void setDbaName(String dbaName) {
+        this.dbaName = dbaName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     @Override
     public String toString() {
         return "ProfileData{" +
@@ -165,6 +183,8 @@ public class ProfileData {
                 ", image='" + image + '\'' +
                 ", accountStatus='" + accountStatus + '\'' +
                 ", status='" + status + '\'' +
+                ", dbaName='" + dbaName + '\'' +
+                ", companyName='" + companyName + '\'' +
                 '}';
     }
 }
