@@ -340,9 +340,10 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_6sdp"
+                                    android:layout_marginStart="@dimen/_4sdp"
                                     android:layout_marginBottom="@dimen/_6sdp"
-                                    android:fontFamily="@font/opensans_bold"
+                                    android:paddingBottom="@dimen/_3sdp"
+                                    android:fontFamily="@font/opensans_semibold"
                                     android:text="@string/currency"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_10ssp" />
@@ -463,7 +464,7 @@
                                         android:fontFamily="@font/opensans_semibold"
                                         android:text="@string/grossamount"
                                         android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_10ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -562,7 +563,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_2sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -600,7 +601,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -647,7 +648,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -686,7 +687,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -733,7 +734,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -772,7 +773,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -787,7 +788,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
-                                android:fontFamily="@font/opensans_semibold"
+                                android:fontFamily="@font/opensans_regular"
                                 android:text="@string/sales_orders"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
@@ -1004,8 +1005,8 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
-                                            android:layout_marginTop="@dimen/_3sdp"
+                                            android:layout_marginStart="@dimen/_2sdp"
+                                            android:layout_marginTop="@dimen/_2sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -1077,8 +1078,8 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
-                                            android:layout_marginTop="@dimen/_3sdp"
+                                            android:layout_marginStart="@dimen/_2sdp"
+                                            android:layout_marginTop="@dimen/_2sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
