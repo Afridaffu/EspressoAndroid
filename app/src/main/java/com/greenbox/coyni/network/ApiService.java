@@ -24,6 +24,7 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
+import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
@@ -605,6 +606,10 @@ public interface ApiService {
 
     @POST("api/v2/transactions/merchant-payout/{batchId}")
     Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
+
+    @POST("api/v2/transactions/admin/reserve/summary")
+    Call<ReserveListResponse> getReserveListItems();
+
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);

@@ -293,7 +293,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onChanged(RefundDataResponce refundDataResponce) {
                     dismissDialog();
                     if (refundDataResponce != null) {
-                        if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
+                        if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
                             Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
                             i.putExtra(Utils.amount, refundET.getText().toString());
                             i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
@@ -304,11 +304,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         }
 
                     } else {
-                        if (!refundDataResponce.getError().getErrorDescription().equals("")) {
-                            Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
-                        } else {
-                            Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
-                        }
+                            if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equals("")) {
+                                Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                            } else {
+                                Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
+                            }
+
                     }
                 }
 
