@@ -794,8 +794,8 @@
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
-                            <SeekBar
-                                android:layout_width="@dimen/_140sdp"
+                            <com.greenbox.coyni.utils.SeekBarWithFloatingText
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="@dimen/_35sdp"
@@ -806,13 +806,13 @@
                                 android:scaleX="2"
                                 android:scaleY="2" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_18sdp"
-                                android:orientation="horizontal">
+                            <!--                            <LinearLayout-->
+                            <!--                                android:layout_width="match_parent"-->
+                            <!--                                android:layout_height="wrap_content"-->
+                            <!--                                android:layout_marginHorizontal="@dimen/_18sdp"-->
+                            <!--                                android:orientation="horizontal">-->
 
-                            </LinearLayout>
+                            <!--                            </LinearLayout>-->
 
                             <View
                                 android:layout_width="match_parent"
