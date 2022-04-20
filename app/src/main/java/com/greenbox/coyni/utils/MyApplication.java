@@ -14,10 +14,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.AgreementsPdf;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsData;
-import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
-import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutRequest;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -44,19 +41,20 @@ import com.greenbox.coyni.model.reguser.Contacts;
 import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersResponse;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
+import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
-import com.greenbox.coyni.model.transaction.TransactionList;
-//import com.greenbox.coyni.model.wallet.WalletResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
-import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -65,9 +63,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,205 +72,165 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class MyApplication extends Application {
-    AgreementsPdf agreementsPdf;
-    RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strInvite = "", strScreen = "";
-    Profile myProfile = new Profile();
-    UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
-    UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
-    UserDetails userDetails;
-    List<States> listStates = new ArrayList<>();
-    LatestTxnResponse listLatestTxn;
-    //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
-    PaymentMethodsResponse paymentMethodsResponse;
-    //    WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
-    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType, dbaOwnerId = 0;
-    TransactionList transactionList;
-    PaymentsList selectedCard, prevSelectedCard;
-    TransferFeeResponse transferFeeResponse;
-    BrandsResponse selectedBrandResponse;
-    WithdrawRequest withdrawRequest;
-    WithdrawResponse withdrawResponse;
-    BuyTokenResponse buyTokenResponse;
-    PayRequestResponse payRequestResponse;
-    TransferPayRequest transferPayRequest;
-    PaidOrderRequest paidOrderRequest;
-    PaidOrderResp paidOrderResp;
-    List<Contacts> listContacts = new ArrayList<>();
-    TransactionListRequest transactionListSearch = new TransactionListRequest();
-    Double withdrawAmount;
-    BusinessTrackerResponse businessTrackerResponse;
-    WalletResponseData walletResponseData;
-    BusinessTypeResp businessTypeResp;
-    CompanyInfoResp companyInfoResp;
-    DBAInfoResp dbaInfoResp;
-    BuyTokenRequest buyRequest;
-    BOResp beneficialOwnersResponse;
-    HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
-    ApplicationSubmitResponseModel submitResponseModel;
-    Double merchantBalance = 0.0;
 
-    public SignOnData getObjSignOnData() {
-        return objSignOnData;
+    private UserData mCurrentUserData;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mCurrentUserData = new UserData();
     }
 
-    String selectedButTokenType = "";
+    public SignOnData getObjSignOnData() {
+        return mCurrentUserData.getObjSignOnData();
+    }
 
     public void setObjSignOnData(SignOnData objSignOnData) {
-        this.objSignOnData = objSignOnData;
+        mCurrentUserData.setObjSignOnData(objSignOnData);
     }
 
     public void setPaidOrderRequest(PaidOrderRequest paidOrderRequest) {
-        this.paidOrderRequest = paidOrderRequest;
+        mCurrentUserData.setPaidOrderRequest(paidOrderRequest);
     }
 
     public PaidOrderRequest getPaidOrderRequest() {
-        return paidOrderRequest;
+        return mCurrentUserData.getPaidOrderRequest();
     }
 
     public PaidOrderResp getPaidOrderResp() {
-        return paidOrderResp;
+        return mCurrentUserData.getPaidOrderResp();
     }
 
     public void setPaidOrderResp(PaidOrderResp paidOrderResp) {
-        this.paidOrderResp = paidOrderResp;
+        mCurrentUserData.setPaidOrderResp(paidOrderResp);
     }
 
     public Double getMerchantBalance() {
-        return merchantBalance;
+        return mCurrentUserData.getMerchantBalance();
     }
 
     public void setMerchantBalance(Double merchantBalance) {
-        this.merchantBalance = merchantBalance;
+        mCurrentUserData.setMerchantBalance(merchantBalance);
     }
 
     public int getDbaOwnerId() {
-        return dbaOwnerId;
+        return mCurrentUserData.getDbaOwnerId();
     }
 
     public void setDbaOwnerId(int dbaOwnerId) {
-        this.dbaOwnerId = dbaOwnerId;
+        mCurrentUserData.setDbaOwnerId(dbaOwnerId);
     }
 
     public LatestTxnResponse getListLatestTxn() {
-        return listLatestTxn;
+        return mCurrentUserData.getListLatestTxn();
     }
 
     public void setListLatestTxn(LatestTxnResponse listLatestTxn) {
-        this.listLatestTxn = listLatestTxn;
+        mCurrentUserData.setListLatestTxn(listLatestTxn);
     }
 
     public UserDetails getUserDetails() {
-        return userDetails;
+        return mCurrentUserData.getUserDetails();
     }
 
     public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
+        mCurrentUserData.setUserDetails(userDetails);
     }
 
     public TransactionList getTransactionList() {
-        return transactionList;
+        return mCurrentUserData.getTransactionList();
     }
 
     public void setTransactionList(TransactionList transactionList) {
-        this.transactionList = transactionList;
+        mCurrentUserData.setTransactionList(transactionList);
     }
-
-    SignOnData objSignOnData = new SignOnData();
-    TrackerResponse trackerResponse = new TrackerResponse();
 
     public AgreementsPdf getAgreementsPdf() {
-        return agreementsPdf;
+        return mCurrentUserData.getAgreementsPdf();
     }
 
-    WalletInfo gbtWallet;
-    Double GBTBalance = 0.0;
-    Double reserveBalance = 0.0;
-
     public void setAgreementsPdf(AgreementsPdf agreementsPdf) {
-        this.agreementsPdf = agreementsPdf;
+        mCurrentUserData.setAgreementsPdf(agreementsPdf);
     }
 
     public String getStrUserName() {
-        return strUserName;
+        return mCurrentUserData.getStrUserName();
     }
 
     public void setStrUserName(String strUserName) {
-        this.strUserName = strUserName;
+        mCurrentUserData.setStrUserName(strUserName);
     }
 
     public RetrieveUsersResponse getObjRetUsers() {
-        return objRetUsers;
+        return mCurrentUserData.getObjRetUsers();
     }
 
     public void setObjRetUsers(RetrieveUsersResponse objRetUsers) {
-        this.objRetUsers = objRetUsers;
+        mCurrentUserData.setObjRetUsers(objRetUsers);
     }
 
     public String getStrRetrEmail() {
-        return strRetrEmail;
+        return mCurrentUserData.getStrRetrEmail();
     }
 
     public void setStrRetrEmail(String strRetrEmail) {
-        this.strRetrEmail = strRetrEmail;
+        mCurrentUserData.setStrRetrEmail(strRetrEmail);
     }
 
     public Profile getMyProfile() {
-        return myProfile;
+        return mCurrentUserData.getMyProfile();
     }
 
     public void setMyProfile(Profile myProfile) {
-        this.myProfile = myProfile;
+        mCurrentUserData.setMyProfile(myProfile);
     }
 
     public UpdateEmailResponse getUpdateEmailResponse() {
-        return updateEmailResponse;
+        return mCurrentUserData.getUpdateEmailResponse();
     }
 
     public void setUpdateEmailResponse(UpdateEmailResponse updateEmailResponse) {
-        this.updateEmailResponse = updateEmailResponse;
+        mCurrentUserData.setUpdateEmailResponse(updateEmailResponse);
     }
 
     public List<States> getListStates() {
-        return listStates;
+        return mCurrentUserData.getListStates();
     }
 
     public void setListStates(List<States> listStates) {
-        this.listStates = listStates;
+        mCurrentUserData.setListStates(listStates);
     }
 
     public Boolean getBiometric() {
-        return isBiometric;
+        return mCurrentUserData.getBiometric();
     }
 
     public void setBiometric(Boolean biometric) {
-        isBiometric = biometric;
+        mCurrentUserData.setBiometric(biometric);
     }
 
     public Boolean getLocalBiometric() {
-        return isLocalBiometric;
+        return mCurrentUserData.getLocalBiometric();
     }
 
     public void setLocalBiometric(Boolean localBiometric) {
-        isLocalBiometric = localBiometric;
+        mCurrentUserData.setLocalBiometric(localBiometric);
     }
 
     public PaymentMethodsResponse getPaymentMethodsResponse() {
-        return paymentMethodsResponse;
+        return mCurrentUserData.getPaymentMethodsResponse();
     }
 
     public void setPaymentMethodsResponse(PaymentMethodsResponse paymentMethodsResponse) {
-        this.paymentMethodsResponse = paymentMethodsResponse;
+        mCurrentUserData.setPaymentMethodsResponse(paymentMethodsResponse);
     }
 
     public UpdatePhoneResponse getUpdatePhoneResponse() {
-        return updatePhoneResponse;
+        return mCurrentUserData.getUpdatePhoneResponse();
     }
 
     public void setUpdatePhoneResponse(UpdatePhoneResponse updatePhoneResponse) {
-        this.updatePhoneResponse = updatePhoneResponse;
+        mCurrentUserData.setUpdatePhoneResponse(updatePhoneResponse);
     }
 
 //    public WalletResponse getWalletResponse() {
@@ -287,83 +242,83 @@ public class MyApplication extends Application {
 //    }
 
     public String getTimezone() {
-        return timezone;
+        return mCurrentUserData.getTimezone();
     }
 
     public void setTimezone(String timezone) {
-        this.timezone = timezone;
+        mCurrentUserData.setTimezone(timezone);
     }
 
     public String getStrEmail() {
-        return strEmail;
+        return mCurrentUserData.getStrEmail();
     }
 
     public void setStrEmail(String strEmail) {
-        this.strEmail = strEmail;
+        mCurrentUserData.setStrEmail(strEmail);
     }
 
     public int getTimezoneID() {
-        return timezoneID;
+        return mCurrentUserData.getTimezoneID();
     }
 
     public void setTimezoneID(int timezoneID) {
-        this.timezoneID = timezoneID;
+        mCurrentUserData.setTimezoneID(timezoneID);
     }
 
     public String getTempTimezone() {
-        return tempTimezone;
+        return mCurrentUserData.getTempTimezone();
     }
 
     public void setTempTimezone(String tempTimezone) {
-        this.tempTimezone = tempTimezone;
+        mCurrentUserData.setTempTimezone(tempTimezone);
     }
 
     public int getTempTimezoneID() {
-        return tempTimezoneID;
+        return mCurrentUserData.getTempTimezoneID();
     }
 
     public void setTempTimezoneID(int tempTimezoneID) {
-        this.tempTimezoneID = tempTimezoneID;
+        mCurrentUserData.setTempTimezoneID(tempTimezoneID);
     }
 
     public String getStrSignOnError() {
-        return strSignOnError;
+        return mCurrentUserData.getStrSignOnError();
     }
 
     public void setStrSignOnError(String strSignOnError) {
-        this.strSignOnError = strSignOnError;
+        mCurrentUserData.setStrSignOnError(strSignOnError);
     }
 
     public SignOnData getSignOnData() {
-        return objSignOnData;
+        return mCurrentUserData.getObjSignOnData();
     }
 
     public void setSignOnData(SignOnData objSignOnData) {
-        this.objSignOnData = objSignOnData;
+        mCurrentUserData.setObjSignOnData(objSignOnData);
     }
 
     public Boolean getResolveUrl() {
-        return isResolveUrl;
+        return mCurrentUserData.getResolveUrl();
     }
 
     public void setResolveUrl(Boolean resolveUrl) {
-        isResolveUrl = resolveUrl;
+        mCurrentUserData.setResolveUrl(resolveUrl);
     }
 
     public String getStrFiservError() {
-        return strFiservError;
+        return mCurrentUserData.getStrFiservError();
     }
 
     public void setStrFiservError(String strFiservError) {
-        this.strFiservError = strFiservError;
+        mCurrentUserData.setStrFiservError(strFiservError);
     }
 
     public int getLoginUserId() {
-        return loginUserId;
+        return mCurrentUserData.getLoginUserId();
     }
 
     public void setLoginUserId(int logUserId) {
-        this.loginUserId = logUserId;
+        mCurrentUserData.setLoginUserId(logUserId);
     }
 
     public void getStates() {
@@ -388,45 +343,44 @@ public class MyApplication extends Application {
 
 
     public TrackerResponse getTrackerResponse() {
-        return trackerResponse;
+        return mCurrentUserData.getTrackerResponse();
     }
 
     public void setTrackerResponse(TrackerResponse trackerResponse) {
-        this.trackerResponse = trackerResponse;
+        mCurrentUserData.setTrackerResponse(trackerResponse);
     }
 
     public String getStrPreference() {
-        return strPreference;
+        return mCurrentUserData.getStrPreference();
     }
 
     public void setStrPreference(String strPreference) {
-        this.strPreference = strPreference;
+        mCurrentUserData.setStrPreference(strPreference);
     }
 
     public WalletInfo getGbtWallet() {
-        return gbtWallet;
+        return mCurrentUserData.getGbtWallet();
     }
 
     public void setGbtWallet(WalletInfo gbtWallet) {
-        this.gbtWallet = gbtWallet;
+        mCurrentUserData.setGbtWallet(gbtWallet);
     }
 
     public Double getGBTBalance() {
-        return GBTBalance;
+        return mCurrentUserData.getGBTBalance();
     }
 
-    public void setGBTBalance(Double GBTBalance) {
-        this.GBTBalance = GBTBalance;
+    public void setGBTBalance(Double gBTBalance) {
+        mCurrentUserData.setGBTBalance(gBTBalance);
     }
 
     public Double getReserveBalance() {
-        return reserveBalance;
+        return mCurrentUserData.getReserveBalance();
     }
 
     public void setReserveBalance(Double reserveBalance) {
-        this.reserveBalance = reserveBalance;
+        mCurrentUserData.setReserveBalance(reserveBalance);
     }
-
 
     public String transactionDate(String date) {
         String strDate = "";
@@ -772,111 +726,111 @@ public class MyApplication extends Application {
     }
 
     public PaymentsList getSelectedCard() {
-        return selectedCard;
+        return mCurrentUserData.getSelectedCard();
     }
 
     public void setSelectedCard(PaymentsList selectedCard) {
-        this.selectedCard = selectedCard;
+        mCurrentUserData.setSelectedCard(selectedCard);
     }
 
     public PaymentsList getPrevSelectedCard() {
-        return prevSelectedCard;
+        return mCurrentUserData.getPrevSelectedCard();
     }
 
     public void setPrevSelectedCard(PaymentsList selectedCard) {
-        this.prevSelectedCard = selectedCard;
+        mCurrentUserData.setPrevSelectedCard(selectedCard);
     }
 
     public String getStrStatesUrl() {
-        return strStatesUrl;
+        return mCurrentUserData.getStrStatesUrl();
     }
 
     public void setStrStatesUrl(String strStatesUrl) {
-        this.strStatesUrl = strStatesUrl;
+        mCurrentUserData.setStrStatesUrl(strStatesUrl);
     }
 
     public String getRsaPublicKey() {
-        return rsaPublicKey;
+        return mCurrentUserData.getRsaPublicKey();
     }
 
     public void setRsaPublicKey(String rsaPublicKey) {
-        this.rsaPublicKey = rsaPublicKey;
+        mCurrentUserData.setRsaPublicKey(rsaPublicKey);
     }
 
     public TransferFeeResponse getTransferFeeResponse() {
-        return transferFeeResponse;
+        return mCurrentUserData.getTransferFeeResponse();
     }
 
     public void setTransferFeeResponse(TransferFeeResponse transferFeeResponse) {
-        this.transferFeeResponse = transferFeeResponse;
+        mCurrentUserData.setTransferFeeResponse(transferFeeResponse);
     }
 
     public BrandsResponse getSelectedBrandResponse() {
-        return selectedBrandResponse;
+        return mCurrentUserData.getSelectedBrandResponse();
     }
 
     public void setSelectedBrandResponse(BrandsResponse selectedBrandResponse) {
-        this.selectedBrandResponse = selectedBrandResponse;
+        mCurrentUserData.setSelectedBrandResponse(selectedBrandResponse);
     }
 
     public WithdrawRequest getWithdrawRequest() {
-        return withdrawRequest;
+        return mCurrentUserData.getWithdrawRequest();
     }
 
     public void setWithdrawRequest(WithdrawRequest gcWithdrawRequest) {
-        this.withdrawRequest = gcWithdrawRequest;
+        mCurrentUserData.setWithdrawRequest(gcWithdrawRequest);
     }
 
     public BuyTokenRequest getBuyRequest() {
-        return buyRequest;
+        return mCurrentUserData.getBuyRequest();
     }
 
     public void setBuyRequest(BuyTokenRequest buyRequest) {
-        this.buyRequest = buyRequest;
+        mCurrentUserData.setBuyRequest(buyRequest);
     }
 
     public WithdrawResponse getWithdrawResponse() {
-        return withdrawResponse;
+        return mCurrentUserData.getWithdrawResponse();
     }
 
     public void setWithdrawResponse(WithdrawResponse withdrawResponse) {
-        this.withdrawResponse = withdrawResponse;
+        mCurrentUserData.setWithdrawResponse(withdrawResponse);
     }
 
     public Boolean getContactPermission() {
-        return isContactPermission;
+        return mCurrentUserData.getContactPermission();
     }
 
     public void setContactPermission(Boolean contactPermission) {
-        isContactPermission = contactPermission;
+        mCurrentUserData.setContactPermission(contactPermission);
     }
 
     public List<Contacts> getListContacts() {
-        return listContacts;
+        return mCurrentUserData.getListContacts();
     }
 
     public void setListContacts(List<Contacts> listContacts) {
-        this.listContacts = listContacts;
+        mCurrentUserData.setListContacts(listContacts);
     }
 
     public String getStrInvite() {
-        return strInvite;
+        return mCurrentUserData.getStrInvite();
     }
 
     public void setStrInvite(String strInvite) {
-        this.strInvite = strInvite;
+        mCurrentUserData.setStrInvite(strInvite);
     }
 
     public void initializeTransactionSearch() {
-        transactionListSearch = new TransactionListRequest();
+        mCurrentUserData.initializeTransactionSearch();
     }
 
     public TransactionListRequest getTransactionListSearch() {
-        return transactionListSearch;
+        return mCurrentUserData.getTransactionListSearch();
     }
 
     public void setTransactionListSearch(TransactionListRequest transactionListSearch) {
-        this.transactionListSearch = transactionListSearch;
+        mCurrentUserData.setTransactionListSearch(transactionListSearch);
     }
 
     public void callResolveFlow(Activity activity, String strSignOn, SignOnData signOnData) {
@@ -965,67 +919,67 @@ public class MyApplication extends Application {
     }
 
     public TransferPayRequest getTransferPayRequest() {
-        return transferPayRequest;
+        return mCurrentUserData.getTransferPayRequest();
     }
 
     public void setTransferPayRequest(TransferPayRequest transferPayRequest) {
-        this.transferPayRequest = transferPayRequest;
+        mCurrentUserData.setTransferPayRequest(transferPayRequest);
     }
 
     public Double getWithdrawAmount() {
-        return withdrawAmount;
+        return mCurrentUserData.getWithdrawAmount();
     }
 
     public void setWithdrawAmount(Double withdrawAmount) {
-        this.withdrawAmount = withdrawAmount;
+        mCurrentUserData.setWithdrawAmount(withdrawAmount);
     }
 
     public PayRequestResponse getPayRequestResponse() {
-        return payRequestResponse;
+        return mCurrentUserData.getPayRequestResponse();
     }
 
     public void setPayRequestResponse(PayRequestResponse payRequestResponse) {
-        this.payRequestResponse = payRequestResponse;
+        mCurrentUserData.setPayRequestResponse(payRequestResponse);
     }
 
     public String getStrScreen() {
-        return strScreen;
+        return mCurrentUserData.getStrScreen();
     }
 
     public void setStrScreen(String strScreen) {
-        this.strScreen = strScreen;
+        mCurrentUserData.setStrScreen(strScreen);
     }
 
     public Boolean getCardSave() {
-        return isCardSave;
+        return mCurrentUserData.getCardSave();
     }
 
     public void setCardSave(Boolean cardSave) {
-        isCardSave = cardSave;
+        mCurrentUserData.setCardSave(cardSave);
     }
 
     public int getAccountType() {
-        return accountType;
+        return mCurrentUserData.getAccountType();
     }
 
     public Boolean getSignet() {
-        return isSignet;
+        return mCurrentUserData.getSignet();
     }
 
     public void setSignet(Boolean signet) {
-        isSignet = signet;
+        mCurrentUserData.setSignet(signet);
     }
 
     public void setAccountType(int accountType) {
-        this.accountType = accountType;
+        mCurrentUserData.setAccountType(accountType);
     }
 
     public WalletResponseData getWalletResponseData() {
-        return walletResponseData;
+        return mCurrentUserData.getWalletResponseData();
     }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
-        this.walletResponseData = walletResponseData;
+        mCurrentUserData.setWalletResponseData(walletResponseData);
     }
 
     public Bitmap convertImageURIToBitMap(String encodedString) {
@@ -1089,83 +1043,83 @@ public class MyApplication extends Application {
     }
 
     public BusinessTrackerResponse getBusinessTrackerResponse() {
-        return businessTrackerResponse;
+        return mCurrentUserData.getBusinessTrackerResponse();
     }
 
     public void setBusinessTrackerResponse(BusinessTrackerResponse businessTrackerResponse) {
-        this.businessTrackerResponse = businessTrackerResponse;
+        mCurrentUserData.setBusinessTrackerResponse(businessTrackerResponse);
     }
 
     public BusinessTypeResp getBusinessTypeResp() {
-        return businessTypeResp;
+        return mCurrentUserData.getBusinessTypeResp();
     }
 
     public void setBusinessTypeResp(BusinessTypeResp businessTypeResp) {
-        this.businessTypeResp = businessTypeResp;
+        mCurrentUserData.setBusinessTypeResp(businessTypeResp);
     }
 
     public CompanyInfoResp getCompanyInfoResp() {
-        return companyInfoResp;
+        return mCurrentUserData.getCompanyInfoResp();
     }
 
     public void setCompanyInfoResp(CompanyInfoResp companyInfoResp) {
-        this.companyInfoResp = companyInfoResp;
+        mCurrentUserData.setCompanyInfoResp(companyInfoResp);
     }
 
     public DBAInfoResp getDbaInfoResp() {
-        return dbaInfoResp;
+        return mCurrentUserData.getDbaInfoResp();
     }
 
     public void setDbaInfoResp(DBAInfoResp dbaInfoResp) {
-        this.dbaInfoResp = dbaInfoResp;
+        mCurrentUserData.setDbaInfoResp(dbaInfoResp);
     }
 
     public BOResp getBeneficialOwnersResponse() {
-        return beneficialOwnersResponse;
+        return mCurrentUserData.getBeneficialOwnersResponse();
     }
 
     public void setBeneficialOwnersResponse(BOResp beneficialOwnersResponse) {
-        this.beneficialOwnersResponse = beneficialOwnersResponse;
+        mCurrentUserData.setBeneficialOwnersResponse(beneficialOwnersResponse);
     }
 
     public String getStrMobileToken() {
-        return strMobileToken;
+        return mCurrentUserData.getStrMobileToken();
     }
 
     public void setStrMobileToken(String strMobileToken) {
-        this.strMobileToken = strMobileToken;
+        mCurrentUserData.setStrMobileToken(strMobileToken);
     }
 
     public BuyTokenResponse getBuyTokenResponse() {
-        return buyTokenResponse;
+        return mCurrentUserData.getBuyTokenResponse();
     }
 
     public void setBuyTokenResponse(BuyTokenResponse buyTokenResponse) {
-        this.buyTokenResponse = buyTokenResponse;
+        mCurrentUserData.setBuyTokenResponse(buyTokenResponse);
     }
 
     public HashMap<String, RegisteredUsersRequest> getObjPhContacts() {
-        return objPhContacts;
+        return mCurrentUserData.getObjPhContacts();
     }
 
     public void setObjPhContacts(HashMap<String, RegisteredUsersRequest> objPhContacts) {
-        this.objPhContacts = objPhContacts;
+        mCurrentUserData.setObjPhContacts(objPhContacts);
     }
 
     public ApplicationSubmitResponseModel getSubmitResponseModel() {
-        return submitResponseModel;
+        return mCurrentUserData.getSubmitResponseModel();
     }
 
     public void setSubmitResponseModel(ApplicationSubmitResponseModel submitResponseModel) {
-        this.submitResponseModel = submitResponseModel;
+        mCurrentUserData.setSubmitResponseModel(submitResponseModel);
     }
 
     public String getStrRegisToken() {
-        return strRegisToken;
+        return mCurrentUserData.getStrRegisToken();
     }
 
     public void setStrRegisToken(String strRegisToken) {
-        this.strRegisToken = strRegisToken;
+        mCurrentUserData.setStrRegisToken(strRegisToken);
     }
 
     public Date getDate(String date) {
@@ -1270,11 +1224,11 @@ public class MyApplication extends Application {
     }
 
     public String getSelectedButTokenType() {
-        return selectedButTokenType;
+        return mCurrentUserData.getSelectedButTokenType();
     }
 
     public void setSelectedButTokenType(String selectedButTokenType) {
-        this.selectedButTokenType = selectedButTokenType;
+        mCurrentUserData.setSelectedButTokenType(selectedButTokenType);
     }
 
 }
