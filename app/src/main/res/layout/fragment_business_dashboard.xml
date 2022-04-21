@@ -147,6 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_11sdp"
+                        android:layout_marginBottom="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:visibility="visible"
                         app:cardCornerRadius="@dimen/_10sdp">
@@ -162,9 +163,8 @@
                                 android:id="@+id/tv_officially_verified"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginStart="@dimen/_21sdp"
                                 android:layout_marginTop="@dimen/_15sdp"
-                                android:gravity="center_horizontal"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/business_officially_verified"
                                 android:textColor="@color/primary_black"
@@ -296,7 +296,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         app:cardCornerRadius="@dimen/_10sdp">
 
@@ -342,9 +341,10 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_6sdp"
+                                    android:layout_marginStart="@dimen/_4sdp"
                                     android:layout_marginBottom="@dimen/_6sdp"
-                                    android:fontFamily="@font/opensans_bold"
+                                    android:paddingBottom="@dimen/_3sdp"
+                                    android:fontFamily="@font/opensans_semibold"
                                     android:text="@string/currency"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_10ssp" />
@@ -465,7 +465,7 @@
                                         android:fontFamily="@font/opensans_semibold"
                                         android:text="@string/grossamount"
                                         android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_10ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -564,7 +564,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_2sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -602,7 +602,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -649,7 +649,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -688,7 +688,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -735,7 +735,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -774,7 +774,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
+                                            android:layout_marginStart="@dimen/_3sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -789,30 +789,17 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
-                                android:fontFamily="@font/opensans_semibold"
+                                android:fontFamily="@font/opensans_regular"
                                 android:text="@string/sales_orders"
                                 android:textColor="@color/dark_grey"
+                                android:layout_marginBottom="@dimen/_23sdp"
                                 android:textSize="@dimen/_11ssp" />
 
-                            <SeekBar
-                                android:layout_width="@dimen/_140sdp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_35sdp"
-                                android:layout_marginTop="@dimen/_20sdp"
-                                android:layout_marginEnd="@dimen/_35sdp"
-                                android:max="5"
-                                android:progress="1"
-                                android:scaleX="2"
-                                android:scaleY="2" />
-
-                            <LinearLayout
+                            <com.greenbox.coyni.utils.SeekBarWithFloatingText
+                                android:id="@+id/sb_today_volume"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/_18sdp"
-                                android:orientation="horizontal">
-
-                            </LinearLayout>
+                                android:layout_gravity="center" />
 
                             <View
                                 android:layout_width="match_parent"
@@ -1006,8 +993,8 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
-                                            android:layout_marginTop="@dimen/_3sdp"
+                                            android:layout_marginStart="@dimen/_2sdp"
+                                            android:layout_marginTop="@dimen/_2sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"
@@ -1079,8 +1066,8 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_6sdp"
-                                            android:layout_marginTop="@dimen/_3sdp"
+                                            android:layout_marginStart="@dimen/_2sdp"
+                                            android:layout_marginTop="@dimen/_2sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text="@string/currency"
                                             android:textColor="@color/primary_black"

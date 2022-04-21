@@ -17,6 +17,7 @@ public class LoginData {
     private Boolean paymentAdded;
     private Boolean biometricEnabled;
     private StateList stateList;
+    private boolean isReserveEnabled;
     private int accountType;
     private int dbaOwnerId;
 
@@ -146,6 +147,14 @@ public class LoginData {
 
     public void setBiometricEnabled(Boolean biometricEnabled) {
         this.biometricEnabled = biometricEnabled;
+    }
+
+    public boolean isReserveEnabled() {
+        return isReserveEnabled;
+    }
+
+    public void setReserveEnabled(boolean reserveEnabled) {
+        isReserveEnabled = reserveEnabled;
     }
 
     public StateList getStateList() {

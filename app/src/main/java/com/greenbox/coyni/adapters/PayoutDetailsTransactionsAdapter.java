@@ -162,49 +162,27 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
     }
 
     private void setItemViewData(TransactionListPosted objData, PayoutDetailsTransactionsAdapter.ItemViewHolder holder) {
-        String strType = "";
-        String[] data = objData.getTxnTypeDn().replace("****", "-").split("-");
-        try {
-            if (data.length > 1) {
-                holder.txnTypeDnExtention.setVisibility(View.VISIBLE);
-//                holder.txnTypeDn.setText(data[0]);
-                holder.txnTypeDnExtention.setText("**" + data[1]);
-                holder.txnTypeDn.setVisibility(View.VISIBLE);
-            } else {
-                holder.txnTypeDn.setText(objData.getTxnTypeDn());
-                // holder.txnTypeDnExtention.setVisibility(View.GONE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         holder.createdDate.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
-
         //type transaction
-        if (objData.getTxnTypeDn().toLowerCase().contains("withdraw")) {
-            strType = "withdraw";
-        } else if (objData.getTxnTypeDn().toLowerCase().contains("pay") || objData.getTxnTypeDn().toLowerCase().contains("request")) {
-            if (objData.getTxnSubTypeDn().toLowerCase().contains("send") || objData.getTxnSubTypeDn().toLowerCase().contains("sent")) {
-                strType = "pay";
-            } else {
-                strType = "receive";
-            }
-        } else if (objData.getTxnTypeDn().toLowerCase().contains("buy")) {
-            strType = "buy";
-        } else {
-            strType = objData.getTxnTypeDn().toLowerCase();
-        }
-
-        if (strType.contains("pay") || strType.equals("withdraw")) {
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
-            holder.amount.setTextColor(Color.parseColor("#000000"));
-        } else if (strType.contains("buy") || strType.equals("receive")) {
-            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
+        if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
+            holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
+            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
-
-        } else {
-            holder.amount.setText(convertTwoDecimal(objData.getAmount()));
+        }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.Refund)){
+            holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getSenderName());
+            holder.amount.setText(" - " + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setTextColor(Color.parseColor("#000000"));
+        }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MerchantPayout)){
+            holder.txnTypeDn.setText(objData.getTxnTypeDn() + " to " + objData.getReceiveName());
+            holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setTextColor(Color.parseColor("#008a05"));
+        }else if(objData.getTxnTypeDn().equalsIgnoreCase(Utils.MonthlyServiceFee)){
+            holder.txnTypeDn.setText(objData.getTxnTypeDn());
+            holder.amount.setText(" - " + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setTextColor(Color.parseColor("#000000"));
         }
+        
         holder.txnStatus.setText(objData.getTxnStatusDn());
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:
