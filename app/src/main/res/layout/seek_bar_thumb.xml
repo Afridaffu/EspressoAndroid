@@ -6,20 +6,20 @@
     android:orientation="vertical">
 
     <View
-        android:layout_width="2dp"
-        android:layout_height="20dp"
+        android:layout_width="1dp"
+        android:layout_height="@dimen/_18sdp"
         android:layout_gravity="center_horizontal"
         android:background="@color/primary_color" />
 
-    <View
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/circle_with_inner_circle" />
+        android:src="@drawable/seek_bar_thumb" />
 
     <View
-        android:layout_width="2dp"
-        android:layout_height="20dp"
+        android:layout_width="1dp"
+        android:layout_height="@dimen/_18sdp"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/transparent" />
 

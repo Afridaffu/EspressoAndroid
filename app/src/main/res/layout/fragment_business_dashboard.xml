@@ -792,27 +792,14 @@
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/sales_orders"
                                 android:textColor="@color/dark_grey"
+                                android:layout_marginBottom="@dimen/_23sdp"
                                 android:textSize="@dimen/_11ssp" />
 
                             <com.greenbox.coyni.utils.SeekBarWithFloatingText
+                                android:id="@+id/sb_today_volume"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_35sdp"
-                                android:layout_marginTop="@dimen/_20sdp"
-                                android:layout_marginEnd="@dimen/_35sdp"
-                                android:max="5"
-                                android:progress="1"
-                                android:scaleX="2"
-                                android:scaleY="2" />
-
-                            <!--                            <LinearLayout-->
-                            <!--                                android:layout_width="match_parent"-->
-                            <!--                                android:layout_height="wrap_content"-->
-                            <!--                                android:layout_marginHorizontal="@dimen/_18sdp"-->
-                            <!--                                android:orientation="horizontal">-->
-
-                            <!--                            </LinearLayout>-->
+                                android:layout_gravity="center" />
 
                             <View
                                 android:layout_width="match_parent"

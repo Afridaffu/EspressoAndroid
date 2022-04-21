@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -38,6 +39,15 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         initView();
     }
+    
+    public void setEnabled(boolean enabled) {
+        seekBar.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return !enabled;
+            }
+        });
+    }
 
     public void setProgressWithText(int progress, String floating) {
         new Handler().postDelayed(new Runnable() {
@@ -58,6 +68,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         tvFloatingText = findViewById(R.id.tv_floating_text);
         seekBar = findViewById(R.id.seekbar);
         seekBar.setThumb(getThumb());
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -82,17 +93,19 @@ public class SeekBarWithFloatingText extends RelativeLayout {
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         int width = seekBar.getWidth();
         int calculatedWidth = (width / 24) * progress;
-        if (calculatedWidth + 20 < width) {
-            layoutParams.setMargins(calculatedWidth, 0, 0, 0);
-            tvFloatingText.setLayoutParams(layoutParams);
-        }
         String text = "";
         if (progress < 12) {
             text = progress + ".00 am";
+            calculatedWidth = calculatedWidth + 60;
         } else if (progress == 12) {
             text = progress + ".00 pm";
         } else {
+            calculatedWidth = calculatedWidth - 10;
             text = (progress - 12) + ".00 pm";
+        }
+        if (calculatedWidth < width) {
+            layoutParams.setMargins(calculatedWidth, 0, 0, 0);
+            tvFloatingText.setLayoutParams(layoutParams);
         }
         tvFloatingText.setText(text + " " + floatingText + "cyn");
     }
