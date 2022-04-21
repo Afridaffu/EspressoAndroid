@@ -166,10 +166,23 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvTeam"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+                    android:layout_height="match_parent"/>
             </ScrollView>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:id="@+id/no_team_member"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Team member not found"
+        android:textSize="@dimen/_11ssp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/opensans_regular"
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="gone"
+        android:textColor="@color/primary_black"/>
 
 
 </LinearLayout>

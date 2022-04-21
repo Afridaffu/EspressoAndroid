@@ -90,6 +90,11 @@ public class TransactionData implements Serializable {
     private String paidAmount;
     private String customerServicePhoneNo;
     private String customerServiceMail;
+    private String saleOrderPaidAmount;
+//    private String saleOrderReferenceId;
+//    private String saleOrderDateAndTime;
+
+
     private String achReferenceId;
 
 
@@ -232,6 +237,10 @@ public class TransactionData implements Serializable {
 
     public void setTotalPaidAmount(String totalPaidAmount) {
         this.totalPaidAmount = totalPaidAmount;
+    }
+
+    public String getSaleOrderPaidAmount() {
+        return saleOrderPaidAmount;
     }
 
     public String getGiftCardName() {
