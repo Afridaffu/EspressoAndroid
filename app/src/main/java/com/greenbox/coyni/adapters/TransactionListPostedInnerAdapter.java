@@ -70,7 +70,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             e.printStackTrace();
         }
 
-        holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
+        holder.walletBal.setText("Balance "+convertTwoDecimal(objData.getWalletBalance()));
 
         if (position == transactionListItemsposted.size() - 1) {
             holder.blankView.setVisibility(View.VISIBLE);

@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Transaction details not found"
+        android:text="Transaction details not found \nfor this Time"
         android:gravity="center"
         android:fontFamily="@font/opensans_regular"
         android:textColor="@color/light_gray"
