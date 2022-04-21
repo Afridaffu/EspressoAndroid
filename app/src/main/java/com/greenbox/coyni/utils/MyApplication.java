@@ -321,27 +321,6 @@ public class MyApplication extends Application {
         mCurrentUserData.setLoginUserId(logUserId);
     }
 
-    public void getStates() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("states.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<States>>() {
-            }.getType();
-            List<States> listStates = gson.fromJson(json, type);
-            setListStates(listStates);
-            Log.e("list states", listStates.size() + "");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
     public TrackerResponse getTrackerResponse() {
         return mCurrentUserData.getTrackerResponse();
     }
@@ -380,349 +359,6 @@ public class MyApplication extends Application {
 
     public void setReserveBalance(Double reserveBalance) {
         mCurrentUserData.setReserveBalance(reserveBalance);
-    }
-
-    public String transactionDate(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String compareTransactionDate(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String transactionTime(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("hh:mm aa");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String reserveDate(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String payoutDetailsDate(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-
-    public String convertZoneDateTime(String date, String format, String requiredFormat) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat(format);
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat(requiredFormat);
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String convertZoneDate(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMM dd, yyyy");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String exportDate(String date) {
-        if (date.length() == 22) {
-            date = date + "0";
-        }
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-
-                Log.e("getStrPreference", getStrPreference());
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneOffset.UTC);
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String convertZoneLatestTxn(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String convertZoneReservedOn(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String convertNewZoneDate(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
-    }
-
-    public String convertPayoutDateTimeZone(String date) throws ParseException {
-        String strDate = "";
-
-//        SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Date newDate = spf.parse(date);
-//        spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
-//        strDate = spf.format(newDate);
-
-        if (Build.VERSION.SDK_INT >= 26) {
-            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.S")
-                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                    .toFormatter()
-                    .withZone(ZoneOffset.UTC);
-            ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-            DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mma");
-            zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-            strDate = zonedTime.format(DATE_TIME_FORMATTER);
-        } else {
-            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-            spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-            Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
-            spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-            strDate = spf.format(newDate);
-        }
-        return strDate;
-    }
-
-    public String convertZoneDateLastYear(String date) {
-        String strDate = "";
-        try {
-            if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-                DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
-                zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-                strDate = zonedTime.format(DATE_TIME_FORMATTER);
-            } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                spf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date newDate = spf.parse(date);
-                spf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
-                spf.setTimeZone(TimeZone.getTimeZone(getStrPreference()));
-                strDate = spf.format(newDate);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strDate;
     }
 
     public PaymentsList getSelectedCard() {
@@ -833,215 +469,6 @@ public class MyApplication extends Application {
         mCurrentUserData.setTransactionListSearch(transactionListSearch);
     }
 
-    public void callResolveFlow(Activity activity, String strSignOn, SignOnData signOnData) {
-        try {
-            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                Intent i = new Intent(activity, WebViewActivity.class);
-                i.putExtra("signon", signOnData);
-                activity.startActivityForResult(i, 1);
-            } else {
-                Utils.displayAlert(strSignOn, activity, "", "");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public String convertNotificationTime(String date) {
-        String strDate = "";
-        String timeAgo = "";
-        try {
-            DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
-                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                    .toFormatter()
-                    .withZone(ZoneOffset.UTC);
-            ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
-            DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-            zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-            strDate = zonedTime.format(DATE_TIME_FORMATTER);
-
-            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            Date past = format.parse(strDate);
-
-            Date now = new Date();
-
-            SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzzz yyyy");
-            String nowString = formatter.format(now);
-
-            DateTimeFormatter dtfNow = new DateTimeFormatterBuilder().appendPattern("EEE MMM dd HH:mm:ss zzzz yyyy")
-                    .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                    .toFormatter()
-                    .withZone(ZoneOffset.UTC);
-            ZonedDateTime zonedTimeNow = ZonedDateTime.parse(nowString, dtfNow);
-            DateTimeFormatter DATE_TIME_FORMATTER_NOW = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-            zonedTime = zonedTimeNow.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
-            nowString = zonedTime.format(DATE_TIME_FORMATTER_NOW);
-
-            SimpleDateFormat formatNow = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            now = formatNow.parse(nowString);
-            Log.e("now", now + "");
-
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
-            long hours = TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
-            long days = TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
-            int weeks = (int) days / 7;
-            int months = (int) weeks / 4;
-            int years = (int) months / 4;
-
-            if (seconds < 60) {
-                timeAgo = seconds + "s ago";
-            } else if (minutes < 60) {
-//                System.out.println(minutes + " minutes ago");
-                timeAgo = minutes + "m ago";
-            } else if (hours < 24) {
-//                System.out.println(hours + " hours ago");
-                timeAgo = hours + "h ago";
-            } else if (days < 7) {
-//                System.out.println(days + " days ago");
-                timeAgo = days + "d ago";
-            } else if (weeks < 4) {
-                timeAgo = weeks + "w ago";
-//                System.out.println(days + " weeks ago");
-            } else if (months < 12) {
-                if (months > 1)
-                    timeAgo = months + "months ago";
-                else
-                    timeAgo = months + "month ago";
-//                System.out.println(days + " weeks ago");
-            } else {
-                timeAgo = years + "y ago";
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return timeAgo;
-    }
-
-    public TransferPayRequest getTransferPayRequest() {
-        return mCurrentUserData.getTransferPayRequest();
-    }
-
-    public void setTransferPayRequest(TransferPayRequest transferPayRequest) {
-        mCurrentUserData.setTransferPayRequest(transferPayRequest);
-    }
-
-    public Double getWithdrawAmount() {
-        return mCurrentUserData.getWithdrawAmount();
-    }
-
-    public void setWithdrawAmount(Double withdrawAmount) {
-        mCurrentUserData.setWithdrawAmount(withdrawAmount);
-    }
-
-    public PayRequestResponse getPayRequestResponse() {
-        return mCurrentUserData.getPayRequestResponse();
-    }
-
-    public void setPayRequestResponse(PayRequestResponse payRequestResponse) {
-        mCurrentUserData.setPayRequestResponse(payRequestResponse);
-    }
-
-    public String getStrScreen() {
-        return mCurrentUserData.getStrScreen();
-    }
-
-    public void setStrScreen(String strScreen) {
-        mCurrentUserData.setStrScreen(strScreen);
-    }
-
-    public Boolean getCardSave() {
-        return mCurrentUserData.getCardSave();
-    }
-
-    public void setCardSave(Boolean cardSave) {
-        mCurrentUserData.setCardSave(cardSave);
-    }
-
-    public int getAccountType() {
-        return mCurrentUserData.getAccountType();
-    }
-
-    public Boolean getSignet() {
-        return mCurrentUserData.getSignet();
-    }
-
-    public void setSignet(Boolean signet) {
-        mCurrentUserData.setSignet(signet);
-    }
-
-    public void setAccountType(int accountType) {
-        mCurrentUserData.setAccountType(accountType);
-    }
-
-    public WalletResponseData getWalletResponseData() {
-        return mCurrentUserData.getWalletResponseData();
-    }
-
-    public void setWalletResponseData(WalletResponseData walletResponseData) {
-        mCurrentUserData.setWalletResponseData(walletResponseData);
-    }
-
-    public Bitmap convertImageURIToBitMap(String encodedString) {
-        try {
-            Bitmap bitmap = MediaStore.Images.Media
-                    .getBitmap(getContentResolver(),
-                            Uri.parse(encodedString));
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-    public int monthsBetweenDates(Date startDate, Date endDate) {
-        int monthsBetween = 0;
-        try {
-            Calendar start = Calendar.getInstance();
-            start.setTime(startDate);
-
-            Calendar end = Calendar.getInstance();
-            end.setTime(endDate);
-
-            int dateDiff = end.get(Calendar.DAY_OF_MONTH) - start.get(Calendar.DAY_OF_MONTH);
-
-            if (dateDiff < 0) {
-                int borrrow = end.getActualMaximum(Calendar.DAY_OF_MONTH);
-                dateDiff = (end.get(Calendar.DAY_OF_MONTH) + borrrow) - start.get(Calendar.DAY_OF_MONTH);
-                monthsBetween--;
-
-                if (dateDiff > 0) {
-                    monthsBetween++;
-                }
-            } else {
-                monthsBetween++;
-            }
-            monthsBetween += end.get(Calendar.MONTH) - start.get(Calendar.MONTH);
-            monthsBetween += (end.get(Calendar.YEAR) - start.get(Calendar.YEAR)) * 12;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return monthsBetween;
-    }
-
-    public PaymentMethodsResponse filterPaymentMethods(PaymentMethodsResponse objResponse) {
-        PaymentMethodsResponse payMethodsResponse = objResponse;
-        List<PaymentsList> listData = new ArrayList<>();
-        try {
-            if (objResponse != null && objResponse.getData() != null && objResponse.getData().getData() != null && objResponse.getData().getData().size() > 0) {
-                for (int i = 0; i < objResponse.getData().getData().size(); i++) {
-                    if (!objResponse.getData().getData().get(i).getPaymentMethod().toLowerCase().equals("signet")) {
-                        listData.add(objResponse.getData().getData().get(i));
-                    }
-                }
-                payMethodsResponse.getData().setData(listData);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return payMethodsResponse;
-    }
-
     public BusinessTrackerResponse getBusinessTrackerResponse() {
         return mCurrentUserData.getBusinessTrackerResponse();
     }
@@ -1122,38 +549,106 @@ public class MyApplication extends Application {
         mCurrentUserData.setStrRegisToken(strRegisToken);
     }
 
-    public Date getDate(String date) {
-        Date dtExpiry = null;
-        try {
-            SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
-            dtExpiry = spf.parse(date);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return dtExpiry;
+    public String getSelectedButTokenType() {
+        return mCurrentUserData.getSelectedButTokenType();
     }
 
-    public PaymentMethodsResponse businessPaymentMethods(PaymentMethodsResponse objResponse) {
+    public void setSelectedButTokenType(String selectedButTokenType) {
+        mCurrentUserData.setSelectedButTokenType(selectedButTokenType);
+    }
+
+    public TransferPayRequest getTransferPayRequest() {
+        return mCurrentUserData.getTransferPayRequest();
+    }
+
+    public void setTransferPayRequest(TransferPayRequest transferPayRequest) {
+        mCurrentUserData.setTransferPayRequest(transferPayRequest);
+    }
+
+    public Double getWithdrawAmount() {
+        return mCurrentUserData.getWithdrawAmount();
+    }
+
+    public void setWithdrawAmount(Double withdrawAmount) {
+        mCurrentUserData.setWithdrawAmount(withdrawAmount);
+    }
+
+    public PayRequestResponse getPayRequestResponse() {
+        return mCurrentUserData.getPayRequestResponse();
+    }
+
+    public void setPayRequestResponse(PayRequestResponse payRequestResponse) {
+        mCurrentUserData.setPayRequestResponse(payRequestResponse);
+    }
+
+    public String getStrScreen() {
+        return mCurrentUserData.getStrScreen();
+    }
+
+    public void setStrScreen(String strScreen) {
+        mCurrentUserData.setStrScreen(strScreen);
+    }
+
+    public Boolean getCardSave() {
+        return mCurrentUserData.getCardSave();
+    }
+
+    public void setCardSave(Boolean cardSave) {
+        mCurrentUserData.setCardSave(cardSave);
+    }
+
+    public int getAccountType() {
+        return mCurrentUserData.getAccountType();
+    }
+
+    public Boolean getSignet() {
+        return mCurrentUserData.getSignet();
+    }
+
+    public void setSignet(Boolean signet) {
+        mCurrentUserData.setSignet(signet);
+    }
+
+    public void setAccountType(int accountType) {
+        mCurrentUserData.setAccountType(accountType);
+    }
+
+    public WalletResponseData getWalletResponseData() {
+        return mCurrentUserData.getWalletResponseData();
+    }
+
+    public void setWalletResponseData(WalletResponseData walletResponseData) {
+        mCurrentUserData.setWalletResponseData(walletResponseData);
+    }
+
+    public Boolean isDeviceID() {
+        Boolean value = false;
+        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+        value = prefs.getBoolean("isDevice", false);
+        if (value) {
+            Utils.setDeviceID(prefs.getString("deviceId", ""));
+        }
+        return value;
+    }
+
+    public void getStates() {
+        String json = null;
         try {
-            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                PaymentMethodsResponse objData = objResponse;
-                List<PaymentsList> listPayments = objData.getData().getData();
-                List<PaymentsList> listBusPayments = new ArrayList<>();
-                if (listPayments != null && listPayments.size() > 0) {
-                    for (int i = 0; i < listPayments.size(); i++) {
-//                        if (listPayments.get(i).getPaymentMethod() != null
-//                                && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank") || listPayments.get(i).getPaymentMethod().toLowerCase().equals("signet"))) {
-                        if (listPayments.get(i).getPaymentMethod() != null && (listPayments.get(i).getPaymentMethod().toLowerCase().equals("bank"))) {
-                            listBusPayments.add(listPayments.get(i));
-                        }
-                    }
-                }
-                objResponse.getData().setData(listBusPayments);
-            }
-        } catch (Exception ex) {
+            InputStream is = getAssets().open("states.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<States>>() {
+            }.getType();
+            List<States> listStates = gson.fromJson(json, type);
+            setListStates(listStates);
+            Log.e("list states", listStates.size() + "");
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return objResponse;
     }
 
     public void launchDashboard(Context context, String fromScreen) {
@@ -1187,48 +682,82 @@ public class MyApplication extends Application {
         }
     }
 
-    public Boolean isDeviceID() {
-        Boolean value = false;
-        SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
-        value = prefs.getBoolean("isDevice", false);
-        if (value) {
-            Utils.setDeviceID(prefs.getString("deviceId", ""));
-        }
-        return value;
+
+    /*
+     * Moving all these methods to Utils to decrease load on Application class
+     *
+     */
+
+    public Bitmap convertImageURIToBitMap(String encodedString) {
+        return Utils.convertImageURIToBitMap(getBaseContext(), encodedString);
+    }
+
+    public int monthsBetweenDates(Date startDate, Date endDate) {
+        return Utils.monthsBetweenDates(startDate, endDate);
+    }
+
+    public PaymentMethodsResponse filterPaymentMethods(PaymentMethodsResponse objResponse) {
+        return Utils.filterPaymentMethods(objResponse);
+    }
+
+    public Date getDate(String date) {
+        return Utils.getDate(date);
+    }
+
+    public PaymentMethodsResponse businessPaymentMethods(PaymentMethodsResponse objResponse) {
+        return Utils.businessPaymentMethods(getAccountType(), objResponse);
     }
 
     public String setNameHead(String strName) {
-        String strNameHead = "";
-        try {
-            if (strName.contains(" ")) {
-                if (!strName.split(" ")[0].equals("")) {
-                    if (strName.split(" ").length > 2) {
-                        if (!strName.split(" ")[1].equals("")) {
-                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
-                        } else {
-                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[2].substring(0, 1).toUpperCase();
-                        }
-                    } else {
-                        strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
-                    }
-                } else {
-                    strNameHead = strName.split(" ")[0].toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
-                }
-            } else {
-                strNameHead = strName.substring(0, 1).toUpperCase();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strNameHead;
+        return Utils.setNameHead(strName);
     }
 
-    public String getSelectedButTokenType() {
-        return mCurrentUserData.getSelectedButTokenType();
+    public String transactionDate(String date) {
+        return Utils.transactionDate(date, getStrPreference());
     }
 
-    public void setSelectedButTokenType(String selectedButTokenType) {
-        mCurrentUserData.setSelectedButTokenType(selectedButTokenType);
+    public String transactionTime(String date) {
+        return Utils.transactionTime(date, getStrPreference());
+    }
+
+    public String reserveDate(String date) {
+        return Utils.reserveDate(date, getStrPreference());
+    }
+
+    public String convertZoneDateTime(String date, String format, String requiredFormat) {
+        return Utils.convertZoneDateTime(date, format, requiredFormat, getStrPreference());
+    }
+
+    public String exportDate(String date) {
+        return Utils.exportDate(date, getStrPreference());
+    }
+
+    public String convertZoneLatestTxn(String date) {
+        return Utils.convertZoneLatestTxn(date, getStrPreference());
+    }
+
+    public String convertZoneReservedOn(String date) {
+        return Utils.convertZoneReservedOn(date, getStrPreference());
+    }
+
+    public String convertNewZoneDate(String date) {
+        return Utils.convertNewZoneDate(date, getStrPreference());
+    }
+
+    public String convertPayoutDateTimeZone(String date) throws ParseException {
+        return Utils.convertPayoutDateTimeZone(date, getStrPreference());
+    }
+
+    public String convertZoneDateLastYear(String date) {
+        return Utils.convertZoneDateLastYear(date, getStrPreference());
+    }
+
+    public void callResolveFlow(Activity activity, String strSignOn, SignOnData signOnData) {
+        Utils.callResolveFlow(activity, strSignOn, signOnData);
+    }
+
+    public String convertNotificationTime(String date) {
+        return Utils.convertNotificationTime(date, getStrPreference());
     }
 
 }
