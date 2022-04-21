@@ -347,6 +347,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                 try {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
+                        objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         enableDisableTabView();
                         if (mCurrentFragment != null) {
                             mCurrentFragment.updateData();

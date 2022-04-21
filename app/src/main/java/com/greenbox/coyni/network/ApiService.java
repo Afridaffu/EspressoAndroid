@@ -112,6 +112,7 @@ import com.greenbox.coyni.model.reguser.RegUsersResponse;
 import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
+import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailRequest;
 import com.greenbox.coyni.model.retrieveemail.RetrieveEmailResponse;
 import com.greenbox.coyni.model.retrieveemail.RetrieveUsersRequest;
@@ -577,6 +578,9 @@ public interface ApiService {
 
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getRollingListData(@Body RollingSearchRequest searchKey);
+
+    @GET("api/v2/reserve/user/rule")
+    Call<RollingRuleResponse> getRollingRuleDetails();
 
     @POST("api/v2/reserve/manual-release/all")
     Call<ManualListResponse> getManualListData(@Body EmptyRequest request);

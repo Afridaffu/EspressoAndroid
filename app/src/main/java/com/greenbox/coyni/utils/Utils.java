@@ -334,6 +334,8 @@ public class Utils {
     public static final String PAID = "paid";
     public static final String CLOSED = "closed";
     public static final String RELEASED = "released";
+    public static final String ONHOLD = "on hold";
+    public static final String CANCELED = "canceled";
 
     public static final int boTargetPercentage = 51;
 

@@ -23,6 +23,7 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
     private OnItemClickListener listener;
     List<BatchPayoutListItems> items;
     MyApplication myApplication;
+    private String date;
 
     public ReserveReleasesRollingAdapter(Context context, List<BatchPayoutListItems> items) {
         this.context = context;
@@ -73,20 +74,27 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
             }
         }
         if (objData.getCreatedAt() != null && !objData.getCreatedAt().equals("")){
+            date = objData.getCreatedAt();
+            if (date.contains(".")) {
+                date = date.substring(0, date.lastIndexOf("."));
+            }
+            date = myApplication.convertZoneDateTime(date, "yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy @ hh:mma");
             if(objData.getStatus().equalsIgnoreCase(String.valueOf(Utils.ROLLING_LIST_STATUS.RELEASED))){
-                holder.dateTime.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
+                holder.dateTime.setText(date);
 
             } else {
-                holder.dateTime.setText("Release: " + Utils.convertPayoutDate(objData.getCreatedAt()));
+                holder.dateTime.setText("Release: " + date);
             }
         }
 
-        holder.rlBase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(holder.getAdapterPosition(), null);
-            }
-        });
+        if (!objData.getStatus().equalsIgnoreCase(Utils.OPEN)) {
+            holder.rlBase.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(holder.getAdapterPosition(), items.get(holder.getAbsoluteAdapterPosition()));
+                }
+            });
+        }
     }
 
     @Override

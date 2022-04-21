@@ -23,6 +23,7 @@ import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
+import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
@@ -51,6 +52,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchPayoutIdDetailsResponse> batchPayoutIdDetailsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> rollingListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<RollingRuleResponse> rollingRuleResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
@@ -92,8 +94,12 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
         return rollingListResponseMutableLiveData;
     }
-    public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData(){
+    public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData() {
         return manualListResponseMutableLiveData;
+    }
+
+    public MutableLiveData<RollingRuleResponse> getRollingRuleResponseMutableLiveData() {
+        return rollingRuleResponseMutableLiveData;
     }
 
     public MutableLiveData<Fees> getFeesMutableLiveData() {
@@ -414,6 +420,37 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+    public void getRollingRuleDetails() {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<RollingRuleResponse> mCall = apiService.getRollingRuleDetails();
+        mCall.enqueue(new Callback<RollingRuleResponse>() {
+            @Override
+            public void onResponse(Call<RollingRuleResponse> call, Response<RollingRuleResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    RollingRuleResponse ruleResponse = response.body();
+                    rollingRuleResponseMutableLiveData.setValue(ruleResponse);
+                } else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<RollingRuleResponse>() {
+                    }.getType();
+                    RollingRuleResponse ruleResponse = null;
+                    try {
+                        ruleResponse = gson.fromJson(response.errorBody().string(), type);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    rollingRuleResponseMutableLiveData.setValue(ruleResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RollingRuleResponse> call, Throwable t) {
+                rollingRuleResponseMutableLiveData.setValue(null);
+            }
+        });
+    }
+
 
     public void getManualListData() {
         try {

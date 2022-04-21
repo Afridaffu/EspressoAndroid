@@ -58,6 +58,7 @@ import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -557,11 +558,16 @@ public class MyApplication extends Application {
         String strDate = "";
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
-                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+                formatter.withZone(ZoneOffset.UTC);
+                LocalDate localDate = LocalDate.parse(date, formatter);
+                ZonedDateTime zonedTime = localDate.atStartOfDay(ZoneId.systemDefault());
+
+//                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern(format)
+//                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+//                        .toFormatter()
+//                        .withZone(ZoneOffset.UTC);
+//                ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
                 DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(requiredFormat);
                 zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(getStrPreference(), ZoneId.SHORT_IDS));
                 strDate = zonedTime.format(DATE_TIME_FORMATTER);

@@ -37,6 +37,7 @@ import com.greenbox.coyni.model.reservemanual.ManualItem;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
+import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -65,6 +66,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     private boolean isRolling = true;
     private Long mLastClickTime = 0L;
     private static String rolling = "Rolling", applyFilter = "ApplyFilter", resetFilter = "ResetFilter";
+    private final String date = "date", batchID = "BatchId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,18 +292,18 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                             if (rollingListData.getData().getItems() != null) {
                                 rollingList = rollingListData.getData().getItems();
                                 reserveReleasesRollingAdapter = new ReserveReleasesRollingAdapter(ReserveReleasesActivity.this, rollingList);
+                                reserveRecyclerView.setLayoutManager(new LinearLayoutManager(ReserveReleasesActivity.this));
+                                reserveRecyclerView.setAdapter(reserveReleasesRollingAdapter);
                                 reserveReleasesRollingAdapter.setOnItemClickListener(new OnItemClickListener() {
                                     @Override
                                     public void onItemClick(int position, Object obj) {
-                                        startActivity(new Intent(getApplicationContext(), ReserveDetailsActivity.class));
+                                        showTransactionDetails((BatchPayoutListItems) obj);
                                     }
 
                                 });
                                 if (rollingList.size() > 0) {
                                     noTransactions.setVisibility(View.GONE);
                                     reserveRecyclerView.setVisibility(View.VISIBLE);
-                                    reserveRecyclerView.setAdapter(reserveReleasesRollingAdapter);
-                                    reserveRecyclerView.setLayoutManager(new LinearLayoutManager(ReserveReleasesActivity.this));
                                 } else {
                                     noTransactions.setVisibility(View.VISIBLE);
                                     reserveRecyclerView.setVisibility(View.GONE);
@@ -349,6 +351,20 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                     }
                 }
             });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showTransactionDetails(BatchPayoutListItems rollingList) {
+
+        try {
+            Intent idDetails = new Intent(ReserveReleasesActivity.this, ReserveDetailsActivity.class);
+            idDetails.putExtra(Utils.teamStatus, rollingList.getStatus());
+            idDetails.putExtra(Utils.amount, rollingList.getReserveAmount());
+            idDetails.putExtra(date, rollingList.getCreatedAt());
+            idDetails.putExtra(batchID, rollingList.getBatchId());
+            startActivity(idDetails);
         } catch (Exception e) {
             e.printStackTrace();
         }
