@@ -115,6 +115,7 @@ public class MyApplication extends Application {
     BOResp beneficialOwnersResponse;
     HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
     ApplicationSubmitResponseModel submitResponseModel;
+    boolean isReserveEnabled = false;
     Double merchantBalance = 0.0;
 
     public SignOnData getObjSignOnData() {
@@ -157,6 +158,14 @@ public class MyApplication extends Application {
 
     public void setDbaOwnerId(int dbaOwnerId) {
         this.dbaOwnerId = dbaOwnerId;
+    }
+
+    public boolean isReserveEnabled() {
+        return isReserveEnabled;
+    }
+
+    public void setIsReserveEnabled(boolean isReserveEnabled) {
+        this.isReserveEnabled = isReserveEnabled;
     }
 
     public LatestTxnResponse getListLatestTxn() {

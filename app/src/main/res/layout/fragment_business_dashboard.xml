@@ -147,6 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_11sdp"
+                        android:layout_marginBottom="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_11sdp"
                         android:visibility="visible"
                         app:cardCornerRadius="@dimen/_10sdp">
@@ -162,9 +163,8 @@
                                 android:id="@+id/tv_officially_verified"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginStart="@dimen/_21sdp"
                                 android:layout_marginTop="@dimen/_15sdp"
-                                android:gravity="center_horizontal"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/business_officially_verified"
                                 android:textColor="@color/primary_black"
@@ -296,7 +296,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         app:cardCornerRadius="@dimen/_10sdp">
 

@@ -110,7 +110,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     static String strToken = "";
     private DatabaseHandler dbHandler;
     private String batchId;
-    private boolean showReserve = true;
+    //private boolean showReserve = true;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -517,9 +517,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
-        cvReserveView.setVisibility(showReserve ? View.VISIBLE : View.GONE);
+        cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
         batchReq();
-        reserveReq();
+        if(myApplication.isReserveEnabled()) {
+            reserveReq();
+        }
         Double merchantBalance = getMerchantBalance();
         merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
         if (merchantBalance != null && merchantBalance == 0.00) {
@@ -709,7 +711,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void reserveReq() {
-        if (showReserve) {
+        if (myApplication.isReserveEnabled()) {
             businessDashboardViewModel.getReserveList();
         }
     }
@@ -820,16 +822,16 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showReserveRelease(ReserveListData listData) {
         showReserveReleaseBalance();
-        nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
-        //Date set here
-//        String date = items.get(i).getCreatedAt();
-//            if (date.contains(".")) {
-//                String res = date.substring(0, date.lastIndexOf("."));
-//                nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
-//            } else {
-//                Log.d("date format", date);
-//            }
         List<ReserveListItems> items = listData.getResponseList();
+        nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
+//        nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
+        String date = listData.getNextReserveReleaseDate();
+            if (date.contains(".")) {
+                String res = date.substring(0, date.lastIndexOf("."));
+                nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+            } else {
+                Log.d("date format", date);
+            }
         if (items != null && items.size() > 0) {
             lastReleaseDateTV.setVisibility(View.VISIBLE);
             nextReleaseNATV.setVisibility(View.GONE);
@@ -842,12 +844,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                 ReserveListItems latest = items.get(0);
                 String amount = latest.getTotalAmount();
                 lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
-                String date = latest.getCreatedAt();
-                if (date != null && !date.equals("")) {
-                    if (date.contains(".")) {
-                        date = date.substring(0, date.lastIndexOf("."));
+                String datee = latest.getCreatedAt();
+                if (datee != null && !datee.equals("")) {
+                    if (datee.contains(".")) {
+                        datee = datee.substring(0, datee.lastIndexOf("."));
                     }
-                    lastReleaseDateTV.setText(myApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+                    lastReleaseDateTV.setText(myApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
                 }
 
                 LinearLayout payoutsList = mCurrentView.findViewById(R.id.reserveReleaseListLL);
