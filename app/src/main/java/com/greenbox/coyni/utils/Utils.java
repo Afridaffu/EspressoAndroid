@@ -340,6 +340,11 @@ public class Utils {
     public static final String RELEASED = "released";
     public static String processType = "M";
 
+    public static final String SaleOrder = "Sale Order";
+    public static final String Refund = "Refund";
+    public static final String MerchantPayout = "Merchant Payout";
+    public static final String MonthlyServiceFee = "Monthly Service Fee";
+
 
     public static final int boTargetPercentage = 51;
 

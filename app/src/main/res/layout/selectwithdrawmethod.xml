@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottomradius"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/_22sdp">
+        android:paddingStart="@dimen/_22sdp">
 
         <LinearLayout
             android:id="@+id/lySelBack"
@@ -34,7 +34,7 @@
             android:layout_marginBottom="@dimen/_11sdp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="left"
-            android:text="Select Withdraw Method"
+            android:text="@string/select_withdraw_method"
             android:textColor="@color/black"
             android:textSize="@dimen/_16ssp" />
     </LinearLayout>
@@ -42,9 +42,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp"
@@ -54,9 +54,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/_10sdp"
+            android:paddingStart="@dimen/_10sdp"
             android:paddingTop="@dimen/_10sdp"
-            android:paddingRight="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
             android:paddingBottom="@dimen/_30sdp">
 
             <RelativeLayout
@@ -65,23 +65,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:gravity="center_vertical"
-                android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_11sdp"
-                android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingEnd="@dimen/_7sdp">
 
                 <ImageView
                     android:id="@+id/imgSBankIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
                     android:src="@drawable/ic_bank_account_active" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
                     android:layout_toRightOf="@+id/imgSBankIcon"
                     android:orientation="vertical">
 
@@ -89,7 +88,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="External Bank Account"
+                        android:text="@string/external_bank_account"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -97,10 +96,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Can be used for withdrawing funds from your coyni account"
+                        android:text="@string/can_be_used_for_withdrawing_funds_from_your_coyni_account"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_10ssp" />
 
                 </LinearLayout>
 
@@ -115,7 +115,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@color/viewcolor"></View>
 
             <RelativeLayout
@@ -123,24 +123,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_16sdp"
-                android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingEnd="@dimen/_7sdp">
 
                 <ImageView
                     android:id="@+id/imgSDCardLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
                     android:src="@drawable/ic_credit_debit_card" />
 
                 <LinearLayout
                     android:id="@+id/layoutDDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
                     android:layout_toRightOf="@+id/imgSDCardLogo"
                     android:orientation="vertical">
 
@@ -148,7 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Instant Pay"
+                        android:text="@string/instantpay"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -157,9 +155,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Use a Visa or Mastercard debit cards for instant coyni withdraws via Instant Pay"
+                        android:text="@string/use_a_visa_or_mastercard_debit_cards_for_instant_coyni_withdraws_via_instant_pay"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9sdp" />
+                        android:textSize="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"/>
 
                 </LinearLayout>
 
@@ -174,30 +173,28 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@color/viewcolor"></View>
 
             <RelativeLayout
                 android:id="@+id/lyGiftCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_15sdp"
-                android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp">
+                android:paddingEnd="@dimen/_7sdp">
 
                 <ImageView
                     android:id="@+id/imgGCardLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:src="@drawable/ic_gift_card" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_14sdp"
+                    android:layout_marginEnd="@dimen/_14sdp"
                     android:layout_toRightOf="@+id/imgGCardLogo"
                     android:orientation="vertical">
 
@@ -207,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text="Gift Card"
+                        android:text="@string/giftcard"
                         android:textColor="@color/primary_black"
                         android:textSize="@dimen/_12ssp" />
 
@@ -215,9 +212,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
-                        android:text="Purchase gift cards from over 100 popular stores, restaurants, and more"
+                        android:text="@string/purchase_gift_cards_from_over_100_popular_stores_restaurants_and_more"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9sdp" />
+                        android:textSize="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"/>
 
                 </LinearLayout>
 
@@ -226,24 +224,22 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
                     android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@color/viewcolor"></View>
 
             <RelativeLayout
                 android:id="@+id/lySignet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/_11sdp"
                 android:paddingTop="@dimen/_15sdp"
-                android:paddingRight="@dimen/_7sdp"
-                android:paddingBottom="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_7sdp"
                 android:visibility="gone">
 
                 <ImageView
@@ -251,14 +247,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:contentDescription="@string/signet_account"
                     android:src="@drawable/ic_signet_ac_logo" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_14sdp"
+                    android:layout_marginEnd="@dimen/_14sdp"
                     android:layout_toLeftOf="@+id/imgCCardArrow"
                     android:layout_toRightOf="@+id/imgSignetAcLogo"
                     android:orientation="vertical">
@@ -278,7 +274,8 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/signet_ac_withdrawing_funds"
                         android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_10ssp"
+                        android:layout_marginBottom="@dimen/_10sdp"/>
 
                 </LinearLayout>
 
@@ -288,7 +285,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
                     android:src="@drawable/ic_chevron_right" />
             </RelativeLayout>
 
@@ -296,7 +293,7 @@
                 android:id="@+id/viewSignet"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@color/viewcolor"
                 android:visibility="gone" />
 

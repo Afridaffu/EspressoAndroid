@@ -72,7 +72,46 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class MyApplication extends Application {
-
+    AgreementsPdf agreementsPdf;
+    RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
+    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strInvite = "", strScreen = "";
+    Profile myProfile = new Profile();
+    UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
+    UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
+    UserDetails userDetails;
+    List<States> listStates = new ArrayList<>();
+    LatestTxnResponse listLatestTxn;
+    //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
+    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
+    PaymentMethodsResponse paymentMethodsResponse;
+    //    WalletResponse walletResponse;
+    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
+    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType, dbaOwnerId = 0;
+    TransactionList transactionList;
+    PaymentsList selectedCard, prevSelectedCard;
+    TransferFeeResponse transferFeeResponse;
+    BrandsResponse selectedBrandResponse;
+    WithdrawRequest withdrawRequest;
+    WithdrawResponse withdrawResponse;
+    BuyTokenResponse buyTokenResponse;
+    PayRequestResponse payRequestResponse;
+    TransferPayRequest transferPayRequest;
+    PaidOrderRequest paidOrderRequest;
+    PaidOrderResp paidOrderResp;
+    List<Contacts> listContacts = new ArrayList<>();
+    TransactionListRequest transactionListSearch = new TransactionListRequest();
+    Double withdrawAmount;
+    BusinessTrackerResponse businessTrackerResponse;
+    WalletResponseData walletResponseData;
+    BusinessTypeResp businessTypeResp;
+    CompanyInfoResp companyInfoResp;
+    DBAInfoResp dbaInfoResp;
+    BuyTokenRequest buyRequest;
+    BOResp beneficialOwnersResponse;
+    HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
+    ApplicationSubmitResponseModel submitResponseModel;
+    boolean isReserveEnabled = false;
+    Double merchantBalance = 0.0;
     private UserData mCurrentUserData;
 
     @Override
@@ -119,6 +158,14 @@ public class MyApplication extends Application {
 
     public void setDbaOwnerId(int dbaOwnerId) {
         mCurrentUserData.setDbaOwnerId(dbaOwnerId);
+    }
+
+    public boolean isReserveEnabled() {
+        return isReserveEnabled;
+    }
+
+    public void setIsReserveEnabled(boolean isReserveEnabled) {
+        this.isReserveEnabled = isReserveEnabled;
     }
 
     public LatestTxnResponse getListLatestTxn() {

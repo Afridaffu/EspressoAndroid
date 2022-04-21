@@ -14,6 +14,7 @@ public class ReserveListData {
     @SerializedName("nextReserveReleaseAmount")
     @Expose
     private String nextReserveReleaseAmount;
+    private String nextReserveReleaseDate;
 
     public ArrayList<ReserveListItems> getResponseList() {
         return responseList;
@@ -21,6 +22,14 @@ public class ReserveListData {
 
     public void setResponseList(ArrayList<ReserveListItems> responseList) {
         this.responseList = responseList;
+    }
+
+    public String getNextReserveReleaseDate() {
+        return nextReserveReleaseDate;
+    }
+
+    public void setNextReserveReleaseDate(String nextReserveReleaseDate) {
+        this.nextReserveReleaseDate = nextReserveReleaseDate;
     }
 
     public String getNextReserveReleaseAmount() {
