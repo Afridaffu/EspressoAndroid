@@ -760,4 +760,8 @@ public class MyApplication extends Application {
         return Utils.convertNotificationTime(date, getStrPreference());
     }
 
+    public void clearUserData() {
+        walletResponseData = null;
+    }
+
 }
