@@ -1,10 +1,5 @@
 package com.greenbox.coyni.view.business;
 
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +11,6 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -25,7 +19,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
@@ -33,18 +31,14 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.RefundInsufficeintTokenDialog;
 import com.greenbox.coyni.dialogs.RefundInsufficientMerchnatDialog;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
-import com.greenbox.coyni.model.transaction.TransactionData;
-import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.RefundReferenceRequest;
+import com.greenbox.coyni.model.transaction.TransactionData;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
-import com.greenbox.coyni.view.PINActivity;
-import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 public class RefundTransactionActivity extends BaseActivity implements TextWatcher {
@@ -52,7 +46,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private ImageView refundBackIV;
     private TextView etremarksTV, fullamounttv, halfamounttv;
     private EditText refundET, addNoteET;
-    private TextView refundcurrencyTV,tvcynTV;
+    private TextView refundcurrencyTV, tvcynTV;
     private LinearLayout remarksll;
     private CardView fullamount, halfamount;
     private CustomKeyboard cKey;
@@ -62,16 +56,17 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private Dialog pDialog, cvvDialog, refundDialog, insuffDialog, insuffTokenDialog;
     private Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     private Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
-    boolean isamount = false, isremarks = false, isfullamount = false, ishalfamount = false, isrefundClick = false, isrefundClickable = false;
+    private boolean isamount = false, isremarks = false, isfullamount = false, ishalfamount = false, isrefundClick = false, isrefundClickable = false;
     public static RefundTransactionActivity refundTransactionActivity;
     private TransactionData transactionData;
     private String refundamount = "", etvalue = "", refundreason = "", gbxid = "", recipientAddress = "", strUserName = "", walletbalance = "";
     private int processingFee, wallettype;
     private boolean isRefundProcessCalled = false, insufficientTokenBalance = false, insufficientMerchantBalance = false;
-    private double value, value1;
+    private double value, value1, Value, etValue;
     private int enteramout, textamount;
     private static final String ACTION = "RefundPreviewDialog";
-    private static final  String ACTIONN = "insuffintmerchantbalancedialog ";
+    private static final String ACTIONN = "insuffintmerchantbalancedialog ";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -109,13 +104,34 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         objMyApplication = (MyApplication) getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
+        refundET.requestFocus();
+        refundET.setShowSoftInputOnFocus(false);
+        refundET.setSelected(false);
         refundET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.hideSoftKeyboard(RefundTransactionActivity.this);
+                Utils.hideSoftKeypad(RefundTransactionActivity.this, v);
             }
         });
+        refundET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Utils.hideSoftKeypad(RefundTransactionActivity.this, v);
+                if (!hasFocus) {
+                    if (!refundET.getText().toString().equals("")) {
+                        InputFilter[] FilterArray = new InputFilter[1];
+                        FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                        refundET.setFilters(FilterArray);
+                        USFormat(refundET);
+                    }
+                } else {
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
+                    refundET.setFilters(FilterArray);
+                }
+            }
+        });
+
 
         if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
             value = Double.parseDouble(Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
@@ -123,27 +139,17 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         }
 
-
         refundET.addTextChangedListener(this);
         if (getIntent().getStringExtra(Utils.amount) != null && !getIntent().getStringExtra(Utils.amount).equals("")) {
             refundET.setText(getIntent().getStringExtra(Utils.amount));
             USFormat(refundET);
-//            enteramout = Integer.parseInt(refundET.getText().toString());
-//            textamount = (int) value;
-//            if(enteramout < textamount){
-//                enableRefund();
-//            }else{
-////                refundET.setEnabled(false);
-//            }
             refundET.setEnabled(true);
         } else {
-//            enableButtons();
             cKey = (CustomKeyboard) findViewById(R.id.ckbrefund);
             InputConnection ic = refundET.onCreateInputConnection(new EditorInfo());
             cKey.setInputConnection(ic);
             cKey.setKeyAction("Refund", RefundTransactionActivity.this);
             cKey.setScreenName("refundables");
-//            cKey.enableButton();
         }
 
         remarksll.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +163,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             }
         });
 
-        fullamounttv.setOnClickListener(new View.OnClickListener() {
+        fullamount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -169,31 +175,38 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         fullamounttv.setTextColor(getResources().getColor(R.color.white));
                         halfamounttv.setTextColor(getResources().getColor(R.color.primary_green));
                         halfamount.setCardBackgroundColor(getResources().getColor(R.color.slidebtn_bg));
+                            isfullamount = true;
+                            ishalfamount = false;
                     } else {
-
+                        ishalfamount = false;
+                        isfullamount = false;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
-        halfamounttv.setOnClickListener(new View.OnClickListener() {
+
+        halfamount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
 
-                        double value = Double.parseDouble(Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
-                        value = value / 2;
-                        refundET.setText("" + value);
+                        Value = Double.parseDouble(Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
+                        Value = Value / 2;
+                        refundET.setText("" + Value);
                         halfamount.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                         halfamounttv.setTextColor(getResources().getColor(R.color.white));
                         fullamounttv.setTextColor(getResources().getColor(R.color.primary_green));
                         fullamount.setCardBackgroundColor(getResources().getColor(R.color.slidebtn_bg));
-
+                        ishalfamount = true;
+                        isfullamount = false;
                     } else {
-
+                        ishalfamount = false;
+                        isfullamount = false;
                     }
+
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -202,13 +215,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         });
     }
 
+
     private void refundAPI(RefundReferenceRequest refundrefrequest) {
-//        showProgressDialog();
         dashboardViewModel.refundDetails(refundrefrequest);
     }
 
     private void refundProcessAPI(RefundReferenceRequest refundrefrequest) {
-//        showProgressDialog();
         dashboardViewModel.refundprocessDetails(refundrefrequest);
     }
 
@@ -304,11 +316,11 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         }
 
                     } else {
-                            if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
-                            } else {
-                                Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
-                            }
+                        if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                        } else {
+                            Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
+                        }
 
                     }
                 }
@@ -324,9 +336,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         try {
             if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
                 recipientAddress = refundDataResponce.getData().getReferenceId();
-
             }
-
             if (refundDataResponce.getData().getWalletBalance() != null && !refundDataResponce.getData().getWalletBalance().equals("")) {
                 walletbalance = refundDataResponce.getData().getWalletBalance();
             }
@@ -340,9 +350,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
             if (!insufficientMerchantBalance && !insufficientTokenBalance) {
                 refundPreview();
-//                insufficientTokenBalancedialog();
             } else if (insufficientMerchantBalance && !insufficientTokenBalance) {
                 insufficientMerchantBalancedialog();
+
             } else {
                 insufficientTokenBalancedialog();
             }
@@ -355,14 +365,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         try {
             RefundInsufficientMerchnatDialog refundInsufficientMerchnatDialog = new RefundInsufficientMerchnatDialog(RefundTransactionActivity.this);
-
             refundInsufficientMerchnatDialog.show();
             refundInsufficientMerchnatDialog.setOnDialogClickListener(new OnDialogClickListener() {
                 @Override
                 public void onDialogClicked(String action, Object value) {
                     if (action.equalsIgnoreCase(ACTIONN)) {
-                        Intent i = new Intent(RefundTransactionActivity.this, BuyTokenPaymentMethodsActivity.class);
-                        i.putExtra("screen", "refund");
+                        Intent i = new Intent(RefundTransactionActivity.this, SelectPaymentMethodActivity.class);
+//                        i.putExtra("screen", "refund");
                         startActivity(i);
                     }
                 }
@@ -370,16 +379,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void insufficientMerchantBalancedialog() {
 
         try {
             RefundInsufficeintTokenDialog refunInsufficeintTokenDialog = new RefundInsufficeintTokenDialog(RefundTransactionActivity.this, objMyApplication.getGBTBalance());
-
             refunInsufficeintTokenDialog.show();
-
             refunInsufficeintTokenDialog.setOnDialogClickListener(new OnDialogClickListener() {
                 @Override
                 public void onDialogClicked(String action, Object value) {
@@ -498,32 +504,43 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     }
 
 
-//    private void changeTextSize(String editable) {
-//        try {
-//            InputFilter[] FilterArray = new InputFilter[1];
-//            if (editable.length() > 12) {
-//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
-//                refundcurrencyTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//            } else if (editable.length() > 8) {
-//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                refundcurrencyTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//            } else if (editable.length() > 5) {
-//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-//                refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-//                refundcurrencyTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//            } else {
-////                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
-////                refundET.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, fontSize));
-////                refundcurrencyTV.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, dollarFont));
-//            }
-//            refundET.setFilters(FilterArray);
-//            refundET.setSelection(refundET.getText().length());
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+    private void changeTextSize(String editable) {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+
+            if (editable.length() > 12) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28);
+                tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                refundET.setSelection(refundET.getText().length());
+
+
+            } else if (editable.length() > 8) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                refundET.setSelection(refundET.getText().length());
+
+
+            } else if (editable.length() > 5) {
+                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                refundET.setSelection(refundET.getText().length());
+                cKey.disableButton();
+
+                refundET.setSelection(refundET.getText().length());
+            } else {
+//                FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+//                refundET.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, fontSize));
+//                refundcurrencyTV.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, dollarFont));
+            }
+            refundET.setFilters(FilterArray);
+            refundET.setSelection(refundET.getText().length());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -531,6 +548,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 //            refundET.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, fontSize));
 //            refundcurrencyTV.setTextSize(Utils.pixelsToSp(RefundTransactionActivity.this, dollarFont));
         }
+
     }
 
     @Override
@@ -545,90 +563,63 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     public void afterTextChanged(Editable editable) {
         if (editable == refundET.getEditableText()) {
             try {
-                if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
-
+                if (editable.length() > 0 && !editable.toString().equals(".")
+                        && !editable.toString().equals(".00")) {
                     refundET.setHint("");
+                    refundET.setSelection(refundET.getText().length());
                     convertUSDValue();
                     if (editable.length() == 5 || editable.length() == 6) {
                         refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(15, 0, 0, 0);
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params1.setMargins(0, 0, 0, 12);
-                        tvcynTV.setLayoutParams(params1);
-                        enableRefund();
+                        cKey.disableButton();
+                        refundET.setSelection(refundET.getText().length());
 
                     } else if (editable.length() == 7 || editable.length() == 8) {
                         refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(15, 0, 0, 0);
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params1.setMargins(0, 0, 0, 12);
-                        tvcynTV.setLayoutParams(params1);
-                        enableRefund();
+                        cKey.disableButton();
+                        refundET.setSelection(refundET.getText().length());
 
                     } else if (editable.length() >= 9) {
                         refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(15, 0, 0, 0);
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params1.setMargins(0, 0, 0, 12);
-                        tvcynTV.setLayoutParams(params1);
-                        enableRefund();
-
+                        cKey.disableButton();
+                        refundET.setSelection(refundET.getText().length());
                     } else if (editable.length() <= 4) {
                         refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(15, 0, 0, 0);
-//                        imgConvert.setLayoutParams(params);
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params1.setMargins(0, 0, 0, 12);
-                        tvcynTV.setLayoutParams(params1);
-                        enableRefund();
+                        cKey.disableButton();
+                        refundET.setSelection(refundET.getText().length());
                     }
-//                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
-//                        enableRefund();
-//                    } else {
-//                        disableButtons(true);
-//                    }
-//                    refundET.setSelection(refundET.getText().length());
                 } else if (editable.toString().equals(".")) {
                     refundET.setText("");
-//                    disableButtons(true);
                 } else if (editable.length() == 0) {
                     refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65);
                     refundET.setHint("0.00");
                     tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(0, 0, 0, 20);
-                    refundET.setLayoutParams(lp);
-                    cynValue = 0.0;
-                    usdValue = 0.0;
-                    cynValidation = 0.0;
                     refundcurrencyTV.setVisibility(View.VISIBLE);
                     cKey.disableButton();
-//                    enableRefund();
-//                    disableButtons(true);
                     cKey.clearData();
                 } else {
                     refundET.setText("");
                     LogUtils.d(TAG, "lengthhh zeroo");
                     refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 70);
-                    LinearLayout.LayoutParams lpImageConvert = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//                    lpImageConvert.setMargins(15, 13, 0, 0);
-//                    imgConvert.setLayoutParams(lpImageConvert);
-                    cynValue = 0.0;
-                    usdValue = 0.0;
-                    cynValidation = 0.0;
-//                    disableButtons(true);
                     cKey.disableButton();
                     cKey.clearData();
                 }
                 enableRefund();
+                if (ishalfamount || isfullamount) {
+                    fullamount.setCardBackgroundColor(getResources().getColor(R.color.slidebtn_bg));
+                    fullamounttv.setTextColor(getResources().getColor(R.color.primary_green));
+                    halfamount.setCardBackgroundColor(getResources().getColor(R.color.slidebtn_bg));
+                    halfamounttv.setTextColor(getResources().getColor(R.color.primary_green));
+
+                    isfullamount = false;
+                    ishalfamount = false;
+                    String str = editable.toString();
+//                    refundET.setText(str.substring(str.length() - 1));
+
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -636,9 +627,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     }
 
     private void enableRefund() {
-        double etValue = Double.parseDouble(Utils.convertTwoDecimal(refundET.getText().toString()));
+        etValue = Double.parseDouble(Utils.convertBigDecimal(refundET.getText().toString()));
 
-        if (etValue > value) {
+        if (etValue > value && etValue >= value1) {
             cKey.disableButton();
             isrefundClickable = false;
         } else if (etValue > 0 && etValue <= value && !etremarksTV.getText().toString().equals("")) {
@@ -685,14 +676,15 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private String USFormat(EditText etAmount) {
         String strAmount = "", strReturn = "";
         try {
-            strAmount = Utils.convertBigDecimalUSDC(etAmount.getText().toString().trim().replace(",", ""));
+            strAmount = Utils.convertTwoDecimal(etAmount.getText().toString().trim().replace(",", ""));
             etAmount.removeTextChangedListener(RefundTransactionActivity.this);
             etAmount.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
             etAmount.addTextChangedListener(RefundTransactionActivity.this);
             etAmount.setSelection(etAmount.getText().toString().length());
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
-//            changeTextSize(strReturn);
+            changeTextSize(strReturn);
             setDefaultLength();
+//            refundET.clearFocus();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -745,7 +737,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() >= 1) {
                         addNoteTIL.setCounterEnabled(true);
-                    }else {
+                    } else {
                         cKey.disableButton();
                         addNoteTIL.setCounterEnabled(false);
                     }
