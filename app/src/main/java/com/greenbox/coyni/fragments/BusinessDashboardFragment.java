@@ -45,6 +45,7 @@ import com.greenbox.coyni.model.DashboardReserveList.ReserveListData;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListItems;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.DialogAttributes;
+import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
@@ -65,7 +66,9 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -111,6 +114,14 @@ public class BusinessDashboardFragment extends BaseFragment {
     private DatabaseHandler dbHandler;
     private String batchId;
     private boolean showReserve = true;
+
+    //Processing Volume Types
+    private static final String todayValue = "Today";
+    private static final String yesterdayValue = "Yesterday";
+    private static final String monthDate = "Month to Date";
+    private static final String lastMonthDate = "Last Month";
+    private static final String customDate = "Custom Date Range";
+    private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -667,7 +678,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         processingVolumeDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                mTvProcessingVolume.setText(action);
+                if (action != null){
+                    mTvProcessingVolume.setText(action);
+                }
+
             }
         });
         processingVolumeDialog.show();
