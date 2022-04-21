@@ -47,6 +47,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.GetHelpWebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:exported="false" />
+        <activity
             android:name=".view.business.RefundTransactionSuccessActivity"
             android:exported="false"
             android:screenOrientation="portrait"

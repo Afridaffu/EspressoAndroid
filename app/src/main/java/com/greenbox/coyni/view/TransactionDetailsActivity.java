@@ -1,14 +1,23 @@
 package com.greenbox.coyni.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -17,12 +26,15 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.transaction.TransactionData;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+
+import org.w3c.dom.Text;
 
 public class TransactionDetailsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
@@ -247,7 +259,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         break;
                     case refund: {
                         ControlMethod(REFUND_RECEIVED);
-                        refundReceived(transactionDetails.getData());
+                        paidOrderToken(transactionDetails.getData());
                     }
                     break;
                     case reserve_release: {
@@ -257,13 +269,19 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     break;
 
                 }
+            } else {
+                try {
+                    findViewById(R.id.transaction_not_found).setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, cancelBuyTokenResponse -> {
             try {
                 progressDialog.dismiss();
-                if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase("Success")) {
+                if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                     Utils.showCustomToast(TransactionDetailsActivity.this, "Transaction cancelled successfully.", R.drawable.ic_custom_tick, "");
                     //progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
                     dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
@@ -275,6 +293,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void refundReceived(TransactionData data) {
+
     }
 
     private void reserveRelease(TransactionData reserveData) {
@@ -393,8 +412,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void paidOrderToken(TransactionData paidOrderData) {
-        TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone;
+        TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
         LinearLayout mReferenceCopy, mMerchantAccountCopy;
+        TextView mAmountPaid, mDateAndTime, mPaidReferenceID;
 
         mTransactionType = findViewById(R.id.transaction_types);
         mPaidAmount = findViewById(R.id.paid_amount);
@@ -408,6 +428,11 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         mCustomerServicePhone = findViewById(R.id.customer_service_phone);
         mReferenceCopy = findViewById(R.id.copy_ref_ll);
         mMerchantAccountCopy = findViewById(R.id.copy_merchant_id);
+        mDescription = findViewById(R.id.description);
+
+        mAmountPaid = findViewById(R.id.amount_paid);
+        mDateAndTime = findViewById(R.id.date_and_time);
+        mPaidReferenceID = findViewById(R.id.reference_id);
 
 
         if (paidOrderData.getTransactionType() != null && paidOrderData.getTransactionSubtype() != null) {
@@ -416,6 +441,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
         if (paidOrderData.getPaidAmount() != null) {
             mPaidAmount.setText(Utils.convertTwoDecimal(paidOrderData.getPaidAmount().replace("CYN", "").trim()));
+            findViewById(R.id.card_view_refund).setVisibility(View.GONE);
+            findViewById(R.id.original_transaction).setVisibility(View.GONE);
+            findViewById(R.id.description).setVisibility(View.VISIBLE);
+        }
+
+        if (paidOrderData.getRefundAmount() != null) {
+            mPaidAmount.setText(Utils.convertTwoDecimal(paidOrderData.getRefundAmount().replace("CYN", "").trim()));
+            findViewById(R.id.card_view_refund).setVisibility(View.VISIBLE);
+            findViewById(R.id.original_transaction).setVisibility(View.VISIBLE);
+            findViewById(R.id.description).setVisibility(View.GONE);
         }
 
         if (paidOrderData.getStatus() != null) {
@@ -481,8 +516,51 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         }
         if (paidOrderData.getCustomerServicePhoneNo() != null) {
-            mCustomerServicePhone.setText(paidOrderData.getCustomerServicePhoneNo());
+            String phone_number = "(" + paidOrderData.getCustomerServicePhoneNo().substring(0, 3) + ")" + " " + paidOrderData.getCustomerServicePhoneNo().substring(3, 6) + "-" + paidOrderData.getCustomerServicePhoneNo().substring(6, 10);
+            mCustomerServicePhone.setText(phone_number);
         }
+
+        String mVar = getString(R.string.description);
+        SpannableString spannableString = new SpannableString(mVar);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                try {
+                    startActivity(new Intent(TransactionDetailsActivity.this, GetHelpWebViewActivity.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+                ds.setColor(getColor(R.color.primary_color));
+            }
+        };
+
+        spannableString.setSpan(clickableSpan, mVar.length() - 8, mVar.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mDescription.setText(spannableString);
+        mDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        mDescription.setHighlightColor(Color.TRANSPARENT);
+
+        if (paidOrderData.getSaleOrderPaidAmount() != null) {
+            mAmountPaid.setText(Utils.convertTwoDecimal(paidOrderData.getSaleOrderPaidAmount().replace("CYN", "").trim()) + " CYN");
+        }
+        if (paidOrderData.getSaleOrderDateAndTime() != null) {
+            mDateAndTime.setText(objMyApplication.convertZoneReservedOn(paidOrderData.getSaleOrderDateAndTime()));
+        }
+
+        if (paidOrderData.getSaleOrderReferenceId() != null) {
+            if (paidOrderData.getSaleOrderReferenceId().length() > 10) {
+                String refId = paidOrderData.getSaleOrderReferenceId().substring(0, 10) + "...";
+                mPaidReferenceID.setText(Html.fromHtml("<u>" + refId + "</u>"));
+            } else
+                mPaidReferenceID.setText(Html.fromHtml("<u>" + paidOrderData.getSaleOrderReferenceId() + "</u>"));
+        }
+
+
     }
 
     private void payRequest(TransactionData objData) {
@@ -1958,7 +2036,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
                 }
                 break;
-                case PAID_ORDER_TOKEN: {
+                case PAID_ORDER_TOKEN:
+                case REFUND_RECEIVED: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
