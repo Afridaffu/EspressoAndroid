@@ -250,16 +250,16 @@
 
             </androidx.cardview.widget.CardView>
 
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:layout_marginStart="@dimen/_22sdp"-->
-<!--                android:layout_marginTop="@dimen/_11sdp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:fontFamily="@font/opensans_bold"-->
-<!--                android:text="@string/payout_information"-->
-<!--                android:textColor="@color/primary_black"-->
-<!--                android:textSize="@dimen/_12ssp" />-->
+            <!--            <TextView-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:layout_marginStart="@dimen/_22sdp"-->
+            <!--                android:layout_marginTop="@dimen/_11sdp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:fontFamily="@font/opensans_bold"-->
+            <!--                android:text="@string/payout_information"-->
+            <!--                android:textColor="@color/primary_black"-->
+            <!--                android:textSize="@dimen/_12ssp" />-->
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -325,8 +325,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
                             android:layout_alignParentStart="true"
+                            android:fontFamily="@font/opensans_regular"
                             android:text="@string/dba_name_text"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -354,8 +354,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/opensans_regular"
                             android:layout_alignParentStart="true"
+                            android:fontFamily="@font/opensans_regular"
                             android:text="@string/customer_service_email"
                             android:textColor="@color/dark_grey"
                             android:textSize="@dimen/_11ssp" />
@@ -390,15 +390,15 @@
                             android:textSize="@dimen/_11ssp" />
 
 
-                            <TextView
-                                android:id="@+id/customer_service_phone"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:gravity="end"
-                                android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_11ssp" />
+                        <TextView
+                            android:id="@+id/customer_service_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
                     </RelativeLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -407,14 +407,140 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_21sdp"
-                android:layout_marginEnd="@dimen/_21sdp"
-                android:lineSpacingExtra="@dimen/_2sdp"
-                android:textSize="@dimen/_11ssp"
-                android:textColor="@color/dark_grey"
-                android:fontFamily="@font/opensans_regular"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
                 android:layout_marginBottom="@dimen/_30sdp"
-                android:text="@string/description"/>
+                android:fontFamily="@font/opensans_regular"
+                android:gravity="start"
+                android:visibility="gone"
+                android:lineSpacingExtra="@dimen/_2sdp"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/_10ssp" />
+
+            <TextView
+                android:id="@+id/original_transaction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Original Transaction Information"
+                android:textSize="@dimen/_12ssp"
+                android:visibility="gone"
+                android:textColor="@color/primary_black"
+                android:layout_marginStart="@dimen/_21sdp"
+                android:fontFamily="@font/opensans_bold"/>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_refund"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginRight="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@color/white"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_18sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_30sdp"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="Amount Paid"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <LinearLayout
+                            android:id="@+id/copy_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/amount_paid"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:gravity="end"
+                                android:textColor="@color/primary_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/date_amp_time"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/date_and_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:textColor="@color/primary_black"
+                            android:textSize="@dimen/_11ssp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/_11sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_11sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:fontFamily="@font/opensans_regular"
+                            android:text="@string/reference_id"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/_11ssp" />
+
+                        <TextView
+                            android:id="@+id/reference_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:fontFamily="@font/opensans_semibold"
+                            android:gravity="end"
+                            android:textColor="@color/primary_green"
+                            android:textSize="@dimen/_11ssp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </ScrollView>

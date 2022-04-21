@@ -56,10 +56,12 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                 lastName = objData.getLastName();
             }
             char first = firstName.charAt(0);
+            char last = lastName.charAt(0);
 //            char last = lastName.charAt(0);
-            String imageName = String.valueOf(first);
+
+            String imageName = first + String.valueOf(last);
             holder.txImageName.setText(imageName);
-            holder.txName.setText(firstName +" "+lastName);
+            holder.txName.setText(firstName + " " + lastName);
             if (objData.getRoleName() != null && !objData.getRoleName().equals("")) {
                 holder.txRole.setText(objData.getRoleName());
             }
@@ -72,10 +74,10 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.active)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
-                } else if(objData.getStatus().equalsIgnoreCase(Utils.canceled)){
+                } else if (objData.getStatus().equalsIgnoreCase(Utils.canceled)) {
                     holder.txStatus.setText(Utils.resendInvitation);
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
-                }else {
+                } else {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
                 }
