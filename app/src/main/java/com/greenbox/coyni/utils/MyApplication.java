@@ -1277,4 +1277,8 @@ public class MyApplication extends Application {
         this.selectedButTokenType = selectedButTokenType;
     }
 
+    public void clearUserData() {
+        walletResponseData = null;
+    }
+
 }
