@@ -162,22 +162,8 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
     }
 
     private void setItemViewData(TransactionListPosted objData, PayoutDetailsTransactionsAdapter.ItemViewHolder holder) {
-        String strType = "";
-        String[] data = objData.getTxnTypeDn().replace("****", "-").split("-");
-        try {
-            if (data.length > 1) {
-                holder.txnTypeDnExtention.setVisibility(View.VISIBLE);
-                holder.txnTypeDnExtention.setText("**" + data[1]);
-                holder.txnTypeDn.setVisibility(View.VISIBLE);
-            } else {
-                holder.txnTypeDn.setText(objData.getTxnTypeDn());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         holder.createdDate.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
-
         //type transaction
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
@@ -196,8 +182,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
             holder.amount.setText(" - " + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }
-
-
+        
         holder.txnStatus.setText(objData.getTxnStatusDn());
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:

@@ -163,19 +163,6 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
     }
 
     private void setItemViewData(TransactionListPosted objData, ItemViewHolder holder) {
-        String strType = "";
-        String[] data = objData.getTxnTypeDn().replace("****", "-").split("-");
-        try {
-            if (data.length > 1) {
-                holder.txnTypeDnExtention.setVisibility(View.VISIBLE);
-                holder.txnTypeDnExtention.setText("**" + data[1]);
-                holder.txnTypeDn.setVisibility(View.VISIBLE);
-            } else {
-                holder.txnTypeDn.setText(objData.getTxnTypeDn());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
@@ -195,8 +182,6 @@ public class MerchantTransactionListPostedNewAdapter extends BaseRecyclerViewAda
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }
 
-
-//        holder.amount.setText(convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
         holder.createdDate.setText(Utils.convertMerchantDate(objData.getCreatedAt()));
 
         holder.txnStatus.setText(objData.getTxnStatusDn());
