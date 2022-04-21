@@ -152,6 +152,7 @@
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
+                            android:id="@+id/tv_monthly_volume_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
@@ -163,6 +164,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_10sdp"
                                 android:layout_marginTop="@dimen/_15sdp"
+                                android:gravity="center_horizontal"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:text="@string/business_officially_verified"
                                 android:textColor="@color/primary_black"
@@ -199,10 +201,10 @@
                                             android:textSize="@dimen/_11ssp" />
 
                                         <TextView
+                                            android:id="@+id/tv_monthly_volume"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="$100,000.00"
                                             android:textColor="@color/primary_color"
                                             android:textSize="@dimen/_12ssp" />
 
@@ -223,10 +225,10 @@
                                             android:textSize="@dimen/_11ssp" />
 
                                         <TextView
+                                            android:id="@+id/tv_high_tickets"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="$1,000.00"
                                             android:textColor="@color/primary_color"
                                             android:textSize="@dimen/_12ssp" />
                                     </LinearLayout>
