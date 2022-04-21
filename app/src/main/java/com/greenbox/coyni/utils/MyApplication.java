@@ -761,7 +761,7 @@ public class MyApplication extends Application {
     }
 
     public void clearUserData() {
-        walletResponseData = null;
+        mCurrentUserData = new UserData();
     }
 
 }
