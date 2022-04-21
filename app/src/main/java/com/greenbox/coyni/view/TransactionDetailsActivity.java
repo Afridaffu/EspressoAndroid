@@ -516,7 +516,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         }
         if (paidOrderData.getCustomerServicePhoneNo() != null) {
-            String phone_number = "("+paidOrderData.getCustomerServicePhoneNo().substring(0,3)+")"+" "+paidOrderData.getCustomerServicePhoneNo().substring(3,6)+"-"+paidOrderData.getCustomerServicePhoneNo().substring(6,10);
+            String phone_number = "(" + paidOrderData.getCustomerServicePhoneNo().substring(0, 3) + ")" + " " + paidOrderData.getCustomerServicePhoneNo().substring(3, 6) + "-" + paidOrderData.getCustomerServicePhoneNo().substring(6, 10);
             mCustomerServicePhone.setText(phone_number);
         }
 
