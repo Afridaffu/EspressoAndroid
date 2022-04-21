@@ -10,13 +10,19 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
+import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
+import com.greenbox.coyni.model.BatchNow.BatchNowSlideRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
+import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
+import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
@@ -27,6 +33,7 @@ import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
+import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
@@ -51,22 +58,33 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchPayoutListResponse> batchPayoutListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutIdDetailsResponse> batchPayoutIdDetailsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> rollingListResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BatchPayoutListResponse> batchNowResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RollingRuleResponse> rollingRuleResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ReserveListResponse> reserveListResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BatchNowResponse> batchNowSlideResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<BusinessActivityResp> businessActivityRespMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public MutableLiveData<BusinessActivityResp> getBusinessActivityRespMutableLiveData() {
+        return businessActivityRespMutableLiveData;
     }
 
     public MutableLiveData<PaymentMethodsResponse> getPaymentMethodsResponseMutableLiveData() {
         return paymentMethodsResponseMutableLiveData;
     }
 
+    public MutableLiveData<ReserveListResponse> getReserveListResponseMutableLiveData(){
+        return reserveListResponseMutableLiveData;
+    }
+
     public MutableLiveData<SignetResponse> getSignetResponseMutableLiveData() {
         return signetResponseMutableLiveData;
     }
-
 
     public MutableLiveData<BusinessWalletResponse> getBusinessWalletResponseMutableLiveData() {
         return businessWalletResponseMutableLiveData;
@@ -91,6 +109,15 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData() {
         return batchPayoutIdDetailsResponseMutableLiveData;
     }
+
+    public MutableLiveData<BatchPayoutListResponse> getBatchNowResponseMutableLiveData() {
+        return batchNowResponseMutableLiveData;
+    }
+
+    public MutableLiveData<BatchPayoutListResponse> getBatchNowSlideResponseMutableLiveData() {
+        return batchNowResponseMutableLiveData;
+    }
+
     public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
         return rollingListResponseMutableLiveData;
     }
@@ -386,6 +413,41 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
+    public void getBatchNowData(BatchNowRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BatchPayoutListResponse> call = apiService.getPayoutListData(request);
+            call.enqueue(new Callback<BatchPayoutListResponse>() {
+                @Override
+                public void onResponse(Call<BatchPayoutListResponse> call, Response<BatchPayoutListResponse> response) {
+                    if (response.isSuccessful()) {
+                        BatchPayoutListResponse list = response.body();
+                        batchNowResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BatchPayoutListResponse>() {
+                        }.getType();
+                        BatchPayoutListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        batchNowResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BatchPayoutListResponse> call, Throwable t) {
+                    batchNowResponseMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getRollingListData(RollingSearchRequest searchKeyReq) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -486,6 +548,41 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+    public void getReserveList(){
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ReserveListResponse> call = apiService.getReserveListItems();
+            call.enqueue(new Callback<ReserveListResponse>() {
+                @Override
+                public void onResponse(Call<ReserveListResponse> call, Response<ReserveListResponse> response) {
+                    if (response.isSuccessful()) {
+                        ReserveListResponse list = response.body();
+                        reserveListResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ReserveListResponse>() {
+                        }.getType();
+                        ReserveListResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        reserveListResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ReserveListResponse> call, Throwable t) {
+                    reserveListResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getManualListData(SearchKeyRequest searchKey) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -519,6 +616,41 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void batchNowSlideData(String batchId) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<BatchNowResponse> call = apiService.getSlideBatchNow(batchId);
+        call.enqueue(new Callback<BatchNowResponse>() {
+            @Override
+            public void onResponse(Call<BatchNowResponse> call, Response<BatchNowResponse> response) {
+//                LogUtils.d("Modell","success"+response.isSuccessful());
+                if (response.isSuccessful()) {
+                    BatchNowResponse obj = response.body();
+                    batchNowSlideResponseMutableLiveData.setValue(obj);
+                    Log.e("Success", new Gson().toJson(obj));
+
+                } else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<BatchNowResponse>() {
+                    }.getType();
+                    BatchNowResponse errorResponse = null;
+                    try {
+                        errorResponse = gson.fromJson(response.errorBody().string(), type);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    batchNowSlideResponseMutableLiveData.setValue(errorResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BatchNowResponse> call, Throwable t) {
+                LogUtils.d("Modell", "failuree" + t);
+                batchNowSlideResponseMutableLiveData.setValue(null);
+            }
+        });
+
     }
 
 //    public void getPayoutListData() {
@@ -638,6 +770,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                         if (response.isSuccessful()) {
                             BatchPayoutIdDetailsResponse list = response.body();
                             batchPayoutIdDetailsResponseMutableLiveData.setValue(list);
+//                            Log.e("Success", new Gson().toJson(list));
+
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<BatchPayoutListResponse>() {
@@ -664,6 +798,39 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void businessActivity(BusinessActivityRequest businessActivityRequest) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<BusinessActivityResp> call = apiService.businessActivity(businessActivityRequest);
+        call.enqueue(new Callback<BusinessActivityResp>() {
+            @Override
+            public void onResponse(Call<BusinessActivityResp> call, Response<BusinessActivityResp> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        BusinessActivityResp businessActivityResp = response.body();
+                        businessActivityRespMutableLiveData.setValue(businessActivityResp);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<BusinessActivityResp>() {
+                        }.getType();
+
+                        BusinessActivityResp errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        businessActivityRespMutableLiveData.setValue(errorResponse);
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    businessActivityRespMutableLiveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BusinessActivityResp> call, Throwable t) {
+                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                paymentMethodsResponseMutableLiveData.setValue(null);
+            }
+        });
     }
 
 

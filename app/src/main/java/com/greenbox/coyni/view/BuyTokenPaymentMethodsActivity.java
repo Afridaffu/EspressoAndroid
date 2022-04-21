@@ -105,6 +105,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 if (strCurrent.equals("externalBank")) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
+                } else if (strCurrent.equals("paymentMethods")) {
+
                 } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
                     super.onBackPressed();
                 } else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {

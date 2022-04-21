@@ -90,7 +90,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
     RelativeLayout lyPayMethod, lyMainLayout;
-    LinearLayout lyCDetails, lyBuyClose, lyBDetails,layoutETAmount;
+    LinearLayout lyCDetails, lyBuyClose, lyBDetails, layoutETAmount;
     DatabaseHandler dbHandler;
     EditText etAmount;
     CustomKeyboard ctKey;
@@ -103,7 +103,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
     ProgressDialog pDialog;
-    String strLimit = "", strType = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "", strToken = "";
+    String strLimit = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "", strToken = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0;
     SignOnData signOnData;
@@ -115,6 +115,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID, dsPermanentToken;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    public String strType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +170,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 
                     if (editable.length() == 5 || editable.length() == 6) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
-                        layoutETAmount.setPadding(0,35,0,0);
+                        layoutETAmount.setPadding(0, 35, 0, 0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -181,7 +182,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
-                        layoutETAmount.setPadding(0,50,0,0);
+                        layoutETAmount.setPadding(0, 50, 0, 0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 0, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -193,7 +194,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() >= 9) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
-                        layoutETAmount.setPadding(0,52,0,0);
+                        layoutETAmount.setPadding(0, 52, 0, 0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 6, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -203,7 +204,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         tvCurrency.setLayoutParams(params1);
                     } else if (editable.length() <= 4) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-                        layoutETAmount.setPadding(0,0,0,0);
+                        layoutETAmount.setPadding(0, 0, 0, 0);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         params.setMargins(15, 13, 0, 0);
                         imgConvert.setLayoutParams(params);
@@ -559,6 +560,14 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                             pfee = transferFeeResponse.getData().getFee();
                             dget = pay - pfee;
                             buyTokenPreview();
+                        }
+
+                        if (etAmount.getText().toString().trim().length() > 0) {
+                            if (validation()) {
+                                ctKey.enableButton();
+                            } else {
+                                ctKey.disableButton();
+                            }
                         }
                     }
                 } catch (Exception ex) {
@@ -944,7 +953,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void calculateFee(String strAmount) {
+    public void calculateFee(String strAmount) {
         try {
             TransferFeeRequest request = new TransferFeeRequest();
             request.setTokens(strAmount.trim().replace(",", ""));
@@ -1304,7 +1313,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             }
 
             String strMessage = "";
-            if (objData.getType().toLowerCase().contains("bank")) {
+            if (objMyApplication.getSelectedButTokenType().toLowerCase().contains("bank")) {
                 tvHeading.setText("Transaction Pending");
                 imgLogo.setImageResource(R.drawable.ic_hourglass_pending_icon);
                 strMessage = "We submitted your request, please allow a 3-5 business days for your coyni purchase to be reflected in your token account. Learn More";

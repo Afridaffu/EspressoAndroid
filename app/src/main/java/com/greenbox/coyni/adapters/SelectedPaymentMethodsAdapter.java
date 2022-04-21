@@ -188,6 +188,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        objMyApplication.setSelectedButTokenType(objData.getPaymentMethod().toLowerCase());
                         switch (strScreen) {
                             case "selectpay":
                                 objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
@@ -229,6 +230,7 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                 break;
                             case "buytoken":
                                 if (objData.getId() != objMyApplication.getSelectedCard().getId()) {
+                                    ((BuyTokenActivity) mContext).strType = objData.getPaymentMethod().toLowerCase();
                                     objMyApplication.setPrevSelectedCard(objMyApplication.getSelectedCard());
                                     objMyApplication.setSelectedCard(objData);
                                     notifyDataSetChanged();
@@ -245,6 +247,8 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                                             ((BuyTokenActivity) mContext).expiry();
                                         }
                                     }
+
+                                    ((BuyTokenActivity) mContext).calculateFee("10");
                                 }
                                 break;
                             case "withdraw":

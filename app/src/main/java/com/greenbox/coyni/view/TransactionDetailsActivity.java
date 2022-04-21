@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
@@ -7,9 +8,16 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -18,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.transaction.TransactionData;
@@ -33,6 +42,45 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     Integer txnSubType;
     ProgressDialog progressDialog;
     CardView cancelTxnCV;
+
+    // Control Method Types
+    private static final String PAY_REQUEST = "PayRequest";
+    private static final String BUY_TOKEN = "BuyTokenDebitAndCreditCard";
+    private static final String BUY_BANK = "BuyTokenBank";
+    private static final String BUY_SIGNET = "BuyTokenSignet";
+    private static final String WITH_GIFT = "WithdrawGiftCard";
+    private static final String WITH_Instant = "WithdrawInstantPay";
+    private static final String WITH_BANK = "WithdrawBankAccount";
+    private static final String WITH_SIGNET = "WithdrawSignet";
+    private static final String BUSINESS_PAYOUT = "businessPayout";
+    private static final String CANCELLED_WITH = "cancelledWithdrawBank";
+    private static final String FAILED_WITH = "failedWithdrawBank";
+    private static final String PAID_ORDER_TOKEN = "PaidOrderToken";
+    private static final String REFUND_RECEIVED = "RefundReceived";
+    private static final String RESERVE_RELEASE = "ReserveRelease";
+
+    // Transaction Types
+    private static final String pay_request = "pay / request";
+    private static final String buy_tokens = "buy tokens";
+    private static final String buy_token = "buy token";
+    private static final String withdraw = "withdraw";
+    private static final String business_payout = "business payout";
+    private static final String canceled_bank_withdraw = "canceled bank withdraw";
+    private static final String failed_bank_withdraw = "failed bank withdraw";
+    private static final String paid_order = "paid order";
+    private static final String refund = "refund";
+    private static final String reserve_release = "reserve release";
+
+    // Transaction SubTypes
+    private static final String sent = "sent";
+    private static final String received = "received";
+    private static final String bank_account = "bank account";
+    private static final String credit_card = "credit card";
+    private static final String debit_card = "debit card";
+    private static final String signet = "signet";
+    private static final String gift_card = "gift card";
+    private static final String instant_pay = "instant pay";
+    private static final String token = "token";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,62 +101,71 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
-            if (getIntent().getStringExtra("gbxTxnIdType") != null && !getIntent().getStringExtra("gbxTxnIdType").equals("")) {
-                strGbxTxnIdType = getIntent().getStringExtra("gbxTxnIdType");
+            if (getIntent().getStringExtra(Utils.gbxTxnIdType) != null && !getIntent().getStringExtra(Utils.gbxTxnIdType).equals("")) {
+                strGbxTxnIdType = getIntent().getStringExtra(Utils.gbxTxnIdType);
             }
-            if (getIntent().getStringExtra("txnType") != null && !getIntent().getStringExtra("txnType").equals("")) {
+            if (getIntent().getStringExtra(Utils.txnType) != null && !getIntent().getStringExtra(Utils.txnType).equals("")) {
                 //txnType = Integer.parseInt(getIntent().getStringExtra("txnType"));
-                switch (getIntent().getStringExtra("txnType").toLowerCase()) {
-                    case "pay / request":
+                switch (getIntent().getStringExtra(Utils.txnType).toLowerCase()) {
+                    case pay_request:
                         txnType = Integer.parseInt(Utils.payType);
                         break;
-                    case "buy token":
-                    case "buy tokens":
+                    case buy_token:
+                    case buy_tokens:
                         txnType = Integer.parseInt(Utils.addType);
                         break;
-                    case "withdraw":
+                    case withdraw:
                         txnType = Integer.parseInt(Utils.withdrawType);
                         break;
-                    case "business payout":
+                    case business_payout:
                         txnType = Integer.parseInt(Utils.businessType);
                         break;
-                    case "merchant payout":
-                        txnType = Integer.parseInt(Utils.merchantType);
-                        break;
-                    case "canceled bank withdraw":
+                    case canceled_bank_withdraw:
                         txnType = Utils.cancelledWithdraw;
                         break;
-                    case "failed bank withdraw":
+                    case failed_bank_withdraw:
                         txnType = Utils.failedWithdraw;
+                        break;
+                    case paid_order:
+                        txnType = Utils.paidInvoice;
+                        break;
+                    case refund:
+                        txnType = Utils.refund;
+                        break;
+                    case reserve_release:
+                        txnType = Utils.reserveRelease;
                         break;
                 }
             }
-            if (getIntent().getStringExtra("txnSubType") != null && !getIntent().getStringExtra("txnSubType").equals("")) {
+            if (getIntent().getStringExtra(Utils.txnSubType) != null && !getIntent().getStringExtra(Utils.txnSubType).equals("")) {
                 //txnSubType = Integer.parseInt(getIntent().getStringExtra("txnSubType"));
-                switch (getIntent().getStringExtra("txnSubType").toLowerCase()) {
-                    case "sent":
+                switch (getIntent().getStringExtra(Utils.txnSubType).toLowerCase()) {
+                    case sent:
                         txnSubType = Integer.parseInt(Utils.paySubType);
                         break;
-                    case "received":
+                    case received:
                         txnSubType = Integer.parseInt(Utils.requestSubType);
                         break;
-                    case "bank account":
+                    case bank_account:
                         txnSubType = Integer.parseInt(Utils.bankType);
                         break;
-                    case "credit card":
+                    case credit_card:
                         txnSubType = Integer.parseInt(Utils.creditType);
                         break;
-                    case "debit card":
+                    case debit_card:
                         txnSubType = Integer.parseInt(Utils.debitType);
                         break;
-                    case "gift card":
+                    case gift_card:
                         txnSubType = Integer.parseInt(Utils.giftcardType);
                         break;
-                    case "instant pay":
+                    case instant_pay:
                         txnSubType = Integer.parseInt(Utils.instantType);
                         break;
-                    case "signet":
+                    case signet:
                         txnSubType = Integer.parseInt(Utils.signetType);
+                        break;
+                    case token:
+                        txnSubType = Integer.parseInt(Utils.tokenType);
                         break;
                     default:
                         txnSubType = null;
@@ -134,64 +191,87 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
             if (transactionDetails != null && transactionDetails.getStatus().equalsIgnoreCase("Success")) {
                 switch (transactionDetails.getData().getTransactionType().toLowerCase()) {
-                    case "pay / request":
-                        ControlMethod("payrequest");
+                    case pay_request:
+                        ControlMethod(PAY_REQUEST);
                         payRequest(transactionDetails.getData());
                         break;
-                    case "buy token":
-                    case "buy tokens":
+                    case buy_token:
+                    case buy_tokens:
                         switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                            case "credit card":
-                            case "debit card":
-                                ControlMethod("buytoken");
+                            case credit_card:
+                            case debit_card:
+                                ControlMethod(BUY_TOKEN);
                                 buyTokenCreditDebit(transactionDetails.getData());
                                 break;
-                            case "bank account":
-                                ControlMethod("buytokenbank");
+                            case bank_account:
+                                ControlMethod(BUY_BANK);
                                 buyTokenBankAccount(transactionDetails.getData());
                                 break;
-                            case "signet":
-                                ControlMethod("buytokensignet");
+                            case signet:
+                                ControlMethod(BUY_SIGNET);
                                 buyTokenSignet(transactionDetails.getData());
                                 break;
                         }
                         break;
-                    case "withdraw":
+                    case withdraw:
                         switch (transactionDetails.getData().getTransactionSubtype().toLowerCase()) {
-                            case "gift card":
-                                ControlMethod("withdrawgift");
+                            case gift_card:
+                                ControlMethod(WITH_GIFT);
                                 withdrawGiftCard(transactionDetails.getData());
                                 break;
-                            case "instant pay":
-                                ControlMethod("withdrawinstant");
+                            case instant_pay:
+                                ControlMethod(WITH_Instant);
                                 withdrawInstant(transactionDetails.getData());
                                 break;
-                            case "bank account":
-                                ControlMethod("withdrawbankaccount");
+                            case bank_account:
+                                ControlMethod(WITH_BANK);
                                 withdrawBank(transactionDetails.getData());
                                 break;
-                            case "signet":
-                                ControlMethod("withdrawsignet");
+                            case signet:
+                                ControlMethod(WITH_SIGNET);
                                 withdrawSignet(transactionDetails.getData());
                                 break;
                         }
                         break;
-                    case "business payout": {
+                    case business_payout: {
 
-                        ControlMethod("businessPayout");
+                        ControlMethod(BUSINESS_PAYOUT);
                         businessPayout(transactionDetails.getData());
                     }
                     break;
-                    case "canceled bank withdraw": {
-                        ControlMethod("cancelledWithdraw");
+                    case canceled_bank_withdraw: {
+                        ControlMethod(CANCELLED_WITH);
                         cancelledWithdraw(transactionDetails.getData());
                     }
                     break;
-                    case "failed bank withdraw": {
-                        ControlMethod("failedWithdraw");
+                    case failed_bank_withdraw: {
+                        ControlMethod(FAILED_WITH);
                         failedWithdraw(transactionDetails.getData());
                     }
                     break;
+                    case paid_order:
+                        if (token.equals(transactionDetails.getData().getTransactionSubtype().toLowerCase())) {
+                            ControlMethod(PAID_ORDER_TOKEN);
+                            paidOrderToken(transactionDetails.getData());
+                        }
+                        break;
+                    case refund: {
+                        ControlMethod(REFUND_RECEIVED);
+                        refundReceived(transactionDetails.getData());
+                    }
+                    break;
+                    case reserve_release: {
+                        ControlMethod(RESERVE_RELEASE);
+                        reserveRelease(transactionDetails.getData());
+                    }
+                    break;
+
+                }
+            } else {
+                try {
+                    findViewById(R.id.transaction_not_found).setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -199,7 +279,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         dashboardViewModel.getCancelBuyTokenResponseMutableLiveData().observe(this, cancelBuyTokenResponse -> {
             try {
                 progressDialog.dismiss();
-                if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase("Success")) {
+                if (cancelBuyTokenResponse != null && cancelBuyTokenResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                     Utils.showCustomToast(TransactionDetailsActivity.this, "Transaction cancelled successfully.", R.drawable.ic_custom_tick, "");
                     //progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
                     dashboardViewModel.getTransactionDetails(strGbxTxnIdType, txnType, txnSubType);
@@ -210,7 +290,245 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         });
     }
 
-    @SuppressLint("SetTextI18n")
+    private void refundReceived(TransactionData data) {
+    }
+
+    private void reserveRelease(TransactionData reserveData) {
+        TextView type, reserveAmount, status, date, referenceId, reserveRules, depositTo, tokenType;
+        TextView reserveHeld, reservedOn, reserveId;
+
+        LinearLayout reserveIDCopy;
+
+        type = findViewById(R.id.reserve_type);
+        reserveAmount = findViewById(R.id.reserve_amount);
+        status = findViewById(R.id.reserve_status);
+        date = findViewById(R.id.released_on);
+        referenceId = findViewById(R.id.reference_id);
+        reserveRules = findViewById(R.id.reserve_rules);
+        depositTo = findViewById(R.id.deposit_to);
+        tokenType = findViewById(R.id.token_account_type);
+
+        reserveHeld = findViewById(R.id.reserve_held_amount);
+        reservedOn = findViewById(R.id.reserved_on_date);
+        reserveId = findViewById(R.id.reserve_id);
+
+        reserveIDCopy = findViewById(R.id.reserve_id_copy);
+
+
+        if (reserveData.getTransactionType() != null) {
+            type.setText(reserveData.getTransactionType());
+        }
+        if (reserveData.getStatus() != null) {
+            status.setText(reserveData.getStatus());
+
+            switch (reserveData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    status.setTextColor(getResources().getColor(R.color.completed_status));
+                    status.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    status.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    status.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    status.setTextColor(getResources().getColor(R.color.pending_status));
+                    status.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    status.setTextColor(getResources().getColor(R.color.failed_status));
+                    status.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+        }
+
+        if (reserveData.getReleasedDate() != null) {
+            date.setText(objMyApplication.convertZoneLatestTxn(reserveData.getReleasedDate()));
+        }
+
+
+        if (reserveData.getReferenceId() != null) {
+            if (reserveData.getReferenceId().length() > 10) {
+                referenceId.setText(reserveData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                referenceId.setText(reserveData.getReserveId());
+            }
+        }
+
+        if (reserveData.getReserveRule() != null) {
+            reserveRules.setText(reserveData.getReserveRule());
+        }
+
+        String depositTO;
+        if (reserveData.getDepositTo() != null) {
+            if (reserveData.getDepositTo().toLowerCase().contains("token account")) {
+                tokenType.setText(reserveData.getDepositTo().split("Token")[0] + "Token Account");
+            }
+            depositTO = reserveData.getDepositTo().split("Account")[1].trim();
+            if (depositTO.length() > 10)
+                depositTo.setText(Html.fromHtml("<u>" + depositTO.substring(0, 10) + "..." + "</u>"));
+            else
+                depositTo.setText(Html.fromHtml("<u>" + depositTO + "</u>"));
+        }
+
+        if (reserveData.getTotalAmount() != null) {
+            if (reserveData.getTotalAmount().contains("CYN"))
+                reserveAmount.setText(Utils.convertTwoDecimal(reserveData.getTotalAmount().replace("CYN", "").trim()));
+            else
+                reserveAmount.setText(Utils.convertTwoDecimal(reserveData.getTotalAmount().replace("USD", "").trim()));
+        }
+
+        if (reserveData.getAmountReleased() != null) {
+            if (reserveData.getAmountReleased().contains("CYN"))
+                reserveHeld.setText(Utils.convertTwoDecimal(reserveData.getAmountReleased().replace("CYN", "").trim()) + " CYN");
+            else
+                reserveHeld.setText(Utils.convertTwoDecimal(reserveData.getAmountReleased().replace("USD", "").trim()) + " CYN");
+        }
+
+        if (reserveData.getReservedOn() != null) {
+            reservedOn.setText(objMyApplication.convertZoneReservedOn(reserveData.getReservedOn()));
+        }
+
+        String reserveID = "";
+        if (reserveData.getReserveId() != null) {
+            if (reserveData.getReserveId().length() > 10) {
+                reserveID = reserveData.getReserveId().substring(0, 10) + "...";
+                reserveId.setText(Html.fromHtml("<u>" + reserveID + "</u>"));
+            } else {
+                reserveID = reserveData.getReserveId();
+                reserveId.setText(Html.fromHtml("<u>" + reserveID + "</u>"));
+            }
+        }
+
+        reserveIDCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Utils.copyText(reserveData.getReserveId(), TransactionDetailsActivity.this);
+            }
+        });
+
+    }
+
+    private void paidOrderToken(TransactionData paidOrderData) {
+        TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
+        LinearLayout mReferenceCopy, mMerchantAccountCopy;
+
+        mTransactionType = findViewById(R.id.transaction_types);
+        mPaidAmount = findViewById(R.id.paid_amount);
+        mPaidStatus = findViewById(R.id.paid_status);
+        mPaidDateAndTime = findViewById(R.id.paid_date_time);
+        mAccountBalance = findViewById(R.id.account_balance);
+        mReferenceID = findViewById(R.id.paid_reference_id);
+        mMerchantAccountID = findViewById(R.id.merchant_account_id);
+        mDbaName = findViewById(R.id.dba_name);
+        mCustomerServiceEmail = findViewById(R.id.customer_service_email);
+        mCustomerServicePhone = findViewById(R.id.customer_service_phone);
+        mReferenceCopy = findViewById(R.id.copy_ref_ll);
+        mMerchantAccountCopy = findViewById(R.id.copy_merchant_id);
+        mDescription = findViewById(R.id.description);
+
+
+        if (paidOrderData.getTransactionType() != null && paidOrderData.getTransactionSubtype() != null) {
+            mTransactionType.setText(paidOrderData.getTransactionType() + " - " + paidOrderData.getTransactionSubtype());
+        }
+
+        if (paidOrderData.getPaidAmount() != null) {
+            mPaidAmount.setText(Utils.convertTwoDecimal(paidOrderData.getPaidAmount().replace("CYN", "").trim()));
+        }
+
+        if (paidOrderData.getStatus() != null) {
+            mPaidStatus.setText(paidOrderData.getStatus());
+            switch (paidOrderData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    mPaidStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    mPaidStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+        }
+
+        if (paidOrderData.getCreatedDate() != null) {
+            mPaidDateAndTime.setText(objMyApplication.convertZoneLatestTxn(paidOrderData.getCreatedDate()));
+        }
+
+        if (paidOrderData.getAccountBalance() != null) {
+            mAccountBalance.setText(Utils.convertTwoDecimal(paidOrderData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        }
+
+        if (paidOrderData.getReferenceId() != null) {
+            if (paidOrderData.getReferenceId().length() > 10)
+                mReferenceID.setText(paidOrderData.getReferenceId().substring(0, 10) + "...");
+            else
+                mReferenceID.setText(paidOrderData.getReferenceId());
+
+            mReferenceCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(paidOrderData.getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
+
+        if (paidOrderData.getMerchantId() != null) {
+            mMerchantAccountID.setText(paidOrderData.getMerchantId());
+        }
+
+        if (paidOrderData.getDbaName() != null) {
+            if (paidOrderData.getDbaName().length() > 20)
+                mDbaName.setText(paidOrderData.getDbaName().substring(0, 20) + "...");
+            else
+                mDbaName.setText(paidOrderData.getDbaName());
+        }
+
+        if (paidOrderData.getCustomerServiceMail() != null) {
+            if (paidOrderData.getCustomerServiceMail().length() > 20) {
+                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail().substring(0, 20) + "...");
+            } else {
+                mCustomerServiceEmail.setText(paidOrderData.getCustomerServiceMail());
+            }
+        }
+        if (paidOrderData.getCustomerServicePhoneNo() != null) {
+            mCustomerServicePhone.setText(paidOrderData.getCustomerServicePhoneNo());
+        }
+
+        String mVar = getString(R.string.description);
+        SpannableString spannableString = new SpannableString(mVar);
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                try {
+                startActivity(new Intent(TransactionDetailsActivity.this,GetHelpWebViewActivity.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void updateDrawState(@NonNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+                ds.setColor(getColor(R.color.primary_color));
+            }
+        };
+
+        spannableString.setSpan(clickableSpan, mVar.length() - 8, mVar.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mDescription.setText(spannableString);
+        mDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        mDescription.setHighlightColor(Color.TRANSPARENT);
+
+
+    }
+
     private void payRequest(TransactionData objData) {
         try {
             TextView headerTV, amount, descrptn, completed, datetime, fee, total, balance;
@@ -230,63 +548,88 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             lyPRClose = findViewById(R.id.lyPRClose);
             lyRefId = findViewById(R.id.lyRefId);
             lyAccAdd = findViewById(R.id.lyAccAdd);
-            headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype().replace("Tokens", ""));
 
-            if (objData.getTransactionSubtype().equals("Sent")) {
-                amount.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN", "").trim()));
-//                amount.setText(objData.getAmount().replace("CYN", "").trim());
-                name.setText(objData.getRecipientName());
-                accountadress.setText((objData.getRecipientWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
-                fee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
-                total.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
-                lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this));
-            } else {
-                amount.setText(Utils.convertTwoDecimal(objData.getAmountReceived().replace("CYN", "").trim()));
-                findViewById(R.id.payreqTAmountLL).setVisibility(View.GONE);
-                findViewById(R.id.payreqPfLL).setVisibility(View.GONE);
-                name.setText(objData.getSenderName());
-                accountadress.setText((objData.getSenderWalletAddress().substring(0, Integer.parseInt(getString(R.string.waddress_length))) + "..."));
-                lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getSenderWalletAddress(), TransactionDetailsActivity.this));
+
+            if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
+                headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype().replace("Tokens", ""));
             }
-            if (!objData.getSenderMessage().equals("")) {
+
+            if (objData.getTransactionSubtype() != null) {
+                if (objData.getTransactionSubtype().equals("Sent")) {
+                    amount.setText(Utils.convertTwoDecimal(objData.getAmount().replace("CYN", "").trim()));
+                    //                amount.setText(objData.getAmount().replace("CYN", "").trim());
+                    name.setText(objData.getRecipientName());
+                    accountadress.setText((objData.getRecipientWalletAddress().substring(0, 10)) + "...");
+                    fee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
+                    total.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
+                    lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getRecipientWalletAddress(), TransactionDetailsActivity.this));
+                } else {
+                    amount.setText(Utils.convertTwoDecimal(objData.getAmountReceived().replace("CYN", "").trim()));
+                    findViewById(R.id.payreqTAmountLL).setVisibility(View.GONE);
+                    findViewById(R.id.payreqPfLL).setVisibility(View.GONE);
+                    name.setText(objData.getSenderName());
+                    accountadress.setText((objData.getSenderWalletAddress().substring(0, 10) + "..."));
+                    lyAccAdd.setOnClickListener(view -> Utils.copyText(objData.getSenderWalletAddress(), TransactionDetailsActivity.this));
+                }
+            }
+
+
+            if (objData.getSenderName() != null && !objData.getSenderMessage().equals("")) {
                 descrptn.setText("\"" + objData.getSenderMessage() + "\"");
             } else {
                 descrptn.setVisibility(View.GONE);
             }
-            completed.setText(objData.getStatus());
-            datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-            balance.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
-            refid.setText(objData.getReferenceId().substring(0, 10) + "...");
 
 
-            switch (objData.getStatus().toLowerCase()) {
-                case "completed":
-                    completed.setTextColor(getResources().getColor(R.color.completed_status));
-                    completed.setBackgroundResource(R.drawable.txn_completed_bg);
-                    break;
-                case "in progress":
-                    completed.setTextColor(getResources().getColor(R.color.inprogress_status));
-                    completed.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                    break;
-                case "pending":
-                    completed.setTextColor(getResources().getColor(R.color.pending_status));
-                    completed.setBackgroundResource(R.drawable.txn_pending_bg);
-                    break;
-                case "failed":
-                    completed.setTextColor(getResources().getColor(R.color.failed_status));
-                    completed.setBackgroundResource(R.drawable.txn_failed_bg);
-                    break;
+            if (objData.getCreatedDate() != null) {
+                datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+            }
+
+            if (objData.getAccountBalance() != null) {
+                balance.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+            }
+
+            if (objData.getReferenceId() != null) {
+
+                if (objData.getReferenceId().length() > 10) {
+                    refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+                } else {
+                    refid.setText(objData.getReferenceId());
+                }
+
+                lyRefId.setOnClickListener(view -> Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this));
+
+            }
+
+            if (objData.getStatus() != null) {
+                completed.setText(objData.getStatus());
+                switch (objData.getStatus().toLowerCase()) {
+                    case Utils.transCompleted:
+                        completed.setTextColor(getResources().getColor(R.color.completed_status));
+                        completed.setBackgroundResource(R.drawable.txn_completed_bg);
+                        break;
+                    case Utils.transinprogress:
+                        completed.setTextColor(getResources().getColor(R.color.inprogress_status));
+                        completed.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                        break;
+                    case Utils.transPending:
+                        completed.setTextColor(getResources().getColor(R.color.pending_status));
+                        completed.setBackgroundResource(R.drawable.txn_pending_bg);
+                        break;
+                    case Utils.transFailed:
+                        completed.setTextColor(getResources().getColor(R.color.failed_status));
+                        completed.setBackgroundResource(R.drawable.txn_failed_bg);
+                        break;
+                }
             }
 
             lyPRClose.setOnClickListener(view -> onBackPressed());
-            lyRefId.setOnClickListener(view -> Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this));
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private void buyTokenCreditDebit(TransactionData objData) {
         TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmountTV, successadd, chargeback;
         TextView refid, name, descriptorName, cardNumber, expiryDate, depositIDTV;
@@ -315,73 +658,123 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         lyPRClose = findViewById(R.id.previous);
         cardBrandIV = findViewById(R.id.cardBrandIV);
 
-        headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
 
-        amount.setText(Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
-
-        status.setText(objData.getStatus());
-
-        switch (objData.getStatus().toLowerCase()) {
-            case "completed":
-                status.setTextColor(getResources().getColor(R.color.completed_status));
-                status.setBackgroundResource(R.drawable.txn_completed_bg);
-                break;
-            case "in progress":
-                status.setTextColor(getResources().getColor(R.color.inprogress_status));
-                status.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                break;
-            case "pending":
-                status.setTextColor(getResources().getColor(R.color.pending_status));
-                status.setBackgroundResource(R.drawable.txn_pending_bg);
-                break;
-            case "failed":
-                status.setTextColor(getResources().getColor(R.color.failed_status));
-                status.setBackgroundResource(R.drawable.txn_failed_bg);
-                break;
-        }
-        datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseAmountTV.setText(objData.getYouPay());
-
-        switch (objData.getCardBrand()) {
-            case "MASTERCARD":
-                cardBrandIV.setImageResource(R.drawable.ic_master);
-                break;
-            case "VISA":
-                cardBrandIV.setImageResource(R.drawable.ic_visa);
-                break;
-            case "AMERICAN EXPRESS":
-                cardBrandIV.setImageResource(R.drawable.ic_amex);
-                break;
-            case "DISCOVER":
-                cardBrandIV.setImageResource(R.drawable.ic_discover);
-                break;
+        if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
+            headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         }
 
+        if (objData.getYouGet() != null) {
+            amount.setText(Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
+        }
 
-        Double purchaseAmount = Double.parseDouble(objData.getYouGet().replace("CYN", "").trim());
-        Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", "").trim());
-        datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseAmountTV.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
-        fee.setText("$" + Utils.convertTwoDecimal((objData.getProcessingFee().replace("USD", "").trim())));
-        total.setText("$" + Utils.convertTwoDecimal(String.valueOf(purchaseAmount + processingFee)));
-        balance.setText(Utils.convertTwoDecimal((objData.getAccountBalance().replace("CYN", "").trim())) + " CYN");
+        if (objData.getStatus() != null) {
+            status.setText(objData.getStatus());
 
-        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
-        descriptorName.setText(objData.getDescriptorName());
-        name.setText(objData.getCardHolderName());
-        cardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
-        expiryDate.setText(objData.getCardExpiryDate());
-        depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
+            switch (objData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    status.setTextColor(getResources().getColor(R.color.completed_status));
+                    status.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    status.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    status.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    status.setTextColor(getResources().getColor(R.color.pending_status));
+                    status.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    status.setTextColor(getResources().getColor(R.color.failed_status));
+                    status.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+        }
+
+        if (objData.getCreatedDate() != null) {
+            datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        }
+
+        if (objData.getYouPay() != null) {
+            purchaseAmountTV.setText(objData.getYouPay());
+        }
+
+        if (objData.getCardBrand() != null) {
+            switch (objData.getCardBrand()) {
+                case Utils.MASTERCARD:
+                    cardBrandIV.setImageResource(R.drawable.ic_master);
+                    break;
+                case Utils.VISA:
+                    cardBrandIV.setImageResource(R.drawable.ic_visa);
+                    break;
+                case Utils.AMERICANEXPRESS:
+                    cardBrandIV.setImageResource(R.drawable.ic_amex);
+                    break;
+                case Utils.DISCOVER:
+                    cardBrandIV.setImageResource(R.drawable.ic_discover);
+                    break;
+            }
+        }
+
+        if (objData.getCreatedDate() != null) {
+            datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        }
+
+
+        if (objData.getYouGet() != null && objData.getProcessingFee() != null) {
+            Double purchaseAmount = Double.parseDouble(objData.getYouGet().replace("CYN", "").trim());
+            Double processingFee = Double.parseDouble(objData.getProcessingFee().replace("USD", "").trim());
+            purchaseAmountTV.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
+            fee.setText("$" + Utils.convertTwoDecimal((objData.getProcessingFee().replace("USD", "").trim())));
+            total.setText("$" + Utils.convertTwoDecimal(String.valueOf(purchaseAmount + processingFee)));
+        }
+
+        if (objData.getAccountBalance() != null) {
+            balance.setText(Utils.convertTwoDecimal((objData.getAccountBalance().replace("CYN", "").trim())) + " CYN");
+        }
+
+        if (objData.getReferenceId() != null) {
+            if (objData.getReferenceId().length() > 10) {
+                refid.setText(objData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                refid.setText(objData.getReferenceId());
+            }
+
+            referenceID.setOnClickListener(view -> Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this));
+
+        }
+
+        if (objData.getDescriptorName() != null) {
+            descriptorName.setText(objData.getDescriptorName());
+        }
+
+        if (objData.getCardHolderName() != null) {
+            name.setText(objData.getCardHolderName());
+        }
+
+        if (objData.getCardNumber() != null) {
+            cardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
+        }
+
+        if (objData.getCardExpiryDate() != null) {
+            expiryDate.setText(objData.getCardExpiryDate());
+        }
+
+        if (objData.getDepositId() != null) {
+            if (objData.getDepositId().length() > 10) {
+                depositIDTV.setText(objData.getDepositId().substring(0, 10) + "...");
+            } else {
+                depositIDTV.setText(objData.getDepositId());
+            }
+
+            depositID.setOnClickListener(view -> Utils.copyText(objData.getDepositId(), TransactionDetailsActivity.this));
+        }
+
         lyPRClose.setOnClickListener(view -> onBackPressed());
-        referenceID.setOnClickListener(view -> Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this));
-        depositID.setOnClickListener(view -> Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this));
-
     }
 
-    @SuppressLint("SetTextI18n")
     private void buyTokenBankAccount(TransactionData objData) {
-        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseamount, successadd, chargeback;
-        TextView refid, name, accountadress, descriptorname, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
+        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmount, successAdd, chargeback;
+        TextView refId, name, accountAddress, descriptorName, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
         LinearLayout lyPRClose, btBankReference, btBankDepositID, descriptorLL;
         ImageView previousBtn, depositIDIV;
 
@@ -389,13 +782,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         amount = findViewById(R.id.btbankamountTV);
         status = findViewById(R.id.btbankStatusTV);
         datetime = findViewById(R.id.btbankDatetimeTV);
-        purchaseamount = findViewById(R.id.btBankpurchaseamntTV);
+        purchaseAmount = findViewById(R.id.btBankpurchaseamntTV);
         fee = findViewById(R.id.btBankprocessingfeeTV);
         total = findViewById(R.id.btbankTotalTV);
-        refid = findViewById(R.id.btbankRefidTV);
+        refId = findViewById(R.id.btbankRefidTV);
         btBankReference = findViewById(R.id.btbankReferenceLL);
         btBankDepositID = findViewById(R.id.btbankDepositIDLL);
-        descriptorname = findViewById(R.id.btbankDescrptorTV);
+        descriptorName = findViewById(R.id.btbankDescrptorTV);
         depositIDTV = findViewById(R.id.btbankDepositIDTV);
         lyPRClose = findViewById(R.id.btbankprevious);
         bankAccNumTV = findViewById(R.id.btbankaccountTV);
@@ -403,50 +796,115 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         nameOnAccTV = findViewById(R.id.btbanknameACTV);
         cancelTxnCV = findViewById(R.id.cancelTxnCV);
         descriptorLL = findViewById(R.id.descriptorLL);
-        headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
 
-        amount.setText(objData.getYouGet().replace("CYN", "").trim());
+        if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
+            headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
+        }
 
-        status.setText(objData.getStatus());
+        if (objData.getYouGet() != null) {
+            amount.setText(objData.getYouGet().replace("CYN", "").trim());
+        }
         cancelTxnCV.setVisibility(View.GONE);
-        switch (objData.getStatus().toLowerCase()) {
-            case "completed":
-                status.setTextColor(getResources().getColor(R.color.completed_status));
-                status.setBackgroundResource(R.drawable.txn_completed_bg);
-                break;
-            case "in progress":
-                status.setTextColor(getResources().getColor(R.color.inprogress_status));
-                status.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                cancelTxnCV.setVisibility(View.VISIBLE);
-                break;
-            case "pending":
-                status.setTextColor(getResources().getColor(R.color.pending_status));
-                status.setBackgroundResource(R.drawable.txn_pending_bg);
-                break;
-            case "failed":
-                status.setTextColor(getResources().getColor(R.color.failed_status));
-                status.setBackgroundResource(R.drawable.txn_failed_bg);
-                break;
-            case "cancelled": {
-                status.setTextColor(getResources().getColor(R.color.failed_status));
-                status.setBackgroundResource(R.drawable.txn_failed_bg);
-                descriptorLL.setVisibility(View.GONE);
+
+        if (objData.getStatus() != null) {
+            status.setText(objData.getStatus());
+            switch (objData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    status.setTextColor(getResources().getColor(R.color.completed_status));
+                    status.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    status.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    status.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    cancelTxnCV.setVisibility(View.VISIBLE);
+                    break;
+                case Utils.transPending:
+                    status.setTextColor(getResources().getColor(R.color.pending_status));
+                    status.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    status.setTextColor(getResources().getColor(R.color.failed_status));
+                    status.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+                case Utils.transCancelled: {
+                    status.setTextColor(getResources().getColor(R.color.failed_status));
+                    status.setBackgroundResource(R.drawable.txn_failed_bg);
+                    if (descriptorLL.getVisibility() == View.VISIBLE) {
+                        descriptorLL.setVisibility(View.GONE);
+                    }
+                }
                 break;
             }
         }
-        datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
 
-        datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-        purchaseamount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
-        fee.setText("$" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("USD", "").trim()));
-        total.setText("$" + Utils.convertTwoDecimal(objData.getYouPay().replace("USD", "").trim()));
-        bankAccNumTV.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
-        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
-        descriptorname.setText(objData.getDescriptorName());
-        depositIDTV.setText(objData.getDepositid().substring(0, 10) + "...");
-        bankNameTV.setText(objData.getBankName());
+        if (objData.getCreatedDate() != null) {
+            datetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        }
 
-        nameOnAccTV.setText(objData.getNameOnBankAccount());
+        if (objData.getYouGet() != null) {
+            purchaseAmount.setText("$" + Utils.convertTwoDecimal(objData.getYouGet().replace("CYN", "").trim()));
+        }
+
+        if (objData.getProcessingFee() != null) {
+            fee.setText("$" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("USD", "").trim()));
+        }
+
+        if (objData.getYouPay() != null) {
+            total.setText("$" + Utils.convertTwoDecimal(objData.getYouPay().replace("USD", "").trim()));
+        }
+
+        if (objData.getBankAccountNumber() != null && objData.getBankAccountNumber().length() > 4) {
+            bankAccNumTV.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
+        }
+
+        if (objData.getReferenceId() != null) {
+            if (objData.getReferenceId().length() > 10) {
+                refId.setText(objData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                refId.setText(objData.getReferenceId());
+            }
+
+            btBankReference.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        if (objData.getDescriptorName() != null) {
+            descriptorName.setText(objData.getDescriptorName());
+        }
+
+        if (objData.getDepositId() != null) {
+            if (objData.getDepositId().length() > 10) {
+                depositIDTV.setText(objData.getDepositId().substring(0, 10) + "...");
+            } else {
+                depositIDTV.setText(objData.getDepositId());
+            }
+            btBankDepositID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Utils.copyText(objData.getDepositId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        if (objData.getBankName() != null) {
+            bankNameTV.setText(objData.getBankName());
+        }
+
+        if (objData.getNameOnBankAccount() != null) {
+            nameOnAccTV.setText(objData.getNameOnBankAccount());
+        }
 
         cancelTxnCV.setOnClickListener(view -> {
             cancelPopup();
@@ -458,32 +916,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        btBankReference.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        btBankDepositID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    Utils.copyText(objData.getDepositid(), TransactionDetailsActivity.this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
 
     }
 
     private void buyTokenSignet(TransactionData objData) {
         TextView headerText, amount, status, date, purchaseAmount, processingFee, totalAmount, depositID, referenceID, descriptorName, nameOnAccount, walletID;
-        LinearLayout copyRefID, copyDepositeID;
+        LinearLayout copyRefID, copyDepositId;
         headerText = findViewById(R.id.buySignetHeaderTV);
         amount = findViewById(R.id.signetAmountTV);
         status = findViewById(R.id.signetStatusTV);
@@ -497,77 +936,120 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         nameOnAccount = findViewById(R.id.signetNameOnAccountTV);
         walletID = findViewById(R.id.signetWalletIdTV);
         copyRefID = findViewById(R.id.copyRefID);
-        copyDepositeID = findViewById(R.id.copyDepositID);
+        copyDepositId = findViewById(R.id.copyDepositID);
 
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawGiftCard(TransactionData objData) {
         TextView headerMsdTV, amountTV;
-        TextView status, dateandtime, withGiftcardname, subtotal, fee, grandtotal, refid, withid, recipientname, email;
-        LinearLayout previous, giftCardWithdrawID, giftcardReferenceID;
-        ImageView withIdIV, refIDIV;
+        TextView status, dateAndTime, withGiftCardName, subtotal, fee, grandTotal, refId, withId, recipientName, email;
+        LinearLayout previous, giftCardWithdrawID, giftCardReferenceID;
 
         headerMsdTV = findViewById(R.id.withGiftheadTV);
         amountTV = findViewById(R.id.withdrawGiftamount);
         status = findViewById(R.id.withdrawGiftStatusTV);
-        dateandtime = findViewById(R.id.withGiftdateTimeTV);
-        withGiftcardname = findViewById(R.id.withdrawGiftcardnameTV);
+        dateAndTime = findViewById(R.id.withGiftdateTimeTV);
+        withGiftCardName = findViewById(R.id.withdrawGiftcardnameTV);
         subtotal = findViewById(R.id.withdrawGiftsubtotatlTV);
         fee = findViewById(R.id.withdrawGiftprofeeTV);
-        grandtotal = findViewById(R.id.withdrawGiftgrandtotalTV);
-        refid = findViewById(R.id.withdrawGiftrefidTV);
-        withid = findViewById(R.id.withgiftid);
-        recipientname = findViewById(R.id.withGiftRecipientNameTV);
+        grandTotal = findViewById(R.id.withdrawGiftgrandtotalTV);
+        refId = findViewById(R.id.withdrawGiftrefidTV);
+        withId = findViewById(R.id.withgiftid);
+        recipientName = findViewById(R.id.withGiftRecipientNameTV);
         email = findViewById(R.id.withGiftReciEmailTV);
         giftCardWithdrawID = findViewById(R.id.giftCardwithdrawIDLL);
-        giftcardReferenceID = findViewById(R.id.giftcardReferenceIDLL);
+        giftCardReferenceID = findViewById(R.id.giftcardReferenceIDLL);
         previous = findViewById(R.id.withGiftprevious);
-        withIdIV = findViewById(R.id.withdrawGiftIdIV);
-        refIDIV = findViewById(R.id.withdrawRefIDIV);
 
-        headerMsdTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        amountTV.setText(Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
-
-        status.setText(objData.getStatus());
-        switch (objData.getStatus().toLowerCase()) {
-            case "completed":
-                status.setTextColor(getResources().getColor(R.color.completed_status));
-                status.setBackgroundResource(R.drawable.txn_completed_bg);
-                break;
-            case "in progress":
-                status.setTextColor(getResources().getColor(R.color.inprogress_status));
-                status.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                break;
-            case "pending":
-                status.setTextColor(getResources().getColor(R.color.pending_status));
-                status.setBackgroundResource(R.drawable.txn_pending_bg);
-                break;
-            case "failed":
-                status.setTextColor(getResources().getColor(R.color.failed_status));
-                status.setBackgroundResource(R.drawable.txn_failed_bg);
-                break;
+        if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
+            headerMsdTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         }
 
-        withGiftcardname.setText(objData.getGiftCardName());
+        if (objData.getGiftCardAmount() != null) {
+            amountTV.setText(Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
+        }
 
-        refid.setText(objData.getReferenceId().substring(0, 10) + "...");
-        recipientname.setText(Utils.capitalize(objData.getRecipientName()));
-        email.setText(objData.getRecipientEmail());
+        if (objData.getStatus() != null) {
+            status.setText(objData.getStatus());
+            switch (objData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    status.setTextColor(getResources().getColor(R.color.completed_status));
+                    status.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                    status.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    status.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    status.setTextColor(getResources().getColor(R.color.pending_status));
+                    status.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                case Utils.transCancelled:
+                    status.setTextColor(getResources().getColor(R.color.failed_status));
+                    status.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
+        }
 
-        Double subtotatl = Double.parseDouble(objData.getTotalPaidAmount().replace("CYN", "").trim());
+        if (objData.getGiftCardName() != null) {
+            withGiftCardName.setText(objData.getGiftCardName());
+        }
 
-        subtotal.setText("" + Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
-        fee.setText("" + Utils.convertTwoDecimal(objData.getGiftCardFee().replace(" CYN", "").trim()));
-        grandtotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotatl)));
+        if (objData.getReferenceId() != null) {
+            if (objData.getReferenceId().length() > 10) {
+                refId.setText(objData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                refId.setText(objData.getReferenceId());
+            }
 
-        dateandtime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+            giftCardReferenceID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
 
-        if (objData.getWithdrawId().length() > 10) {
-            withid.setText(objData.getWithdrawId().substring(0, 10) + "...");
-        } else {
-            withid.setText(objData.getWithdrawId());
+        if (objData.getRecipientName() != null) {
+            recipientName.setText(Utils.capitalize(objData.getRecipientName()));
+        }
+
+        if (objData.getRecipientEmail() != null) {
+            email.setText(objData.getRecipientEmail());
+        }
+
+        Double subtotall = null;
+        if (objData.getTotalPaidAmount() != null) {
+            subtotall = Double.parseDouble(objData.getTotalPaidAmount().replace("CYN", "").trim());
+            grandTotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotall)));
+        }
+
+        if (objData.getGiftCardAmount() != null) {
+            subtotal.setText("" + Utils.convertTwoDecimal(objData.getGiftCardAmount().toUpperCase().replace("USD", "").trim()));
+        }
+
+        if (objData.getGiftCardFee() != null) {
+            fee.setText("" + Utils.convertTwoDecimal(objData.getGiftCardFee().replace(" CYN", "").trim()));
+        }
+
+        if (objData.getCreatedDate() != null) {
+            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        }
+
+        if (objData.getWithdrawId() != null) {
+            if (objData.getWithdrawId().length() > 10) {
+                withId.setText(objData.getWithdrawId().substring(0, 10) + "...");
+            } else {
+                withId.setText(objData.getWithdrawId());
+            }
+            giftCardWithdrawID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getWithdrawId(), TransactionDetailsActivity.this);
+                }
+            });
         }
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -575,121 +1057,147 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        giftcardReferenceID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
-            }
-        });
-        giftCardWithdrawID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getWithdrawId(), TransactionDetailsActivity.this);
-            }
-        });
+
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawInstant(TransactionData objData) {
         LinearLayout previous, withdrawID, referenceID;
-        TextView withiheader, withiamount, withidescription, withistatus, withidatetime, withiwithdrawalAmount, withiprocefee, withitotal, withiaccountbal, withiwithdrawalId, withirefId;
-        TextView withicardHolderName, withicardnumber, withiexpirydate;
-        ImageView withiwithdrawalid, withirefIDIV, withicardbrand;
+        TextView withHeader, withAmount, withDescription, withStatus, withDateTime, withWithdrawalAmount, withProcessFee, withTotal, withAccountBal, withWithdrawalId, withRefId;
+        TextView withCardHolderName, withCardNumber, withExpiryDate;
+        ImageView withCardBrand;
 
         previous = findViewById(R.id.withInstantprevious);
-        withiheader = findViewById(R.id.withinheaderTV);
-        withiamount = findViewById(R.id.withinamount);
-        withidescription = findViewById(R.id.withindescrptnTV);
-        withistatus = findViewById(R.id.withinstatus);
-        withidatetime = findViewById(R.id.withindateTimeTV);
-        withiwithdrawalAmount = findViewById(R.id.withinwithdrawamount);
-        withiprocefee = findViewById(R.id.withinprocessingfee);
-        withitotal = findViewById(R.id.withintotalamount);
-        withiaccountbal = findViewById(R.id.withinaccountbal);
-        withiwithdrawalId = findViewById(R.id.withinwithdrawidTV);
-        withiwithdrawalid = findViewById(R.id.withinwithIDIV);
-        withirefId = findViewById(R.id.withinrefid);
-        withirefIDIV = findViewById(R.id.withinrefIDIV);
+        withHeader = findViewById(R.id.withinheaderTV);
+        withAmount = findViewById(R.id.withinamount);
+        withDescription = findViewById(R.id.withindescrptnTV);
+        withStatus = findViewById(R.id.withinstatus);
+        withDateTime = findViewById(R.id.withindateTimeTV);
+        withWithdrawalAmount = findViewById(R.id.withinwithdrawamount);
+        withProcessFee = findViewById(R.id.withinprocessingfee);
+        withTotal = findViewById(R.id.withintotalamount);
+        withAccountBal = findViewById(R.id.withinaccountbal);
+        withWithdrawalId = findViewById(R.id.withinwithdrawidTV);
+        withRefId = findViewById(R.id.withinrefid);
         withdrawID = findViewById(R.id.withiwithdrawalLL);
         referenceID = findViewById(R.id.withiReferenceIDLL);
-        withicardHolderName = findViewById(R.id.withincardholdername);
-        withicardbrand = findViewById(R.id.withincardbrandIV);
-        withicardnumber = findViewById(R.id.withincardnumTV);
-        withiexpirydate = findViewById(R.id.withinexpdateTV);
+        withCardHolderName = findViewById(R.id.withincardholdername);
+        withCardBrand = findViewById(R.id.withincardbrandIV);
+        withCardNumber = findViewById(R.id.withincardnumTV);
+        withExpiryDate = findViewById(R.id.withinexpdateTV);
 
 
-        withiheader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withiamount.setText(Utils.convertTwoDecimal(objData.getReceivedAmount().replace("USD", "").trim()));
-//        if (objData.getDescription().equals("")) {
-//            withidescription.setVisibility(View.GONE);
-//        } else {
-//            withidescription.setText("\"" + objData.getDescription() + "\"");
-//        }
-        if (objData.getRemarks().equals("")) {
-            withidescription.setVisibility(View.GONE);
+        if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
+            withHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
+        }
+
+        if (objData.getReceivedAmount() != null) {
+            withAmount.setText(Utils.convertTwoDecimal(objData.getReceivedAmount().replace("USD", "").trim()));
+        }
+
+        if (objData.getRemarks() != null && !objData.getRemarks().equals("")) {
+            withDescription.setText("\"" + objData.getRemarks() + "\"");
         } else {
-            withidescription.setText("\"" + objData.getRemarks() + "\"");
-        }
-        withistatus.setText(objData.getStatus());
-        switch (objData.getStatus().toLowerCase()) {
-            case "completed":
-                withistatus.setTextColor(getResources().getColor(R.color.completed_status));
-                withistatus.setBackgroundResource(R.drawable.txn_completed_bg);
-                break;
-            case "in progress":
-            case "inprogress":
-                withistatus.setTextColor(getResources().getColor(R.color.inprogress_status));
-                withistatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                break;
-            case "pending":
-                withistatus.setTextColor(getResources().getColor(R.color.pending_status));
-                withistatus.setBackgroundResource(R.drawable.txn_pending_bg);
-                break;
-            case "failed":
-                withistatus.setTextColor(getResources().getColor(R.color.failed_status));
-                withistatus.setBackgroundResource(R.drawable.txn_failed_bg);
-                break;
+            withDescription.setVisibility(View.GONE);
         }
 
-        withidatetime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-
-        withiwithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()) + " CYN");
-
-        withiprocefee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
-
-        withitotal.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
-
-        withiaccountbal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
-
-        if (objData.getWithdrawalId().length() > 10) {
-            withiwithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
-        } else {
-            withiwithdrawalId.setText(objData.getWithdrawalId());
+        if (objData.getStatus() != null) {
+            withStatus.setText(objData.getStatus());
+            switch (objData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    withStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                case Utils.transInProgress:
+                    withStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    withStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    withStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    withStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
         }
 
-        withirefId.setText(objData.getReferenceId().substring(0, 10) + "...");
-
-        withicardHolderName.setText(objData.getCardHolderName());
-
-        withicardnumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
-
-        switch (objData.getCardBrand()) {
-            case "MASTERCARD":
-                withicardbrand.setImageResource(R.drawable.ic_master);
-                break;
-            case "VISA":
-                withicardbrand.setImageResource(R.drawable.ic_visa);
-                break;
-            case "AMERICAN EXPRESS":
-                withicardbrand.setImageResource(R.drawable.ic_amex);
-                break;
-            case "DISCOVER":
-                withicardbrand.setImageResource(R.drawable.ic_discover);
-                break;
+        if (objData.getCreatedDate() != null) {
+            withDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
         }
 
-        withiexpirydate.setText(objData.getCardExpiryDate());
+        if (objData.getWithdrawAmount() != null) {
+            withWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()) + " CYN");
+        }
+
+        if (objData.getProcessingFee() != null) {
+            withProcessFee.setText(Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()) + " CYN");
+        }
+
+        if (objData.getTotalAmount() != null) {
+            withTotal.setText(Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()) + " CYN");
+        }
+
+
+        if (objData.getAccountBalance() != null) {
+            withAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        }
+
+        if (objData.getWithdrawalId() != null) {
+            if (objData.getWithdrawalId().length() > 10) {
+                withWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            } else {
+                withWithdrawalId.setText(objData.getWithdrawalId());
+            }
+
+            withdrawID.setOnClickListener(view -> Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this));
+        }
+
+        if (objData.getReferenceId() != null) {
+            if (objData.getReferenceId().length() > 10) {
+                withRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                withRefId.setText(objData.getReferenceId());
+            }
+
+            referenceID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
+
+        if (objData.getCardHolderName() != null) {
+            withCardHolderName.setText(objData.getCardHolderName());
+        }
+
+        if (objData.getCardNumber() != null) {
+            withCardNumber.setText("\u2022\u2022\u2022\u2022" + objData.getCardNumber().substring(objData.getCardNumber().length() - 4));
+        }
+
+        if (objData.getCardBrand() != null) {
+            switch (objData.getCardBrand()) {
+                case Utils.MASTERCARD:
+                    withCardBrand.setImageResource(R.drawable.ic_master);
+                    break;
+                case Utils.VISA:
+                    withCardBrand.setImageResource(R.drawable.ic_visa);
+                    break;
+                case Utils.AMERICANEXPRESS:
+                    withCardBrand.setImageResource(R.drawable.ic_amex);
+                    break;
+                case Utils.DISCOVER:
+                    withCardBrand.setImageResource(R.drawable.ic_discover);
+                    break;
+            }
+        }
+
+        if (objData.getCardExpiryDate() != null) {
+            withExpiryDate.setText(objData.getCardExpiryDate());
+        }
 
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -697,22 +1205,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        referenceID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
-            }
-        });
-        withdrawID.setOnClickListener(view -> Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this));
-
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawBank(TransactionData objData) {
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
         TextView withBankNameOnAccount, withBankName, withBankAccount;
-//        ImageView withbankwithdrawalid, withbankrefIDIV;
+
         LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
 
         withBankHeader = findViewById(R.id.withBankHeaderTV);
@@ -733,102 +1232,124 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withBankAccount = findViewById(R.id.withBankbankaccountTV);
 
         withBankCloseLL = findViewById(R.id.withbankCloseLL);
-//        withbankwithdrawalid = findViewById(R.id.withBankwithdrawIDIV);
-//        withbankrefIDIV = findViewById(R.id.withBankReferenceIDIV);
 
-
-        withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-//        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
-
-        if (objData.getWithdrawAmount().toLowerCase().contains("cyn")){
-            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
+            withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         }
-        else {
-            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
 
+        if (objData.getWithdrawAmount() != null) {
+            if (objData.getWithdrawAmount().toLowerCase().contains("cyn")) {
+                withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+            } else {
+                withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+
+            }
         }
-//        if (objData.getDescription().equals("")) {
-//            withbankdescription.setVisibility(View.GONE);
-//        } else {
-//            withbankdescription.setText("\"" + objData.getDescription() + "\"");
-//        }
-        if (objData.getRemarks().equals("")) {
-            withBankDescription.setVisibility(View.GONE);
-        } else {
+
+        if (objData.getRemarks() != null && !objData.getRemarks().equals("")) {
             withBankDescription.setText("\"" + objData.getRemarks() + "\"");
+        } else {
+            withBankDescription.setVisibility(View.GONE);
+
         }
-        withBankStatus.setText(objData.getStatus());
-        switch (objData.getStatus().toLowerCase()) {
-            case "completed":
-                withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
-                break;
-            case "in progress":
-            case "inprogress":
-                withBankStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                break;
-            case "pending":
-                withBankStatus.setTextColor(getResources().getColor(R.color.pending_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_pending_bg);
-                break;
-            case "failed":
-                withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
-                break;
+        if (objData.getStatus() != null) {
+            withBankStatus.setText(objData.getStatus());
+            switch (objData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                case Utils.transInProgress:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
         }
 
-        withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        if (objData.getCreatedDate() != null) {
+            withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        }
 //
 //        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("USD", "").trim());
 //        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
 
 //        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
-        if (objData.getWithdrawAmount().toLowerCase().contains("cyn")){
-            withBankWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
-        }
-        else {
-            withBankWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
+        if (objData.getWithdrawAmount() != null) {
+            if (objData.getWithdrawAmount().toLowerCase().contains("cyn")) {
+                withBankWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+            } else {
+                withBankWithdrawalAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("USD", "").trim()));
 
+            }
         }
 
-        withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
-        withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()));
+        if (objData.getProcessingFee() != null) {
+            withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
+        }
+
+        if (objData.getTotalAmount() != null) {
+            withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()));
+        }
 
         if (objData.getAccountBalance() != null)
             withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
 
-        if (objData.getWithdrawalId().length() > 10) {
-            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
-        } else {
-            withBankWithdrawalId.setText(objData.getWithdrawalId());
+        if (objData.getWithdrawalId() != null) {
+            if (objData.getWithdrawalId().length() > 10) {
+                withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            } else {
+                withBankWithdrawalId.setText(objData.getWithdrawalId());
+            }
+
+            withBankWithdrawalID.setOnClickListener(view -> Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this));
+
         }
 
-        withBankRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
+        if (objData.getReferenceId() != null) {
+            if (objData.getReferenceId().length() > 10) {
+                withBankRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
+            } else {
+                withBankRefId.setText(objData.getReferenceId());
+            }
 
-        withBankNameOnAccount.setText(objData.getNameOnBankAccount());
+            withBankReference.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
 
-        withBankName.setText(objData.getBankName());
+        if (objData.getNameOnBankAccount() != null) {
+            withBankNameOnAccount.setText(objData.getNameOnBankAccount());
+        }
+
+        if (objData.getBankName() != null) {
+            withBankName.setText(objData.getBankName());
+        }
 
 
-        withBankAccount.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
+        if (objData.getBankAccountNumber() != null && objData.getBankAccountNumber().length() > 4) {
+            withBankAccount.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
+        }
+
         withBankCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-        withBankReference.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
-            }
-        });
-        withBankWithdrawalID.setOnClickListener(view -> Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this));
-
     }
 
-    @SuppressLint("SetTextI18n")
     private void withdrawSignet(TransactionData objData) {
 
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
@@ -853,74 +1374,109 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withBankName = findViewById(R.id.withBankBanknameTV);
         withBankAccount = findViewById(R.id.withBankbankaccountTV);
         signetTextTV = findViewById(R.id.bankNameORSignetTV);
-
         withBankCloseLL = findViewById(R.id.withbankCloseLL);
-//        withbankwithdrawalid = findViewById(R.id.withBankwithdrawIDIV);
-//        withbankrefIDIV = findViewById(R.id.withBankReferenceIDIV);
 
 
-        withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
-        withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
-//        if (objData.getDescription().equals("")) {
-//            withbankdescription.setVisibility(View.GONE);
-//        } else {
-//            withbankdescription.setText("\"" + objData.getDescription() + "\"");
-//        }
-        withBankStatus.setText(objData.getStatus());
-        switch (objData.getStatus().toLowerCase()) {
-            case "completed":
-                withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
-                break;
-            case "in progress":
-            case "inprogress":
-                withBankStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                break;
-            case "pending":
-                withBankStatus.setTextColor(getResources().getColor(R.color.pending_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_pending_bg);
-                break;
-            case "failed":
-            case "cancelled":
-                withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
-                withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
-                break;
+        if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
+            withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         }
 
-        withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
-
-        Double subtotal = Double.parseDouble(objData.getWithdrawAmount().replace("CYN", "").trim());
-        Double procesFee = Double.parseDouble(objData.getProcessingFee().replace("CYN", "").trim());
-
-        withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
-        withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
-        withBankTotal.setText("" + Utils.convertTwoDecimal(String.valueOf(subtotal + procesFee)));
-
-        withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
-
-        if (objData.getWithdrawalId().length() > 10) {
-            withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
-        } else {
-            withBankWithdrawalId.setText(objData.getWithdrawalId());
+        if (objData.getWithdrawAmount() != null) {
+            withBankAmount.setText(Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
         }
 
-        if (objData.getReferenceId().length() > 10)
-            withBankRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
-        else {
-            withBankRefId.setText(objData.getReferenceId());
+        if (objData.getStatus() != null) {
+            withBankStatus.setText(objData.getStatus());
+            switch (objData.getStatus().toLowerCase()) {
+                case Utils.transCompleted:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case Utils.transinprogress:
+                case Utils.transInProgress:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+                case Utils.transPending:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.pending_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_pending_bg);
+                    break;
+                case Utils.transFailed:
+                case Utils.transCancelled:
+                    withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                    break;
+            }
         }
-        withBankNameOnAccount.setText(objData.getNameOnBank());
+
+        if (objData.getCreatedDate() != null) {
+            withBankDateTime.setText(objMyApplication.convertZoneLatestTxn(objData.getCreatedDate()));
+        }
+
+
+        if (objData.getWithdrawAmount() != null) {
+            withBankWithdrawalAmount.setText("" + Utils.convertTwoDecimal(objData.getWithdrawAmount().replace("CYN", "").trim()));
+        }
+
+        if (objData.getProcessingFee() != null) {
+            withBankProcessingFee.setText("" + Utils.convertTwoDecimal(objData.getProcessingFee().replace("CYN", "").trim()));
+        }
+
+        if (objData.getTotalAmount() != null) {
+            withBankTotal.setText("" + Utils.convertTwoDecimal(objData.getTotalAmount().replace("CYN", "").trim()));
+        }
+
+        if (objData.getAccountBalance() != null) {
+            withBankAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        }
+
+        if (objData.getWithdrawalId() != null) {
+            if (objData.getWithdrawalId().length() > 10) {
+                withBankWithdrawalId.setText(objData.getWithdrawalId().substring(0, 10) + "...");
+            } else {
+                withBankWithdrawalId.setText(objData.getWithdrawalId());
+            }
+
+            withBankWithdrawalID.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
+
+
+        if (objData.getReferenceId() != null) {
+            if (objData.getReferenceId().length() > 10)
+                withBankRefId.setText(objData.getReferenceId().substring(0, 10) + "...");
+            else {
+                withBankRefId.setText(objData.getReferenceId());
+            }
+
+            withBankReference.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
+                }
+            });
+        }
+
+        if (objData.getNameOnBank() != null) {
+            withBankNameOnAccount.setText(objData.getNameOnBank());
+        }
 
         signetTextTV.setText("Signet Wallet ID");
 //        signetTextTV.setPadding(0, 0, 0, 20);
 //        findViewById(R.id.nameOnAccount).setPadding(0, 10, 0, 0);
 //        findViewById(R.id.withdrawIDTV).setPadding(30, 30, 0, 0);
-        if (objData.getWithdrawalId().length() > 20) {
-            withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
-        } else {
-            withBankName.setText(objData.getWalletId());
+        if (objData.getWalletId() != null) {
+            if (objData.getWalletId().length() > 20) {
+                withBankName.setText(objData.getWalletId().substring(0, 20) + "...");
+            } else {
+                withBankName.setText(objData.getWalletId());
+            }
         }
+
         findViewById(R.id.bankAccountLL).setVisibility(View.GONE);
 
 
@@ -930,24 +1486,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        withBankReference.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getReferenceId(), TransactionDetailsActivity.this);
-            }
-        });
-        withBankWithdrawalID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(objData.getWithdrawalId(), TransactionDetailsActivity.this);
-            }
-        });
 
-        withBankDescription.setVisibility(View.GONE);
+        if (withBankDescription.getVisibility() == View.VISIBLE) {
+            withBankDescription.setVisibility(View.GONE);
+        }
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void businessPayout(TransactionData businessPayoutData) {
         try {
             TextView headerNameTV, amountTV, statusTV, dateAndTime, payoutID, refID, payoutDate, totalAmount, totalTransactions, depositID;
@@ -967,82 +1512,106 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             totalTransactions = findViewById(R.id.mPItotaltransactionsTV);
             depositID = findViewById(R.id.mPIdeposittoTV);
 
-            headerNameTV.setText(businessPayoutData.getTransactionType());
-
-            amountTV.setText(Utils.convertTwoDecimal(businessPayoutData.getTotalAmount().replace("CYN", "").trim()));
-
-            statusTV.setText(businessPayoutData.getStatus());
-            switch (businessPayoutData.getStatus().toLowerCase()) {
-                case "completed":
-                    statusTV.setTextColor(getResources().getColor(R.color.completed_status));
-                    statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
-                    break;
-                case "in progress":
-                case "inprogress":
-                    statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
-                    statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
-                    break;
-                case "pending":
-                    statusTV.setTextColor(getResources().getColor(R.color.pending_status));
-                    statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
-                    break;
-                case "failed":
-                case "cancelled":
-                    statusTV.setTextColor(getResources().getColor(R.color.failed_status));
-                    statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
-                    break;
+            if (businessPayoutData.getTransactionType() != null) {
+                headerNameTV.setText(businessPayoutData.getTransactionType());
             }
 
-            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(businessPayoutData.getCreatedDate()));
-
-            if (businessPayoutData.getPayoutId().length() > 10) {
-                payoutId = businessPayoutData.getPayoutId().substring(0, 10) + "...";
-                payoutID.setText(Html.fromHtml("<u>" + payoutId + "</u>"));
-            } else {
-//                payoutID.setText(businessPayoutData.getPayoutId());
-                payoutId = businessPayoutData.getPayoutId();
-                payoutID.setText(Html.fromHtml("<u>" + payoutId + "</u>"));
+            if (businessPayoutData.getTotalAmount() != null) {
+                amountTV.setText(Utils.convertTwoDecimal(businessPayoutData.getTotalAmount().replace("CYN", "").trim()));
             }
 
-            copyPayoutID.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        Utils.copyText(businessPayoutData.getPayoutId(), TransactionDetailsActivity.this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            if (businessPayoutData.getStatus() != null) {
+                statusTV.setText(businessPayoutData.getStatus());
+                switch (businessPayoutData.getStatus().toLowerCase()) {
+                    case Utils.transCompleted:
+                        statusTV.setTextColor(getResources().getColor(R.color.completed_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                        break;
+                    case Utils.transinprogress:
+                    case Utils.transInProgress:
+                        statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                        break;
+                    case Utils.transPending:
+                        statusTV.setTextColor(getResources().getColor(R.color.pending_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
+                        break;
+                    case Utils.transFailed:
+                    case Utils.transCancelled:
+                        statusTV.setTextColor(getResources().getColor(R.color.failed_status));
+                        statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
+                        break;
                 }
-            });
-
-            if (businessPayoutData.getReferenceId().length() > 10) {
-                refID.setText(businessPayoutData.getReferenceId().substring(0, 10) + "...");
-            } else {
-                refID.setText(businessPayoutData.getReferenceId());
             }
 
-            copyReferenceIDLL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        Utils.copyText(businessPayoutData.getReferenceId(), TransactionDetailsActivity.this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            if (businessPayoutData.getCreatedDate() != null) {
+                dateAndTime.setText(objMyApplication.convertZoneLatestTxn(businessPayoutData.getCreatedDate()));
+            }
+
+            if (businessPayoutData.getPayoutId() != null) {
+                if (businessPayoutData.getPayoutId().length() > 10) {
+                    payoutId = businessPayoutData.getPayoutId().substring(0, 10) + "...";
+                    payoutID.setText(Html.fromHtml("<u>" + payoutId + "</u>"));
+                } else {
+                    //                payoutID.setText(businessPayoutData.getPayoutId());
+                    payoutId = businessPayoutData.getPayoutId();
+                    payoutID.setText(Html.fromHtml("<u>" + payoutId + "</u>"));
                 }
-            });
 
-            payoutDate.setText(businessPayoutData.getPayoutDate());
+                copyPayoutID.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            Utils.copyText(businessPayoutData.getPayoutId(), TransactionDetailsActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
 
-            totalAmount.setText(Utils.convertTwoDecimal(businessPayoutData.getTotalAmount().replace("CYN", "").trim()) + " ");
+            if (businessPayoutData.getReferenceId() != null) {
+                if (businessPayoutData.getReferenceId().length() > 10) {
+                    refID.setText(businessPayoutData.getReferenceId().substring(0, 10) + "...");
+                } else {
+                    refID.setText(businessPayoutData.getReferenceId());
+                }
 
-            totalTransactions.setText(businessPayoutData.getTotalTransactions());
+                copyReferenceIDLL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            Utils.copyText(businessPayoutData.getReferenceId(), TransactionDetailsActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
 
 
-            if (businessPayoutData.getDepositTo().length() > 10) {
-                depositID.setText(businessPayoutData.getDepositTo().substring(0, 10) + "...");
-            } else {
-                depositID.setText(businessPayoutData.getDepositTo());
+            if (businessPayoutData.getPayoutCreatedDate() != null && businessPayoutData.getPayoutUpdatedDate() != null) {
+                String startDate = objMyApplication.convertPayoutDateTimeZone(businessPayoutData.getPayoutCreatedDate());
+                String endDate = objMyApplication.convertPayoutDateTimeZone(businessPayoutData.getPayoutUpdatedDate());
+
+                payoutDate.setText(startDate + " to " + endDate);
+            }
+
+            if (businessPayoutData.getTotalAmount() != null) {
+                totalAmount.setText(Utils.convertTwoDecimal(businessPayoutData.getTotalAmount().replace("CYN", "").trim()) + " ");
+            }
+
+            if (businessPayoutData.getTotalTransactions() != null) {
+                totalTransactions.setText(businessPayoutData.getTotalTransactions());
+            }
+
+
+            if (businessPayoutData.getDepositTo() != null) {
+                if (businessPayoutData.getDepositTo().length() > 10) {
+                    depositID.setText(businessPayoutData.getDepositTo().substring(0, 10) + "...");
+                } else {
+                    depositID.setText(businessPayoutData.getDepositTo());
+                }
             }
 
             findViewById(R.id.Mpayoutll).setOnClickListener(view -> finish());
@@ -1054,7 +1623,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void failedWithdraw(TransactionData failedData) {
         try {
             TextView transactionTypeTV, amountTV, statusTV, dateAndTime, refID, reasonFailed, achWithTV, achRefID, withdrawAmountTV, processingFeeTV, totalAmountTV;
@@ -1074,55 +1642,62 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             processingFeeTV = findViewById(R.id.withBankProcessFee);
             totalAmountTV = findViewById(R.id.totalAmountTV);
 
-            transactionTypeTV.setText(failedData.getTransactionType());
+            if (failedData.getTransactionType() != null) {
+                transactionTypeTV.setText(failedData.getTransactionType());
+            }
 
-            statusTV.setText(failedData.getStatus());
 
             amountTV.setText(Utils.convertTwoDecimal(failedData.getWithdrawAmount().replace("CYN", "").trim()));
 
 
-            try {
+            if (failedData.getStatus() != null) {
+                statusTV.setText(failedData.getStatus());
                 switch (failedData.getStatus().toLowerCase()) {
-                    case "completed":
+                    case Utils.transCompleted:
                         statusTV.setTextColor(getResources().getColor(R.color.completed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
-                    case "in progress":
-                    case "inprogress":
+                    case Utils.transinprogress:
+                    case Utils.transInProgress:
                         statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
                         statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case "pending":
+                    case Utils.transPending:
                         statusTV.setTextColor(getResources().getColor(R.color.pending_status));
                         statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case "failed":
-                    case "cancelled":
+                    case Utils.transFailed:
+                    case Utils.transCancelled:
                         statusTV.setTextColor(getResources().getColor(R.color.failed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
             }
 
-            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(failedData.getCreatedDate()));
-
-            if (failedData.getReferenceId().length() > 10)
-                refID.setText(failedData.getReferenceId().substring(0, 10) + "...");
-            else {
-                refID.setText(failedData.getReferenceId());
+            if (failedData.getCreatedDate() != null) {
+                dateAndTime.setText(objMyApplication.convertZoneLatestTxn(failedData.getCreatedDate()));
             }
 
-            copyReferenceIDLL.setOnClickListener(view -> {
-                try {
-                    Utils.copyText(failedData.getReferenceId(), TransactionDetailsActivity.this);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (failedData.getReferenceId() != null) {
+                if (failedData.getReferenceId().length() > 10) {
+                    refID.setText(failedData.getReferenceId().substring(0, 10) + "...");
+                } else {
+                    refID.setText(failedData.getReferenceId());
                 }
-            });
 
-            reasonFailed.setText(failedData.getFailedReason());
+                copyReferenceIDLL.setOnClickListener(view -> {
+                    try {
+                        Utils.copyText(failedData.getReferenceId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+
+            if (failedData.getFailedReason() != null) {
+                reasonFailed.setText(failedData.getFailedReason());
+            }
 
             if (failedData.getAchReferenceId() != null) {
                 if (failedData.getWithdrawId().length() > 10) {
@@ -1130,32 +1705,41 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 } else {
                     achWithTV.setText(failedData.getWithdrawId());
                 }
-            }
-            copyACHWithID.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        Utils.copyText(failedData.getWithdrawId(), TransactionDetailsActivity.this);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                copyACHWithID.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            Utils.copyText(failedData.getWithdrawId(), TransactionDetailsActivity.this);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            }
 
             String achRefId = "";
-            if (failedData.getAchReferenceId().length() > 10) {
-                achRefId = failedData.getAchReferenceId().substring(0, 10) + "...";
-                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
-            } else {
-                achRefId = failedData.getAchReferenceId();
-                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+            if (failedData.getAchReferenceId() != null) {
+                if (failedData.getAchReferenceId().length() > 10) {
+                    achRefId = failedData.getAchReferenceId().substring(0, 10) + "...";
+                    achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+                } else {
+                    achRefId = failedData.getAchReferenceId();
+                    achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+                }
             }
 
-            withdrawAmountTV.setText(Utils.convertTwoDecimal(failedData.getWithdrawAmount().replace("CYN", "").trim()));
+            if (failedData.getWithdrawAmount() != null) {
+                withdrawAmountTV.setText(Utils.convertTwoDecimal(failedData.getWithdrawAmount().replace("CYN", "").trim()));
+            }
 
-            processingFeeTV.setText(Utils.convertTwoDecimal(failedData.getProcessingFee().replace("CYN", "").trim()));
+            if (failedData.getProcessingFee() != null) {
+                processingFeeTV.setText(Utils.convertTwoDecimal(failedData.getProcessingFee().replace("CYN", "").trim()));
+            }
 
-            totalAmountTV.setText(Utils.convertTwoDecimal(failedData.getTotalAmount().replace("CYN", "").trim()));
+            if (failedData.getTotalAmount() != null) {
+                totalAmountTV.setText(Utils.convertTwoDecimal(failedData.getTotalAmount().replace("CYN", "").trim()));
+            }
         } catch (Resources.NotFoundException | NumberFormatException e) {
             e.printStackTrace();
         }
@@ -1163,7 +1747,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("SetTextI18n")
     private void cancelledWithdraw(TransactionData cancelledData) {
         try {
             TextView transactionTypeTV, amountTV, statusTV, dateAndTime, refID, reasonFailed, achWithTV, achRefID, withdrawAmountTV, processingFeeTV, totalAmountTV;
@@ -1183,53 +1766,59 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             processingFeeTV = findViewById(R.id.withBankProcessFee);
             totalAmountTV = findViewById(R.id.totalAmountTV);
 
-            transactionTypeTV.setText(cancelledData.getTransactionType());
+            if (cancelledData.getTransactionType() != null) {
+                transactionTypeTV.setText(cancelledData.getTransactionType());
+            }
 
-            statusTV.setText(cancelledData.getStatus());
 
             amountTV.setText(Utils.convertTwoDecimal(cancelledData.getWithdrawAmount().replace("CYN", "").trim()));
 
 
-            try {
+            if (cancelledData.getStatus() != null) {
+                statusTV.setText(cancelledData.getStatus());
                 switch (cancelledData.getStatus().toLowerCase()) {
-                    case "completed":
+                    case Utils.transCompleted:
                         statusTV.setTextColor(getResources().getColor(R.color.completed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_completed_bg);
                         break;
-                    case "in progress":
-                    case "inprogress":
+                    case Utils.transinprogress:
+                    case Utils.transInProgress:
                         statusTV.setTextColor(getResources().getColor(R.color.inprogress_status));
                         statusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                         break;
-                    case "pending":
+                    case Utils.transPending:
                         statusTV.setTextColor(getResources().getColor(R.color.pending_status));
                         statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
                         break;
-                    case "failed":
-                    case "cancelled":
+                    case Utils.transFailed:
+                    case Utils.transCancelled:
                         statusTV.setTextColor(getResources().getColor(R.color.failed_status));
                         statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
                         break;
                 }
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
             }
 
-            dateAndTime.setText(objMyApplication.convertZoneLatestTxn(cancelledData.getCreatedDate()));
 
-            if (cancelledData.getReferenceId().length() > 10)
-                refID.setText(cancelledData.getReferenceId().substring(0, 10) + "...");
-            else {
-                refID.setText(cancelledData.getReferenceId());
+            if (cancelledData.getCreatedDate() != null) {
+                dateAndTime.setText(objMyApplication.convertZoneLatestTxn(cancelledData.getCreatedDate()));
             }
 
-            copyReferenceIDLL.setOnClickListener(view -> {
-                try {
-                    Utils.copyText(cancelledData.getReferenceId(), TransactionDetailsActivity.this);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (cancelledData.getReferenceId() != null) {
+                if (cancelledData.getReferenceId().length() > 10)
+                    refID.setText(cancelledData.getReferenceId().substring(0, 10) + "...");
+                else {
+                    refID.setText(cancelledData.getReferenceId());
                 }
-            });
+
+                copyReferenceIDLL.setOnClickListener(view -> {
+                    try {
+                        Utils.copyText(cancelledData.getReferenceId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
             findViewById(R.id.failedReTV).setVisibility(View.GONE);
             reasonFailed.setVisibility(View.GONE);
 
@@ -1239,29 +1828,40 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 } else {
                     achWithTV.setText(cancelledData.getWithdrawId());
                 }
+
+                copyACHWithID.setOnClickListener(view -> {
+                    try {
+                        Utils.copyText(cancelledData.getWithdrawId(), TransactionDetailsActivity.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
             }
-            copyACHWithID.setOnClickListener(view -> {
-                try {
-                    Utils.copyText(cancelledData.getWithdrawId(), TransactionDetailsActivity.this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+
 
             String achRefId;
-            if (cancelledData.getAchReferenceId().length() > 10) {
-                achRefId = cancelledData.getAchReferenceId().substring(0, 10) + "...";
-                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
-            } else {
-                achRefId = cancelledData.getAchReferenceId();
-                achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+            if (cancelledData.getAchReferenceId() != null) {
+                if (cancelledData.getAchReferenceId().length() > 10) {
+                    achRefId = cancelledData.getAchReferenceId().substring(0, 10) + "...";
+                    achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+                } else {
+                    achRefId = cancelledData.getAchReferenceId();
+                    achRefID.setText(Html.fromHtml("<u>" + achRefId + "</u>"));
+                }
             }
 
-            withdrawAmountTV.setText(Utils.convertTwoDecimal(cancelledData.getWithdrawAmount().replace("CYN", "").trim()));
+            if (cancelledData.getWithdrawAmount() != null) {
+                withdrawAmountTV.setText(Utils.convertTwoDecimal(cancelledData.getWithdrawAmount().replace("CYN", "").trim()));
+            }
 
-            processingFeeTV.setText(Utils.convertTwoDecimal(cancelledData.getProcessingFee().replace("CYN", "").trim()));
+            if (cancelledData.getProcessingFee() != null) {
+                processingFeeTV.setText(Utils.convertTwoDecimal(cancelledData.getProcessingFee().replace("CYN", "").trim()));
+            }
 
-            totalAmountTV.setText(Utils.convertTwoDecimal(cancelledData.getTotalAmount().replace("CYN", "").trim()));
+            if (cancelledData.getTotalAmount() != null) {
+                totalAmountTV.setText(Utils.convertTwoDecimal(cancelledData.getTotalAmount().replace("CYN", "").trim()));
+            }
+
         } catch (Resources.NotFoundException | NumberFormatException e) {
             e.printStackTrace();
         }
@@ -1271,7 +1871,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void ControlMethod(String methodToShow) {
         try {
             switch (methodToShow) {
-                case "payrequest": {
+                case PAY_REQUEST: {
                     findViewById(R.id.payrequest).setVisibility(View.VISIBLE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1280,9 +1880,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
-                case "buytoken": {
+                case BUY_TOKEN: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.VISIBLE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1291,9 +1894,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
-                case "buytokenbank": {
+                case BUY_BANK: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.VISIBLE);
@@ -1302,9 +1908,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
-                case "buytokensignet": {
+                case BUY_SIGNET: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1313,9 +1922,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.VISIBLE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+
                 }
                 break;
-                case "withdrawgift": {
+                case WITH_GIFT: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1324,9 +1937,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
-                case "withdrawinstant": {
+                case WITH_Instant: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1335,10 +1951,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
-                case "withdrawbankaccount":
-                case "withdrawsignet": {
+                case WITH_BANK:
+                case WITH_SIGNET: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1347,9 +1966,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.VISIBLE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+
                 }
                 break;
-                case "businessPayout": {
+                case BUSINESS_PAYOUT: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1358,10 +1981,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.withdrawBank).setVisibility(View.GONE);
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.VISIBLE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
                 }
                 break;
-                case "cancelledWithdraw":
-                case "failedWithdraw": {
+                case CANCELLED_WITH:
+                case FAILED_WITH: {
                     findViewById(R.id.payrequest).setVisibility(View.GONE);
                     findViewById(R.id.buytokenCD).setVisibility(View.GONE);
                     findViewById(R.id.buytokenBank).setVisibility(View.GONE);
@@ -1371,7 +1997,37 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
                     findViewById(R.id.businessPayout).setVisibility(View.GONE);
                     findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.VISIBLE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
 
+                }
+                break;
+                case PAID_ORDER_TOKEN: {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.VISIBLE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.GONE);
+                }
+                break;
+                case RESERVE_RELEASE: {
+                    findViewById(R.id.payrequest).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenCD).setVisibility(View.GONE);
+                    findViewById(R.id.buytokenBank).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawGift).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawInstant).setVisibility(View.GONE);
+                    findViewById(R.id.withdrawBank).setVisibility(View.GONE);
+                    findViewById(R.id.buyTokenSignet).setVisibility(View.GONE);
+                    findViewById(R.id.businessPayout).setVisibility(View.GONE);
+                    findViewById(R.id.failedWithdrawBankAcc).setVisibility(View.GONE);
+                    findViewById(R.id.paidOrderToken).setVisibility(View.GONE);
+                    findViewById(R.id.reserve_release_details).setVisibility(View.VISIBLE);
                 }
                 break;
             }

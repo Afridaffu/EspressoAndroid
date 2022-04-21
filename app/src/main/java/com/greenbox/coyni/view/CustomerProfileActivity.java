@@ -2,15 +2,8 @@ package com.greenbox.coyni.view;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
-import com.bumptech.glide.Glide;
-import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
-import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
-import com.greenbox.coyni.model.businesswallet.WalletResponseData;
-import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
-import com.greenbox.coyni.model.profile.Profile;
-
-import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -41,22 +34,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
+import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.logout.LogoutResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.Locale;
 
@@ -87,8 +86,7 @@ public class CustomerProfileActivity extends BaseActivity {
     Dialog qrDialog;
     String strWallet = "";
     private DatabaseHandler dbHandler;
-
-    static Cursor dsPermanentToken, dsFacePin, dsTouchID;
+    private LoginViewModel loginViewModel;
     static String strToken = "";
     static String strDeviceID = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -142,6 +140,7 @@ public class CustomerProfileActivity extends BaseActivity {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             dbHandler = DatabaseHandler.getInstance(CustomerProfileActivity.this);
 
             isBiometric = Utils.getIsBiometric();
@@ -227,12 +226,14 @@ public class CustomerProfileActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        isLoggedOut = true;
-                        objMyApplication.setStrRetrEmail("");
-                        dropAllTables();
-                        Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(i);
+                        showProgressDialog();
+                        loginViewModel.logout();
+//                        isLoggedOut = true;
+//                        objMyApplication.setStrRetrEmail("");
+//                        dropAllTables();
+//                        Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
+//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                        startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -450,10 +451,19 @@ public class CustomerProfileActivity extends BaseActivity {
                 }
             });
 
-            customerProfileViewModel.meSyncAccount();
+            //customerProfileViewModel.meSyncAccount();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void onLogoutSuccess() {
+        isLoggedOut = true;
+        objMyApplication.setStrRetrEmail("");
+        dropAllTables();
+        Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 
     private void displayQRCode() {
@@ -674,21 +684,7 @@ public class CustomerProfileActivity extends BaseActivity {
 
     private void dropAllTables() {
         try {
-            enableBiometric(false);
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-
-            //SHIVA Changes
-//            mydatabase.execSQL("Delete from tblUserDetails;");
-//            mydatabase.execSQL("Delete from tblRemember;");
-//            mydatabase.execSQL("Delete from tblThumbPinLock;");
-//            mydatabase.execSQL("Delete from tblFacePinLock;");
-//            mydatabase.execSQL("Delete from tblPermanentToken;");
-//            mydatabase.execSQL("Delete from tblDontRemind;");
+//            enableBiometric(false);
 
             dbHandler.clearAllTables();
 
@@ -715,23 +711,19 @@ public class CustomerProfileActivity extends BaseActivity {
     private void isSwitchEnable() {
         try {
             if (!isSwitchEnabled) {
-//                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
                     FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.hasEnrolledFingerprints()) {
                         enablePopup = showFaceTouchEnabledDialog(this, "TOUCH");
                     } else {
-//                        dialog = Utils.showProgressDialog(this);
                         BiometricRequest biometricRequest = new BiometricRequest();
                         biometricRequest.setBiometricEnabled(true);
                         biometricRequest.setDeviceId(Utils.getDeviceID());
                         coyniViewModel.saveBiometric(biometricRequest);
                     }
                 } else {
-
                     if (Utils.checkBiometric(CustomerProfileActivity.this)) {
                         if (!Utils.isFingerPrint(CustomerProfileActivity.this)) {
-//                            dialog = Utils.showProgressDialog(this);
                             BiometricRequest biometricRequest = new BiometricRequest();
                             biometricRequest.setBiometricEnabled(true);
                             biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -742,15 +734,12 @@ public class CustomerProfileActivity extends BaseActivity {
                     }
                 }
             } else {
-//                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 if (tvBMSetting.getText().toString().toLowerCase().contains("face")) {
-//                    dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
                     coyniViewModel.saveBiometric(biometricRequest);
                 } else {
-//                    dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -798,13 +787,13 @@ public class CustomerProfileActivity extends BaseActivity {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "CHOOSE")
                             .putExtra("screen", "ResetPIN")
-                            .putExtra("AUTH_TYPE","TOUCH");
+                            .putExtra("AUTH_TYPE", "TOUCH");
                     startActivity(i);
                 } else {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
                             .putExtra("screen", "ResetPIN")
-                            .putExtra("AUTH_TYPE","PIN");
+                            .putExtra("AUTH_TYPE", "PIN");
                     startActivity(i);
                 }
             }
@@ -973,6 +962,24 @@ public class CustomerProfileActivity extends BaseActivity {
                         }
                         Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
                         startActivity(cp);
+                    }
+                }
+            }
+        });
+
+        loginViewModel.getLogoutLiveData().observe(this, new Observer<LogoutResponse>() {
+            @Override
+            public void onChanged(LogoutResponse logoutResponse) {
+                dismissDialog();
+                if (logoutResponse != null) {
+                    if (logoutResponse.getStatus().toLowerCase().equals("success")) {
+                        onLogoutSuccess();
+                    } else {
+                        if (!logoutResponse.getError().getErrorDescription().equals("")) {
+                            Utils.displayAlert(logoutResponse.getError().getErrorDescription(), CustomerProfileActivity.this, "", "");
+                        } else {
+                            Utils.displayAlert(logoutResponse.getError().getFieldErrors().get(0), CustomerProfileActivity.this, "", "");
+                        }
                     }
                 }
             }
@@ -1272,62 +1279,6 @@ public class CustomerProfileActivity extends BaseActivity {
         }
     }
 
-
-//    public static void SetToken(MyApplication objMyApplication, Activity activity) {
-//        try {
-//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-//            dsPermanentToken.moveToFirst();
-//            if (dsPermanentToken.getCount() > 0) {
-//                strToken = dsPermanentToken.getString(1);
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
-//    public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
-//        try {
-//            isFaceLock = false;
-//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-//            dsFacePin.moveToFirst();
-//            if (dsFacePin.getCount() > 0) {
-//                String value = dsFacePin.getString(1);
-//                if (value.equals("true")) {
-//                    isFaceLock = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isFaceLock = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    public static void SetTouchId(MyApplication objMyApplication, Activity activity) {
-//        try {
-//            isTouchId = false;
-//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-//            dsTouchID.moveToFirst();
-//            if (dsTouchID.getCount() > 0) {
-//                String value = dsTouchID.getString(1);
-//                if (value.equals("true")) {
-//                    isTouchId = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isTouchId = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     public void setToken() {
         strToken = dbHandler.getPermanentToken();
     }
@@ -1365,5 +1316,4 @@ public class CustomerProfileActivity extends BaseActivity {
             ex.printStackTrace();
         }
     }
-
 }

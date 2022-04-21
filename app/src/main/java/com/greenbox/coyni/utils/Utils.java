@@ -233,6 +233,7 @@ public class Utils {
     public static final String tokensub = "token";
     public static final String transfersub = "transfer";
     public static final String Success = "Success";
+    public static final String Swiped = "Swiped";
     //    controll methods in merchanttransactiondetails
     public static final String refundCM = "refundCM";
     public static final String saleorderCM = "saleorderCM";
@@ -330,12 +331,18 @@ public class Utils {
     public static final String pinActionType = "COYNIPIN";
     public static final String paidActionType = "PAIDORDER";
 
+    public static final String MERCHANT_TRANSACTION_PARTIAL_REFUND = "Partial Refund";
+    public static final String MERCHANT_TRANSACTION_COMPLETED = "Completed";
+    public static final String MERCHANT_TRANSACTION_FAILED = "Failed";
+
     public static final String OPEN = "open";
     public static final String PAID = "paid";
     public static final String CLOSED = "closed";
     public static final String RELEASED = "released";
     public static final String ONHOLD = "on hold";
     public static final String CANCELED = "canceled";
+    public static String processType = "M";
+
 
     public static final int boTargetPercentage = 51;
 
@@ -371,13 +378,19 @@ public class Utils {
     public static final String resetFilter = "resetFilter";
     public static final String datePicker = "DatePicker";
 
-
     public static final String position = "Position";
     public static final int cPP = 0;
     public static final int cTOS = 1;
     public static final int mPP = 8;
     public static final int mTOS = 7;
     public static final int mAgmt = 5;
+
+    //Cards
+    public static final String MASTERCARD = "MASTERCARD";
+    public static final String VISA = "VISA";
+    public static final String AMERICANEXPRESS = "AMERICAN EXPRESS";
+    public static final String DISCOVER = "DISCOVER";
+
 
 
     public static String getStrLang() {

@@ -31,7 +31,6 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
-import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
@@ -89,9 +88,7 @@ public class EditTeamMember extends BaseActivity {
         //editPhoneTil = findViewById(R.id.phoneNumberOET);
 
         editFNameET = findViewById(R.id.editFNameET);
-        editFNameET.setEnabled(false);
         editLNameET = findViewById(R.id.editLNameET);
-        editLNameET.setEnabled(false);
         editEmailET = findViewById(R.id.editEmailET);
         editPhoneET = findViewById(R.id.phoneNumberOET);
         editPhoneET.setFrom("EDIT_TEAM_MEMBER");
@@ -152,8 +149,7 @@ public class EditTeamMember extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    showProgressDialog();
-                    teamInfoAPICall(prepareRequest());
+                    sendUpdateRequest();
                     Utils.hideKeypad(EditTeamMember.this);
                 }
 
@@ -189,6 +185,7 @@ public class EditTeamMember extends BaseActivity {
                         }
                         if (editFNameET.getText().toString().length() > 0 && !editFNameET.getText().toString().substring(0, 1).equals(" ")) {
                             editFNameET.setText(editFNameET.getText().toString().substring(0, 1).toUpperCase() + editFNameET.getText().toString().substring(1));
+                            editFNameET.setSelection(editFNameET.getText().toString().length());
                         }
                     } else {
                         editFNameLL.setVisibility(GONE);
@@ -223,6 +220,7 @@ public class EditTeamMember extends BaseActivity {
                         }
                         if (editLNameET.getText().toString().length() > 0 && !editLNameET.getText().toString().substring(0, 1).equals(" ")) {
                             editLNameET.setText(editLNameET.getText().toString().substring(0, 1).toUpperCase() + editLNameET.getText().toString().substring(1));
+                            editLNameET.setSelection(editLNameET.getText().toString().length());
                         }
                     } else {
                         focusedID = editLNameET.getId();
@@ -412,15 +410,16 @@ public class EditTeamMember extends BaseActivity {
         try {
             if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
-                sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-
+                if (sendCV != null) {
+                    sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                }
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " + isPhoneNumber + " ");
             } else {
-
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " + isPhoneNumber + " ");
-
                 isNextEnabled = false;
-                sendCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                if (sendCV != null) {
+                    sendCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -428,27 +427,33 @@ public class EditTeamMember extends BaseActivity {
 
     }
 
-    public void teamInfoAPICall(TeamRequest teamRequest) {
-        teamViewModel.updateTeamMember(teamRequest, teamMemberId);
-    }
-
-    public TeamRequest prepareRequest() {
-        TeamRequest teamRequest = new TeamRequest();
+    public void sendUpdateRequest() {
         try {
+            String firstName = editFNameET.getText().toString();
+            String lastName = editLNameET.getText().toString();
             String emailAddress = editEmailET.getText().toString();
             String phoneNumber = editPhoneET.getText().toString().substring(1, 4) + editPhoneET.getText().toString().substring(6, 9) + editPhoneET.getText().toString().substring(10, editPhoneET.getText().length());
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
-            phone.setPhoneNumber(phoneNumber);
-            teamRequest.setPhoneNumber(phone);
-            teamRequest.setEmailAddress(emailAddress);
-            teamRequest.setRoleId(19);
 
+            if (firstName.equalsIgnoreCase(this.firstName) && lastName.equalsIgnoreCase(this.lastName)
+                    && emailAddress.equalsIgnoreCase(this.emailAddress) && phoneNumber.equalsIgnoreCase(this.phoneNumber)) {
+                Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.please_modify_details), R.drawable.ic_custom_tick, "Update");
+            } else {
+                TeamRequest teamRequest = new TeamRequest();
+                teamRequest.setFirstName(firstName);
+                teamRequest.setLastName(lastName);
+                phone.setPhoneNumber(phoneNumber);
+                teamRequest.setPhoneNumber(phone);
+                teamRequest.setEmailAddress(emailAddress);
+                teamRequest.setRoleId(19);
+                showProgressDialog();
+                teamViewModel.updateTeamMember(teamRequest, teamMemberId);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return teamRequest;
     }
 
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
@@ -484,8 +489,8 @@ public class EditTeamMember extends BaseActivity {
                 dismissDialog();
                 try {
                     if (teamInfoAddModel != null) {
-                        if (teamInfoAddModel.getStatus().equalsIgnoreCase("SUCCESS")) {
-                            Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.invitation_sent_with_exclamatory), R.drawable.ic_custom_tick, "Update");
+                        if (teamInfoAddModel.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.team_member_update_successful), R.drawable.ic_custom_tick, "Update");
                             new Handler().postDelayed(() -> {
                                 try {
                                     finish();

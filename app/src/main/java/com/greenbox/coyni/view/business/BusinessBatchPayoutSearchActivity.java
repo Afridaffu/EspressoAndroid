@@ -267,17 +267,27 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                 showBatchPayoutDetails(batchPayoutListItem);
             }
 
-        });
-        if (payoutList.size() > 0) {
-            recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
-            recyclerViewPayouts.setVisibility(View.VISIBLE);
-            noMorePayoutTransactions.setVisibility(View.GONE);
-            cynTV.setVisibility(View.VISIBLE);
-        } else {
-            recyclerViewPayouts.setVisibility(View.GONE);
-            noPayoutTransactions.setVisibility(View.VISIBLE);
-            cynTV.setVisibility(View.GONE);
+                                });
+                                if (payoutList.size() > 0) {
+                                    recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
+                                    recyclerViewPayouts.setVisibility(View.VISIBLE);
+                                    noMorePayoutTransactions.setVisibility(View.GONE);
+                                    cynTV.setVisibility(View.VISIBLE);
+                                }else {
+                                    recyclerViewPayouts.setVisibility(View.GONE);
+                                    noPayoutTransactions.setVisibility(View.VISIBLE);
+                                    cynTV.setVisibility(View.GONE);
+                                }
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutSearchActivity.this, "", batchPayoutList.getError().getFieldErrors().get(0));
 
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
@@ -346,8 +356,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         }
 
     }
-
-    private void getBatchListData() {
+    private void getBatchListData(){
         showProgressDialog();
         RollingListRequest listRequest = new RollingListRequest();
         listRequest.setPayoutType(Utils.batchNow);

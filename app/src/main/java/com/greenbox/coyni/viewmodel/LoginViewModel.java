@@ -22,6 +22,7 @@ import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
+import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
@@ -83,6 +84,7 @@ public class LoginViewModel extends AndroidViewModel {
     private MutableLiveData<AddBusinessUserResponse> postChangeAccountResponse = new MutableLiveData<>();
     private MutableLiveData<UpdateResendOTPResponse> updateResendOTPMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<LoginResponse> authenticatePasswordResponse = new MutableLiveData<>();
+    private MutableLiveData<LogoutResponse> logoutLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LoginResponse> getAuthenticatePasswordResponse() {
         return authenticatePasswordResponse;
@@ -177,6 +179,10 @@ public class LoginViewModel extends AndroidViewModel {
 
     public MutableLiveData<EmailExistsResponse> getEmailExistsResponseMutableLiveData() {
         return emailExistsResponseMutableLiveData;
+    }
+
+    public MutableLiveData<LogoutResponse> getLogoutLiveData() {
+        return logoutLiveData;
     }
 
     public void smsotpresend(SMSResend resend) {
@@ -348,6 +354,37 @@ public class LoginViewModel extends AndroidViewModel {
         }
     }
 
+    public void logout() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<LogoutResponse> mCall = apiService.logout();
+            mCall.enqueue(new Callback<LogoutResponse>() {
+                @Override
+                public void onResponse(Call<LogoutResponse> call, Response<LogoutResponse> response) {
+                    if (response.isSuccessful()) {
+                        LogoutResponse obj = response.body();
+                        logoutLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<LogoutResponse>() {
+                        }.getType();
+                        LogoutResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            logoutLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LogoutResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    logoutLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public void login(LoginRequest loginRequest) {
         try {

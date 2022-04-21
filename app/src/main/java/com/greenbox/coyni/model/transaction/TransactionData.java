@@ -85,8 +85,12 @@ public class TransactionData implements Serializable {
     private String payoutDate;
     private String totalTransactions;
     private String failedReason;
+    private String merchantId;
+    private String dbaName;
+    private String paidAmount;
+    private String customerServicePhoneNo;
+    private String customerServiceMail;
     private String achReferenceId;
-
 
 
     //    MerchantTransaction newly added fields
@@ -99,7 +103,19 @@ public class TransactionData implements Serializable {
     private String dateAndTime;
     private String refundAmount;
     private String depositTo;
+    private String payoutCreatedDate;
+    private String payoutUpdatedDate;
     private String amountSent;
+    private String saleOrderGrossAmount;
+    private String saleOrderNetAmount;
+    private String saleOrderReferenceId;
+    private String saleOrderDateAndTime;
+    private String saleOrderReserve;
+    private String releasedDate;
+    private String amountReleased;
+    private String reserveRule;
+    private String reservedOn;
+    private String reserveId;
 
 
     public String getWithdrawId() {
@@ -108,6 +124,46 @@ public class TransactionData implements Serializable {
 
     public String getCardExpiryDate() {
         return cardExpiryDate;
+    }
+
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    public String getDbaName() {
+        return dbaName;
+    }
+
+    public String getCustomerServicePhoneNo() {
+        return customerServicePhoneNo;
+    }
+
+    public String getCustomerServiceMail() {
+        return customerServiceMail;
+    }
+
+    public String getPaidAmount() {
+        return paidAmount;
+    }
+
+    public String getReleasedDate() {
+        return releasedDate;
+    }
+
+    public String getReserveRule() {
+        return reserveRule;
+    }
+
+    public String getAmountReleased() {
+        return amountReleased;
+    }
+
+    public String getReservedOn() {
+        return reservedOn;
+    }
+
+    public String getReserveId() {
+        return reserveId;
     }
 
     public void setCardExpiryDate(String cardExpiryDate) {
@@ -213,6 +269,7 @@ public class TransactionData implements Serializable {
     public void setDepositid(String depositId) {
         this.depositId = depositId;
     }
+
     public String getDepositid() {
         return depositId;
     }
@@ -241,7 +298,9 @@ public class TransactionData implements Serializable {
         this.amountReceived = amountReceived;
     }
 
-    public String getSenderName() { return senderName; }
+    public String getSenderName() {
+        return senderName;
+    }
 
     public void setSenderName(String senderName) {
         this.senderName = senderName;
@@ -499,6 +558,22 @@ public class TransactionData implements Serializable {
         this.failedReason = failedReason;
     }
 
+    public String getPayoutCreatedDate() {
+        return payoutCreatedDate;
+    }
+
+    public void setPayoutCreatedDate(String payoutCreatedDate) {
+        this.payoutCreatedDate = payoutCreatedDate;
+    }
+
+    public String getPayoutUpdatedDate() {
+        return payoutUpdatedDate;
+    }
+
+    public void setPayoutUpdatedDate(String payoutUpdatedDate) {
+        this.payoutUpdatedDate = payoutUpdatedDate;
+    }
+
     public String getAchReferenceId() {
         return achReferenceId;
     }
@@ -512,50 +587,111 @@ public class TransactionData implements Serializable {
     public String getFees() {
         return fees;
     }
+
     public void setFees(String fees) {
         this.fees = fees;
     }
+
     public String getNetAmount() {
         return netAmount;
     }
+
     public void setNetAmount(String netAmount) {
         this.netAmount = netAmount;
     }
+
     public String getSenderEmail() {
         return senderEmail;
     }
+
     public void setSenderEmail(String senderEmail) {
         this.senderEmail = senderEmail;
     }
+
     public String getReserve() {
         return reserve;
     }
+
     public void setReserve(String reserve) {
         this.reserve = reserve;
     }
+
     public String getGrossAmount() {
         return grossAmount;
     }
+
     public void setGrossAmount(String grossAmount) {
         this.grossAmount = grossAmount;
     }
+
     public String getDateAndTime() {
         return dateAndTime;
     }
+
     public void setDateAndTime(String dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
+
     public String getRefundAmount() {
         return refundAmount;
     }
+
     public void setRefundAmount(String refundAmount) {
         this.refundAmount = refundAmount;
     }
+
     public String getAmountSent() {
         return amountSent;
     }
+
     public void setAmountSent(String amountSent) {
         this.amountSent = amountSent;
     }
+
+
+    public String getSaleOrderGrossAmount() {
+        return saleOrderGrossAmount;
+    }
+
+    public void setSaleOrderGrossAmount(String saleOrderGrossAmount) {
+        this.saleOrderGrossAmount = saleOrderGrossAmount;
+    }
+
+
+    public String getSaleOrderNetAmount() {
+        return saleOrderNetAmount;
+    }
+
+    public void setSaleOrderNetAmount(String saleOrderNetAmount) {
+        this.saleOrderNetAmount = saleOrderNetAmount;
+    }
+
+
+    public String getSaleOrderReferenceId() {
+        return saleOrderReferenceId;
+    }
+
+    public void setSaleOrderReferenceId(String saleOrderReferenceId) {
+        this.saleOrderReferenceId = saleOrderReferenceId;
+    }
+
+
+    public String getSaleOrderDateAndTime() {
+        return saleOrderDateAndTime;
+    }
+
+    public void setSaleOrderDateAndTime(String saleOrderDateAndTime) {
+        this.saleOrderDateAndTime = saleOrderDateAndTime;
+    }
+
+
+    public String getSaleOrderReserve() {
+        return saleOrderReserve;
+    }
+
+    public void setSaleOrderReserve(String saleOrderReserve) {
+        this.saleOrderReserve = saleOrderReserve;
+    }
+
 
 }
