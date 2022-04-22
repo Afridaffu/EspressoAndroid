@@ -138,7 +138,6 @@
     <string name="credit_card">Credit Card </string>
     <string name="withdraw">Withdraw (CYN)</string>
     <string name="instant">Instant Pay</string>
-    <string name="giftcard">Gift Card</string>
     <string name="buytoken">Buy Tokens (CYN)</string>
     <string name="ok">OK</string>
     <string name="create_new_password">Create New Password</string>
@@ -227,8 +226,6 @@
     <string name="something_went_wrong">something went wrong</string>
     <string name="signet_account">Signet Account</string>
     <string name="signet_ac_withdrawing_funds">Can be used for withdrawing funds from \nyour coyni account.</string>
-    <string name="select_withdraw_method">Select Withdraw Method</string>
-    <string name="external_bank_account">External Bank Account</string>
     <string name="withdraw_to_usd">Withdraw to USD</string>
     <string name="scan">Scan</string>
     <string name="pay_request">Pay/Request</string>
@@ -283,8 +280,8 @@
     <string name="batchpayouts">Batch Payouts</string>
     <string name="all_p_deposit">All Payouts are deposited into</string>
     <string name="businesstoken">Business Token</string>
-    <string name="ac">Account.</string>
-    <string name="outAt">out at.</string>
+    <string name="ac">Account. </string>
+    <string name="outAt">out at</string>
     <string name="nextpayout"> Next Payout</string>
     <string name="lastpayout"> Last Payout</string>
     <string name="batchnow"> Batch Now</string>
@@ -301,7 +298,7 @@
     <string name="reserverole">Reserve Rule:</string>
     <string name="rollingperiod">rolling period.</string>
     <string name="reserverule"> [%] per Sale Order with a 90 day</string>
-    <string name="a_u_pay">Your active batch is set to automatically pay.</string>
+    <string name="a_u_pay"> Your active batch is set to automatically pay</string>
     <string name="merchant_balance">Merchant Balance = Net volume processed since your\nlast batch + Reserve Balance</string>
     <string name="business_type">Business Type</string>
     <string name="application_completed">Application completed!</string>
@@ -644,7 +641,7 @@
     <string name="canceled_description">Release Scheduled for %s for the amount of %s has been canceled due to lack of funds in the reserve balance.</string>
     <string name="scheduled_release_has_been_canceled">Scheduled Release Has Been Canceled</string>
     <string name="time">11:59pm</string>
-    <string name="sales_orders">Sales Orders</string>
+    <string name="sales_orders">Sale Orders</string>
     <string name="signet">Signet</string>
     <string name="withdraw_tokens">Withdraw Tokens</string>
     <string name="cyn_under_payout">(CYN)</string>
@@ -654,6 +651,12 @@
     <string name="merchant_account_id">Merchant Account ID</string>
     <string name="dba_name_text">DBA Name</string>
     <string name="customer_service_phone">Customer Service Phone</string>
-    <string name="description">If you are experiencing any issues with your transaction please contact the merchant on file or contact “coyni” customer service by click Get Help </string>
-
+    <string name="description">If you are experiencing any issues with your transaction please contact the merchant on file or contact “coyni” customer service by click</string>
+    <string name="select_withdraw_method">Select Withdraw Method</string>
+    <string name="external_bank_account">External Bank Account</string>
+    <string name="can_be_used_for_withdrawing_funds_from_your_coyni_account">Can be used for withdrawing funds from your coyni account.</string>
+    <string name="instantpay">Instant Pay</string>
+    <string name="use_a_visa_or_mastercard_debit_cards_for_instant_coyni_withdraws_via_instant_pay">Use a Visa or Mastercard debit cards for instant coyni withdraws via Instant Pay.</string>
+    <string name="giftcard">Gift Card</string>
+    <string name="purchase_gift_cards_from_over_100_popular_stores_restaurants_and_more">Purchase gift cards from over 100 popular stores, restaurants, and more.</string>
 </resources>
