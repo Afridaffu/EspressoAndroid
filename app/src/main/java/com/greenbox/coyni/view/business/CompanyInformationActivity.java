@@ -622,9 +622,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             businessIdentityVerificationViewModel.getUpdateBasicCompanyInfoResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
                 @Override
                 public void onChanged(CompanyInfoUpdateResp companyInfoResponse) {
-
-                    if (dialog != null)
-                        dismissDialog();
+                    dismissDialog();
                     if (companyInfoResponse != null) {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             close.setVisibility(GONE);
@@ -727,9 +725,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             businessIdentityVerificationViewModel.getPostCompanyInfoResponse().observe(this, new Observer<CompanyInfoUpdateResp>() {
                 @Override
                 public void onChanged(CompanyInfoUpdateResp companyInfoResponse) {
-
-                    if (dialog != null)
-                        dismissDialog();
+                    dismissDialog();
                     if (companyInfoResponse != null) {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             isPostSuccess = true;

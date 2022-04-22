@@ -782,6 +782,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 getStatesUrl(login.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(login.getData().getAccountType());
                                 objMyApplication.setDbaOwnerId(login.getData().getDbaOwnerId());
+                                objMyApplication.setIsReserveEnabled(login.getData().isReserveEnabled());
 //                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
 //                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (login.getData().getPasswordExpired()) {

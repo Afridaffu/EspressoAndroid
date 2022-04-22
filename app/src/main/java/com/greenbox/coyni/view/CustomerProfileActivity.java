@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -727,23 +728,19 @@ public class CustomerProfileActivity extends BaseActivity {
     private void isSwitchEnable() {
         try {
             if (!isSwitchEnabled) {
-//                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
                     FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                     if (!fingerprintManager.hasEnrolledFingerprints()) {
                         enablePopup = showFaceTouchEnabledDialog(this, "TOUCH");
                     } else {
-//                        dialog = Utils.showProgressDialog(this);
                         BiometricRequest biometricRequest = new BiometricRequest();
                         biometricRequest.setBiometricEnabled(true);
                         biometricRequest.setDeviceId(Utils.getDeviceID());
                         coyniViewModel.saveBiometric(biometricRequest);
                     }
                 } else {
-
                     if (Utils.checkBiometric(CustomerProfileActivity.this)) {
                         if (!Utils.isFingerPrint(CustomerProfileActivity.this)) {
-//                            dialog = Utils.showProgressDialog(this);
                             BiometricRequest biometricRequest = new BiometricRequest();
                             biometricRequest.setBiometricEnabled(true);
                             biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -754,15 +751,12 @@ public class CustomerProfileActivity extends BaseActivity {
                     }
                 }
             } else {
-//                if (Utils.getIsTouchEnabled() || (!Utils.getIsTouchEnabled() && !Utils.getIsFaceEnabled())) {
                 if (tvBMSetting.getText().toString().toLowerCase().contains("face")) {
-//                    dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
                     coyniViewModel.saveBiometric(biometricRequest);
                 } else {
-//                    dialog = Utils.showProgressDialog(this);
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(false);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -1306,62 +1300,6 @@ public class CustomerProfileActivity extends BaseActivity {
         }
     }
 
-
-//    public static void SetToken(MyApplication objMyApplication, Activity activity) {
-//        try {
-//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-//            dsPermanentToken.moveToFirst();
-//            if (dsPermanentToken.getCount() > 0) {
-//                strToken = dsPermanentToken.getString(1);
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
-//    public static void SetFaceLock(MyApplication objMyApplication, Activity activity) {
-//        try {
-//            isFaceLock = false;
-//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-//            dsFacePin.moveToFirst();
-//            if (dsFacePin.getCount() > 0) {
-//                String value = dsFacePin.getString(1);
-//                if (value.equals("true")) {
-//                    isFaceLock = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isFaceLock = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    public static void SetTouchId(MyApplication objMyApplication, Activity activity) {
-//        try {
-//            isTouchId = false;
-//            mydatabase = activity.openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-//            dsTouchID.moveToFirst();
-//            if (dsTouchID.getCount() > 0) {
-//                String value = dsTouchID.getString(1);
-//                if (value.equals("true")) {
-//                    isTouchId = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isTouchId = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     public void setToken() {
         strToken = dbHandler.getPermanentToken();
     }
@@ -1399,5 +1337,4 @@ public class CustomerProfileActivity extends BaseActivity {
             ex.printStackTrace();
         }
     }
-
 }

@@ -257,9 +257,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                                     recyclerViewPayouts.setVisibility(View.GONE);
                                     noPayoutTransactions.setVisibility(View.VISIBLE);
                                     cynTV.setVisibility(View.GONE);
-
                                 }
-
                             }
                         } else {
                             Utils.displayAlert(getString(R.string.something_went_wrong), BusinessBatchPayoutSearchActivity.this, "", batchPayoutList.getError().getFieldErrors().get(0));

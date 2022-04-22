@@ -10,14 +10,16 @@
         android:id="@+id/payrequest"
         layout="@layout/payrequestdetails"
         android:visibility="gone" />
+
     <include
         android:id="@+id/buytokenCD"
         layout="@layout/activity_transaction_buy_token_debit"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <include
         android:id="@+id/buytokenBank"
         layout="@layout/activity_buy_token_bank_acc_transatn"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <include
         android:id="@+id/withdrawGift"
@@ -27,27 +29,41 @@
     <include
         android:id="@+id/withdrawInstant"
         layout="@layout/activity_withdraw_instant_transaction"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <include
         android:id="@+id/withdrawBank"
         layout="@layout/activity_withdraw_bank_acc_transctn"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <include
         android:id="@+id/buyTokenSignet"
         layout="@layout/buy_token_signet_tdetails"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <include
         android:id="@+id/failedWithdrawBankAcc"
         layout="@layout/activity_transaction_details_failed"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
+
     <include
         android:id="@+id/businessPayout"
         layout="@layout/activity_merchant_payout"
         android:visibility="gone" />
+
     <include
-        android:id="@+id/reservePayout"
+        android:id="@+id/paidOrderToken"
+        layout="@layout/paid_order_token_transaction_details"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/reserve_release_details"
         layout="@layout/activity_reserve_payout"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/transaction_not_found"
+        layout="@layout/transaction_details_not_found"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

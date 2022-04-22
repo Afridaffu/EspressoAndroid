@@ -468,7 +468,12 @@ public class BusinessProfileActivity extends BaseActivity {
                     account_status.setText(accountStatus);
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
                     fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
-                    userFullname.setText(fullname);
+                    if (fullname.length() > 22){
+                        userFullname.setText(fullname.substring(0,22)+" ");
+                    }
+                    else {
+                        userFullname.setText(fullname);
+                    }
 
                 } catch (Resources.NotFoundException e) {
                     e.printStackTrace();
@@ -644,7 +649,7 @@ public class BusinessProfileActivity extends BaseActivity {
                                 account_status.setText(profile.getData().getAccountStatus());
                                 account_id.setText("Account ID M-" + profile.getData().getId());
                                 String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                                userFullname.setText(fullname);
+//                                userFullname.setText(fullname);
 
                                 if (userFullname != null && userFullname.length() > 22) {
                                     userFullname.setText(fullname.substring(0, 22) + " ");
@@ -723,6 +728,7 @@ public class BusinessProfileActivity extends BaseActivity {
     private void onLogoutSuccess() {
         isLoggedOut = true;
         myApplication.setStrRetrEmail("");
+        myApplication.clearUserData();
         dropAllTables();
         Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -734,8 +740,13 @@ public class BusinessProfileActivity extends BaseActivity {
             profileImage.setVisibility(View.GONE);
             profileText.setVisibility(View.VISIBLE);
             String imageTextNew = "";
-            imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            if(myApplication.getMyProfile().getData().getFirstName() != null && !myApplication.getMyProfile().getData().getFirstName().equals("")) {
+                imageTextNew = myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase();
+            }
+            if(myApplication.getMyProfile().getData().getLastName() != null && !myApplication.getMyProfile().getData().getLastName().equals("")) {
+                imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            }
+
             profileText.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
@@ -749,10 +760,6 @@ public class BusinessProfileActivity extends BaseActivity {
             } else {
                 profileImage.setVisibility(View.GONE);
                 profileText.setVisibility(View.VISIBLE);
-                String imageText = "";
-                imageText = imageText + myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-                profileText.setText(imageText);
             }
 
         } catch (Exception ex) {
@@ -793,12 +800,14 @@ public class BusinessProfileActivity extends BaseActivity {
                 if (resultCode == RESULT_OK) {
                     Intent i = new Intent(BusinessProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "CHOOSE")
-                            .putExtra("screen", "ResetPIN");
+                            .putExtra("screen", "ResetPIN")
+                            .putExtra("AUTH_TYPE", "TOUCH");
                     startActivity(i);
                 } else {
                     Intent i = new Intent(BusinessProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "ResetPIN");
+                            .putExtra("screen", "ResetPIN")
+                            .putExtra("AUTH_TYPE", "PIN");
                     startActivity(i);
                 }
             }else if (requestCode == CODE_AUTHENTICATION) {

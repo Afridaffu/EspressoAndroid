@@ -124,9 +124,7 @@ public class AddBankAccount extends BaseActivity {
                 @Override
                 public void onChanged(SignOn signOn) {
                     try {
-                        if (dialog != null) {
-                            dialog.dismiss();
-                        }
+                        dismissDialog();
                         if (signOn != null) {
                             if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
                                 objMyApplication.setSignOnData(signOn.getData());
@@ -158,7 +156,7 @@ public class AddBankAccount extends BaseActivity {
                 @Override
                 public void onChanged(APIError apiError) {
                     try {
-                        dialog.dismiss();
+                        dismissDialog();
                         if (apiError != null) {
                             if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                                 objMyApplication.setResolveUrl(true);

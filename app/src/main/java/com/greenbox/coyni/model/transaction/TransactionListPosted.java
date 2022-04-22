@@ -38,6 +38,24 @@ public class TransactionListPosted extends ListItem implements Serializable, Com
     @SerializedName("updatedAt")
     @Expose
     private String updatedAt;
+    private String senderName;
+    private String receiveName;
+
+    public String getReceiveName() {
+        return receiveName;
+    }
+
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
 
     private int type = ListItem.TYPE_GENERAL;
 

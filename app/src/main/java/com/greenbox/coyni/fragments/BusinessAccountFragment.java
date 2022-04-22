@@ -35,6 +35,8 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
 
+import okhttp3.internal.Util;
+
 public class BusinessAccountFragment extends BaseFragment {
 
     private LinearLayout viewMoreLL;
@@ -122,6 +124,7 @@ public class BusinessAccountFragment extends BaseFragment {
                         List<WalletInfo> walletInfo = businessWalletResponse.getData().getWalletNames();
                         if (walletInfo != null && walletInfo.size() > 0) {
                             String strAmount;
+                            objMyApplication.setGBTBalance(walletInfo.get(0).getExchangeAmount());
                             strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(0).getExchangeAmount()));
                             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
                         }

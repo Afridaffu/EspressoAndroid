@@ -4,7 +4,6 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
-import com.greenbox.coyni.model.BatchNow.BatchNowSlideRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
@@ -25,6 +24,7 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
+import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
@@ -37,6 +37,8 @@ import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
+import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
+import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
@@ -128,7 +130,7 @@ import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
 import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
-import com.greenbox.coyni.model.team.TeamResponseModel;
+import com.greenbox.coyni.model.team.TeamListResponse;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
@@ -140,7 +142,6 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
-import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
@@ -157,14 +158,11 @@ import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -541,9 +539,9 @@ public interface ApiService {
     Call<CancelApplicationResponse> cancelMerchant();
 
     @POST("api/v2/team/retrieve")
-    Call<TeamResponseModel> getTeamData(@Body TeamRequest request);
+    Call<TeamListResponse> getTeamData();
 
-    @PATCH("api/v2/team/{teamMemberId}")
+    @PATCH("api/v2/team/update/{teamMemberId}")
     Call<TeamInfoAddModel> updateTeamMember(@Body TeamRequest request, @Path("teamMemberId") Integer teamMemberId);
 
     @DELETE("api/v2/team/{teamMemberId}")
@@ -609,8 +607,15 @@ public interface ApiService {
     @POST("api/v2/transactions/merchant-payout/{batchId}")
     Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
 
+    @POST("api/v2/transactions/admin/reserve/summary")
+    Call<ReserveListResponse> getReserveListItems();
+
+
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
+
+    @POST("/api/v2/transactions/business-activity")
+    Call<BusinessActivityResp> businessActivity(BusinessActivityRequest businessActivityRequest);
 
 }
 

@@ -70,7 +70,7 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             e.printStackTrace();
         }
 
-        holder.walletBal.setText(convertTwoDecimal(objData.getWalletBalance()));
+        holder.walletBal.setText("Balance "+convertTwoDecimal(objData.getWalletBalance()));
 
         if (position == transactionListItemsposted.size() - 1) {
             holder.blankView.setVisibility(View.VISIBLE);
@@ -96,14 +96,18 @@ public class TransactionListPostedInnerAdapter extends RecyclerView.Adapter<Tran
             }
         } else if (objData.getTxnTypeDn().toLowerCase().contains("buy")) {
             strType = "buy";
+        } else if (objData.getTxnTypeDn().toLowerCase().contains("refund")) {
+            strType = "refund";
+        } else if (objData.getTxnTypeDn().toLowerCase().contains("paid")) {
+            strType = "paid";
         } else {
             strType = objData.getTxnTypeDn().toLowerCase();
         }
 
-        if (strType.contains("pay") || strType.equals("withdraw")) {
+        if (strType.contains("pay") || strType.equals("withdraw") || strType.equals("paid")) {
             holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(Color.parseColor("#000000"));
-        } else if (strType.contains("buy") || strType.equals("receive")) {
+        } else if (strType.contains("buy") || strType.equals("receive") || strType.equals("refund")) {
             holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()));
             holder.amount.setTextColor(Color.parseColor("#008a05"));
 

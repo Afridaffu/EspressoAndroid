@@ -78,7 +78,7 @@
                         android:paddingBottom="@dimen/_21sdp">
 
                         <TextView
-                            android:id="@+id/headerTV"
+                            android:id="@+id/reserve_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -97,7 +97,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/amountTV"
+                                android:id="@+id/reserve_amount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
@@ -142,7 +142,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/respayStatusTV"
+                                android:id="@+id/reserve_status"
                                 android:layout_width="@dimen/_68sdp"
                                 android:layout_height="@dimen/_14sdp"
                                 android:layout_marginTop="@dimen/_6sdp"
@@ -170,7 +170,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/releasedateTimeTV"
+                                android:id="@+id/released_on"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -197,13 +197,13 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <LinearLayout
-                                android:id="@+id/lyAcAdd"
+                                android:id="@+id/reserve_id_copy"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:id="@+id/referIDTV"
+                                    android:id="@+id/reference_id"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -240,7 +240,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/reserveRegularTV"
+                                android:id="@+id/reserve_rules"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -272,6 +272,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
+                                android:id="@+id/token_account_type"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -283,6 +284,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/deposit_to"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_semibold"
@@ -339,7 +341,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/reserveHeldTV"
+                                android:id="@+id/reserve_held_amount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -352,7 +354,6 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/reserverdOnLL"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="@dimen/_18sdp"
@@ -369,7 +370,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/reservedOnTV"
+                                android:id="@+id/reserved_on_date"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -398,7 +399,7 @@
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
-                                android:id="@+id/reserveIDTV"
+                                android:id="@+id/reserve_id"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
