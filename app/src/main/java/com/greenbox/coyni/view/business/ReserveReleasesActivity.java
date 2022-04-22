@@ -43,6 +43,8 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ReserveReleasesActivity extends BaseActivity implements TextWatcher {
@@ -60,6 +62,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     private ReserveReleaseManualListAdapter reserveReleaseManualListAdapter;
     private List<BatchPayoutListItems> rollingList = new ArrayList<>();
     private List<ManualItem> manualItems = new ArrayList<>();
+    ArrayList<String> statusList = new ArrayList<>();
     private View view;
     private ReserveFilter reserveFilter = new ReserveFilter();
     private int currentPage = 0, total = 0;
@@ -159,6 +162,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         RollingListRequest listRequest = new RollingListRequest();
         listRequest.setPayoutType(Utils.reserveRelease);
         ArrayList<Integer> status = new ArrayList<>();
+
         if (reserveFilter != null && reserveFilter.isFilterApplied) {
             if(!reserveFilter.isOpen() && !reserveFilter.isOnHold()
                     && !reserveFilter.isReleased() && !reserveFilter.isCancelled()) {
@@ -190,17 +194,17 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             }
 
         } else {
+
             status.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatusType());
-
             status.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatusType());
-
             status.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatusType());
 
             status.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatusType());
-
         }
+
         listRequest.setStatus(status);
         businessDashboardViewModel.getRollingListData(listRequest);
+
     }
 
     private void clearAdapterData() {
@@ -291,6 +295,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                             loadMore.setVisibility(View.GONE);
                             if (rollingListData.getData().getItems() != null) {
                                 rollingList = rollingListData.getData().getItems();
+                                sortingStatus();
                                 reserveReleasesRollingAdapter = new ReserveReleasesRollingAdapter(ReserveReleasesActivity.this, rollingList);
                                 reserveRecyclerView.setLayoutManager(new LinearLayoutManager(ReserveReleasesActivity.this));
                                 reserveRecyclerView.setAdapter(reserveReleasesRollingAdapter);
@@ -356,14 +361,33 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
         }
     }
 
-    private void showTransactionDetails(BatchPayoutListItems rollingList) {
+    private void sortingStatus() {
+        statusList = new ArrayList<String>();
+        statusList.add(Utils.ROLLING_LIST_STATUS.OPEN.getStatus());
+        statusList.add(Utils.ROLLING_LIST_STATUS.ON_HOLD.getStatus());
+        statusList.add(Utils.ROLLING_LIST_STATUS.RELEASED.getStatus());
+        statusList.add(Utils.ROLLING_LIST_STATUS.CANCELED.getStatus());
+        Collections.sort(rollingList, new Comparator<BatchPayoutListItems>() {
+            @Override
+            public int compare(BatchPayoutListItems o1, BatchPayoutListItems o2) {
+                int o1Index = statusList.indexOf(o1.getStatus());
+                int o2Index = statusList.indexOf(o2.getStatus());
+                if(o1Index > o2Index) {
+                    return 1;
+                } else if(o1Index < o2Index) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+    }
+
+    private void showTransactionDetails(BatchPayoutListItems rollingListItem) {
 
         try {
             Intent idDetails = new Intent(ReserveReleasesActivity.this, ReserveDetailsActivity.class);
-            idDetails.putExtra(Utils.teamStatus, rollingList.getStatus());
-            idDetails.putExtra(Utils.amount, rollingList.getReserveAmount());
-            idDetails.putExtra(date, rollingList.getCreatedAt());
-            idDetails.putExtra(batchID, rollingList.getBatchId());
+            idDetails.putExtra(Utils.requestSub, rollingListItem);
             startActivity(idDetails);
         } catch (Exception e) {
             e.printStackTrace();

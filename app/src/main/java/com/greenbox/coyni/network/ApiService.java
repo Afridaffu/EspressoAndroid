@@ -116,6 +116,8 @@ import com.greenbox.coyni.model.register.SMSValidate;
 import com.greenbox.coyni.model.register.SmsRequest;
 import com.greenbox.coyni.model.reguser.RegUsersResponse;
 import com.greenbox.coyni.model.reguser.RegisteredUsersRequest;
+import com.greenbox.coyni.model.reserveIdDetails.DetailsRequest;
+import com.greenbox.coyni.model.reserveIdDetails.DetailsResponse;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
@@ -586,6 +588,9 @@ public interface ApiService {
 
     @GET("api/v2/reserve/user/rule")
     Call<RollingRuleResponse> getRollingRuleDetails();
+
+    @POST("api/v2/transactions/merchatPayout/summary")
+    Call<DetailsResponse> getReserveIdDetails(@Body DetailsRequest reserveDetailsRequest);
 
     @POST("api/v2/reserve/manual-release/all")
     Call<ManualListResponse> getManualListData(@Body EmptyRequest request);

@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.ReserveDetailsListAdapter;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
+import com.greenbox.coyni.model.reserveIdDetails.DetailsRequest;
+import com.greenbox.coyni.model.reserveIdDetails.DetailsResponse;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPending;
@@ -104,20 +107,27 @@ public class ReserveDetailsActivity extends BaseActivity {
 
         TransactionListRequest transactionListRequest = new TransactionListRequest();
         transactionListRequest.setTransactionType(getDefaultTransactionTypes());
-//        transactionListRequest.setTxnStatus(getDefaultStatus());
+        transactionListRequest.setTxnStatus(getDefaultStatus());
 
-        String createdDate = "2022-03-08 01:54:50.23";
+        String createdDate = "2022-01-27 01:54:50.23";
         if (createdDate.trim().contains(" ")) {
             createdDate = createdDate.substring(0, createdDate.lastIndexOf(" "));
         }
         String fromDate = createdDate + " 00:00:00.00";
-        String toDate = createdDate + " 11:59:59.00";
-//        transactionListRequest.setUpdatedFromDate(fromDate);
-//        transactionListRequest.setUpdatedFromDateOperator(">=");
-//        transactionListRequest.setUpdatedToDate(toDate);
-//        transactionListRequest.setUpdatedToDateOperator("<=");
+        String toDate = createdDate + " 23:59:59.00";
+        transactionListRequest.setUpdatedFromDate(fromDate);
+        transactionListRequest.setUpdatedFromDateOperator(">=");
+        transactionListRequest.setUpdatedToDate(toDate);
+        transactionListRequest.setUpdatedToDateOperator("<=");
         dashboardViewModel.meTransactionList(transactionListRequest);
 
+    }
+
+    private void getReserveDetails(String payoutId) {
+        DetailsRequest detailsRequest = new DetailsRequest();
+        detailsRequest.setPayoutId(payoutId);
+        detailsRequest.setPayoutType(Utils.reserveRelease);
+        businessDashboardViewModel.getReserveIdDetails(detailsRequest);
     }
 
     private void initObserver() {
@@ -144,6 +154,7 @@ public class ReserveDetailsActivity extends BaseActivity {
 
                 }
             });
+
             dashboardViewModel.getTransactionListMutableLiveData().observe(this, new Observer<TransactionList>() {
                 @Override
                 public void onChanged(TransactionList transactionList) {
@@ -188,6 +199,25 @@ public class ReserveDetailsActivity extends BaseActivity {
                     }
                 }
             });
+
+            businessDashboardViewModel.getDetailsResponseMutableLiveData().observe(this, new Observer<DetailsResponse>() {
+                @Override
+                public void onChanged(DetailsResponse detailsResponse) {
+                    if (detailsResponse != null) {
+                        if (detailsResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            if (detailsResponse.getData() != null) {
+                                if (detailsResponse.getData().getPayoutReferenceId() != null && detailsResponse.getData().getPayoutReferenceId().equals("")) {
+                                    transID.setText(detailsResponse.getData().getPayoutReferenceId());
+                                }
+                            }
+                        } else {
+                            Utils.displayAlert(getString(R.string.something_went_wrong), ReserveDetailsActivity.this, "", detailsResponse.getError().getFieldErrors().get(0));
+
+                        }
+                    }
+
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,35 +237,40 @@ public class ReserveDetailsActivity extends BaseActivity {
         return transactionStatus;
     }
 
-    private void transactionsAPI(TransactionListRequest transactionListRequest) {
-        dashboardViewModel.meTransactionList(transactionListRequest);
-    }
-
     private void displayingDetails() {
 
+        BatchPayoutListItems selected = (BatchPayoutListItems) getIntent().getSerializableExtra(Utils.requestSub);
+        if(selected.getStatus().equalsIgnoreCase(Utils.RELEASED)) {
+            getReserveDetails(selected.getBatchId());
+        }
         if (myApplication.getReserveBalance() != null) {
             reserveAmount = Utils.convertTwoDecimal(String.valueOf(myApplication.getReserveBalance()));
             amount.setText(reserveAmount + " CYN");
         }
-        if (getIntent().getStringExtra(date) != null) {
-            timeDate = getIntent().getStringExtra(date);
+        if (selected != null && selected.getCreatedAt() != null) {
+            timeDate = selected.getCreatedAt();
 
             if (timeDate.contains(".")) {
                 timeDate = timeDate.substring(0, timeDate.lastIndexOf("."));
             }
-            timeDateTemp = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy @ hh:mm a");
+            timeDate = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy @ hh:mm a");
         }
-        releaseDateTime.setText(timeDateTemp);
+        releaseDateTime.setText(timeDate);
 
-        if (getIntent().getStringExtra(batchID) != null) {
-            batchId = getIntent().getStringExtra(batchID);
+        if (selected != null && selected.getBatchId() != null) {
+            batchId = selected.getBatchId();
             reserveID.setText(batchId);
             reserveIDTV.setText(batchId);
-            transID.setText(batchId);
         }
+        if (selected != null && selected.getScheduledRelease() != null) {
+            timeDateTemp = selected.getScheduledRelease();
 
-        String arg1 = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy");
-        String arg2 = Utils.convertTwoDecimal(getIntent().getStringExtra("amount")) + " CYN";
+            if (timeDateTemp.contains(".")) {
+                timeDateTemp = timeDateTemp.substring(0, timeDateTemp.lastIndexOf("."));
+            }
+        }
+        String arg1 = myApplication.convertZoneDateTime(timeDateTemp, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy");
+        String arg2 = Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN";
         String cancel_desc = getResources().getString(R.string.reserve_canceled_description, arg1, arg2);
 
         //22  - 22+arg1.length;    length - (64 + arg2.length) length - 64
@@ -247,8 +282,8 @@ public class ReserveDetailsActivity extends BaseActivity {
         spannableString.setSpan(new StyleSpan(Typeface.BOLD), cancel_desc.length() - (63 + arg2.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
 
-        if (getIntent().getStringExtra(Utils.teamStatus) != null) {
-            status = getIntent().getStringExtra(Utils.teamStatus);
+        if (selected != null && selected.getStatus() != null) {
+            status = selected.getStatus();
             if (!status.equals("")) {
                 if (status.equalsIgnoreCase(Utils.RELEASED)) {
                     released.setVisibility(View.VISIBLE);
@@ -261,7 +296,7 @@ public class ReserveDetailsActivity extends BaseActivity {
                     released.setVisibility(View.GONE);
                     details.setVisibility(View.GONE);
                     onHoldCv.setVisibility(View.VISIBLE);
-                    onHoldAmt.setText(Html.fromHtml(getResources().getString(R.string.release_scheduled_for, "<font color='#151515'><b>" + myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy") + "</b></font>", "<font color='#151515'><b>" + Utils.convertTwoDecimal(getIntent().getStringExtra("amount")) + " CYN</b></font>")));
+                    onHoldAmt.setText(Html.fromHtml(getResources().getString(R.string.release_scheduled_for, "<font color='#151515'><b>" + myApplication.convertZoneDateTime(timeDateTemp, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy") + "</b></font>", "<font color='#151515'><b>" + Utils.convertTwoDecimal(getIntent().getStringExtra("amount")) + " CYN</b></font>")));
                     statusTV.setText(status);
                     statusTV.setTextColor(getColor(R.color.pending_color));
                     statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
@@ -278,8 +313,8 @@ public class ReserveDetailsActivity extends BaseActivity {
         }
 
         //Released Details
-        if (getIntent().getStringExtra(Utils.amount) != null) {
-            releasedAMT.setText(getIntent().getStringExtra(Utils.amount) + " CYN");
+        if (selected != null && selected.getReserveAmount() != null) {
+            releasedAMT.setText(selected.getReserveAmount() + " CYN");
         }
 
         tvDBAName.setText(myApplication.getStrUserName());

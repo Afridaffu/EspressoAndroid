@@ -302,7 +302,7 @@
                 android:layout_marginTop="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
                 android:layout_marginBottom="@dimen/_11sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp"
                 app:cardElevation="0dp">
