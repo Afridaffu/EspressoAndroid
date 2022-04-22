@@ -74,7 +74,7 @@ import java.util.List;
 public class BusinessDashboardFragment extends BaseFragment {
 
     private View mCurrentView, batchView, releaseView;
-    private TextView tv_PayoutNoHistory, tv_PayoutHistory, batchNoTransaction, nextReleaseNATV,
+    private TextView tv_PayoutNoHistory, batchNoTransaction, nextReleaseNATV,
             lastReleaseNATV, releaseNoTransaction;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
@@ -112,7 +112,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     static String strToken = "";
     private DatabaseHandler dbHandler;
     private String batchId;
-    //private boolean showReserve = true;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -219,7 +218,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         dbHandler = DatabaseHandler.getInstance(getActivity());
 
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
-        tv_PayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutFullHistory);
         batchView = mCurrentView.findViewById(R.id.batchView);
         batchNoTransaction = mCurrentView.findViewById(R.id.batchNoTransaction);
 
@@ -342,7 +340,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
                             tv_PayoutNoHistory.setVisibility(View.GONE);
                             batchView.setVisibility(View.GONE);
-                            tv_PayoutHistory.setVisibility(View.VISIBLE);
+                            mPayoutHistory.setVisibility(View.VISIBLE);
                             showData(batchPayoutListResponse.getData().getItems());
                         } else {
                             Log.d(TAG, "No items found");
@@ -806,7 +804,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
-            tv_PayoutHistory.setVisibility(View.GONE);
+            mPayoutHistory.setVisibility(View.GONE);
             tv_PayoutNoHistory.setVisibility(View.VISIBLE);
             mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             mCvBatchNow.setClickable(false);
