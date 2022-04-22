@@ -196,9 +196,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             public void onClick(View v) {
                 try {
                     if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
-                        Value = Double.parseDouble(Utils.convertTwoDecimal(transactionData.getGrossAmount().replace("CYN", "").trim()));
+                        Value = Double.parseDouble(transactionData.getGrossAmount().replace("CYN", "").trim());
                         Value =Value/2;
-                        refundET.setText("" + Value);
+                        refundET.setText("" + Utils.convertTwoDecimal(String.valueOf(Value)));
                         refundET.setSelection(refundET.getText().length());
                         halfamount.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                         halfamounttv.setTextColor(getResources().getColor(R.color.white));
