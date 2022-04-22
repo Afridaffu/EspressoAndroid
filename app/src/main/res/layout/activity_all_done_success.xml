@@ -30,7 +30,7 @@
                 android:layout_marginBottom="@dimen/_21sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
-                android:text="All Done"
+                android:text="@string/all_done"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp" />
 
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
-                android:text="Your bank account has been successfully authorized and added to your payment \nmethod."
+                android:text="@string/alldone_success"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
         </LinearLayout>
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/opensans_bold"
-                    android:text="Done"
+                    android:text="@string/done"
                     android:textColor="#fdfdfd"
                     android:textSize="@dimen/_12ssp" />
             </androidx.cardview.widget.CardView>

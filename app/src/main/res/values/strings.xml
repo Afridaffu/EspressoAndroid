@@ -66,6 +66,8 @@
     <string name="sepupid">Set Up Face ID</string>
     <string name="sepupidnotnoe">Not Now</string>
     <string name="setupnotnowBtn">Not Now</string>
+    <string name="all_done">All Done</string>
+    <string name="alldone_success">Your bank account has been successfully authorized and added to your payment \nmethods.</string>
 
     <string name="uploadid">Fill out your information and Upload ID</string>
     <string name="uploadid_cust">Upload ID and fill out your information</string>
