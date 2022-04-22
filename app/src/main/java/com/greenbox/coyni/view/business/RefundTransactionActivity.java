@@ -197,7 +197,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 try {
                     if (transactionData.getGrossAmount() != null && !transactionData.getGrossAmount().equals("")) {
                         Value = Double.parseDouble(transactionData.getGrossAmount().replace("CYN", "").trim());
-                        Value =Value/2;
+                        Value = Value / 2;
                         refundET.setText("" + Utils.convertTwoDecimal(String.valueOf(Value)));
                         refundET.setSelection(refundET.getText().length());
                         halfamount.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
@@ -281,62 +281,62 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
     private void initobservers() {
 
-            dashboardViewModel.getRefundDetailsMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
-                @Override
-                public void onChanged(RefundDataResponce refundDataResponce) {
-                    dismissDialog();
-                    try {
-                        if (refundDataResponce != null) {
-                            if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
-                                refundInfo(refundDataResponce);
+        dashboardViewModel.getRefundDetailsMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
+            @Override
+            public void onChanged(RefundDataResponce refundDataResponce) {
+                dismissDialog();
+                try {
+                    if (refundDataResponce != null) {
+                        if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
+                            refundInfo(refundDataResponce);
+                        } else {
+                            if (!refundDataResponce.getError().getErrorDescription().equals("")) {
+                                Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
                             } else {
-                                if (!refundDataResponce.getError().getErrorDescription().equals("")) {
-                                    Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
-                                } else {
-                                    Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
-                                }
+                                Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
                             }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            }
 
-            });
+        });
 
-            dashboardViewModel.getRefundProcessMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
-                @Override
-                public void onChanged(RefundDataResponce refundDataResponce) {
-                    dismissDialog();
-                    try {
-                        if (refundDataResponce != null) {
-                            if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
-                                if (refundDataResponce.getData() != null) {
-                                    if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
-                                        Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
-                                        i.putExtra(Utils.amount, refundET.getText().toString());
-                                        i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
-                                        startActivity(i);
-                                    }
-                                } else {
-                                    Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
+        dashboardViewModel.getRefundProcessMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
+            @Override
+            public void onChanged(RefundDataResponce refundDataResponce) {
+                dismissDialog();
+                try {
+                    if (refundDataResponce != null) {
+                        if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
+                            if (refundDataResponce.getData() != null) {
+                                if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
+                                    Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
+                                    i.putExtra(Utils.amount, refundET.getText().toString());
+                                    i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
                                     startActivity(i);
                                 }
                             } else {
-                                if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equals("")) {
-                                    Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
-                                } else {
-                                    Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
-                                }
-
+                                Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
+                                startActivity(i);
                             }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                        } else {
+                            if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equals("")) {
+                                Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                            } else {
+                                Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
+                            }
 
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
+
+            }
+        });
     }
 
     private void refundInfo(RefundDataResponce refundDataResponce) {
@@ -555,6 +555,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.toString().trim().length() == 0) {
 
+
         }
 
     }
@@ -566,7 +567,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 if (editable.length() > 0 && !editable.toString().equals(".")
                         && !editable.toString().equals(".00")) {
                     refundET.setHint("");
-                    convertUSDValue();
+                      convertUSDValue();
                     if (editable.length() == 5 || editable.length() == 6) {
                         refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -782,7 +783,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
             isfullamount = false;
             ishalfamount = false;
-            refundET.setText("");
+//            refundET.setText("");
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }

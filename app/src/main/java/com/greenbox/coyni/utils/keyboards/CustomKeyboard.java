@@ -148,6 +148,9 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                     if (strScreen.equals("addcard")) {
                         AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
                     }
+                    if (strScreen.equals("refundables")) {
+                        RefundTransactionActivity.refundTransactionActivity.clearAmountCards();
+                    }
                 }
             }
         });
@@ -191,7 +194,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
 
                         refundTransactionActivity.isfullamount = false;
                         refundTransactionActivity.ishalfamount = false;
-//                        refundTransactionActivity.refundET.setText("");
+                        refundTransactionActivity.refundET.setText("");
                         enteredText = "";
                         refundTransactionActivity.clearAmountCards();
                     }
