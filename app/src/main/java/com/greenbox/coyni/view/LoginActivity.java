@@ -192,6 +192,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
         }
 
+        etPassword.setText("Admin@123");
+
     }
 
     @Override

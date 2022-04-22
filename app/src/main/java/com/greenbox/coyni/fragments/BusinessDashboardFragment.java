@@ -46,6 +46,7 @@ import com.greenbox.coyni.model.DashboardReserveList.ReserveListItems;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
+import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
@@ -124,6 +125,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String lastMonthDate = "Last Month";
     private static final String customDate = "Custom Date Range";
     private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
+    private static final String date = "yyyy-MM-dd";
+    private static final String time = " 00:00:00";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -254,6 +257,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             ((BusinessDashboardActivity) getActivity()).launchBuyTokens();
         });
+
 
         mLlProcessingVolume.setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -403,6 +407,17 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
+
+//        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessActivityResp>() {
+//            @Override
+//            public void onChanged(BusinessActivityResp businessActivityResp) {
+//                if (businessActivityResp != null && businessActivityResp.getData() != null) {
+//                    if (businessActivityResp.getStatus() != null && businessActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+//                        Toast.makeText(getActivity().getApplicationContext(), "Hi", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        });
     }
 
 
@@ -533,7 +548,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void setBusinessData() {
         cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
         batchReq();
-        if(myApplication.isReserveEnabled()) {
+        getProcessingVolume(todayValue);
+        if (myApplication.isReserveEnabled()) {
             reserveReq();
         }
         Double merchantBalance = getMerchantBalance();
@@ -684,14 +700,52 @@ public class BusinessDashboardFragment extends BaseFragment {
         processingVolumeDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                if (action != null){
-                    mTvProcessingVolume.setText(action);
+                if (action != null) {
+                    getProcessingVolume(action);
                 }
 
             }
         });
         processingVolumeDialog.show();
     }
+
+
+    private void getProcessingVolume(String action) {
+        String strFromDate, strToDate;
+        mTvProcessingVolume.setText(action);
+        switch (action) {
+            case todayValue: {
+                SimpleDateFormat spf = new SimpleDateFormat(dateAndTime);
+                strFromDate = myApplication.convertZoneDateTime(spf.format(Calendar.getInstance().getTime()), dateAndTime, date) + time;
+                strToDate = myApplication.convertZoneDateTime(spf.format(Calendar.getInstance().getTime()), dateAndTime, dateAndTime);
+                businessActivityAPICall(strFromDate, strToDate);
+            }
+            break;
+            case yesterdayValue: {
+//                BusinessActivityRequest request = new BusinessActivityRequest();
+//                SimpleDateFormat spf = new SimpleDateFormat(dateAndTime);
+//                String strCurDate = myApplication.convertZoneDateTime(spf.format(Calendar.getInstance().getTime()),"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd HH:mm:ss");
+//                request.setFromDate(strCurDate);
+//                request.setToDate(strCurDate);
+//                businessDashboardViewModel.businessActivity(request);
+            }
+            break;
+            case monthDate: {
+
+            }
+            break;
+            case lastMonthDate: {
+
+            }
+            break;
+            case customDate: {
+            }
+            break;
+
+
+        }
+    }
+
 
     private void showCancelApplicationDialog() {
         DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.cancel_application),
@@ -844,12 +898,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
 //        nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
         String date = listData.getNextReserveReleaseDate();
-            if (date.contains(".")) {
-                String res = date.substring(0, date.lastIndexOf("."));
-                nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
-            } else {
-                Log.d("date format", date);
-            }
+        if (date.contains(".")) {
+            String res = date.substring(0, date.lastIndexOf("."));
+            nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+        } else {
+            Log.d("date format", date);
+        }
         if (items != null && items.size() > 0) {
             lastReleaseDateTV.setVisibility(View.VISIBLE);
             nextReleaseNATV.setVisibility(View.GONE);
@@ -902,6 +956,17 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             releaseNoTransaction.setVisibility(View.VISIBLE);
             LogUtils.v(TAG, "Reserve release summary is empty");
+        }
+    }
+
+    private void businessActivityAPICall(String strFromDate, String strToDate) {
+        BusinessActivityRequest request = new BusinessActivityRequest();
+        request.setFromDate(strFromDate);
+        request.setToDate(strToDate);
+        try {
+            businessDashboardViewModel.businessActivity(request);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

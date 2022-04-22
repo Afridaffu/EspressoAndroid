@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
@@ -76,7 +77,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         return paymentMethodsResponseMutableLiveData;
     }
 
-    public MutableLiveData<ReserveListResponse> getReserveListResponseMutableLiveData(){
+    public MutableLiveData<ReserveListResponse> getReserveListResponseMutableLiveData() {
         return reserveListResponseMutableLiveData;
     }
 
@@ -514,7 +515,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void getReserveList(){
+    public void getReserveList() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<ReserveListResponse> call = apiService.getReserveListItems();
@@ -765,38 +766,43 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     }
 
     public void businessActivity(BusinessActivityRequest businessActivityRequest) {
-        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-        Call<BusinessActivityResp> call = apiService.businessActivity(businessActivityRequest);
-        call.enqueue(new Callback<BusinessActivityResp>() {
-            @Override
-            public void onResponse(Call<BusinessActivityResp> call, Response<BusinessActivityResp> response) {
-                try {
-                    if (response.isSuccessful()) {
-                        BusinessActivityResp businessActivityResp = response.body();
-                        businessActivityRespMutableLiveData.setValue(businessActivityResp);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<BusinessActivityResp>() {
-                        }.getType();
-
-                        BusinessActivityResp errorResponse = gson.fromJson(response.errorBody().string(), type);
-                        businessActivityRespMutableLiveData.setValue(errorResponse);
-
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<BusinessActivityResp> call = apiService.businessActivity(businessActivityRequest);
+            call.enqueue(new Callback<BusinessActivityResp>() {
+                @Override
+                public void onResponse(Call<BusinessActivityResp> call, Response<BusinessActivityResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            BusinessActivityResp list = response.body();
+                            businessActivityRespMutableLiveData.setValue(list);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<BusinessActivityResp>() {
+                            }.getType();
+                            BusinessActivityResp errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            businessActivityRespMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }
+
+                @Override
+                public void onFailure(Call<BusinessActivityResp> call, Throwable t) {
                     businessActivityRespMutableLiveData.setValue(null);
                 }
-            }
+            });
 
-            @Override
-            public void onFailure(Call<BusinessActivityResp> call, Throwable t) {
-                Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                paymentMethodsResponseMutableLiveData.setValue(null);
-            }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
 }
 

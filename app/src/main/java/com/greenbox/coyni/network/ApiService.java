@@ -615,7 +615,7 @@ public interface ApiService {
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
 
     @POST("/api/v2/transactions/business-activity")
-    Call<BusinessActivityResp> businessActivity(BusinessActivityRequest businessActivityRequest);
+    Call<BusinessActivityResp> businessActivity(@Body BusinessActivityRequest businessActivityRequest);
 
 }
 

@@ -478,7 +478,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/_5sdp"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="917,999.00"
+                                            android:text="0.00"
                                             android:textColor="@color/price"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -518,7 +518,7 @@
                                         android:layout_marginTop="@dimen/_7sdp"
                                         android:layout_marginBottom="@dimen/_22sdp"
                                         android:fontFamily="@font/opensans_bold"
-                                        android:text="890"
+                                        android:text="0"
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_14ssp" />
                                 </LinearLayout>
@@ -557,7 +557,7 @@
                                             android:layout_height="wrap_content"
 
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="14,000.00"
+                                            android:text="0.00"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -595,7 +595,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="840.00"
+                                            android:text="0.00"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -642,7 +642,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="34,000.00"
+                                            android:text="0.00"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -681,7 +681,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="903,659.00"
+                                            android:text="0.00"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -698,6 +698,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/tickets_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_13sdp"
@@ -728,7 +729,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="903,659.00"
+                                            android:text="0.00"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -767,7 +768,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="659.00"
+                                            android:text="0.00"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -785,12 +786,14 @@
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/sale_order_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/sales_orders"
+                                android:visibility="gone"
                                 android:textColor="@color/dark_grey"
                                 android:layout_marginBottom="@dimen/_23sdp"
                                 android:textSize="@dimen/_11ssp" />
@@ -799,6 +802,7 @@
                                 android:id="@+id/sb_today_volume"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:layout_gravity="center" />
 
                             <View
