@@ -387,7 +387,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
 
         try {
             Intent idDetails = new Intent(ReserveReleasesActivity.this, ReserveDetailsActivity.class);
-            idDetails.putExtra(Utils.requestSub, rollingListItem);
+            idDetails.putExtra(Utils.DATA, rollingListItem);
             startActivity(idDetails);
         } catch (Exception e) {
             e.printStackTrace();

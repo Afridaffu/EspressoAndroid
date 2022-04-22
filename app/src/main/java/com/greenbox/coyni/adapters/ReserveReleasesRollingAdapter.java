@@ -78,7 +78,7 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
             if (date.contains(".")) {
                 date = date.substring(0, date.lastIndexOf("."));
             }
-            date = myApplication.convertZoneDateTime(date, "yyyy-MM-dd hh:mm:ss", "MM/dd/yyyy @ hh:mma");
+            date = myApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma");
             if(objData.getStatus().equalsIgnoreCase(String.valueOf(Utils.ROLLING_LIST_STATUS.RELEASED))){
                 holder.dateTime.setText(date);
 

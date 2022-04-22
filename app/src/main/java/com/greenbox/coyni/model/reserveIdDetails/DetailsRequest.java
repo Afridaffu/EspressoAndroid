@@ -2,16 +2,16 @@ package com.greenbox.coyni.model.reserveIdDetails;
 
 public class DetailsRequest {
 
-    private int payoutType;
+    private int txnType;
 
     private String payoutId;
 
-    public int getPayoutType() {
-        return payoutType;
+    public int getTxnType() {
+        return txnType;
     }
 
-    public void setPayoutType(int payoutType) {
-        this.payoutType = payoutType;
+    public void setTxnType(int txnType) {
+        this.txnType = txnType;
     }
 
     public String getPayoutId() {

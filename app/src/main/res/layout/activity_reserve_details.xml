@@ -445,7 +445,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
-                                android:text="SND327433N"
+                                android:text=""
                                 android:textColor="@color/primary_green"
                                 android:textSize="@dimen/_11ssp" />
 

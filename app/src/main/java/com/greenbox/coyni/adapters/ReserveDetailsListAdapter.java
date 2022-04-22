@@ -55,7 +55,7 @@ public class ReserveDetailsListAdapter extends BaseRecyclerViewAdapter<ReserveDe
 
         TransactionListPosted posted = transactionListItemsPosted.get(position);
         if (posted.getTxnTypeDn()!= null && !posted.getTxnTypeDn().equals("")) {
-            holder.name.setText(posted.getTxnTypeDn() + " - ");
+            holder.name.setText(posted.getTxnTypeDn() + " - " + posted.getSenderName());
         }
         if (posted.getAmount()!= null && !posted.getAmount().equals("")) {
             String amt="";
