@@ -66,7 +66,7 @@ public class BusinessProfileActivity extends BaseActivity {
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static String strToken = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    private final int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private final int CODE_AUTHENTICATION_VERIFICATION = 251, CODE_AUTHENTICATION = 512;
     private final int CODE_AUTHENTICATION_VERIFICATION_RESET_PIN = 252;
     boolean isTogleBtn = false;
     private CardView business_userProfileCV, statusDot, cardViewSetting, cvLogout;
@@ -231,7 +231,26 @@ public class BusinessProfileActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    isSwitchEnable();
+
+                    if (Utils.checkAuthentication(BusinessProfileActivity.this)) {
+                        if (isBiometric && ((Utils.isFingerPrint(BusinessProfileActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(BusinessProfileActivity.this, CODE_AUTHENTICATION);
+                        } else {
+                            if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                                enablePopup = showFaceTouchEnabledDialog(BusinessProfileActivity.this, "TOUCH");
+                            } else {
+                                enablePopup = showFaceTouchEnabledDialog(BusinessProfileActivity.this, "FACE");
+                            }
+                        }
+                    } else {
+                        if (b_tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                            enablePopup = showFaceTouchEnabledDialog(BusinessProfileActivity.this, "TOUCH");
+                        } else {
+                            enablePopup = showFaceTouchEnabledDialog(BusinessProfileActivity.this, "FACE");
+                        }
+                    }
+
+//                    isSwitchEnable();
                 }
             });
 
@@ -781,6 +800,10 @@ public class BusinessProfileActivity extends BaseActivity {
                             .putExtra("TYPE", "ENTER")
                             .putExtra("screen", "ResetPIN");
                     startActivity(i);
+                }
+            }else if (requestCode == CODE_AUTHENTICATION) {
+                if (resultCode == RESULT_OK) {
+                    isSwitchEnable();
                 }
             }
         } catch (Exception ex) {

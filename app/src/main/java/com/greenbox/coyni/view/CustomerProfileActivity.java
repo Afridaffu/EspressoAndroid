@@ -89,7 +89,7 @@ public class CustomerProfileActivity extends BaseActivity {
     static String strToken = "";
     static String strDeviceID = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251, CODE_AUTHENTICATION = 512;
     private final int CODE_AUTHENTICATION_VERIFICATION_RESET_PIN = 252;
     String authenticateType = "";
     boolean isLoggedOut = false;
@@ -273,7 +273,24 @@ public class CustomerProfileActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    isSwitchEnable();
+
+                    if (Utils.checkAuthentication(CustomerProfileActivity.this)) {
+                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
+                        } else {
+                            if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "TOUCH");
+                            } else {
+                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "FACE");
+                            }
+                        }
+                    } else {
+                        if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                            enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "TOUCH");
+                        } else {
+                            enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "FACE");
+                        }
+                    }
                 }
             });
 
@@ -464,6 +481,7 @@ public class CustomerProfileActivity extends BaseActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
+
     private void displayQRCode() {
         try {
             ImageView imgClose, copyRecipientAddress;
@@ -792,14 +810,18 @@ public class CustomerProfileActivity extends BaseActivity {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "CHOOSE")
                             .putExtra("screen", "ResetPIN")
-                            .putExtra("AUTH_TYPE","TOUCH");
+                            .putExtra("AUTH_TYPE", "TOUCH");
                     startActivity(i);
                 } else {
                     Intent i = new Intent(CustomerProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
                             .putExtra("screen", "ResetPIN")
-                            .putExtra("AUTH_TYPE","PIN");
+                            .putExtra("AUTH_TYPE", "PIN");
                     startActivity(i);
+                }
+            } else if (requestCode == CODE_AUTHENTICATION) {
+                if (resultCode == RESULT_OK) {
+                    isSwitchEnable();
                 }
             }
         } catch (Exception ex) {
