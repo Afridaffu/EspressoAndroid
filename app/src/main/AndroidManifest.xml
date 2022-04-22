@@ -48,10 +48,14 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.GetHelpWebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:exported="false" />
         <activity
             android:name=".view.business.RefundTransactionSuccessActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.MerchantTransactionDetailsActivity"
             android:exported="false"
@@ -595,7 +599,8 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+        </activity>
         <activity
             android:name=".view.business.TransactionDetailsFailedActivity"
             android:configChanges="uiMode"

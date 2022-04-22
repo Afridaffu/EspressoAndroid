@@ -50,6 +50,7 @@ import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.PINActivity;
@@ -104,13 +105,14 @@ public class BusinessDashboardFragment extends BaseFragment {
     private String openAmount = "", sent = "", availbal = "";
     private int dbaID = 0;
     private String merchantBalance;
+    private SeekBarWithFloatingText mSbTodayVolume;
     private Long mLastClickTime = 0L;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private final int CODE_AUTHENTICATION_VERIFICATION = 251;
     static String strToken = "";
     private DatabaseHandler dbHandler;
     private String batchId;
-    private boolean showReserve = true;
+    //private boolean showReserve = true;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -186,6 +188,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutFullHistory);
         merchantBalanceTV = mCurrentView.findViewById(R.id.merchant_balance_tv);
         mTvReserveBalance = mCurrentView.findViewById(R.id.tv_reserve_balance);
+        mSbTodayVolume = mCurrentView.findViewById(R.id.sb_today_volume);
         payoutTimeTV = mCurrentView.findViewById(R.id.payoutTimeTV);
         nextPayoutAmountTV = mCurrentView.findViewById(R.id.nextPayoutAmountTV);
         lastPayoutAmountTV = mCurrentView.findViewById(R.id.lastPayoutAmountTV);
@@ -427,8 +430,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showUserData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
-        LogUtils.d(TAG, "dashboardmyApplication" + myApplication.getBusinessTrackerResponse());
-        LogUtils.d(TAG, "dashboardisProfileVerified" + myApplication.getBusinessTrackerResponse().getData().isProfileVerified());
+//        LogUtils.d(TAG, "dashboardmyApplication" + myApplication.getBusinessTrackerResponse());
+//        LogUtils.d(TAG, "dashboardisProfileVerified" + myApplication.getBusinessTrackerResponse().getData().isProfileVerified());
         if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
                 && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
             showGetStartedView();
@@ -517,9 +520,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
-        cvReserveView.setVisibility(showReserve ? View.VISIBLE : View.GONE);
+        cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
         batchReq();
-        reserveReq();
+        if(myApplication.isReserveEnabled()) {
+            reserveReq();
+        }
         Double merchantBalance = getMerchantBalance();
         merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
         if (merchantBalance != null && merchantBalance == 0.00) {
@@ -527,7 +532,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             monthlyVolumeViewLl.setVisibility(View.GONE);
         }
-
+        mSbTodayVolume.setEnabled(false);
+        mSbTodayVolume.setProgressWithText(9, "100");
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -709,7 +715,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void reserveReq() {
-        if (showReserve) {
+        if (myApplication.isReserveEnabled()) {
             businessDashboardViewModel.getReserveList();
         }
     }
@@ -820,16 +826,16 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showReserveRelease(ReserveListData listData) {
         showReserveReleaseBalance();
-        nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
-        //Date set here
-//        String date = items.get(i).getCreatedAt();
-//            if (date.contains(".")) {
-//                String res = date.substring(0, date.lastIndexOf("."));
-//                nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
-//            } else {
-//                Log.d("date format", date);
-//            }
         List<ReserveListItems> items = listData.getResponseList();
+        nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
+//        nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
+        String date = listData.getNextReserveReleaseDate();
+            if (date.contains(".")) {
+                String res = date.substring(0, date.lastIndexOf("."));
+                nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+            } else {
+                Log.d("date format", date);
+            }
         if (items != null && items.size() > 0) {
             lastReleaseDateTV.setVisibility(View.VISIBLE);
             nextReleaseNATV.setVisibility(View.GONE);
@@ -842,12 +848,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                 ReserveListItems latest = items.get(0);
                 String amount = latest.getTotalAmount();
                 lastReleaseAmountTV.setText(Utils.convertBigDecimalUSDC((amount)));
-                String date = latest.getCreatedAt();
-                if (date != null && !date.equals("")) {
-                    if (date.contains(".")) {
-                        date = date.substring(0, date.lastIndexOf("."));
+                String datee = latest.getCreatedAt();
+                if (datee != null && !datee.equals("")) {
+                    if (datee.contains(".")) {
+                        datee = datee.substring(0, datee.lastIndexOf("."));
                     }
-                    lastReleaseDateTV.setText(myApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+                    lastReleaseDateTV.setText(myApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
                 }
 
                 LinearLayout payoutsList = mCurrentView.findViewById(R.id.reserveReleaseListLL);
