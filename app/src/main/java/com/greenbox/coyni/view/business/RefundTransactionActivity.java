@@ -281,61 +281,63 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     }
 
     private void initobservers() {
-        try {
+
             dashboardViewModel.getRefundDetailsMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
                 @Override
                 public void onChanged(RefundDataResponce refundDataResponce) {
                     dismissDialog();
-                    if (refundDataResponce != null) {
-                        if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
-                            refundInfo(refundDataResponce);
-                        } else {
-                            if (!refundDataResponce.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                    try {
+                        if (refundDataResponce != null) {
+                            if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
+                                refundInfo(refundDataResponce);
                             } else {
-                                Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
+                                if (!refundDataResponce.getError().getErrorDescription().equals("")) {
+                                    Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                                } else {
+                                    Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
+                                }
                             }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
+
             dashboardViewModel.getRefundProcessMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
                 @Override
                 public void onChanged(RefundDataResponce refundDataResponce) {
                     dismissDialog();
-                    if (refundDataResponce != null) {
-                        if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
-                            if (refundDataResponce.getData() != null) {
-                                if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
-                                    Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
-                                    i.putExtra(Utils.amount, refundET.getText().toString());
-                                    i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
+                    try {
+                        if (refundDataResponce != null) {
+                            if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
+                                if (refundDataResponce.getData() != null) {
+                                    if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
+                                        Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
+                                        i.putExtra(Utils.amount, refundET.getText().toString());
+                                        i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
+                                        startActivity(i);
+                                    }
+                                } else {
+                                    Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
                                     startActivity(i);
                                 }
                             } else {
-                                Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
-                                startActivity(i);
-                            }
-                        } else {
-                            if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
-                            } else {
-                                Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
-                            }
+                                if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equals("")) {
+                                    Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
+                                } else {
+                                    Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
+                                }
 
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void refundInfo(RefundDataResponce refundDataResponce) {
