@@ -30,7 +30,7 @@ public class BatchPayoutListItems implements Serializable, Comparable<BatchPayou
     @SerializedName("sentTo")
     @Expose
     private String sentTo;
-    @SerializedName("reserve")
+    @SerializedName("scheduledRelease")
     @Expose
     private String scheduledRelease;
 
