@@ -4,7 +4,7 @@ public class DetailsData {
 
     public String status;
 
-    public int amount;
+    public double amount;
 
     public String payoutDate;
 
@@ -24,11 +24,11 @@ public class DetailsData {
         this.status = status;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
