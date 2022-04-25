@@ -595,11 +595,11 @@ public interface ApiService {
     @POST("api/v2/reserve/manual-release/all")
     Call<ManualListResponse> getManualListData(@Body EmptyRequest request);
 
-    @POST("api/v2/transactions/merchatPayout/summary")
-    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
-
     @POST("api/v2/reserve/manual-release/all")
     Call<ManualListResponse> getManualListData(@Body SearchKeyRequest searchKey);
+
+    @POST("api/v2/transactions/merchatPayout/summary")
+    Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
     @POST("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);

@@ -213,7 +213,6 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initObserver() {
-
         coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
             @Override
             public void onChanged(ValidateResponse validateResponse) {

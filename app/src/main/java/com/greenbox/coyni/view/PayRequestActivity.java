@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
@@ -172,36 +173,20 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         tvCurrency.setLayoutParams(params1);
 
                     }
-                    //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//                    } else if (editable.length() <= 4) {
-//                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 53);
-//                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                        params.setMargins(15, 13, 0, 0);
-//                        imgConvert.setLayoutParams(params);
-//
-//                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//                    }
-//                    if (editable.length() > 8) {
-//                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//                    } else if (editable.length() > 5) {
-//                        payRequestET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                    } else {
-//                        payRequestET.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, fontSize));
-//                        tvCurrency.setTextSize(Utils.pixelsToSp(PayRequestActivity.this, dollarFont));
-//                    }
+
                     if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
                         disableButtons(false);
                     } else {
                         disableButtons(true);
                     }
                     payRequestET.setSelection(payRequestET.getText().length());
+                    payRequestET.setTextDirection(View.TEXT_DIRECTION_LTR);
                 } else if (editable.toString().equals(".")) {
                     payRequestET.setText("");
                     disableButtons(true);
                 } else if (editable.length() == 0) {
                     payRequestET.setHint("0.00");
+                    payRequestET.setTextDirection(View.TEXT_DIRECTION_RTL);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lp.setMargins(0, 0, 0, 0);
                     payRequestET.setLayoutParams(lp);
@@ -212,7 +197,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
-                    // tvCurrency.setVisibility(View.VISIBLE);
                     disableButtons(true);
                     cKey.clearData();
                 } else {
@@ -526,6 +510,17 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
                 cKey.setInputConnection(ic);
             }
+
+            payRequestET.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                @Override
+                public void sendAccessibilityEvent(View host, int eventType) {
+                    super.sendAccessibilityEvent(host, eventType);
+                    if (eventType == AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED) {
+                        payRequestET.setSelection(payRequestET.getText().toString().length());
+                    }
+                }
+            });
+
             payRequestET.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -908,8 +903,15 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private Boolean requestValidation() {
         Boolean value = true;
         try {
+            changeUSFormat();
             String strPay = payRequestET.getText().toString().trim().replace("\"", "");
-            if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+            if (strPay.equals("")) {
+                Utils.displayAlert("Please enter Amount", PayRequestActivity.this, "Oops!", "");
+                return value = false;
+            } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+                Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
+                return value = false;
+            } else if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");
             }
@@ -1509,7 +1511,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             isAuthenticationCalled = false;
             if (!addNoteTV.getText().toString().trim().equals("")) {
                 lyMessage.setVisibility(View.VISIBLE);
-                messageNoteTV.setText("\""+addNoteTV.getText().toString()+"\"");
+                messageNoteTV.setText("\"" + addNoteTV.getText().toString() + "\"");
             } else {
                 lyMessage.setVisibility(View.INVISIBLE);
             }
@@ -1577,6 +1579,17 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 
             prevDialog.setCanceledOnTouchOutside(true);
             prevDialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void changeUSFormat() {
+        try {
+            InputFilter[] FilterArray = new InputFilter[1];
+            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+            payRequestET.setFilters(FilterArray);
+            USFormat(payRequestET);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
