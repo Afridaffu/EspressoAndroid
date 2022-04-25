@@ -1,7 +1,6 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -10,39 +9,31 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.model.APIError;
-import com.greenbox.coyni.model.bank.BankResponse;
-import com.greenbox.coyni.model.bank.SignOn;
-import com.greenbox.coyni.model.bank.SyncAccount;
-import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
-import com.greenbox.coyni.model.preferences.UserPreference;
-import com.greenbox.coyni.model.profile.updateemail.UpdateEmailRequest;
-import com.greenbox.coyni.model.profile.updateemail.UpdateEmailResponse;
-import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneRequest;
-import com.greenbox.coyni.model.profile.updatephone.UpdatePhoneResponse;
-import com.greenbox.coyni.model.underwriting.ActionRequiredDataResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
-import com.greenbox.coyni.model.users.AccountLimits;
-import com.greenbox.coyni.model.users.User;
-import com.greenbox.coyni.model.users.UserData;
-import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.Utils;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.UUID;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UnderwritingUserActionRequired extends AndroidViewModel {
+public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
 
-    public UnderwritingUserActionRequired(@NonNull Application application) {
+    public final String TAG = getClass().getName();
+
+    public UnderwritingUserActionRequiredViewModel(@NonNull Application application) {
         super(application);
     }
 
@@ -53,11 +44,12 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
     public MutableLiveData<ActionRequiredResponse> getUserAccountLimitsMutableLiveData() {
         return ActionRequiredResponseMutableLiveData;
     }
- public MutableLiveData<ActionRequiredResponse> getSubmitActionRequired() {
+
+    public MutableLiveData<ActionRequiredResponse> getActionRequiredSubmitResponseMutableLiveData() {
         return ActionRequiredSubmitResponseMutableLiveData;
     }
 
-    public void postactionRequired() {
+    public void getAdditionalActionRequiredData() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<ActionRequiredResponse> mCall = apiService.postAdditionActionRequired();
@@ -66,7 +58,7 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
 
                 @Override
                 public void onResponse(Call<ActionRequiredResponse> call, Response<ActionRequiredResponse> response) {
-                    LogUtils.d("UnderwritingUserActionRequired",""+response);
+                    LogUtils.d(TAG, "" + response);
                     if (response.isSuccessful()) {
                         ActionRequiredResponse obj = response.body();
                         ActionRequiredResponseMutableLiveData.setValue(obj);
@@ -83,8 +75,7 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
 
                 @Override
                 public void onFailure(Call<ActionRequiredResponse> call, Throwable t) {
-                    LogUtils.d("UnderwritingUserActionRequired","UnderwritingUserActionRequired"+t.getMessage());
-                    LogUtils.d("UnderwritingUserActionRequired","UnderwritingUserActionRequired44"+t.toString());
+                    LogUtils.d(TAG, "UnderwritingUserActionRequired" + t.getMessage());
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }
@@ -94,22 +85,19 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
         }
     }
 
-    public void submitActionRequired(RequestBody information, MultipartBody.Part[] documentsImageList) {
+    public void submitActionRequired(MultipartBody documentsImageList) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            LogUtils.d("submitActionRequired","submitActionRequired"+documentsImageList);
-            LogUtils.d("submitActionRequired","submitActionRequired"+information.toString());
+            LogUtils.d(TAG, "submitActionRequired" + documentsImageList);
 
-            Call<ActionRequiredResponse> mCall = apiService.submitActionrequired(information);
+            Call<ActionRequiredResponse> mCall = apiService.submitActionRequired(documentsImageList);
             mCall.enqueue(new Callback<ActionRequiredResponse>() {
                 @Override
                 public void onResponse(Call<ActionRequiredResponse> call, Response<ActionRequiredResponse> response) {
-                    LogUtils.d("UderWritingUserActionRequired","submitActionRequired"+response);
+                    LogUtils.d(TAG, "submitActionRequired" + response);
                     if (response.isSuccessful()) {
                         ActionRequiredResponse obj = response.body();
                         ActionRequiredSubmitResponseMutableLiveData.setValue(obj);
-
-
                     } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<ActionRequiredResponse>() {
@@ -117,15 +105,13 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
                         ActionRequiredResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
                             ActionRequiredSubmitResponseMutableLiveData.setValue(errorResponse);
-
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ActionRequiredResponse> call, Throwable t) {
-                    LogUtils.d("UderWritingUserActionRequired","submitActionRequired"+t.getMessage());
-                    LogUtils.d("UderWritingUserActionRequired","submitActionRequiredeeee"+t.getLocalizedMessage());
+                    LogUtils.d(TAG, "submitActionRequired" + t.getMessage());
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
                 }
@@ -135,5 +121,43 @@ public class UnderwritingUserActionRequired extends AndroidViewModel {
         }
     }
 
+    public void submitAdditionalActionRequired(MultipartBody requestBody) {
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        Request request = new Request.Builder()
+                .url(BuildConfig.URL_PRODUCTION + "api/v2/underwriting/user/business/action-required")
+                .method("POST", requestBody)
+                .addHeader("Accept-Language", "en-us")
+                //.addHeader("SkipDecryption", "true")
+                .addHeader("X-REQUESTID", UUID.randomUUID().toString())
+                //.addHeader("Requested-portal", "")
+                .addHeader("Referer", Utils.getStrReferer())
+                .addHeader("Authorization", "Bearer " + Utils.getStrAuth())
+                .build();
+
+        LogUtils.d(TAG, "request" + request);
+        LogUtils.d(TAG, "upload" + requestBody.toString());
+
+        okhttp3.Call call = client.newCall(request);
+        call.enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
+                LogUtils.d(TAG, "callback" + e.getMessage());
+                ActionRequiredSubmitResponseMutableLiveData.setValue(null);
+            }
+
+            @Override
+            public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
+                LogUtils.d(TAG, "callback" + response.body());
+                try {
+                    Gson gson = new Gson();
+                    ActionRequiredResponse res = gson.fromJson(response.body().string(), ActionRequiredResponse.class);
+                    ActionRequiredSubmitResponseMutableLiveData.setValue(res);
+                } catch (Exception e) {
+                    ActionRequiredSubmitResponseMutableLiveData.setValue(null);
+                }
+
+            }
+        });
+    }
 
 }

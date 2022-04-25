@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -27,15 +29,15 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.textfield.TextInputLayout;
-import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
@@ -43,35 +45,34 @@ import com.greenbox.coyni.model.underwriting.InformationChangeData;
 import com.greenbox.coyni.model.underwriting.ProposalsData;
 import com.greenbox.coyni.model.underwriting.ProposalsPropertiesSubmitRequestData;
 import com.greenbox.coyni.model.underwriting.ProposalsSubmitRequestData;
+import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequired;
+import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequiredViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     public ScrollView scrollview;
-    LinearLayout additionReservedLL, llapprovedreserved, llHeading, llBottomView, additionalDocumentRequiredLL, websiteRevisionRequiredLL, informationRevisionLL, actionReqFileUploadedLL, sscFileUploadLL, actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, acceptLL, declineLL, acceptDeclineLL, acceptdneLL, declindneLL;
+    LinearLayout additionReservedLL, llapprovedreserved, llHeading, llBottomView, additionalDocumentRequiredLL,
+            websiteRevisionRequiredLL, informationRevisionLL, actionReqFileUploadedLL, sscFileUploadLL,
+            actionReqFileUploadLL, businessLicenseUploadLL, lincenseFileUploadedLL, acceptLL, declineLL,
+            acceptDeclineLL, acceptdneLL, declindneLL;
     String selectedDocType = "";
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 102;
     private static final int ACTIVITY_CHOOSE_FILE = 3;
@@ -82,7 +83,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     public boolean isSubmitEnabled = false;
     private EditText addNoteET;
     public CardView submitCV;
-    private UnderwritingUserActionRequired underwritingUserActionRequired;
+    private UnderwritingUserActionRequiredViewModel underwritingUserActionRequiredViewModel;
     private HashMap<Integer, String> fileUpload;
     private ActionRequiredResponse actionRequired;
     private int documentID;
@@ -112,9 +113,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         initFields();
         initObserver();
         enableOrDisableNext();
-
     }
-
 
     private void initFields() {
 
@@ -129,8 +128,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         imvCLose = findViewById(R.id.imvCLose);
         submitCV = findViewById(R.id.submitCV);
 
-        underwritingUserActionRequired = new ViewModelProvider(this).get(UnderwritingUserActionRequired.class);
-        underwritingUserActionRequired.postactionRequired();
+        underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
+        underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
 
         fileUpload = new HashMap<Integer, String>();
         documentsFIle = new ArrayList<>();
@@ -221,7 +220,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             }
 
-
         } catch (JSONException je) {
             je.printStackTrace();
         }
@@ -241,63 +239,31 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         LogUtils.d(TAG, "documentsss56787656" + documentsFIle);
 
         MultipartBody requestBody = buildernew.build();
-
-        Request request = new Request.Builder()
-                .url(BuildConfig.URL_PRODUCTION + "api/v2/underwriting/user/business/action-required")
-                .method("POST", requestBody)
-                .addHeader("Accept-Language", "en-us")
-                .addHeader("SkipDecryption", "true")
-                .addHeader("X-REQUESTID", "1212")
-                .addHeader("Requested-portal", "")
-                .addHeader("Referer", Utils.getStrReferer())
-                .addHeader("Authorization", "Bearer " + Utils.getStrAuth())
-                .build();
-
-        LogUtils.d(TAG, "request" + request);
-        LogUtils.d(TAG, "upload" + requestBody.toString());
-
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                LogUtils.d(TAG, "callback" + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                LogUtils.d(TAG, "callback" + response.body());
-                JSONObject jsonObj = null;
-                try {
-                    jsonObj = new JSONObject(response.body().string());
-                    LogUtils.d("callback", "---->>JSONException" + jsonObj);
-                    String status = jsonObj.getString("status");
-                    if (status.toLowerCase().toString().equalsIgnoreCase("success")) {
-                        finish();
-                    } else {
-                        String errorMsg = jsonObj.getJSONObject("error").getString("errorDescription");
-                        Utils.displayAlert(errorMsg,
-                                BusinessAdditionalActionRequiredActivity.this, "", "");
-                    }
-                } catch (JSONException e) {
-                    LogUtils.d("ws", "---->>JSONException" + jsonObj);
-                    Utils.displayAlert(e.getMessage(),
-                            BusinessAdditionalActionRequiredActivity.this, "", "");
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    LogUtils.d("ws", "---->>IOException" + jsonObj);
-                    Utils.displayAlert(e.getMessage(),
-                            BusinessAdditionalActionRequiredActivity.this, "", "");
-                    e.printStackTrace();
-                }
-
-            }
-        });
-
+        showProgressDialog();
+        underwritingUserActionRequiredViewModel.submitAdditionalActionRequired(requestBody);
     }
 
     private void initObserver() {
+        underwritingUserActionRequiredViewModel.getActionRequiredSubmitResponseMutableLiveData().observe(this, new Observer<ActionRequiredResponse>() {
+            @Override
+            public void onChanged(ActionRequiredResponse actionRequiredResponse) {
+                dismissDialog();
+                if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
 
-        underwritingUserActionRequired.getUserAccountLimitsMutableLiveData().observe(this,
+                } else {
+                    String errorMessage = getString(R.string.something_went_wrong);
+                    if (actionRequiredResponse != null && actionRequiredResponse.getError() != null
+                            && actionRequiredResponse.getError().getErrorDescription() != null
+                            && !actionRequiredResponse.getError().getErrorDescription().equals("")) {
+                        errorMessage = actionRequiredResponse.getError().getErrorDescription();
+                        Utils.displayAlert(errorMessage,
+                                BusinessAdditionalActionRequiredActivity.this, "", "");
+                    }
+                }
+            }
+        });
+
+        underwritingUserActionRequiredViewModel.getUserAccountLimitsMutableLiveData().observe(this,
                 new Observer<ActionRequiredResponse>() {
                     @Override
                     public void onChanged(ActionRequiredResponse actionRequiredResponse) {
@@ -325,9 +291,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                 }
 
                             } else {
-
-                                Utils.displayAlert(actionRequiredResponse.getError().getErrorDescription(), BusinessAdditionalActionRequiredActivity.this, "", actionRequiredResponse.getError().getFieldErrors().get(0));
-
+                                Utils.displayAlert(actionRequiredResponse.getError().getErrorDescription(),
+                                        BusinessAdditionalActionRequiredActivity.this, "",
+                                        actionRequiredResponse.getError().getFieldErrors().get(0));
                             }
 
                         } catch (Exception ex) {
@@ -335,25 +301,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         }
                     }
                 });
-
-        try {
-            underwritingUserActionRequired.getSubmitActionRequired().observe(this, new Observer<ActionRequiredResponse>() {
-                @Override
-                public void onChanged(ActionRequiredResponse companyInfoResponse) {
-                    dismissDialog();
-                    if (companyInfoResponse != null) {
-                        if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
-                            finish();
-                        } else {
-                            Utils.displayAlert(companyInfoResponse.getError().getErrorDescription(),
-                                    BusinessAdditionalActionRequiredActivity.this, "", companyInfoResponse.getError().getFieldErrors().get(0));
-                        }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -363,7 +310,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         LinearLayout.LayoutParams layoutParamss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < actionRequiredResponse.getData().getAdditionalDocument().size(); i++) {
-            View inf = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
+            View inf = getLayoutInflater().inflate(R.layout.additional_document_item, null);
             LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
             LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
             LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
@@ -409,27 +356,25 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         for (int i = 0; i < actionRequiredResponse.getData().getWebsiteChange().size(); i++) {
-            View inf1 = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
-            LinearLayout websiteChangeLL = inf1.findViewById(R.id.website);
-            LinearLayout websiteCheckBoxLL = inf1.findViewById(R.id.websiteCheckBox);
-            TextView tvheading = inf1.findViewById(R.id.tvheading);
-            TextView tvDescription = inf1.findViewById(R.id.tvDescription);
-            CheckBox checkboxCB = inf1.findViewById(R.id.checkboxCB);
-            ImageView imgWebsite = inf1.findViewById(R.id.imgWebsite);
-            websiteChangeLL.setVisibility(View.VISIBLE);
-//            String bolded = Html.fromHtml("<b>" + actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader() + "</b>").toString();
-//            tvheading.setText(getString((R.string.footer_full_legal_name_as_it), bolded,
-//                    actionRequiredResponse.getData().getWebsiteChange().get(i).getComment()));
-            tvheading.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader() + " _ " + actionRequiredResponse.getData().getWebsiteChange().get(i).getComment());
-            tvDescription.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getComment());
-            
+            View websiteView = getLayoutInflater().inflate(R.layout.additional_website_changes_item, null);
+            TextView tvheading = websiteView.findViewById(R.id.tvheading);
+            CheckBox checkboxCB = websiteView.findViewById(R.id.checkboxCB);
+            ImageView imgWebsite = websiteView.findViewById(R.id.imgWebsite);
+            int headerLength = actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader().length();
+            String websiteChanges = actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader()
+                    + " - " + actionRequiredResponse.getData().getWebsiteChange().get(i).getComment();
+            Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
+            SpannableStringBuilder SS = new SpannableStringBuilder(websiteChanges);
+            SS.setSpan(new CustomTypefaceSpan("", font), 0, headerLength, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+            tvheading.setText(SS);
 
             if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
                 imgWebsite.setVisibility(View.VISIBLE);
-
+                int width = imgWebsite.getWidth();
                 Glide.with(this)
                         .load(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1())
-                        .placeholder(R.drawable.ic_profilelogo)
+                        .fitCenter()
+                        .override(imgWebsite.getWidth(), Target.SIZE_ORIGINAL)
                         .into(imgWebsite);
             } else {
                 imgWebsite.setVisibility(View.GONE);
@@ -437,7 +382,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
             fileUpload.put(actionRequiredResponse.getData().getWebsiteChange().get(i).getId(), null);
 
-            websiteRevisionRequiredLL.addView(inf1, layoutParamss1);
+            websiteRevisionRequiredLL.addView(websiteView, layoutParamss1);
 
             checkboxCB.setTag(i);
 
@@ -464,7 +409,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         for (int i = 0; i < actionRequiredResponse.getData().getInformationChange().size(); i++) {
-            View inf1 = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
+            View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
             LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
             TextView comapny_nameTV = inf1.findViewById(R.id.comapny_nameTV);
 //            TextView sucesscomapny_nameTV = inf1.findViewById(R.id.sucess_comapny_nameTV);
@@ -633,7 +578,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
                 } else {
                     addNoteTIL.setCounterEnabled(true);
-                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                    doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                 }
 
             }
