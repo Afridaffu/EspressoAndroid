@@ -63,9 +63,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     public static RefundTransactionActivity refundTransactionActivity;
     private TransactionData transactionData;
     private String refundamount = "", etvalue = "", refundreason = "", gbxid = "", recipientAddress = "", strUserName = "", walletbalance = "", hamount = "";
-    private int processingFee, wallettype;
+    private int  wallettype;
     private boolean isRefundProcessCalled = false, insufficientTokenBalance = false, insufficientMerchantBalance = false;
-    private double value, value1, Value, etValue;
+    private double value, value1, Value, etValue,processingFee;
     private int enteramout, textamount;
     private static final String ACTION = "RefundPreviewDialog";
     private static final String ACTIONN = "insuffintmerchantbalancedialog ";
@@ -310,15 +310,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 dismissDialog();
                 try {
                     if (refundDataResponce != null) {
-                        if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
                             if (refundDataResponce.getData() != null) {
                                 if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
                                     Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
                                     i.putExtra(Utils.amount, refundET.getText().toString());
                                     i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
                                     startActivity(i);
-                                }
-                            } else {
+                                } else {
                                 Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
                                 startActivity(i);
                             }
@@ -616,10 +614,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         try {
             etValue = Double.parseDouble(Utils.convertBigDecimal(refundET.getText().toString()));
 
-            if (etValue > value && etValue >= value1) {
-                cKey.disableButton();
-                isrefundClickable = false;
-            } else if (etValue > 0 && etValue <= value && !etremarksTV.getText().toString().equals("")) {
+            if (etValue > 0 && etValue <= value && !etremarksTV.getText().toString().equals("")) {
                 cKey.enableButton();
                 isrefundClickable = true;
             } else {

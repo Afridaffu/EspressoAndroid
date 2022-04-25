@@ -7,7 +7,7 @@ public class RefundData {
     private Boolean insufficientMerchantBalance;
     private Boolean insufficientTokenBalance;
     private String walletBalance;
-    private Integer processingFee;
+    private Double processingFee;
     private String referenceId;
     private Integer walletType;
 
@@ -35,11 +35,11 @@ public class RefundData {
         this.walletBalance = walletBalance;
     }
 
-    public Integer getProcessingFee() {
+    public Double getProcessingFee() {
         return processingFee;
     }
 
-    public void setProcessingFee(Integer processingFee) {
+    public void setProcessingFee(Double processingFee) {
         this.processingFee = processingFee;
     }
 
