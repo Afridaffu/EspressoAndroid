@@ -50,6 +50,7 @@ import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.PINActivity;
@@ -104,6 +105,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private String openAmount = "", sent = "", availbal = "";
     private int dbaID = 0;
     private String merchantBalance;
+    private SeekBarWithFloatingText mSbTodayVolume;
     private Long mLastClickTime = 0L;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private final int CODE_AUTHENTICATION_VERIFICATION = 251;
@@ -186,6 +188,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutFullHistory);
         merchantBalanceTV = mCurrentView.findViewById(R.id.merchant_balance_tv);
         mTvReserveBalance = mCurrentView.findViewById(R.id.tv_reserve_balance);
+        mSbTodayVolume = mCurrentView.findViewById(R.id.sb_today_volume);
         payoutTimeTV = mCurrentView.findViewById(R.id.payoutTimeTV);
         nextPayoutAmountTV = mCurrentView.findViewById(R.id.nextPayoutAmountTV);
         lastPayoutAmountTV = mCurrentView.findViewById(R.id.lastPayoutAmountTV);
@@ -529,7 +532,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             monthlyVolumeViewLl.setVisibility(View.GONE);
         }
-
+        mSbTodayVolume.setEnabled(false);
+        mSbTodayVolume.setProgressWithText(9, "100");
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

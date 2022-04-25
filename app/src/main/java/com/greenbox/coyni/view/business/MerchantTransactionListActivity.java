@@ -108,7 +108,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-
+                    searchET.setText("");
                 }
             });
 
@@ -339,7 +339,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     }
 
     private void showFilterDialog() {
-        if(filterTransactionList != null && filterTransactionList.isManualUpdate()) {
+        if (filterTransactionList != null && filterTransactionList.isManualUpdate()) {
             filterTransactionList.setTransactionType(new ArrayList<>());
             filterTransactionList.setManualUpdate(false);
         }
@@ -351,7 +351,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     globalPending.clear();
                     globalPosted.clear();
                     filterTransactionList = (TransactionListRequest) value;
-                    if(filterTransactionList.getTransactionType() == null
+                    if (filterTransactionList.getTransactionType() == null
                             || filterTransactionList.getTransactionType().size() <= 0) {
                         filterTransactionList.setTransactionType(getDefaultTransactionTypes());
                         filterTransactionList.setManualUpdate(true);

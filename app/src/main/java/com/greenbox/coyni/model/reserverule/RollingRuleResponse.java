@@ -1,8 +1,8 @@
-package com.greenbox.coyni.model.reserverolling;
+package com.greenbox.coyni.model.reserverule;
 
 import com.greenbox.coyni.model.BaseResponse;
 
-public class RollingListResponse extends BaseResponse {
+public class RollingRuleResponse extends BaseResponse {
 
     private RollingData data;
 

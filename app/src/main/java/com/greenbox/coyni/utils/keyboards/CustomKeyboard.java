@@ -83,79 +83,11 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         keyDot.setOnClickListener(this);
 
         keyBack = findViewById(R.id.keyBackLL);
-        keyBack.setOnClickListener(this);
+//        keyBack.setOnClickListener(this);
 
         keyAction = findViewById(R.id.keyActionLL);
-        keyAction.setOnClickListener(this);
+//        keyAction.setOnClickListener(this);
 
-        keyActionText = findViewById(R.id.keyActionTV);
-
-        keyValues.put(R.id.keyZeroTV, "0");
-        keyValues.put(R.id.keyOneTV, "1");
-        keyValues.put(R.id.keyTwoTV, "2");
-        keyValues.put(R.id.keyThreeTV, "3");
-        keyValues.put(R.id.keyFourTV, "4");
-        keyValues.put(R.id.keyFiveTV, "5");
-        keyValues.put(R.id.keySixTV, "6");
-        keyValues.put(R.id.keySevenTV, "7");
-        keyValues.put(R.id.keyEightTV, "8");
-        keyValues.put(R.id.keyNineTV, "9");
-        keyValues.put(R.id.keyDotTV, ".");
-        keyValues.put(R.id.keyActionLL, "");
-
-
-    }
-
-    @Override
-    public void onClick(View view) {
-        try {
-            if (inputConnection == null) {
-                CharSequence selectedText = inputConnection.getSelectedText(0);
-                if (TextUtils.isEmpty(selectedText)) {
-                    inputConnection.deleteSurroundingText(1, 0);
-
-                } else {
-                    inputConnection.commitText("", 1);
-                }
-            } else {
-                String value = keyValues.get(view.getId());
-//                inputConnection.commitText(value, 1);
-                if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
-
-                } else {
-                    enteredText = enteredText + value;
-                    inputConnection.commitText(value, 1);
-
-                    if (strScreen.equals("addcard")) {
-                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        keyBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String chatSet = (String) inputConnection.getSelectedText(0);
-                try {
-
-                    inputConnection.deleteSurroundingText(1, 0);
-                    enteredText = enteredText.substring(0, enteredText.length() - 1);
-
-                    if (strScreen.equals("addcard")) {
-                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    if (strScreen.equals("addcard")) {
-                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
-                    }
-                }
-            }
-        });
         keyAction.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,6 +129,93 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 }
             }
         });
+
+        keyBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String chatSet = (String) inputConnection.getSelectedText(0);
+                try {
+
+                    inputConnection.deleteSurroundingText(1, 0);
+                    enteredText = enteredText.substring(0, enteredText.length() - 1);
+
+                    if (strScreen.equals("addcard")) {
+                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (strScreen.equals("addcard")) {
+                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+                    }
+                    if (strScreen.equals("refundables")) {
+                        RefundTransactionActivity.refundTransactionActivity.clearAmountCards();
+                    }
+                }
+            }
+        });
+
+
+        keyActionText = findViewById(R.id.keyActionTV);
+
+        keyValues.put(R.id.keyZeroTV, "0");
+        keyValues.put(R.id.keyOneTV, "1");
+        keyValues.put(R.id.keyTwoTV, "2");
+        keyValues.put(R.id.keyThreeTV, "3");
+        keyValues.put(R.id.keyFourTV, "4");
+        keyValues.put(R.id.keyFiveTV, "5");
+        keyValues.put(R.id.keySixTV, "6");
+        keyValues.put(R.id.keySevenTV, "7");
+        keyValues.put(R.id.keyEightTV, "8");
+        keyValues.put(R.id.keyNineTV, "9");
+        keyValues.put(R.id.keyDotTV, ".");
+        keyValues.put(R.id.keyActionLL, "");
+
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        try {
+            if (inputConnection == null) {
+                CharSequence selectedText = inputConnection.getSelectedText(0);
+                if (TextUtils.isEmpty(selectedText)) {
+                    inputConnection.deleteSurroundingText(1, 0);
+
+                } else {
+                    inputConnection.commitText("", 1);
+                }
+            } else {
+
+                if(strScreen.equals("refundables")){
+                    RefundTransactionActivity refundTransactionActivity = (RefundTransactionActivity) activityContext;
+
+                    if(refundTransactionActivity.isfullamount || refundTransactionActivity.ishalfamount){
+
+                        refundTransactionActivity.isfullamount = false;
+                        refundTransactionActivity.ishalfamount = false;
+                        refundTransactionActivity.refundET.setText("");
+                        enteredText = "";
+                        refundTransactionActivity.clearAmountCards();
+                    }
+                }
+                String value = keyValues.get(view.getId());
+//                inputConnection.commitText(value, 1);
+                if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
+
+                } else {
+                    enteredText = enteredText + value;
+                    inputConnection.commitText(value, 1);
+
+                    if (strScreen.equals("addcard")) {
+                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 

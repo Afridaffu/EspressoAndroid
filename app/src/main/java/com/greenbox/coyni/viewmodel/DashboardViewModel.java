@@ -758,7 +758,7 @@ public class DashboardViewModel extends AndroidViewModel {
                         RefundDataResponce errorResponse = null;
                         try {
                             errorResponse = gson.fromJson(r.errorBody().string(), type);
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         refundProcessMutableLiveData.setValue(errorResponse);

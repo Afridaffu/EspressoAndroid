@@ -66,6 +66,8 @@
     <string name="sepupid">Set Up Face ID</string>
     <string name="sepupidnotnoe">Not Now</string>
     <string name="setupnotnowBtn">Not Now</string>
+    <string name="all_done">All Done</string>
+    <string name="alldone_success">Your bank account has been successfully authorized and added to your payment \nmethods.</string>
 
     <string name="uploadid">Fill out your information and Upload ID</string>
     <string name="uploadid_cust">Upload ID and fill out your information</string>
@@ -636,8 +638,10 @@
     <string name="daily_batch_ids">Daily Batch IDs</string>
     <string name="release_on">Release On</string>
     <string name="amount_released">Amount Released</string>
-    <string name="canceled_description">Release Scheduled for %s for the amount of %s has been canceled due to lack of funds in the reserve balance.</string>
+    <string name="reserve_canceled_description">Release Scheduled for %1$s for the amount of %2$s has been canceled due to lack of funds in the reserve balance.</string>
+    <string name="being_held">Reserve Is Still Being Held</string>
     <string name="scheduled_release_has_been_canceled">Scheduled Release Has Been Canceled</string>
+    <string name="release_scheduled_for">Release Scheduled for %s for the amount of %s.</string>
     <string name="time">11:59pm</string>
     <string name="sales_orders">Sale Orders</string>
     <string name="signet">Signet</string>

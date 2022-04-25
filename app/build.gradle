@@ -67,7 +67,8 @@ android {
             buildConfigField 'boolean', 'SKIP_ENCRYPTION', 'false'
         }
         qa {
-            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-qa.coyni.com/\"'
+            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-gateway-automation-1247405150.us-east-1.elb.amazonaws.com/\"'
+//            buildConfigField 'String', 'URL_PRODUCTION', '\"https://api-qa.coyni.com/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://sat-qa-api-1367964791.us-east-1.elb.amazonaws.com/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://54.204.152.195:9001/\"'
 //            buildConfigField 'String', 'URL_PRODUCTION', '\"http://3.94.123.86:9001/\"'
