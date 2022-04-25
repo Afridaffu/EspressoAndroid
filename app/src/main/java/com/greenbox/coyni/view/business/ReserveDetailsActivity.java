@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +30,7 @@ import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.transaction.TransactionList;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
 import com.greenbox.coyni.model.transaction.TransactionListRequest;
+import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -50,7 +54,7 @@ public class ReserveDetailsActivity extends BaseActivity {
     private CardView details, onHoldCv;
     private CardView released;
     private MyApplication myApplication;
-    private String arg1 = "", arg2 = "";
+    private String time = "", amt = "";
 
     private String status = "", reserveAmount = "", batchId = "", timeDate = "", timeDateTemp = "", reserveRules = "", releaseDate = "";
 
@@ -314,7 +318,18 @@ public class ReserveDetailsActivity extends BaseActivity {
                     released.setVisibility(View.GONE);
                     details.setVisibility(View.GONE);
                     onHoldCv.setVisibility(View.VISIBLE);
-                    onHoldAmt.setText(Html.fromHtml(getResources().getString(R.string.release_scheduled_for, "<font color='#151515'><b>" + arg1 + "</b></font>", "<font color='#151515'><b>" + arg2 + "</b></font>")));
+//                    onHoldAmt.setText(Html.fromHtml(getResources().getString(R.string.release_scheduled_for, "<font color='#151515'><b>" + time + "</b></font>", "<font color='#151515'><b>" + amt + "</b></font>")));
+                    String onHold_desc = getResources().getString(R.string.release_scheduled_for, time, amt);
+
+                    //22  - 22+arg1.length;    length - (42 + arg2.length) length - 42
+                    SpannableString spannableString = new SpannableString(onHold_desc);
+                    Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
+
+                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("",font), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), onHold_desc.length() - (1 + amt.length()), onHold_desc.length() - 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("",font), onHold_desc.length() - (1 + amt.length()), onHold_desc.length() - 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    onHoldAmt.setText(spannableString);
                     statusTV.setText(status);
                     statusTV.setTextColor(getColor(R.color.pending_color));
                     statusTV.setBackgroundResource(R.drawable.txn_pending_bg);
@@ -322,15 +337,17 @@ public class ReserveDetailsActivity extends BaseActivity {
                     released.setVisibility(View.GONE);
                     details.setVisibility(View.VISIBLE);
                     onHoldCv.setVisibility(View.GONE);
-                    String cancel_desc = getResources().getString(R.string.reserve_canceled_description, arg1, arg2);
+                    String cancel_desc = getResources().getString(R.string.reserve_canceled_description, time, amt);
 
                     //22  - 22+arg1.length;    length - (64 + arg2.length) length - 64
                     SpannableString spannableString = new SpannableString(cancel_desc);
+                    Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
 
-                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), 22, 22 + arg1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 22, 22 + arg1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), cancel_desc.length() - (63 + arg2.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), cancel_desc.length() - (63 + arg2.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("",font), 22, 22 + time.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), cancel_desc.length() - (63 + amt.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new CustomTypefaceSpan("",font), cancel_desc.length() - (63 + amt.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
                     cancel.setText(spannableString);
                     statusTV.setText(status);
                     statusTV.setTextColor(getColor(R.color.failed_status));
@@ -364,8 +381,8 @@ public class ReserveDetailsActivity extends BaseActivity {
                 timeDateTemp = timeDateTemp.substring(0, timeDateTemp.lastIndexOf("."));
             }
 
-            arg1 = myApplication.convertZoneDateTime(timeDateTemp, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy");
-            arg2 = Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN";
+            time = myApplication.convertZoneDateTime(timeDateTemp, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy");
+            amt = Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN";
         }
     }
 

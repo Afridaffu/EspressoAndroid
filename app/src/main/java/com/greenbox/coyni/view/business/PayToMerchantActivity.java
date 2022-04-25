@@ -958,7 +958,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             convertDecimal();
-            if (payValidation()) {
+
                 isPayClick = true;
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                 cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
@@ -977,7 +977,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             }
         }
 
-    }
 
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, boolean isPayToMerchantActivity, Double balance) {
         PayToMerchantWithAmountDialog payToMerchantWithAmountDialog = new PayToMerchantWithAmountDialog(PayToMerchantActivity.this, amount, userDetails, isPayToMerchantActivity, balance, "");
