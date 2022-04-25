@@ -1852,6 +1852,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etCardNumber.setText("");
                         etExpiry.setText("");
                         etCVV.setText("");
+                        etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
 
                         etAddress1.setText("");
                         etAddress2.setText("");

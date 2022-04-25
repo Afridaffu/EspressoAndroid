@@ -873,7 +873,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                         Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                                     }
                                 } else {
-                                    Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
+                                    if (loginResponse.getError().getErrorDescription().equalsIgnoreCase("invalid.Permanent.Token")) {
+                                        Utils.displayAlert(getString(R.string.bio_token_expired), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
+                                    } else {
+                                        Utils.displayAlert(loginResponse.getError().getErrorDescription(), LoginActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
+                                    }
                                 }
                             }
                         }

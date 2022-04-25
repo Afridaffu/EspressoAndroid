@@ -5,11 +5,15 @@ import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,29 +31,41 @@ import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.outline_et.SSNBOEditText;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
 public class IdVeAdditionalActionActivity extends AppCompatActivity {
-    TextInputEditText ssnET;
+//    TextInputEditText ssnET;
     TextInputLayout ssnaacTIL;
     CardView idveridoneBtn;
-    boolean isssn = false, isSubmitEnabled = true;
-    LinearLayout ssnCloseLL, ssnErrorLL;
-    TextView ssnErrorTV;
+    public boolean isssn = false, isSubmitEnabled = false;
+    public LinearLayout ssnCloseLL, ssnErrorLL;
+    public TextView ssnErrorTV;
     IdentityVerificationViewModel identityVerificationViewModel;
     GetIdentityResponse IDVEResponse;
     ProgressDialog dialog;
+    private Long mLastClickTime = 0L;
+
+    SSNBOEditText ssnET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_id_ve_additional_action);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         ssnCloseLL = findViewById(R.id.ssnCloseLL);
-        ssnET = findViewById(R.id.ssnET);
+//        ssnET = findViewById(R.id.ssnET);
         ssnErrorLL = findViewById(R.id.ssnErrorLL);
         ssnErrorTV = findViewById(R.id.ssnErrorTV);
         idveridoneBtn = findViewById(R.id.idveridoneBtn);
         ssnaacTIL = findViewById(R.id.ssnTIL);
+
+        ssnET = findViewById(R.id.ssnOutLineBoxET);
+        ssnET.setFrom("IDVE_SSN", this);
+
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
@@ -62,93 +78,104 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
             }
         });
 
-
-        ssnET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (ssnET.getText().toString().length() == 0) {
-                    ssnErrorLL.setVisibility(VISIBLE);
-                    ssnErrorTV.setText("Field Required");
-                }
-//                else if (ssnET.getText().toString().length() > 0 && ssnET.getText().toString().length() < 9) {
-//                    ssnErrorLL.setVisibility(VISIBLE);
-//                    ssnErrorTV.setText("Please enter a valid SSN");
+//        ssnET.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                if (ssnET.getText().toString().length() == 0) {
+////                    ssnErrorLL.setVisibility(VISIBLE);
+////                    ssnErrorTV.setText("Field Required");
+//                    isssn = false;
+//                } else if (ssnET.getText().toString().length() > 0 && ssnET.getText().toString().length() < 9) {
+////                    ssnErrorLL.setVisibility(VISIBLE);
+////                    ssnErrorTV.setText("Please enter a valid SSN");
+//                    isssn = true;
+//                } else if (ssnET.getText().toString().length() == 9) {
+////                    ssnErrorLL.setVisibility(GONE);
+//                    isssn = true;
 //                }
-                else if (ssnET.getText().toString().length() == 9) {
-                    ssnErrorLL.setVisibility(GONE);
-                }
-            }
+//                ssnErrorLL.setVisibility(GONE);
+//                enableORdiableNext();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
         idveridoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String SSN = ssnET.getText().toString();
 
-                if (SSN.length() == 0) {
-                    ssnErrorLL.setVisibility(VISIBLE);
-                    ssnErrorTV.setText("Field Required");
-                } else if (SSN.length() > 0 && ssnET.getText().toString().length() < 9) {
-                    ssnErrorLL.setVisibility(VISIBLE);
-                    ssnErrorTV.setText("Please enter a valid SSN");
-                } else if (SSN.length() == 9) {
-                    ssnErrorLL.setVisibility(GONE);
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
 
-                    dialog = Utils.showProgressDialog(IdVeAdditionalActionActivity.this);
-                    IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
-                    try {
-                        identityAddressRequest.setFirstName(IDVEResponse.getData().getFirstName());
-                        identityAddressRequest.setLastName(IDVEResponse.getData().getLastName());
-                        identityAddressRequest.setPhoneNumber(IDVEResponse.getData().getPhoneNumber());
-                        identityAddressRequest.setEmail(IDVEResponse.getData().getEmail());
-                        identityAddressRequest.setDateOfBirth(IDVEResponse.getData().getDateOfBirth());
-                        //Unmask SSN
+                if (isSubmitEnabled) {
+                    String SSN = ssnET.getUnMasked();
+
+                    if (SSN.length() == 0) {
+                        ssnErrorLL.setVisibility(VISIBLE);
+                        ssnErrorTV.setText("Field Required");
+                    } else if (SSN.length() > 0 && SSN.length() < 9) {
+                        ssnErrorLL.setVisibility(VISIBLE);
+                        ssnErrorTV.setText("Please enter a valid SSN");
+                    } else if (SSN.length() == 9) {
+                        ssnErrorLL.setVisibility(GONE);
+
+                        dialog = Utils.showProgressDialog(IdVeAdditionalActionActivity.this);
+                        IdentityAddressRequest identityAddressRequest = new IdentityAddressRequest();
+                        try {
+                            identityAddressRequest.setFirstName(IDVEResponse.getData().getFirstName());
+                            identityAddressRequest.setLastName(IDVEResponse.getData().getLastName());
+                            identityAddressRequest.setPhoneNumber(IDVEResponse.getData().getPhoneNumber());
+                            identityAddressRequest.setEmail(IDVEResponse.getData().getEmail());
+                            identityAddressRequest.setDateOfBirth(IDVEResponse.getData().getDateOfBirth());
+                            //Unmask SSN
 //                    String SSN = ssnET.getText().toString().substring(0,2)+ssnET.getText().toString().substring(4,5)+ssnET.getText().toString().substring(7,10);
 
-                        identityAddressRequest.setSsn(SSN);
+                            identityAddressRequest.setSsn(SSN);
 
-                        AddressObj addressObj = new AddressObj();
-                        addressObj.setAddressLine1(IDVEResponse.getData().getUseraddress().getAddressLine1());
-                        addressObj.setAddressLine2(IDVEResponse.getData().getUseraddress().getAddressLine2());
-                        addressObj.setAddressType(IDVEResponse.getData().getUseraddress().getAddressType());
-                        addressObj.setCity(IDVEResponse.getData().getUseraddress().getCity());
+                            AddressObj addressObj = new AddressObj();
+                            addressObj.setAddressLine1(IDVEResponse.getData().getUseraddress().getAddressLine1());
+                            addressObj.setAddressLine2(IDVEResponse.getData().getUseraddress().getAddressLine2());
+                            addressObj.setAddressType(IDVEResponse.getData().getUseraddress().getAddressType());
+                            addressObj.setCity(IDVEResponse.getData().getUseraddress().getCity());
 //                        addressObj.setState(IDVEResponse.getData().getUseraddress().getState());
-                        addressObj.setState(IDVEResponse.getData().getUseraddress().getStateCode());
-                        try {
-                            addressObj.setStateCode(IDVEResponse.getData().getUseraddress().getStateCode());
+                            addressObj.setState(IDVEResponse.getData().getUseraddress().getStateCode());
+                            try {
+                                addressObj.setStateCode(IDVEResponse.getData().getUseraddress().getStateCode());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            addressObj.setCountry("us");
+                            addressObj.setZipCode(IDVEResponse.getData().getUseraddress().getZipCode());
+
+                            PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
+                            photoIDEntityObject.setNumber(SSN);
+                            try {
+                                photoIDEntityObject.setType(IDVEResponse.getData().getPhotoIDEntityObject().getType());
+                                photoIDEntityObject.setIssuer(IDVEResponse.getData().getPhotoIDEntityObject().getIssuer());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            identityAddressRequest.setAddressObj(addressObj);
+                            identityAddressRequest.setPhotoIDEntityObject(photoIDEntityObject);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        addressObj.setCountry("us");
-                        addressObj.setZipCode(IDVEResponse.getData().getUseraddress().getZipCode());
 
-                        PhotoIDEntityObject photoIDEntityObject = new PhotoIDEntityObject();
-                        photoIDEntityObject.setNumber(SSN);
-                        try {
-                            photoIDEntityObject.setType(IDVEResponse.getData().getPhotoIDEntityObject().getType());
-                            photoIDEntityObject.setIssuer(IDVEResponse.getData().getPhotoIDEntityObject().getIssuer());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        identityAddressRequest.setAddressObj(addressObj);
-                        identityAddressRequest.setPhotoIDEntityObject(photoIDEntityObject);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        identityVerificationViewModel.uploadIdentityAddressPatch(identityAddressRequest);
                     }
 
-                    identityVerificationViewModel.uploadIdentityAddressPatch(identityAddressRequest);
                 }
-
             }
         });
 
@@ -161,6 +188,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
             }
         });
 
+        enableORdiableNext();
 
         try {
             identityVerificationViewModel.getUploadIdentityAddressPatchResponse().observe(this, new Observer<IdentityAddressResponse>() {
@@ -209,10 +237,12 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
         }
     }
 
-    private void enableORdiableNext() {
+    public void enableORdiableNext() {
         if (isssn) {
+            isSubmitEnabled = true;
             idveridoneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
         } else {
+            isSubmitEnabled = false;
             idveridoneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
         }
     }
