@@ -127,9 +127,9 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
                 .url(BuildConfig.URL_PRODUCTION + "api/v2/underwriting/user/business/action-required")
                 .method("POST", requestBody)
                 .addHeader("Accept-Language", "en-us")
-                //.addHeader("SkipDecryption", "true")
+                .addHeader("SkipDecryption", "true")
                 .addHeader("X-REQUESTID", UUID.randomUUID().toString())
-                //.addHeader("Requested-portal", "")
+                .addHeader("Requested-portal", "")
                 .addHeader("Referer", Utils.getStrReferer())
                 .addHeader("Authorization", "Bearer " + Utils.getStrAuth())
                 .build();
@@ -142,7 +142,7 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
             @Override
             public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
                 LogUtils.d(TAG, "callback" + e.getMessage());
-                ActionRequiredSubmitResponseMutableLiveData.setValue(null);
+                ActionRequiredSubmitResponseMutableLiveData.postValue(null);
             }
 
             @Override
@@ -151,9 +151,9 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
                 try {
                     Gson gson = new Gson();
                     ActionRequiredResponse res = gson.fromJson(response.body().string(), ActionRequiredResponse.class);
-                    ActionRequiredSubmitResponseMutableLiveData.setValue(res);
+                    ActionRequiredSubmitResponseMutableLiveData.postValue(res);
                 } catch (Exception e) {
-                    ActionRequiredSubmitResponseMutableLiveData.setValue(null);
+                    ActionRequiredSubmitResponseMutableLiveData.postValue(null);
                 }
 
             }

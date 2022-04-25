@@ -183,6 +183,7 @@ public class Utils {
     public static Boolean isFaceEnabled;
     public static Boolean isTouchEnabled;
     public static Boolean isBiometric = false;
+    public static final String COMMENT_ACTION = "comment_action";
     public static final String transInProgress = "inprogress";
     public static final String SELECTED_BATCH_PAYOUT = "selectedBatchPayout";
     public static final String transPending = "pending";

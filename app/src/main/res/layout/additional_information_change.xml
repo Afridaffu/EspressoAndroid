@@ -149,7 +149,6 @@
                     android:layout_marginEnd="@dimen/_11sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text=""
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10ssp" />
 
@@ -213,7 +212,7 @@
                     android:id="@+id/acceptMsgTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_bold"
                     android:text="@string/Accepted"
@@ -237,10 +236,8 @@
                     android:id="@+id/remarksTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginBottom="@dimen/_15sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text=""
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10sdp"
                     android:visibility="gone" />
