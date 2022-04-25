@@ -27,8 +27,11 @@ import com.greenbox.coyni.model.business_id_verification.CancelApplicationRespon
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.reserveIdDetails.DetailsRequest;
+import com.greenbox.coyni.model.reserveIdDetails.DetailsResponse;
 import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
+import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
@@ -59,6 +62,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<BatchPayoutListResponse> rollingListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchPayoutListResponse> batchNowResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ManualListResponse> manualListResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<RollingRuleResponse> rollingRuleResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<DetailsResponse> detailsResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<Fees> feesMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ReserveListResponse> reserveListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchNowResponse> batchNowSlideResponseMutableLiveData = new MutableLiveData<>();
@@ -104,7 +109,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         return batchPayoutListMutableLiveData;
     }
 
-
     public MutableLiveData<BatchPayoutIdDetailsResponse> getBatchPayoutIdDetailsResponseMutableLiveData() {
         return batchPayoutIdDetailsResponseMutableLiveData;
     }
@@ -120,9 +124,15 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
         return rollingListResponseMutableLiveData;
     }
-
+    public MutableLiveData<DetailsResponse> getDetailsResponseMutableLiveData() {
+        return detailsResponseMutableLiveData;
+    }
     public MutableLiveData<ManualListResponse> getManualListResponseMutableLiveData() {
         return manualListResponseMutableLiveData;
+    }
+
+    public MutableLiveData<RollingRuleResponse> getRollingRuleResponseMutableLiveData() {
+        return rollingRuleResponseMutableLiveData;
     }
 
     public MutableLiveData<Fees> getFeesMutableLiveData() {
@@ -479,6 +489,71 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
+    public void getRollingRuleDetails() {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<RollingRuleResponse> mCall = apiService.getRollingRuleDetails();
+        mCall.enqueue(new Callback<RollingRuleResponse>() {
+            @Override
+            public void onResponse(Call<RollingRuleResponse> call, Response<RollingRuleResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    RollingRuleResponse ruleResponse = response.body();
+                    rollingRuleResponseMutableLiveData.setValue(ruleResponse);
+                } else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<RollingRuleResponse>() {
+                    }.getType();
+                    RollingRuleResponse ruleResponse = null;
+                    try {
+                        ruleResponse = gson.fromJson(response.errorBody().string(), type);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    rollingRuleResponseMutableLiveData.setValue(ruleResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RollingRuleResponse> call, Throwable t) {
+                rollingRuleResponseMutableLiveData.setValue(null);
+            }
+        });
+    }
+
+    public void getReserveIdDetails(DetailsRequest detailsRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DetailsResponse> call = apiService.getReserveIdDetails(detailsRequest);
+            call.enqueue(new Callback<DetailsResponse>() {
+                @Override
+                public void onResponse(Call<DetailsResponse> call, Response<DetailsResponse> response) {
+                    if (response.isSuccessful()) {
+                        DetailsResponse list = response.body();
+                        detailsResponseMutableLiveData.setValue(list);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<DetailsResponse>() {
+                        }.getType();
+                        DetailsResponse errorResponse = null;
+                        try {
+                            errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        detailsResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DetailsResponse> call, Throwable t) {
+                    detailsResponseMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getManualListData() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
@@ -722,6 +797,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
 
     public void batchPayoutIdDetails(BatchPayoutDetailsRequest batchPayoutDetailsRequest) {
         try {

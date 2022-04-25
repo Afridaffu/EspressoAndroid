@@ -482,14 +482,15 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         cardResponseData = cardResponse.getData();
                         Error errData = cardResponse.getError();
                         if (errData == null || cardResponse.getStatus().toString().toLowerCase().equals("success")) {
-                            if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
+                            if (cardResponseData.getProcessor_response_text() != null && (cardResponseData.getProcessor_response_text().toLowerCase().contains("cvv mismatch") || cardResponseData.getProcessor_response_text().toLowerCase().contains("wrong card details")
+                                    || cardResponseData.getProcessor_response_text().toLowerCase().contains("fraud card"))) {
+                                displayAlert("Card details are invalid, please try with a valid card", "");
+                            } else if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
                                 displayPreAuth();
                             } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || (cardResponseData.getResponse() != null && cardResponseData.getResponse().toLowerCase().equals("declined"))) {
-//                                Utils.displayAlert("Card details are invalid, please try with a valid card", AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
                                 displayAlert("Card details are invalid, please try with a valid card", "");
                             }
                         } else {
-//                            Utils.displayAlert(errData.getErrorDescription(), AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
                             if (errData != null && !errData.getErrorDescription().equals("")) {
                                 displayAlert(errData.getErrorDescription(), "");
                             } else {
@@ -497,8 +498,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             }
                         }
                     }
-                } catch (
-                        Exception ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -1506,7 +1506,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
+            //tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {

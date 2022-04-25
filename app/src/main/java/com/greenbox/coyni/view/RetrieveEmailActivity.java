@@ -420,7 +420,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
     public void enableButton() {
         try {
             if (!phoneNumberET.getText().toString().trim().equals("") && phoneNumberET.getText().toString().length() == 14
-                    && firstName.getText().length() >= 2 && lastName.getText().length() >= 2) {
+                    && firstName.getText().toString().trim().length() >= 2 && lastName.getText().toString().trim().length() >= 2) {
                 nextBtn.setEnabled(true);
                 nextBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             } else {
