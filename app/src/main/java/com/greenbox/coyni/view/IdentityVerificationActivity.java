@@ -630,6 +630,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         }
                     } else {
 //                        mailAddr1.setHint("Street Address");
+                        if (Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);

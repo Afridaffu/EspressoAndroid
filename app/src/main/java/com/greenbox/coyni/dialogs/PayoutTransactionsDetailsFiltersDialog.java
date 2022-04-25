@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListData;
 import com.greenbox.coyni.model.RangeDates;
+import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -42,12 +43,14 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     public boolean isfilterdatePickET = false, isapplyEnabled = false;
 
     private RangeDates rangeDates;
+    private ReserveFilter filter;
     //    public static PayoutTransactionsDetailsFiltersDialog payoutTransactionsDetailsFiltersDialog;
     public static DateRangePickerDialog dateRangePickerDialog;
 
-    public PayoutTransactionsDetailsFiltersDialog(Context context) {
+    public PayoutTransactionsDetailsFiltersDialog(Context context, ReserveFilter filter) {
         super(context);
         this.context = context;
+        this.filter = filter;
     }
 
     @Override
@@ -61,6 +64,10 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         filterDatePickET = findViewById(R.id.filterdatePickET);
         applyFilterBtnCV = findViewById(R.id.applyFilterBtnCV);
         resetFilterTV = findViewById(R.id.resetFiltersTV);
+
+        if (filter == null) {
+            filter = new ReserveFilter();
+        }
 
         datePickLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,22 +98,34 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getOnDialogClickListener().onDialogClicked("Date_SELECTED", strSelectedDate);
-                if (rangeDates == null) {
+
+                if (!filter.isFilterApplied) {
+                    dismiss();
                     Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    getOnDialogClickListener().onDialogClicked("dates", rangeDates);
-                    dismiss();
-
-
+                    if (getOnDialogClickListener() != null) {
+                        getOnDialogClickListener().onDialogClicked("ApplyFilter", filter);
+                        dismiss();
+                    }
                 }
+//                getOnDialogClickListener().onDialogClicked("Date_SELECTED", strSelectedDate);
+//                if (rangeDates == null) {
+//                    Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
+//                } else {
+//
+//                    getOnDialogClickListener().onDialogClicked("dates", rangeDates);
+//                    dismiss();
+//                }
             }
         });
         resetFilterTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filterDatePickET.setText("");
+                filter.isFilterApplied = false;
+                if (getOnDialogClickListener() != null) {
+                    getOnDialogClickListener().onDialogClicked("ResetFilter", filter);
+                }
             }
         });
     }
@@ -118,6 +137,9 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
             public void onDialogClicked(String action, Object value) {
                 if (action.equals(Utils.datePicker)) {
                     rangeDates = (RangeDates) value;
+                    filter.isFilterApplied = true;
+                    filter.setUpdatedFromDate(rangeDates.getUpdatedFromDate());
+                    filter.setUpdatedToDate(rangeDates.getUpdatedToDate());
                     filterDatePickET.setText(rangeDates.getFullDate());
                 }
             }
