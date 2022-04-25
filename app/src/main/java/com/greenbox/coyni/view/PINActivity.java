@@ -134,7 +134,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     passcode = "";
                     if (getIntent().getStringExtra("AUTH_TYPE") != null && getIntent().getStringExtra("AUTH_TYPE").equals("TOUCH")) {
                         imgBack.setImageResource(R.drawable.ic_close);
-                    } else{
+                    } else {
                         imgBack.setImageResource(R.drawable.ic_back);
                     }
                     break;
@@ -189,7 +189,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     || getIntent().getStringExtra("screen").equals("Pay"))
                     || getIntent().getStringExtra("screen").equals("Notifications")
                     || getIntent().getStringExtra("screen").equals("Buy")
-                    || getIntent().getStringExtra("screen").equals("Paid")) {
+                    || getIntent().getStringExtra("screen").equals("Paid")
+                    || getIntent().getStringExtra("screen").equals("ChangePassword")) {
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -408,6 +409,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                     }
                                 }, 2000);
 
+                            } else if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("login_SET_PIN")) {
+                                Intent i = new Intent(PINActivity.this, LoginActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
                             } else {
                                 if (Utils.checkBiometric(PINActivity.this)) {
                                     if (Utils.checkAuthentication(PINActivity.this)) {
@@ -787,7 +792,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                         passcode = "";
                         if (getIntent().getStringExtra("AUTH_TYPE") != null && getIntent().getStringExtra("AUTH_TYPE").equals("TOUCH")) {
                             imgBack.setImageResource(R.drawable.ic_close);
-                        } else{
+                        } else {
                             imgBack.setImageResource(R.drawable.ic_back);
                         }
                         resetPINValue = "CHOOSE";

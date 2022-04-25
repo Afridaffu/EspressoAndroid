@@ -140,6 +140,11 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                     inputConnection.deleteSurroundingText(1, 0);
                     enteredText = enteredText.substring(0, enteredText.length() - 1);
 
+//                    inputConnection.deleteSurroundingText(1, 0);
+//                    StringBuilder stringBuilder = new StringBuilder(enteredText);
+//                    stringBuilder.deleteCharAt(inputConnection.getTextBeforeCursor(1, 0).length());
+//                    enteredText = stringBuilder.toString();
+
                     if (strScreen.equals("addcard")) {
                         AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
                     }
@@ -187,10 +192,10 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 }
             } else {
 
-                if(strScreen.equals("refundables")){
+                if (strScreen.equals("refundables")) {
                     RefundTransactionActivity refundTransactionActivity = (RefundTransactionActivity) activityContext;
 
-                    if(refundTransactionActivity.isfullamount || refundTransactionActivity.ishalfamount){
+                    if (refundTransactionActivity.isfullamount || refundTransactionActivity.ishalfamount) {
 
                         refundTransactionActivity.isfullamount = false;
                         refundTransactionActivity.ishalfamount = false;
@@ -204,9 +209,13 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                 if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
 
                 } else {
-                    enteredText = enteredText + value;
-                    inputConnection.commitText(value, 1);
+                    String[] split = enteredText.split("\\.");
+                    if (split.length == 2 && split[1].length() == 2) {
 
+                    } else {
+                        enteredText = enteredText + value;
+                        inputConnection.commitText(value, 1);
+                    }
                     if (strScreen.equals("addcard")) {
                         AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
                     }

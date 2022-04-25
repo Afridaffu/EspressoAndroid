@@ -785,6 +785,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
+                    showProgressDialog();
                     BiometricTokenRequest request = new BiometricTokenRequest();
                     request.setDeviceId(Utils.getDeviceID());
 //                    request.setMobileToken(strToken);
@@ -976,6 +977,7 @@ public class CustomerProfileActivity extends BaseActivity {
         coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
             @Override
             public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                dismissDialog();
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {

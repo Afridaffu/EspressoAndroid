@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -82,9 +83,16 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
                     if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(ForgotPasswordActivity.this);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 300);
+
                 }
             });
             fromStr = getIntent().getStringExtra("screen");
