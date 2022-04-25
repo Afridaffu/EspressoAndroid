@@ -34,14 +34,12 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class ReserveDetailsActivity extends BaseActivity {
 
@@ -116,41 +114,39 @@ public class ReserveDetailsActivity extends BaseActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createdDate = selected.getScheduledRelease();
 
-//        if(createdDate != null) {
-//            Date date = null;
-//            try {
-//                date = dateFormat.parse(createdDate);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            Calendar fromDate = Calendar.getInstance();
-//            fromDate.setTime(date);
-//            fromDate.set(Calendar.HOUR_OF_DAY, 0);
-//            fromDate.set(Calendar.MINUTE, 0);
-//            fromDate.set(Calendar.SECOND, 0);
-//
-//            Calendar toDate = Calendar.getInstance();
-//            toDate.setTime(date);
-//            toDate.set(Calendar.HOUR_OF_DAY, 23);
-//            toDate.set(Calendar.MINUTE, 59);
-//            toDate.set(Calendar.SECOND, 59);
-//
-//            String reqFromDate = "";
-//            String reqToDate = "";
-//            try {
-//                reqFromDate = dateFormat.format(fromDate);
-//                 reqToDate= dateFormat.format(toDate);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            transactionListRequest.setUpdatedFromDate(reqFromDate);
-//            transactionListRequest.setUpdatedFromDateOperator(">=");
-//            transactionListRequest.setUpdatedToDate(reqToDate);
-//            transactionListRequest.setUpdatedToDateOperator("<=");
-//
-//        }
-        dashboardViewModel.meTransactionList(transactionListRequest);
+        if (createdDate != null) {
+            Date date = null;
+            try {
+                date = dateFormat.parse(createdDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar fromDate = Calendar.getInstance();
+            fromDate.setTime(date);
+            fromDate.set(Calendar.HOUR_OF_DAY, 0);
+            fromDate.set(Calendar.MINUTE, 0);
+            fromDate.set(Calendar.SECOND, 0);
 
+            Calendar toDate = Calendar.getInstance();
+            toDate.setTime(date);
+            toDate.set(Calendar.HOUR_OF_DAY, 23);
+            toDate.set(Calendar.MINUTE, 59);
+            toDate.set(Calendar.SECOND, 59);
+
+            String reqFromDate = "";
+            String reqToDate = "";
+            try {
+                reqFromDate = dateFormat.format(fromDate.getTime());
+                reqToDate = dateFormat.format(toDate.getTime());
+                transactionListRequest.setUpdatedFromDate(reqFromDate);
+                transactionListRequest.setUpdatedFromDateOperator(">=");
+                transactionListRequest.setUpdatedToDate(reqToDate);
+                transactionListRequest.setUpdatedToDateOperator("<=");
+                dashboardViewModel.meTransactionList(transactionListRequest);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void getReserveDetails(String payoutId) {
@@ -326,7 +322,16 @@ public class ReserveDetailsActivity extends BaseActivity {
                     released.setVisibility(View.GONE);
                     details.setVisibility(View.VISIBLE);
                     onHoldCv.setVisibility(View.GONE);
-                    cancel.setText(getDateDescription());
+                    String cancel_desc = getResources().getString(R.string.reserve_canceled_description, arg1, arg2);
+
+                    //22  - 22+arg1.length;    length - (64 + arg2.length) length - 64
+                    SpannableString spannableString = new SpannableString(cancel_desc);
+
+                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), 22, 22 + arg1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 22, 22 + arg1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), cancel_desc.length() - (63 + arg2.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), cancel_desc.length() - (63 + arg2.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                    cancel.setText(spannableString);
                     statusTV.setText(status);
                     statusTV.setTextColor(getColor(R.color.failed_status));
                     statusTV.setBackgroundResource(R.drawable.txn_failed_bg);
@@ -351,8 +356,7 @@ public class ReserveDetailsActivity extends BaseActivity {
 
     }
 
-    private String getDateDescription() {
-        String res = "";
+    private void getDateDescription() {
         if (selected != null && selected.getScheduledRelease() != null) {
             timeDateTemp = selected.getScheduledRelease();
 
@@ -362,18 +366,7 @@ public class ReserveDetailsActivity extends BaseActivity {
 
             arg1 = myApplication.convertZoneDateTime(timeDateTemp, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy");
             arg2 = Utils.convertTwoDecimal(selected.getReserveAmount()) + " CYN";
-            String cancel_desc = getResources().getString(R.string.reserve_canceled_description, arg1, arg2);
-
-            //22  - 22+arg1.length;    length - (64 + arg2.length) length - 64
-            SpannableString spannableString = new SpannableString(cancel_desc);
-
-            spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), 22, 22 + arg1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 22, 22 + arg1.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-            spannableString.setSpan(new ForegroundColorSpan(getColor(R.color.primary_black)), cancel_desc.length() - (63 + arg2.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), cancel_desc.length() - (63 + arg2.length()), cancel_desc.length() - 63, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-            res = spannableString.toString();
         }
-        return res;
     }
 
 }
