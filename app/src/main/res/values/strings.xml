@@ -66,6 +66,8 @@
     <string name="sepupid">Set Up Face ID</string>
     <string name="sepupidnotnoe">Not Now</string>
     <string name="setupnotnowBtn">Not Now</string>
+    <string name="all_done">All Done</string>
+    <string name="alldone_success">Your bank account has been successfully authorized and added to your payment \nmethods.</string>
 
     <string name="uploadid">Fill out your information and Upload ID</string>
     <string name="uploadid_cust">Upload ID and fill out your information</string>
@@ -620,7 +622,8 @@
     <string name="invitation_canceled">Invitation Cancelled\</string>
     <string name="confirmation_msg">Do you want to discard the changes?</string>
     <string name="pre_authorization">Pre-Authorization</string>
-    <string name="preauth_description">A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from [Descriptor Name] and enter the amount below.</string>
+    <!--    <string name="preauth_description">A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from [Descriptor Name] and enter the amount below.</string>-->
+    <string name="preauth_description">For security reasons, we have charged your card a small amount which will be removed after the verification process is complete.  Please check your recent card transactions and enter the amount of this charge below.</string>
     <string name="incorrect_amount_1_attempt_left">Incorrect amount, 1 attempt left</string>
     <string name="please_check_the_box_if_you_completed_a_task">Please check the box if you completed a task</string>
     <string name="footer_full_legal_name_as_it"><b>FOOTER</b> - Full Legal name (as it </string>
@@ -636,8 +639,10 @@
     <string name="daily_batch_ids">Daily Batch IDs</string>
     <string name="release_on">Release On</string>
     <string name="amount_released">Amount Released</string>
-    <string name="canceled_description">Release Scheduled for %s for the amount of %s has been canceled due to lack of funds in the reserve balance.</string>
+    <string name="reserve_canceled_description">Release Scheduled for %1$s for the amount of %2$s has been canceled due to lack of funds in the reserve balance.</string>
+    <string name="being_held">Reserve Is Still Being Held</string>
     <string name="scheduled_release_has_been_canceled">Scheduled Release Has Been Canceled</string>
+    <string name="release_scheduled_for">Release Scheduled for %s for the amount of %s.</string>
     <string name="time">11:59pm</string>
     <string name="sales_orders">Sale Orders</string>
     <string name="signet">Signet</string>
