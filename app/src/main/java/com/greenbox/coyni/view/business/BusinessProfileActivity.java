@@ -433,6 +433,9 @@ public class BusinessProfileActivity extends BaseActivity {
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.orange));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                    }else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        account_status.setTextColor(getResources().getColor(R.color.orange));
+                        statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));

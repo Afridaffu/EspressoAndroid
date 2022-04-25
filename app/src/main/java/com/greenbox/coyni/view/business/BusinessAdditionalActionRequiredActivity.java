@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -34,6 +35,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
+import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
@@ -85,6 +87,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private ActionRequiredResponse actionRequired;
     private int documentID;
     private LinearLayout selectedLayout = null;
+    private TextView selectedText = null;
     public static ArrayList<File> documentsFIle;
     private JSONObject informationJSON;
     private ImageView imvAcceptTick;
@@ -93,6 +96,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private LinearLayout llDecline;
     private LinearLayout llAccept;
     private String currentDateTimeString;
+    private String currentDateString;
     private boolean userAccepted = false;
     public static File mediaFile;
     private boolean reservedRuleAccepted = false;
@@ -239,7 +243,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         MultipartBody requestBody = buildernew.build();
 
         Request request = new Request.Builder()
-                .url("http://api-gateway-dev-1893379566.us-east-1.elb.amazonaws.com/api/v2/underwriting/user/business/action-required")
+                .url(BuildConfig.URL_PRODUCTION + "api/v2/underwriting/user/business/action-required")
                 .method("POST", requestBody)
                 .addHeader("Accept-Language", "en-us")
                 .addHeader("SkipDecryption", "true")
@@ -363,12 +367,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             LinearLayout documentRequiredLL = inf.findViewById(R.id.documentRequired);
             LinearLayout sscFileUploadLL = inf.findViewById(R.id.sscFileUploadLL);
             LinearLayout sscfileUploadedLL = inf.findViewById(R.id.sscfileUploadedLL);
+            TextView sscuploadFileTV = inf.findViewById(R.id.sscuploadFileTV);
+            TextView sscfileUpdatedOnTV = inf.findViewById(R.id.sscfileUpdatedOnTV);
 
             TextView documentName = inf.findViewById(R.id.tvdocumentName);
             documentRequiredLL.setVisibility(View.VISIBLE);
             documentName.setText(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentName());
             additionalDocumentRequiredLL.addView(inf, layoutParamss);
-
+            sscfileUpdatedOnTV.setText("Uploaded on " + Utils.getCurrentDate());
             sscFileUploadLL.setTag(i);
 
             fileUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentId(), null);
@@ -379,6 +385,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     int pos = (int) view.getTag();
                     documentID = actionRequiredResponse.getData().getAdditionalDocument().get(pos).getDocumentId();
                     selectedLayout = sscfileUploadedLL;
+                    selectedText = sscuploadFileTV;
                     if (checkAndRequestPermissions(BusinessAdditionalActionRequiredActivity.this)) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
@@ -410,8 +417,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             CheckBox checkboxCB = inf1.findViewById(R.id.checkboxCB);
             ImageView imgWebsite = inf1.findViewById(R.id.imgWebsite);
             websiteChangeLL.setVisibility(View.VISIBLE);
-            tvheading.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader());
+//            String bolded = Html.fromHtml("<b>" + actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader() + "</b>").toString();
+//            tvheading.setText(getString((R.string.footer_full_legal_name_as_it), bolded,
+//                    actionRequiredResponse.getData().getWebsiteChange().get(i).getComment()));
+            tvheading.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader() + " _ " + actionRequiredResponse.getData().getWebsiteChange().get(i).getComment());
             tvDescription.setText(actionRequiredResponse.getData().getWebsiteChange().get(i).getComment());
+            
 
             if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
                 imgWebsite.setVisibility(View.VISIBLE);
@@ -456,6 +467,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             View inf1 = getLayoutInflater().inflate(R.layout.activity_business_additional_action_documents_items, null);
             LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
             TextView comapny_nameTV = inf1.findViewById(R.id.comapny_nameTV);
+//            TextView sucesscomapny_nameTV = inf1.findViewById(R.id.sucess_comapny_nameTV);
             TextView comapnynameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
             TextView comapnynameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
             TextView tvMessage = inf1.findViewById(R.id.tvMessage);
@@ -471,6 +483,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             if (actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0) != null) {
                 if (actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0) != null) {
                     comapny_nameTV.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getName());
+//                    sucesscomapny_nameTV.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getName());
                     comapnynameOriginal.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getOriginalValue());
                     comapnynameProposed.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getProposedValue());
                     tvMessage.setText(actionRequiredResponse.getData().getInformationChange().get(i).getProposals().get(0).getProperties().get(0).getAdminMessage());
@@ -493,7 +506,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvacceptMsg.setVisibility(View.VISIBLE);
                     llAccept.setVisibility(View.GONE);
                     llDecline.setVisibility(View.GONE);
-                    tvacceptMsg.setText(getResources().getString(R.string.Accepted) + " " + currentDateTimeString);
+                    tvacceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
 
                     if (fileUpload.containsKey(pos)) {
                         fileUpload.replace(pos, "true");
@@ -561,7 +574,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     }
 
     private void displayComments(int position) {
-
+        Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
         Dialog cvvDialog = new Dialog(BusinessAdditionalActionRequiredActivity.this);
         cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         cvvDialog.setContentView(R.layout.add_note_layout);
@@ -573,7 +586,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
         TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
         LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
-
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -595,7 +607,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvRemarks.setVisibility(View.VISIBLE);
                     llAccept.setVisibility(View.GONE);
                     tvdeclinedMsg.setVisibility(View.VISIBLE);
-                    tvdeclinedMsg.setText(getResources().getString(R.string.Decline) + " " + currentDateTimeString);
+
+                    tvdeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to : ");
                     llDecline.setVisibility(View.GONE);
                     if (fileUpload.containsKey(position)) {
                         fileUpload.replace(position, "true");
@@ -616,9 +629,11 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() == 0) {
                     addNoteTIL.setCounterEnabled(false);
+                    doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+
                 } else {
                     addNoteTIL.setCounterEnabled(true);
-
+                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                 }
 
             }
@@ -759,8 +774,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 String[] extraMimeTypes = {"application/pdf", "image/*"};
                 pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes);
                 pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-                Intent
-                        chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
+                Intent chooserIntent = Intent.createChooser(pickIntent, "Select Picture");
                 startActivityForResult(chooserIntent, ACTIVITY_CHOOSE_FILE);
             });
             chooseFile.show();
@@ -821,6 +835,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         if (selectedLayout != null) {
             selectedLayout.setVisibility(View.VISIBLE);
+            selectedText.setVisibility(View.GONE);
         }
 
         LogUtils.d(TAG, "fileUpload" + fileUpload);
@@ -849,6 +864,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
             if (selectedLayout != null) {
                 selectedLayout.setVisibility(View.VISIBLE);
+                selectedText.setVisibility(View.GONE);
+
             }
 
             LogUtils.d(TAG, "fileUpload" + fileUpload);
