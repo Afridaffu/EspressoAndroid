@@ -117,8 +117,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         return batchNowResponseMutableLiveData;
     }
 
-    public MutableLiveData<BatchPayoutListResponse> getBatchNowSlideResponseMutableLiveData() {
-        return batchNowResponseMutableLiveData;
+    public MutableLiveData<BatchNowResponse> getBatchNowSlideResponseMutableLiveData() {
+        return batchNowSlideResponseMutableLiveData;
     }
 
     public MutableLiveData<BatchPayoutListResponse> getRollingListResponseMutableLiveData() {
@@ -668,6 +668,7 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     BatchNowResponse obj = response.body();
                     batchNowSlideResponseMutableLiveData.setValue(obj);
+
                     Log.e("Success", new Gson().toJson(obj));
 
                 } else {
@@ -797,7 +798,6 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
-
 
     public void batchPayoutIdDetails(BatchPayoutDetailsRequest batchPayoutDetailsRequest) {
         try {
