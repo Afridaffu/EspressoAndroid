@@ -35,6 +35,7 @@ import com.bumptech.glide.request.target.Target;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.dialogs.AddCommentsDialog;
+import com.greenbox.coyni.dialogs.ApplicationApprovedDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
@@ -488,11 +489,24 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        tv_mv.setText(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume());
-        tv_ht.setText(actionRequiredResponse.getData().getReserveRule().getHighTicket());
+        tv_mv.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("CYN","")));
+        tv_ht.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("CYN","")));
         tv_reserveAmount.setText(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString().replace("0*$", "") + " %");
         tv_reservePeriod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 
+        ImageView i_iconIV = reserveRule.findViewById(R.id.i_iconIV);
+
+        i_iconIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                ApplicationApprovedDialog dialog = new ApplicationApprovedDialog(BusinessAdditionalActionRequiredActivity.this);
+                dialog.show();
+            }
+        });
         llApprovedReserved.addView(reserveRule, layoutParams);
 
         cardAccept.setOnClickListener(new View.OnClickListener() {

@@ -665,5 +665,8 @@
     <string name="giftcard">Gift Card</string>
     <string name="purchase_gift_cards_from_over_100_popular_stores_restaurants_and_more">Purchase gift cards from over 100 popular stores, restaurants, and more.</string>
     <string name="bio_token_expired">Your token has been expired, please login with your credentials.</string>
+    <string name="application_approved">Application Approved!</string>
+    <string name="thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with">Thank you for your interest in coyni. After\ncarefully reviewing. The coyni team made\ndecision to approve your application with</string>
+    <string name="reserve_conditions">reserve conditions.</string>
 
 </resources>
