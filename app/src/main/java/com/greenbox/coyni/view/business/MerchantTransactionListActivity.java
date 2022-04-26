@@ -370,7 +370,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     filterIV.setImageResource(R.drawable.ic_filter_enabled);
                 } else if (action.equals(Utils.resetFilter)) {
                     filterTransactionList = null;
-                    loadData();
+//                    loadData();
                 }
             }
         });
