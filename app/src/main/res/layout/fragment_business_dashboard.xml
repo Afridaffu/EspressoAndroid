@@ -71,7 +71,7 @@
 
                 <TextView
                     android:id="@+id/tv_user_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_9sdp"
@@ -417,7 +417,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:layout_marginEnd="@dimen/_2sdp"
-                                        android:fontFamily="@font/opensans_semibold"
+                                        android:fontFamily="@font/opensans_regular"
                                         android:text="@string/custom_date_range"
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_10ssp" />
@@ -474,11 +474,11 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/gross_amount"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/_5sdp"
                                             android:fontFamily="@font/opensans_bold"
-                                            android:text="0.00"
                                             android:textColor="@color/price"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -513,12 +513,13 @@
                                         android:textSize="@dimen/_11ssp" />
 
                                     <TextView
+                                        android:id="@+id/transactions"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/_7sdp"
+                                        android:text="0"
                                         android:layout_marginBottom="@dimen/_22sdp"
                                         android:fontFamily="@font/opensans_bold"
-                                        android:text="0"
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_14ssp" />
                                 </LinearLayout>
@@ -553,11 +554,11 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/refunds"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-
-                                            android:fontFamily="@font/opensans_bold"
                                             android:text="0.00"
+                                            android:fontFamily="@font/opensans_bold"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -592,10 +593,11 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/processing_fees"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_bold"
                                             android:text="0.00"
+                                            android:fontFamily="@font/opensans_bold"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -639,10 +641,11 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/misc_fee"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_bold"
                                             android:text="0.00"
+                                            android:fontFamily="@font/opensans_bold"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -678,10 +681,11 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/net_amount"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_bold"
                                             android:text="0.00"
+                                            android:fontFamily="@font/opensans_bold"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -703,6 +707,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_weight="1"
+                                android:visibility="gone"
                                 android:orientation="horizontal">
 
                                 <LinearLayout
@@ -726,6 +731,7 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/highest_ticket"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:fontFamily="@font/opensans_bold"
@@ -765,10 +771,11 @@
                                         android:orientation="horizontal">
 
                                         <TextView
+                                            android:id="@+id/average_ticket"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:fontFamily="@font/opensans_bold"
                                             android:text="0.00"
+                                            android:fontFamily="@font/opensans_bold"
                                             android:textColor="@color/primary_black"
                                             android:textSize="@dimen/_16ssp" />
 
@@ -793,16 +800,16 @@
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/sales_orders"
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:textColor="@color/dark_grey"
-                                android:layout_marginBottom="@dimen/_23sdp"
-                                android:textSize="@dimen/_11ssp" />
+                                android:layout_marginBottom="@dimen/_14sdp"
+                                android:textSize="@dimen/_12ssp" />
 
                             <com.greenbox.coyni.utils.SeekBarWithFloatingText
                                 android:id="@+id/sb_today_volume"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 android:layout_gravity="center" />
 
                             <View

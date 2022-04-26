@@ -34,6 +34,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.BatchPayoutListAdapter;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
+import com.greenbox.coyni.dialogs.DateRangePickerDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
@@ -45,6 +46,8 @@ import com.greenbox.coyni.model.DashboardReserveList.ReserveListData;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListItems;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.DialogAttributes;
+import com.greenbox.coyni.model.RangeDates;
+import com.greenbox.coyni.model.business_activity.BusinessActivityData;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
@@ -68,10 +71,12 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 //Business Dashboard Fragment
@@ -107,7 +112,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     private LinearLayout reserveReleaseListLL, reserveDetailsLL;
     private BatchNowRequest batchNowRequest = null;
     private String openAmount = "", sent = "", availbal = "";
-    private int dbaID = 0;
+    private int dbaID = 0, currentTimeInHours = 0;
+    private String currentTimeHoursText = "";
     private String merchantBalance;
     private SeekBarWithFloatingText mSbTodayVolume;
     private Long mLastClickTime = 0L;
@@ -116,6 +122,9 @@ public class BusinessDashboardFragment extends BaseFragment {
     static String strToken = "";
     private DatabaseHandler dbHandler;
     private String batchId;
+    private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount, saleOrdersText;
+    private LinearLayout mTicketsLayout;
+
     //private boolean showReserve = true;
 
     //Processing Volume Types
@@ -126,7 +135,12 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String customDate = "Custom Date Range";
     private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
     private static final String date = "yyyy-MM-dd";
-    private static final String time = " 00:00:00";
+    private static final String startTime = " 00:00:00";
+    private static final String endTime = " 23:59:59";
+    private static final String midTime = " 12:00:00";
+    private static final String defaultAmount = "0.00";
+    private RangeDates rangeDates;
+    private String strFromDate, strToDate;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -241,6 +255,16 @@ public class BusinessDashboardFragment extends BaseFragment {
         nextReleaseNATV = mCurrentView.findViewById(R.id.nextReleaseNATV);
         lastReleaseNATV = mCurrentView.findViewById(R.id.lastReleaseNATV);
         releaseNoTransaction = mCurrentView.findViewById(R.id.releaseNoTransaction);
+
+        // For Processing Volume
+        mGrossAmount = mCurrentView.findViewById(R.id.gross_amount);
+        mTransactions = mCurrentView.findViewById(R.id.transactions);
+        mRefunds = mCurrentView.findViewById(R.id.refunds);
+        mProcessingFees = mCurrentView.findViewById(R.id.processing_fees);
+        mMISCFees = mCurrentView.findViewById(R.id.misc_fee);
+        mNetAmount = mCurrentView.findViewById(R.id.net_amount);
+        mTicketsLayout = mCurrentView.findViewById(R.id.tickets_layout);
+        saleOrdersText = mCurrentView.findViewById(R.id.sale_order_text);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -408,16 +432,63 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
-//        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessActivityResp>() {
-//            @Override
-//            public void onChanged(BusinessActivityResp businessActivityResp) {
-//                if (businessActivityResp != null && businessActivityResp.getData() != null) {
-//                    if (businessActivityResp.getStatus() != null && businessActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-//                        Toast.makeText(getActivity().getApplicationContext(), "Hi", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        });
+        businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessActivityResp>() {
+            @Override
+            public void onChanged(BusinessActivityResp businessActivityResp) {
+                if (businessActivityResp != null && businessActivityResp.getData() != null) {
+                    double processingFee = 0.0,
+                            grossAmount = 0.0,
+                            refunds = 0.0,
+                            miscFee = 0.0,
+                            netAmount = 0.0;
+                    mSbTodayVolume.setEnabled(false);
+                    if (businessActivityResp.getStatus() != null && businessActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (businessActivityResp.getData() != null && businessActivityResp.getData().size() > 0) {
+                            List<BusinessActivityData> data = businessActivityResp.getData();
+                            for (int position = 0; position < data.size(); position++) {
+                                if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.saleOrdertxntype)
+                                        && data.get(position).getTransactionSubType() == null) {
+                                    if (data.get(position).getTotalAmount() != null) {
+                                        mGrossAmount.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+                                        grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
+                                    }
+                                    mTransactions.setText(String.valueOf(data.get(position).getCount()));
+                                    if (data.get(position).getFee() != null) {
+                                        processingFee = Double.parseDouble(data.get(position).getFee());
+                                    }
+                                } else if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
+                                        && data.get(position).getTransactionSubType() == null) {
+                                    if (data.get(position).getTotalAmount() != null) {
+                                        mRefunds.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+                                        refunds = Double.parseDouble(data.get(position).getTotalAmount());
+                                    }
+
+                                    double processFee = processingFee+Double.parseDouble(data.get(position).getFee());
+                                    processingFee = processFee;
+                                } else if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
+                                        && data.get(position).getTransactionSubType() == null) {
+                                    mMISCFees.setText(data.get(position).getTotalAmount());
+                                    miscFee = Double.parseDouble(data.get(position).getTotalAmount());
+                                }
+                            }
+                            mProcessingFees.setText(Utils.convertTwoDecimal(String.valueOf(processingFee)));
+                            netAmount = grossAmount - refunds - processingFee - miscFee;
+                            mNetAmount.setText(Utils.convertTwoDecimal(String.valueOf(netAmount)));
+                        } else {
+                            mGrossAmount.setText(defaultAmount);
+                            mTransactions.setText("0");
+                            mRefunds.setText(defaultAmount);
+                            mProcessingFees.setText(defaultAmount);
+                            mMISCFees.setText(defaultAmount);
+                            mNetAmount.setText(defaultAmount);
+                        }
+                        currentTimeInHours = Integer.parseInt(myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH")); // Returns Hour of Current Time with Preference
+                        currentTimeHoursText = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH:mma"); // Returns Hour with Minutes of Current Time with Preference
+                        mSbTodayVolume.setProgressWithText(currentTimeInHours, currentTimeHoursText, mGrossAmount.getText().toString());
+                    }
+                }
+            }
+        });
     }
 
 
@@ -559,8 +630,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             monthlyVolumeViewLl.setVisibility(View.GONE);
         }
-        mSbTodayVolume.setEnabled(false);
-        mSbTodayVolume.setProgressWithText(9, "100");
+//        mSbTodayVolume.setEnabled(false);
+//        mSbTodayVolume.setProgressWithText(9, "100");
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -711,34 +782,74 @@ public class BusinessDashboardFragment extends BaseFragment {
 
 
     private void getProcessingVolume(String action) {
-        String strFromDate, strToDate;
         mTvProcessingVolume.setText(action);
         switch (action) {
             case todayValue: {
-                SimpleDateFormat spf = new SimpleDateFormat(dateAndTime);
-                strFromDate = myApplication.convertZoneDateTime(spf.format(Calendar.getInstance().getTime()), dateAndTime, date) + time;
-                strToDate = myApplication.convertZoneDateTime(spf.format(Calendar.getInstance().getTime()), dateAndTime, dateAndTime);
+                mTvProcessingVolume.setText(action + "  ");
+                mTicketsLayout.setVisibility(View.GONE);
+                mSbTodayVolume.setVisibility(View.VISIBLE);
+                saleOrdersText.setVisibility(View.VISIBLE);
+                strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
+                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
                 businessActivityAPICall(strFromDate, strToDate);
             }
             break;
             case yesterdayValue: {
-//                BusinessActivityRequest request = new BusinessActivityRequest();
-//                SimpleDateFormat spf = new SimpleDateFormat(dateAndTime);
-//                String strCurDate = myApplication.convertZoneDateTime(spf.format(Calendar.getInstance().getTime()),"yyyy-MM-dd HH:mm:ss","yyyy-MM-dd HH:mm:ss");
-//                request.setFromDate(strCurDate);
-//                request.setToDate(strCurDate);
-//                businessDashboardViewModel.businessActivity(request);
+                mTicketsLayout.setVisibility(View.GONE);
+                mSbTodayVolume.setVisibility(View.GONE);
+                saleOrdersText.setVisibility(View.GONE);
+                strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
+                strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
+                businessActivityAPICall(strFromDate, strToDate);
             }
             break;
             case monthDate: {
-
+                mTicketsLayout.setVisibility(View.GONE);
+                mSbTodayVolume.setVisibility(View.GONE);
+                saleOrdersText.setVisibility(View.GONE);
+                strFromDate = myApplication.convertZoneDateTime(getFirstDayOfMonthString(), dateAndTime, date) + startTime;
+                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
+                businessActivityAPICall(strFromDate, strToDate);
             }
             break;
             case lastMonthDate: {
+                mTicketsLayout.setVisibility(View.VISIBLE);
+                mSbTodayVolume.setVisibility(View.GONE);
+                saleOrdersText.setVisibility(View.GONE);
+                strFromDate = myApplication.convertZoneDateTime(getPreviousMonthFirstDate(), dateAndTime, date) + startTime;
+                strToDate = myApplication.convertZoneDateTime(getPreviousMonthLastDate(), dateAndTime, date) + endTime;
+                businessActivityAPICall(strFromDate, strToDate);
 
             }
             break;
             case customDate: {
+                mTicketsLayout.setVisibility(View.GONE);
+                mSbTodayVolume.setVisibility(View.GONE);
+                saleOrdersText.setVisibility(View.GONE);
+                DateRangePickerDialog dateRangePickerDialog = new DateRangePickerDialog(getActivity());
+                dateRangePickerDialog.show();
+
+                dateRangePickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
+
+                    @Override
+                    public void onDialogClicked(String action, Object value) {
+                        if (action.equalsIgnoreCase(Utils.datePicker)) {
+
+                            rangeDates = (RangeDates) value;
+                            if (rangeDates != null) {
+                                String fromDate = rangeDates.getUpdatedFromDate() + midTime;
+                                String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
+                                strFromDate = myApplication.convertZoneDateTime(fromDate, dateAndTime, date) + startTime;
+                                strToDate = myApplication.convertZoneDateTime(toDate, dateAndTime, date) + endTime;
+
+                                businessActivityAPICall(strFromDate, strToDate);
+//                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                });
+
+
             }
             break;
 
@@ -969,4 +1080,62 @@ public class BusinessDashboardFragment extends BaseFragment {
             e.printStackTrace();
         }
     }
+
+
+    private Date yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return cal.getTime();
+    }
+
+    private Date firstDayOfCurrentMonth() {
+        final Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return cal.getTime();
+    }
+
+    private Date previousMonthFirstDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);  // get Previous Month
+        cal.set(Calendar.DATE, 1);      // I am setting Date 1
+        Date firstDateOfPreviousMonth = cal.getTime();
+
+        return firstDateOfPreviousMonth;
+    }
+
+    private Date previousMonthLastDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        cal.set(Calendar.DATE, cal.getActualMaximum(Calendar.DATE)); // setting last date of previous month
+
+        Date lastDateOfPreviousMonth = cal.getTime();
+        return lastDateOfPreviousMonth;
+    }
+
+    private String getYesterdayDateString() {
+        DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        return dateFormat.format(yesterday());
+    }
+
+    private String getFirstDayOfMonthString() {
+        DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        return dateFormat.format(firstDayOfCurrentMonth());
+    }
+
+    private String getCurrentTimeString() {
+        DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        return dateFormat.format(Calendar.getInstance().getTime());
+    }
+
+
+    private String getPreviousMonthFirstDate() {
+        DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        return dateFormat.format(previousMonthFirstDate());
+    }
+
+    private String getPreviousMonthLastDate() {
+        DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
+        return dateFormat.format(previousMonthLastDate());
+    }
+
 }

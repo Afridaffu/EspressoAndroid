@@ -24,6 +24,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
     private SeekBar seekBar;
     private View thumbView;
     private String floatingText;
+    private String minutesText;
 
     public SeekBarWithFloatingText(Context context) {
         super(context);
@@ -39,7 +40,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         initView();
     }
-    
+
     public void setEnabled(boolean enabled) {
         seekBar.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -49,11 +50,12 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         });
     }
 
-    public void setProgressWithText(int progress, String floating) {
+    public void setProgressWithText(int progress, String time, String floating) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 floatingText = floating;
+                minutesText = time;
                 seekBar.setProgress(progress);
             }
         }, 100);
@@ -92,22 +94,31 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         LayoutParams layoutParams = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         int width = seekBar.getWidth();
-        int calculatedWidth = (width / 24) * progress;
+        int calculatedWidth = (width / 24);
         String text = "";
         if (progress < 12) {
-            text = progress + ".00 am";
-            calculatedWidth = calculatedWidth + 60;
+//            text = minutesText + "am";
+            text = minutesText.toLowerCase();
+            calculatedWidth = calculatedWidth + 20 * progress;
         } else if (progress == 12) {
-            text = progress + ".00 pm";
+//            text = minutesText + "pm";
+            text = minutesText.toLowerCase();
+            calculatedWidth = calculatedWidth + 20 * progress;
         } else {
-            calculatedWidth = calculatedWidth - 10;
-            text = (progress - 12) + ".00 pm";
+            if (progress > 12 && progress < 22) {
+                calculatedWidth = calculatedWidth + 20 * progress;
+            }
+            else {
+                calculatedWidth = 20*22 +20 -calculatedWidth;  // for fix the Position
+            }
+//            text = (progress - 12) + minutesText.substring(2) + "pm";
+            text = minutesText.toLowerCase();
         }
         if (calculatedWidth < width) {
             layoutParams.setMargins(calculatedWidth, 0, 0, 0);
             tvFloatingText.setLayoutParams(layoutParams);
         }
-        tvFloatingText.setText(text + " " + floatingText + "cyn");
+        tvFloatingText.setText(text + " " + floatingText + " CYN");
     }
 
     public Drawable getThumb() {
