@@ -315,6 +315,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void run() {
                     picker.show(getWindow());
+                    ssnET.setEnabled(true);
                 }
             }, 500);
 
@@ -629,6 +630,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         }
                     } else {
 //                        mailAddr1.setHint("Street Address");
+                        if (Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(IdentityVerificationActivity.this);
                         mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(mailingAddTIL, getColor(R.color.primary_green));
                         address1ErrorLL.setVisibility(GONE);
@@ -861,7 +864,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
-//                    if (Utils.isKeyboardVisible)
+                    ssnET.setEnabled(false);
+                    //                    if (Utils.isKeyboardVisible)
 //                        Utils.hideKeypad(IdentityVerificationActivity.this);
 //                    setToDate(dobET);
                     setToDateWheelPicker(dobET);
@@ -877,6 +881,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     ssnET.clearFocus();
+                    ssnET.setEnabled(false);
 //                    if (Utils.isKeyboardVisible)
 //                        Utils.hideKeypad(IdentityVerificationActivity.this);
 //                    setToDate(dobET);
@@ -890,6 +895,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
                         ssnET.clearFocus();
+                        ssnET.setEnabled(false);
 //                        if (Utils.isKeyboardVisible)
 //                            Utils.hideKeypad(IdentityVerificationActivity.this);
 //                        setToDate(dobET);

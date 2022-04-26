@@ -482,14 +482,15 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         cardResponseData = cardResponse.getData();
                         Error errData = cardResponse.getError();
                         if (errData == null || cardResponse.getStatus().toString().toLowerCase().equals("success")) {
-                            if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
+                            if (cardResponseData.getProcessor_response_text() != null && (cardResponseData.getProcessor_response_text().toLowerCase().contains("cvv mismatch") || cardResponseData.getProcessor_response_text().toLowerCase().contains("wrong card details")
+                                    || cardResponseData.getProcessor_response_text().toLowerCase().contains("fraud card"))) {
+                                displayAlert("Card details are invalid, please try with a valid card", "");
+                            } else if (cardResponseData.getStatus().toLowerCase().contains("authorize") || cardResponseData.getStatus().toLowerCase().contains("approve") || cardResponseData.getStatus().toLowerCase().equals("pending_settlement")) {
                                 displayPreAuth();
                             } else if (cardResponseData.getStatus().toLowerCase().equals("failed") || (cardResponseData.getResponse() != null && cardResponseData.getResponse().toLowerCase().equals("declined"))) {
-//                                Utils.displayAlert("Card details are invalid, please try with a valid card", AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
                                 displayAlert("Card details are invalid, please try with a valid card", "");
                             }
                         } else {
-//                            Utils.displayAlert(errData.getErrorDescription(), AddCardActivity.this, "", cardResponse.getError().getFieldErrors().get(0));
                             if (errData != null && !errData.getErrorDescription().equals("")) {
                                 displayAlert(errData.getErrorDescription(), "");
                             } else {
@@ -497,8 +498,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             }
                         }
                     }
-                } catch (
-                        Exception ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -1249,6 +1249,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 try {
                     if (charSequence.length() > 0) {
 //                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
+                    } else if (charSequence.toString().trim().length() == 0) {
+                        etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.light_gray));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1291,6 +1294,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         cityErrorLL.setVisibility(GONE);
                         etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_black));
+                    } else if (charSequence.toString().trim().length() == 0) {
+                        isCity = false;
+                        cityErrorLL.setVisibility(GONE);
+                        etlCity.setBoxStrokeColor(getResources().getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.light_gray));
                     } else {
                         isCity = false;
                     }
@@ -1365,7 +1373,12 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+                    } else if (charSequence.toString().trim().length() == 0) {
+                        isZipcode = false;
+                        zipErrorLL.setVisibility(GONE);
+                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.light_gray));
                     } else {
                         isZipcode = false;
                         zipErrorLL.setVisibility(GONE);
@@ -1506,7 +1519,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             ctKey.disableButton();
             InputConnection ic = etPreAmount.onCreateInputConnection(new EditorInfo());
             ctKey.setInputConnection(ic);
-            tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
+            //tvMessage.setText("A temporary hold was placed on your card and will be removed by the end of this verification process. Please check your Bank/Card statement for a charge from " + cardResponseData.getDescriptorName().toLowerCase() + " and enter the amount below.");
             etPreAmount.setShowSoftInputOnFocus(false);
             etPreAmount.setEnabled(false);
             layoutPClose.setOnClickListener(new View.OnClickListener() {
@@ -1806,6 +1819,20 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         try {
             isCardClear = true;
             etExpiry.setText("");
+
+            //Extra added
+            etAddress1.setText("");
+            etAddress2.setText("");
+            etCity.setText("");
+            etState.setText("");
+            etZipCode.setText("");
+
+            etAddress1.clearFocus();
+            etAddress2.clearFocus();
+            etCity.clearFocus();
+            etZipCode.clearFocus();
+            //Extra added
+
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 etCVV.setText("");
             }
@@ -1852,6 +1879,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etCardNumber.setText("");
                         etExpiry.setText("");
                         etCVV.setText("");
+                        etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
 
                         etAddress1.setText("");
                         etAddress2.setText("");

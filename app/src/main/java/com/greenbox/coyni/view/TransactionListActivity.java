@@ -179,6 +179,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
                         ex.printStackTrace();
                     }
 //                    swipeRefreshLayout.setRefreshing(false);
+                    searchET.setText("");
                 }
             });
 

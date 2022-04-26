@@ -31,12 +31,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -89,7 +91,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     PaymentsList selectedCard, objSelected, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
-    RelativeLayout lyPayMethod, lyMainLayout;
+    RelativeLayout lyPayMethod;
+    ScrollView lyMainLayout;
     LinearLayout lyCDetails, lyBuyClose, lyBDetails, layoutETAmount;
     DatabaseHandler dbHandler;
     EditText etAmount;
@@ -179,7 +182,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         params1.setMargins(0, 0, 0, 12);
                         tvCurrency.setLayoutParams(params1);
 
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() == 7 || editable.length() == 8) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
                         layoutETAmount.setPadding(0, 50, 0, 0);
@@ -191,7 +193,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         params1.setMargins(0, 0, 0, 10);
                         tvCurrency.setLayoutParams(params1);
 
-                        //tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
                     } else if (editable.length() >= 9) {
                         etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
                         layoutETAmount.setPadding(0, 52, 0, 0);
@@ -214,27 +215,19 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         tvCurrency.setLayoutParams(params1);
                     }
 
-//                    if (editable.length() > 8) {
-//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
-//                    } else if (editable.length() > 5) {
-//                        etAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
-//                        tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
-//                    } else {
-//                        etAmount.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, fontSize));
-//                        tvCurrency.setTextSize(Utils.pixelsToSp(BuyTokenActivity.this, dollarFont));
-//                    }
-
                     if (validation()) {
                         ctKey.enableButton();
                     } else {
                         ctKey.disableButton();
                     }
+                    etAmount.setSelection(etAmount.getText().length());
+                    etAmount.setTextDirection(View.TEXT_DIRECTION_LTR);
                 } else if (editable.toString().equals(".")) {
                     etAmount.setText("");
                     ctKey.disableButton();
                 } else if (editable.length() == 0) {
                     etAmount.setHint("0.00");
+                    etAmount.setTextDirection(View.TEXT_DIRECTION_RTL);
                     cynValue = 0.0;
                     usdValue = 0.0;
                     cynValidation = 0.0;
@@ -260,43 +253,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-//            switch (resultCode) {
-//                case 1:
-//                    if (data == null) {
-//                        if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
-//                            Utils.displayAlert("Bank integration has been cancelled", BuyTokenActivity.this, "", "");
-//                        } else {
-//                            pDialog = Utils.showProgressDialog(this);
-//                            customerProfileViewModel.meSyncAccount();
-//                        }
-//                    }
-//                    break;
-//                case RESULT_OK:
-//                case 235: {
-//                    try {
-//                        //buyToken();
-//                        pDialog = Utils.showProgressDialog(BuyTokenActivity.this);
-//                        BiometricTokenRequest request = new BiometricTokenRequest();
-//                        request.setDeviceId(Utils.getDeviceID());
-////                        request.setMobileToken(strToken);
-//                        request.setMobileToken(objMyApplication.getStrMobileToken());
-//                        request.setActionType(Utils.buyActionType);
-//                        coyniViewModel.biometricToken(request);
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//                break;
-//                case 0:
-//                    if (requestCode != 3 && requestCode != 1) {
-//                        startActivity(new Intent(BuyTokenActivity.this, PINActivity.class)
-//                                .putExtra("TYPE", "ENTER")
-//                                .putExtra("screen", "buy")
-//                                .putExtra("cynValue", String.valueOf(cynValue)));
-//                    }
-//                    break;
-//            }
-
             switch (resultCode) {
                 case RESULT_OK:
                     try {
@@ -382,6 +338,17 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             setFaceLock();
             setTouchId();
             etAmount.addTextChangedListener(this);
+
+            etAmount.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                @Override
+                public void sendAccessibilityEvent(View host, int eventType) {
+                    super.sendAccessibilityEvent(host, eventType);
+                    if (eventType == AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED) {
+                        etAmount.setSelection(etAmount.getText().toString().length());
+                    }
+                }
+            });
+
             etAmount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1178,7 +1145,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isUSD) {
                 isUSD = false;
                 usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-                cynValue = ((usdValue - feeInAmount) * 100) / (100 + feeInPercentage);
+//                cynValue = ((usdValue - feeInAmount) * 100) / (100 + feeInPercentage);
+                cynValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1190,7 +1158,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isCYN) {
                 isCYN = false;
                 cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-                usdValue = (cynValue + (cynValue * (feeInPercentage / 100))) + feeInAmount;
+//                usdValue = (cynValue + (cynValue * (feeInPercentage / 100))) + feeInAmount;
+                usdValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
             }
         } catch (Exception ex) {
             ex.printStackTrace();

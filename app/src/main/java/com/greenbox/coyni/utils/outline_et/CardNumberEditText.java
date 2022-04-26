@@ -241,6 +241,7 @@ public class CardNumberEditText extends ConstraintLayout {
         cnET.requestFocus();
         hintName.setTextColor(getResources().getColor(R.color.primary_color));
         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+        hintName.setVisibility(VISIBLE);
     }
 
     public void hideBrandIcon() {

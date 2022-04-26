@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.reservemanual.ManualItem;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
 import java.util.List;
@@ -21,10 +22,13 @@ public class ReserveReleaseManualListAdapter extends BaseRecyclerViewAdapter<Res
     private Context context;
     private OnItemClickListener listener;
     private List<ManualItem> dataList;
+    private String timeDate = "";
+    private MyApplication myApplication;
 
     public ReserveReleaseManualListAdapter(Context context, List<ManualItem> dataList) {
         this.context = context;
         this.dataList = dataList;
+        myApplication = (MyApplication) context.getApplicationContext();
     }
 
     @Override
@@ -56,7 +60,12 @@ public class ReserveReleaseManualListAdapter extends BaseRecyclerViewAdapter<Res
             holder.tokenAc.setText(objData.getSentTo());
         }
         if (objData.getDate() != null && !objData.getDate().equals("")) {
-            holder.dateTime.setText(Utils.convertPayoutDate(objData.getDate()));
+            timeDate = objData.getDate();
+            if (timeDate.contains(".")) {
+                timeDate = timeDate.substring(0, timeDate.lastIndexOf("."));
+            }
+            timeDate = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy @ hh:mma");
+            holder.dateTime.setText(timeDate);
         }
     }
 

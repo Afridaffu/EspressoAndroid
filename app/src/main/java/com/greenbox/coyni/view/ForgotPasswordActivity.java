@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -47,6 +48,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
     String fromStr = "";
+    boolean isemail = false, isSaveEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +84,16 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
                     if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(ForgotPasswordActivity.this);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 300);
+
                 }
             });
             fromStr = getIntent().getStringExtra("screen");
@@ -112,48 +121,71 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    try {
-                        String str = etEmail.getText().toString();
-                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                            etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
-                            etEmail.setSelection(etEmail.getText().length());
-                        } else if (s.length() == 0) {
-                            layoutEmailError.setVisibility(GONE);
-                        } else if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5) {
-                            layoutEmailError.setVisibility(GONE);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                }
-            });
-
-            etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    if (b) {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(ForgotPasswordActivity.this);
-//                        etEmail.setHint("Email");
+                    if (s.length() > 5 && Utils.isValidEmail(s.toString().trim())) {
+//                        tvEmailError.setVisibility(GONE);
+                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
                         etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
-                        layoutEmailError.setVisibility(GONE);
-                    } else {
-                        etEmail.setHint("");
+//                        newEmailTIL.setHintTextColor(colorState);
+                        Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_green));
+                        isemail = true;
+                    } else if (etEmail.getText().toString().trim().length() == 0) {
+//                        layoutEmailError.setVisibility(VISIBLE);
+//                        b_newEmailErrorTV.setText("Field Required");
+                        isemail = false;
                     }
+                    if (Utils.isValidEmail(s.toString().trim()) && s.toString().trim().length() > 5) {
+                        isemail = true;
+                    } else {
+                        isemail = false;
+                    }
+                    enable();
                 }
-            });
 
-            cvNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
+                private void onBackPressed() {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(ForgotPasswordActivity.this);
+                }
+
+            @Override
+            public void afterTextChanged (Editable s){
+                try {
+                    String str = etEmail.getText().toString();
+                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                        etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
+                        etEmail.setSelection(etEmail.getText().length());
+                    } else if (s.length() == 0) {
+                        layoutEmailError.setVisibility(GONE);
+                    } else if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5) {
+                        layoutEmailError.setVisibility(GONE);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+
+        etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
+//                        etEmail.setHint("Email");
+                    etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
+                    layoutEmailError.setVisibility(GONE);
+                } else {
+                    etEmail.setHint("");
+                }
+            }
+        });
+
+        cvNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (isSaveEnabled) {
                         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                             return;
                         }
@@ -181,24 +213,30 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
                             layoutEmailError.setVisibility(VISIBLE);
                             tvEmailError.setText("Please enter a valid Email");
                             etEmail.clearFocus();
-                        } else {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-//                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                            Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
-                            layoutEmailError.setVisibility(VISIBLE);
-                            tvEmailError.setText("Field Required");
-                            etEmail.clearFocus();
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                    } else {
+//                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+////                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+//                                Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
+//                                layoutEmailError.setVisibility(VISIBLE);
+//                                tvEmailError.setText("Field Required");
+//                            etEmail.clearFocus();
                     }
-                }
-            });
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+    } catch(
+    Exception ex)
+
+    {
+        ex.printStackTrace();
     }
+
+}
 
     private void initObserver() {
         loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
@@ -275,6 +313,18 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
                 onKeyboardVisibilityListener.onVisibilityChanged(isShown);
             }
         });
+    }
+
+    public void enable() {
+        if (isemail) {
+            isSaveEnabled = true;
+            cvNext.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+            cvNext.setClickable(true);
+        } else {
+            isSaveEnabled = false;
+            cvNext.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+            cvNext.setClickable(false);
+        }
     }
 
     @Override

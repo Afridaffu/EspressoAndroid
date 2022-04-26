@@ -168,13 +168,17 @@ public class CreatePasswordActivity extends AppCompatActivity {
             imgClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
-                        Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
-                        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(loginIntent);
-                    } else {
-                        onBackPressed();
-                        finish();
+                    try {
+                        if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                            Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
+                            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(loginIntent);
+                        } else {
+                            onBackPressed();
+    //                        finish();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -740,16 +744,20 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!isSuccessLayout) {
-//            super.onBackPressed();
-            if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
-                Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
-                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(loginIntent);
-            } else {
-                onBackPressed();
-                finish();
+        try {
+            if (!isSuccessLayout) {
+    //            super.onBackPressed();
+                if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                    Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
+                    loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(loginIntent);
+                } else {
+//                    onBackPressed();
+                    finish();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -186,7 +186,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             layoutFailure.setVisibility(View.GONE);
                         }
                         break;
-                    case "login":
+                    case "login_SET_PIN":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_close);
                         if (OTP_TYPE.equals("MOBILE")) {
@@ -412,7 +412,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                         loginViewModel.updatePhoneotpValidate(updatePhoneValidateRequest);
                                     }
                                 }
-                            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("login")) {
+                            } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("login_SET_PIN")) {
                                 if (OTP_TYPE.equals("MOBILE")) {
                                     if (charSequence.length() == 6) {
                                         Utils.hideKeypad(OTPValidation.this);
@@ -607,7 +607,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         if (smsValidate.getStatus().toLowerCase().equals("error")) {
                             otpPV.setLineColor(getResources().getColor(R.color.error_red));
                             shakeAnimateLeftRight();
-                            if (strScreen != null && strScreen.equals("login")) {
+                            if (strScreen != null && strScreen.equals("login_SET_PIN")) {
                                 if (resendCounter >= 5) {
                                     Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                                 }
@@ -650,7 +650,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                             }, Utils.duration);
                                         }
                                         break;
-                                    case "login":
+                                    case "login_SET_PIN":
                                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                                         secureAccountRL.setVisibility(View.VISIBLE);
                                         layoutMain.setClickable(false);
@@ -691,7 +691,9 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                         if (strScreen != null && !strScreen.equals("")) {
                                             switch (strScreen) {
                                                 case "ForgotPwd":
-                                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class).putExtra("code", emailValidateResponse.getData().getCode()));
+                                                    startActivity(new Intent(OTPValidation.this, CreatePasswordActivity.class)
+                                                            .putExtra("code", emailValidateResponse.getData().getCode())
+                                                            .putExtra("screen", "ForgotPwd"));
                                                     break;
                                                 case "ForgotPin":
                                                     startActivity(new Intent(OTPValidation.this, PINActivity.class).putExtra("TYPE", "CHOOSE")
@@ -725,7 +727,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         newCodeTV.setVisibility(View.VISIBLE);
                         resendCounter++;
                         startTimer();
-                        if (strScreen != null && strScreen.equals("login")) {
+                        if (strScreen != null && strScreen.equals("login_SET_PIN")) {
                             if (resendCounter >= 5) {
                                 Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                             }
