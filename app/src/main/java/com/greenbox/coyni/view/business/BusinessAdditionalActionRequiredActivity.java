@@ -129,6 +129,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 LogUtils.d(TAG, "submitCV" + fileUpload);
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 postSubmitAPiCall();
             }
         });
@@ -426,6 +430,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             llDecline.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                        return;
+                                    }
+                                    mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
                                 }
@@ -489,8 +497,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        tv_mv.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("CYN","")));
-        tv_ht.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("CYN","")));
+        tv_mv.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("CYN","").trim()));
+        tv_ht.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("CYN","").trim()));
         tv_reserveAmount.setText(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString().replace("0*$", "") + " %");
         tv_reservePeriod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 
@@ -512,6 +520,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         cardAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 reservedRuleAccepted = true;
                 postSubmitAPiCall();
             }
@@ -520,6 +532,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         tvcardDeclined.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 reservedRuleAccepted = false;
                 postSubmitAPiCall();
             }

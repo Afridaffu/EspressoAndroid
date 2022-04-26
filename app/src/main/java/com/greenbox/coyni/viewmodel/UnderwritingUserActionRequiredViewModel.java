@@ -148,11 +148,17 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
 
             @Override
             public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
-                LogUtils.d(TAG, "onResponse callback -- " + response.body());
                 try {
-                    Gson gson = new Gson();
-                    ActionRequiredSubmitResponse res = gson.fromJson(response.body().string(), ActionRequiredSubmitResponse.class);
-                    ActionRequiredSubmitResponseMutableLiveData.postValue(res);
+                    if(response.isSuccessful()) {
+                        String strResponse = response.body().string();
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ActionRequiredSubmitResponse>() {
+                        }.getType();
+                        ActionRequiredSubmitResponse res = gson.fromJson(strResponse, type);
+                        ActionRequiredSubmitResponseMutableLiveData.postValue(res);
+                    } else {
+                        ActionRequiredSubmitResponseMutableLiveData.postValue(null);
+                    }
                 } catch (Exception e) {
                     ActionRequiredSubmitResponseMutableLiveData.postValue(null);
                 }
