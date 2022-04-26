@@ -1143,7 +1143,7 @@
                                 android:layout_marginBottom="@dimen/_14sdp"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="@string/full_payouts_history"
-                                android:textColor="@color/primary_green"
+                                android:textColor="@color/dark_gray"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
@@ -1452,6 +1452,18 @@
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="@string/v_r_history"
                                 android:textColor="@color/primary_green"
+                                android:textSize="@dimen/_11ssp"
+                                android:visibility="gone"/>
+                            <TextView
+                                android:id="@+id/disable_reserve_list"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_21sdp"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text="@string/v_r_history"
+                                android:textColor="@color/dark_gray"
                                 android:textSize="@dimen/_11ssp" />
 
 
