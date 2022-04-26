@@ -508,6 +508,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             mMISCFees.setText(defaultAmount);
                             mNetAmount.setText(defaultAmount);
                         }
+                        // for SeekBar Graph
                         currentTimeInHours = Integer.parseInt(myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH")); // Returns Hour of Current Time with Preference
                         currentTimeHoursText = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH:mma"); // Returns Hour with Minutes of Current Time with Preference
                         mSbTodayVolume.setProgressWithText(currentTimeInHours, currentTimeHoursText, mGrossAmount.getText().toString());
@@ -822,8 +823,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             break;
             case yesterdayValue: {
                 mTicketsLayout.setVisibility(View.GONE);
-                mSbTodayVolume.setVisibility(View.GONE);
-                saleOrdersText.setVisibility(View.GONE);
+                mSbTodayVolume.setVisibility(View.VISIBLE);
+                saleOrdersText.setVisibility(View.VISIBLE);
                 strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
