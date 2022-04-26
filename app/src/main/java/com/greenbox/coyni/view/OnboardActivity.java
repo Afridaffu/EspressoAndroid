@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
+import androidx.biometric.BiometricManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -40,6 +41,7 @@ import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -192,6 +194,41 @@ public class OnboardActivity extends BaseActivity {
             });
 
             initObserver();
+
+
+//            BiometricManager biometricManager = BiometricManager.from(getApplicationContext());
+//            switch (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK)) {
+//                case BiometricManager.BIOMETRIC_SUCCESS:
+//                    Log.e("BIOMETRIC_WEAK", "App can authenticate using biometrics.");
+//                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+//                    Log.e("BIOMETRIC_WEAK", "No biometric features available on this device.");
+//                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+//                    Log.e("BIOMETRIC_WEAK", "Biometric features are currently unavailable.");
+//                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+//                    // Prompts the user to create credentials that your app accepts.
+//                    Log.e("BIOMETRIC_WEAK", "BIOMETRIC_ERROR_NONE_ENROLLED.");
+//                    break;
+//            }
+//
+//            BiometricManager biometricManager2 = BiometricManager.from(getApplicationContext());
+//            switch (biometricManager2.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)) {
+//                case BiometricManager.BIOMETRIC_SUCCESS:
+//                    Log.e("BIOMETRIC_STRONG", "App can authenticate using biometrics.");
+//                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+//                    Log.e("BIOMETRIC_STRONG", "No biometric features available on this device.");
+//                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+//                    Log.e("BIOMETRIC_STRONG", "Biometric features are currently unavailable.");
+//                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+//                    // Prompts the user to create credentials that your app accepts.
+//                    Log.e("BIOMETRIC_STRONG", "BIOMETRIC_ERROR_NONE_ENROLLED.");
+//                    break;
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -268,13 +305,13 @@ public class OnboardActivity extends BaseActivity {
                                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(i);
                                     }
-                                    Intent i = null;
-                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
-                                        i = new Intent(OnboardActivity.this, DashboardActivity.class);
-                                    else
-                                        i = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(i);
+//                                    Intent i = null;
+//                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
+//                                        i = new Intent(OnboardActivity.this, DashboardActivity.class);
+//                                    else
+//                                        i = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
+//                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(i);
                                 }
                             } else {
                                 if (loginResponse.getData() != null) {
@@ -285,7 +322,10 @@ public class OnboardActivity extends BaseActivity {
                                         Utils.emailPasswordIncorrectDialog("", OnboardActivity.this, "");
                                     }
                                 } else {
-                                    Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
+                                    Intent i = new Intent(OnboardActivity.this, LoginActivity.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+//                                    Utils.displayAlert(loginResponse.getError().getErrorDescription(), OnboardActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
                                 }
                             }
                         }
@@ -333,7 +373,7 @@ public class OnboardActivity extends BaseActivity {
     private void setDB() {
         String value = dbHandler.getTableUserDetails();
 
-        if (value != null && !value.equals("")){
+        if (value != null && !value.equals("")) {
             strFirstUser = value;
         }
     }

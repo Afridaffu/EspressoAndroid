@@ -1249,6 +1249,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 try {
                     if (charSequence.length() > 0) {
 //                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.primary_black));
+                    } else if (charSequence.toString().trim().length() == 0) {
+                        etlAddress2.setBoxStrokeColor(getResources().getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlAddress2, getResources().getColor(R.color.light_gray));
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1291,6 +1294,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         cityErrorLL.setVisibility(GONE);
                         etlCity.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.primary_black));
+                    } else if (charSequence.toString().trim().length() == 0) {
+                        isCity = false;
+                        cityErrorLL.setVisibility(GONE);
+                        etlCity.setBoxStrokeColor(getResources().getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlCity, getResources().getColor(R.color.light_gray));
                     } else {
                         isCity = false;
                     }
@@ -1365,7 +1373,12 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         isZipcode = true;
                         zipErrorLL.setVisibility(GONE);
                         etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+//                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.primary_green));
+                    } else if (charSequence.toString().trim().length() == 0) {
+                        isZipcode = false;
+                        zipErrorLL.setVisibility(GONE);
+                        etlZipCode.setBoxStrokeColor(getResources().getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlZipCode, getResources().getColor(R.color.light_gray));
                     } else {
                         isZipcode = false;
                         zipErrorLL.setVisibility(GONE);
@@ -1806,6 +1819,20 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         try {
             isCardClear = true;
             etExpiry.setText("");
+
+            //Extra added
+            etAddress1.setText("");
+            etAddress2.setText("");
+            etCity.setText("");
+            etState.setText("");
+            etZipCode.setText("");
+
+            etAddress1.clearFocus();
+            etAddress2.clearFocus();
+            etCity.clearFocus();
+            etZipCode.clearFocus();
+            //Extra added
+
             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 etCVV.setText("");
             }
@@ -1852,6 +1879,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         etCardNumber.setText("");
                         etExpiry.setText("");
                         etCVV.setText("");
+                        etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+
 
                         etAddress1.setText("");
                         etAddress2.setText("");

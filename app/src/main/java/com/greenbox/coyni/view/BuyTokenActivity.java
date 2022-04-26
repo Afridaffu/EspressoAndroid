@@ -38,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -90,7 +91,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     PaymentsList selectedCard, objSelected, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;
     TextView tvLimit, tvPayHead, tvAccNumber, tvCurrency, tvBankName, tvBAccNumber, tvError, tvCYN;
-    RelativeLayout lyPayMethod, lyMainLayout;
+    RelativeLayout lyPayMethod;
+    ScrollView lyMainLayout;
     LinearLayout lyCDetails, lyBuyClose, lyBDetails, layoutETAmount;
     DatabaseHandler dbHandler;
     EditText etAmount;

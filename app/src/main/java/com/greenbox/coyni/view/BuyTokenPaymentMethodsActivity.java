@@ -107,6 +107,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     strCurrent = "addpayment";
                 } else if (strCurrent.equals("paymentMethods")) {
 
+                    //Why is empty , so i have added on backpressed
+                    super.onBackPressed();
                 } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
                     super.onBackPressed();
                 } else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {

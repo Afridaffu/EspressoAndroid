@@ -395,6 +395,8 @@ public class Utils {
     public static final String AMERICANEXPRESS = "AMERICAN EXPRESS";
     public static final String DISCOVER = "DISCOVER";
 
+    //Display Alert double popup check
+    public static Dialog displayAlertDialog = null;
 
     public static String getStrLang() {
         return strLang;
@@ -618,10 +620,20 @@ public class Utils {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(i);
             } else {
-                displayAlertNew(msg, activity, header);
+                if (displayAlertDialog != null) {
+                    displayAlertDialog.dismiss();
+                    displayAlertNew(msg, activity, header);
+                } else {
+                    displayAlertNew(msg, activity, header);
+                }
             }
         } else {
-            displayAlertNew(fieldError, activity, header);
+            if (displayAlertDialog != null) {
+                displayAlertDialog.dismiss();
+                displayAlertNew(fieldError, activity, header);
+            } else {
+                displayAlertNew(fieldError, activity, header);
+            }
         }
     }
 
@@ -900,18 +912,18 @@ public class Utils {
 
     public static void displayAlertNew(String msg, final Context context, String headerText) {
         // custom dialog
-        final Dialog dialog = new Dialog(context);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        displayAlertDialog = new Dialog(context);
+        displayAlertDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        displayAlertDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        displayAlertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         DisplayMetrics mertics = context.getResources().getDisplayMetrics();
         int width = mertics.widthPixels;
 
-        TextView header = dialog.findViewById(R.id.tvHead);
-        TextView message = dialog.findViewById(R.id.tvMessage);
-        CardView actionCV = dialog.findViewById(R.id.cvAction);
-        TextView actionText = dialog.findViewById(R.id.tvAction);
+        TextView header = displayAlertDialog.findViewById(R.id.tvHead);
+        TextView message = displayAlertDialog.findViewById(R.id.tvMessage);
+        CardView actionCV = displayAlertDialog.findViewById(R.id.cvAction);
+        TextView actionText = displayAlertDialog.findViewById(R.id.tvAction);
 
         if (!headerText.equals("")) {
             header.setVisibility(View.VISIBLE);
@@ -921,12 +933,12 @@ public class Utils {
         actionCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                displayAlertDialog.dismiss();
             }
         });
 
         message.setText(msg);
-        Window window = dialog.getWindow();
+        Window window = displayAlertDialog.getWindow();
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -935,10 +947,10 @@ public class Utils {
         wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        displayAlertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
+        displayAlertDialog.setCanceledOnTouchOutside(true);
+        displayAlertDialog.show();
     }
 
     public static InputFilter acceptonlyAlphabetValuesnotNumbersMethod() {

@@ -53,6 +53,8 @@ public class EnableAuthID extends AppCompatActivity {
     LinearLayout layoutNotnow, layoutNotnowFace;
     MyApplication objMyApplication;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 512;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,10 @@ public class EnableAuthID extends AppCompatActivity {
                     break;
             }
 
+            isBiometric = Utils.getIsBiometric();
+            setFaceLock();
+            setTouchId();
+
             initObserver();
             enableFaceCV.setOnClickListener(view -> {
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -137,14 +143,24 @@ public class EnableAuthID extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-                dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                dialog.setIndeterminate(false);
-                dialog.setMessage("Please wait...");
-                dialog.show();
-                BiometricRequest biometricRequest = new BiometricRequest();
-                biometricRequest.setBiometricEnabled(true);
-                biometricRequest.setDeviceId(Utils.getDeviceID());
-                coyniViewModel.saveBiometric(biometricRequest);
+                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(EnableAuthID.this)) {
+                    if (isBiometric && ((isTouchId && Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
+                        Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
+                    } else {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    }
+                } else {
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                }
+
+//                dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
+//                dialog.setIndeterminate(false);
+//                dialog.setMessage("Please wait...");
+//                dialog.show();
+//                BiometricRequest biometricRequest = new BiometricRequest();
+//                biometricRequest.setBiometricEnabled(true);
+//                biometricRequest.setDeviceId(Utils.getDeviceID());
+//                coyniViewModel.saveBiometric(biometricRequest);
             });
 
             dontRemindFace.setOnClickListener(view -> {
@@ -189,29 +205,56 @@ public class EnableAuthID extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-                    if (!fingerprintManager.isHardwareDetected()) {
-                        Log.e("Not support", "Not support");
-                    } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                        final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                BIOMETRIC_STRONG);
-                        startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
-                    } else {
-
-                            dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
-                            BiometricRequest biometricRequest = new BiometricRequest();
-                            biometricRequest.setBiometricEnabled(true);
-                            biometricRequest.setDeviceId(Utils.getDeviceID());
-                            try {
-                                coyniViewModel.saveBiometric(biometricRequest);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                    if (Utils.checkAuthentication(EnableAuthID.this)) {
+                        if (isBiometric && ((Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
+                        } else {
+                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+                            if (!fingerprintManager.isHardwareDetected()) {
+                                Log.e("Not support", "Not support");
+                            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+                                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                        BIOMETRIC_STRONG);
+                                startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                             }
+                        }
+                    } else {
+                        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+                        if (!fingerprintManager.isHardwareDetected()) {
+                            Log.e("Not support", "Not support");
+                        } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                            final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                                    BIOMETRIC_STRONG);
+                            startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+                        }
                     }
+
+
+//                    FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+//                    if (!fingerprintManager.isHardwareDetected()) {
+//                        Log.e("Not support", "Not support");
+//                    } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+//                        final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+//                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+//                                BIOMETRIC_STRONG);
+//                        startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+//                    } else {
+//
+//                        dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
+//                        dialog.setIndeterminate(false);
+//                        dialog.setMessage("Please wait...");
+//                        dialog.show();
+//                        BiometricRequest biometricRequest = new BiometricRequest();
+//                        biometricRequest.setBiometricEnabled(true);
+//                        biometricRequest.setDeviceId(Utils.getDeviceID());
+//                        try {
+//                            coyniViewModel.saveBiometric(biometricRequest);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -407,6 +450,21 @@ public class EnableAuthID extends AppCompatActivity {
                     biometricRequest.setDeviceId(Utils.getDeviceID());
                     coyniViewModel.saveBiometric(biometricRequest);
                 }
+            } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+                if (resultCode == RESULT_OK) {
+                    dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
+                    dialog.setIndeterminate(false);
+                    dialog.setMessage("Please wait...");
+                    dialog.show();
+                    BiometricRequest biometricRequest = new BiometricRequest();
+                    biometricRequest.setBiometricEnabled(true);
+                    biometricRequest.setDeviceId(Utils.getDeviceID());
+                    try {
+                        coyniViewModel.saveBiometric(biometricRequest);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -573,5 +631,39 @@ public class EnableAuthID extends AppCompatActivity {
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
 //        }
+    }
+
+    public void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

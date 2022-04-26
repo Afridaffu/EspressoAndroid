@@ -90,7 +90,7 @@ public class CustomerProfileActivity extends BaseActivity {
     static String strToken = "";
     static String strDeviceID = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
-    private static int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private static int CODE_AUTHENTICATION_VERIFICATION = 251, CODE_AUTHENTICATION = 512;
     private final int CODE_AUTHENTICATION_VERIFICATION_RESET_PIN = 252;
     String authenticateType = "";
     boolean isLoggedOut = false;
@@ -274,7 +274,24 @@ public class CustomerProfileActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    isSwitchEnable();
+
+                    if (Utils.checkAuthentication(CustomerProfileActivity.this)) {
+                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+                            Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
+                        } else {
+                            if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "TOUCH");
+                            } else {
+                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "FACE");
+                            }
+                        }
+                    } else {
+                        if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+                            enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "TOUCH");
+                        } else {
+                            enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "FACE");
+                        }
+                    }
                 }
             });
 
@@ -768,6 +785,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
+                    showProgressDialog();
                     BiometricTokenRequest request = new BiometricTokenRequest();
                     request.setDeviceId(Utils.getDeviceID());
 //                    request.setMobileToken(strToken);
@@ -795,6 +813,10 @@ public class CustomerProfileActivity extends BaseActivity {
                             .putExtra("screen", "ResetPIN")
                             .putExtra("AUTH_TYPE", "PIN");
                     startActivity(i);
+                }
+            } else if (requestCode == CODE_AUTHENTICATION) {
+                if (resultCode == RESULT_OK) {
+                    isSwitchEnable();
                 }
             }
         } catch (Exception ex) {
@@ -955,6 +977,7 @@ public class CustomerProfileActivity extends BaseActivity {
         coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
             @Override
             public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                dismissDialog();
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
