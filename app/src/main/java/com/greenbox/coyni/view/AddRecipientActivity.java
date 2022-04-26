@@ -51,7 +51,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-public class AddRecipientActivity extends AppCompatActivity {
+public class AddRecipientActivity extends BaseActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
     List<Contacts> mobileArray;
     MyApplication objMyApplication;
@@ -381,6 +381,7 @@ public class AddRecipientActivity extends AppCompatActivity {
 
     @SuppressLint("Range")
     private List<Contacts> getAllContacts() {
+        showProgressDialog();
         ArrayList<String> nameList = new ArrayList<>();
         List<Contacts> listContacts = new ArrayList<>();
         Contacts objContact;
@@ -428,6 +429,7 @@ public class AddRecipientActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        dismissDialog();
         return listContacts;
     }
 
