@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.RetEmailAdapter;
+import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.DatabaseHandler;
@@ -29,10 +30,11 @@ import com.greenbox.coyni.view.business.BusinessAddNewAccountActivity;
 import com.greenbox.coyni.view.business.BusinessAddNewBusinessAccountActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.List;
 
-public class BindingLayoutActivity extends AppCompatActivity {
+public class BindingLayoutActivity extends BaseActivity {
     String strScreen = "";
     LinearLayout lyClose, verifyAccountCloseLL;
     TextView tvEmail;
@@ -43,8 +45,9 @@ public class BindingLayoutActivity extends AppCompatActivity {
     DatabaseHandler dbHandler;
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
-    TextView txvVerifyName,txvVerifyDescription;
+    TextView txvVerifyName, txvVerifyDescription;
     private IdentityVerificationViewModel identityVerificationViewModel;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,8 @@ public class BindingLayoutActivity extends AppCompatActivity {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
                 identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
-           }
+            }
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
             List<RetUserResData> usersData;
             if (objMyApplication.getObjRetUsers() != null) {
@@ -101,6 +105,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             btnChangePassCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    loginViewModel.logout();
                     dropAllTables();
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -112,7 +117,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
+                    Intent i = new Intent(BindingLayoutActivity.this, LoginActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                 }
@@ -142,7 +147,7 @@ public class BindingLayoutActivity extends AppCompatActivity {
             nextGetStartedCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(objMyApplication.getAccountType()==2){
+                    if (objMyApplication.getAccountType() == 2) {
                         identityVerificationViewModel.getPostAddCustomer();
 
                     } else {
@@ -265,10 +270,10 @@ public class BindingLayoutActivity extends AppCompatActivity {
 
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
 
-                        if(objMyApplication.getAccountType()==2){
+                        if (objMyApplication.getAccountType() == 2) {
                             Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                             Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
-                            i.putExtra("ADDPERSONAL","true");
+                            i.putExtra("ADDPERSONAL", "true");
                             startActivity(i);
                             finish();
                         } else {
@@ -286,5 +291,35 @@ public class BindingLayoutActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            loginViewModel.getLogoutLiveData().observe(this, new Observer<LogoutResponse>() {
+                @Override
+                public void onChanged(LogoutResponse logoutResponse) {
+                    dismissDialog();
+                    if (logoutResponse != null) {
+                        if (logoutResponse.getStatus().toLowerCase().equals("success")) {
+                            onLogoutSuccess();
+                        } else {
+                            if (!logoutResponse.getError().getErrorDescription().equals("")) {
+                                Utils.displayAlert(logoutResponse.getError().getErrorDescription(), BindingLayoutActivity.this, "", "");
+                            } else {
+                                Utils.displayAlert(logoutResponse.getError().getFieldErrors().get(0), BindingLayoutActivity.this, "", "");
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onLogoutSuccess() {
+        objMyApplication.setStrRetrEmail("");
+        dropAllTables();
+        Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 }

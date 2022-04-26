@@ -37,6 +37,7 @@ import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
+import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
@@ -99,7 +100,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private RecyclerView recyclerViewPayouts;
     private List<BatchPayoutListItems> listItems;
     private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV,
-            lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV;
+            lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV,disable_reserve_list;
     private LinearLayout reserveReleaseListLL, reserveDetailsLL;
     private BatchNowRequest batchNowRequest = null;
     private String openAmount = "", sent = "", availbal = "";
@@ -225,6 +226,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         nextReleaseNATV = mCurrentView.findViewById(R.id.nextReleaseNATV);
         lastReleaseNATV = mCurrentView.findViewById(R.id.lastReleaseNATV);
         releaseNoTransaction = mCurrentView.findViewById(R.id.releaseNoTransaction);
+        disable_reserve_list = mCurrentView.findViewById(R.id.disable_reserve_list);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -381,6 +383,30 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
+
+        businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
+            @Override
+            public void onChanged(BatchNowResponse batchNowResponse) {
+                if(batchNowResponse != null){
+                    if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
+                        Log.d(TAG, "Batched successfully");
+                        batchReq();
+                        Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+                    } else {
+                        Log.d(TAG, "No items found");
+                        String msg = getString(R.string.something_went_wrong);
+                        if (batchNowResponse.getError() != null
+                                && batchNowResponse.getError().getErrorDescription() != null
+                                && !batchNowResponse.getError().getErrorDescription().trim().equals("")) {
+                            msg = batchNowResponse.getError().getErrorDescription();
+                        } else {
+                            String mesg = getString(R.string.something_went_wrong);
+                        }
+                    }
+                }
+            }
+        });
+
         businessIdentityVerificationViewModel.getGetDBAInfoResponse().observe(getViewLifecycleOwner(), new Observer<DBAInfoResp>() {
             @Override
             public void onChanged(DBAInfoResp dbaInfoResp) {
@@ -391,7 +417,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
     }
-
 
     private void showData(List<BatchPayoutListItems> items) {
         showBatchPayouts(items);
@@ -589,43 +614,45 @@ public class BusinessDashboardFragment extends BaseFragment {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
-//                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
-//                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
-//                        }
-                    } else {
-                        launchPinActivity(batchNow.getBatchId());
-                    }
+                    businessDashboardViewModel.batchNowSlideData((String) value);
+//                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
+////                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
+////                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
+////                        }
+//                    } else {
+//                        businessDashboardViewModel.batchNowSlideData((String) value);
+//                        Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+//                    }
                 }
             }
         });
         batchNowDialog.show();
     }
 
-    private void launchPinActivity(String batchNow) {
-        batchId = batchNow;
-        Intent inPin = new Intent(getActivity(), PINActivity.class);
-        inPin.putExtra("TYPE", "ENTER");
-        inPin.putExtra("screen", "BatchNow");
-        pinActivityResultLauncher.launch(inPin);
-    }
-
+//    private void launchPinActivity(String batchNow) {
+//        batchId = batchNow;
+//        Intent inPin = new Intent(getActivity(), PINActivity.class);
+//        inPin.putExtra("TYPE", "ENTER");
+//        inPin.putExtra("screen", "BatchNow");
+//        pinActivityResultLauncher.launch(inPin);
+//    }
+//
 //    private void batchAPI(String batchId) {
 //     BatchNowSlideRequest req = new BatchNowSlideRequest();
 //        req.setBatchId(batchId);
 //        businessDashboardViewModel.batchNowSlideData(req.getBatchId());
 //    }
 
-    ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    //Call API Here
-                    LogUtils.v(TAG, "RESULT_OK" + result);
-                    businessDashboardViewModel.batchNowSlideData(batchId);
-                    Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
-                }
-            });
+//    ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
+//            new ActivityResultContracts.StartActivityForResult(),
+//            result -> {
+//                if (result.getResultCode() == Activity.RESULT_OK) {
+//                    //Call API Here
+//                    LogUtils.v(TAG, "RESULT_OK" + result);
+//                    businessDashboardViewModel.batchNowSlideData(batchId);
+//                     Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+//                }
+//            });
 
     public void setToken() {
         strToken = dbHandler.getPermanentToken();
@@ -664,7 +691,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             ex.printStackTrace();
         }
     }
-
 
     public void showProcessingVolumeDialog() {
         ProcessingVolumeDialog processingVolumeDialog = new ProcessingVolumeDialog(getActivity());
@@ -825,16 +851,21 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void showReserveRelease(ReserveListData listData) {
         showReserveReleaseBalance();
         List<ReserveListItems> items = listData.getResponseList();
-        nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
-//        nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
-        String date = listData.getNextReserveReleaseDate();
+        if (items != null && items.size() > 0) {
+            nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
+            String date = listData.getNextReserveReleaseDate();
             if (date.contains(".")) {
                 String res = date.substring(0, date.lastIndexOf("."));
                 nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
             } else {
                 Log.d("date format", date);
             }
+        }else {
+            nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
+        }
         if (items != null && items.size() > 0) {
+            mTvReserveList.setVisibility(View.VISIBLE);
+            disable_reserve_list.setVisibility(View.GONE);
             lastReleaseDateTV.setVisibility(View.VISIBLE);
             nextReleaseNATV.setVisibility(View.GONE);
             nextReleaseDateTV.setVisibility(View.VISIBLE);
@@ -885,6 +916,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         } else {
             releaseNoTransaction.setVisibility(View.VISIBLE);
+            mTvReserveList.setVisibility(View.GONE);
             LogUtils.v(TAG, "Reserve release summary is empty");
         }
     }

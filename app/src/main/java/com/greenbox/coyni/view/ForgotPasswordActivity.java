@@ -104,12 +104,14 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
                 tvHead.setText("Forgot Your PIN?");
                 tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
                 etEmail.setText(Utils.getUserEmail(this));
+                validEmail();
                 Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
                 etEmail.setEnabled(false);
             }
 
             if (getIntent().getStringExtra("email") != null && !getIntent().getStringExtra("email").equals("")) {
                 etEmail.setText(getIntent().getStringExtra("email"));
+                validEmail();
                 Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
             }
 
@@ -152,6 +154,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
                     String str = etEmail.getText().toString();
                     if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
                         etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
+                        validEmail();
                         etEmail.setSelection(etEmail.getText().length());
                     } else if (s.length() == 0) {
                         layoutEmailError.setVisibility(GONE);
@@ -335,6 +338,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
             Utils.isKeyboardVisible = false;
         }
         Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
+    }
+
+    private void validEmail(){
+        isemail = true;
+        enable();
     }
 
 }
