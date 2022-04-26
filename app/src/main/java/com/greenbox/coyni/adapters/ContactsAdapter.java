@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameHead, tvUserName, tvWalletAddress;
         public ImageView imgInvite, imgUser;
+        public RelativeLayout rlUserDetailS;
 
         public MyViewHolder(View view) {
             super(view);
@@ -38,6 +41,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             tvWalletAddress = view.findViewById(R.id.tvWalletAddress);
             imgInvite = view.findViewById(R.id.imgInvite);
             imgUser = view.findViewById(R.id.imgUser);
+            rlUserDetailS = view.findViewById(R.id.lldetails);
         }
     }
 
@@ -143,9 +147,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.imgUser.setVisibility(View.GONE);
                 holder.tvNameHead.setVisibility(View.VISIBLE);
             }
-//            }
 
-            holder.imgInvite.setOnClickListener(new View.OnClickListener() {
+            holder.rlUserDetailS.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
@@ -164,6 +167,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 }
             });
 
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -179,7 +183,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                             i.putExtra("phone", objData.getPhoneNumber());
                             mContext.startActivity(i);
                         } else {
-                            Utils.displayAlert("You can only invite this contact.", ((AddRecipientActivity) mContext), "", "");
+//                            Utils.displayAlert("You can only invite this contact.", ((AddRecipientActivity) mContext), "", "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
