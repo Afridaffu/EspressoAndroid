@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
@@ -38,14 +39,14 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
     }
 
     private MutableLiveData<ActionRequiredResponse> ActionRequiredResponseMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<ActionRequiredResponse> ActionRequiredSubmitResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ActionRequiredSubmitResponse> ActionRequiredSubmitResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<ActionRequiredResponse> getUserAccountLimitsMutableLiveData() {
         return ActionRequiredResponseMutableLiveData;
     }
 
-    public MutableLiveData<ActionRequiredResponse> getActionRequiredSubmitResponseMutableLiveData() {
+    public MutableLiveData<ActionRequiredSubmitResponse> getActionRequiredSubmitResponseMutableLiveData() {
         return ActionRequiredSubmitResponseMutableLiveData;
     }
 
@@ -90,19 +91,19 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             LogUtils.d(TAG, "submitActionRequired" + documentsImageList);
 
-            Call<ActionRequiredResponse> mCall = apiService.submitActionRequired(documentsImageList);
-            mCall.enqueue(new Callback<ActionRequiredResponse>() {
+            Call<ActionRequiredSubmitResponse> mCall = apiService.submitActionRequired(documentsImageList);
+            mCall.enqueue(new Callback<ActionRequiredSubmitResponse>() {
                 @Override
-                public void onResponse(Call<ActionRequiredResponse> call, Response<ActionRequiredResponse> response) {
+                public void onResponse(Call<ActionRequiredSubmitResponse> call, Response<ActionRequiredSubmitResponse> response) {
                     LogUtils.d(TAG, "submitActionRequired" + response);
                     if (response.isSuccessful()) {
-                        ActionRequiredResponse obj = response.body();
+                        ActionRequiredSubmitResponse obj = response.body();
                         ActionRequiredSubmitResponseMutableLiveData.setValue(obj);
                     } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<ActionRequiredResponse>() {
+                        Type type = new TypeToken<ActionRequiredSubmitResponse>() {
                         }.getType();
-                        ActionRequiredResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        ActionRequiredSubmitResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
                         if (errorResponse != null) {
                             ActionRequiredSubmitResponseMutableLiveData.setValue(errorResponse);
                         }
@@ -110,7 +111,7 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
                 }
 
                 @Override
-                public void onFailure(Call<ActionRequiredResponse> call, Throwable t) {
+                public void onFailure(Call<ActionRequiredSubmitResponse> call, Throwable t) {
                     LogUtils.d(TAG, "submitActionRequired" + t.getMessage());
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     apiErrorMutableLiveData.setValue(null);
@@ -141,16 +142,16 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
         call.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
-                LogUtils.d(TAG, "callback" + e.getMessage());
+                LogUtils.d(TAG, "onFailure callback -- " + e.getMessage());
                 ActionRequiredSubmitResponseMutableLiveData.postValue(null);
             }
 
             @Override
             public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
-                LogUtils.d(TAG, "callback" + response.body());
+                LogUtils.d(TAG, "onResponse callback -- " + response.body());
                 try {
                     Gson gson = new Gson();
-                    ActionRequiredResponse res = gson.fromJson(response.body().string(), ActionRequiredResponse.class);
+                    ActionRequiredSubmitResponse res = gson.fromJson(response.body().string(), ActionRequiredSubmitResponse.class);
                     ActionRequiredSubmitResponseMutableLiveData.postValue(res);
                 } catch (Exception e) {
                     ActionRequiredSubmitResponseMutableLiveData.postValue(null);

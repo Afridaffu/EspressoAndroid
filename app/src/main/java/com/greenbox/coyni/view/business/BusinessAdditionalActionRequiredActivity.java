@@ -37,6 +37,7 @@ import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.dialogs.AddCommentsDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.model.underwriting.InformationChangeData;
 import com.greenbox.coyni.model.underwriting.ProposalsData;
 import com.greenbox.coyni.model.underwriting.ProposalsPropertiesData;
@@ -202,22 +203,22 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         MultipartBody requestBody = buildernew.build();
         showProgressDialog();
-//        underwritingUserActionRequiredViewModel.submitAdditionalActionRequired(requestBody);
+        underwritingUserActionRequiredViewModel.submitAdditionalActionRequired(requestBody);
     }
 
     private void initObserver() {
-        underwritingUserActionRequiredViewModel.getActionRequiredSubmitResponseMutableLiveData().observe(this, new Observer<ActionRequiredResponse>() {
+        underwritingUserActionRequiredViewModel.getActionRequiredSubmitResponseMutableLiveData().observe(this, new Observer<ActionRequiredSubmitResponse>() {
             @Override
-            public void onChanged(ActionRequiredResponse actionRequiredResponse) {
+            public void onChanged(ActionRequiredSubmitResponse actionRequiredSubmitResponse) {
                 dismissDialog();
-                if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                if (actionRequiredSubmitResponse != null && actionRequiredSubmitResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                     finish();
                 } else {
                     String errorMessage = getString(R.string.something_went_wrong);
-                    if (actionRequiredResponse != null && actionRequiredResponse.getError() != null
-                            && actionRequiredResponse.getError().getErrorDescription() != null
-                            && !actionRequiredResponse.getError().getErrorDescription().equals("")) {
-                        errorMessage = actionRequiredResponse.getError().getErrorDescription();
+                    if (actionRequiredSubmitResponse != null && actionRequiredSubmitResponse.getError() != null
+                            && actionRequiredSubmitResponse.getError().getErrorDescription() != null
+                            && !actionRequiredSubmitResponse.getError().getErrorDescription().equals("")) {
+                        errorMessage = actionRequiredSubmitResponse.getError().getErrorDescription();
                     }
                     Utils.displayAlert(errorMessage,
                             BusinessAdditionalActionRequiredActivity.this, "", "");
@@ -374,59 +375,61 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         if (informationChangeData != null && informationChangeData.size() > 0) {
             InformationChangeData changeData = informationChangeData.get(0);
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
-                List<ProposalsPropertiesData> proposalsPropertiesData = changeData.getProposals().get(0).getProperties();
-                if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
-                    informationRevisionLL.setVisibility(View.VISIBLE);
-                    proposalsMap = new HashMap<>();
-                    for (int i = 0; i < proposalsPropertiesData.size(); i++) {
-                        View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
-                        LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
-                        TextView companyNameTV = inf1.findViewById(R.id.comapny_nameTV);
-                        TextView companyNameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
-                        TextView companyNameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
-                        TextView tvMessage = inf1.findViewById(R.id.tvMessage);
-                        ImageView imvAcceptTick = inf1.findViewById(R.id.imvAccepttick);
-                        TextView tvAcceptMsg = inf1.findViewById(R.id.acceptMsgTV);
-                        LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
-                        LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
-                        ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-                        companyNameTV.setText(propertiesData.getName());
-                        companyNameOriginal.setText(propertiesData.getOriginalValue());
-                        companyNameProposed.setText(propertiesData.getProposedValue());
-                        tvMessage.setText(propertiesData.getAdminMessage());
-                        proposalsMap.put(propertiesData.getName(), propertiesData);
-                        fileUpload.put(propertiesData.getName().trim().hashCode(), null);
+                for(int count = 0; count < changeData.getProposals().size(); count++) {
+                    List<ProposalsPropertiesData> proposalsPropertiesData = changeData.getProposals().get(count).getProperties();
+                    if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
+                        informationRevisionLL.setVisibility(View.VISIBLE);
+                        proposalsMap = new HashMap<>();
+                        for (int i = 0; i < proposalsPropertiesData.size(); i++) {
+                            View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
+                            LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
+                            TextView companyNameTV = inf1.findViewById(R.id.comapny_nameTV);
+                            TextView companyNameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
+                            TextView companyNameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
+                            TextView tvMessage = inf1.findViewById(R.id.tvMessage);
+                            ImageView imvAcceptTick = inf1.findViewById(R.id.imvAccepttick);
+                            TextView tvAcceptMsg = inf1.findViewById(R.id.acceptMsgTV);
+                            LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
+                            LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
+                            ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
+                            companyNameTV.setText(propertiesData.getName());
+                            companyNameOriginal.setText(propertiesData.getOriginalValue());
+                            companyNameProposed.setText(propertiesData.getProposedValue());
+                            tvMessage.setText(propertiesData.getAdminMessage());
+                            proposalsMap.put(propertiesData.getName(), propertiesData);
+                            fileUpload.put(propertiesData.getName().trim().hashCode(), null);
 
-                        informationRevisionLL.addView(inf1, layoutParams);
-                        llAccept.setTag(inf1);
-                        llAccept.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                imvAcceptTick.setVisibility(View.VISIBLE);
-                                tvAcceptMsg.setVisibility(View.VISIBLE);
-                                llAccept.setVisibility(View.GONE);
-                                llDecline.setVisibility(View.GONE);
-                                tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
+                            informationRevisionLL.addView(inf1, layoutParams);
+                            llAccept.setTag(inf1);
+                            llAccept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    imvAcceptTick.setVisibility(View.VISIBLE);
+                                    tvAcceptMsg.setVisibility(View.VISIBLE);
+                                    llAccept.setVisibility(View.GONE);
+                                    llDecline.setVisibility(View.GONE);
+                                    tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
 
-                                if (fileUpload.containsKey(propertiesData.getName().trim().hashCode())) {
-                                    fileUpload.replace(propertiesData.getName().trim().hashCode(), "true");
+                                    if (fileUpload.containsKey(propertiesData.getName().trim().hashCode())) {
+                                        fileUpload.replace(propertiesData.getName().trim().hashCode(), "true");
+                                    }
+                                    View v = (View) view.getTag();
+                                    TextView tv = v.findViewById(R.id.comapny_nameTV);
+                                    proposalsMap.get(tv.getText().toString()).setUserAccepted(true);
+                                    proposalsMap.get(tv.getText().toString()).setUserMessage("Accepted");
+                                    enableOrDisableNext();
+
                                 }
-                                View v = (View) view.getTag();
-                                TextView tv = v.findViewById(R.id.comapny_nameTV);
-                                proposalsMap.get(tv.getText().toString()).setUserAccepted(true);
-                                proposalsMap.get(tv.getText().toString()).setUserMessage("Accepted");
-                                enableOrDisableNext();
-
-                            }
-                        });
-                        llDecline.setTag(inf1);
-                        llDecline.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                View v = (View) view.getTag();
-                                showCommentDialog(v);
-                            }
-                        });
+                            });
+                            llDecline.setTag(inf1);
+                            llDecline.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    View v = (View) view.getTag();
+                                    showCommentDialog(v);
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -495,10 +498,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         cardAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 reservedRuleAccepted = true;
                 postSubmitAPiCall();
-
             }
         });
 
@@ -507,7 +508,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             public void onClick(View view) {
                 reservedRuleAccepted = false;
                 postSubmitAPiCall();
-
             }
         });
 

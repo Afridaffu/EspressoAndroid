@@ -146,6 +146,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.userrequest.UserRequest;
@@ -570,7 +571,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v2/underwriting/user/business/action-required")
-    Call<ActionRequiredResponse> submitActionRequired(@Part MultipartBody information);
+    Call<ActionRequiredSubmitResponse> submitActionRequired(@Part MultipartBody information);
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();
