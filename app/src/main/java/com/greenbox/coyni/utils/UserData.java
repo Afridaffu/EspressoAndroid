@@ -14,6 +14,7 @@ import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -56,6 +57,7 @@ public class UserData {
     //    WalletResponse walletResponse;
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
     private int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType, dbaOwnerId = 0;
+    private LoginResponse loginResponse;
     private TransactionList transactionList;
     private PaymentsList selectedCard, prevSelectedCard;
     private TransferFeeResponse transferFeeResponse;
@@ -341,6 +343,14 @@ public class UserData {
 
     public void setLoginUserId(int loginUserId) {
         this.loginUserId = loginUserId;
+    }
+
+    public LoginResponse getLoginResponse() {
+        return loginResponse;
+    }
+
+    public void setLoginResponse(LoginResponse response) {
+        this.loginResponse = response;
     }
 
     public int getAccountType() {

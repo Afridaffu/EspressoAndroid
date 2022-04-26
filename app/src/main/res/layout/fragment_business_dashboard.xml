@@ -124,7 +124,7 @@
 
         </LinearLayout>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
@@ -147,8 +147,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/_11sdp"
-                        android:layout_marginBottom="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_11sdp"
+                        android:layout_marginBottom="@dimen/_7sdp"
                         android:visibility="visible"
                         app:cardCornerRadius="@dimen/_10sdp">
 
@@ -343,8 +343,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/_4sdp"
                                     android:layout_marginBottom="@dimen/_6sdp"
-                                    android:paddingBottom="@dimen/_3sdp"
                                     android:fontFamily="@font/opensans_semibold"
+                                    android:paddingBottom="@dimen/_3sdp"
                                     android:text="@string/currency"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_10ssp" />
@@ -789,10 +789,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/_13sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/sales_orders"
                                 android:textColor="@color/dark_grey"
-                                android:layout_marginBottom="@dimen/_23sdp"
                                 android:textSize="@dimen/_11ssp" />
 
                             <com.greenbox.coyni.utils.SeekBarWithFloatingText
@@ -828,8 +828,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_10sdp"
                         android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
@@ -1120,13 +1120,12 @@
                                 android:id="@+id/batchNoTransaction"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="You have no transaction"
-                                android:textColor="@color/dark_gray"
-                                android:fontFamily="@font/opensans_regular"
-                                android:textSize="@dimen/_10sdp"
                                 android:layout_gravity="center"
                                 android:layout_marginBottom="@dimen/_7sdp"
-                                />
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="You have no transaction"
+                                android:textColor="@color/dark_gray"
+                                android:textSize="@dimen/_10sdp" />
 
                             <View
                                 android:id="@+id/batchView"
@@ -1134,6 +1133,7 @@
                                 android:layout_height="@dimen/_1sdp"
                                 android:layout_marginHorizontal="@dimen/_11sdp"
                                 android:background="@color/blue_light" />
+
                             <TextView
                                 android:id="@+id/tv_PayoutNoHistory"
                                 android:layout_width="wrap_content"
@@ -1157,7 +1157,7 @@
                                 android:text="@string/v_p_history"
                                 android:textColor="@color/primary_green"
                                 android:textSize="@dimen/_11ssp"
-                                android:visibility="gone"/>
+                                android:visibility="gone" />
 
 
                         </LinearLayout>
@@ -1332,7 +1332,8 @@
                                         android:text=""
                                         android:textColor="@color/dark_grey"
                                         android:textSize="@dimen/_10ssp"
-                                        android:visibility="gone"/>
+                                        android:visibility="gone" />
+
                                     <TextView
                                         android:id="@+id/nextReleaseNATV"
                                         android:layout_width="wrap_content"
@@ -1342,7 +1343,7 @@
                                         android:text="N/A"
                                         android:textColor="@color/dark_grey"
                                         android:textSize="@dimen/_10ssp"
-                                        android:visibility="visible"/>
+                                        android:visibility="visible" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -1398,7 +1399,8 @@
                                         android:text=""
                                         android:textColor="@color/dark_grey"
                                         android:textSize="@dimen/_10ssp"
-                                        android:visibility="gone"/>
+                                        android:visibility="gone" />
+
                                     <TextView
                                         android:id="@+id/lastReleaseNATV"
                                         android:layout_width="wrap_content"
@@ -1408,7 +1410,7 @@
                                         android:text="N/A"
                                         android:textColor="@color/dark_grey"
                                         android:textSize="@dimen/_10ssp"
-                                        android:visibility="visible"/>
+                                        android:visibility="visible" />
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -1418,29 +1420,26 @@
                                 android:id="@+id/reserveReleaseListLL"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                            </LinearLayout>
+                                android:orientation="vertical"></LinearLayout>
 
                             <TextView
                                 android:id="@+id/releaseNoTransaction"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="You have no transaction"
-                                android:textColor="@color/dark_gray"
-                                android:fontFamily="@font/opensans_regular"
-                                android:textSize="@dimen/_10sdp"
                                 android:layout_gravity="center"
                                 android:layout_marginBottom="@dimen/_7sdp"
-                                />
+                                android:fontFamily="@font/opensans_regular"
+                                android:text="You have no transaction"
+                                android:textColor="@color/dark_gray"
+                                android:textSize="@dimen/_10sdp" />
 
 
                             <View
                                 android:id="@+id/releaseView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="@dimen/_1sdp"
-                                android:background="@color/blue_light"
                                 android:layout_marginHorizontal="@dimen/_11sdp"
-                                />
+                                android:background="@color/blue_light" />
 
                             <TextView
                                 android:id="@+id/tv_reserve_list"
@@ -1533,39 +1532,36 @@
                 <LinearLayout
                     android:id="@+id/ll_identity_additional_data"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_15sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_11sdp"
+                        android:layout_marginBottom="@dimen/_11sdp"
+                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_10sdp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_17sdp"
-                            android:gravity="center"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
                             android:orientation="vertical">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_20sdp"
-                                android:background="@color/white"
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_90sdp"
+                                android:layout_marginTop="@dimen/_47sdp"
                                 android:contentDescription="@string/additional_action_required"
-                                android:src="@drawable/additional_action_required" />
+                                android:src="@drawable/ic_ssn_fail" />
 
                             <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_20sdp"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_bold"
                                 android:text="@string/additional_action_required"
                                 android:textAlignment="center"
@@ -1587,7 +1583,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_25sdp"
                                 android:orientation="vertical">
 
                                 <androidx.cardview.widget.CardView
@@ -1595,6 +1591,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/_43sdp"
                                     android:gravity="center"
+                                    android:layout_margin="@dimen/_10sdp"
                                     app:cardBackgroundColor="@color/primary_green"
                                     app:cardCornerRadius="@dimen/_22sdp">
 
@@ -1608,11 +1605,9 @@
                                         android:textSize="@dimen/_12ssp" />
                                 </androidx.cardview.widget.CardView>
                             </LinearLayout>
-
-
                         </LinearLayout>
-
                     </androidx.cardview.widget.CardView>
+
 
                 </LinearLayout>
 
@@ -1764,6 +1759,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 </RelativeLayout>

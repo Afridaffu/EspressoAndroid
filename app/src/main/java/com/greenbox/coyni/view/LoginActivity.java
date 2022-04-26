@@ -777,6 +777,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setStrEmail(login.getData().getEmail());
                                 //                            objMyApplication.setUserId(login.getData().getUserId());
                                 objMyApplication.setLoginUserId(login.getData().getUserId());
+                                objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                                 objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                                 getStatesUrl(login.getData().getStateList().getUS());
@@ -851,6 +852,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
+                                objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
