@@ -60,6 +60,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -155,6 +156,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
             setContentView(R.layout.activity_pay_request_scan);
             scanActivity = this;
@@ -443,6 +445,17 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
                             setAmountDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                             ctKey = (CustomKeyboard) setAmountDialog.findViewById(R.id.customKeyBoard);
                             setAmount = setAmountDialog.findViewById(R.id.setAmountET);
+
+                            setAmount.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                                @Override
+                                public void sendAccessibilityEvent(View host, int eventType) {
+                                    super.sendAccessibilityEvent(host, eventType);
+                                    if (eventType == AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED) {
+                                        setAmount.setSelection(setAmount.getText().toString().length());
+                                    }
+                                }
+                            });
+
                             InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
                             ctKey.setInputConnection(ic);
                             ctKey.setKeyAction("OK", ScanActivity.this);
