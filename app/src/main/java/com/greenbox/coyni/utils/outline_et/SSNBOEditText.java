@@ -18,6 +18,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
+import com.greenbox.coyni.view.IdVeAdditionalActionActivity;
+import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
 import com.greenbox.coyni.view.business.DBAInfoAcivity;
@@ -55,39 +57,69 @@ public class SSNBOEditText extends ConstraintLayout {
         viewSSNIV = findViewById(R.id.viewSSNIV);
 
         ssnET.setOnFocusChangeListener((view, b) -> {
-            try {
-                AddBeneficialOwnerActivity aboa = (AddBeneficialOwnerActivity) mContext;
-                if (b) {
-                    ssnET.setHint("•••-••-••••");
-                    hintName.setVisibility(VISIBLE);
-                    hintName.setTextColor(getResources().getColor(R.color.primary_color));
-                    hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
-                    aboa.ssnLL.setVisibility(GONE);
 
-                } else {
-                    ssnET.setHint("SSN");
-                    hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
-                    if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 11)) {
-                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+            if (FROM.equals("ADD_BO")) {
+                try {
+                    AddBeneficialOwnerActivity aboa = (AddBeneficialOwnerActivity) mContext;
+                    if (b) {
+                        ssnET.setHint("•••-••-••••");
                         hintName.setVisibility(VISIBLE);
-                        aboa.ssnLL.setVisibility(VISIBLE);
-                        aboa.ssnTV.setText("Please enter a valid SSN");
-                        hintName.setTextColor(getResources().getColor(R.color.error_red));
-                    } else if ((ssnET.getText().length() == 0)) {
-                        hintName.setTextColor(getResources().getColor(R.color.error_red));
-                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                        aboa.ssnLL.setVisibility(VISIBLE);
-                        aboa.ssnTV.setText("Field Required");
-                        hintName.setVisibility(GONE);
-                    } else {
-                        hintName.setTextColor(getResources().getColor(R.color.primary_black));
-                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         aboa.ssnLL.setVisibility(GONE);
-                    }
-                }
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                    } else {
+                        ssnET.setHint("SSN");
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 11)) {
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            hintName.setVisibility(VISIBLE);
+                            aboa.ssnLL.setVisibility(VISIBLE);
+                            aboa.ssnTV.setText("Please enter a valid SSN");
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                        } else if ((ssnET.getText().length() == 0)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            aboa.ssnLL.setVisibility(VISIBLE);
+                            aboa.ssnTV.setText("Field Required");
+                            hintName.setVisibility(GONE);
+                        } else {
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                            aboa.ssnLL.setVisibility(GONE);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (FROM.equals("IDVE_SSN")) {
+                try {
+                    if (b) {
+                        ssnET.setHint("•••-••-••••");
+                        hintName.setVisibility(VISIBLE);
+                        hintName.setTextColor(getResources().getColor(R.color.primary_color));
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
+                    } else {
+                        ssnET.setHint("SSN");
+                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        if ((ssnET.getText().length() > 0 && ssnET.getText().length() < 11)) {
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            hintName.setVisibility(VISIBLE);
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                        } else if ((ssnET.getText().length() == 0)) {
+                            hintName.setTextColor(getResources().getColor(R.color.error_red));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+                            hintName.setVisibility(GONE);
+                        } else {
+                            hintName.setTextColor(getResources().getColor(R.color.primary_black));
+                            hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -100,16 +132,29 @@ public class SSNBOEditText extends ConstraintLayout {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                AddBeneficialOwnerActivity comAct = (AddBeneficialOwnerActivity) mContext;
-                if (charSequence.length() == 11) {
-                    comAct.ssnLL.setVisibility(GONE);
-                    comAct.isssn = true;
-                } else if (charSequence.length() > 0 && charSequence.length() < 11) {
-                    comAct.isssn = false;
-                } else if ((ssnET.getText().length() == 0)) {
-                    comAct.isssn = false;
+                if (FROM.equals("ADD_BO")) {
+                    AddBeneficialOwnerActivity comAct = (AddBeneficialOwnerActivity) mContext;
+                    if (charSequence.length() == 11) {
+                        comAct.ssnLL.setVisibility(GONE);
+                        comAct.isssn = true;
+                    } else if (charSequence.length() > 0 && charSequence.length() < 11) {
+                        comAct.isssn = false;
+                    } else if ((ssnET.getText().length() == 0)) {
+                        comAct.isssn = false;
+                    }
+                    comAct.enableOrDisableNext();
+                } else if (FROM.equals("IDVE_SSN")) {
+                    IdVeAdditionalActionActivity idveSSN = (IdVeAdditionalActionActivity) mContext;
+                    if (charSequence.length() == 11) {
+                        idveSSN.isssn = true;
+                    } else if (charSequence.length() > 0 && charSequence.length() < 11) {
+                        idveSSN.isssn = true;
+                    } else if ((ssnET.getText().length() == 0)) {
+                        idveSSN.isssn = false;
+                    }
+                    idveSSN.ssnErrorLL.setVisibility(GONE);
+                    idveSSN.enableORdiableNext();
                 }
-                comAct.enableOrDisableNext();
             }
 
             @Override
