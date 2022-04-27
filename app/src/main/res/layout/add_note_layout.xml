@@ -50,7 +50,7 @@
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="top"
-                android:hint="Optional: Add Note (Maximum 120 characters)"
+                android:hint="Enter the reason of decline here.(Maximum 120 characters)"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine|textCapSentences"
                 android:lineSpacingExtra="3dp"
@@ -58,6 +58,7 @@
                 android:padding="15dp"
                 android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                 android:text=""
+                android:cursorVisible="true"
                 android:textColor="@color/primary_black"
                 android:textColorHint="@color/text_grey_msg"
                 android:textCursorDrawable="@drawable/cursor_color"
@@ -102,7 +103,7 @@
             android:layout_height="@dimen/_43sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/primary_color"
+            app:cardBackgroundColor="@color/inactive_color"
             app:cardCornerRadius="@dimen/_21sdp"
             app:cardElevation="0dp">
 

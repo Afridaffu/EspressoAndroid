@@ -183,6 +183,7 @@ public class Utils {
     public static Boolean isFaceEnabled;
     public static Boolean isTouchEnabled;
     public static Boolean isBiometric = false;
+    public static final String COMMENT_ACTION = "comment_action";
     public static final String transInProgress = "inprogress";
     public static final String SELECTED_BATCH_PAYOUT = "selectedBatchPayout";
     public static final String transPending = "pending";
@@ -571,6 +572,15 @@ public class Utils {
             ex.printStackTrace();
         }
         return value;
+    }
+
+    public static String getCurrentDate() {
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("MM/dd/yyyy");
+            return spf.format(new Date());
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public static String convertDate(String date) {
@@ -1801,6 +1811,17 @@ public class Utils {
         Date dtExpiry = null;
         try {
             SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
+            dtExpiry = spf.parse(date);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return dtExpiry;
+    }
+
+    public static Date simpleDate(String date) {
+        Date dtExpiry = null;
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("MM/dd/yyyy");
             dtExpiry = spf.parse(date);
         } catch (Exception ex) {
             ex.printStackTrace();

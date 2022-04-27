@@ -119,10 +119,10 @@ public class ImageUtility {
                 BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(mediaFile);
             }
             else if(from.equals("AAR-SecFile")) {
-                BusinessAdditionalActionRequiredActivity.addtional2fFle = mediaFile;
+                BusinessAdditionalActionRequiredActivity.additional2fFle = mediaFile;
             }
             else if(from.equals("AAR-FBL")) {
-                BusinessAdditionalActionRequiredActivity.businessLincenseFile = mediaFile;
+                BusinessAdditionalActionRequiredActivity.businessLicenceFile = mediaFile;
             }
             else if(from.equals("AAR-securityCard")){
                 AdditionalInformationRequiredActivity.securityFile = mediaFile;
