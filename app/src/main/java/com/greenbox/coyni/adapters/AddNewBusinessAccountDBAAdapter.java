@@ -69,9 +69,11 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
             if (listCompany.get(position).isSelected()) {
                 holder.imvTickIcon.setVisibility(View.VISIBLE);
+                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_green));
                 holder.statusLL.setVisibility(View.GONE);
             } else {
                 holder.imvTickIcon.setVisibility(View.GONE);
+                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
                 if(!listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
 
                     if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())){
@@ -89,7 +91,6 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                 } else {
                     holder.statusLL.setVisibility(View.GONE);
                 }
-
 
             }
 

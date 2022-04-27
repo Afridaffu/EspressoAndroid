@@ -73,7 +73,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:elevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -110,9 +111,8 @@
 
                             <TextView
                                 android:id="@+id/salesOrderPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -151,9 +151,8 @@
 
                             <TextView
                                 android:id="@+id/refundPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -186,7 +185,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:elevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -240,9 +240,8 @@
 
                             <TextView
                                 android:id="@+id/tvEBAPer"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -281,9 +280,8 @@
 
                             <TextView
                                 android:id="@+id/instantPayPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -322,9 +320,8 @@
 
                             <TextView
                                 android:id="@+id/signetAccPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -363,9 +360,8 @@
 
                             <TextView
                                 android:id="@+id/giftCardPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="45dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -404,9 +400,8 @@
 
                             <TextView
                                 android:id="@+id/fdwPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -423,7 +418,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:elevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -477,9 +473,8 @@
 
                             <TextView
                                 android:id="@+id/buyTokenEBAPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -518,9 +513,8 @@
 
                             <TextView
                                 android:id="@+id/buytokenSignetPerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"
@@ -552,7 +546,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    app:cardCornerRadius="@dimen/_10sdp">
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:elevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -589,9 +584,8 @@
 
                             <TextView
                                 android:id="@+id/monthlyFeePerTV"
-                                android:layout_width="wrap_content"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_30sdp"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="end"

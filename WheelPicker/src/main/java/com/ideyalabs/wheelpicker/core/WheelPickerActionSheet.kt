@@ -39,6 +39,7 @@ abstract class WheelPickerActionSheet<Picker : View>(context: Context) {
     }
 
     protected fun setPickerView(pickerView: Picker) {
+        pickerView.isHapticFeedbackEnabled = false
         this.pickerView = pickerView
         val containerView = contentBinding.containerView
         containerView.addView(pickerView)
