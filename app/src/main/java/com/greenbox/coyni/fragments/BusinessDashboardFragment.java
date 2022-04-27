@@ -52,6 +52,8 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityData;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
@@ -59,7 +61,6 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
@@ -109,7 +110,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private RecyclerView recyclerViewPayouts;
     private List<BatchPayoutListItems> listItems;
     private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV,
-            lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV,disable_reserve_list;
+            lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV, disable_reserve_list;
     private LinearLayout reserveReleaseListLL, reserveDetailsLL;
     private BatchNowRequest batchNowRequest = null;
     private String openAmount = "", sent = "", availbal = "";
@@ -428,7 +429,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
             @Override
             public void onChanged(BatchNowResponse batchNowResponse) {
-                if(batchNowResponse != null){
+                if (batchNowResponse != null) {
                     if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
                         Log.d(TAG, "Batched successfully");
                         batchReq();
@@ -489,7 +490,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                         refunds = Double.parseDouble(data.get(position).getTotalAmount());
                                     }
 
-                                    double processFee = processingFee+Double.parseDouble(data.get(position).getFee());
+                                    double processFee = processingFee + Double.parseDouble(data.get(position).getFee());
                                     processingFee = processFee;
                                 } else if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
                                         && data.get(position).getTransactionSubType() == null) {
@@ -508,11 +509,22 @@ public class BusinessDashboardFragment extends BaseFragment {
                             mMISCFees.setText(defaultAmount);
                             mNetAmount.setText(defaultAmount);
                         }
-                        // for SeekBar Graph
-                        currentTimeInHours = Integer.parseInt(myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH")); // Returns Hour of Current Time with Preference
-                        currentTimeHoursText = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH:mma"); // Returns Hour with Minutes of Current Time with Preference
-                        mSbTodayVolume.setProgressWithText(currentTimeInHours, currentTimeHoursText, mGrossAmount.getText().toString());
                     }
+                }
+            }
+        });
+        businessDashboardViewModel.getMerchantActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<MerchantActivityResp>() {
+            @Override
+            public void onChanged(MerchantActivityResp merchantActivityResp) {
+                if (merchantActivityResp != null && merchantActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    if (merchantActivityResp.getData() != null) {
+                        // for SeekBar Graph
+
+                        currentTimeInHours = merchantActivityResp.getData().getEarnings().get(0).getKey(); // Returns Hour of Current Time with Preference
+                        currentTimeHoursText = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH:mma"); // Returns Hour with Minutes of Current Time with Preference
+                        mSbTodayVolume.setProgressWithText(currentTimeInHours, merchantActivityResp.getData().getEarnings().get(0).getTotalAmount());
+                    }
+
                 }
             }
         });
@@ -674,6 +686,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         });
     }
 
+
     private void showIdentityVerificationReview() {
         mLlIdentityVerificationReview.setVisibility(View.VISIBLE);
         mLlBusinessDashboardView.setVisibility(View.GONE);
@@ -819,6 +832,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
                 businessActivityAPICall(strFromDate, strToDate);
+                commissionActivityCall(todayValue);
             }
             break;
             case yesterdayValue: {
@@ -828,6 +842,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
+                commissionActivityCall(yesterdayValue);
             }
             break;
             case monthDate: {
@@ -882,6 +897,15 @@ public class BusinessDashboardFragment extends BaseFragment {
 
 
         }
+    }
+
+    private void commissionActivityCall(String value) {
+        MerchantActivityRequest request = new MerchantActivityRequest();
+        request.setDuration(value.toUpperCase());
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null)
+            request.setUserId("" + myApplication.getMyProfile().getData().getId());
+        businessDashboardViewModel.merchantActivity(request);
+
     }
 
 
@@ -1042,7 +1066,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             } else {
                 Log.d("date format", date);
             }
-        }else {
+        } else {
             nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
         }
         if (items != null && items.size() > 0) {

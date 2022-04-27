@@ -13,7 +13,6 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
-import com.greenbox.coyni.model.BatchNow.BatchNowSlideRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutIdDetailsResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
@@ -26,6 +25,8 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.fee.Fees;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.reserveIdDetails.DetailsRequest;
@@ -36,11 +37,9 @@ import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
-import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -69,9 +68,14 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
     private MutableLiveData<ReserveListResponse> reserveListResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BatchNowResponse> batchNowSlideResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<BusinessActivityResp> businessActivityRespMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<MerchantActivityResp> merchantActivityRespMutableLiveData = new MutableLiveData<>();
 
     public BusinessDashboardViewModel(@NonNull Application application) {
         super(application);
+    }
+
+    public MutableLiveData<MerchantActivityResp> getMerchantActivityRespMutableLiveData() {
+        return merchantActivityRespMutableLiveData;
     }
 
     public MutableLiveData<BusinessActivityResp> getBusinessActivityRespMutableLiveData() {
@@ -879,6 +883,46 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
+    public void merchantActivity(MerchantActivityRequest request) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<MerchantActivityResp> call = apiService.merchantActivity(request);
+            call.enqueue(new Callback<MerchantActivityResp>() {
+                @Override
+                public void onResponse(Call<MerchantActivityResp> call, Response<MerchantActivityResp> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            MerchantActivityResp list = response.body();
+                            merchantActivityRespMutableLiveData.setValue(list);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<MerchantActivityResp>() {
+                            }.getType();
+                            MerchantActivityResp errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            merchantActivityRespMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MerchantActivityResp> call, Throwable t) {
+                    merchantActivityRespMutableLiveData.setValue(null);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
 

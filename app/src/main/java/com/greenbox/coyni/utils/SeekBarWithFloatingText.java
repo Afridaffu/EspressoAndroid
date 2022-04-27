@@ -24,7 +24,6 @@ public class SeekBarWithFloatingText extends RelativeLayout {
     private SeekBar seekBar;
     private View thumbView;
     private String floatingText;
-    private String minutesText;
 
     public SeekBarWithFloatingText(Context context) {
         super(context);
@@ -50,12 +49,12 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         });
     }
 
-    public void setProgressWithText(int progress, String time, String floating) {
+    public void setProgressWithText(int progress, String time) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                floatingText = floating;
-                minutesText = time;
+//                floatingText = floating;
+                floatingText = time;
                 seekBar.setProgress(progress);
             }
         }, 100);
@@ -97,12 +96,12 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         int calculatedWidth = (width / 24);
         String text = "";
         if (progress < 12) {
-//            text = minutesText + "am";
-            text = minutesText.toLowerCase();
+            text = "0"+progress + ":00am";
+//            text = floatingText.toLowerCase();
             calculatedWidth = calculatedWidth + 20 * progress;
         } else if (progress == 12) {
-//            text = minutesText + "pm";
-            text = minutesText.toLowerCase();
+            text =  progress + ":00pm";
+//            text = floatingText.toLowerCase();
             calculatedWidth = calculatedWidth + 20 * progress;
         } else {
             if (progress > 12 && progress < 22) {
@@ -111,8 +110,8 @@ public class SeekBarWithFloatingText extends RelativeLayout {
             else {
                 calculatedWidth = 20*22 +20 -calculatedWidth;  // for fix the Position
             }
-//            text = (progress - 12) + minutesText.substring(2) + "pm";
-            text = minutesText.toLowerCase();
+            text = progress  + ":00pm";
+//            text = floatingText.toLowerCase();
         }
         if (calculatedWidth < width) {
             layoutParams.setMargins(calculatedWidth, 0, 0, 0);

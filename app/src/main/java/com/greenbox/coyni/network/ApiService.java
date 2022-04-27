@@ -54,6 +54,8 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
 import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -624,6 +626,9 @@ public interface ApiService {
 
     @POST("/api/v2/transactions/business-activity")
     Call<BusinessActivityResp> businessActivity(@Body BusinessActivityRequest businessActivityRequest);
+
+    @POST("/api/v2/transactions/admin/merchant-activity-chart")
+    Call<MerchantActivityResp> merchantActivity(@Body MerchantActivityRequest request);
 
 }
 

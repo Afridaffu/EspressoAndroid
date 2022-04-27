@@ -276,10 +276,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
-                    myApplication.setGbtWallet(walletInfo.get(i));
+//                    myApplication.setGbtWallet(walletInfo.get(i));
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
                     userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-                    myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
+//                    myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
 //                    }
                 }
             }
