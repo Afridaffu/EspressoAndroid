@@ -15,6 +15,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.merchant_activity.Earning;
+
+import java.util.List;
+import java.util.Vector;
 
 public class SeekBarWithFloatingText extends RelativeLayout {
 
@@ -24,6 +28,9 @@ public class SeekBarWithFloatingText extends RelativeLayout {
     private SeekBar seekBar;
     private View thumbView;
     private String floatingText;
+    private List<Earning> userData;
+    String defaultValue = " 0.00 CYN";
+
 
     public SeekBarWithFloatingText(Context context) {
         super(context);
@@ -49,15 +56,18 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         });
     }
 
-    public void setProgressWithText(int progress, String time) {
+    public void setProgressWithText(int progress, List<Earning> userData) {
+
+        this.userData = userData;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-//                floatingText = floating;
-                floatingText = time;
+
+
                 seekBar.setProgress(progress);
+                setTextPos(progress);
             }
-        }, 100);
+        }, 1000);
     }
 
     private void initView() {
@@ -95,29 +105,42 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         int width = seekBar.getWidth();
         int calculatedWidth = (width / 24);
         String text = "";
+
+        List<Earning> earningList = userData;
         if (progress < 12) {
-            text = "0"+progress + ":00am";
-//            text = floatingText.toLowerCase();
+            if (progress < 10) {
+                text = "0" + progress + ":00am";
+            } else {
+                text = progress + ":00am";
+            }
+//            text = totalAmount.toLowerCase();
             calculatedWidth = calculatedWidth + 20 * progress;
         } else if (progress == 12) {
-            text =  progress + ":00pm";
-//            text = floatingText.toLowerCase();
+            text = progress + ":00pm";
+//            text = totalAmount.toLowerCase();
             calculatedWidth = calculatedWidth + 20 * progress;
         } else {
-            if (progress > 12 && progress < 22) {
+            if (progress > 12 && progress < 20) {
                 calculatedWidth = calculatedWidth + 20 * progress;
+            } else {
+                calculatedWidth = 20 * 20 + 20 - calculatedWidth;  // for fix the Position
             }
-            else {
-                calculatedWidth = 20*22 +20 -calculatedWidth;  // for fix the Position
-            }
-            text = progress  + ":00pm";
-//            text = floatingText.toLowerCase();
+            text = progress + ":00pm";
+//            text = totalAmount.toLowerCase();
         }
         if (calculatedWidth < width) {
             layoutParams.setMargins(calculatedWidth, 0, 0, 0);
             tvFloatingText.setLayoutParams(layoutParams);
         }
-        tvFloatingText.setText(text + " " + floatingText + " CYN");
+        for (int position = 0; position < earningList.size(); position++) {
+            if (progress == earningList.get(position).getKey()) {
+                tvFloatingText.setText(text + " " + earningList.get(position).getTotalAmount() + " CYN");
+            } else {
+                tvFloatingText.setText(text + defaultValue);
+            }
+
+        }
+
     }
 
     public Drawable getThumb() {

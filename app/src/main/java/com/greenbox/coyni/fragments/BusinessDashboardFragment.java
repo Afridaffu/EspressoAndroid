@@ -59,6 +59,7 @@ import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.SeekBarWithFloatingText;
+import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
@@ -126,6 +127,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private String batchId;
     private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount, saleOrdersText;
     private LinearLayout mTicketsLayout;
+    private UserData userData;
 
     //private boolean showReserve = true;
 
@@ -194,6 +196,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void initFields() {
         mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
+       userData = myApplication.getCurrentUserData();
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
         mIvUserIconCV = mCurrentView.findViewById(R.id.iv_user_icon_CV);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
@@ -468,7 +471,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             refunds = 0.0,
                             miscFee = 0.0,
                             netAmount = 0.0;
-                    mSbTodayVolume.setEnabled(false);
+//                    mSbTodayVolume.setEnabled(false);
                     if (businessActivityResp.getStatus() != null && businessActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (businessActivityResp.getData() != null && businessActivityResp.getData().size() > 0) {
                             List<BusinessActivityData> data = businessActivityResp.getData();
@@ -519,10 +522,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (merchantActivityResp != null && merchantActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                     if (merchantActivityResp.getData() != null) {
                         // for SeekBar Graph
+                            userData.setEarningList(merchantActivityResp.getData().getEarnings());
 
-                        currentTimeInHours = merchantActivityResp.getData().getEarnings().get(0).getKey(); // Returns Hour of Current Time with Preference
-                        currentTimeHoursText = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, "HH:mma"); // Returns Hour with Minutes of Current Time with Preference
-                        mSbTodayVolume.setProgressWithText(currentTimeInHours, merchantActivityResp.getData().getEarnings().get(0).getTotalAmount());
+                        mSbTodayVolume.setEnabled(true);
+                        mSbTodayVolume.setProgressWithText(0,userData.getEarningList());
                     }
 
                 }
@@ -668,8 +671,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             monthlyVolumeViewLl.setVisibility(View.GONE);
         }
-//        mSbTodayVolume.setEnabled(false);
-//        mSbTodayVolume.setProgressWithText(9, "100");
+//        mSbTodayVolume.setEnabled(true);
+//        mSbTodayVolume.setProgressWithText(0,userData);
         mTvReserveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
