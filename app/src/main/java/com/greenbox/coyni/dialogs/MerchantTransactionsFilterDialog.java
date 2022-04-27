@@ -194,7 +194,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             transTypeRefund.setChecked(false);
             transTypeMerchantPayout.setChecked(false);
             transTypeMonthlyServiceFee.setChecked(false);
-            transTypeRefund.setChecked(false);
+//            transTypeRefund.setChecked(false);
 
             transStatusCompleted.setChecked(false);
             transStatusRefund.setChecked(false);
@@ -204,7 +204,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
             getOnDialogClickListener().onDialogClicked(Utils.resetFilter, null);
-            dismiss();
+//            dismiss();
 
         });
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.RetrieveEmailActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
 public class AddNewTeamMemberActivity extends BaseActivity {
@@ -195,6 +197,8 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                         }
                         if (editFNameET.getText().toString().length() > 0 && !editFNameET.getText().toString().substring(0, 1).equals(" ")) {
                             editFNameET.setText(editFNameET.getText().toString().substring(0, 1).toUpperCase() + editFNameET.getText().toString().substring(1));
+                            editFNameET.setSelection(editFNameET.getText().toString().length());
+
                         }
                     } else {
 
@@ -230,6 +234,8 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                         }
                         if (editLNameET.getText().toString().length() > 0 && !editLNameET.getText().toString().substring(0, 1).equals(" ")) {
                             editLNameET.setText(editLNameET.getText().toString().substring(0, 1).toUpperCase() + editLNameET.getText().toString().substring(1));
+                            editLNameET.setSelection(editLNameET.getText().toString().length());
+
                         }
                     } else {
 
@@ -360,8 +366,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                         editLNameET.setText("");
                         editLNameET.setSelection(editLNameET.getText().length());
                     }
-
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -425,10 +429,11 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
     }
 
-    private void enableOrDisableNext() {
+    public void enableOrDisableNext() {
         try {
             if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
+                Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " ");
