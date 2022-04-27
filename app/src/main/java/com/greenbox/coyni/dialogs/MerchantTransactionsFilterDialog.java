@@ -476,7 +476,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                     isFilters = true;
                     filterTransactionListRequest.setTransactionSubType(transactionSubType);
                 }
-                if (txnStatus.size() >= 0) {
+                if (txnStatus.size() > 0) {
                     isFilters = true;
                     filterTransactionListRequest.setTxnStatus(txnStatus);
                 }
