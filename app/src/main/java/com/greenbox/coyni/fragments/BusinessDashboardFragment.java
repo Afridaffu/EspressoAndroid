@@ -514,8 +514,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
         DBAInfoResp resp = myApplication.getDbaInfoResp();
         if (resp != null && resp.getData() != null) {
-            mTvMonthlyVolume.setText(Utils.convertBigDecimalUSDC(resp.getData().getMonthlyProcessingVolume()));
-            mTvHighTickets.setText(Utils.convertBigDecimalUSDC(resp.getData().getHighTicket()));
+            mTvMonthlyVolume.setText("$"+Utils.convertBigDecimalUSDC(resp.getData().getMonthlyProcessingVolume()));
+            mTvHighTickets.setText("$"+Utils.convertBigDecimalUSDC(resp.getData().getHighTicket()));
         }
     }
 
