@@ -770,8 +770,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                     isfname = true;
                     fnameLL.setVisibility(GONE);
-                    fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
+//                    fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    if (!fnameET.hasFocus())
+                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
 //                    String str = fnameET.getText().toString();
 //                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                        fnameET.setText(fnameET.getText().toString().replaceAll(" ", ""));
@@ -816,8 +817,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
                     islname = true;
                     lnameLL.setVisibility(GONE);
-                    lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
+//                    lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    if (!lnameET.hasFocus())
+                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
 //                        String str = lnameET.getText().toString();
 //                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                            lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
@@ -970,7 +972,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isAddress1 = true;
                     address1ErrorLL.setVisibility(GONE);
 //                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
+                    if (!address1ET.hasFocus())
+                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
                 } else {
 //                    address1ErrorLL.setVisibility(VISIBLE);
 //                    address1ErrorTV.setText("Field Required");
@@ -1009,7 +1012,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
-//                    Utils.setUpperHintColor(address2TIL, getResources().getColor(R.color.primary_black));
+                    if (!address2ET.hasFocus())
+                    Utils.setUpperHintColor(address2TIL, getResources().getColor(R.color.primary_black));
                 }
                 enableOrDisableSave();
             }
@@ -1044,7 +1048,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 if (charSequence.length() > 0) {
                     isCity = true;
 //                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
+                    if (!cityET.hasFocus())
+                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                     cityErrorLL.setVisibility(GONE);
                 } else {
 //                    cityErrorLL.setVisibility(VISIBLE);
@@ -1087,7 +1092,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 try {
                     if (charSequence.length() > 0) {
-//                        Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(stateTIL, getResources().getColor(R.color.primary_black));
 //                        stateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
                         isState = true;
                     } else {
@@ -1116,16 +1121,18 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 if (charSequence.length() == 5) {
                     isZipcode = true;
                     zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                    Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
-                } else if (charSequence.length() > 0 && charSequence.length() < 5) {
+                    //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    if (!zipcodeET.hasFocus())
+                        Utils.setUpperHintColor(zipcodeTIL, getResources().getColor(R.color.primary_black));
+                } else if (charSequence.length() < 5 && charSequence.length() > 0) {
                     isZipcode = false;
-//                    zipcodeErrorLL.setVisibility(GONE);
-//                    zipcodeErrorTV.setText("Minimum 5 Digits Required");
+                    zipcodeErrorLL.setVisibility(GONE);
+                    //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                 } else if (charSequence.length() == 0) {
                     isZipcode = false;
-//                    zipcodeErrorLL.setVisibility(VISIBLE);
-//                    zipcodeErrorTV.setText("Field Required");
+                    //                            zipcodeErrorLL.setVisibility(VISIBLE);
+                    //                            zipcodeErrorTV.setText("Field Required");
                 }
                 enableOrDisableSave();
             }

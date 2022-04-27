@@ -96,12 +96,13 @@ public class BatchNowDialog extends BaseDialog {
                     motionLayout.transitionToState(motionLayout.getEndState());
                     slideToConfirm.setInteractionEnabled(false);
                     if (!isBatchProcessCalled) {
+                        isBatchProcessCalled = true;
                         dismiss();
                         tv_lable.setText("Verifying");
                         if (getOnDialogClickListener() != null) {
                             getOnDialogClickListener().onDialogClicked(Utils.Swiped, batchNowRequest.getBatchId());
                         }
-                        isBatchProcessCalled = true;
+                        //isBatchProcessCalled = true;
                     }
 
                 }

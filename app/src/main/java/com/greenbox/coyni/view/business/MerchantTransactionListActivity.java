@@ -104,7 +104,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         transactionListRequest.setPageNo(String.valueOf(currentPage));
                         transactionListRequest.setWalletCategory(Utils.walletCategory);
                         transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
-                        getTransactions(transactionListRequest);
+//                        getTransactions(transactionListRequest);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -210,7 +210,6 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onChanged(TransactionList transactionList) {
                 dismissDialog();
-                swipeRefreshLayout.setRefreshing(false);
                 try {
                     if (transactionList != null) {
                         if (transactionList.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -295,6 +294,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -309,6 +309,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+            transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageNo(String.valueOf(currentPage));
             getTransactions(transactionListRequest);
         } catch (Exception ex) {
@@ -370,7 +371,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     filterIV.setImageResource(R.drawable.ic_filter_enabled);
                 } else if (action.equals(Utils.resetFilter)) {
                     filterTransactionList = null;
-                    loadData();
+//                    loadData();
                 }
             }
         });

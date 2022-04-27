@@ -134,9 +134,9 @@ public class RetakeActivity extends AppCompatActivity {
                 }else if (from.equals("BAARA")) {
                     //BusinessAdditionalActionRequiredActivity.adtionalSscFile = null;
                 }else if (from.equals("AAR-SecFile")){
-                    BusinessAdditionalActionRequiredActivity.addtional2fFle = null;
+                    BusinessAdditionalActionRequiredActivity.additional2fFle = null;
                 }else if (from.equals("AAR-FBL")){
-                    BusinessAdditionalActionRequiredActivity.businessLincenseFile = null;
+                    BusinessAdditionalActionRequiredActivity.businessLicenceFile = null;
                 }
                 else if(from.equals("AAR-securityCard")){
                     AdditionalInformationRequiredActivity.securityFile = null;
