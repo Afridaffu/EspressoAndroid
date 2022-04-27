@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.view.Gravity;
@@ -397,6 +398,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
+//                            companyNameTV.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                             companyNameTV.setText(propertiesData.getName());
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
                             companyNameProposed.setText(propertiesData.getProposedValue());

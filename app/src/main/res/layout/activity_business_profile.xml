@@ -98,7 +98,7 @@
 
                             <TextView
                                 android:id="@+id/b_tvACStatus"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
                                 android:layout_marginTop="@dimen/_6sdp"
@@ -112,6 +112,7 @@
                                 android:layout_width="@dimen/_8sdp"
                                 android:layout_height="@dimen/_8sdp"
                                 android:layout_marginTop="@dimen/_2sdp"
+                                android:layout_marginEnd="@dimen/_5sdp"
                                 app:cardCornerRadius="@dimen/_4sdp" />
                         </LinearLayout>
 
@@ -119,7 +120,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/profilePicCL"
-                        android:layout_width="@dimen/_100sdp"
+                        android:layout_width="@dimen/_80sdp"
                         android:layout_height="@dimen/_65sdp"
                         android:layout_alignParentEnd="true"
                         android:visibility="visible">
@@ -128,9 +129,9 @@
                             android:id="@+id/linearLayout"
                             android:layout_width="@dimen/_50sdp"
                             android:layout_height="@dimen/_50sdp"
+                            android:background="@drawable/corecircle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:background="@drawable/corecircle"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
@@ -140,8 +141,8 @@
                                 android:layout_height="@dimen/_46sdp"
                                 android:layout_alignParentRight="true"
                                 android:layout_gravity="center"
-                                app:cardCornerRadius="@dimen/_23sdp"
                                 android:elevation="0dp"
+                                app:cardCornerRadius="@dimen/_23sdp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -159,10 +160,10 @@
                                     android:id="@+id/b_imageTextTV"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text="AO"
                                     android:background="@color/blue_light"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:gravity="center"
+                                    android:text="AO"
                                     android:textColor="@color/primary_green"
                                     android:textSize="@dimen/_18ssp"
                                     android:visibility="visible" />
@@ -179,9 +180,9 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias=".80"
-                            app:layout_constraintVertical_bias="0.9"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.9" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

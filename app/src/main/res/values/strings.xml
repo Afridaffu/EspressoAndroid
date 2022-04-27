@@ -424,7 +424,7 @@
     <string name="merchant_application_nverification_failed">Merchant Application \nVerification Failed</string>
     <string name="unable_to_verify">We were unable to verify your business account\nbecause of an issue with your bank account.</string>
     <string name="please_try_again">Please try again or try a different bank account</string>
-    <string name="application_canceled">Application Canceled</string>
+    <string name="application_canceled">Application Cancelled</string>
     <string name="payout_details">Payout Details</string>
     <string name="payout_id">Payout ID</string>
     <string name="id">" [#ID]"</string>
