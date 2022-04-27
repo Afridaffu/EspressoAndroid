@@ -49,6 +49,7 @@ import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.DBAInfo.BusinessType;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -485,6 +486,27 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     Utils.hideKeypad(this);
                 Utils.populateStates(this, stateET, objMyApplication);
             });
+
+            //Default values enabled
+            eCommerceIV.setImageResource(R.drawable.ic_rb_selected);
+            retailIV.setImageResource(R.drawable.ic_rb_unselected);
+            websiteOET.setHint("Website");
+            isECommerce = true;
+            isRetail = false;
+            identificationType = 9;
+            isIDVESelected = true;
+
+            if (objMyApplication.getBusinessTypeResp() != null && objMyApplication.getBusinessTypeResp().getData() != null) {
+                selectedBTKey = objMyApplication.getBusinessTypeResp().getData().get(0).getKey();
+                businessTypeET.setText(objMyApplication.getBusinessTypeResp().getData().get(0).getValue());
+                isBusinessType = true;
+            }
+
+            objMyApplication.setTimezone(getString(R.string.PST));
+            objMyApplication.setTimezoneID(0);
+            timeZoneET.setText(objMyApplication.getTimezone());
+            isTimeZone = true;
+            //Default values enabled
 
         } catch (Exception e) {
             e.printStackTrace();
