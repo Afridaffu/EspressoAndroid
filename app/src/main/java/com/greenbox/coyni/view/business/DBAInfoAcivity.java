@@ -516,7 +516,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             businessIdentityVerificationViewModel.getUpdateBasicDBAInfoResponse().observe(this, new Observer<DBAInfoUpdateResp>() {
                 @Override
                 public void onChanged(DBAInfoUpdateResp dbaInfoUpdateResp) {
-                        dismissDialog();
+                    dismissDialog();
                     if (dbaInfoUpdateResp != null) {
                         if (dbaInfoUpdateResp.getStatus().toLowerCase().toString().equals("success")) {
                             closeIV.setVisibility(GONE);
@@ -579,10 +579,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         RequestBody idType = RequestBody.create(MediaType.parse("text/plain"), identificationType + "");
 
                         RequestBody idNumber;
-                        if(objMyApplication.getCompanyInfoResp().getData().getSsnOrEin()!=null) {
-                             idNumber = RequestBody.create(MediaType.parse("text/plain"), objMyApplication.getCompanyInfoResp().getData().getSsnOrEin());
+                        if (objMyApplication.getCompanyInfoResp().getData().getSsnOrEin() != null) {
+                            idNumber = RequestBody.create(MediaType.parse("text/plain"), objMyApplication.getCompanyInfoResp().getData().getSsnOrEin());
                         } else {
-                             idNumber = RequestBody.create(MediaType.parse("text/plain"), "123456789");
+                            idNumber = RequestBody.create(MediaType.parse("text/plain"), "123456789");
                         }
                         identityVerificationViewModel.uploadIdentityImage(idFile, idType, idNumber);
                     }
@@ -662,7 +662,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (dbanameET.getText().toString().trim().length() > 0) {
                             dbanameLL.setVisibility(GONE);
                             dbanameTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
-                            dbanameET.setHintTextColor(getColor(R.color.light_gray));
                             Utils.setUpperHintColor(dbanameTIL, getColor(R.color.primary_black));
 
                         }
@@ -686,8 +685,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     } else {
 //                        dbanameET.setHint("DBA Name");
                         dbanameTIL.setBoxStrokeColor(getColor(R.color.primary_green));
-                        dbanameET.setHintTextColor(getColor(R.color.light_gray));
                         dbanameLL.setVisibility(GONE);
+                        Utils.setUpperHintColor(dbanameTIL, getColor(R.color.primary_green));
+
                     }
 
                 }
@@ -701,7 +701,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (dbaemailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(dbaemailET.getText().toString().trim())) {
                             dbaemailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(myActivity));
                             dbaemailLL.setVisibility(VISIBLE);
-                            dbaemailET.setHintTextColor(getColor(R.color.error_red));
                             Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.error_red));
                             dbaemailTV.setText("Please enter a valid Email");
 
@@ -725,7 +724,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     } else {
 //                        dbaemailET.setHint("Customer Service Email");
                         dbaemailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        dbaemailET.setHintTextColor(getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(dbaemailTIL, getColor(R.color.primary_green));
                         dbaemailLL.setVisibility(GONE);
                     }
                 }
@@ -869,10 +868,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.toString().trim().length() > 0) {
                         isdbaName = true;
-                        dbanameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                        Utils.setUpperHintColor(dbanameTIL, getResources().getColor(R.color.primary_black));
+//                        dbanameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        if (!dbanameET.hasFocus())
+                            Utils.setUpperHintColor(dbanameTIL, getResources().getColor(R.color.primary_black));
                     } else {
-                        dbanameTV.setText("Field Required");
                         isdbaName = false;
                     }
                     enableOrDisableNext();
@@ -910,10 +909,22 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
+                        isdbaEmail = false;
                         dbaemailLL.setVisibility(GONE);
+                        dbanameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+
+                        if (!dbaemailET.hasFocus())
+                            Utils.setUpperHintColor(dbaemailTIL, getResources().getColor(R.color.primary_black));
+
+                    } else if (dbaemailET.getText().toString().trim().length() == 0) {
+                        isdbaEmail = false;
+                    }
+                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
                         isdbaEmail = true;
 //                        Utils.setUpperHintColor(dbaemailTIL, getResources().getColor(R.color.primary_black));
-                    } else if (dbaemailET.getText().toString().trim().length() == 0) {
+
+
+                    } else {
                         isdbaEmail = false;
                     }
                     enableOrDisableNext();
@@ -942,7 +953,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() > 0) {
-//                        Utils.setUpperHintColor(businessTypeTIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(businessTypeTIL, getResources().getColor(R.color.primary_black));
                         isBusinessType = true;
                     } else {
                         isBusinessType = false;
@@ -965,7 +976,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                     if (charSequence.length() > 0) {
                         timezoneTIL.setHint("Time Zone");
-//                        Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
                         isTimeZone = true;
                     } else {
                         timezoneTIL.setHint("Select Time Zone");
@@ -993,7 +1004,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             isCompanyAdress1 = true;
                             address1ErrorLL.setVisibility(GONE);
                             //                        mailingAddTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                            Utils.setUpperHintColor(companyaddresstil, getResources().getColor(R.color.primary_black));
+                            if (!companyaddressET.hasFocus())
+                                Utils.setUpperHintColor(companyaddresstil, getResources().getColor(R.color.primary_black));
                         } else {
                             //                            address1ErrorLL.setVisibility(VISIBLE);
                             //                            address1ErrorTV.setText("Field Required");
@@ -1038,7 +1050,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-//                            Utils.setUpperHintColor(companyaddress2til, getResources().getColor(R.color.primary_black));
+                            if (!companyaddress2ET.hasFocus())
+                                Utils.setUpperHintColor(companyaddress2til, getResources().getColor(R.color.primary_black));
                         }
                         enableOrDisableAddressNext();
                     } catch (Resources.NotFoundException e) {
@@ -1080,7 +1093,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (charSequence.length() > 0) {
                             isCity = true;
                             cityErrorLL.setVisibility(GONE);
-//                            Utils.setUpperHintColor(citytil, getResources().getColor(R.color.primary_black));
+                            if (!cityET.hasFocus())
+                                Utils.setUpperHintColor(citytil, getResources().getColor(R.color.primary_black));
                         } else {
                             //                            cityErrorLL.setVisibility(VISIBLE);
                             //                            cityErrorTV.setText("Field Required");
@@ -1123,7 +1137,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     try {
                         if (charSequence.length() > 0) {
-//                            Utils.setUpperHintColor(statetil, getResources().getColor(R.color.primary_black));
+                            Utils.setUpperHintColor(statetil, getResources().getColor(R.color.primary_black));
                             //                            statetil.setBoxStrokeColorStateList(Utils.getNormalColorState());
                             isState = true;
                         } else {
@@ -1154,7 +1168,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             isZipcode = true;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+                            if (!zipcodeET.hasFocus())
+                                Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() < 5 && charSequence.length() > 0) {
                             isZipcode = false;
                             zipcodeErrorLL.setVisibility(GONE);
@@ -1197,7 +1212,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             } else {
                 if (isdbaName && isdbaEmail && iscustPhoneNumber && isBusinessType && isWebsite && isMPV
-                        && isHighTkt && isAvgTkt && isTimeZone  && isIDVESelected) {
+                        && isHighTkt && isAvgTkt && isTimeZone && isIDVESelected) {
 //                    && isDBAFiling (DBA file is Optional)
                     isNextEnabled = true;
                     dbaNextCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));

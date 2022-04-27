@@ -1,20 +1,16 @@
 package com.greenbox.coyni.model.underwriting;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.greenbox.coyni.model.BaseResponse;
 
-public class ActionRequiredResponse extends BaseResponse {
+public class ActionRequiredSubmitResponse extends BaseResponse {
 
-    @SerializedName("data")
-    @Expose
-    private ActionRequiredDataResponse data;
+    private String data;
 
-    public ActionRequiredDataResponse getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(ActionRequiredDataResponse data) {
+    public void setData(String data) {
         this.data = data;
     }
 
@@ -28,4 +24,3 @@ public class ActionRequiredResponse extends BaseResponse {
                 '}';
     }
 }
-
