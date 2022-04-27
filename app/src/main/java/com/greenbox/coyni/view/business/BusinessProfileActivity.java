@@ -458,6 +458,9 @@ public class BusinessProfileActivity extends BaseActivity {
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
+                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                        account_status.setTextColor(getResources().getColor(R.color.error_red));
+                        statusDot.setCardBackgroundColor(getResources().getColor(R.color.error_red));
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                             || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.error_red));
@@ -497,14 +500,7 @@ public class BusinessProfileActivity extends BaseActivity {
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getAccountStatus() != null) {
             String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
-            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                isEnable = false;
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                isEnable = true;
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
-                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-                isEnable = false;
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isEnable = true;
             }
         }

@@ -545,7 +545,7 @@ public interface ApiService {
     Call<CancelApplicationResponse> cancelMerchant();
 
     @POST("api/v2/team/retrieve")
-    Call<TeamListResponse> getTeamData();
+    Call<TeamListResponse> getTeamData(@Body EmptyRequest request);
 
     @PATCH("api/v2/team/update/{teamMemberId}")
     Call<TeamInfoAddModel> updateTeamMember(@Body TeamRequest request, @Path("teamMemberId") Integer teamMemberId);
