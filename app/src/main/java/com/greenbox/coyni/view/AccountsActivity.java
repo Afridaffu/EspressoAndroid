@@ -88,7 +88,7 @@ public class AccountsActivity extends AppCompatActivity {
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
-                        objMyApplication.setGbtWallet(walletInfo.get(i));
+//                        objMyApplication.setGbtWallet(walletInfo.get(i));
                         strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
                         userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
                         objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());

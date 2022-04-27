@@ -14,6 +14,8 @@ import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.merchant_activity.Earning;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -86,6 +88,16 @@ public class UserData {
     private SignOnData objSignOnData = new SignOnData();
     private TrackerResponse trackerResponse = new TrackerResponse();
     private String selectedButTokenType = "";
+    private List<Earning> earningList;
+
+
+    public List<Earning> getEarningList() {
+        return earningList;
+    }
+
+    public void setEarningList(List<Earning> earningList) {
+        this.earningList = earningList;
+    }
 
     public AgreementsPdf getAgreementsPdf() {
         return agreementsPdf;
