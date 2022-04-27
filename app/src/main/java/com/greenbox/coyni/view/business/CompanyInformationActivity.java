@@ -1245,7 +1245,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             isZipcode = false;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZipcode = false;
 //                            zipcodeErrorLL.setVisibility(VISIBLE);
