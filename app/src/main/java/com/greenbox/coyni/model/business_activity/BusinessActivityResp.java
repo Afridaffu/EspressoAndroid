@@ -2,15 +2,17 @@ package com.greenbox.coyni.model.business_activity;
 
 import com.greenbox.coyni.model.BaseResponse;
 
+import java.util.List;
+
 public class BusinessActivityResp extends BaseResponse {
 
-    private BusinessActivityData data;
+    private List<BusinessActivityData> data;
 
-    public BusinessActivityData getData() {
+    public List<BusinessActivityData> getData() {
         return data;
     }
 
-    public void setData(BusinessActivityData data) {
+    public void setData(List<BusinessActivityData> data) {
         this.data = data;
     }
 

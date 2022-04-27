@@ -257,7 +257,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
             mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
         }
-        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
+//        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
     }
 
     private void pushFragment(BaseFragment fragment) {
@@ -376,7 +376,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                                 objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE)) {
                                 objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else {
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT)) {
                                 objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                                 objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             }
@@ -391,7 +391,16 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
         String iconText = "";
-        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+        if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())
+                && objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+            iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
+            userName = objMyApplication.getMyProfile().getData().getDbaName();
+            if (userName != null && userName.length() > 21) {
+                mTvUserName.setText("Hi! "+userName.substring(0, 21) + " ");
+            } else {
+                mTvUserName.setText("Hi! "+userName);
+            }
+        } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getFirstName() != null) {
             String firstName = objMyApplication.getMyProfile().getData().getFirstName();
             iconText = firstName.substring(0, 1).toUpperCase();
