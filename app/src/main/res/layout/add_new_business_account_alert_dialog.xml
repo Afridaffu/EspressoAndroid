@@ -60,7 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_44sdp"
         android:layout_marginTop="@dimen/_40sdp"
-        app:cardBackgroundColor="@color/primary_green"
+        android:layout_marginBottom="@dimen/_28sdp"
+        app:cardBackgroundColor="@color/inactive_color"
         app:cardCornerRadius="@dimen/_22sdp">
 
         <TextView
@@ -80,7 +81,4 @@
 
     </ScrollView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_28sdp" />
 </LinearLayout>
