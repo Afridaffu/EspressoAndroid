@@ -383,7 +383,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                                 objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE)) {
                                 objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else {
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT)) {
                                 objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                                 objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             }
