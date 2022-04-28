@@ -97,7 +97,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
     DatabaseHandler dbHandler;
     Brand objBrand;
     ProgressDialog pDialog;
-    Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0;
+    Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0,feeInAmount = 0.0, feeInPercentage = 0.0;;
     List<Items> listAmounts = new ArrayList<>();
     String amountETString = "", amount = "", strLimit = "", strBrandDesc = "";
     public String selectedFixedAmount = "";
@@ -313,6 +313,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                 }
             });
 
+            calculateFee("10");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -385,6 +387,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                 try {
                     if (transferFeeResponse != null) {
                         fee = transferFeeResponse.getData().getFee();
+                        feeInAmount = transferFeeResponse.getData().getFeeInAmount();
+                        feeInPercentage = transferFeeResponse.getData().getFeeInPercentage();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -472,7 +476,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                             } else {
                                 walletAmount = Double.parseDouble(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             }
-                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
+//                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
+                            Double giftCardAmount = Double.parseDouble(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
                             Double giftCardETAmount = Double.parseDouble(amountET.getText().toString().replace(",", ""));
                             if (objTranLimit.getData() != null && objTranLimit.getData().getMinimumLimit() != null) {
                                 minValue = Double.parseDouble(objTranLimit.getData().getMinimumLimit());
@@ -480,10 +485,17 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                             if (minValue < min) {
                                 minValue = min;
                             }
-                            if (walletAmount < giftCardAmount) {
+
+                            if (walletAmount.equals(giftCardETAmount)) {
+                                isAmount = false;
+                                amountErrorLL.setVisibility(VISIBLE);
+                                amountErrorTV.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
+
+                            } else if (walletAmount < giftCardAmount) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
                                 amountErrorTV.setText("Amount entered exceeds available balance");
+
                             } else if (giftCardETAmount < minValue) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);

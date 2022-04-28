@@ -28,6 +28,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     Context mContext;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
+    Long mLastClickTimeInvite = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameHead, tvUserName, tvWalletAddress;
@@ -148,14 +149,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.tvNameHead.setVisibility(View.VISIBLE);
             }
 
-            holder.rlUserDetailS.setOnClickListener(new View.OnClickListener() {
+            holder.imgInvite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeInvite < 2000) {
                             return;
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
+                        mLastClickTimeInvite = SystemClock.elapsedRealtime();
                         Intent i = new Intent(Intent.ACTION_SEND);
                         i.setType("text/plain");
                         i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");

@@ -432,6 +432,8 @@ public class NotificationsActivity extends AppCompatActivity {
                                             }
                                         }
                                     }
+
+
                                 }
                             } else {
                                 if (!updatedStatus.equals("Completed")) {
@@ -452,6 +454,16 @@ public class NotificationsActivity extends AppCompatActivity {
                                             }
                                         }
                                     }
+
+//                                    if (updatedStatus.equals("Cancelled")) {
+//                                        for (int i = 0; i < globalNotifications.size(); i++) {
+//                                            if (globalNotifications.get(i).getId() == globalRequests.get(Integer.parseInt(selectedRow)).getId()) {
+//                                                globalNotifications.get(i).setStatus(updatedStatus);
+//                                                break;
+//                                            }
+//                                        }
+//                                    }
+
                                 }
                             }
                         } else {
