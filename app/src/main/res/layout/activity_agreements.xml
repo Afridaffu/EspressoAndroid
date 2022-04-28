@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#f2f4f5"
     android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.AgreementsActivity">
 
 
@@ -20,14 +21,14 @@
             android:id="@+id/backAgreeIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_marginStart="@dimen/_13sdp"
+            android:padding="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_43sdp"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/_10sdp"
                 android:src="@drawable/ic_back" />
         </LinearLayout>
 
