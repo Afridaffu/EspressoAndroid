@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,6 +29,9 @@ public class AccountLimitsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_account_limits);
         backBtn = findViewById(R.id.alBackbtn);
         accountLimitsViewModel = new ViewModelProvider(this).get(AccountLimitsViewModel.class);
