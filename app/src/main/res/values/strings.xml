@@ -361,6 +361,8 @@
     <string name="decline_reserve_rules_message">Are you sure you want to decline this reserve rule and cancel your merchant application? You will need to complete another application to apply again.</string>
     <string name="no_go_back">No, go back</string>
     <string name="verification_failed">Verification Failed</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
     <string name="dear_name">Dear <b>[Name],</b></string>
     <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name:<b>[name]</b></string>
@@ -370,7 +372,7 @@
     <string name="copy_of_social_security_card">Copy of Social Security card</string>
     <string name="upload_file">Upload File</string>
     <string name="fictitious_business_license">Fictitious Business License</string>
-    <string name="website_revisions_required">Website Revisions Required</string>
+    <string name="website_revisions_required">Website Revision Required</string>
     <string name="information_revisions">Information Revisions</string>
     <string name="please_accept_or_decline_the_revision_suggestion">Please accept or decline the revision suggestion</string>
     <string name="company_name">Company Name</string>
@@ -422,7 +424,7 @@
     <string name="merchant_application_nverification_failed">Merchant Application \nVerification Failed</string>
     <string name="unable_to_verify">We were unable to verify your business account\nbecause of an issue with your bank account.</string>
     <string name="please_try_again">Please try again or try a different bank account</string>
-    <string name="application_canceled">Application Canceled</string>
+    <string name="application_canceled">Application Cancelled</string>
     <string name="payout_details">Payout Details</string>
     <string name="payout_id">Payout ID</string>
     <string name="id">" [#ID]"</string>
@@ -626,14 +628,14 @@
     <string name="preauth_description">For security reasons, we have charged your card a small amount which will be removed after the verification process is complete.  Please check your recent card transactions and enter the amount of this charge below.</string>
     <string name="incorrect_amount_1_attempt_left">Incorrect amount, 1 attempt left</string>
     <string name="please_check_the_box_if_you_completed_a_task">Please check the box if you completed a task</string>
-    <string name="footer_full_legal_name_as_it"><b>FOOTER</b> - Full Legal name (as it </string>
+    <string name="footer_full_legal_name_as_it"><b>%1$s</b> - %2$s </string>
     <string name="Footer">appears in the Articles of \nIncorporation), address, customer \nservice phone number and email \naddress. The bank requires that the full \ncompany address including country (no \nabbreviations) is listed on the website. - \nMust be visible in ALL pages.</string>
     <string name="terms_remove_opt_in_and_opt_out"><b>TERMS</b> - Remove OPT-IN and OPT-OUT</string>
     <string name="Terms">sections as this is prohibited to be used \nby third parties.</string>
     <string name="proof_of_ownership_should_be"><b>Proof of ownership </b>- should be</string>
     <string name="ProofOfOwnership">provided (Whois-registration; or invoice \nplus screenshot from web hosting \nbackend) Applying Company should \nown the URL(s).</string>
     <string name="please_upload_required_documents_below">Please upload required documents below</string>
-    <string name="Decline">Declined by applicant on Date due to :</string>
+    <string name="Decline">Declined by applicant on </string>
     <string name="Accepted">Accepted by applicant on</string>
     <string name="reserve_detail">Reserve Detail</string>
     <string name="daily_batch_ids">Daily Batch IDs</string>
@@ -663,5 +665,8 @@
     <string name="giftcard">Gift Card</string>
     <string name="purchase_gift_cards_from_over_100_popular_stores_restaurants_and_more">Purchase gift cards from over 100 popular stores, restaurants, and more.</string>
     <string name="bio_token_expired">Your token has been expired, please login with your credentials.</string>
+    <string name="application_approved">Application Approved!</string>
+    <string name="thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with">Thank you for your interest in coyni. After\ncarefully reviewing. The coyni team made\ndecision to approve your application with</string>
+    <string name="reserve_conditions">reserve conditions.</string>
 
 </resources>

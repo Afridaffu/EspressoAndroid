@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
 import com.greenbox.coyni.view.business.AddNewTeamMemberActivity;
@@ -241,18 +242,10 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             isPhoneError = false;
                             addnewteammember.editPhoneLL.setVisibility(GONE);
                         }
-
                         addnewteammember.isPhoneNumber = pnET.getText().toString().trim().length() > 13;
 
-                        if (addnewteammember.isFirstName && addnewteammember.isLastName &&
-                                addnewteammember.isEmail && addnewteammember.isPhoneNumber) {
-                            addnewteammember.isNextEnabled = true;
-                            addnewteammember.sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
-                        } else {
-                            addnewteammember.isNextEnabled = false;
-                            addnewteammember.sendCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                        }
+                        addnewteammember.enableOrDisableNext();
 
                         //                    if ((pnET.getText().length() == 0)) {
                         //                        CreateAccountActivity caa = CreateAccountActivity.createAccountActivity;

@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
@@ -23,6 +24,7 @@ import java.lang.reflect.Type;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Body;
 
 public class TeamViewModel extends AndroidViewModel {
     public TeamViewModel(@NonNull Application application) {
@@ -64,7 +66,7 @@ public class TeamViewModel extends AndroidViewModel {
     public void retrieveTeamInfo() {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<TeamListResponse> mCall = apiService.getTeamData();
+            Call<TeamListResponse> mCall = apiService.getTeamData(new EmptyRequest());
             mCall.enqueue(new Callback<TeamListResponse>() {
                 @Override
                 public void onResponse(Call<TeamListResponse> call, Response<TeamListResponse> response) {

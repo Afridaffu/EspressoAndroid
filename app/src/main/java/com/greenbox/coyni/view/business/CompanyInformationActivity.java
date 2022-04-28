@@ -140,6 +140,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     protected void onResume() {
         super.onResume();
         companynameET.requestFocus();
+        companyaddressET.requestFocus();
+        Utils.shwForcedKeypad(CompanyInformationActivity.this);
     }
 
     public void initFields() {
@@ -779,6 +781,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     } else {
 //                        companynameET.setHint("Company’s Name");
+                        companyaddressET.requestFocus();
+                        Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         companynameET.setHintTextColor(getColor(R.color.light_gray));
                         companynameErrorLL.setVisibility(GONE);
@@ -1245,7 +1249,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             isZipcode = false;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZipcode = false;
 //                            zipcodeErrorLL.setVisibility(VISIBLE);

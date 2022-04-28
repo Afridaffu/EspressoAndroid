@@ -182,7 +182,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
             holder.amount.setText(" - " + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
             holder.amount.setTextColor(Color.parseColor("#000000"));
         }
-        
+
         holder.txnStatus.setText(objData.getTxnStatusDn());
         switch (objData.getTxnStatusDn().replace(" ", "").toLowerCase()) {
             case Utils.transInProgress:
