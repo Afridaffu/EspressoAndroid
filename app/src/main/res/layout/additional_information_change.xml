@@ -147,6 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_11sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
+                    android:text="hjghjgjgj ghj"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10ssp" />
@@ -216,7 +217,8 @@
                     android:text="@string/Accepted"
                     android:textColor="@color/active_green"
                     android:textSize="@dimen/_11sdp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:paddingBottom="@dimen/_10sdp"/>
 
                 <TextView
                     android:id="@+id/declineMsgTV"
@@ -236,9 +238,10 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_15sdp"
                     android:fontFamily="@font/opensans_regular"
+                    android:text="hsdj fhgsfhgj"
                     android:textColor="@color/dark_grey"
                     android:textSize="@dimen/_10sdp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
