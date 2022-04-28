@@ -333,8 +333,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
-//            SetFaceLock();
-//            SetTouchId();
+            if (getIntent().getStringExtra("cvv") == null && getIntent().getStringExtra("notoken") != null) {
+                displayCVV(selectedCard);
+            }
             setFaceLock();
             setTouchId();
             etAmount.addTextChangedListener(this);
@@ -1418,6 +1419,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             cvvDialog = new Dialog(BuyTokenActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             cvvDialog.setContentView(R.layout.cvvlayout);
+            cvvDialog.setCanceledOnTouchOutside(false);
+            cvvDialog.setCancelable(false);
             cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
             DisplayMetrics mertics = getResources().getDisplayMetrics();
@@ -1510,8 +1513,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 prevSelectedCard = null;
                 cvvDialog.dismiss();
                 strCvv = etCVV.getText().toString().trim();
-//                etAmount.setText("");
-//                ctKey.clearData();
                 bindPayMethod(objSelected);
             } else {
                 Utils.displayAlert("Please enter CVV", BuyTokenActivity.this, "", "");
