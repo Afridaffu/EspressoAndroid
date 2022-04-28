@@ -2041,16 +2041,30 @@ public class Utils {
         String strDate = "";
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
+                DateTimeFormatter dtf = null;
+                if (date.length() == 23) {
+                    dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                            .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                            .toFormatter()
+                            .withZone(ZoneOffset.UTC);
+                } else {
+                    dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SS")
+                            .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                            .toFormatter()
+                            .withZone(ZoneOffset.UTC);
+                }
                 ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
                 DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
                 zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
                 strDate = zonedTime.format(DATE_TIME_FORMATTER);
             } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                SimpleDateFormat spf = null;
+                if (date.length() == 23) {
+                    spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                } else {
+                    spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
+
+                }
                 spf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date newDate = spf.parse(date);
                 spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
