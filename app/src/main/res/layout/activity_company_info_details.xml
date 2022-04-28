@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.business.CompanyInfoDetails">
 
     <ScrollView
@@ -24,13 +25,14 @@
                 android:layout_marginBottom="@dimen/_16sdp"
                 android:background="@drawable/bottomradius"
                 android:orientation="vertical"
-                android:paddingStart="@dimen/_21sdp"
-                android:paddingTop="@dimen/_45sdp"
                 android:paddingBottom="@dimen/_11sdp">
 
                 <LinearLayout
                     android:id="@+id/bpCloseLL"
                     android:layout_width="@dimen/_30sdp"
+                    android:layout_marginStart="@dimen/_13sdp"
+                    android:layout_marginTop="@dimen/_45sdp"
+                    android:padding="@dimen/_8sdp"
                     android:layout_height="wrap_content">
 
                     <ImageView
@@ -42,8 +44,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_11sdp"
                     android:fontFamily="@font/opensans_bold"
+                    android:layout_marginStart="@dimen/_20sdp"
                     android:text="Company Information "
                     android:textColor="@color/black"
                     android:textSize="@dimen/_16ssp" />
