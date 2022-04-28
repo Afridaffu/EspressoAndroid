@@ -132,13 +132,15 @@ public class SeekBarWithFloatingText extends RelativeLayout {
             layoutParams.setMargins(calculatedWidth, 0, 0, 0);
             tvFloatingText.setLayoutParams(layoutParams);
         }
-        for (int position = 0; position < earningList.size(); position++) {
-            if (progress == earningList.get(position).getKey()) {
-                tvFloatingText.setText(text + " " + earningList.get(position).getTotalAmount() + " CYN");
-            } else {
-                tvFloatingText.setText(text + defaultValue);
-            }
+        if (earningList != null) {
+            for (int position = 0; position < earningList.size(); position++) {
+                if (progress == earningList.get(position).getKey()) {
+                    tvFloatingText.setText(text + " " + earningList.get(position).getTotalAmount() + " CYN");
+                } else {
+                    tvFloatingText.setText(text + defaultValue);
+                }
 
+            }
         }
 
     }
