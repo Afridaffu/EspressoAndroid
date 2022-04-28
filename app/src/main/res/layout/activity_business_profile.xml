@@ -120,7 +120,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/profilePicCL"
-                        android:layout_width="@dimen/_80sdp"
+                        android:layout_width="@dimen/_90sdp"
                         android:layout_height="@dimen/_65sdp"
                         android:layout_alignParentEnd="true"
                         android:visibility="visible">

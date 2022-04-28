@@ -39,6 +39,7 @@
             android:textSize="@dimen/_11ssp" />
 
         <TextView
+            android:id="@+id/tv_rolling_reserves"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
@@ -56,6 +57,7 @@
             android:textSize="@dimen/_11ssp" />
 
         <TextView
+            android:id="@+id/tv_manual_releases"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/opensans_regular"
@@ -68,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_20sdp"
             android:fontFamily="@font/opensans_regular"
-            android:text="to an Instant Pay bank account uses your debit\ncard to facilitate the process. This typically takes\nabout 30 seconds to process, but can take up to\n30 minutes depending on your bank. Most, but\nnot all banks support Instant Pay"
+            android:text="to an Instant Pay bank account uses your debit\ncard to facilitate the process. This typically takes\nabout 30 seconds to process, but can take up to\n30 minutes depending on your bank. Most, but\nnot all banks support Instant Pay."
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
 
