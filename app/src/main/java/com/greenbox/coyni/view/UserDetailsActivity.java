@@ -649,8 +649,10 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             myApplicationObj.setStrPreference("AST");
                         }
                     }
-                    accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
                     dashboardViewModel.getProfiles();
+                    if(preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
+                        accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
