@@ -36,7 +36,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-public class ForgotPasswordActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class ForgotPasswordActivity extends BaseActivity {
     CardView cvNext;
     TextInputEditText etEmail;
     LoginViewModel loginViewModel;
@@ -66,7 +66,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
 
     private void initialization() {
         try {
-            setKeyboardVisibilityListener(ForgotPasswordActivity.this);
+//            setKeyboardVisibilityListener(ForgotPasswordActivity.this);
             llClose = findViewById(R.id.llClose);
             cvNext = findViewById(R.id.cvNext);
             etEmail = findViewById(R.id.etEmail);
@@ -84,8 +84,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(ForgotPasswordActivity.this);
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(ForgotPasswordActivity.this);
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -125,7 +125,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (s.length() > 5 && Utils.isValidEmail(s.toString().trim())) {
 //                        tvEmailError.setVisibility(GONE);
-                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
+//                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
                         etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        newEmailTIL.setHintTextColor(colorState);
                         Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_green));
@@ -144,8 +144,8 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
                 }
 
                 private void onBackPressed() {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(ForgotPasswordActivity.this);
+//                    if (Utils.isKeyboardVisible)
+//                        Utils.hideKeypad(ForgotPasswordActivity.this);
                 }
 
             @Override
@@ -173,7 +173,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
             public void onFocusChange(View view, boolean b) {
                 if (b) {
                     if (!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
+//                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
 //                        etEmail.setHint("Email");
                     etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
@@ -330,15 +330,15 @@ public class ForgotPasswordActivity extends AppCompatActivity implements OnKeybo
         }
     }
 
-    @Override
-    public void onVisibilityChanged(boolean visible) {
-        if (visible) {
-            Utils.isKeyboardVisible = true;
-        } else {
-            Utils.isKeyboardVisible = false;
-        }
-        Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
-    }
+//    @Override
+//    public void onVisibilityChanged(boolean visible) {
+//        if (visible) {
+//            Utils.isKeyboardVisible = true;
+//        } else {
+//            Utils.isKeyboardVisible = false;
+//        }
+//        Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
+//    }
 
     private void validEmail(){
         isemail = true;

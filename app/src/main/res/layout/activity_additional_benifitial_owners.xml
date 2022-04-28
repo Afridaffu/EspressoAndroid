@@ -94,6 +94,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
+                android:scrollbars="none"
+                android:nestedScrollingEnabled="false"
                 android:layout_marginBottom="@dimen/_21sdp"/>
 
             <TextView
