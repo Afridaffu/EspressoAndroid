@@ -43,8 +43,7 @@
                 android:layout_below="@+id/tvHead"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
-                android:text="The amount you have entered is incorrect. If you wish to continue, please add an
-                              external bank account."
+                android:text="The amount you have entered is incorrect. If you wish to continue, please add an external bank account."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_12ssp" />
 

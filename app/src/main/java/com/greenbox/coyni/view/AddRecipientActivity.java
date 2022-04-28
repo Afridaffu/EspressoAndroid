@@ -526,20 +526,29 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                         nWAList.add(contacts.get(i));
                     }
                 }
-                if (wWAList != null && wWAList.size() > 0) {
-                    contactsList.addAll(wWAList);
-                }
-                if (nWAList != null && nWAList.size() > 0) {
-                    contactsList.addAll(nWAList);
-                }
 
 
-                Collections.sort(contactsList, new Comparator<RegUsersResponseData>() {
+                Collections.sort(wWAList, new Comparator<RegUsersResponseData>() {
                     @Override
                     public int compare(RegUsersResponseData o1, RegUsersResponseData o2) {
                         return o1.getUserName().compareTo(o2.getUserName());
                     }
                 });
+
+                Collections.sort(nWAList, new Comparator<RegUsersResponseData>() {
+                    @Override
+                    public int compare(RegUsersResponseData o1, RegUsersResponseData o2) {
+                        return o1.getUserName().compareTo(o2.getUserName());
+                    }
+                });
+
+                if (wWAList != null && wWAList.size() > 0) {
+                    contactsList.addAll(wWAList);
+                }
+
+                if (nWAList != null && nWAList.size() > 0) {
+                    contactsList.addAll(nWAList);
+                }
 
                 rvContacts.setVisibility(View.VISIBLE);
                 tvContactMsg.setVisibility(View.VISIBLE);

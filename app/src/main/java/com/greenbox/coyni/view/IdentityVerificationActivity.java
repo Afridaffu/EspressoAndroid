@@ -751,7 +751,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(ssnTIL, getColor(R.color.error_red));
                             ssnErrorLL.setVisibility(VISIBLE);
-                            ssnErrorTV.setText("Minimum 4 Characters Required");
+                            ssnErrorTV.setText("Minimum 4 Digits Required");
 
                         } else {
                             ssnTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
