@@ -79,6 +79,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListner, OnKeyboardVisibilityListener {
     private TextView edit1, edit2, edit3;
@@ -708,15 +709,16 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             });
                             if (agreements != null && agreements1.getItems().size() > 0) {
                                 for (int i = 0; i < agreements1.getItems().size(); i++) {
+                                    String doc = agreements1.getItems().get(i).getDocumentVersion();
                                     switch (agreements1.getItems().get(i).getSignatureType()) {
                                         case Utils.mPP:
-                                            mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            mPrivacyVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
                                             break;
                                         case Utils.mTOS:
-                                            mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            mTermsVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
                                             break;
                                         case Utils.mAgmt:
-                                            mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            mMerchantsVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
                                             break;
                                     }
 //                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mPP) {

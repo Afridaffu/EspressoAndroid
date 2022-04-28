@@ -414,9 +414,9 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvUserName.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText(userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! "+userName.substring(0, 21) + " ");
             } else {
-                mTvUserName.setText(userName);
+                mTvUserName.setText("Hi! "+userName);
             }
         }
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
