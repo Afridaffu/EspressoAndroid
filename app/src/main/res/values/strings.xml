@@ -661,7 +661,7 @@
     <string name="external_bank_account">External Bank Account</string>
     <string name="can_be_used_for_withdrawing_funds_from_your_coyni_account">Can be used for withdrawing funds from your coyni account.</string>
     <string name="instantpay">Instant Pay</string>
-    <string name="use_a_visa_or_mastercard_debit_cards_for_instant_coyni_withdraws_via_instant_pay">Use a Visa or Mastercard debit cards for instant coyni withdraws via Instant Pay.</string>
+    <string name="use_a_visa_or_mastercard_debit_cards_for_instant_coyni_withdraws_via_instant_pay">Use Visa or Mastercard debit cards for instant coyni withdraws via Instant Pay.</string>
     <string name="giftcard">Gift Card</string>
     <string name="purchase_gift_cards_from_over_100_popular_stores_restaurants_and_more">Purchase gift cards from over 100 popular stores, restaurants, and more.</string>
     <string name="bio_token_expired">Your token has been expired, please login with your credentials.</string>
