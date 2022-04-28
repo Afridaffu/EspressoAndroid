@@ -30,9 +30,9 @@
                     android:id="@+id/b_backBtn"
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_21sdp"
-                    android:layout_marginTop="@dimen/_45sdp"
-                    android:layout_marginBottom="@dimen/_14sdp"
+                    android:layout_marginStart="@dimen/_13sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_43sdp"
                     android:orientation="horizontal">
 
                     <ImageView
