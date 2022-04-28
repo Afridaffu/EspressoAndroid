@@ -402,7 +402,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             companyNameTV.setText(propertiesData.getName());
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
                             companyNameProposed.setText(propertiesData.getProposedValue());
-                            tvMessage.setText(propertiesData.getAdminMessage());
+                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + ". \"");
                             proposalsMap.put(propertiesData.getName(), propertiesData);
                             fileUpload.put(propertiesData.getName().trim().hashCode(), null);
 
@@ -438,6 +438,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
+                                    Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                                 }
                             });
                         }
@@ -460,7 +461,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.COMMENT_ACTION)) {
                     String comm = (String) value;
-                    tvRemarks.setText(comm);
+                    tvRemarks.setText("\"" + comm + " \"");
                     Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     imvAcceptTick.setVisibility(View.VISIBLE);
                     imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
