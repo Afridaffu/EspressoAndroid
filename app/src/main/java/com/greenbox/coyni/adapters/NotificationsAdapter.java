@@ -472,24 +472,24 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     public void updateList(List<NotificationsDataItems> list, int pos) {
         notifications = list;
 //        notifyDataSetChanged();
-//        notifyItemChanged(pos);
+        notifyItemChanged(pos);
 
-        if (notifications.size() > 0) {
-            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.VISIBLE);
-            ((NotificationsActivity) mContext).noDataTV.setVisibility(View.GONE);
-
-            LinearLayoutManager nLayoutManager = new LinearLayoutManager(mContext);
-            ((NotificationsActivity) mContext).notificationsAdapter = new NotificationsAdapter(notifications, mContext);
-            ((NotificationsActivity) mContext).notificationsRV.setLayoutManager(nLayoutManager);
-            ((NotificationsActivity) mContext).notificationsRV.setItemAnimator(new DefaultItemAnimator());
-            ((NotificationsActivity) mContext).notificationsRV.setAdapter(((NotificationsActivity) mContext).notificationsAdapter);
-
-            ((NotificationsActivity) mContext).notificationsRV.scrollToPosition(pos);
-        } else {
-            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.GONE);
-            ((NotificationsActivity) mContext).noDataTV.setVisibility(View.VISIBLE);
-            ((NotificationsActivity) mContext).noDataTV.setText("You have no notifications");
-        }
+//        if (notifications.size() > 0) {
+//            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.VISIBLE);
+//            ((NotificationsActivity) mContext).noDataTV.setVisibility(View.GONE);
+//
+//            LinearLayoutManager nLayoutManager = new LinearLayoutManager(mContext);
+//            ((NotificationsActivity) mContext).notificationsAdapter = new NotificationsAdapter(notifications, mContext);
+//            ((NotificationsActivity) mContext).notificationsRV.setLayoutManager(nLayoutManager);
+//            ((NotificationsActivity) mContext).notificationsRV.setItemAnimator(new DefaultItemAnimator());
+//            ((NotificationsActivity) mContext).notificationsRV.setAdapter(((NotificationsActivity) mContext).notificationsAdapter);
+//
+//            ((NotificationsActivity) mContext).notificationsRV.scrollToPosition(pos);
+//        } else {
+//            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.GONE);
+//            ((NotificationsActivity) mContext).noDataTV.setVisibility(View.VISIBLE);
+//            ((NotificationsActivity) mContext).noDataTV.setText("You have no notifications");
+//        }
     }
 
     @Override

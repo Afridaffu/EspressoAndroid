@@ -259,4 +259,8 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
     public void setText(String strText) {
         enteredText = strText;
     }
+
+    public void setEnteredText(String text){
+        enteredText = text.trim();
+    }
 }
