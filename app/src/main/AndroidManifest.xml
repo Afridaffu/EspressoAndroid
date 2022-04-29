@@ -355,7 +355,8 @@
             android:name=".view.BindingLayoutActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".view.RetrieveEmailActivity"
             android:configChanges="uiMode"

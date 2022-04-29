@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
@@ -491,8 +492,12 @@ public interface ApiService {
     @PATCH("api/v2/coyni-pin/stepup")
     Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);
 
-    @GET("api/v2/profile/me/{walletType}")
-    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
+    //Deprecated
+//    @GET("api/v2/profile/me/{walletType}")
+//    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
+
+    @POST("api/v2/profile/wallet")
+    Call<BusinessWalletResponse> meMerchantWallet(@Body WalletRequest request);
 
     @GET("api/v2/lov/BT")
     Call<BusinessTypeResp> getBusinessType();

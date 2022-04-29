@@ -31,7 +31,7 @@
     <include
         android:id="@+id/verifyYourAccount"
         layout="@layout/verify_your_account"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

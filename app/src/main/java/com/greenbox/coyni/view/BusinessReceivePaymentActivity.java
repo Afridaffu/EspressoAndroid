@@ -36,6 +36,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -340,7 +341,10 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
     protected void onResume() {
         try {
             super.onResume();
-            dashboardViewModel.meMerchantWallet(Utils.MERCHANT);
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.MERCHANT);
+            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+            dashboardViewModel.meMerchantWallet(walletRequest);
 
         } catch (Exception e) {
             e.printStackTrace();

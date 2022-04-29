@@ -24,6 +24,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -176,7 +177,10 @@ public class BusinessAccountFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (Utils.checkInternet(requireContext().getApplicationContext())) {
-            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.TOKEN);
+            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
             dashboardViewModel.getLatestTxns();
             ((BusinessDashboardActivity) getActivity()).showProgressDialog();
             transactionsNSV.smoothScrollTo(0, 0);

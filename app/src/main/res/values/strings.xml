@@ -668,5 +668,7 @@
     <string name="application_approved">Application Approved!</string>
     <string name="thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with">Thank you for your interest in coyni. After\ncarefully reviewing. The coyni team made\ndecision to approve your application with</string>
     <string name="reserve_conditions">reserve conditions.</string>
+    <string name="hi_text">Hi!\u0020</string>
+
 
 </resources>
