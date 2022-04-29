@@ -39,6 +39,7 @@ import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
@@ -350,7 +351,11 @@ public class DashboardActivity extends AppCompatActivity {
                         if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
                                 && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
                             dashboardViewModel.getLatestTxns();
-                            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
+                            WalletRequest walletRequest = new WalletRequest();
+                            walletRequest.setWalletType(Utils.TOKEN);
+                            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+                            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//                            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                             transactionsNSV.smoothScrollTo(0, 0);
                         } else {
                             latestTxnRefresh.setRefreshing(false);
@@ -366,17 +371,17 @@ public class DashboardActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (tvUserName.getText().toString().contains("...")) {
                         if (strName.length() == 21 || strName.length() > 21) {
-                            tvUserName.setText(strName.substring(0, 20));
+                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 20));
                         } else {
-                            tvUserName.setText(strName);
+                            tvUserName.setText(getString(R.string.hi_text)+strName);
                         }
                     } else {
                         if (strName.length() == 21) {
-                            tvUserName.setText(strName.substring(0, 20) + "...");
+                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 20) + "...");
                         } else if (strName.length() > 22) {
-                            tvUserName.setText(strName.substring(0, 22) + "...");
+                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 22) + "...");
                         } else {
-                            tvUserName.setText(strName);
+                            tvUserName.setText(getString(R.string.hi_text)+strName);
                         }
                     }
                 }
@@ -387,17 +392,17 @@ public class DashboardActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (tvUserNameSmall.getText().toString().contains("...")) {
                         if (strName.length() == 21 || strName.length() > 21) {
-                            tvUserNameSmall.setText(strName.substring(0, 20));
+                            tvUserNameSmall.setText(getString(R.string.hi_text) + strName.substring(0, 20));
                         } else {
-                            tvUserNameSmall.setText(strName);
+                            tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                         }
                     } else {
                         if (strName.length() == 21) {
-                            tvUserNameSmall.setText(strName.substring(0, 20) + "...");
+                            tvUserNameSmall.setText(getString(R.string.hi_text) + strName.substring(0, 20) + "...");
                         } else if (strName.length() > 22) {
-                            tvUserNameSmall.setText(strName.substring(0, 22) + "...");
+                            tvUserNameSmall.setText(getString(R.string.hi_text) + strName.substring(0, 22) + "...");
                         } else {
-                            tvUserNameSmall.setText(strName);
+                            tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                         }
                     }
                 }
@@ -457,11 +462,11 @@ public class DashboardActivity extends AppCompatActivity {
                         //                        tvUserNameSmall.setText( strName);
                         //                    }
                         if (objMyApplication.getStrUserName().length() > 20) {
-                            tvUserName.setText(strName.substring(0, 20));
-                            tvUserNameSmall.setText(strName.substring(0, 20));
+                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 20));
+                            tvUserNameSmall.setText(getString(R.string.hi_text) + strName.substring(0, 20));
                         } else {
-                            tvUserName.setText(strName);
-                            tvUserNameSmall.setText(strName);
+                            tvUserName.setText(getString(R.string.hi_text)+strName);
+                            tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                         }
                         bindImage();
                     }
@@ -877,7 +882,11 @@ public class DashboardActivity extends AppCompatActivity {
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
 //                dashboardViewModel.meWallet();
-                businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
+                WalletRequest walletRequest = new WalletRequest();
+                walletRequest.setWalletType(Utils.TOKEN);
+                walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+                businessDashboardViewModel.meMerchantWallet(walletRequest);
+//                businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                 notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();

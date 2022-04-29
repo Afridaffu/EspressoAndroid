@@ -58,8 +58,8 @@
                             android:layout_height="@dimen/_29sdp"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center"
-                            app:cardCornerRadius="@dimen/_14sdp"
                             app:cardBackgroundColor="@color/primary_green"
+                            app:cardCornerRadius="@dimen/_14sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -78,10 +78,10 @@
                                 android:id="@+id/tvUserInfoSmall"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:fontFamily="@font/opensans_bold"
-                                android:text="TT"
                                 android:background="@color/primary_green"
+                                android:fontFamily="@font/opensans_bold"
+                                android:gravity="center"
+                                android:text="TT"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_14sdp"
                                 android:visibility="visible" />
@@ -183,10 +183,10 @@
                                 android:id="@+id/tvUserInfo"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:fontFamily="@font/opensans_bold"
-                                android:textColor="@color/white"
                                 android:background="@color/primary_green"
+                                android:fontFamily="@font/opensans_bold"
+                                android:gravity="center"
+                                android:textColor="@color/white"
                                 android:textSize="@dimen/_14sdp"
                                 android:visibility="gone"
                                 tools:text="VT" />
@@ -408,6 +408,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
+
                                     <TextView
                                         android:id="@+id/welcomeCoyniTV"
                                         android:layout_width="wrap_content"
@@ -688,6 +689,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
+
                                     <TextView
                                         android:id="@+id/buyTokenWelcomeCoyniTV"
                                         android:layout_width="wrap_content"
@@ -876,15 +878,14 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_47sdp"
-                android:src="@drawable/ic_account_created"></ImageView>
+                android:src="@drawable/ic_dashboad_get_started"></ImageView>
 
             <View
                 android:id="@+id/divider"
                 android:layout_width="159.8564453125dp"
                 android:layout_height="5.4189453125dp"
                 android:layout_below="@+id/imgHead"
-                android:layout_centerHorizontal="true"
-                android:background="#1c567675" />
+                android:layout_centerHorizontal="true" />
 
             <TextView
                 android:id="@+id/tvHead"

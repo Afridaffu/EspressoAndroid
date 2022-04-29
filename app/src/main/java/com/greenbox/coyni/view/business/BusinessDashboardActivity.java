@@ -27,6 +27,7 @@ import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -283,9 +284,20 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
-            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(Utils.RESERVE);
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.MERCHANT);
+            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.TOKEN);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.RESERVE);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+//            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
+//            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
+//            businessDashboardViewModel.meMerchantWallet(Utils.RESERVE);
 
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
@@ -372,12 +384,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (businessWalletResponse != null) {
 //                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
-                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE)) {
-                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT)) {
+                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
                                 objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
+                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
+//                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                                 objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             }
                         }
@@ -396,9 +409,9 @@ public class BusinessDashboardActivity extends BaseActivity {
             iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
             userName = objMyApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! "+userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
             } else {
-                mTvUserName.setText("Hi! "+userName);
+                mTvUserName.setText("Hi! " + userName);
             }
         } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getFirstName() != null) {
@@ -414,9 +427,9 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvUserName.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! "+userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
             } else {
-                mTvUserName.setText("Hi! "+userName);
+                mTvUserName.setText("Hi! " + userName);
             }
         }
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null

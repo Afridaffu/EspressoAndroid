@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,6 +57,8 @@ public class BindingLayoutActivity extends BaseActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_binding_layout);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             initialization();
             if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
                 strScreen = getIntent().getStringExtra("screen");
