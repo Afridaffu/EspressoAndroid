@@ -137,6 +137,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
+                    Utils.shwForcedKeypad(AddCardActivity.this);
 
                 }
 
@@ -147,7 +148,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                     } else if (position == 1) {
-
+                        Utils.shwForcedKeypad(AddCardActivity.this);
                         if (isNextEnabled && validation()) {
                             strName = etName.getText().toString().trim();
                             strCardNo = etCardNumber.getText().toString().trim().replace(" ", "");
@@ -159,7 +160,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
 
 //                        if(!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(AddCardActivity.this);
                     }
                 }
 
@@ -350,8 +350,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
-                            if (Utils.isKeyboardVisible)
-                                Utils.hideKeypad(AddCardActivity.this);
+//                            if (Utils.isKeyboardVisible)
+//                                Utils.hideKeypad(AddCardActivity.this);
                             mLastClickTime = SystemClock.elapsedRealtime();
                             viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
@@ -437,6 +437,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
+                            Utils.shwForcedKeypad(AddCardActivity.this);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
