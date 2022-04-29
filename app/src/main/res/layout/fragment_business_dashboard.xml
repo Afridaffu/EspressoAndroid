@@ -1578,7 +1578,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginRight="@dimen/_10sdp"
@@ -1588,7 +1588,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_20sdp"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -1627,13 +1626,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_10sdp"
+                                android:paddingBottom="@dimen/_100sdp"
                                 android:orientation="vertical">
 
                                 <androidx.cardview.widget.CardView
                                     android:id="@+id/cv_additional_data_continue"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/_43sdp"
-                                    android:layout_marginBottom="@dimen/_60sdp"
                                     android:gravity="center"
                                     app:cardBackgroundColor="@color/primary_green"
                                     app:cardCornerRadius="@dimen/_22sdp">
