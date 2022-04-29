@@ -109,7 +109,11 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         List<Earning> earningList = userData;
         if (progress < 12) {
             if (progress < 10) {
-                text = "0" + progress + ":00am";
+                if (progress == 0) {
+                    text = "12:00am";
+                } else {
+                    text = "0" + progress + ":00am";
+                }
             } else {
                 text = progress + ":00am";
             }
@@ -125,23 +129,31 @@ public class SeekBarWithFloatingText extends RelativeLayout {
             } else {
                 calculatedWidth = 20 * 20 + 20 - calculatedWidth;  // for fix the Position
             }
-            text = progress + ":00pm";
+            if (progress != 24) {
+                text = (progress - 12) + ":00pm";
+            }
+            else {
+                text = "11:59pm";
+            }
 //            text = totalAmount.toLowerCase();
         }
         if (calculatedWidth < width) {
             layoutParams.setMargins(calculatedWidth, 0, 0, 0);
             tvFloatingText.setLayoutParams(layoutParams);
         }
+        tvFloatingText.setText(text + defaultValue);
         if (earningList != null) {
             for (int position = 0; position < earningList.size(); position++) {
                 if (progress == earningList.get(position).getKey()) {
                     tvFloatingText.setText(text + " " + earningList.get(position).getTotalAmount() + " CYN");
+                    break;
                 } else {
                     tvFloatingText.setText(text + defaultValue);
                 }
 
             }
         }
+
 
     }
 

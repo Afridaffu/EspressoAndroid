@@ -125,7 +125,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     static String strToken = "";
     private DatabaseHandler dbHandler;
     private String batchId;
-    private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount, saleOrdersText;
+    private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount,
+            saleOrdersText, mAverageTicket, mHighestTicket, mDateHighestTicket;
     private LinearLayout mTicketsLayout;
     private UserData userData;
 
@@ -196,7 +197,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void initFields() {
         mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
-       userData = myApplication.getCurrentUserData();
+        userData = myApplication.getCurrentUserData();
         mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
         mIvUserIconCV = mCurrentView.findViewById(R.id.iv_user_icon_CV);
         mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
@@ -271,6 +272,9 @@ public class BusinessDashboardFragment extends BaseFragment {
         mNetAmount = mCurrentView.findViewById(R.id.net_amount);
         mTicketsLayout = mCurrentView.findViewById(R.id.tickets_layout);
         saleOrdersText = mCurrentView.findViewById(R.id.sale_order_text);
+        mAverageTicket = mCurrentView.findViewById(R.id.average_ticket);
+        mHighestTicket = mCurrentView.findViewById(R.id.highest_ticket);
+        mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -465,45 +469,83 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.getBusinessActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessActivityResp>() {
             @Override
             public void onChanged(BusinessActivityResp businessActivityResp) {
-                if (businessActivityResp != null && businessActivityResp.getData() != null) {
-                    double processingFee = 0.0,
-                            grossAmount = 0.0,
-                            refunds = 0.0,
-                            miscFee = 0.0,
-                            netAmount = 0.0;
-//                    mSbTodayVolume.setEnabled(false);
-                    if (businessActivityResp.getStatus() != null && businessActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        if (businessActivityResp.getData() != null && businessActivityResp.getData().size() > 0) {
-                            List<BusinessActivityData> data = businessActivityResp.getData();
-                            for (int position = 0; position < data.size(); position++) {
-                                if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.saleOrdertxntype)
-                                        && data.get(position).getTransactionSubType() == null) {
-                                    if (data.get(position).getTotalAmount() != null) {
-                                        mGrossAmount.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
-                                        grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
-                                    }
-                                    mTransactions.setText(String.valueOf(data.get(position).getCount()));
-                                    if (data.get(position).getFee() != null) {
-                                        processingFee = Double.parseDouble(data.get(position).getFee());
-                                    }
-                                } else if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
-                                        && data.get(position).getTransactionSubType() == null) {
-                                    if (data.get(position).getTotalAmount() != null) {
-                                        mRefunds.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
-                                        refunds = Double.parseDouble(data.get(position).getTotalAmount());
-                                    }
+                try {
+                    if (businessActivityResp != null && businessActivityResp.getData() != null) {
+                        double processingFee = 0.0,
+                                grossAmount = 0.0,
+                                refunds = 0.0,
+                                miscFee = 0.0,
+                                netAmount = 0.0,
+                                averageTicket = 0.0;
+                        int totalTransactions = 1;
+                        //                    mSbTodayVolume.setEnabled(false);
+                        if (businessActivityResp.getStatus() != null && businessActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            if (businessActivityResp.getData() != null && businessActivityResp.getData().size() > 0) {
+                                List<BusinessActivityData> data = businessActivityResp.getData();
+                                for (int position = 0; position < data.size(); position++) {
+                                    if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.saleOrdertxntype)
+                                            && data.get(position).getTransactionSubType() == null) {
+                                        if (data.get(position).getTotalAmount() != null) {
+                                            mGrossAmount.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+                                            grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
+                                        }
+                                        if (data.get(position).getCount() > 0) {
+                                            mTransactions.setText(String.valueOf(data.get(position).getCount()));
+                                            totalTransactions = data.get(position).getCount();
+                                        } else {
+                                            mTransactions.setText(defaultAmount);
+                                        }
 
-                                    double processFee = processingFee + Double.parseDouble(data.get(position).getFee());
-                                    processingFee = processFee;
-                                } else if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
-                                        && data.get(position).getTransactionSubType() == null) {
-                                    mMISCFees.setText(data.get(position).getTotalAmount());
-                                    miscFee = Double.parseDouble(data.get(position).getTotalAmount());
+                                        if (data.get(position).getFee() != null) {
+                                            processingFee = Double.parseDouble(data.get(position).getFee());
+                                        }
+                                    } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
+                                            && data.get(position).getTransactionSubType() == null) {
+                                        if (data.get(position).getTotalAmount() != null) {
+                                            mRefunds.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+                                            refunds = Double.parseDouble(data.get(position).getTotalAmount());
+                                        }
+
+                                        double processFee = processingFee + Double.parseDouble(data.get(position).getFee());
+                                        processingFee = processFee;
+                                    } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
+                                            && data.get(position).getTransactionSubType() == null) {
+
+                                        if (data.get(position).getTotalAmount() != null) {
+                                            mMISCFees.setText(data.get(position).getTotalAmount());
+                                            miscFee = Double.parseDouble(data.get(position).getTotalAmount());
+                                        }
+                                    } else if (data.get(position).getTransactionType() == null && data.get(position).getTransactionSubType() == null) {
+                                        if (data.get(position).getTotalAmount() != null)
+                                            mHighestTicket.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+
+                                        if (data.get(position).getCreatedAt() != null) {
+                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, date));
+                                        } else {
+                                            mDateHighestTicket.setVisibility(View.GONE);
+                                        }
+                                    }
                                 }
+                                mProcessingFees.setText(Utils.convertTwoDecimal(String.valueOf(processingFee)));
+                                netAmount = grossAmount - refunds - processingFee - miscFee;
+                                mNetAmount.setText(Utils.convertTwoDecimal(String.valueOf(netAmount)));
+                                if (grossAmount > 0 && totalTransactions >= 1) {
+                                    averageTicket = grossAmount / totalTransactions;
+                                } else {
+                                    averageTicket = 0;
+                                }
+                                mAverageTicket.setText(Utils.convertTwoDecimal(String.valueOf(averageTicket)));
+
+                            } else {
+                                mGrossAmount.setText(defaultAmount);
+                                mTransactions.setText("0");
+                                mRefunds.setText(defaultAmount);
+                                mProcessingFees.setText(defaultAmount);
+                                mMISCFees.setText(defaultAmount);
+                                mNetAmount.setText(defaultAmount);
+                                mAverageTicket.setText(defaultAmount);
+                                mHighestTicket.setText(defaultAmount);
                             }
-                            mProcessingFees.setText(Utils.convertTwoDecimal(String.valueOf(processingFee)));
-                            netAmount = grossAmount - refunds - processingFee - miscFee;
-                            mNetAmount.setText(Utils.convertTwoDecimal(String.valueOf(netAmount)));
                         } else {
                             mGrossAmount.setText(defaultAmount);
                             mTransactions.setText("0");
@@ -511,23 +553,31 @@ public class BusinessDashboardFragment extends BaseFragment {
                             mProcessingFees.setText(defaultAmount);
                             mMISCFees.setText(defaultAmount);
                             mNetAmount.setText(defaultAmount);
+                            mAverageTicket.setText(defaultAmount);
+                            mHighestTicket.setText(defaultAmount);
                         }
                     }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
             }
         });
         businessDashboardViewModel.getMerchantActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<MerchantActivityResp>() {
             @Override
             public void onChanged(MerchantActivityResp merchantActivityResp) {
-                if (merchantActivityResp != null && merchantActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                    if (merchantActivityResp.getData() != null) {
-                        // for SeekBar Graph
+                try {
+                    if (merchantActivityResp != null && merchantActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (merchantActivityResp.getData() != null) {
+                            // for SeekBar Graph
                             userData.setEarningList(merchantActivityResp.getData().getEarnings());
 
-                        mSbTodayVolume.setEnabled(true);
-                        mSbTodayVolume.setProgressWithText(0,userData.getEarningList());
-                    }
+                            mSbTodayVolume.setEnabled(true);
+                            mSbTodayVolume.setProgressWithText(0, userData.getEarningList());
+                        }
 
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -652,8 +702,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
         DBAInfoResp resp = myApplication.getDbaInfoResp();
         if (resp != null && resp.getData() != null) {
-            mTvMonthlyVolume.setText("$"+Utils.convertBigDecimalUSDC(resp.getData().getMonthlyProcessingVolume()));
-            mTvHighTickets.setText("$"+Utils.convertBigDecimalUSDC(resp.getData().getHighTicket()));
+            mTvMonthlyVolume.setText("$" + Utils.convertBigDecimalUSDC(resp.getData().getMonthlyProcessingVolume()));
+            mTvHighTickets.setText("$" + Utils.convertBigDecimalUSDC(resp.getData().getHighTicket()));
         }
     }
 
