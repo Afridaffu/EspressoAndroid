@@ -406,7 +406,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             }
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
                             companyNameProposed.setText(propertiesData.getProposedValue());
-                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + ". \"");
+                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + ".\"");
                             proposalsMap.put(companyname, propertiesData);
                             fileUpload.put(companyname.trim().hashCode(), null);
 
@@ -474,7 +474,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.COMMENT_ACTION) && tv.getText()!= null) {
                     String comm = (String) value;
-                    tvRemarks.setText("\"" + comm + " \"");
+                    tvRemarks.setText("\"" + comm + "\"");
                     Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     imvAcceptTick.setVisibility(View.VISIBLE);
                     imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
