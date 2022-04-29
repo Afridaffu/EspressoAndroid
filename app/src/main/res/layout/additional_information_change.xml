@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="@dimen/_20sdp"
+        android:paddingStart="@dimen/_11sdp"
         android:paddingTop="@dimen/_10ssp"
-        android:paddingEnd="@dimen/_20sdp"
+        android:paddingEnd="@dimen/_11sdp"
         android:visibility="visible">
 
         <androidx.cardview.widget.CardView
@@ -137,7 +137,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginTop="@dimen/_14sdp"
-                    android:layout_marginEnd="@dimen/_11sdp"
                     android:layout_marginBottom="@dimen/_17sdp"
                     android:background="@color/dark_color_bg" />
 
@@ -145,7 +144,6 @@
                     android:id="@+id/tvMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_11sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:text="hjghjgjgj ghj"
                     android:fontFamily="@font/opensans_regular"

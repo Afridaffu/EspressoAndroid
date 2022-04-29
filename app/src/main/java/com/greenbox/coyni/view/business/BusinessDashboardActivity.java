@@ -448,17 +448,17 @@ public class BusinessDashboardActivity extends BaseActivity {
         mTvUserName.setOnClickListener(view -> {
             if (mTvUserName.getText().toString().contains("...")) {
                 if (userName.length() == 21 || userName.length() > 21) {
-                    mTvUserName.setText(userName.substring(0, 20));
+                    mTvUserName.setText("Hi! "+userName.substring(0, 20));
                 } else {
-                    mTvUserName.setText(userName);
+                    mTvUserName.setText("Hi! "+userName);
                 }
             } else {
                 if (userName.length() == 21) {
-                    mTvUserName.setText(userName.substring(0, 20) + "...");
+                    mTvUserName.setText("Hi! "+userName.substring(0, 20) + "...");
                 } else if (userName.length() > 22) {
-                    mTvUserName.setText(userName.substring(0, 22) + "...");
+                    mTvUserName.setText("Hi! "+userName.substring(0, 22) + "...");
                 } else {
-                    mTvUserName.setText(userName);
+                    mTvUserName.setText("Hi! "+userName);
                 }
             }
         });

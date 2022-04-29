@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,6 +50,7 @@ public class BindingLayoutActivity extends BaseActivity {
     TextView txvVerifyName, txvVerifyDescription;
     private IdentityVerificationViewModel identityVerificationViewModel;
     private LoginViewModel loginViewModel;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class BindingLayoutActivity extends BaseActivity {
             mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
-            if (objMyApplication.getAccountType() == 2) {
+            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
                 identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
@@ -150,9 +152,12 @@ public class BindingLayoutActivity extends BaseActivity {
             nextGetStartedCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (objMyApplication.getAccountType() == 2) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                         identityVerificationViewModel.getPostAddCustomer();
-
                     } else {
                         Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
                         startActivity(i);
@@ -273,7 +278,7 @@ public class BindingLayoutActivity extends BaseActivity {
 
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
 
-                        if (objMyApplication.getAccountType() == 2) {
+                        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                             Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                             Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
                             i.putExtra("ADDPERSONAL", "true");

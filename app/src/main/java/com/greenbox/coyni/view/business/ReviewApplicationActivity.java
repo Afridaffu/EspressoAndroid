@@ -79,9 +79,8 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListner, OnKeyboardVisibilityListener {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListener, OnKeyboardVisibilityListener {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -750,7 +749,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d(TAG, "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            if (objMyApplication.getAccountType() == 2) {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                                 intent.putExtra("showGetStarted", true);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
