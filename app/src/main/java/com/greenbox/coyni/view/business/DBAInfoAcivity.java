@@ -975,6 +975,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() > 0) {
+                        if (!businessTypeET.hasFocus())
                         Utils.setUpperHintColor(businessTypeTIL, getResources().getColor(R.color.primary_black));
                         isBusinessType = true;
                     } else {
@@ -998,7 +999,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
                     if (charSequence.length() > 0) {
                         timezoneTIL.setHint("Time Zone");
-                        Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
+                        if (!businessTypeET.hasFocus())
+                            Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
                         isTimeZone = true;
                     } else {
                         timezoneTIL.setHint("Select Time Zone");
