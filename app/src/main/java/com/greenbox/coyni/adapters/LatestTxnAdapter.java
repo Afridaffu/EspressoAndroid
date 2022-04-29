@@ -111,9 +111,11 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                 holder.statusTV.setTextColor(mContext.getColor(R.color.error_red));
                 holder.statusLL.setBackground(mContext.getDrawable(R.drawable.txn_failed_bg));
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("Completed")) {
-                holder.statusLL.setVisibility(View.GONE);
-                holder.dateTV.setVisibility(View.VISIBLE);
-                holder.dateTV.setText(objMyApplication.convertZoneLatestTxn(latestTxns.getData().get(position).getUpdatedAt()));
+                holder.statusLL.setVisibility(View.VISIBLE);
+                holder.dateTV.setVisibility(View.GONE);
+//                holder.dateTV.setText(objMyApplication.convertZoneLatestTxn(latestTxns.getData().get(position).getUpdatedAt()));
+                holder.statusTV.setTextColor(mContext.getColor(R.color.completed_status));
+                holder.statusLL.setBackground(mContext.getDrawable(R.drawable.txn_active_bg));
             } else if (latestTxns.getData().get(position).getTxnStatusDn().equalsIgnoreCase("In Progress")) {
                 holder.statusTV.setText(latestTxns.getData().get(position).getTxnStatusDn());
                 holder.statusTV.setTextColor(mContext.getColor(R.color.under_review_blue));
@@ -152,7 +154,10 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return latestTxns.getData().size();
+        if (latestTxns.getData().size() > 5)
+            return 5;
+        else
+            return latestTxns.getData().size();
     }
 
 

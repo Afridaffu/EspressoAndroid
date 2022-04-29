@@ -312,7 +312,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (confirmPasswordET.getText().length() > 0) {
                             confirmPasswordET.setSelection(confirmPasswordET.getText().length());
                         }
-                        confirmPasswordET.setHint("Confirm Password");
+//                        confirmPasswordET.setHint("Confirm Password");
                         confPasswordTIL.setHint("Confirm Password");
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -750,7 +750,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
                         } else {
                             isConfirmPassword = false;
-                            confPasswordTIL.setHint("Password doesn’t match");
+//                            confPasswordTIL.setHint("Password doesn’t match");
                         }
                         enableOrDisableNext();
                     }

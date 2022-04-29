@@ -30,9 +30,9 @@
         android:layout_below="@+id/seekbar"
         android:layout_marginStart="20dp"
         android:layout_marginTop="-20dp"
-        android:textColor="@color/primary_black"
         android:fontFamily="@font/opensans_regular"
-        android:text="0:00am"
+        android:text="12:00am"
+        android:textColor="@color/primary_black"
         android:textSize="@dimen/_10ssp" />
 
     <TextView
