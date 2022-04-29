@@ -120,7 +120,8 @@ import java.util.regex.Pattern;
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
-    public static final String TOKEN = "TOKEN", MERCHANT = "MERCHANT", RESERVE = "RESERVE";
+    public static final String TOKEN = "0", MERCHANT = "1", RESERVE = "2";
+    public static final String TOKEN_STR = "TOKEN", MERCHANT_STR = "MERCHANT", RESERVE_STR = "RESERVE";
 
     public static enum BUSINESS_ACCOUNT_STATUS {
         UNDER_REVIEW("Under Review"),

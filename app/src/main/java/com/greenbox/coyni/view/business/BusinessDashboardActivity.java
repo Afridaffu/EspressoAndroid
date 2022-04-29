@@ -384,12 +384,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (businessWalletResponse != null) {
 //                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
-                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE)) {
-                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT)) {
+                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
                                 objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
+                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
+//                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                                 objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             }
                         }
