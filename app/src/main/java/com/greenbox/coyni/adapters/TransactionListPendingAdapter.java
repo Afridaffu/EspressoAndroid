@@ -97,9 +97,9 @@ public class TransactionListPendingAdapter extends RecyclerView.Adapter<Transact
         }
 
         if (strType.contains("pay") || strType.equals("withdraw")) {
-            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("-" + convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());
         } else {
-            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN"," "));
+            holder.amount.setText("+" + convertTwoDecimal(objData.getAmount()).replace("CYN"," ").trim());
             holder.amount.setTextColor(Color.parseColor("#008a05"));
         }
 
