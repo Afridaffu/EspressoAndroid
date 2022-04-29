@@ -496,16 +496,21 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             identificationType = 9;
             isIDVESelected = true;
 
-            if (objMyApplication.getBusinessTypeResp() != null && objMyApplication.getBusinessTypeResp().getData() != null) {
-                selectedBTKey = objMyApplication.getBusinessTypeResp().getData().get(0).getKey();
-                businessTypeET.setText(objMyApplication.getBusinessTypeResp().getData().get(0).getValue());
-                isBusinessType = true;
+            if (objMyApplication.getBusinessTypeResp() != null) {
+                if (objMyApplication.getBusinessTypeResp().getData() != null) {
+                    selectedBTKey = objMyApplication.getBusinessTypeResp().getData().get(0).getKey();
+                    businessTypeET.setText(objMyApplication.getBusinessTypeResp().getData().get(0).getValue());
+                    isBusinessType = true;
+                    Utils.setUpperHintColor(businessTypeTIL, getColor(R.color.primary_black));
+                }
             }
+
 
             objMyApplication.setTimezone(getString(R.string.PST));
             objMyApplication.setTimezoneID(0);
             timeZoneET.setText(objMyApplication.getTimezone());
             isTimeZone = true;
+            Utils.setUpperHintColor(timezoneTIL, getColor(R.color.primary_black));
             //Default values enabled
 
         } catch (Exception e) {
@@ -975,9 +980,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() > 0) {
-                        if (!businessTypeET.hasFocus())
-                        Utils.setUpperHintColor(businessTypeTIL, getResources().getColor(R.color.primary_black));
                         isBusinessType = true;
+                        if (!businessTypeET.hasFocus())
+                            Utils.setUpperHintColor(businessTypeTIL, getResources().getColor(R.color.primary_black));
                     } else {
                         isBusinessType = false;
                     }
@@ -998,8 +1003,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     if (charSequence.length() > 0) {
-                        timezoneTIL.setHint("Time Zone");
-                        if (!businessTypeET.hasFocus())
+//                        timezoneTIL.setHint("Time Zone");
+//                        if (!timeZoneET.hasFocus())
                             Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
                         isTimeZone = true;
                     } else {
