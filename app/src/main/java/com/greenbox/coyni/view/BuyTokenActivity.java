@@ -422,52 +422,52 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (!isMinimumError) {
-                            if (etAmount.getText().toString().trim().length() > 0 && Double.parseDouble(etAmount.getText().toString().replace(",", "")) != 0) {
-                                if (tvCYN.getVisibility() == View.GONE) {
-                                    tvCYN.setVisibility(View.VISIBLE);
-                                    tvCurrency.setVisibility(View.INVISIBLE);
-                                    etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-                                    convertUSDtoCYN();
-                                    if (tvError.getVisibility() == View.VISIBLE) {
-                                        if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+//                        if (!isMinimumError) {
+                        if (etAmount.getText().toString().trim().length() > 0 && Double.parseDouble(etAmount.getText().toString().replace(",", "")) != 0) {
+                            if (tvCYN.getVisibility() == View.GONE) {
+                                tvCYN.setVisibility(View.VISIBLE);
+                                tvCurrency.setVisibility(View.INVISIBLE);
+                                etAmount.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+                                convertUSDtoCYN();
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
 //                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
-                                            setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
-                                        } else {
-                                            if (strLimit.equals("daily")) {
-                                                tvError.setText("Amount entered exceeds your daily limit");
-                                            } else if (strLimit.equals("week")) {
-                                                tvError.setText("Amount entered exceeds your weekly limit");
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    tvCYN.setVisibility(View.GONE);
-                                    tvCurrency.setVisibility(View.VISIBLE);
-                                    convertCYNtoUSD();
-                                    etAmount.setGravity(Gravity.CENTER_VERTICAL);
-                                    if (tvError.getVisibility() == View.VISIBLE) {
-                                        if (tvError.getText().toString().trim().contains("Minimum Amount")) {
-//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
-                                            setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
-
-                                        } else {
-                                            if (strLimit.equals("daily")) {
-                                                tvError.setText("Amount entered exceeds your daily limit");
-                                            } else if (strLimit.equals("week")) {
-                                                tvError.setText("Amount entered exceeds your weekly limit");
-                                            }
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", BuyTokenActivity.this, tvError, 17);
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
                                         }
                                     }
                                 }
                             } else {
-                                if (!etAmount.getText().toString().equals("")) {
-                                    etAmount.setText("0.00");
-                                    ctKey.setText("0.00");
-                                    etAmount.setSelection(etAmount.getText().length());
+                                tvCYN.setVisibility(View.GONE);
+                                tvCurrency.setVisibility(View.VISIBLE);
+                                convertCYNtoUSD();
+                                etAmount.setGravity(Gravity.CENTER_VERTICAL);
+                                if (tvError.getVisibility() == View.VISIBLE) {
+                                    if (tvError.getText().toString().trim().contains("Minimum Amount")) {
+//                                        tvError.setText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD");
+                                        setSpannableText("Minimum Amount is " + Utils.USNumberFormat(usdValidation) + " USD", BuyTokenActivity.this, tvError, 17);
+
+                                    } else {
+                                        if (strLimit.equals("daily")) {
+                                            tvError.setText("Amount entered exceeds your daily limit");
+                                        } else if (strLimit.equals("week")) {
+                                            tvError.setText("Amount entered exceeds your weekly limit");
+                                        }
+                                    }
                                 }
                             }
+                        } else {
+                            if (!etAmount.getText().toString().equals("")) {
+                                etAmount.setText("0.00");
+                                ctKey.setText("0.00");
+                                etAmount.setSelection(etAmount.getText().length());
+                            }
                         }
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
