@@ -97,7 +97,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         businessAdditionalActionRequired = this;
         initFields();
         initObserver();
-        enableOrDisableNext();
+//        enableOrDisableNext();
     }
 
     private void initFields() {
@@ -164,7 +164,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             JSONObject proposalsObj = new JSONObject();
             JSONArray proposalsArray = new JSONArray();
 
-            if (actionRequired.getData().getInformationChange() != null) {
+            if (actionRequired.getData().getInformationChange() != null ) {
                 for (int i = 0; i < actionRequired.getData().getInformationChange().size(); i++) {
                     InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
                     List<ProposalsData> proposalsData = data.getProposals();
@@ -174,9 +174,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             for (int k = 0; k < proposal.getProperties().size(); k++) {
                                 ProposalsPropertiesData property = proposal.getProperties().get(k);
                                 JSONObject propertyObj = new JSONObject();
-                                propertyObj.put("isUserAccepted", proposalsMap.get(property.getName()).isUserAccepted());
+                                propertyObj.put("isUserAccepted", proposalsMap.get(capFirstLetter(property.getName())).isUserAccepted());
                                 propertyObj.put("name", property.getName());
-                                propertyObj.put("userMessage", proposalsMap.get(property.getName()).getUserMessage());
+                                propertyObj.put("userMessage", proposalsMap.get(capFirstLetter(property.getName())).getUserMessage());
                                 proposalsArray.put(propertyObj);
                             }
                         }
@@ -330,6 +330,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             TextView tvheading = websiteView.findViewById(R.id.tvheading);
             CheckBox checkboxCB = websiteView.findViewById(R.id.checkboxCB);
             ImageView imgWebsite = websiteView.findViewById(R.id.imgWebsite);
+
             int headerLength = actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader().length();
             String websiteChanges = actionRequiredResponse.getData().getWebsiteChange().get(i).getHeader()
                     + " - " + actionRequiredResponse.getData().getWebsiteChange().get(i).getComment();
@@ -398,13 +399,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-//                            companyNameTV.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-                            companyNameTV.setText(propertiesData.getName());
+//                            companyNameTV.setText(propertiesData.getName());
+                            String companyname = capFirstLetter(propertiesData.getName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
+                            if(propertiesData.getName()!=null) {
+                                companyNameTV.setText(companyname);
+                            }
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
                             companyNameProposed.setText(propertiesData.getProposedValue());
-                            tvMessage.setText(propertiesData.getAdminMessage());
-                            proposalsMap.put(propertiesData.getName(), propertiesData);
-                            fileUpload.put(propertiesData.getName().trim().hashCode(), null);
+                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + ". \"");
+                            proposalsMap.put(companyname, propertiesData);
+                            fileUpload.put(companyname.trim().hashCode(), null);
 
                             informationRevisionLL.addView(inf1, layoutParams);
                             llAccept.setTag(inf1);
@@ -416,14 +420,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     llAccept.setVisibility(View.GONE);
                                     llDecline.setVisibility(View.GONE);
                                     tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
-
-                                    if (fileUpload.containsKey(propertiesData.getName().trim().hashCode())) {
-                                        fileUpload.replace(propertiesData.getName().trim().hashCode(), "true");
-                                    }
                                     View v = (View) view.getTag();
                                     TextView tv = v.findViewById(R.id.comapny_nameTV);
-                                    proposalsMap.get(tv.getText().toString()).setUserAccepted(true);
-                                    proposalsMap.get(tv.getText().toString()).setUserMessage("Accepted");
+                                    if (fileUpload.containsKey(companyname.trim().hashCode())) {
+                                        fileUpload.replace(companyname.trim().hashCode(), "true");
+                                    }
+                                    proposalsMap.get(companyname).setUserAccepted(true);
+                                    proposalsMap.get(companyname).setUserMessage("Accepted");
                                     enableOrDisableNext();
 
                                 }
@@ -438,6 +441,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
+                                    Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                                 }
                             });
                         }
@@ -445,6 +449,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             }
         }
+    }
+//
+    private String capFirstLetter(String text){
+        if(text == null || text.equals("")) {
+            return "";
+        }
+        if(text.length() == 1) {
+            return text.toUpperCase();
+        }
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
     }
 
     private void showCommentDialog(final View view) {
@@ -458,9 +472,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                if (action.equalsIgnoreCase(Utils.COMMENT_ACTION)) {
+                if (action.equalsIgnoreCase(Utils.COMMENT_ACTION) && tv.getText()!= null) {
                     String comm = (String) value;
-                    tvRemarks.setText(comm);
+                    tvRemarks.setText("\"" + comm + " \"");
                     Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     imvAcceptTick.setVisibility(View.VISIBLE);
                     imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
@@ -472,7 +486,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     proposalsMap.get(tv.getText().toString()).setUserAccepted(false);
                     proposalsMap.get(tv.getText().toString()).setUserMessage(comm);
                     if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
-                        fileUpload.replace(tv.getText().toString().trim().hashCode(), "true");
+                        fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
                     }
                     enableOrDisableNext();
                 }
@@ -499,9 +513,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        tv_mv.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("CYN","").trim()));
-        tv_ht.setText(Utils.convertBigDecimalUSDC(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("CYN","").trim()));
-        tv_reserveAmount.setText(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString().replace("0*$", "") + " %");
+        tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("CYN","").trim()));
+        tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("CYN","").trim()));
+        String percent =  Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
+        tv_reserveAmount.setText(percent.replace("0*$", "") + " %");
         tv_reservePeriod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 
         ImageView i_iconIV = reserveRule.findViewById(R.id.i_iconIV);

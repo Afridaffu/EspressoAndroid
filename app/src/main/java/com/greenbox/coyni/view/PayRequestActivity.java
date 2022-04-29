@@ -384,48 +384,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-//    public void SetFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-//            dsFacePin.moveToFirst();
-//            if (dsFacePin.getCount() > 0) {
-//                String value = dsFacePin.getString(1);
-//                if (value.equals("true")) {
-//                    isFaceLock = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isFaceLock = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    public void SetTouchId() {
-//        try {
-//            isTouchId = false;
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-//            dsTouchID.moveToFirst();
-//            if (dsTouchID.getCount() > 0) {
-//                String value = dsTouchID.getString(1);
-//                if (value.equals("true")) {
-//                    isTouchId = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isTouchId = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     public void setFaceLock() {
         try {
             isFaceLock = false;
@@ -916,6 +874,9 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             } else if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
                 Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
                 return value = false;
+            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getTransactionLimit())) + " CYN", PayRequestActivity.this, "Oops!", "");
+                value = false;
             } else if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");

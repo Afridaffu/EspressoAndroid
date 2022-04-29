@@ -750,7 +750,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
                         } else {
                             isConfirmPassword = false;
-                            confPasswordTIL.setHint("Password doesn’t match");
+//                            confPasswordTIL.setHint("Password doesn’t match");
                         }
                         enableOrDisableNext();
                     }

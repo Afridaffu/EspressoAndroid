@@ -57,30 +57,6 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             RecentUsersData objData = listUsers.get(position);
-//            if (objData.getUserName() != null && !objData.getUserName().equals("")) {
-//                if (objData.getUserName().contains(" ")) {
-//                    if (!objData.getUserName().split(" ")[0].equals("")) {
-//                        if (objData.getUserName().split(" ").length > 2) {
-//                            if (!objData.getUserName().split(" ")[1].equals("")) {
-//                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-//                            } else {
-//                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[2].substring(0, 1).toUpperCase());
-//                            }
-//                        } else {
-//                            holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-//                        }
-//                    } else {
-//                        holder.tvNameHead.setText(objData.getUserName().split(" ")[0].toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-//                    }
-//                } else {
-//                    holder.tvNameHead.setText(objData.getUserName().substring(0, 1).toUpperCase());
-//                }
-//                holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
-//                if (objData.getWalletAddress().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
-//                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
-//                } else {
-//                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
-//                }
 
             String strPhContact = "", strEcoSysName = "";
             if (objData.getUserName() != null && !objData.getUserName().equals("")) {
