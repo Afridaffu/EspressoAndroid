@@ -11,6 +11,7 @@ public class BusinessActivityData implements Serializable {
     private int percentage;
     private String fee;
     private String highTicket;
+    private String createdAt;
 
     public String getTransactionType() {
         return transactionType;
@@ -66,5 +67,13 @@ public class BusinessActivityData implements Serializable {
 
     public void setHighTicket(String highTicket) {
         this.highTicket = highTicket;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

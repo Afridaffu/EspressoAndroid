@@ -656,7 +656,7 @@
     <string name="merchant_account_id">Merchant Account ID</string>
     <string name="dba_name_text">DBA Name</string>
     <string name="customer_service_phone">Customer Service Phone</string>
-    <string name="description">If you are experiencing any issues with your transaction please contact the merchant on file or contact “coyni” customer service by click</string>
+    <string name="description">If you are experiencing any issues with your transaction please contact the merchant on file or contact “coyni” customer service by click Get Help</string>
     <string name="select_withdraw_method">Select Withdraw Method</string>
     <string name="external_bank_account">External Bank Account</string>
     <string name="can_be_used_for_withdrawing_funds_from_your_coyni_account">Can be used for withdrawing funds from your coyni account.</string>

@@ -269,12 +269,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     break;
 
                 }
-            } else {
-                try {
-                    findViewById(R.id.transaction_not_found).setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         });
 

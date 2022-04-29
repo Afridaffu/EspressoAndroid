@@ -125,7 +125,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     static String strToken = "";
     private DatabaseHandler dbHandler;
     private String batchId;
-    private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount, saleOrdersText, mAverageTicket, mHighestTicket;
+    private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount,
+            saleOrdersText, mAverageTicket, mHighestTicket, mDateHighestTicket;
     private LinearLayout mTicketsLayout;
     private UserData userData;
 
@@ -273,6 +274,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         saleOrdersText = mCurrentView.findViewById(R.id.sale_order_text);
         mAverageTicket = mCurrentView.findViewById(R.id.average_ticket);
         mHighestTicket = mCurrentView.findViewById(R.id.highest_ticket);
+        mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -476,12 +478,12 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 netAmount = 0.0,
                                 averageTicket = 0.0;
                         int totalTransactions = 1;
-    //                    mSbTodayVolume.setEnabled(false);
+                        //                    mSbTodayVolume.setEnabled(false);
                         if (businessActivityResp.getStatus() != null && businessActivityResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                             if (businessActivityResp.getData() != null && businessActivityResp.getData().size() > 0) {
                                 List<BusinessActivityData> data = businessActivityResp.getData();
                                 for (int position = 0; position < data.size(); position++) {
-                                    if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.saleOrdertxntype)
+                                    if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.saleOrdertxntype)
                                             && data.get(position).getTransactionSubType() == null) {
                                         if (data.get(position).getTotalAmount() != null) {
                                             mGrossAmount.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
@@ -490,14 +492,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                                         if (data.get(position).getCount() > 0) {
                                             mTransactions.setText(String.valueOf(data.get(position).getCount()));
                                             totalTransactions = data.get(position).getCount();
-                                        }else {
+                                        } else {
                                             mTransactions.setText(defaultAmount);
                                         }
 
                                         if (data.get(position).getFee() != null) {
                                             processingFee = Double.parseDouble(data.get(position).getFee());
                                         }
-                                    } else if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
+                                    } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.refundtxntype)
                                             && data.get(position).getTransactionSubType() == null) {
                                         if (data.get(position).getTotalAmount() != null) {
                                             mRefunds.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
@@ -506,7 +508,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 
                                         double processFee = processingFee + Double.parseDouble(data.get(position).getFee());
                                         processingFee = processFee;
-                                    } else if (data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
+                                    } else if (data.get(position).getTransactionType() != null && data.get(position).getTransactionType().equalsIgnoreCase(Utils.monthlyServiceFeetxntype)
                                             && data.get(position).getTransactionSubType() == null) {
 
                                         if (data.get(position).getTotalAmount() != null) {
@@ -514,8 +516,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             miscFee = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
                                     } else if (data.get(position).getTransactionType() == null && data.get(position).getTransactionSubType() == null) {
-                                        if (data.get(position).getHighTicket() != null)
-                                            mHighestTicket.setText(Utils.convertTwoDecimal(data.get(position).getHighTicket()));
+                                        if (data.get(position).getTotalAmount() != null)
+                                            mHighestTicket.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
+
+                                        if (data.get(position).getCreatedAt() != null) {
+                                            mDateHighestTicket.setText(myApplication.convertZoneDateTime(data.get(position).getCreatedAt(), dateAndTime, date));
+                                        } else {
+                                            mDateHighestTicket.setVisibility(View.GONE);
+                                        }
                                     }
                                 }
                                 mProcessingFees.setText(Utils.convertTwoDecimal(String.valueOf(processingFee)));
@@ -538,8 +546,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 mAverageTicket.setText(defaultAmount);
                                 mHighestTicket.setText(defaultAmount);
                             }
-                        }
-                        else {
+                        } else {
                             mGrossAmount.setText(defaultAmount);
                             mTransactions.setText("0");
                             mRefunds.setText(defaultAmount);
