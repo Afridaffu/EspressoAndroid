@@ -269,12 +269,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     break;
 
                 }
-            } else {
-                try {
-                    findViewById(R.id.transaction_not_found).setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -413,7 +407,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     private void paidOrderToken(TransactionData paidOrderData) {
         TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
-        LinearLayout mReferenceCopy, mMerchantAccountCopy;
+        LinearLayout mReferenceCopy, mMerchantAccountCopy,mBackButton;
         TextView mAmountPaid, mDateAndTime, mPaidReferenceID;
 
         mTransactionType = findViewById(R.id.transaction_types);
@@ -429,10 +423,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         mReferenceCopy = findViewById(R.id.copy_ref_ll);
         mMerchantAccountCopy = findViewById(R.id.copy_merchant_id);
         mDescription = findViewById(R.id.description);
+        mBackButton = findViewById(R.id.back_button);
 
         mAmountPaid = findViewById(R.id.amount_paid);
         mDateAndTime = findViewById(R.id.date_and_time);
         mPaidReferenceID = findViewById(R.id.reference_id);
+
 
 
         if (paidOrderData.getTransactionType() != null && paidOrderData.getTransactionSubtype() != null) {
@@ -559,6 +555,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             } else
                 mPaidReferenceID.setText(Html.fromHtml("<u>" + paidOrderData.getSaleOrderReferenceId() + "</u>"));
         }
+
+        mBackButton.setOnClickListener(view -> finish());
+
+
 
 
     }
