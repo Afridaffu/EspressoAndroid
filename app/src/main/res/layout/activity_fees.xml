@@ -362,7 +362,7 @@
 
                             <TextView
                                 android:id="@+id/giftCardPerTV"
-                                android:layout_width="45dp"
+                                android:layout_width="@dimen/_45sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/_23sdp"
                                 android:fontFamily="@font/opensans_semibold"
