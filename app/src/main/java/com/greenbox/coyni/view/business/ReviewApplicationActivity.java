@@ -805,8 +805,17 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
                         //new code for showing pdf , modify later
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf"))
+                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf")) {
                             browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
+                            switch (agreementsPdf.getData().getAgreementType()) {
+                                case Utils.mTOS:
+                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+                                    break;
+                                case Utils.mAgmt:
+                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+                                    break;
+                            }
+                        }
                         else {
                             switch (agreementsPdf.getData().getAgreementType()) {
                                 case Utils.mPP:
@@ -819,7 +828,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
                                     break;
                             }
-//                            browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
                         }
                         try {
                             startActivity(browserIntent);
