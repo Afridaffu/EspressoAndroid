@@ -267,13 +267,13 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             walletErrorLL.setVisibility(GONE);
                             etlWalletId.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
-                        }  else if (etWalletId.getText().toString().trim().length() == 1) {
+                        } else if (etWalletId.getText().toString().trim().length() == 1) {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState());
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.error_red));
                             walletErrorLL.setVisibility(VISIBLE);
                             walletErrorTV.setText("Minimum 2 Characters Required");
-                        }else {
+                        } else {
                             isWallet = false;
                             etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.light_gray));
@@ -703,10 +703,10 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                     if (charSequence.toString().trim().length() > 0) {
                         isState = true;
                         stateErrorLL.setVisibility(GONE);
-//                        Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
                     } else {
                         isState = false;
-//                        Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
+                        Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
                     }
                     enableOrDisableNext();
                 } catch (Exception ex) {

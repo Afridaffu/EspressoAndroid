@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,6 +35,7 @@ import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
@@ -58,9 +60,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     CoyniViewModel coyniViewModel;
     ProgressDialog pDialog;
     Dialog prevDialog;
-    SQLiteDatabase mydatabase;
     DatabaseHandler dbHandler;
-    Cursor dsFacePin, dsTouchID;
     Boolean isFaceLock = false, isTouchId = false, isCancel = false;
     Double pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0, total = 0.0, cynValue = 0.0, avaBal = 0.0;
     String strUserName = "", strAddress = "";
@@ -72,6 +72,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     CardView cvLock, im_lock;
     float fontSize, dollarFont;
     ImageView imgConvert;
+    TransactionLimitResponse objResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,49 +120,6 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 break;
         }
     }
-//
-//    public void SetFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-//            dsFacePin.moveToFirst();
-//            if (dsFacePin.getCount() > 0) {
-//                String value = dsFacePin.getString(1);
-//                if (value.equals("true")) {
-//                    isFaceLock = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isFaceLock = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    public void SetTouchId() {
-//        try {
-//            isTouchId = false;
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-//            dsTouchID.moveToFirst();
-//            if (dsTouchID.getCount() > 0) {
-//                String value = dsTouchID.getString(1);
-//                if (value.equals("true")) {
-//                    isTouchId = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isTouchId = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
 
     public void setFaceLock() {
         try {
@@ -309,10 +267,19 @@ public class PayToPersonalActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             });
-//            SetFaceLock();
-//            SetTouchId();
             setFaceLock();
             setTouchId();
+            if (Utils.checkInternet(PayToPersonalActivity.this)) {
+                TransactionLimitRequest obj = new TransactionLimitRequest();
+                obj.setTransactionType(Integer.parseInt(Utils.payType));
+                obj.setTransactionSubType(Integer.parseInt(Utils.paySubType));
+                pDialog = Utils.showProgressDialog(PayToPersonalActivity.this);
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+                } else {
+                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+                }
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -328,6 +295,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 }
             }
         });
+
         buyTokenViewModel.getTransferFeeResponseMutableLiveData().observe(this, new Observer<TransferFeeResponse>() {
             @Override
             public void onChanged(TransferFeeResponse transferFeeResponse) {
@@ -380,6 +348,18 @@ public class PayToPersonalActivity extends AppCompatActivity {
                         }
                         payTransaction();
                     }
+                }
+            }
+        });
+
+        buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
+            @Override
+            public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (pDialog != null) {
+                    pDialog.dismiss();
+                }
+                if (transactionLimitResponse != null) {
+                    objResponse = transactionLimitResponse;
                 }
             }
         });
@@ -623,7 +603,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            if (cynValue > avaBal) {
+            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                displayAlertNew("Amount entered exceeds transaction limit.", PayToPersonalActivity.this, "Oops!");
+                value = false;
+            } else if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             }
@@ -687,6 +670,50 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 changeSlideState();
             }
         });
+    }
+
+    private void displayAlertNew(String msg, final Context context, String headerText) {
+        // custom dialog
+        final Dialog displayAlertDialog = new Dialog(context);
+        displayAlertDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        displayAlertDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        displayAlertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = displayAlertDialog.findViewById(R.id.tvHead);
+        TextView message = displayAlertDialog.findViewById(R.id.tvMessage);
+        CardView actionCV = displayAlertDialog.findViewById(R.id.cvAction);
+        TextView actionText = displayAlertDialog.findViewById(R.id.tvAction);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayAlertDialog.dismiss();
+                changeSlideState();
+            }
+        });
+
+        message.setText(msg);
+        Window window = displayAlertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        displayAlertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        displayAlertDialog.setCanceledOnTouchOutside(true);
+        displayAlertDialog.show();
     }
 
     private void payTransaction() {

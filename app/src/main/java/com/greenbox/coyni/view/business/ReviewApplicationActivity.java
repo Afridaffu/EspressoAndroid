@@ -363,6 +363,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     public void deleteBankAPICall(int id) {
         paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
+        showProgressDialog();
         paymentMethodsViewModel.deleteBanks(id);
     }
 
@@ -406,7 +407,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             @Override
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
-                    showProgressDialog();
+                    //showProgressDialog();
                     summaryViewModel.getApplicationSummaryData();
                     Utils.showCustomToast(ReviewApplicationActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
                 }

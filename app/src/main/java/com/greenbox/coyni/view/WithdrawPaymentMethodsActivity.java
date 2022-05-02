@@ -120,6 +120,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         ControlMethod("withdrawmethod");
                         selectWithdrawMethod();
                         strScreen = "withdrawmethod";
+                        strCurrent = "";
                     }
                     getPaymentMethods();
                 }
@@ -266,6 +267,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         } else {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
+                            } else if (apiError.getError().getErrorCode().equals(getString(R.string.no_bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("no bank accounts found")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), WithdrawPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
                             } else {
                                 displayError();
@@ -1479,10 +1482,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     isBankSuccess = false;
-                    //Added 29-03-2022 - VT
-                    strCurrent = "externalBank";
-                    strScreen = "withdrawpay";
-                    //Added 29-03-2022 - VT
+//                    //Added 29-03-2022 - VT
+//                    strCurrent = "externalBank";
+//                    strScreen = "withdrawpay";
+//                    //Added 29-03-2022 - VT
+                    strCurrent = "";
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("withdrawmethod");
                         selectWithdrawMethod();
