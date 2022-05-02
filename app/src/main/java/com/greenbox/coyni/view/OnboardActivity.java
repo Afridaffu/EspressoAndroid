@@ -1,19 +1,14 @@
 package com.greenbox.coyni.view;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
-import androidx.biometric.BiometricManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -40,8 +34,6 @@ import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.BusinessDashboardActivity;
-import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -347,20 +339,7 @@ public class OnboardActivity extends BaseActivity {
                     if (businessTrackerResponse != null) {
                         if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
-
-                            objMyApplication.launchDashboard(OnboardActivity.this, "login");
-
-//                            Intent dashboardIntent = new Intent(OnboardActivity.this, DashboardActivity.class);
-//                            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-//                            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-//                                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-//                                dashboardIntent = new Intent(OnboardActivity.this, BusinessDashboardActivity.class);
-//                            } else {
-//                                dashboardIntent = new Intent(OnboardActivity.this, BusinessRegistrationTrackerActivity.class);
-//                                dashboardIntent.putExtra("FROM","login");
-//                            }
-//                            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                            startActivity(dashboardIntent);
+                            launchDashboard();
                         }
                     }
                 }
@@ -369,6 +348,14 @@ public class OnboardActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private void launchDashboard() {
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.launchDashboard(this, "login");
+        }
     }
 
     private void setDB() {

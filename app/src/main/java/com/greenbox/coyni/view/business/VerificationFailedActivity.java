@@ -56,7 +56,7 @@ public class VerificationFailedActivity extends BaseActivity {
                 if (data.getDbaName() != null && !data.getDbaName().equals("")) {
                     String dbaName = getString(R.string.verification_dba_name, data.getDbaName());
                     SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(dbaName);
-                    spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 6, dbaName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+                    spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 5, dbaName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                     mTvDbaName.setText(spannableLegalName);
                 }
             }

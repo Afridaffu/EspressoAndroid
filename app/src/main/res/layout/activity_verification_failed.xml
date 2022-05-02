@@ -93,9 +93,10 @@
                 android:id="@+id/cv_done"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_55sdp"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 app:cardBackgroundColor="@color/primary_color"
-                app:cardCornerRadius="@dimen/_33sdp">
+                app:cardCornerRadius="@dimen/_22sdp">
 
                 <TextView
                     android:layout_width="match_parent"
