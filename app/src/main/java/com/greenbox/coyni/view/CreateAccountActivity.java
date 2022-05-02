@@ -939,7 +939,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            //passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {

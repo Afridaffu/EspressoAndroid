@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_select_bank"></ImageView>
+                android:src="@drawable/ic_select_bank"/>
 
             <LinearLayout
                 android:id="@+id/layoutBank"
@@ -51,23 +51,23 @@
 
                 <TextView
                     android:id="@+id/bankName"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.8"
                     android:fontFamily="@font/opensans_semibold"
                     android:singleLine="true"
                     android:text="Bank of America"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_12ssp"></TextView>
+                    android:textSize="@dimen/_12ssp"/>
 
                 <TextView
                     android:id="@+id/accountNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.2"
+                    android:layout_weight="1"
+                    android:text="•• - •••-••65"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"></TextView>
+                    android:textSize="@dimen/_11ssp"/>
 
             </LinearLayout>
 
@@ -77,7 +77,7 @@
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="1dp"
-                android:background="@color/viewcolor"></View>
+                android:background="@color/viewcolor"/>
         </RelativeLayout>
 
     </com.greenbox.coyni.utils.swipelayout.SwipeLayout>

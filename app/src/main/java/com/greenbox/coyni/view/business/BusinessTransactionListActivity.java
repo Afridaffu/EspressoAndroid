@@ -84,6 +84,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
     Date endDateD = null;
     public static BusinessTransactionListActivity transactionListActivity;
 
+    boolean isSwipeToRefresh = false;
 //    ProgressDialog progressDialog;
 
     @Override
@@ -134,6 +135,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                     try {
                         noMoreTransactionTV.setVisibility(View.GONE);
 
+                        isSwipeToRefresh = true;
                         globalPending.clear();
                         globalPosted.clear();
                         transactionType.clear();
@@ -161,9 +163,15 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                         objMyApplication.initializeTransactionSearch();
                         objMyApplication.setTransactionListSearch(transactionListRequest);
 
+
+                        if (searchET.getText().length() > 0 && !searchET.getText().equals("")) {
+                            searchET.setText("");
+                        }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                    searchET.setText("");
                 }
             });
 
@@ -283,10 +291,12 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
             pendingTxt.setVisibility(View.GONE);
             noTransactionTV.setVisibility(View.VISIBLE);
         } else if (charSequence.toString().trim().length() == 0) {
-            globalPending.clear();
-            globalPosted.clear();
-            objMyApplication.getTransactionListSearch().setPageNo("0");
-            transactionsAPI(objMyApplication.getTransactionListSearch());
+            if (!isSwipeToRefresh) {
+                globalPending.clear();
+                globalPosted.clear();
+                objMyApplication.getTransactionListSearch().setPageNo("0");
+                transactionsAPI(objMyApplication.getTransactionListSearch());
+            }
         }
     }
 
@@ -424,6 +434,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                     e.printStackTrace();
                 }
                 swipeRefreshLayout.setRefreshing(false);
+                isSwipeToRefresh = false;
             }
         });
     }

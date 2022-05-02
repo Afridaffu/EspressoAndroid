@@ -25,6 +25,7 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.fee.Fees;
@@ -214,10 +215,10 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void meMerchantWallet(String walletType) {
+    public void meMerchantWallet(WalletRequest walletRequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<BusinessWalletResponse> mCall = apiService.meMerchantWallet(walletType);
+            Call<BusinessWalletResponse> mCall = apiService.meMerchantWallet(walletRequest);
             mCall.enqueue(new Callback<BusinessWalletResponse>() {
                 @Override
                 public void onResponse(Call<BusinessWalletResponse> call, Response<BusinessWalletResponse> response) {

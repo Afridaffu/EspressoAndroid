@@ -294,7 +294,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView type, reserveAmount, status, date, referenceId, reserveRules, depositTo, tokenType;
         TextView reserveHeld, reservedOn, reserveId;
 
-        LinearLayout reserveIDCopy;
+        LinearLayout reserveIDCopy,mCloseButton;
 
         type = findViewById(R.id.reserve_type);
         reserveAmount = findViewById(R.id.reserve_amount);
@@ -310,6 +310,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         reserveId = findViewById(R.id.reserve_id);
 
         reserveIDCopy = findViewById(R.id.reserve_id_copy);
+        mCloseButton = findViewById(R.id.reserve_close_button);
 
 
         if (reserveData.getTransactionType() != null) {
@@ -347,7 +348,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (reserveData.getReferenceId().length() > 10) {
                 referenceId.setText(reserveData.getReferenceId().substring(0, 10) + "...");
             } else {
-                referenceId.setText(reserveData.getReserveId());
+                referenceId.setText(reserveData.getReferenceId());
             }
         }
 
@@ -396,12 +397,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         }
 
-        reserveIDCopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(reserveData.getReserveId(), TransactionDetailsActivity.this);
-            }
-        });
+        reserveIDCopy.setOnClickListener(view -> Utils.copyText(reserveData.getReferenceId(), TransactionDetailsActivity.this));
+
+        mCloseButton.setOnClickListener(view -> finish());
+
 
     }
 

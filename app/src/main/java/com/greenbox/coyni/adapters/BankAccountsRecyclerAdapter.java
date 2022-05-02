@@ -22,7 +22,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     List<BankAccount> banks;
     Context mContext;
     MyApplication objMyApplication;
-    private OnSelectListner listener;
+    private OnSelectListener listener;
     Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -42,7 +42,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     }
 
 
-    public BankAccountsRecyclerAdapter(Context context, List<BankAccount> list , OnSelectListner listener) {
+    public BankAccountsRecyclerAdapter(Context context, List<BankAccount> list , OnSelectListener listener) {
         this.mContext = context;
         this.banks = list;
         this.objMyApplication = (MyApplication) context.getApplicationContext();
@@ -61,9 +61,14 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             BankAccount objData = banks.get(position);
-            holder.bankNameTx.setText(objData.getBankName());
-
-            holder.accountNumberTx.setText(objData.getAccountNumber());
+            if(objData.getBankName() != null && objData.getBankName().length()>19 ) {
+                holder.bankNameTx.setText(objData.getBankName().substring(0, 19));
+            }else {
+                holder.bankNameTx.setText(objData.getBankName());
+            }
+            if (objData.getAccountNumber() != null && !objData.getAccountNumber().equals("")) {
+                holder.accountNumberTx.setText(" ••••"+objData.getAccountNumber().substring(objData.getAccountNumber().length()-4));
+            }
 
             holder.deleteLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,7 +81,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
                     mItemManger.closeAllItems();
                     try {
                         if (banks.size() > 1) {
-                            listener.selectedBankItem(objData.getId());
+                            listener.selectedBankItem(objData.getBankId());
                         } else if (banks.size() == 1) {
                             listener.selectedBankItem(0);
                         }
@@ -130,7 +135,7 @@ public class BankAccountsRecyclerAdapter extends RecyclerSwipeAdapter<BankAccoun
         return R.id.swipeLayout;
     }
 
-    public interface OnSelectListner{
+    public interface OnSelectListener {
         void selectedBankItem(int id );
     }
 
