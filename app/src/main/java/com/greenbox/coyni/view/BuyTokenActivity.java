@@ -685,61 +685,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
         });
     }
 
-//    public void SetFaceLock() {
-//        try {
-//            isFaceLock = false;
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-//            dsFacePin.moveToFirst();
-//            if (dsFacePin.getCount() > 0) {
-//                String value = dsFacePin.getString(1);
-//                if (value.equals("true")) {
-//                    isFaceLock = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isFaceLock = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    public void SetTouchId() {
-//        try {
-//            isTouchId = false;
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-//            dsTouchID.moveToFirst();
-//            if (dsTouchID.getCount() > 0) {
-//                String value = dsTouchID.getString(1);
-//                if (value.equals("true")) {
-//                    isTouchId = true;
-//                    objMyApplication.setLocalBiometric(true);
-//                } else {
-//                    isTouchId = false;
-//                    objMyApplication.setLocalBiometric(false);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
-//    private void SetToken() {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-//            dsPermanentToken.moveToFirst();
-//            if (dsPermanentToken.getCount() > 0) {
-//                strToken = dsPermanentToken.getString(1);
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-
     public void bindPayMethod(PaymentsList objData) {
         try {
             if (payDialog != null) {

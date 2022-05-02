@@ -233,6 +233,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), BusinessPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
+                            } else if (apiError.getError().getErrorCode().equals(getString(R.string.no_bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("no bank accounts found")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), BusinessPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
                             } else {
                                 displayError();
                             }
