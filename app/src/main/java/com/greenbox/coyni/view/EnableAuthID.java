@@ -611,26 +611,11 @@ public class EnableAuthID extends AppCompatActivity {
     }
 
     private void launchDashboard() {
-
-        objMyApplication.launchDashboard(this, strScreen);
-
-//        try {
-//            Intent dashboardIntent = new Intent(EnableAuthID.this, DashboardActivity.class);
-//            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-//                BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-//                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-//                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-//                    dashboardIntent = new Intent(EnableAuthID.this, BusinessDashboardActivity.class);
-//                } else {
-//                    dashboardIntent = new Intent(EnableAuthID.this, BusinessRegistrationTrackerActivity.class);
-//                    dashboardIntent.putExtra("FROM",strScreen);
-//                }
-//            }
-//            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(dashboardIntent);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.launchDashboard(this, strScreen);
+        }
     }
 
     public void setFaceLock() {

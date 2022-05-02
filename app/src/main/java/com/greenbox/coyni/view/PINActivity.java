@@ -1,13 +1,9 @@
 package com.greenbox.coyni.view;
 
 
-import static android.view.View.VISIBLE;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -23,14 +19,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
@@ -63,9 +57,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     ProgressDialog pDialog;
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
-    SQLiteDatabase mydatabase;
     private int mAccountType = Utils.PERSONAL_ACCOUNT;
-    Cursor dsDontRemind;
     Boolean isDontRemind = false;
     String resetPINValue = "ENTER";
     BuyTokenViewModel buyTokenViewModel;
@@ -75,7 +67,6 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     private DatabaseHandler dbHandler;
     LoginViewModel loginViewModel;
     Long mLastClickTime = 0L;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1145,26 +1136,11 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void launchDashboard() {
-
-        objMyApplication.launchDashboard(this, strScreen);
-
-//        try {
-//            Intent dashboardIntent = new Intent(PINActivity.this, DashboardActivity.class);
-//            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-//                BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-//                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-//                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-//                    dashboardIntent = new Intent(PINActivity.this, BusinessDashboardActivity.class);
-//                } else {
-//                    dashboardIntent = new Intent(PINActivity.this, BusinessRegistrationTrackerActivity.class);
-//                    dashboardIntent.putExtra("FROM", strScreen);
-//                }
-//            }
-//            dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            PINActivity.this.startActivity(dashboardIntent);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.launchDashboard(this, strScreen);
+        }
     }
 
     private void WithdrawMethod() {

@@ -350,8 +350,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
-//                            if (Utils.isKeyboardVisible)
-//                                Utils.hideKeypad(AddCardActivity.this);
                             mLastClickTime = SystemClock.elapsedRealtime();
                             viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);

@@ -6,8 +6,6 @@ import static android.view.View.VISIBLE;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -81,8 +79,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "";
     ProgressDialog dialog;
     LoginViewModel loginViewModel;
-    SQLiteDatabase mydatabase;
-    Cursor dsUserDetails, dsFacePin, dsRemember, dsPermanentToken, dsTouchID;
     Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
     ImageView loginBGIV, endIconIV, coyniLogoIV;
     CheckBox chkRemember;
@@ -582,13 +578,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             });
             enableIcon();
 
-            //Shiva Changes
-//            SetDB();
-//            SetToken();
-//            SetFaceLock();
-//            SetTouchId();
-//            SetRemember();
-
             setDB();
             setToken();
             setFaceLock();
@@ -596,22 +585,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             setRemember();
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void SetDB() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsUserDetails = mydatabase.rawQuery("Select * from tblUserDetails", null);
-            dsUserDetails.moveToFirst();
-            if (dsUserDetails.getCount() > 0) {
-                strFirstUser = dsUserDetails.getString(1);
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblUserDetails(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, email TEXT);");
-            }
         }
     }
 
@@ -623,48 +596,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         }
     }
 
-
-    private void SetToken() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsPermanentToken = mydatabase.rawQuery("Select * from tblPermanentToken", null);
-            dsPermanentToken.moveToFirst();
-            if (dsPermanentToken.getCount() > 0) {
-                strToken = dsPermanentToken.getString(1);
-                objMyApplication.setStrMobileToken(strToken);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     private void setToken() {
         strToken = dbHandler.getPermanentToken();
         objMyApplication.setStrMobileToken(strToken);
-    }
-
-    private void SetFaceLock() {
-        try {
-            isFaceLock = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsFacePin = mydatabase.rawQuery("Select * from tblFacePinLock", null);
-            dsFacePin.moveToFirst();
-            if (dsFacePin.getCount() > 0) {
-                String value = dsFacePin.getString(1);
-                if (value.equals("true")) {
-                    isFaceLock = true;
-                    if (Utils.getIsTouchEnabled()) {
-                        endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
-                    } else {
-                        endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_faceid));
-                    }
-                } else {
-                    isFaceLock = false;
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void setFaceLock() {
@@ -687,26 +621,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         }
     }
 
-    private void SetTouchId() {
-        try {
-            isTouchId = false;
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsTouchID = mydatabase.rawQuery("Select * from tblThumbPinLock", null);
-            dsTouchID.moveToFirst();
-            if (dsTouchID.getCount() > 0) {
-                String value = dsTouchID.getString(1);
-                if (value.equals("true")) {
-                    isTouchId = true;
-                    endIconIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_touch_id));
-                } else {
-                    isTouchId = false;
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public void setTouchId() {
         try {
             isTouchId = false;
@@ -721,30 +635,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void SetRemember() {
-        try {
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-            dsRemember = mydatabase.rawQuery("Select * from tblRemember", null);
-            dsRemember.moveToFirst();
-            if (dsRemember.getCount() > 0) {
-                etEmail.setText(dsRemember.getString(1));
-                if (isEmailValid(etEmail.getText().toString().trim())) {
-                    Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
-                    layoutEmailError.setVisibility(GONE);
-                }
-                chkRemember.setChecked(true);
-            } else {
-                chkRemember.setChecked(false);
-            }
-        } catch (Exception ex) {
-            if (ex.getMessage().toString().contains("no such table")) {
-                mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
-                mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblRemember(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, username TEXT);");
-            }
         }
     }
 
@@ -777,6 +667,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setStrEmail(login.getData().getEmail());
                                 //                            objMyApplication.setUserId(login.getData().getUserId());
                                 objMyApplication.setLoginUserId(login.getData().getUserId());
+                                objMyApplication.setLoginResponse(login);
                                 Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                                 objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                                 getStatesUrl(login.getData().getStateList().getUS());
@@ -851,6 +742,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
+                                objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(LoginActivity.this, loginResponse.getData().getEmail());
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
@@ -934,22 +826,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     }
 
     private void launchDashboard() {
-
-        objMyApplication.launchDashboard(this, "login");
-
-//        Intent dashboardIntent = new Intent(LoginActivity.this, DashboardActivity.class);
-//        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-//            BusinessTrackerResponse btr = objMyApplication.getBusinessTrackerResponse();
-//            if (btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-//                    && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-//                dashboardIntent = new Intent(LoginActivity.this, BusinessDashboardActivity.class);
-//            } else {
-//                dashboardIntent = new Intent(LoginActivity.this, BusinessRegistrationTrackerActivity.class);
-//                dashboardIntent.putExtra("FROM","login");
-//            }
-//        }
-//        dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        startActivity(dashboardIntent);
+        if (objMyApplication.checkForDeclinedStatus()) {
+            objMyApplication.launchDeclinedActivity(this);
+        } else {
+            objMyApplication.launchDashboard(this, "login");
+        }
     }
 
     private void login() {
@@ -990,8 +871,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (strEmail.equals("")) {
                 strEmail = etEmail.getText().toString().trim().toLowerCase();
             }
-//            mydatabase.execSQL("Delete from tblRemember");
-//            mydatabase.execSQL("INSERT INTO tblRemember(id,username) VALUES(null,'" + strEmail.toLowerCase() + "')");
             dbHandler.clearTableRemember();
             dbHandler.insertTableRemember(strEmail.toLowerCase());
 
