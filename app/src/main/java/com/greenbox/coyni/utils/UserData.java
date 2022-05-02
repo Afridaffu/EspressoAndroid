@@ -90,7 +90,7 @@ public class UserData {
     private TrackerResponse trackerResponse = new TrackerResponse();
     private String selectedButTokenType = "";
     private List<Earning> earningList;
-
+    boolean isReserveEnabled = false;
 
     public List<Earning> getEarningList() {
         return earningList;
@@ -632,5 +632,11 @@ public class UserData {
         this.selectedButTokenType = selectedButTokenType;
     }
 
+    public boolean isReserveEnabled() {
+        return isReserveEnabled;
+    }
 
+    public void setIsReserveEnabled(boolean isReserveEnabled) {
+        this.isReserveEnabled = isReserveEnabled;
+    }
 }

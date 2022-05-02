@@ -192,6 +192,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
         }
 
+        etEmail.setText("c2@gmail.com");
+        etPassword.setText("Admin@123");
     }
 
     @Override
@@ -777,7 +779,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 objMyApplication.setStrEmail(login.getData().getEmail());
                                 //                            objMyApplication.setUserId(login.getData().getUserId());
                                 objMyApplication.setLoginUserId(login.getData().getUserId());
-                                objMyApplication.setLoginResponse(loginResponse);
+                                objMyApplication.setLoginResponse(login);
                                 Utils.setUserEmail(LoginActivity.this, login.getData().getEmail());
                                 objMyApplication.setBiometric(login.getData().getBiometricEnabled());
                                 getStatesUrl(login.getData().getStateList().getUS());
@@ -992,8 +994,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             if (strEmail.equals("")) {
                 strEmail = etEmail.getText().toString().trim().toLowerCase();
             }
-//            mydatabase.execSQL("Delete from tblRemember");
-//            mydatabase.execSQL("INSERT INTO tblRemember(id,username) VALUES(null,'" + strEmail.toLowerCase() + "')");
             dbHandler.clearTableRemember();
             dbHandler.insertTableRemember(strEmail.toLowerCase());
 

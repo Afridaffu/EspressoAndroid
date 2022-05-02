@@ -283,6 +283,7 @@ public class OnboardActivity extends BaseActivity {
                                 objMyApplication.setStrEmail(loginResponse.getData().getEmail());
                                 //                            objMyApplication.setUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
+                                objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
