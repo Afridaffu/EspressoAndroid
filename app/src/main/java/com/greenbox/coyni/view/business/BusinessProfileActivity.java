@@ -473,7 +473,10 @@ public class BusinessProfileActivity extends BaseActivity {
                     //                    }
                     account_status.setText(accountStatus);
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
-                    fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
+//                    fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
+                    if (myApplication.getMyProfile().getData().getDbaName() != null) {
+                        fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
+                    }
                     if (fullname.length() > 22){
                         userFullname.setText(fullname.substring(0,22)+" ");
                     }
@@ -647,7 +650,10 @@ public class BusinessProfileActivity extends BaseActivity {
                                 //                    }
                                 account_status.setText(profile.getData().getAccountStatus());
                                 account_id.setText("Account ID M-" + profile.getData().getId());
-                                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+//                                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+                                if (profile.getData().getDbaName() != null) {
+                                    fullname = Utils.capitalize(profile.getData().getDbaName());
+                                }
 //                                userFullname.setText(fullname);
 
                                 if (userFullname != null && userFullname.length() > 22) {
