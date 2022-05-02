@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.zxing.Reader;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
@@ -45,7 +46,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -58,6 +61,8 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
@@ -81,6 +86,7 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
+import com.greenbox.coyni.view.business.TeamActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -100,7 +106,7 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ScanActivity extends AppCompatActivity implements TextWatcher {
+public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKeyboardVisibilityListener {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
     LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL, scanMeScanCodeLL;
     ConstraintLayout flashLL;
@@ -223,6 +229,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
             scanCode = findViewById(R.id.scanCodeTV);
             scanMe = findViewById(R.id.scanMeTV);
+            setKeyboardVisibilityListener(ScanActivity.this);
             toglebtn1 = findViewById(R.id.toglebtn);
             tvWalletAddress = findViewById(R.id.tvWalletAddress);
             mycodeScannerView = findViewById(R.id.scanner_view);
@@ -259,6 +266,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(ScanActivity.this);
 
             avaBal = objMyApplication.getGBTBalance();
             businessIdentityVerificationViewModel.getBusinessType();
@@ -990,6 +1000,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
             } else {
                 isAlbumClicked = false;
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1743,5 +1754,36 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
     }
 }

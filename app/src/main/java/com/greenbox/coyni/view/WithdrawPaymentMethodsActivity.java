@@ -1377,6 +1377,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 startActivity(i);
             } else {
                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
+                i.putExtra("notoken", strscreen);
                 startActivity(i);
             }
         } catch (Exception ex) {

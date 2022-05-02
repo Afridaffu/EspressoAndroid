@@ -959,10 +959,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             mLastClickTime = SystemClock.elapsedRealtime();
             convertDecimal();
 
+            if (payValidation())  {
                 isPayClick = true;
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                 cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
                 calculateFee(Utils.USNumberFormat(cynValue));
+            }
 //                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
 //                                    isPayClick = true;
 //                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);

@@ -3,11 +3,13 @@ package com.greenbox.coyni.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,10 +26,12 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -40,6 +44,7 @@ import okhttp3.internal.Util;
 public class BusinessAccountFragment extends BaseFragment {
 
     private LinearLayout viewMoreLL;
+    private RelativeLayout mUserIconRelativeLayout;
     private RecyclerView txnRV;
     private TextView noTxnTV, tvBalance;
     private SwipeRefreshLayout latestTxnRefresh;
@@ -48,6 +53,7 @@ public class BusinessAccountFragment extends BaseFragment {
     private DashboardViewModel dashboardViewModel;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private MyApplication objMyApplication;
+    private Long mLastClickTimeQA = 0L;
     private NestedScrollView transactionsNSV;
     private ImageView mIvNotifications;
 
@@ -64,6 +70,7 @@ public class BusinessAccountFragment extends BaseFragment {
         transactionsNSV = currentView.findViewById(R.id.transactionsNSV);
         latestTxnRefresh = currentView.findViewById(R.id.latestTxnRefresh);
         mIvNotifications = currentView.findViewById(R.id.iv_notifications);
+        mUserIconRelativeLayout = currentView.findViewById(R.id.rl_user_icon_layout);
         objMyApplication = (MyApplication) requireContext().getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
@@ -100,6 +107,15 @@ public class BusinessAccountFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), NotificationsActivity.class));
             }
         });
+
+        mUserIconRelativeLayout.setOnClickListener(view -> {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                return;
+            }
+            mLastClickTimeQA = SystemClock.elapsedRealtime();
+            startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+        });
+
 
         initObservers();
         showUserData();
@@ -176,7 +192,10 @@ public class BusinessAccountFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (Utils.checkInternet(requireContext().getApplicationContext())) {
-            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.TOKEN);
+            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
             dashboardViewModel.getLatestTxns();
             ((BusinessDashboardActivity) getActivity()).showProgressDialog();
             transactionsNSV.smoothScrollTo(0, 0);

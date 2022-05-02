@@ -272,11 +272,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_14sdp"
                         android:background="@drawable/bg_white_color_light_border"
-                        android:paddingLeft="@dimen/_8sdp"
-                        android:visibility="gone"
                         android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/_8sdp"
                         android:paddingTop="@dimen/_8sdp"
-                        android:paddingBottom="@dimen/_7sdp">
+                        android:paddingBottom="@dimen/_7sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -307,17 +307,16 @@
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="Uploaded on 6/11/2020"
                                 android:textColor="@color/dark_grey"
-                                android:textSize="@dimen/_8ssp"
-                                />
+                                android:textSize="@dimen/_8ssp" />
 
                         </LinearLayout>
 
                         <View
                             android:layout_width="1.5dp"
                             android:layout_height="match_parent"
+                            android:layout_marginVertical="@dimen/_6sdp"
                             android:layout_marginStart="5dp"
-                            android:background="@color/viewcolor"
-                            android:layout_marginVertical="@dimen/_6sdp"/>
+                            android:background="@color/viewcolor" />
 
                         <TextView
                             android:id="@+id/view_article"

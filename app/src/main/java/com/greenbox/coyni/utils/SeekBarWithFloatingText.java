@@ -15,6 +15,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.merchant_activity.Earning;
+
+import java.util.List;
+import java.util.Vector;
 
 public class SeekBarWithFloatingText extends RelativeLayout {
 
@@ -24,6 +28,9 @@ public class SeekBarWithFloatingText extends RelativeLayout {
     private SeekBar seekBar;
     private View thumbView;
     private String floatingText;
+    private List<Earning> userData;
+    String defaultValue = " 0.00 CYN";
+
 
     public SeekBarWithFloatingText(Context context) {
         super(context);
@@ -39,7 +46,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         super(context, attrs, defStyleAttr);
         initView();
     }
-    
+
     public void setEnabled(boolean enabled) {
         seekBar.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -49,14 +56,18 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         });
     }
 
-    public void setProgressWithText(int progress, String floating) {
+    public void setProgressWithText(int progress, List<Earning> userData) {
+
+        this.userData = userData;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                floatingText = floating;
+
+
                 seekBar.setProgress(progress);
+                setTextPos(progress);
             }
-        }, 100);
+        }, 1000);
     }
 
     private void initView() {
@@ -92,22 +103,58 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         LayoutParams layoutParams = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         int width = seekBar.getWidth();
-        int calculatedWidth = (width / 24) * progress;
+        int calculatedWidth = (width / 24);
         String text = "";
+
+        List<Earning> earningList = userData;
         if (progress < 12) {
-            text = progress + ".00 am";
-            calculatedWidth = calculatedWidth + 60;
+            if (progress < 10) {
+                if (progress == 0) {
+                    text = "12:00am";
+                } else {
+                    text = "0" + progress + ":00am";
+                }
+            } else {
+                text = progress + ":00am";
+            }
+//            text = totalAmount.toLowerCase();
+            calculatedWidth = calculatedWidth + 20 * progress;
         } else if (progress == 12) {
-            text = progress + ".00 pm";
+            text = progress + ":00pm";
+//            text = totalAmount.toLowerCase();
+            calculatedWidth = calculatedWidth + 20 * progress;
         } else {
-            calculatedWidth = calculatedWidth - 10;
-            text = (progress - 12) + ".00 pm";
+            if (progress > 12 && progress < 20) {
+                calculatedWidth = calculatedWidth + 20 * progress;
+            } else {
+                calculatedWidth = 20 * 20 + 20 - calculatedWidth;  // for fix the Position
+            }
+            if (progress != 24) {
+                text = (progress - 12) + ":00pm";
+            }
+            else {
+                text = "11:59pm";
+            }
+//            text = totalAmount.toLowerCase();
         }
         if (calculatedWidth < width) {
             layoutParams.setMargins(calculatedWidth, 0, 0, 0);
             tvFloatingText.setLayoutParams(layoutParams);
         }
-        tvFloatingText.setText(text + " " + floatingText + "cyn");
+        tvFloatingText.setText(text + defaultValue);
+        if (earningList != null) {
+            for (int position = 0; position < earningList.size(); position++) {
+                if (progress == earningList.get(position).getKey()) {
+                    tvFloatingText.setText(text + " " + earningList.get(position).getTotalAmount() + " CYN");
+                    break;
+                } else {
+                    tvFloatingText.setText(text + defaultValue);
+                }
+
+            }
+        }
+
+
     }
 
     public Drawable getThumb() {

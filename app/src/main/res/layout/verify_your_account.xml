@@ -13,14 +13,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@drawable/arc_shape"></RelativeLayout>
+            android:background="@drawable/arc_shape"
+            android:visibility="gone"></RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:alpha="0.5"
-            android:background="@drawable/ic_dash_back"
-            android:backgroundTint="@color/white"></RelativeLayout>
+            android:background="@drawable/ic_account_created_bg_curve"></RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -36,11 +35,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_32sdp"
-                    android:layout_marginTop="@dimen/_37sdp">
+                    android:layout_marginTop="@dimen/_45sdp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
                         android:src="@drawable/ic_x"
                         android:layout_marginRight="@dimen/_10sdp"
                         app:tint="@color/white" />
@@ -60,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="77dp"
+                    android:layout_marginTop="120dp"
                     android:src="@drawable/ic_account_created" />
 
             </RelativeLayout>

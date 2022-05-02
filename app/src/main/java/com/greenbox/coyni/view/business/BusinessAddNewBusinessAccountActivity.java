@@ -54,7 +54,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class BusinessAddNewBusinessAccountActivity extends BaseActivity implements AddNewBusinessAccountDBAAdapter.OnSelectListner {
+public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
 
     private ImageView imageViewClose;
     private LinearLayout llNewComapny, llNewDba;
@@ -133,24 +133,38 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity implemen
 //            listComapny.add(c.getCompanyName());
 //        }
         LogUtils.d(TAG,"businessAccountList"+businessAccountList.toString());
-        AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, BusinessAddNewBusinessAccountActivity.this);
+        AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, new AddNewBusinessAccountDBAAdapter.OnSelectListner(){
+            @Override
+            public void selectedItem(ProfilesResponse.Profiles item) {
+                LogUtils.d("dbaselected", "dbaselectes" + item.toString());
+                addDBACardView.setEnabled(true);
+                addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
+                companyId = item.getId();
+            }
+        });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         rvCompanyList.setLayoutManager(mLayoutManager);
         rvCompanyList.setItemAnimator(new DefaultItemAnimator());
         rvCompanyList.setAdapter(addNewBusinessAccountDBAAdapter);
         LogUtils.d(TAG, "eeee" + companyId);
 
+        if (companyId != 0){
+            addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
+            addDBACardView.setEnabled(true);
+        } else {
+            addDBACardView.setCardBackgroundColor(getColor(R.color.inactive_color));
+            addDBACardView.setEnabled(false);
+        }
+
         addDBACardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (companyId != 0) {
                     identityVerificationViewModel.getPostAddDBABusiness(companyId);
                     dialog.cancel();
                 } else {
 
                 }
-
             }
         });
 
@@ -230,12 +244,11 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity implemen
         }
     }
 
-    @Override
-    public void selectedItem(ProfilesResponse.Profiles item) {
-
-        LogUtils.d("dbaselected", "dbaselectes" + item.toString());
-
-        companyId = item.getId();
-
-    }
+//    @Override
+//    public void selectedItem(ProfilesResponse.Profiles item) {
+//
+//        LogUtils.d("dbaselected", "dbaselectes" + item.toString());
+//        addDBACardView.setEnabled(true);
+//        companyId = item.getId();
+//    }
 }

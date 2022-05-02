@@ -27,6 +27,7 @@ import com.greenbox.coyni.fragments.BusinessDashboardFragment;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -257,7 +258,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
             mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
         }
-        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
+//        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
     }
 
     private void pushFragment(BaseFragment fragment) {
@@ -283,9 +284,20 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
-            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(Utils.RESERVE);
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.MERCHANT);
+            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.TOKEN);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.RESERVE);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+//            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
+//            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
+//            businessDashboardViewModel.meMerchantWallet(Utils.RESERVE);
 
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
@@ -298,14 +310,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
             String accountStatus = objMyApplication.getMyProfile().getData().getAccountStatus();
-            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                isTabsEnabled = false;
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                isTabsEnabled = true;
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
-                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-                isTabsEnabled = false;
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isTabsEnabled = true;
             }
         }
@@ -379,12 +384,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (businessWalletResponse != null) {
 //                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN)) {
-                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE)) {
-                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else {
+                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
                                 objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
+                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
+//                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                                 objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             }
                         }
@@ -398,7 +404,16 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
         String iconText = "";
-        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+        if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())
+                && objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+            iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
+            userName = objMyApplication.getMyProfile().getData().getDbaName();
+            if (userName != null && userName.length() > 21) {
+                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
+            } else {
+                mTvUserName.setText("Hi! " + userName);
+            }
+        } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getFirstName() != null) {
             String firstName = objMyApplication.getMyProfile().getData().getFirstName();
             iconText = firstName.substring(0, 1).toUpperCase();
@@ -412,9 +427,9 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvUserName.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText(userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
             } else {
-                mTvUserName.setText(userName);
+                mTvUserName.setText("Hi! " + userName);
             }
         }
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
@@ -434,17 +449,17 @@ public class BusinessDashboardActivity extends BaseActivity {
         mTvUserName.setOnClickListener(view -> {
             if (mTvUserName.getText().toString().contains("...")) {
                 if (userName.length() == 21 || userName.length() > 21) {
-                    mTvUserName.setText(userName.substring(0, 20));
+                    mTvUserName.setText("Hi! "+userName.substring(0, 20));
                 } else {
-                    mTvUserName.setText(userName);
+                    mTvUserName.setText("Hi! "+userName);
                 }
             } else {
                 if (userName.length() == 21) {
-                    mTvUserName.setText(userName.substring(0, 20) + "...");
+                    mTvUserName.setText("Hi! "+userName.substring(0, 20) + "...");
                 } else if (userName.length() > 22) {
-                    mTvUserName.setText(userName.substring(0, 22) + "...");
+                    mTvUserName.setText("Hi! "+userName.substring(0, 22) + "...");
                 } else {
-                    mTvUserName.setText(userName);
+                    mTvUserName.setText("Hi! "+userName);
                 }
             }
         });

@@ -140,6 +140,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     protected void onResume() {
         super.onResume();
         companynameET.requestFocus();
+////        companyaddressET.requestFocus();
+        Utils.shwForcedKeypad(CompanyInformationActivity.this);
     }
 
     public void initFields() {
@@ -270,9 +272,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider0.setBackgroundResource(R.drawable.button_background);
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background1);
-
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        companynameET.requestFocus();
+//                        if (!Utils.isKeyboardVisible)
+//                        Utils.shwForcedKeypad(CompanyInformationActivity.this);
 
                         enableOrDisableNext();
                     } else if (position == 1) {
@@ -281,7 +283,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider0.setBackgroundResource(R.drawable.button_background1);
                         divider1.setBackgroundResource(R.drawable.button_background);
                         divider2.setBackgroundResource(R.drawable.button_background1);
-
+                        companyaddressET.requestFocus();
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         enableOrDisableAddressNext();
@@ -779,8 +781,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     } else {
 //                        companynameET.setHint("Company’s Name");
+//                        companynameET.requestFocus();
+//                        Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                        companynameET.setHintTextColor(getColor(R.color.light_gray));
                         companynameErrorLL.setVisibility(GONE);
                         Utils.setUpperHintColor(companynametil, getColor(R.color.primary_green));
                     }
@@ -955,7 +958,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.toString().trim().length() > 0) {
                         iscompanyName = true;
-                        companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+//                        companynametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         if (!companynameET.hasFocus())
                             Utils.setUpperHintColor(companynametil, getResources().getColor(R.color.primary_black));
                     } else {
@@ -1245,7 +1248,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             isZipcode = false;
                             zipcodeErrorLL.setVisibility(GONE);
                             //                        zipcodeTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
+//                            Utils.setUpperHintColor(zipcodetil, getResources().getColor(R.color.primary_black));
                         } else if (charSequence.length() == 0) {
                             isZipcode = false;
 //                            zipcodeErrorLL.setVisibility(VISIBLE);

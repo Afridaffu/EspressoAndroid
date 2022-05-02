@@ -80,7 +80,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListner, OnKeyboardVisibilityListener {
+public class ReviewApplicationActivity extends BaseActivity implements BenificialOwnersRecyclerAdapter.OnSelectListner, BankAccountsRecyclerAdapter.OnSelectListener, OnKeyboardVisibilityListener {
     private TextView edit1, edit2, edit3;
     private CheckBox agreeCB;
     private boolean isNextEnabled = false, isagreed = false;
@@ -708,15 +708,16 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             });
                             if (agreements != null && agreements1.getItems().size() > 0) {
                                 for (int i = 0; i < agreements1.getItems().size(); i++) {
+                                    String doc = agreements1.getItems().get(i).getDocumentVersion();
                                     switch (agreements1.getItems().get(i).getSignatureType()) {
                                         case Utils.mPP:
-                                            mPrivacyVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            mPrivacyVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
                                             break;
                                         case Utils.mTOS:
-                                            mTermsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            mTermsVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
                                             break;
                                         case Utils.mAgmt:
-                                            mMerchantsVno.setText(agreements1.getItems().get(i).getDocumentVersion());
+                                            mMerchantsVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
                                             break;
                                     }
 //                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mPP) {
@@ -748,7 +749,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d(TAG, "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
-                            if (objMyApplication.getAccountType() == 2) {
+                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                                 intent.putExtra("showGetStarted", true);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

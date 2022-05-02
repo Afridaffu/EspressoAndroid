@@ -109,6 +109,10 @@ public class MyApplication extends Application {
         mCurrentUserData = new UserData();
     }
 
+    public UserData getCurrentUserData() {
+        return mCurrentUserData;
+    }
+
     public SignOnData getObjSignOnData() {
         return mCurrentUserData.getObjSignOnData();
     }

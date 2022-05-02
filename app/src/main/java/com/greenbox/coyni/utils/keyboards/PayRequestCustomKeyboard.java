@@ -152,4 +152,8 @@ public class PayRequestCustomKeyboard extends LinearLayout implements View.OnCli
     public void clearData() {
         enteredText = "";
     }
+
+    public void setEnteredText(String text){
+        enteredText = text.trim();
+    }
 }

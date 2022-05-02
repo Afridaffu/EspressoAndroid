@@ -2,7 +2,7 @@ package com.greenbox.coyni.model.summary;
 
 public class BankAccount {
 
-    private Integer id;
+    private Integer bankId;
 
     private String bankName;
 
@@ -36,12 +36,20 @@ public class BankAccount {
 
     private Boolean isArchived;
 
-    public Integer getId() {
-        return id;
+    public Integer getBankId() {
+        return bankId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setBankId(Integer bankId) {
+        this.bankId = bankId;
+    }
+
+    public Boolean getArchived() {
+        return isArchived;
+    }
+
+    public void setArchived(Boolean archived) {
+        isArchived = archived;
     }
 
     public String getBankName() {

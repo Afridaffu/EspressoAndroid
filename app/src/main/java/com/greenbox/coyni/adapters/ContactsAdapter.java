@@ -28,6 +28,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     Context mContext;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
+    Long mLastClickTimeInvite = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameHead, tvUserName, tvWalletAddress;
@@ -63,37 +64,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             RegUsersResponseData objData = listUsers.get(position);
-//            if (objData.getUserName() != null && !objData.getUserName().equals("")) {
-//                if (objData.getUserName().contains(" ")) {
-//                    if (!objData.getUserName().split(" ")[0].equals("")) {
-//                        if (objData.getUserName().split(" ").length > 2) {
-//                            if (!objData.getUserName().split(" ")[1].equals("")) {
-//                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-//                            } else {
-//                                holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[2].substring(0, 1).toUpperCase());
-//                            }
-//                        } else {
-//                            holder.tvNameHead.setText(objData.getUserName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-//                        }
-//                    } else {
-//                        holder.tvNameHead.setText(objData.getUserName().split(" ")[0].toUpperCase() + objData.getUserName().split(" ")[1].substring(0, 1).toUpperCase());
-//                    }
-//                } else {
-//                    holder.tvNameHead.setText(objData.getUserName().substring(0, 1).toUpperCase());
-//                }
-//                holder.tvUserName.setText(Utils.capitalize(objData.getUserName()));
-//                if (objData.getWalletAddress() != null && !objData.getWalletAddress().equals("")) {
-//                    if (objData.getWalletAddress().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
-//                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
-//                    } else {
-//                        holder.tvWalletAddress.setText("Account Address " + objData.getWalletAddress());
-//                    }
-//                    holder.imgInvite.setVisibility(View.GONE);
-//                } else {
-//                    //holder.tvWalletAddress.setVisibility(View.INVISIBLE);
-//                    holder.tvWalletAddress.setText("");
-//                    holder.imgInvite.setVisibility(View.VISIBLE);
-//                }
+
             String strPhContact = "", strEcoSysName = "";
             if (objData.getUserName() != null && !objData.getUserName().equals("")) {
                 if (objData.getUserName().length() > 24) {
@@ -148,14 +119,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.tvNameHead.setVisibility(View.VISIBLE);
             }
 
-            holder.rlUserDetailS.setOnClickListener(new View.OnClickListener() {
+            holder.imgInvite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTimeInvite < 2000) {
                             return;
                         }
-                        mLastClickTime = SystemClock.elapsedRealtime();
+                        mLastClickTimeInvite = SystemClock.elapsedRealtime();
                         Intent i = new Intent(Intent.ACTION_SEND);
                         i.setType("text/plain");
                         i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");

@@ -7,9 +7,11 @@ public class BusinessActivityData implements Serializable {
     private String transactionType;
     private String transactionSubType;
     private String totalAmount;
-    private long count;
+    private int count;
     private int percentage;
     private String fee;
+    private String highTicket;
+    private String createdAt;
 
     public String getTransactionType() {
         return transactionType;
@@ -23,8 +25,32 @@ public class BusinessActivityData implements Serializable {
         return totalAmount;
     }
 
-    public long getCount() {
+    public int getCount() {
         return count;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public void setTransactionSubType(String transactionSubType) {
+        this.transactionSubType = transactionSubType;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setPercentage(int percentage) {
+        this.percentage = percentage;
+    }
+
+    public void setFee(String fee) {
+        this.fee = fee;
     }
 
     public int getPercentage() {
@@ -33,5 +59,21 @@ public class BusinessActivityData implements Serializable {
 
     public String getFee() {
         return fee;
+    }
+
+    public String getHighTicket() {
+        return highTicket;
+    }
+
+    public void setHighTicket(String highTicket) {
+        this.highTicket = highTicket;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -71,7 +71,8 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
         llPersonalAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(BusinessAddNewAccountActivity.this, BindingLayoutActivity.class));
+                startActivity(new Intent(BusinessAddNewAccountActivity.this, BindingLayoutActivity.class)
+                        .putExtra("screen","profileGetStarted"));
                 //identityVerificationViewModel.getPostAddCustomer();
 
             }

@@ -269,12 +269,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     break;
 
                 }
-            } else {
-                try {
-                    findViewById(R.id.transaction_not_found).setVisibility(View.VISIBLE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -300,7 +294,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView type, reserveAmount, status, date, referenceId, reserveRules, depositTo, tokenType;
         TextView reserveHeld, reservedOn, reserveId;
 
-        LinearLayout reserveIDCopy;
+        LinearLayout reserveIDCopy,mCloseButton;
 
         type = findViewById(R.id.reserve_type);
         reserveAmount = findViewById(R.id.reserve_amount);
@@ -316,6 +310,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         reserveId = findViewById(R.id.reserve_id);
 
         reserveIDCopy = findViewById(R.id.reserve_id_copy);
+        mCloseButton = findViewById(R.id.reserve_close_button);
 
 
         if (reserveData.getTransactionType() != null) {
@@ -353,7 +348,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (reserveData.getReferenceId().length() > 10) {
                 referenceId.setText(reserveData.getReferenceId().substring(0, 10) + "...");
             } else {
-                referenceId.setText(reserveData.getReserveId());
+                referenceId.setText(reserveData.getReferenceId());
             }
         }
 
@@ -402,18 +397,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             }
         }
 
-        reserveIDCopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.copyText(reserveData.getReserveId(), TransactionDetailsActivity.this);
-            }
-        });
+        reserveIDCopy.setOnClickListener(view -> Utils.copyText(reserveData.getReferenceId(), TransactionDetailsActivity.this));
+
+        mCloseButton.setOnClickListener(view -> finish());
+
 
     }
 
     private void paidOrderToken(TransactionData paidOrderData) {
         TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
-        LinearLayout mReferenceCopy, mMerchantAccountCopy;
+        LinearLayout mReferenceCopy, mMerchantAccountCopy,mBackButton;
         TextView mAmountPaid, mDateAndTime, mPaidReferenceID;
 
         mTransactionType = findViewById(R.id.transaction_types);
@@ -429,10 +422,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         mReferenceCopy = findViewById(R.id.copy_ref_ll);
         mMerchantAccountCopy = findViewById(R.id.copy_merchant_id);
         mDescription = findViewById(R.id.description);
+        mBackButton = findViewById(R.id.back_button);
 
         mAmountPaid = findViewById(R.id.amount_paid);
         mDateAndTime = findViewById(R.id.date_and_time);
         mPaidReferenceID = findViewById(R.id.reference_id);
+
 
 
         if (paidOrderData.getTransactionType() != null && paidOrderData.getTransactionSubtype() != null) {
@@ -559,6 +554,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             } else
                 mPaidReferenceID.setText(Html.fromHtml("<u>" + paidOrderData.getSaleOrderReferenceId() + "</u>"));
         }
+
+        mBackButton.setOnClickListener(view -> finish());
+
+
 
 
     }

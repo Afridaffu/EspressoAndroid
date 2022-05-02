@@ -115,7 +115,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     float fontSize, dollarFont;
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
-    Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false;
+    Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false,isMinimumError = false;
     Boolean isFaceLock = false, isTouchId = false;
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID;
@@ -938,12 +938,14 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     private Boolean validation() {
         Boolean value = true;
+        isMinimumError = false;
         try {
             cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = Utils.convertBigDecimalUSDC((etAmount.getText().toString().trim().replace("\"", "")).replace(",", ""));
             if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
 //                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
                 setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
+                isMinimumError = true;
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
@@ -1758,6 +1760,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
 
     private void enableButton() {
         try {
+            isMinimumError = false;
             if (etAmount.getText().toString().trim().length() > 0) {
                 convertDecimal();
                 if (validation()) {
@@ -1773,6 +1776,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                         lyBalance.setVisibility(View.GONE);
                         if (tvError.getText().toString().trim().contains("Minimum Amount")) {
 //                            tvError.setText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN");
+                            isMinimumError = true;
                             setSpannableText("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", WithdrawTokenActivity.this, tvError, 17);
                         } else if (tvError.getText().toString().trim().equals("Amount entered exceeds available balance")) {
                             tvError.setText("Amount entered exceeds available balance");

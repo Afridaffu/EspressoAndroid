@@ -120,7 +120,8 @@ import java.util.regex.Pattern;
 public class Utils {
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
-    public static final String TOKEN = "TOKEN", MERCHANT = "MERCHANT", RESERVE = "RESERVE";
+    public static final String TOKEN = "0", MERCHANT = "1", RESERVE = "2";
+    public static final String TOKEN_STR = "TOKEN", MERCHANT_STR = "MERCHANT", RESERVE_STR = "RESERVE";
 
     public static enum BUSINESS_ACCOUNT_STATUS {
         UNDER_REVIEW("Under Review"),
@@ -183,6 +184,7 @@ public class Utils {
     public static Boolean isFaceEnabled;
     public static Boolean isTouchEnabled;
     public static Boolean isBiometric = false;
+    public static final String COMMENT_ACTION = "comment_action";
     public static final String transInProgress = "inprogress";
     public static final String SELECTED_BATCH_PAYOUT = "selectedBatchPayout";
     public static final String transPending = "pending";
@@ -571,6 +573,15 @@ public class Utils {
             ex.printStackTrace();
         }
         return value;
+    }
+
+    public static String getCurrentDate() {
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("MM/dd/yyyy");
+            return spf.format(new Date());
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public static String convertDate(String date) {
@@ -1808,6 +1819,17 @@ public class Utils {
         return dtExpiry;
     }
 
+    public static Date simpleDate(String date) {
+        Date dtExpiry = null;
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("MM/dd/yyyy");
+            dtExpiry = spf.parse(date);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return dtExpiry;
+    }
+
     public static PaymentMethodsResponse businessPaymentMethods(int accountType, PaymentMethodsResponse objResponse) {
         try {
             if (accountType == Utils.BUSINESS_ACCOUNT) {
@@ -2020,16 +2042,30 @@ public class Utils {
         String strDate = "";
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
-                        .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
-                        .toFormatter()
-                        .withZone(ZoneOffset.UTC);
+                DateTimeFormatter dtf = null;
+                if (date.length() == 23) {
+                    dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SSS")
+                            .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                            .toFormatter()
+                            .withZone(ZoneOffset.UTC);
+                } else {
+                    dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss.SS")
+                            .parseDefaulting(ChronoField.OFFSET_SECONDS, 0)
+                            .toFormatter()
+                            .withZone(ZoneOffset.UTC);
+                }
                 ZonedDateTime zonedTime = ZonedDateTime.parse(date, dtf);
                 DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
                 zonedTime = zonedTime.withZoneSameInstant(ZoneId.of(zoneId, ZoneId.SHORT_IDS));
                 strDate = zonedTime.format(DATE_TIME_FORMATTER);
             } else {
-                SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                SimpleDateFormat spf = null;
+                if (date.length() == 23) {
+                    spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                } else {
+                    spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
+
+                }
                 spf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date newDate = spf.parse(date);
                 spf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");

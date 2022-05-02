@@ -166,18 +166,22 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                         String search_key = s.toString();
                         List<RegUsersResponseData> filterList = new ArrayList<>();
                         List<RecentUsersData> filtersRecentList = new ArrayList<>();
-//                        int sIndex = 0, wIndex = -1;
-                        boolean sIndex = false, wIndex = false;
+                        boolean sIndex = false, wIndex = false, ecoIndex = false;
                         if (contactsList != null && contactsList.size() > 0) {
                             for (int i = 0; i < contactsList.size(); i++) {
                                 wIndex = false;
-//                                sIndex = contactsList.get(i).getUserName().toLowerCase().indexOf(search_key.toLowerCase());
-                                sIndex = contactsList.get(i).getUserName().toLowerCase().startsWith(search_key.toLowerCase());
+                                ecoIndex = false;
+//                                sIndex = contactsList.get(i).getUserName().toLowerCase().startsWith(search_key.toLowerCase());
+                                sIndex = contactsList.get(i).getUserName().toLowerCase().contains(search_key.toLowerCase());
                                 if (contactsList.get(i).getWalletAddress() != null) {
-//                                    wIndex = contactsList.get(i).getWalletAddress().toLowerCase().indexOf(search_key.toLowerCase());
-                                    wIndex = contactsList.get(i).getWalletAddress().toLowerCase().startsWith(search_key.toLowerCase());
+//                                    wIndex = contactsList.get(i).getWalletAddress().toLowerCase().startsWith(search_key.toLowerCase());
+                                    wIndex = contactsList.get(i).getWalletAddress().toLowerCase().contains(search_key.toLowerCase());
                                 }
-                                if (sIndex || wIndex) {
+                                if (contactsList.get(i).getFullName() != null && !contactsList.get(i).getFullName().equals("")) {
+                                    ecoIndex = contactsList.get(i).getFullName().toLowerCase().contains(search_key.toLowerCase());
+                                }
+//                                if (sIndex || wIndex) {
+                                if (sIndex || wIndex || ecoIndex) {
                                     filterList.add(contactsList.get(i));
                                 }
                             }
@@ -192,11 +196,18 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                         if (usersList != null && usersList.size() > 0) {
                             for (int i = 0; i < usersList.size(); i++) {
                                 wIndex = false;
-                                sIndex = usersList.get(i).getUserName().toLowerCase().startsWith(search_key.toLowerCase());
+                                ecoIndex = false;
+//                                sIndex = usersList.get(i).getUserName().toLowerCase().startsWith(search_key.toLowerCase());
+                                sIndex = usersList.get(i).getUserName().toLowerCase().contains(search_key.toLowerCase());
                                 if (usersList.get(i).getWalletAddress() != null) {
-                                    wIndex = usersList.get(i).getWalletAddress().toLowerCase().startsWith(search_key.toLowerCase());
+//                                    wIndex = usersList.get(i).getWalletAddress().toLowerCase().startsWith(search_key.toLowerCase());
+                                    wIndex = usersList.get(i).getWalletAddress().toLowerCase().contains(search_key.toLowerCase());
                                 }
-                                if (sIndex || wIndex) {
+                                if (objMyApplication.getObjPhContacts().containsKey(usersList.get(i).getPhoneNumber().replace("(1)", ""))) {
+                                    ecoIndex = objMyApplication.getObjPhContacts().get(usersList.get(i).getPhoneNumber().replace("(1)", "")).getUserName().toLowerCase().contains(search_key.toLowerCase());
+                                }
+//                                if (sIndex || wIndex) {
+                                if (sIndex || wIndex || ecoIndex) {
                                     filtersRecentList.add(usersList.get(i));
                                 }
                             }
@@ -215,7 +226,6 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                         }
                         search_text = search_key;
                         if (!search_key.trim().equals("") && search_key.trim().length() > 2) {
-                            //lyCoyniUsers.setVisibility(View.VISIBLE);
                             tvSearchUsers.setVisibility(View.GONE);
                             payViewModel.getCoyniUsers(search_key.toLowerCase());
                         } else {
@@ -526,20 +536,29 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                         nWAList.add(contacts.get(i));
                     }
                 }
-                if (wWAList != null && wWAList.size() > 0) {
-                    contactsList.addAll(wWAList);
-                }
-                if (nWAList != null && nWAList.size() > 0) {
-                    contactsList.addAll(nWAList);
-                }
 
 
-                Collections.sort(contactsList, new Comparator<RegUsersResponseData>() {
+                Collections.sort(wWAList, new Comparator<RegUsersResponseData>() {
                     @Override
                     public int compare(RegUsersResponseData o1, RegUsersResponseData o2) {
                         return o1.getUserName().compareTo(o2.getUserName());
                     }
                 });
+
+                Collections.sort(nWAList, new Comparator<RegUsersResponseData>() {
+                    @Override
+                    public int compare(RegUsersResponseData o1, RegUsersResponseData o2) {
+                        return o1.getUserName().compareTo(o2.getUserName());
+                    }
+                });
+
+                if (wWAList != null && wWAList.size() > 0) {
+                    contactsList.addAll(wWAList);
+                }
+
+                if (nWAList != null && nWAList.size() > 0) {
+                    contactsList.addAll(nWAList);
+                }
 
                 rvContacts.setVisibility(View.VISIBLE);
                 tvContactMsg.setVisibility(View.VISIBLE);

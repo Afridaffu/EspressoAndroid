@@ -312,7 +312,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         if (confirmPasswordET.getText().length() > 0) {
                             confirmPasswordET.setSelection(confirmPasswordET.getText().length());
                         }
-                        confirmPasswordET.setHint("Confirm Password");
+//                        confirmPasswordET.setHint("Confirm Password");
                         confPasswordTIL.setHint("Confirm Password");
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -750,7 +750,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
                         } else {
                             isConfirmPassword = false;
-                            confPasswordTIL.setHint("Password doesn’t match");
+//                            confPasswordTIL.setHint("Password doesn’t match");
                         }
                         enableOrDisableNext();
                     }
@@ -939,7 +939,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                         } else if (passwordET.getText().toString().length() > 0 && confirmPasswordET.getText().toString().length() > 0 && !passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
-                            //passwordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                            passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
                             confPasswordTIL.setHint("Password doesn’t match");
                         } else {

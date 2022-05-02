@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingStart="@dimen/_22sdp"
-        android:paddingEnd="@dimen/_22sdp"
-        >
+        android:paddingEnd="@dimen/_22sdp">
         <ImageView
             android:id="@+id/imv_close"
             android:layout_width="wrap_content"
@@ -40,18 +40,19 @@
             <LinearLayout
                 android:id="@+id/ll_new_company"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/account_type_bg"
+                android:background="@drawable/bg_white_color_light_blue_border"
                 android:gravity="left"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/_26sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginVertical="@dimen/_19sdp"
                     android:layout_marginStart="@dimen/_10ssp"
-                    android:layout_height="@dimen/_26sdp"
-                    android:src="@drawable/ic_case" />
+                    android:src="@drawable/ic_company_info_business" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,19 +68,20 @@
             <LinearLayout
                 android:id="@+id/ll_new_dba"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="@dimen/_10ssp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_11ssp"
                 android:layout_weight="1"
-                android:background="@drawable/account_type_bg"
+                android:background="@drawable/bg_white_color_light_blue_border"
                 android:gravity="left"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="@dimen/_26sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_10ssp"
-                    android:layout_height="@dimen/_26sdp"
-                    android:src="@drawable/ic_user" />
+                    android:layout_marginVertical="@dimen/_19sdp"
+                    android:src="@drawable/ic_dba" />
 
                 <TextView
                     android:layout_width="wrap_content"

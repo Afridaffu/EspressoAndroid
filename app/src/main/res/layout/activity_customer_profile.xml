@@ -130,9 +130,9 @@
                             android:id="@+id/linearLayout"
                             android:layout_width="@dimen/_50sdp"
                             android:layout_height="@dimen/_50sdp"
+                            android:background="@drawable/corecircle"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            android:background="@drawable/corecircle"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
@@ -142,8 +142,8 @@
                                 android:layout_height="@dimen/_46sdp"
                                 android:layout_alignParentRight="true"
                                 android:layout_gravity="center"
-                                app:cardCornerRadius="@dimen/_23sdp"
                                 android:elevation="0dp"
+                                app:cardCornerRadius="@dimen/_23sdp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -161,10 +161,10 @@
                                     android:id="@+id/imageTextTV"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text="VT"
-                                    android:gravity="center"
                                     android:background="@color/blue_light"
+                                    android:fontFamily="@font/opensans_bold"
+                                    android:gravity="center"
+                                    android:text="VT"
                                     android:textColor="@color/primary_green"
                                     android:textSize="@dimen/_18ssp"
                                     android:visibility="visible" />
@@ -410,7 +410,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
-                                    android:layout_marginTop="3dp"
+                                    android:layout_centerInParent="true"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>
@@ -445,6 +445,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>
@@ -479,6 +480,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>
@@ -550,6 +552,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>
@@ -584,6 +587,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>
@@ -656,6 +660,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>
@@ -781,6 +786,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentRight="true"
+                                    android:layout_centerInParent="true"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>

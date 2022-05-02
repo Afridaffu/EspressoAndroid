@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
@@ -54,6 +55,8 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
 import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -146,6 +149,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.transferfee.TransferFeeResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
+import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendOTPResponse;
 import com.greenbox.coyni.model.update_resend_otp.UpdateResendRequest;
 import com.greenbox.coyni.model.userrequest.UserRequest;
@@ -488,8 +492,12 @@ public interface ApiService {
     @PATCH("api/v2/coyni-pin/stepup")
     Call<StepUpResponse> stepUpPin(@Body ValidateRequest request);
 
-    @GET("api/v2/profile/me/{walletType}")
-    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
+    //Deprecated
+//    @GET("api/v2/profile/me/{walletType}")
+//    Call<BusinessWalletResponse> meMerchantWallet(@Path("walletType") String walletType);
+
+    @POST("api/v2/profile/wallet")
+    Call<BusinessWalletResponse> meMerchantWallet(@Body WalletRequest request);
 
     @GET("api/v2/lov/BT")
     Call<BusinessTypeResp> getBusinessType();
@@ -542,7 +550,7 @@ public interface ApiService {
     Call<CancelApplicationResponse> cancelMerchant();
 
     @POST("api/v2/team/retrieve")
-    Call<TeamListResponse> getTeamData();
+    Call<TeamListResponse> getTeamData(@Body EmptyRequest request);
 
     @PATCH("api/v2/team/update/{teamMemberId}")
     Call<TeamInfoAddModel> updateTeamMember(@Body TeamRequest request, @Path("teamMemberId") Integer teamMemberId);
@@ -570,9 +578,7 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v2/underwriting/user/business/action-required")
-    Call<ActionRequiredResponse> submitActionrequired(
-            @Part("information") RequestBody information
-    );
+    Call<ActionRequiredSubmitResponse> submitActionRequired(@Part MultipartBody information);
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();
@@ -624,7 +630,10 @@ public interface ApiService {
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
 
     @POST("/api/v2/transactions/business-activity")
-    Call<BusinessActivityResp> businessActivity(BusinessActivityRequest businessActivityRequest);
+    Call<BusinessActivityResp> businessActivity(@Body BusinessActivityRequest businessActivityRequest);
+
+    @POST("/api/v2/transactions/admin/merchant-activity-chart")
+    Call<MerchantActivityResp> merchantActivity(@Body MerchantActivityRequest request);
 
 }
 

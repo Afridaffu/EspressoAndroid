@@ -1,246 +1,287 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/_21sdp"
-        >
-        <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/aditional"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_40sdp"
-        android:layout_marginBottom="@dimen/_14sdp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Application Approved!"
-        android:fontFamily="@font/opensans_bold"
-        android:textSize="@dimen/_16ssp"
-        android:textColor="@color/primary_black"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/_22sdp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thank you for your interest in coyni. After\ncarefully reviewing. The coyni team made\ndecision to approve your application with"
-        android:textSize="@dimen/_11ssp"
-        android:lineHeight="@dimen/_16ssp"
-        android:textColor="@color/primary_black"
-        android:fontFamily="@font/opensans_regular"
-        android:layout_gravity="center"
-        />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_36sdp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/primary_black"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:textSize="@dimen/_11ssp"
-                android:text="reserve conditions."
-                android:fontFamily="@font/opensans_semibold"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_x"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:layout_marginLeft="@dimen/_5sdp"
-                />
-        </LinearLayout>
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/_7sdp"
-            android:layout_marginBottom="@dimen/_7sdp"
-            >
+            android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_120sdp"
                 android:orientation="vertical"
-                android:background="@color/at_gray"
-                >
+                android:paddingStart="@dimen/_20sdp"
+                android:paddingTop="@dimen/_20sdp"
+                android:paddingEnd="@dimen/_20sdp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_34sdp"
+                    android:layout_marginBottom="@dimen/_14sdp"
+                    android:src="@drawable/group_18294" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_18sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/application_approved"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_16ssp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_regular"
+                    android:text="@string/thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
                 <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_45sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/opensans_semibold"
+                        android:text="@string/reserve_conditions"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <ImageView
+                        android:id="@+id/i_iconIV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_info" />
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="@dimen/_11sdp"
-                    android:paddingStart="@dimen/_11sdp"
-                    android:paddingEnd="@dimen/_11sdp"
-                    >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Monthly Volume : "
-                    android:textSize="@dimen/_11ssp"
-                    android:fontFamily="@font/opensans_semibold"
-                    android:textColor="@color/light_gray_black"
+                    android:layout_marginBottom="@dimen/_7sdp"
+                    app:cardCornerRadius="@dimen/_7sdp">
 
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/tvMonthlyVolume"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="@dimen/_12ssp"
-                    android:fontFamily="@font/opensans_bold"
-                    android:textColor="@color/primary_color"
-
-                    />
-
-            </LinearLayout>
-                <LinearLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_11sdp"
-                        >
-                    <TextView
-                        android:layout_width="wrap_content"
+                        android:background="@color/at_gray"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingTop="@dimen/_7sdp"
+                            android:paddingEnd="@dimen/_11sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Monthly Volume : "
+                                android:textColor="@color/light_gray_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_2sdp"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text="$"
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp" />
+
+                            <TextView
+                                android:id="@+id/tvMonthlyVolume"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text=""
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp"
+
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingTop="@dimen/_7sdp"
+                            android:paddingBottom="@dimen/_9sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="High Tickets : "
+                                android:textColor="@color/light_gray_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_2sdp"
+                                android:layout_marginEnd="@dimen/_2sdp"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text="$"
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp" />
+
+
+                            <TextView
+                                android:id="@+id/tvhighticket"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text=""
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_11sdp"
+                    android:layout_marginBottom="@dimen/_50sdp"
+                    app:cardCornerRadius="@dimen/_7sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="High Tickets : "
-                        android:textSize="@dimen/_11ssp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:textColor="@color/light_gray_black"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:id="@+id/tvhighticket"
-                        android:textSize="@dimen/_12ssp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:textColor="@color/primary_color"
-                        />
-                  </LinearLayout>
+                        android:background="@color/at_gray"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingTop="@dimen/_7sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:singleLine="true"
+                                android:text="Reserve Amount Per Transaction : "
+                                android:textColor="@color/light_gray_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:id="@+id/tvreserveAMountTransaction"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_bold"
+                                android:singleLine="true"
+                                android:text=""
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp"
+
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/at_gray"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingTop="@dimen/_7sdp"
+                            android:paddingBottom="@dimen/_9sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_semibold"
+                                android:text="Reserve Period : "
+                                android:textColor="@color/light_gray_black"
+                                android:textSize="@dimen/_11ssp" />
+
+                            <TextView
+                                android:id="@+id/tvreservePeriod"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/opensans_bold"
+                                android:text=""
+                                android:textColor="@color/primary_color"
+                                android:textSize="@dimen/_12ssp"
+
+                                />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_11sdp"
-            app:cardCornerRadius="@dimen/_7sdp"
-            android:layout_marginBottom="@dimen/_55sdp"
-            >
-            <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAccept"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/at_gray"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:gravity="center"
+                app:cardBackgroundColor="@color/primary_color"
+                app:cardCornerRadius="@dimen/_33sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingTop="@dimen/_11sdp"
-                    android:paddingStart="@dimen/_11sdp"
-                    android:paddingEnd="@dimen/_11sdp"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Reserve Amount Per Transaction : "
-                        android:textSize="@dimen/_11ssp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:textColor="@color/light_gray_black"
-
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tvreserveAMountTransaction"
-                        android:text=""
-                        android:textSize="@dimen/_12ssp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:textColor="@color/primary_color"
-
-                        />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_11sdp"
-                    android:background="@color/at_gray"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Reserve Period : "
-                        android:textSize="@dimen/_11ssp"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:textColor="@color/light_gray_black"
-
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tvreservePeriod"
-                        android:text=""
-                        android:textSize="@dimen/_12ssp"
-                        android:fontFamily="@font/opensans_bold"
-                        android:textColor="@color/primary_color"
-
-                        />
-
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/cardAccept"
-            app:cardBackgroundColor="@color/primary_color"
-            android:layout_marginStart="@dimen/_7sdp"
-            android:layout_marginEnd="@dimen/_7sdp"
-            app:cardCornerRadius="@dimen/_33sdp">
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_13sdp"
+                    android:layout_marginBottom="@dimen/_13sdp"
+                    android:fontFamily="@font/opensans_bold"
+                    android:gravity="center"
+                    android:text="Accept"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_13sdp"
-                android:fontFamily="@font/opensans_bold"
-                android:gravity="center"
-                android:text="Accept"
-                android:textSize="@dimen/_12ssp"
-                android:textColor="@color/white" />
-        </androidx.cardview.widget.CardView>
-         <TextView
-                android:layout_width="wrap_content"
                 android:id="@+id/cardDeclined"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_13sdp"
-                android:layout_marginBottom="@dimen/_13sdp"
+                android:layout_marginTop="@dimen/_9sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:gravity="center"
                 android:text="Decline"
-                android:textSize="@dimen/_12ssp"
-                android:textColor="@color/primary_color" />
+                android:textColor="@color/primary_color"
+                android:textSize="@dimen/_12ssp" />
+        </LinearLayout>
+        </RelativeLayout>
 
-
-     </LinearLayout>
     </ScrollView>
 </LinearLayout>
