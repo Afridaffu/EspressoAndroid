@@ -87,7 +87,8 @@ public class BanksListAdapter extends RecyclerSwipeAdapter<BanksListAdapter.MyVi
 
                         AddBankAccount addBankAccount = (AddBankAccount) mContext;
                         if (listBanks.size() > 1) {
-                            addBankAccount.deleteBankAPICall(objData.getId());
+//                            addBankAccount.deleteBankAPICall(objData.getId());
+                            addBankAccount.deleteBankAPICall(objData.getBankId());
                         } else if (listBanks.size() == 1) {
                             addBankAccount.showPopup();
                         }

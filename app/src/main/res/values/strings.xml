@@ -194,6 +194,7 @@
     <string name="enable_touch_message">Enable Touch ID to use touch recognition to complete payments quickly and securely.</string>
     <string name="error_code">117004</string>
     <string name="bank_error_code">117007</string>
+    <string name="no_bank_error_code">117005</string>
     <string name="view_all"><u>View all</u></string>
     <string name="view_less"><u>View less</u></string>
     <string name="bank_exhausthead">Too Many Bank Accounts</string>
