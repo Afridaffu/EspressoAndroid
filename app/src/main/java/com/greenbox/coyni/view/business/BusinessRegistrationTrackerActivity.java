@@ -470,15 +470,13 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             dbaStartTV.setVisibility(GONE);
                             dbaInProgressIV.setVisibility(VISIBLE);
 
+                        } else {
+                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
+                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
+                            dbaIncompleteTV.setText("Incomplete");
+                            dbaStartTV.setVisibility(VISIBLE);
+                            dbaInProgressIV.setVisibility(GONE);
                         }
-//                        else {
-//                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
-//                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
-//                            dbaIncompleteTV.setText("Incomplete");
-//                            dbaStartTV.setVisibility(VISIBLE);
-//                            dbaInProgressIV.setVisibility(GONE);
-//
-//                        }
                     }
                 }
             });
@@ -623,8 +621,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             } else {
                 caCompleteLL.setVisibility(VISIBLE);
             }
+        } else {
+            dbaStartTV.setVisibility(View.GONE);
+            dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
+            caCompleteLL.setVisibility(View.GONE);
+            caIncompleteLL.setVisibility(View.VISIBLE);
         }
-
         if (businessTrackerResponse.getData().isDbaInfo()) {
             boInProgressIV.setVisibility(GONE);
             boStartTV.setVisibility(View.VISIBLE);
