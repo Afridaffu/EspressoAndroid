@@ -1,7 +1,7 @@
 package com.greenbox.coyni.model.bank;
 
 public class BankItem {
-    private int id;
+    private int bankId;
     private String bankName;
     private String routingNumber;
     private String accountNumber;
@@ -19,12 +19,12 @@ public class BankItem {
     private String bankIdentifierCode;
     private Boolean isArchived;
 
-    public int getId() {
-        return id;
+    public int getBankId() {
+        return bankId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBankId(int bankId) {
+        this.bankId = bankId;
     }
 
     public String getBankName() {

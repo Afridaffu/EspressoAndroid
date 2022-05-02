@@ -207,7 +207,8 @@ public class AddBankAccount extends BaseActivity {
                         if (bankResponse.getStatus().toLowerCase().equals("success")) {
                             ControlMethod("banksuccess");
                             strScreen = "banksuccess";
-                            bankSuccess(bankResponse.getData().getItems());
+//                            bankSuccess(bankResponse.getData().getItems());
+                            bankSuccess(bankResponse.getData());
                         } else {
                             if (!bankResponse.getError().getErrorDescription().equals("")) {
                                 Utils.displayAlert(bankResponse.getError().getErrorDescription(), AddBankAccount.this, "", bankResponse.getError().getFieldErrors().get(0));
