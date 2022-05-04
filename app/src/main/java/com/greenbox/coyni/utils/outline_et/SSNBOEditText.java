@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MaskEditText.Action;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.IdVeAdditionalActionActivity;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
