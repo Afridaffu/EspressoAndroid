@@ -34,6 +34,7 @@ import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.EditEmailActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
 public class AddPaymentSignetActivity extends AppCompatActivity {
@@ -272,7 +273,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.primary_black));
                         } else if (etWalletId.getText().toString().trim().length() == 1) {
                             isWallet = false;
-                            etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            etlWalletId.setBoxStrokeColorStateList(Utils.getErrorColorState(AddPaymentSignetActivity.this));
                             Utils.setUpperHintColor(etlWalletId, getColor(R.color.error_red));
                             walletErrorLL.setVisibility(VISIBLE);
                             walletErrorTV.setText("Minimum 2 Characters Required");

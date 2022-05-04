@@ -187,21 +187,14 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     holder.messageTV.setVisibility(View.VISIBLE);
                     holder.messageTV.setText(notifications.get(position).getFromUser() + " sent you a reminder");
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
-                        && notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponseData()
+                        && notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
                         .getWalletNames().get(0).getWalletId())) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.messageTV.setVisibility(View.VISIBLE);
                     holder.messageTV.setText(notifications.get(position).getFromUser() + " declined this request");
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
-                        && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponseData()
-                        .getWalletNames().get(0).getWalletId())) {
-                    holder.meRequestLL.setVisibility(View.GONE);
-                    holder.fromRequesterLL.setVisibility(View.GONE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText("You declined this request");
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
-                        && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getWalletResponseData()
+                        && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
                         .getWalletNames().get(0).getWalletId())) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.fromRequesterLL.setVisibility(View.GONE);
@@ -243,7 +236,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                             mLastClickTime = SystemClock.elapsedRealtime();
                             Log.e("payLL", "payLL");
 
-                            if (notifications.get(position).getAmount() <= objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount()) {
+                            if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount()) {
                                 ((NotificationsActivity) mContext).selectedRow = position + "";
 
                                 TransferPayRequest request = new TransferPayRequest();
@@ -253,7 +246,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
 
                                 ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
                             } else {
-                                Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
+                                Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

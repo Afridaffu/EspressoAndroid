@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_21sdp"
-            android:layout_marginTop="@dimen/_45sdp">
+            android:layout_marginTop="@dimen/_44sdp">
 
             <ImageView
                 android:layout_width="wrap_content"

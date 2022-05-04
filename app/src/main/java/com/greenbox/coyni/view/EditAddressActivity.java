@@ -581,11 +581,11 @@ public class EditAddressActivity extends AppCompatActivity {
                     address1ET.setHint("");
                     if (address1ET.getText().toString().trim().length() > 0) {
                         address1ErrorLL.setVisibility(GONE);
-                        address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        address1TIL.setBoxStrokeColorStateList(Utils.getNormalColorState(EditAddressActivity.this));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_black));
 
                     } else {
-                        address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        address1TIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditAddressActivity.this));
                         Utils.setUpperHintColor(address1TIL, getColor(R.color.light_gray));
                         address1ErrorLL.setVisibility(VISIBLE);
                         address1ErrorTV.setText("Field Required");
@@ -637,11 +637,11 @@ public class EditAddressActivity extends AppCompatActivity {
                     cityET.setHint("");
                     if (cityET.getText().toString().trim().length() > 0) {
                         cityErrorLL.setVisibility(GONE);
-                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        cityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(EditAddressActivity.this));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.primary_black));
 
                     } else {
-                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        cityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditAddressActivity.this));
                         Utils.setUpperHintColor(cityTIL, getColor(R.color.light_gray));
                         cityErrorLL.setVisibility(VISIBLE);
                         cityErrorTV.setText("Field Required");
@@ -676,7 +676,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         zipcodeErrorTV.setText("Minimum 5 Digits Required");
 
                     } else {
-                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        zipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditAddressActivity.this));
                         Utils.setUpperHintColor(zipcodeTIL, getColor(R.color.light_gray));
                         zipcodeErrorLL.setVisibility(VISIBLE);
                         zipcodeErrorTV.setText("Field Required");

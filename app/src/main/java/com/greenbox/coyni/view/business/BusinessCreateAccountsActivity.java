@@ -173,21 +173,23 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 }
             });
         }
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                && myApplication.getMyProfile().getData().getImage() != null) {
-            userShortInfoTV.setVisibility(View.GONE);
-            imgProfile.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .load(myApplication.getMyProfile().getData().getImage())
-                    .placeholder(R.drawable.ic_profile_male_user)
-                    .into(imgProfile);
-        } else {
-            userShortInfoTV.setVisibility(View.VISIBLE);
-            imgProfile.setVisibility(View.GONE);
-            userShortInfoTV.setText(iconText);
-        }
 
-        setUserBalance(myApplication.getWalletResponseData());
+//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+//                && myApplication.getMyProfile().getData().getImage() != null) {
+//            userShortInfoTV.setVisibility(View.GONE);
+//            imgProfile.setVisibility(View.VISIBLE);
+//            Glide.with(this)
+//                    .load(myApplication.getMyProfile().getData().getImage())
+//                    .placeholder(R.drawable.ic_profile_male_user)
+//                    .into(imgProfile);
+//        } else {
+//            userShortInfoTV.setVisibility(View.VISIBLE);
+//            imgProfile.setVisibility(View.GONE);
+//            userShortInfoTV.setText(iconText);
+//        }
+
+//        setUserBalance(myApplication.getWalletResponseData());
+        setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
 
     }
 

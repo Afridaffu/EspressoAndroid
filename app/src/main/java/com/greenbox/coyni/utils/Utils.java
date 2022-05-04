@@ -851,25 +851,25 @@ public class Utils {
     /**
      * @deprecated use {@link #getErrorColorState(Context)} instead.
      */
-    @Deprecated
-    public static ColorStateList getErrorColorState() {
-        errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
-        errorColor = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red), OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red)};
-        errorColorState = new ColorStateList(errorState, errorColor);
-
-        return errorColorState;
-    }
+//    @Deprecated
+//    public static ColorStateList getErrorColorState() {
+//        errorState = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+//        errorColor = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red), OnboardActivity.onboardActivity.getResources().getColor(R.color.error_red)};
+//        errorColorState = new ColorStateList(errorState, errorColor);
+//
+//        return errorColorState;
+//    }
 
     /**
      * @deprecated use {@link #getNormalColorState(Context)} instead.
      */
-    @Deprecated
-    public static ColorStateList getNormalColorState() {
-        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
-        color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray), OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
-        colorState = new ColorStateList(state, color);
-        return colorState;
-    }
+//    @Deprecated
+//    public static ColorStateList getNormalColorState() {
+//        state = new int[][]{new int[]{-android.R.attr.state_focused}, new int[]{android.R.attr.state_focused}};
+//        color = new int[]{OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray), OnboardActivity.onboardActivity.getResources().getColor(R.color.light_gray)};
+//        colorState = new ColorStateList(state, color);
+//        return colorState;
+//    }
 
 //    public static void setUpperHintColor(TextInputLayout til, int color) {
 //        try {
