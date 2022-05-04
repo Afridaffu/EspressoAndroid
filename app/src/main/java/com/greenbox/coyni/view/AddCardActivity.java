@@ -348,14 +348,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (isNextEnabled && validation()) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            if (!Utils.isKeyboardVisible)
-                                Utils.shwForcedKeypad(AddCardActivity.this);
-
-                            mLastClickTime = SystemClock.elapsedRealtime();
                             viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
