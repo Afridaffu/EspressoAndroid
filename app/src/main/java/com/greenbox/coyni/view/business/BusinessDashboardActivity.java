@@ -394,17 +394,19 @@ public class BusinessDashboardActivity extends BaseActivity {
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
                 try {
                     if (businessWalletResponse != null) {
-//                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
-                                objMyApplication.setGbtWallet(businessWalletResponse.getData().getWalletNames().get(0));
-                                objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
-                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
-                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-                                objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-                            }
+//                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
+//                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
+////                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+//
+//                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
+////                                objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
+//
+//                            }
+                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount(),
+                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
                         }
                     }
                 } catch (Exception ex) {
@@ -461,17 +463,17 @@ public class BusinessDashboardActivity extends BaseActivity {
         mTvUserName.setOnClickListener(view -> {
             if (mTvUserName.getText().toString().contains("...")) {
                 if (userName.length() == 21 || userName.length() > 21) {
-                    mTvUserName.setText("Hi! "+userName.substring(0, 20));
+                    mTvUserName.setText("Hi! " + userName.substring(0, 20));
                 } else {
-                    mTvUserName.setText("Hi! "+userName);
+                    mTvUserName.setText("Hi! " + userName);
                 }
             } else {
                 if (userName.length() == 21) {
-                    mTvUserName.setText("Hi! "+userName.substring(0, 20) + "...");
+                    mTvUserName.setText("Hi! " + userName.substring(0, 20) + "...");
                 } else if (userName.length() > 22) {
-                    mTvUserName.setText("Hi! "+userName.substring(0, 22) + "...");
+                    mTvUserName.setText("Hi! " + userName.substring(0, 22) + "...");
                 } else {
-                    mTvUserName.setText("Hi! "+userName);
+                    mTvUserName.setText("Hi! " + userName);
                 }
             }
         });

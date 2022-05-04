@@ -437,16 +437,6 @@
                         android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/spannableTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_14sdp"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="@string/spannable_text"
-                    android:textColor="@color/primary_black"
-                    android:textSize="@dimen/_11ssp"
-                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -465,12 +455,23 @@
                         android:theme="@style/AppTheme" />
 
                     <TextView
+                        android:id="@+id/spannableTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/spannable_text"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="visible" />
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_regular"
                         android:text="I agree to"
                         android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tosTV"
@@ -479,7 +480,8 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text=" Terms of Service"
                         android:textColor="@color/primary_green"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -487,7 +489,8 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text=" &amp; "
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/privacyTV"
@@ -496,7 +499,8 @@
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/privay_policy"
                         android:textColor="@color/primary_green"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <androidx.cardview.widget.CardView
