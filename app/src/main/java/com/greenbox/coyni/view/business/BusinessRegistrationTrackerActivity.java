@@ -165,14 +165,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 //            if (getIntent().getStringExtra("FROM").equalsIgnoreCase("login"))
 //                businessTrackerCloseIV.setVisibility(GONE);
 
-            objMyApplication = (MyApplication) getApplicationContext();
-            businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
-            caStartTV = findViewById(R.id.caStartTV);
-            dbaStartTV = findViewById(R.id.dbaStartTV);
-            boStartTV = findViewById(R.id.boStartTV);
-            addBankStartTV = findViewById(R.id.addBankStartTV);
-            aggrementsStartTV = findViewById(R.id.aggrementsStartTV);
-
             infoTV = findViewById(R.id.infoTV);
             appFinishedTV = findViewById(R.id.appFinishedTV);
 
@@ -472,13 +464,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             dbaStartTV.setVisibility(GONE);
                             dbaInProgressIV.setVisibility(VISIBLE);
 
-                        } else {
-                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
-                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
-                            dbaIncompleteTV.setText("Incomplete");
-                            dbaStartTV.setVisibility(VISIBLE);
-                            dbaInProgressIV.setVisibility(GONE);
                         }
+//                        else {
+//                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
+//                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
+//                            dbaIncompleteTV.setText("Incomplete");
+//                            dbaStartTV.setVisibility(VISIBLE);
+//                            dbaInProgressIV.setVisibility(GONE);
+//                        }
                     }
                 }
             });
@@ -593,21 +586,21 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             e.printStackTrace();
         }
 
-        try {
-            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
-                @Override
-                public void onChanged(BusinessTypeResp businessTypeResp) {
-
-                    if (businessTypeResp != null) {
-                        if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
-                            objMyApplication.setBusinessTypeResp(businessTypeResp);
-                        }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+//                @Override
+//                public void onChanged(BusinessTypeResp businessTypeResp) {
+//
+//                    if (businessTypeResp != null) {
+//                        if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
+//                            objMyApplication.setBusinessTypeResp(businessTypeResp);
+//                        }
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
