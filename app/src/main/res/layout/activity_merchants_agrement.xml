@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bottomradius"
         android:orientation="vertical"
-        android:paddingTop="@dimen/_44sdp">
+        android:paddingTop="@dimen/_41sdp">
 
         <ImageView
             android:id="@+id/canceledIV"

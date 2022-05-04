@@ -156,7 +156,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             strCardNo = etCardNumber.getText().toString().trim().replace(" ", "");
                             strExpiry = etExpiry.getText().toString().trim();
                             strCvv = etCVV.getText().toString().trim();
-
                         }
 
                         divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);

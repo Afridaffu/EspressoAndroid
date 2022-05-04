@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/et_bg_gray"
     android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.business.BenificialOwnerDetails">
 
     <LinearLayout
@@ -14,8 +15,8 @@
         android:background="@drawable/bottomradius"
         android:orientation="horizontal"
         android:paddingStart="@dimen/_21sdp"
-        android:paddingBottom="@dimen/_12sdp"
-        android:paddingTop="@dimen/_45sdp">
+        android:paddingTop="@dimen/_45sdp"
+        android:paddingBottom="@dimen/_12sdp">
 
         <LinearLayout
             android:id="@+id/backLL"
@@ -34,10 +35,10 @@
             android:id="@+id/intentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_semibold"
             android:layout_marginEnd="@dimen/_50sdp"
-            android:textAlignment="center"
+            android:fontFamily="@font/opensans_semibold"
             android:text="Beneficial Owners"
+            android:textAlignment="center"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
 
@@ -50,6 +51,7 @@
         android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_14sdp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp">
 
         <LinearLayout
@@ -74,8 +76,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -165,6 +167,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_11sdp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp">
 
         <LinearLayout
