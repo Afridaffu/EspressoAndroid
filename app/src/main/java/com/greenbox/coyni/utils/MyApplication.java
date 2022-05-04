@@ -673,25 +673,26 @@ public class MyApplication extends Application {
         try {
             Intent dashboardIntent = new Intent(context, DashboardActivity.class);
             if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                BusinessTrackerResponse btr = getBusinessTrackerResponse();
-                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-
-                    if (btr.getData().isProfileVerified()) {
-                        dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
-                    }
-//                    else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
-//                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+                dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
+//                BusinessTrackerResponse btr = getBusinessTrackerResponse();
+//                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+//                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
+//
+//                    if (btr.getData().isProfileVerified()) {
+//                        dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
 //                    }
-                    else {
-                        dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
-                        dashboardIntent.putExtra("FROM", fromScreen);
-                    }
-
-                } else {
-                    dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
-                    dashboardIntent.putExtra("FROM", fromScreen);
-                }
+////                    else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+////                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+////                    }
+//                    else {
+//                        dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+//                        dashboardIntent.putExtra("FROM", fromScreen);
+//                    }
+//
+//                } else {
+//                    dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+//                    dashboardIntent.putExtra("FROM", fromScreen);
+//                }
             }
             dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(dashboardIntent);

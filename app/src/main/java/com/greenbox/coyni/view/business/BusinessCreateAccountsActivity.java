@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private IdentityVerificationViewModel identityVerificationViewModel;
     private String userName;
+    private Long mLastClickTimeQA = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,10 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             accountsCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                        return;
+                    }
+                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                     finish();
                 }
             });
@@ -76,18 +82,22 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             llOpenAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class)
-//                            .putExtra("PersonalAccount", personalAccountExist)
-//                    );
+                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                        return;
+                    }
+                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                     startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class));
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         dashboardViewModel.getProfiles();
-
     }
 
     private void initFields() {

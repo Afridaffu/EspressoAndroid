@@ -22,8 +22,9 @@
                 android:id="@+id/businessTrackerCloseIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_44sdp"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_39sdp"
                 android:src="@drawable/ic_x"
                 android:visibility="visible" />
 

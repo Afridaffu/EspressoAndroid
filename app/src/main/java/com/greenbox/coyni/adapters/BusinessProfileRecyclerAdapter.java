@@ -107,13 +107,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (detailInfo != null && detailInfo.getFullName() != null) {
                 childItem.setText(detailInfo.getFullName());
             } else {
-                childItem.setText("Null Full Name");
+                //childItem.setText("Null");
             }
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             if (detailInfo != null && detailInfo.getDbaName() != null) {
                 childItem.setText(detailInfo.getDbaName());
             } else {
-                childItem.setText("Null Company Name");
+                //childItem.setText("NullD");
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
@@ -252,7 +252,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (headerInfo != null && headerInfo.getFullName() != null) {
                 heading.setText(headerInfo.getFullName());
             } else {
-                heading.setText("Null Full Name");
+               // heading.setText("Null");
             }
             if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);
@@ -274,7 +274,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (headerInfo != null && headerInfo.getCompanyName() != null) {
                 heading.setText(headerInfo.getCompanyName());
             } else {
-                heading.setText("Null Company Name");
+                //heading.setText("Null");
             }
             if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);
