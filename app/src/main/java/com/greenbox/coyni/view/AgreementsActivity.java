@@ -58,6 +58,9 @@ public class AgreementsActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         showProgressDialog();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 //        dashboardViewModel.agreementsByType("1");
         setContentView(R.layout.activity_agreements);
