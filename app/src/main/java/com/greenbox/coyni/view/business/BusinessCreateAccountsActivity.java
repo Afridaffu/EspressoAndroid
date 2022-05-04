@@ -257,7 +257,8 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 //            userShortInfoTV.setText(iconText);
 //        }
 
-        setUserBalance(myApplication.getWalletResponseData());
+//        setUserBalance(myApplication.getWalletResponseData());
+        setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
 
 //        Double bal = myApplication.getGBTBalance();
 //        String strBal = Utils.convertBigDecimalUSDC(String.valueOf(bal));

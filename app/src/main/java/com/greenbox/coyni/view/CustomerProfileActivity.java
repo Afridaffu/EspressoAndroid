@@ -561,7 +561,7 @@ public class CustomerProfileActivity extends BaseActivity {
             }
 
 
-            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
+            WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
 
             try {
                 imgProfile.setVisibility(View.GONE);
@@ -650,7 +650,7 @@ public class CustomerProfileActivity extends BaseActivity {
                         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                         ClipData myClip;
-                        String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
+                        String text = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId();
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
 //                    showToast();

@@ -195,7 +195,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             business_defaultAccTIL = findViewById(R.id.b_accountTIL);
             business_defaultaccountET = findViewById(R.id.b_accountET);
 
-            business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            business_defaultAccTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(UserDetailsActivity.this));
 //            isBiometric = Utils.checkBiometric(UserDetailsActivity.this);
             try {
                 isBiometric = Utils.getIsBiometric();
