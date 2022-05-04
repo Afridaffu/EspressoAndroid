@@ -32,6 +32,7 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
@@ -388,6 +389,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 }
             });
 
+            businessIdentityVerificationViewModel.getBusinessType();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -585,6 +587,22 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                                     .putExtra("ID", boIdResp.getData().getId()));
                         } else {
                             Utils.displayAlert(boIdResp.getError().getErrorDescription(), BusinessRegistrationTrackerActivity.this, "", boIdResp.getError().getFieldErrors().get(0));
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+                @Override
+                public void onChanged(BusinessTypeResp businessTypeResp) {
+
+                    if (businessTypeResp != null) {
+                        if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTypeResp(businessTypeResp);
                         }
                     }
                 }

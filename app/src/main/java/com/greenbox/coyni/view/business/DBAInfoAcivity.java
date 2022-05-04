@@ -70,6 +70,7 @@ import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -496,8 +497,17 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             identificationType = 9;
             isIDVESelected = true;
 
+
+            objMyApplication.setTimezone(getString(R.string.PST));
+            objMyApplication.setTimezoneID(0);
+            timeZoneET.setText(objMyApplication.getTimezone());
+            isTimeZone = true;
+            Utils.setUpperHintColor(timezoneTIL, getColor(R.color.primary_black));
+
+
             if (objMyApplication.getBusinessTypeResp() != null) {
                 if (objMyApplication.getBusinessTypeResp().getData() != null) {
+                    Collections.sort(objMyApplication.getBusinessTypeResp().getData());
                     selectedBTKey = objMyApplication.getBusinessTypeResp().getData().get(0).getKey();
                     businessTypeET.setText(objMyApplication.getBusinessTypeResp().getData().get(0).getValue());
                     isBusinessType = true;
@@ -505,12 +515,6 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             }
 
-
-            objMyApplication.setTimezone(getString(R.string.PST));
-            objMyApplication.setTimezoneID(0);
-            timeZoneET.setText(objMyApplication.getTimezone());
-            isTimeZone = true;
-            Utils.setUpperHintColor(timezoneTIL, getColor(R.color.primary_black));
             //Default values enabled
 
         } catch (Exception e) {
