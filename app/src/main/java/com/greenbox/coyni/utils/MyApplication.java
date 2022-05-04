@@ -62,11 +62,17 @@ import java.util.List;
 public class MyApplication extends Application {
 
     private UserData mCurrentUserData;
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
         mCurrentUserData = new UserData();
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
     public UserData getCurrentUserData() {
@@ -625,12 +631,14 @@ public class MyApplication extends Application {
     }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
-        if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
-            mCurrentUserData.setTokenWalletResponse(walletResponseData);
-        } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
-            mCurrentUserData.setMerchantWalletResponse(walletResponseData);
-        } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
-            mCurrentUserData.setReserveWalletResponse(walletResponseData);
+        if(walletResponseData.getWalletNames().size() > 0) {
+            if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
+                mCurrentUserData.setTokenWalletResponse(walletResponseData);
+            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
+                mCurrentUserData.setMerchantWalletResponse(walletResponseData);
+            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
+                mCurrentUserData.setReserveWalletResponse(walletResponseData);
+            }
         }
     }
 

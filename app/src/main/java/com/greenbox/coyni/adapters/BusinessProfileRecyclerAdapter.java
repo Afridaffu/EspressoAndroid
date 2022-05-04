@@ -104,16 +104,16 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                         .into(profileImage);
             }
         } else if (detailInfo.getAccountType().equals(Utils.PERSONAL)) {
-            if (detailInfo != null && detailInfo.getFullName() != null) {
+            if (detailInfo.getFullName() != null) {
                 childItem.setText(detailInfo.getFullName());
             } else {
-                //childItem.setText("Null");
+                childItem.setText("");
             }
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
-            if (detailInfo != null && detailInfo.getDbaName() != null) {
+            if (detailInfo.getDbaName() != null) {
                 childItem.setText(detailInfo.getDbaName());
             } else {
-                //childItem.setText("NullD");
+                childItem.setText("");
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
@@ -130,12 +130,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                         .into(profileImage);
             }
         }
-        if(showdba) {
-            if (isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
-                addDBA.setVisibility(View.VISIBLE);
-            } else {
-                addDBA.setVisibility(View.GONE);
-            }
+        if(showdba && isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
+            addDBA.setVisibility(View.VISIBLE);
         } else {
             addDBA.setVisibility(View.GONE);
         }
@@ -234,7 +230,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
         LogUtils.d("BusinessProfileRecyclerAdapter", "isselectedId" + selectedID);
 
-
         if (headerInfo.getAccountType().equals(Utils.SHARED)) {
             arrowImg.setVisibility(View.VISIBLE);
             heading.setText(R.string.shared_account);
@@ -249,10 +244,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 arrowImg.setVisibility(View.GONE);
                 tickIcon.setVisibility(View.GONE);
             }
-            if (headerInfo != null && headerInfo.getFullName() != null) {
+            if (headerInfo.getFullName() != null) {
                 heading.setText(headerInfo.getFullName());
             } else {
-               // heading.setText("Null");
+                heading.setText("");
             }
             if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);
@@ -265,16 +260,14 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 personalText.setVisibility(View.VISIBLE);
                 profileImage.setVisibility(View.GONE);
                 String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
-//
                 personalText.setText(userName);
-
             }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
-            if (headerInfo != null && headerInfo.getCompanyName() != null) {
+            if (headerInfo.getCompanyName() != null) {
                 heading.setText(headerInfo.getCompanyName());
             } else {
-                //heading.setText("Null");
+                heading.setText("");
             }
             if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);
@@ -322,11 +315,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
     public interface OnItemClickListener {
 
-        public void onGroupClicked(int position, String accountType, Integer id,String fullname);
+        void onGroupClicked(int position, String accountType, Integer id,String fullName);
 
-        public void onChildClicked(ProfilesResponse.Profiles detailInfo);
+        void onChildClicked(ProfilesResponse.Profiles detailInfo);
 
-        public void onAddDbaClicked(String accountType, Integer id);
+        void onAddDbaClicked(String accountType, Integer id);
     }
 
 

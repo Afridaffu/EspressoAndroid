@@ -588,8 +588,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         LogUtils.d(TAG, "tracker iddddd" + myApplication.getDbaOwnerId());
         if (myApplication.getDbaOwnerId() != 0) {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
-            inTracker.putExtra("ADDBUSINESS", true);
-            inTracker.putExtra("ADDDBA", true);
+            inTracker.putExtra(Utils.ADD_BUSINESS, true);
+            inTracker.putExtra(Utils.ADD_DBA, true);
             startActivity(inTracker);
         } else {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);

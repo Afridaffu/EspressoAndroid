@@ -245,6 +245,12 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         profilesListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                ImageView arrowImg = v.findViewById(R.id.arrowImg);
+                if(parent != null && parent.isGroupExpanded(groupPosition)) {
+                    arrowImg.setImageResource(R.drawable.ic_chevron_down);
+                } else {
+                    arrowImg.setImageResource(R.drawable.ic_chevron_up);
+                }
                 setListViewHeight(parent, groupPosition);
                 return false;
             }
@@ -324,12 +330,12 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d(TAG, "addDBAresponse" + identityImageResponse);
+                    LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", true)
-                                .putExtra("ADDDBA", true));
+                                .putExtra(Utils.ADD_BUSINESS, true)
+                                .putExtra(Utils.ADD_DBA, true));
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
@@ -343,12 +349,12 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse);
+                    LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", true)
-                                .putExtra("ADDDBA", true));
+                                .putExtra(Utils.ADD_BUSINESS, true)
+                                .putExtra(Utils.ADD_DBA, true));
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }

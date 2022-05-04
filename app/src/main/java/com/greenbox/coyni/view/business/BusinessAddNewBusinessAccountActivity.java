@@ -121,7 +121,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, new AddNewBusinessAccountDBAAdapter.OnSelectListner() {
             @Override
             public void selectedItem(ProfilesResponse.Profiles item) {
-                LogUtils.d("dbaselected", "dbaselectes" + item.toString());
+                LogUtils.d(TAG, "ProfilesResponse.Profiles  " + item.toString());
                 addDBACardView.setEnabled(true);
                 addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
                 companyId = item.getId();
@@ -196,8 +196,8 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", true)
-                                .putExtra("ADDDBA", false));
+                                .putExtra(Utils.ADD_BUSINESS, true)
+                                .putExtra(Utils.ADD_DBA, false));
 
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
@@ -212,12 +212,12 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse);
+                    LogUtils.d(TAG, "identityImageResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", true)
-                                .putExtra("ADDDBA", true));
+                                .putExtra(Utils.ADD_BUSINESS, true)
+                                .putExtra(Utils.ADD_DBA, true));
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
