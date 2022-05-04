@@ -238,8 +238,9 @@
             android:configChanges="uiMode"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
         <activity
             android:name=".view.BuyTokenActivity"
             android:configChanges="uiMode"
@@ -281,9 +282,8 @@
             android:name=".view.PreferencesActivity"
             android:configChanges="uiMode"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.ScanActivity"
             android:configChanges="uiMode"
@@ -301,6 +301,7 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.IdVeAdditionalActionActivity"
@@ -422,13 +423,17 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
         <activity
             android:name=".view.business.BusinessDashboardActivity"
             android:exported="false"
@@ -611,7 +616,7 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity
             android:name=".view.business.TransactionDetailsFailedActivity"
             android:configChanges="uiMode"

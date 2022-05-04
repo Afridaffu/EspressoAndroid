@@ -109,6 +109,7 @@ public class CardNumberEditText extends ConstraintLayout {
                         } else {
                             imgCardType.setImageResource(R.drawable.ic_issue_card_inactive);
                             AddCardActivity.addCardActivity.isCard = false;
+
                         }
                         AddCardActivity.addCardActivity.enableOrDisableNext();
                     } catch (Exception ex) {
@@ -153,7 +154,8 @@ public class CardNumberEditText extends ConstraintLayout {
         cnET.setText(text);
         if (text.equals("")) {
             hintName.setVisibility(GONE);
-            cnET.setHint("Card Number");
+            if (!cnET.isFocusable())
+                cnET.setHint("Card Number");
         }
     }
 

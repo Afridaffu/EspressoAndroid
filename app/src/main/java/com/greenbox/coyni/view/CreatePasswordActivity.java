@@ -85,7 +85,6 @@ public class CreatePasswordActivity extends AppCompatActivity {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
             setContentView(R.layout.activity_create_password);
             initialization();
             initObserver();
@@ -108,10 +107,10 @@ public class CreatePasswordActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
             imgClose = findViewById(R.id.imgClose);
             cvSave = findViewById(R.id.cvSave);
             cvLogin = findViewById(R.id.cvLogin);

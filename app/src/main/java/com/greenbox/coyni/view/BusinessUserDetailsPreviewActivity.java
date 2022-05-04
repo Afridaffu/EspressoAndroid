@@ -232,7 +232,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "CompanyChangeEmail").putExtra("action", "EditEmailCompany"));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditEmailActivity.class).putExtra("screen", "CompanyChangeEmail").putExtra("action", "EditEmailCompany").putExtra("currentEmail", value.getText().toString()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -248,6 +248,8 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                 value.setText("(" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(0, 3) + ") " + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(3, 6) + "-" + myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber().substring(6, 10));
             }
 
+            phoneFormat = value.getText().toString();
+
 
             changeCV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -257,7 +259,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditPhoneActivity.class).putExtra("screen", "CompanyChangePhone").putExtra("action", "EditPhoneCompany").putExtra("OLD_PHONE", phoneFormat));
+                        startActivity(new Intent(BusinessUserDetailsPreviewActivity.this, EditPhoneActivity.class).putExtra("screen", "CompanyChangePhone").putExtra("action", "EditPhoneCompany").putExtra("OLD_PHONE", value.getText().toString()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
