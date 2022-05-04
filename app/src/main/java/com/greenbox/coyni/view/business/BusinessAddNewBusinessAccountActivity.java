@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -66,6 +67,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private int companyId;
+    private long mLastClickTime =0l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,10 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         llNewComapny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 identityVerificationViewModel.getAddBusinessUser();
 
 
@@ -96,7 +102,10 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         llNewDba.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 listComapny.clear();
                 displayAlert(BusinessAddNewBusinessAccountActivity.this);
 
