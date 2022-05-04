@@ -721,6 +721,8 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() >= 1) {
                         addNoteTIL.setCounterEnabled(true);
+                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+//
                     } else {
                         cKey.disableButton();
                         addNoteTIL.setCounterEnabled(false);

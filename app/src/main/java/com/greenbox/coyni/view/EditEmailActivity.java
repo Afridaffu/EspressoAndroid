@@ -165,7 +165,20 @@ public class EditEmailActivity extends AppCompatActivity {
                                 phNoWithCountryCode.setPhoneNumber(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
                                 contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
                                 contactInfoRequest.setId(myApplicationObj.getCompanyInfoResp().getData().getId());
-                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                                if (getIntent().getStringExtra("currentEmail") != null && !getIntent().getStringExtra("currentEmail").equals("")){
+                                    currentEmail = getIntent().getStringExtra("currentEmail");
+                                    if (currentEmail.equalsIgnoreCase(b_newEmailET.getText().toString())){
+                                        dialog.dismiss();
+//                    b_newEmailErrorLL.setVisibility(VISIBLE);
+//                    b_newEmailErrorTV.setText("Please enter a new email ");
+                                        Utils.displayAlertNew("Please enter a new email ",EditEmailActivity.this,"coyni");
+                                    }
+                                    else {
+                                        b_newEmailErrorTV.setText("");
+                                        b_newEmailErrorLL.setVisibility(GONE);
+                                        businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                                    }
+                                }
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }
@@ -234,48 +247,48 @@ public class EditEmailActivity extends AppCompatActivity {
 
         try {
             String beforeText = "";
-                b_newEmailET.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        Log.e("beforeTextChanged", charSequence.toString());
-                    }
+            b_newEmailET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    Log.e("beforeTextChanged", charSequence.toString());
+                }
 
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                        if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
-                            b_newEmailErrorLL.setVisibility(GONE);
-                            b_newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                    if (charSequence.length() > 5 && Utils.isValidEmail(charSequence.toString().trim())) {
+                        b_newEmailErrorLL.setVisibility(GONE);
+                        b_newEmailTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
 //                        newEmailTIL.setHintTextColor(colorState);
-                            Utils.setUpperHintColor(b_newEmailTIL, getResources().getColor(R.color.primary_green));
-                            isNewEmail = true;
-                        } else if (b_newEmailET.getText().toString().trim().length() == 0) {
+                        Utils.setUpperHintColor(b_newEmailTIL, getResources().getColor(R.color.primary_green));
+                        isNewEmail = true;
+                    } else if (b_newEmailET.getText().toString().trim().length() == 0) {
 //                        b_newEmailErrorLL.setVisibility(VISIBLE);
 //                        b_newEmailErrorTV.setText("Field Required");
-                            isNewEmail = false;
-                        }
-                        if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
-                            isNewEmail = true;
-                        } else {
-                            isNewEmail = false;
-                        }
-                        enableOrDisableSave();
-
+                        isNewEmail = false;
                     }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        try {
-                            String str = b_newEmailET.getText().toString();
-                            if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                                b_newEmailET.setText(b_newEmailET.getText().toString().replaceAll(" ", ""));
-                                b_newEmailET.setSelection(b_newEmailET.getText().length());
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
+                    if (Utils.isValidEmail(charSequence.toString().trim()) && charSequence.toString().trim().length() > 5) {
+                        isNewEmail = true;
+                    } else {
+                        isNewEmail = false;
                     }
-                });
+                    enableOrDisableSave();
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        String str = b_newEmailET.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            b_newEmailET.setText(b_newEmailET.getText().toString().replaceAll(" ", ""));
+                            b_newEmailET.setSelection(b_newEmailET.getText().length());
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
 //            }
 
         } catch (Exception e) {

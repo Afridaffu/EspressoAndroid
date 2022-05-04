@@ -283,8 +283,8 @@ public class ReserveDetailsActivity extends BaseActivity {
         }
         lycopy.setOnClickListener(v -> Utils.copyText(reserveIDTV.getText().toString(), ReserveDetailsActivity.this));
 
-        if (myApplication.getReserveBalance() != null) {
-            reserveAmount = Utils.convertTwoDecimal(String.valueOf(myApplication.getReserveBalance()));
+        if (myApplication.getCurrentUserData().getReserveGBTBalance() != null) {
+            reserveAmount = Utils.convertTwoDecimal(String.valueOf(myApplication.getCurrentUserData().getReserveGBTBalance()));
             amount.setText(reserveAmount + " CYN");
         }
         if (selected != null && selected.getCreatedAt() != null) {

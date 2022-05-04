@@ -32,6 +32,7 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
@@ -62,7 +63,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private CardView mReviewCv;
     private boolean review = false, isBOStart = false;
     private ImageView bagIV;
-    private int dbaID=0;
+    private int dbaID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +79,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
             TextView dashboardTV = findViewById(R.id.dashboardTV);
 
-            if (getIntent().getBooleanExtra("ADDBUSINESS",false)) {
+            if (getIntent().getBooleanExtra("ADDBUSINESS", false)) {
                 loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-                addBusiness = getIntent().getBooleanExtra("ADDBUSINESS",false);
+                addBusiness = getIntent().getBooleanExtra("ADDBUSINESS", false);
                 LogUtils.d("addBusiness", "addBusiness" + addBusiness);
             }
 
-            if (getIntent().getBooleanExtra("ADDDBA" ,false)){
+            if (getIntent().getBooleanExtra("ADDDBA", false)) {
                 loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-                addDBA = getIntent().getBooleanExtra("ADDDBA",false);
+                addDBA = getIntent().getBooleanExtra("ADDDBA", false);
                 LogUtils.d("addDBA", "addDBA" + addDBA);
             }
 
-            if(getIntent().getIntExtra("dbaId", 0)!=0){
+            if (getIntent().getIntExtra("dbaId", 0) != 0) {
                 dbaID = getIntent().getIntExtra("dbaId", 0);
             }
 
@@ -163,14 +164,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
 //            if (getIntent().getStringExtra("FROM").equalsIgnoreCase("login"))
 //                businessTrackerCloseIV.setVisibility(GONE);
-
-            objMyApplication = (MyApplication) getApplicationContext();
-            businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
-            caStartTV = findViewById(R.id.caStartTV);
-            dbaStartTV = findViewById(R.id.dbaStartTV);
-            boStartTV = findViewById(R.id.boStartTV);
-            addBankStartTV = findViewById(R.id.addBankStartTV);
-            aggrementsStartTV = findViewById(R.id.aggrementsStartTV);
 
             infoTV = findViewById(R.id.infoTV);
             appFinishedTV = findViewById(R.id.appFinishedTV);
@@ -258,16 +251,16 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
 
-                            if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
-                                if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
-                                    dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
-                                } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
-                                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
-                                    intent.putExtra("FROM", "TRACKER");
-                                    intent.putExtra("TYPE", "EXIST");
-                                    startActivity(intent);
-                                }
+                        if (objMyApplication.getBusinessTrackerResponse().getData().isCompanyInfo()) {
+                            if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() == 0) {
+                                dbaBotmsheetPopUp(BusinessRegistrationTrackerActivity.this);
+                            } else if (dbaInfoResponse != null && dbaInfoResponse.getData() != null && dbaInfoResponse.getData().getId() != 0) {
+                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
+                                intent.putExtra("FROM", "TRACKER");
+                                intent.putExtra("TYPE", "EXIST");
+                                startActivity(intent);
                             }
+                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -337,14 +330,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    LogUtils.d(TAG,"mReviewCv"+addDBA+",,,,,"+addBusiness);
+                    LogUtils.d(TAG, "mReviewCv" + addDBA + ",,,,," + addBusiness);
                     if (review) {
                         if (addDBA) {
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
                                     .putExtra("ADDBUSINESS", true)
                                     .putExtra("ADDDBA", true));
 
-                        } else if(addBusiness) {
+                        } else if (addBusiness) {
 
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
                                     .putExtra("ADDBUSINESS", true)
@@ -388,6 +381,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 }
             });
 
+            businessIdentityVerificationViewModel.getBusinessType();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -414,8 +408,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             reloadTrackerDashboard(btResp);
 
                         } else {
-                        Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessRegistrationTrackerActivity.this, "", btResp.getError().getFieldErrors().get(0));
-                    }
+                            Utils.displayAlert(btResp.getError().getErrorDescription(), BusinessRegistrationTrackerActivity.this, "", btResp.getError().getFieldErrors().get(0));
+                        }
                     }
                 }
             });
@@ -477,7 +471,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 //                            dbaIncompleteTV.setText("Incomplete");
 //                            dbaStartTV.setVisibility(VISIBLE);
 //                            dbaInProgressIV.setVisibility(GONE);
-//
 //                        }
                     }
                 }
@@ -592,6 +585,22 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+                @Override
+                public void onChanged(BusinessTypeResp businessTypeResp) {
+
+                    if (businessTypeResp != null) {
+                        if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTypeResp(businessTypeResp);
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -623,8 +632,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             } else {
                 caCompleteLL.setVisibility(VISIBLE);
             }
+        } else {
+            dbaStartTV.setVisibility(View.GONE);
+            dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
+            caCompleteLL.setVisibility(View.GONE);
+            caIncompleteLL.setVisibility(View.VISIBLE);
         }
-
         if (businessTrackerResponse.getData().isDbaInfo()) {
             boInProgressIV.setVisibility(GONE);
             boStartTV.setVisibility(View.VISIBLE);
@@ -674,7 +687,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             aggrementsCompleteLL.setVisibility(View.GONE);
             aggrementsIncompleteLL.setVisibility(View.VISIBLE);
         }
-        LogUtils.d(TAG,"reviewbutton"+addDBA + businessTrackerResponse);
+        LogUtils.d(TAG, "reviewbutton" + addDBA + businessTrackerResponse);
 
         if (businessTrackerResponse != null && businessTrackerResponse.getData().isCompanyInfo() && businessTrackerResponse.getData().isDbaInfo() && businessTrackerResponse.getData().isBeneficialOwners()
                 && businessTrackerResponse.getData().isIsbankAccount() && businessTrackerResponse.getData().isAgreementSigned()) {
@@ -687,7 +700,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             if (addDBA) {
                 if (businessTrackerResponse != null && businessTrackerResponse.getData().isDbaInfo() && businessTrackerResponse.getData().isBeneficialOwners()
                         && businessTrackerResponse.getData().isIsbankAccount() && businessTrackerResponse.getData().isAgreementSigned()) {
-                    LogUtils.d(TAG,"iffff"+addDBA + businessTrackerResponse);
+                    LogUtils.d(TAG, "iffff" + addDBA + businessTrackerResponse);
                     review = true;
                     mReviewCv.setVisibility(VISIBLE);
                     appFinishedTV.setVisibility(VISIBLE);
@@ -695,15 +708,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     bagIV.setImageDrawable(getResources().getDrawable(R.drawable.idve_completed));
 
                 } else {
-                    LogUtils.d(TAG,"elseeeeee"+addDBA + businessTrackerResponse);
+                    LogUtils.d(TAG, "elseeeeee" + addDBA + businessTrackerResponse);
                     review = false;
                     mReviewCv.setVisibility(GONE);
                     appFinishedTV.setVisibility(GONE);
                     infoTV.setVisibility(VISIBLE);
                     bagIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_appl_inprogress));
                 }
-            }
-          else {
+            } else {
                 review = false;
                 mReviewCv.setVisibility(GONE);
                 appFinishedTV.setVisibility(GONE);
@@ -758,4 +770,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             Utils.isKeyboardVisible = false;
         }
     }
+
+
 }

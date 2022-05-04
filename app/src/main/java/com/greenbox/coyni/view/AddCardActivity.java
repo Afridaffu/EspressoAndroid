@@ -127,6 +127,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_addcard);
             addCardActivity = this;
             identityPagerAdapter = new IdentityPagerAdapter();
@@ -137,7 +140,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
-                    Utils.shwForcedKeypad(AddCardActivity.this);
+//                    Utils.shwForcedKeypad(AddCardActivity.this);
 
                 }
 
@@ -148,7 +151,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                     } else if (position == 1) {
-                        Utils.shwForcedKeypad(AddCardActivity.this);
                         if (isNextEnabled && validation()) {
                             strName = etName.getText().toString().trim();
                             strCardNo = etCardNumber.getText().toString().trim().replace(" ", "");
@@ -346,11 +348,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (isNextEnabled && validation()) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
                             viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                             divider2.setBackgroundResource(R.drawable.bg_core_colorfill);
@@ -890,6 +892,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             }
                         } else {
 //                            etAddress1.setHint("Billing Address Line 1");
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(AddCardActivity.this);
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             address1ErrorLL.setVisibility(GONE);

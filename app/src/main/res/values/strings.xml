@@ -362,12 +362,12 @@
     <string name="decline_reserve_rules_message">Are you sure you want to decline this reserve rule and cancel your merchant application? You will need to complete another application to apply again.</string>
     <string name="no_go_back">No, go back</string>
     <string name="verification_failed">Verification Failed</string>
+    <string name="dear_name">Dear %1$s,</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="dear_name">Dear <b>[Name],</b></string>
     <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
-    <string name="legal_name_name">Legal Name:<b>[name]</b></string>
-    <string name="dba_dba">DBA: <b>[DBA]</b></string>
+    <string name="legal_name_name">Legal Name: %1$s</string>
+    <string name="verification_dba_name">DBA: %1$s</string>
     <string name="we_thank_for_interest">Again, we thank you for your interest and wish you the best of luck.</string>
     <string name="documents_required">Documents Required</string>
     <string name="copy_of_social_security_card">Copy of Social Security card</string>
@@ -670,6 +670,7 @@
     <string name="thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with">Thank you for your interest in coyni. After\ncarefully reviewing. The coyni team made\ndecision to approve your application with</string>
     <string name="reserve_conditions">reserve conditions.</string>
     <string name="hi_text">Hi!\u0020</string>
+    <string name="not_available_description">We’re sorry but this feature currently is not available, please wait until we finish your identity verification.</string>
 
 
 </resources>

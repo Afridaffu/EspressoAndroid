@@ -86,7 +86,7 @@ import java.util.List;
 public class BusinessDashboardFragment extends BaseFragment {
 
     private View mCurrentView, batchView, releaseView;
-    private TextView tv_PayoutNoHistory, tv_PayoutHistory, batchNoTransaction, nextReleaseNATV,
+    private TextView tv_PayoutNoHistory, batchNoTransaction, nextReleaseNATV,
             lastReleaseNATV, releaseNoTransaction;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
@@ -129,8 +129,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             saleOrdersText, mAverageTicket, mHighestTicket, mDateHighestTicket;
     private LinearLayout mTicketsLayout;
     private UserData userData;
-
-    //private boolean showReserve = true;
 
     //Processing Volume Types
     private static final String todayValue = "Today";
@@ -175,8 +173,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         if (myApplication.getGBTBalance() != null) {
             amt += myApplication.getGBTBalance();
         }
-        if (myApplication.getMerchantBalance() != null) {
-            amt += myApplication.getMerchantBalance();
+        if (myApplication.getCurrentUserData().getMerchnatGBTBalance() != null) {
+            amt += myApplication.getCurrentUserData().getMerchnatGBTBalance();
         }
         return amt;
     }
@@ -253,7 +251,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         dbHandler = DatabaseHandler.getInstance(getActivity());
 
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
-        tv_PayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutFullHistory);
         batchView = mCurrentView.findViewById(R.id.batchView);
         batchNoTransaction = mCurrentView.findViewById(R.id.batchNoTransaction);
 
@@ -391,7 +388,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
                             tv_PayoutNoHistory.setVisibility(View.GONE);
                             batchView.setVisibility(View.GONE);
-                            tv_PayoutHistory.setVisibility(View.VISIBLE);
+                            mPayoutHistory.setVisibility(View.VISIBLE);
                             showData(batchPayoutListResponse.getData().getItems());
                         } else {
                             Log.d(TAG, "No items found");
@@ -1089,7 +1086,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
-            tv_PayoutHistory.setVisibility(View.GONE);
+            mPayoutHistory.setVisibility(View.GONE);
             tv_PayoutNoHistory.setVisibility(View.VISIBLE);
             mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             mCvBatchNow.setClickable(false);
@@ -1101,8 +1098,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showReserveReleaseBalance() {
         Double amt = 0.0;
-        if (myApplication.getReserveBalance() != null) {
-            amt += myApplication.getReserveBalance();
+        if (myApplication.getCurrentUserData().getReserveGBTBalance() != null) {
+            amt += myApplication.getCurrentUserData().getReserveGBTBalance();
         }
         mTvReserveBalance.setText(Utils.convertBigDecimalUSDC(String.valueOf(amt)));
     }

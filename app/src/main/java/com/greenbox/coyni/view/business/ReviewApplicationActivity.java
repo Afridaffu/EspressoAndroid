@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -26,6 +27,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -131,6 +133,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_review_application);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setKeyboardVisibilityListener(ReviewApplicationActivity.this);
@@ -805,8 +810,17 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
                         //new code for showing pdf , modify later
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf"))
+                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf")) {
                             browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
+                            switch (agreementsPdf.getData().getAgreementType()) {
+                                case Utils.mTOS:
+                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+                                    break;
+                                case Utils.mAgmt:
+                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+                                    break;
+                            }
+                        }
                         else {
                             switch (agreementsPdf.getData().getAgreementType()) {
                                 case Utils.mPP:
@@ -819,7 +833,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
                                     break;
                             }
-//                            browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
                         }
                         try {
                             startActivity(browserIntent);
@@ -901,7 +914,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
             showProgressDialog();
-            summaryViewModel.getApplicationSummaryData();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    summaryViewModel.getApplicationSummaryData();
+                }
+            }, 1500);
             //temporary API Call to proceed further,not required response
             summaryViewModel.fees();
         } catch (Exception e) {

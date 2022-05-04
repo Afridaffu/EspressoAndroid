@@ -14,8 +14,8 @@ import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.merchant_activity.Earning;
-import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -58,6 +58,7 @@ public class UserData {
     //    WalletResponse walletResponse;
     private String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
     private int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType, dbaOwnerId = 0;
+    private LoginResponse loginResponse;
     private TransactionList transactionList;
     private PaymentsList selectedCard, prevSelectedCard;
     private TransferFeeResponse transferFeeResponse;
@@ -73,7 +74,7 @@ public class UserData {
     private TransactionListRequest transactionListSearch = new TransactionListRequest();
     private Double withdrawAmount;
     private BusinessTrackerResponse businessTrackerResponse;
-    private WalletResponseData walletResponseData;
+    private WalletResponseData walletResponseData, tokenWalletResponse, merchantWalletResponse, reserveWalletResponse;
     private BusinessTypeResp businessTypeResp;
     private CompanyInfoResp companyInfoResp;
     private DBAInfoResp dbaInfoResp;
@@ -83,13 +84,13 @@ public class UserData {
     private ApplicationSubmitResponseModel submitResponseModel;
     private Double merchantBalance = 0.0;
     private WalletInfo gbtWallet;
-    private Double GBTBalance = 0.0;
+    private Double tokenGBTBalance = 0.0, merchnatGBTBalance = 0.0, reserveGBTBalance = 0.0;
     private Double reserveBalance = 0.0;
     private SignOnData objSignOnData = new SignOnData();
     private TrackerResponse trackerResponse = new TrackerResponse();
     private String selectedButTokenType = "";
     private List<Earning> earningList;
-
+    boolean isReserveEnabled = false;
 
     public List<Earning> getEarningList() {
         return earningList;
@@ -355,6 +356,14 @@ public class UserData {
         this.loginUserId = loginUserId;
     }
 
+    public LoginResponse getLoginResponse() {
+        return loginResponse;
+    }
+
+    public void setLoginResponse(LoginResponse response) {
+        this.loginResponse = response;
+    }
+
     public int getAccountType() {
         return accountType;
     }
@@ -583,13 +592,13 @@ public class UserData {
         this.gbtWallet = gbtWallet;
     }
 
-    public Double getGBTBalance() {
-        return GBTBalance;
-    }
-
-    public void setGBTBalance(Double GBTBalance) {
-        this.GBTBalance = GBTBalance;
-    }
+//    public Double getGBTBalance() {
+//        return GBTBalance;
+//    }
+//
+//    public void setGBTBalance(Double GBTBalance) {
+//        this.GBTBalance = GBTBalance;
+//    }
 
     public Double getReserveBalance() {
         return reserveBalance;
@@ -623,5 +632,57 @@ public class UserData {
         this.selectedButTokenType = selectedButTokenType;
     }
 
+    public WalletResponseData getTokenWalletResponse() {
+        return tokenWalletResponse;
+    }
 
+    public void setTokenWalletResponse(WalletResponseData tokenWalletResponse) {
+        this.tokenWalletResponse = tokenWalletResponse;
+    }
+
+    public WalletResponseData getMerchantWalletResponse() {
+        return merchantWalletResponse;
+    }
+
+    public void setMerchantWalletResponse(WalletResponseData merchantWalletResponse) {
+        this.merchantWalletResponse = merchantWalletResponse;
+    }
+
+    public WalletResponseData getReserveWalletResponse() {
+        return reserveWalletResponse;
+    }
+
+    public void setReserveWalletResponse(WalletResponseData reserveWalletResponse) {
+        this.reserveWalletResponse = reserveWalletResponse;
+    }
+
+    public Double getTokenGBTBalance() {
+        return tokenGBTBalance;
+    }
+    public boolean isReserveEnabled() {
+        return isReserveEnabled;
+    }
+
+    public void setTokenGBTBalance(Double tokenGBTBalance) {
+        this.tokenGBTBalance = tokenGBTBalance;
+    }
+
+    public Double getMerchnatGBTBalance() {
+        return merchnatGBTBalance;
+    }
+
+    public void setMerchnatGBTBalance(Double merchnatGBTBalance) {
+        this.merchnatGBTBalance = merchnatGBTBalance;
+    }
+
+    public Double getReserveGBTBalance() {
+        return reserveGBTBalance;
+    }
+
+    public void setReserveGBTBalance(Double reserveGBTBalance) {
+        this.reserveGBTBalance = reserveGBTBalance;
+    }
+    public void setIsReserveEnabled(boolean isReserveEnabled) {
+        this.isReserveEnabled = isReserveEnabled;
+    }
 }

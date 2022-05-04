@@ -80,6 +80,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_edit_card);
@@ -101,10 +102,10 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
 
     private void initialization() {
         try {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
 
             editCardActivity = this;
             objMyApplication = (MyApplication) getApplicationContext();
@@ -432,6 +433,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             }
                         } else {
                             etExpiry.setHint("MM/YY");
+                            Utils.shwForcedKeypad(EditCardActivity.this);
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                             expiryErrorLL.setVisibility(GONE);
