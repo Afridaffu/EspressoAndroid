@@ -73,7 +73,7 @@ public class UserData {
     private TransactionListRequest transactionListSearch = new TransactionListRequest();
     private Double withdrawAmount;
     private BusinessTrackerResponse businessTrackerResponse;
-    private WalletResponseData walletResponseData;
+    private WalletResponseData walletResponseData, tokenWalletResponse, merchantWalletResponse, reserveWalletResponse;
     private BusinessTypeResp businessTypeResp;
     private CompanyInfoResp companyInfoResp;
     private DBAInfoResp dbaInfoResp;
@@ -83,7 +83,7 @@ public class UserData {
     private ApplicationSubmitResponseModel submitResponseModel;
     private Double merchantBalance = 0.0;
     private WalletInfo gbtWallet;
-    private Double GBTBalance = 0.0;
+    private Double tokenGBTBalance = 0.0, merchnatGBTBalance = 0.0, reserveGBTBalance = 0.0;
     private Double reserveBalance = 0.0;
     private SignOnData objSignOnData = new SignOnData();
     private TrackerResponse trackerResponse = new TrackerResponse();
@@ -583,13 +583,13 @@ public class UserData {
         this.gbtWallet = gbtWallet;
     }
 
-    public Double getGBTBalance() {
-        return GBTBalance;
-    }
-
-    public void setGBTBalance(Double GBTBalance) {
-        this.GBTBalance = GBTBalance;
-    }
+//    public Double getGBTBalance() {
+//        return GBTBalance;
+//    }
+//
+//    public void setGBTBalance(Double GBTBalance) {
+//        this.GBTBalance = GBTBalance;
+//    }
 
     public Double getReserveBalance() {
         return reserveBalance;
@@ -623,5 +623,51 @@ public class UserData {
         this.selectedButTokenType = selectedButTokenType;
     }
 
+    public WalletResponseData getTokenWalletResponse() {
+        return tokenWalletResponse;
+    }
 
+    public void setTokenWalletResponse(WalletResponseData tokenWalletResponse) {
+        this.tokenWalletResponse = tokenWalletResponse;
+    }
+
+    public WalletResponseData getMerchantWalletResponse() {
+        return merchantWalletResponse;
+    }
+
+    public void setMerchantWalletResponse(WalletResponseData merchantWalletResponse) {
+        this.merchantWalletResponse = merchantWalletResponse;
+    }
+
+    public WalletResponseData getReserveWalletResponse() {
+        return reserveWalletResponse;
+    }
+
+    public void setReserveWalletResponse(WalletResponseData reserveWalletResponse) {
+        this.reserveWalletResponse = reserveWalletResponse;
+    }
+
+    public Double getTokenGBTBalance() {
+        return tokenGBTBalance;
+    }
+
+    public void setTokenGBTBalance(Double tokenGBTBalance) {
+        this.tokenGBTBalance = tokenGBTBalance;
+    }
+
+    public Double getMerchnatGBTBalance() {
+        return merchnatGBTBalance;
+    }
+
+    public void setMerchnatGBTBalance(Double merchnatGBTBalance) {
+        this.merchnatGBTBalance = merchnatGBTBalance;
+    }
+
+    public Double getReserveGBTBalance() {
+        return reserveGBTBalance;
+    }
+
+    public void setReserveGBTBalance(Double reserveGBTBalance) {
+        this.reserveGBTBalance = reserveGBTBalance;
+    }
 }
