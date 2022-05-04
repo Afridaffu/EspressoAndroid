@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
 
@@ -119,6 +120,7 @@
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
                 android:layout_marginBottom="@dimen/_20sdp"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout
