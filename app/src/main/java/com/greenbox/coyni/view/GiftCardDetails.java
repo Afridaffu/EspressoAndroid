@@ -472,9 +472,9 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 //                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
                             Double walletAmount = 0.0;
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                walletAmount = Double.parseDouble(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             } else {
-                                walletAmount = Double.parseDouble(objMyApplication.getWalletResponseData().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             }
 //                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
                             Double giftCardAmount = Double.parseDouble(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;

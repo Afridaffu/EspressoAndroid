@@ -620,9 +620,9 @@ public class MyApplication extends Application {
         mCurrentUserData.setAccountType(accountType);
     }
 
-    public WalletResponseData getWalletResponseData() {
-        return mCurrentUserData.getWalletResponseData();
-    }
+//    public WalletResponseData getWalletResponseData() {
+//        return mCurrentUserData.getWalletResponseData();
+//    }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
         if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
