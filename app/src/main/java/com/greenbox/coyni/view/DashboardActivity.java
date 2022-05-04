@@ -371,17 +371,17 @@ public class DashboardActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (tvUserName.getText().toString().contains("...")) {
                         if (strName.length() == 21 || strName.length() > 21) {
-                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 20));
+                            tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 20));
                         } else {
-                            tvUserName.setText(getString(R.string.hi_text)+strName);
+                            tvUserName.setText(getString(R.string.hi_text) + strName);
                         }
                     } else {
                         if (strName.length() == 21) {
-                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 20) + "...");
+                            tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 20) + "...");
                         } else if (strName.length() > 22) {
-                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 22) + "...");
+                            tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 22) + "...");
                         } else {
-                            tvUserName.setText(getString(R.string.hi_text)+strName);
+                            tvUserName.setText(getString(R.string.hi_text) + strName);
                         }
                     }
                 }
@@ -462,10 +462,10 @@ public class DashboardActivity extends AppCompatActivity {
                         //                        tvUserNameSmall.setText( strName);
                         //                    }
                         if (objMyApplication.getStrUserName().length() > 20) {
-                            tvUserName.setText(getString(R.string.hi_text)+strName.substring(0, 20));
+                            tvUserName.setText(getString(R.string.hi_text) + strName.substring(0, 20));
                             tvUserNameSmall.setText(getString(R.string.hi_text) + strName.substring(0, 20));
                         } else {
-                            tvUserName.setText(getString(R.string.hi_text)+strName);
+                            tvUserName.setText(getString(R.string.hi_text) + strName);
                             tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                         }
                         bindImage();
@@ -969,11 +969,11 @@ public class DashboardActivity extends AppCompatActivity {
             if (walletInfo != null && walletInfo.size() > 0) {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
-                    objMyApplication.setWalletResponseData(walletResponse);
-                    objMyApplication.setGbtWallet(walletInfo.get(i));
+//                    objMyApplication.setWalletResponseData(walletResponse);
+//                    objMyApplication.setGbtWallet(walletInfo.get(i));
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
                     tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-                    objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
+                    objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount(), walletInfo.get(0).getWalletType());
 //                    }
                 }
             }

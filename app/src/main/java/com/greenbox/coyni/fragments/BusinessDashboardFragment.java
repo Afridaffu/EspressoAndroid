@@ -173,8 +173,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         if (myApplication.getGBTBalance() != null) {
             amt += myApplication.getGBTBalance();
         }
-        if (myApplication.getMerchantBalance() != null) {
-            amt += myApplication.getMerchantBalance();
+        if (myApplication.getCurrentUserData().getMerchnatGBTBalance() != null) {
+            amt += myApplication.getCurrentUserData().getMerchnatGBTBalance();
         }
         return amt;
     }
@@ -1098,8 +1098,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showReserveReleaseBalance() {
         Double amt = 0.0;
-        if (myApplication.getReserveBalance() != null) {
-            amt += myApplication.getReserveBalance();
+        if (myApplication.getCurrentUserData().getReserveGBTBalance() != null) {
+            amt += myApplication.getCurrentUserData().getReserveGBTBalance();
         }
         mTvReserveBalance.setText(Utils.convertBigDecimalUSDC(String.valueOf(amt)));
     }

@@ -32,6 +32,7 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
+import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
@@ -163,14 +164,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
 //            if (getIntent().getStringExtra("FROM").equalsIgnoreCase("login"))
 //                businessTrackerCloseIV.setVisibility(GONE);
-
-            objMyApplication = (MyApplication) getApplicationContext();
-            businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
-            caStartTV = findViewById(R.id.caStartTV);
-            dbaStartTV = findViewById(R.id.dbaStartTV);
-            boStartTV = findViewById(R.id.boStartTV);
-            addBankStartTV = findViewById(R.id.addBankStartTV);
-            aggrementsStartTV = findViewById(R.id.aggrementsStartTV);
 
             infoTV = findViewById(R.id.infoTV);
             appFinishedTV = findViewById(R.id.appFinishedTV);
@@ -305,7 +298,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     if (businessTrackerResponse.getData().isDbaInfo()) {
                         boAPICallFrom = "INCOMPLETE";
                         businessIdentityVerificationViewModel.getBeneficialOwners();
-
                     }
                 }
             });
@@ -389,6 +381,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 }
             });
 
+            businessIdentityVerificationViewModel.getBusinessType();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -471,13 +464,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             dbaStartTV.setVisibility(GONE);
                             dbaInProgressIV.setVisibility(VISIBLE);
 
-                        } else {
+                        }
+//                        else {
 //                            dbaTV.setTextColor(getResources().getColor(R.color.primary_black));
 //                            dbaIncompleteTV.setTextColor(getResources().getColor(R.color.primary_black));
 //                            dbaIncompleteTV.setText("Incomplete");
 //                            dbaStartTV.setVisibility(VISIBLE);
 //                            dbaInProgressIV.setVisibility(GONE);
-                        }
+//                        }
                     }
                 }
             });
@@ -584,6 +578,22 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                                     .putExtra("ID", boIdResp.getData().getId()));
                         } else {
                             Utils.displayAlert(boIdResp.getError().getErrorDescription(), BusinessRegistrationTrackerActivity.this, "", boIdResp.getError().getFieldErrors().get(0));
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            businessIdentityVerificationViewModel.getBusinessTypesResponse().observe(this, new Observer<BusinessTypeResp>() {
+                @Override
+                public void onChanged(BusinessTypeResp businessTypeResp) {
+
+                    if (businessTypeResp != null) {
+                        if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
+                            objMyApplication.setBusinessTypeResp(businessTypeResp);
                         }
                     }
                 }

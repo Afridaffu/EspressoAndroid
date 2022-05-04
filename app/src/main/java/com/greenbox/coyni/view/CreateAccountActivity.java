@@ -1148,11 +1148,13 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
     public void setSpannableText() {
 
-        SpannableString ss = new SpannableString("By clicking next, you agree to Terms of Service & ");
+        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy");
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Log.e("Click", "click");
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(CreateAccountActivity.this);
+
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
@@ -1165,7 +1167,6 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -1175,12 +1176,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             }
         };
 
-        privacyPolicyTV.setText("Privacy Policy");
-        privacyPolicyTV.setPaintFlags(privacyPolicyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        tosTV.setPaintFlags(tosTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        privacyPolicyTV.setOnClickListener(new View.OnClickListener() {
+        ClickableSpan clickableSpan2 = new ClickableSpan() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View textView) {
                 if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(CreateAccountActivity.this);
 
@@ -1198,40 +1196,111 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     e.printStackTrace();
                 }
             }
-        });
 
-        tosTV.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(CreateAccountActivity.this);
-
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-                try {
-                    startActivity(browserIntent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
             }
-        });
+        };
 
-        ss.setSpan(clickableSpan, 31, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 47, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 49, 63, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan, 64, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 64, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 
         spannableText.setText(ss);
         spannableText.setMovementMethod(LinkMovementMethod.getInstance());
         spannableText.setHighlightColor(Color.TRANSPARENT);
     }
+
+//    public void setSpannableText() {
+//
+//        SpannableString ss = new SpannableString("By clicking next, you agree to Terms of Service & ");
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("Click", "click");
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+//                try {
+//                    startActivity(browserIntent);
+//                } catch (ActivityNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(true);
+//            }
+//        };
+//
+//        privacyPolicyTV.setText("Privacy Policy");
+//        privacyPolicyTV.setPaintFlags(privacyPolicyTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//        tosTV.setPaintFlags(tosTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//        privacyPolicyTV.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (Utils.isKeyboardVisible)
+//                    Utils.hideKeypad(CreateAccountActivity.this);
+//
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//
+//
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
+//                try {
+//                    startActivity(browserIntent);
+//                } catch (ActivityNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        tosTV.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (Utils.isKeyboardVisible)
+//                    Utils.hideKeypad(CreateAccountActivity.this);
+//
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
+//
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+//                try {
+//                    startActivity(browserIntent);
+//                } catch (ActivityNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        ss.setSpan(clickableSpan, 31, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+////        ss.setSpan(clickableSpan2, 49, 63, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 31, 47, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+////        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 49, 63, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//
+//        spannableText.setText(ss);
+//        spannableText.setMovementMethod(LinkMovementMethod.getInstance());
+//        spannableText.setHighlightColor(Color.TRANSPARENT);
+//    }
 
 //    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 //        if (event.action == MotionEvent.ACTION_DOWN) {

@@ -97,13 +97,13 @@ public class MyApplication extends Application {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
     }
 
-    public Double getMerchantBalance() {
-        return mCurrentUserData.getMerchantBalance();
-    }
-
-    public void setMerchantBalance(Double merchantBalance) {
-        mCurrentUserData.setMerchantBalance(merchantBalance);
-    }
+//    public Double getMerchantBalance() {
+//        return mCurrentUserData.getMerchantBalance();
+//    }
+//
+//    public void setMerchantBalance(Double merchantBalance) {
+//        mCurrentUserData.setMerchantBalance(merchantBalance);
+//    }
 
     public int getDbaOwnerId() {
         return mCurrentUserData.getDbaOwnerId();
@@ -346,20 +346,27 @@ public class MyApplication extends Application {
     }
 
     public Double getGBTBalance() {
-        return mCurrentUserData.getGBTBalance();
+        return mCurrentUserData.getTokenGBTBalance();
     }
 
-    public void setGBTBalance(Double gBTBalance) {
-        mCurrentUserData.setGBTBalance(gBTBalance);
+
+    public void setGBTBalance(Double gBTBalance, String walletType) {
+        if (walletType.equals(Utils.TOKEN_STR)) {
+            mCurrentUserData.setTokenGBTBalance(gBTBalance);
+        } else if (walletType.equals(Utils.MERCHANT_STR)) {
+            mCurrentUserData.setMerchnatGBTBalance(gBTBalance);
+        } else if (walletType.equals(Utils.RESERVE_STR)) {
+            mCurrentUserData.setReserveGBTBalance(gBTBalance);
+        }
     }
 
-    public Double getReserveBalance() {
-        return mCurrentUserData.getReserveBalance();
-    }
-
-    public void setReserveBalance(Double reserveBalance) {
-        mCurrentUserData.setReserveBalance(reserveBalance);
-    }
+//    public Double getReserveBalance() {
+//        return mCurrentUserData.getReserveBalance();
+//    }
+//
+//    public void setReserveBalance(Double reserveBalance) {
+//        mCurrentUserData.setReserveBalance(reserveBalance);
+//    }
 
     public PaymentsList getSelectedCard() {
         return mCurrentUserData.getSelectedCard();
@@ -618,7 +625,13 @@ public class MyApplication extends Application {
     }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
-        mCurrentUserData.setWalletResponseData(walletResponseData);
+        if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
+            mCurrentUserData.setTokenWalletResponse(walletResponseData);
+        } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
+            mCurrentUserData.setMerchantWalletResponse(walletResponseData);
+        } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
+            mCurrentUserData.setReserveWalletResponse(walletResponseData);
+        }
     }
 
     public Boolean isDeviceID() {
