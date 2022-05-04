@@ -432,6 +432,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             }
                         } else {
                             etExpiry.setHint("MM/YY");
+                            Utils.shwForcedKeypad(EditCardActivity.this);
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                             expiryErrorLL.setVisibility(GONE);
