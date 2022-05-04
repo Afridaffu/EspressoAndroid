@@ -40,7 +40,8 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/profile_account_profile_image"

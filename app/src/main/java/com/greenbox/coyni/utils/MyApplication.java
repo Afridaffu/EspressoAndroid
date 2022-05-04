@@ -6,13 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
@@ -27,6 +26,7 @@ import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paidorder.PaidOrderResp;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -48,7 +48,6 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.view.DashboardActivity;
-import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 
@@ -56,62 +55,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 public class MyApplication extends Application {
-    AgreementsPdf agreementsPdf;
-    RetrieveUsersResponse objRetUsers = new RetrieveUsersResponse();
-    String strUserName = "", strRetrEmail = "", strEmail = "", strSignOnError = "", strFiservError = "", strPreference = "PST", strInvite = "", strScreen = "";
-    Profile myProfile = new Profile();
-    UpdateEmailResponse updateEmailResponse = new UpdateEmailResponse();
-    UpdatePhoneResponse updatePhoneResponse = new UpdatePhoneResponse();
-    UserDetails userDetails;
-    List<States> listStates = new ArrayList<>();
-    LatestTxnResponse listLatestTxn;
-    //isBiometric - OS level on/off;  isLocalBiometric - LocalDB value
-    Boolean isBiometric = false, isLocalBiometric = false, isResolveUrl = false, isContactPermission = true, isCardSave = false, isSignet = false;
-    PaymentMethodsResponse paymentMethodsResponse;
-    //    WalletResponse walletResponse;
-    String timezone = "", tempTimezone = "Pacific (PST)", strStatesUrl = "", rsaPublicKey = "", strMobileToken = "", strRegisToken = "";
-    int timezoneID = 0, tempTimezoneID = 0, loginUserId, accountType, dbaOwnerId = 0;
-    TransactionList transactionList;
-    PaymentsList selectedCard, prevSelectedCard;
-    TransferFeeResponse transferFeeResponse;
-    BrandsResponse selectedBrandResponse;
-    WithdrawRequest withdrawRequest;
-    WithdrawResponse withdrawResponse;
-    BuyTokenResponse buyTokenResponse;
-    PayRequestResponse payRequestResponse;
-    TransferPayRequest transferPayRequest;
-    PaidOrderRequest paidOrderRequest;
-    PaidOrderResp paidOrderResp;
-    List<Contacts> listContacts = new ArrayList<>();
-    TransactionListRequest transactionListSearch = new TransactionListRequest();
-    Double withdrawAmount;
-    BusinessTrackerResponse businessTrackerResponse;
-    WalletResponseData walletResponseData;
-    BusinessTypeResp businessTypeResp;
-    CompanyInfoResp companyInfoResp;
-    DBAInfoResp dbaInfoResp;
-    BuyTokenRequest buyRequest;
-    BOResp beneficialOwnersResponse;
-    HashMap<String, RegisteredUsersRequest> objPhContacts = new HashMap<>();
-    ApplicationSubmitResponseModel submitResponseModel;
-    boolean isReserveEnabled = false;
-    Double merchantBalance = 0.0;
+
     private UserData mCurrentUserData;
 
     @Override
@@ -165,11 +114,11 @@ public class MyApplication extends Application {
     }
 
     public boolean isReserveEnabled() {
-        return isReserveEnabled;
+        return mCurrentUserData.isReserveEnabled();
     }
 
     public void setIsReserveEnabled(boolean isReserveEnabled) {
-        this.isReserveEnabled = isReserveEnabled;
+        mCurrentUserData.setIsReserveEnabled(isReserveEnabled);
     }
 
     public LatestTxnResponse getListLatestTxn() {
@@ -284,14 +233,6 @@ public class MyApplication extends Application {
         mCurrentUserData.setUpdatePhoneResponse(updatePhoneResponse);
     }
 
-//    public WalletResponse getWalletResponse() {
-//        return walletResponse;
-//    }
-
-//    public void setWalletResponse(WalletResponse walletResponse) {
-//        this.walletResponse = walletResponse;
-//    }
-
     public String getTimezone() {
         return mCurrentUserData.getTimezone();
     }
@@ -370,6 +311,14 @@ public class MyApplication extends Application {
 
     public void setLoginUserId(int logUserId) {
         mCurrentUserData.setLoginUserId(logUserId);
+    }
+
+    public LoginResponse getLoginResponse() {
+        return mCurrentUserData.getLoginResponse();
+    }
+
+    public void setLoginResponse(LoginResponse loginResponse) {
+        mCurrentUserData.setLoginResponse(loginResponse);
     }
 
     public TrackerResponse getTrackerResponse() {
@@ -715,6 +664,24 @@ public class MyApplication extends Application {
         }
     }
 
+    public void launchDeclinedActivity(Context context) {
+        Intent declinedIntent = new Intent(context, VerificationFailedActivity.class);
+        declinedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(declinedIntent);
+    }
+
+    public boolean checkForDeclinedStatus() {
+        if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            LoginResponse loginResponse = getLoginResponse();
+            if (loginResponse != null && loginResponse.getStatus() != null
+                    && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)
+                    && loginResponse.getData() != null
+                    && loginResponse.getData().getAccountStatus() != null) {
+                return loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus());
+            }
+        }
+        return false;
+    }
     public void launchDashboard(Context context, String fromScreen) {
         try {
             Intent dashboardIntent = new Intent(context, DashboardActivity.class);

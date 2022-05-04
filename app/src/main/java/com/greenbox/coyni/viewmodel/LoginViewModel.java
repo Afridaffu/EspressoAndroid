@@ -662,6 +662,7 @@ public class LoginViewModel extends AndroidViewModel {
                 public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                     if (response.isSuccessful()) {
                         LoginResponse obj = response.body();
+
                         biometricResponseMutableLiveData.setValue(obj);
                         Log.e("Bio Success", new Gson().toJson(obj));
                     } else {

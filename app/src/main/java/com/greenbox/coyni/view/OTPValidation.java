@@ -188,7 +188,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         break;
                     case "login_SET_PIN":
                         maskedPhone = getIntent().getStringExtra("MASK_MOBILE");
-                        otpValidationCloseIV.setImageResource(R.drawable.ic_close);
+                        otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (OTP_TYPE.equals("MOBILE")) {
                             headerTV.setText("Please Verify your Phone Number");
                             subHeaderTV.setText("We have sent you 6-digit code to the registered phone number " + maskedPhone);

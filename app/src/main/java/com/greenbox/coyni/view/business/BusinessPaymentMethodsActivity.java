@@ -67,7 +67,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     CardView cvNext, cvAddPayment, cvTryAgain, cvDone;
     ImageView imgBankIcon, imgBankArrow, imgSignetLogo, imgSignetArrow, imgDCardLogo, imgDCardArrow;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,17 +129,31 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (!isBankSuccess) {
+            if (strCurrent.equals("addpay") || strCurrent.equals("addpayment")) {
+                getPaymentMethods();
+            } else {
+                super.onBackPressed();
+            }
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         try {
-            if (strCurrent.equals("firstError")) {
-                displayError();
-            } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
-                ControlMethod("addpayment");
-                addPayment();
-            } else {
-                if (!isPayments) {
-                    getPaymentMethods();
+            if (!isBankSuccess) {
+                if (strCurrent.equals("firstError")) {
+                    displayError();
+                } else if (strCurrent.equals("addpay") || strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("signet")) {
+                    ControlMethod("addpayment");
+                    addPayment();
+                    strCurrent = "addpayment";
+                } else {
+                    if (!isPayments) {
+                        getPaymentMethods();
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -232,6 +246,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                         } else {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), BusinessPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
+                            } else if (apiError.getError().getErrorCode().equals(getString(R.string.no_bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("no bank accounts found")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), BusinessPaymentMethodsActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
                             } else {
                                 displayError();
@@ -407,7 +423,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+//                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
+                        if (paymentMethodsResponse.getData().getDebitCardCount() < paymentMethodsResponse.getData().getMaxDebitCardsAllowed()) {
                             strCurrent = "debit";
                             Intent i = new Intent(BusinessPaymentMethodsActivity.this, AddCardActivity.class);
                             i.putExtra("card", "debit");
@@ -616,11 +633,13 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
 
     private void displaySuccess() {
         try {
+            isBankSuccess = true;
             ControlMethod("banksuccess");
             cvDone = findViewById(R.id.cvDone);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    isBankSuccess = false;
                     if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         ControlMethod("paymentMethods");
                         strCurrent = "paymentMethods";

@@ -158,7 +158,21 @@ public class EditPhoneActivity extends AppCompatActivity {
                                 phNoWithCountryCode.setPhoneNumber(newPhoneNumber);
                                 contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
                                 contactInfoRequest.setId(myApplicationObj.getCompanyInfoResp().getData().getId());
-                                businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                                currentPhoneNumber = currentPhoneET.getText().toString().substring(1, 4) + currentPhoneET.getText().toString().substring(6, 9) + currentPhoneET.getText().toString().substring(10, currentPhoneET.getText().length());
+                                if (currentPhoneNumber.equalsIgnoreCase(newPhoneNumber)) {
+                                    try {
+                                        dialog.dismiss();
+                                        Utils.displayAlertNew("Please enter a new phone number ", EditPhoneActivity.this, "coyni");
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    try {
+                                        businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }

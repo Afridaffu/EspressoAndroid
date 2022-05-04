@@ -47,6 +47,7 @@ import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.EditCardActivity;
+import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WebViewActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -270,14 +271,9 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                             isBank = false;
                             if (apiError.getError().getErrorCode().equals(getString(R.string.bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("this payment method has already")) {
                                 Utils.displayAlert(apiError.getError().getErrorDescription(), SelectPaymentMethodActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
+                            } else if (apiError.getError().getErrorCode().equals(getString(R.string.no_bank_error_code)) && apiError.getError().getErrorDescription().toLowerCase().contains("no bank accounts found")) {
+                                Utils.displayAlert(apiError.getError().getErrorDescription(), SelectPaymentMethodActivity.this, "Error", apiError.getError().getFieldErrors().get(0));
                             } else {
-//                                String strError = "";
-//                                if (!apiError.getError().getErrorDescription().equals("")) {
-//                                    strError = apiError.getError().getErrorDescription();
-//                                } else {
-//                                    strError = apiError.getError().getFieldErrors().get(0);
-//                                }
-//                                displayError(strError);
                                 displayError();
                             }
                         }

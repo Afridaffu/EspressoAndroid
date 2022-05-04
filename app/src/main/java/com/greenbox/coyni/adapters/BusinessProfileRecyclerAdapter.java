@@ -1,6 +1,7 @@
 package com.greenbox.coyni.adapters;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     private AccountsData accountsData;
     private int selectedID;
     private boolean showdba;
+    private long mLastClickTime =0l;
 
     public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData, int selectedID, boolean showdba) {
         this.context = context;
@@ -170,6 +172,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         childView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime()-mLastClickTime<2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
 
                 if (listener != null) {
                     selectedID = detailInfo.getId();
@@ -182,6 +188,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         addDBA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 if (listener != null) {
                     listener.onAddDbaClicked(detailInfo.getAccountType(), groupProfile.getId());
                 }

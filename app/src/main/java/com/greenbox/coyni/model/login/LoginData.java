@@ -20,6 +20,12 @@ public class LoginData {
     private boolean isReserveEnabled;
     private int accountType;
     private int dbaOwnerId;
+    private String accountStatus;
+    private String companyName;
+    private String dbaName;
+    private boolean oldSessionExist;
+    private boolean isProfileVerified;
+    private boolean isPersonIdentified;
 
     public int getDbaOwnerId() {
         return dbaOwnerId;
@@ -171,6 +177,54 @@ public class LoginData {
 
     public void setAccountType(int accountType) {
         this.accountType = accountType;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getDbaName() {
+        return dbaName;
+    }
+
+    public void setDbaName(String dbaName) {
+        this.dbaName = dbaName;
+    }
+
+    public boolean isOldSessionExist() {
+        return oldSessionExist;
+    }
+
+    public void setOldSessionExist(boolean oldSessionExist) {
+        this.oldSessionExist = oldSessionExist;
+    }
+
+    public boolean isProfileVerified() {
+        return isProfileVerified;
+    }
+
+    public void setProfileVerified(boolean profileVerified) {
+        isProfileVerified = profileVerified;
+    }
+
+    public boolean isPersonIdentified() {
+        return isPersonIdentified;
+    }
+
+    public void setPersonIdentified(boolean personIdentified) {
+        isPersonIdentified = personIdentified;
     }
 }
 
