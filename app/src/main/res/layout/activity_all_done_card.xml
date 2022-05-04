@@ -31,7 +31,7 @@
         android:layout_below="@+id/tvHead"
         android:fontFamily="@font/opensans_regular"
         android:gravity="center"
-        android:text="Your card has been successfully authorized and added to your payment method."
+        android:text="Your card has been successfully authorized and added to your payment methods."
         android:textColor="@color/primary_black"
         android:textSize="@dimen/_12ssp" />
 
