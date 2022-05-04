@@ -385,12 +385,12 @@ public class BusinessDashboardActivity extends BaseActivity {
 //                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
                             if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
-                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                                objMyApplication.setGbtWallet(businessWalletResponse.getData().getWalletNames().get(0));
                                 objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
                                 objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
-//                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
+                                objMyApplication.setWalletResponseData(businessWalletResponse.getData());
                                 objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
                             }
                         }
