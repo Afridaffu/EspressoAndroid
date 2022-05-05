@@ -19,6 +19,7 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 
     List<TeamData> listTeam;
     Context mContext;
+    private String fullname = "";
     private TeamAdapter.TeamMemberClickListener memberClickListener;
 
     public TeamAdapter(Context context, List<TeamData> listTeam, TeamAdapter.TeamMemberClickListener memberClickListener) {
@@ -59,9 +60,19 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             char last = lastName.charAt(0);
 //            char last = lastName.charAt(0);
 
+
             String imageName = first + String.valueOf(last);
             holder.txImageName.setText(imageName);
-            holder.txName.setText(firstName + " " + lastName);
+            String name = firstName + " " + lastName;
+            holder.txName.setText(name);
+
+            if (name.length() > 22){
+                holder.txName.setText(name.substring(0,22)+"...");
+            }
+            else {
+                holder.txName.setText(name);
+            }
+
             if (objData.getRoleName() != null && !objData.getRoleName().equals("")) {
                 holder.txRole.setText(objData.getRoleName());
             }
@@ -113,6 +124,8 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             txStatus = itemView.findViewById(R.id.status);
             txImageName = itemView.findViewById(R.id.imageTextTV);
             itemView.setOnClickListener(this);
+
+
         }
 
         @Override
