@@ -487,7 +487,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
                                         if (data.get(position).getCount() > 0) {
-                                            mTransactions.setText(String.valueOf(data.get(position).getCount()));
+                                            mTransactions.setText(String.valueOf(data.get(position).getCount()).split("\\.")[0]);
                                             totalTransactions = data.get(position).getCount();
                                         } else {
                                             mTransactions.setText(defaultAmount);
