@@ -52,7 +52,7 @@ import java.util.regex.Pattern;
 public class CreatePasswordActivity extends AppCompatActivity {
     ImageView imgClose;
     CardView cvSave, cvLogin;
-    LinearLayout layoutNewPassword;
+    RelativeLayout layoutNewPassword;
     RelativeLayout layoutDone;
     TextView tvPasswordInfo, tvHead, tvMessage, tvchangepass, passwordErrorTV, confPassErrorTV;
     TextInputLayout passwordTIL, confPasswordTIL, currentPass;

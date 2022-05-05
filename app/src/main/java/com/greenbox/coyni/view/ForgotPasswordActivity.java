@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,7 +45,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     ProgressDialog dialog;
     LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
-    RelativeLayout layoutMain;
+    LinearLayout layoutMain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
     String fromStr = "";
@@ -54,6 +55,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_forgot_password);
@@ -84,15 +86,15 @@ public class ForgotPasswordActivity extends BaseActivity {
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (Utils.isKeyboardVisible)
-//                        Utils.hideKeypad(ForgotPasswordActivity.this);
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(ForgotPasswordActivity.this);
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             finish();
                         }
-                    }, 300);
+                    }, 500);
 
                 }
             });
@@ -148,98 +150,96 @@ public class ForgotPasswordActivity extends BaseActivity {
 //                        Utils.hideKeypad(ForgotPasswordActivity.this);
                 }
 
-            @Override
-            public void afterTextChanged (Editable s){
-                try {
-                    String str = etEmail.getText().toString();
-                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
-                        etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
-                        validEmail();
-                        etEmail.setSelection(etEmail.getText().length());
-                    } else if (s.length() == 0) {
-                        layoutEmailError.setVisibility(GONE);
-                    } else if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5) {
-                        layoutEmailError.setVisibility(GONE);
+                @Override
+                public void afterTextChanged(Editable s) {
+                    try {
+                        String str = etEmail.getText().toString();
+                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
+                            etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
+                            validEmail();
+                            etEmail.setSelection(etEmail.getText().length());
+                        } else if (s.length() == 0) {
+                            layoutEmailError.setVisibility(GONE);
+                        } else if (Utils.isValidEmail(etEmail.getText().toString().trim()) && etEmail.getText().toString().trim().length() > 5) {
+                            layoutEmailError.setVisibility(GONE);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+
                 }
+            });
 
-            }
-        });
-
-        etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    if (!Utils.isKeyboardVisible)
+            etEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b) {
+                        if (!Utils.isKeyboardVisible)
 //                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
 //                        etEmail.setHint("Email");
-                    etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
-                    Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
-                    layoutEmailError.setVisibility(GONE);
-                } else {
-                    etEmail.setHint("");
-                }
-            }
-        });
-
-        cvNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if (isSaveEnabled) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        Utils.hideKeypad(ForgotPasswordActivity.this, v);
-                        if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                            layoutEmailError.setVisibility(VISIBLE);
-                            tvEmailError.setText("Please enter a valid Email");
-                            etEmail.clearFocus();
-                        } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
-                            layoutEmailError.setVisibility(GONE);
-                            etEmail.clearFocus();
-                            dialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
-                            loginViewModel.emailotpresend(etEmail.getText().toString().trim());
-                        } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
-                            etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
-                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
-                            layoutEmailError.setVisibility(VISIBLE);
-                            tvEmailError.setText("Please enter a valid Email");
-                            etEmail.clearFocus();
-                        }
+                            etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
+                        layoutEmailError.setVisibility(GONE);
                     } else {
+                        etEmail.setHint("");
+                    }
+                }
+            });
+
+            cvNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (isSaveEnabled) {
+                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                return;
+                            }
+                            mLastClickTime = SystemClock.elapsedRealtime();
+                            Utils.hideKeypad(ForgotPasswordActivity.this, v);
+                            if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                                layoutEmailError.setVisibility(VISIBLE);
+                                tvEmailError.setText("Please enter a valid Email");
+                                etEmail.clearFocus();
+                            } else if (etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim())) {
+                                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
+                                layoutEmailError.setVisibility(GONE);
+                                etEmail.clearFocus();
+                                dialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
+                                dialog.setIndeterminate(false);
+                                dialog.setMessage("Please wait...");
+                                dialog.show();
+                                loginViewModel.emailotpresend(etEmail.getText().toString().trim());
+                            } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
+                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
+                                Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
+                                layoutEmailError.setVisibility(VISIBLE);
+                                tvEmailError.setText("Please enter a valid Email");
+                                etEmail.clearFocus();
+                            }
+                        } else {
 //                                etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
 ////                            Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
 //                                Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
 //                                layoutEmailError.setVisibility(VISIBLE);
 //                                tvEmailError.setText("Field Required");
 //                            etEmail.clearFocus();
+                        }
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
-        });
+            });
 
-    } catch(
-    Exception ex)
+        } catch (
+                Exception ex) {
+            ex.printStackTrace();
+        }
 
-    {
-        ex.printStackTrace();
     }
-
-}
 
     private void initObserver() {
         loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
@@ -340,7 +340,7 @@ public class ForgotPasswordActivity extends BaseActivity {
 //        Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
 //    }
 
-    private void validEmail(){
+    private void validEmail() {
         isemail = true;
         enable();
     }

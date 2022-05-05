@@ -724,6 +724,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
 //
                     } else {
+                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         cKey.disableButton();
                         addNoteTIL.setCounterEnabled(false);
                     }

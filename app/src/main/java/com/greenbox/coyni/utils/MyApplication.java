@@ -337,13 +337,13 @@ public class MyApplication extends Application {
         mCurrentUserData.setStrPreference(strPreference);
     }
 
-    public WalletInfo getGbtWallet() {
-        return mCurrentUserData.getGbtWallet();
-    }
-
-    public void setGbtWallet(WalletInfo gbtWallet) {
-        mCurrentUserData.setGbtWallet(gbtWallet);
-    }
+//    public WalletInfo getGbtWallet() {
+//        return mCurrentUserData.getGbtWallet();
+//    }
+//
+//    public void setGbtWallet(WalletInfo gbtWallet) {
+//        mCurrentUserData.setGbtWallet(gbtWallet);
+//    }
 
     public Double getGBTBalance() {
         return mCurrentUserData.getTokenGBTBalance();
