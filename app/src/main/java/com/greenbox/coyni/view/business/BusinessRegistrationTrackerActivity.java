@@ -40,8 +40,6 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.DashboardActivity;
-import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -79,16 +77,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
             TextView dashboardTV = findViewById(R.id.dashboardTV);
 
-            if (getIntent().getBooleanExtra("ADDBUSINESS", false)) {
-                loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-                addBusiness = getIntent().getBooleanExtra("ADDBUSINESS", false);
-                LogUtils.d("addBusiness", "addBusiness" + addBusiness);
+            if (getIntent().getBooleanExtra(Utils.ADD_BUSINESS, false)) {
+                addBusiness = getIntent().getBooleanExtra(Utils.ADD_BUSINESS, false);
             }
 
-            if (getIntent().getBooleanExtra("ADDDBA", false)) {
-                loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-                addDBA = getIntent().getBooleanExtra("ADDDBA", false);
-                LogUtils.d("addDBA", "addDBA" + addDBA);
+            if (getIntent().getBooleanExtra(Utils.ADD_DBA, false)) {
+                addDBA = getIntent().getBooleanExtra(Utils.ADD_DBA, false);
             }
 
             if (getIntent().getIntExtra("dbaId", 0) != 0) {
@@ -151,6 +145,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private void initFields() {
         try {
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
             businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
             caStartTV = findViewById(R.id.caStartTV);
@@ -334,19 +329,19 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     if (review) {
                         if (addDBA) {
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
-                                    .putExtra("ADDBUSINESS", true)
-                                    .putExtra("ADDDBA", true));
+                                    .putExtra(Utils.ADD_BUSINESS, true)
+                                    .putExtra(Utils.ADD_DBA, true));
 
                         } else if (addBusiness) {
 
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
-                                    .putExtra("ADDBUSINESS", true)
-                                    .putExtra("ADDDBA", false));
+                                    .putExtra(Utils.ADD_BUSINESS, true)
+                                    .putExtra(Utils.ADD_DBA, false));
 
                         } else {
                             startActivity(new Intent(BusinessRegistrationTrackerActivity.this, ReviewApplicationActivity.class)
-                                    .putExtra("ADDBUSINESS", false)
-                                    .putExtra("ADDDBA", false));
+                                    .putExtra(Utils.ADD_BUSINESS, false)
+                                    .putExtra(Utils.ADD_DBA, false));
                         }
 
                     }

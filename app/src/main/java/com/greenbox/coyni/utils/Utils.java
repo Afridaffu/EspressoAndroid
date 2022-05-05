@@ -349,6 +349,9 @@ public class Utils {
     public static final String MerchantPayout = "Merchant Payout";
     public static final String MonthlyServiceFee = "Monthly Service Fee";
 
+    public static final String ADD_BUSINESS = "ADDBUSINESS";
+    public static final String ADD_DBA = "ADDDBA";
+    public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
 
     public static final int boTargetPercentage = 51;
 

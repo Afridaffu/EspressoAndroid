@@ -489,7 +489,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
                                         if (data.get(position).getCount() > 0) {
-                                            mTransactions.setText(String.valueOf(data.get(position).getCount()));
+                                            mTransactions.setText(String.valueOf(data.get(position).getCount()).split("\\.")[0]);
                                             totalTransactions = data.get(position).getCount();
                                         } else {
                                             mTransactions.setText(defaultAmount);
@@ -590,8 +590,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         LogUtils.d(TAG, "tracker iddddd" + myApplication.getDbaOwnerId());
         if (myApplication.getDbaOwnerId() != 0) {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
-            inTracker.putExtra("ADDBUSINESS", true);
-            inTracker.putExtra("ADDDBA", true);
+            inTracker.putExtra(Utils.ADD_BUSINESS, true);
+            inTracker.putExtra(Utils.ADD_DBA, true);
             startActivity(inTracker);
         } else {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
@@ -619,15 +619,19 @@ public class BusinessDashboardFragment extends BaseFragment {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
 //        LogUtils.d(TAG, "dashboardmyApplication" + myApplication.getBusinessTrackerResponse());
 //        LogUtils.d(TAG, "dashboardisProfileVerified" + myApplication.getBusinessTrackerResponse().getData().isProfileVerified());
-        if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
-                && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
-            showGetStartedView();
-        } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+//        if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
+//                && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
+//
+//        } else
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getAccountStatus() != null) {
             String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
-            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                showGetStartedView();
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                 showIdentityVerificationReview();
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus()) || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
                 showAdditionalActionView();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
