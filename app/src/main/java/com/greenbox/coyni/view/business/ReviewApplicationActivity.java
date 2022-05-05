@@ -142,15 +142,13 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         objMyApplication = (MyApplication) getApplicationContext();
 
-        if (getIntent().getBooleanExtra("ADDBUSINESS", false)) {
+        if (getIntent().getBooleanExtra(Utils.ADD_BUSINESS, false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            addBusiness = getIntent().getBooleanExtra("ADDBUSINESS", false);
-            LogUtils.d("addBusiness", "addBusiness" + addBusiness);
+            addBusiness = getIntent().getBooleanExtra(Utils.ADD_BUSINESS, false);
         }
-        if (getIntent().getBooleanExtra("ADDDBA", false)) {
+        if (getIntent().getBooleanExtra(Utils.ADD_DBA, false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            addDBA = getIntent().getBooleanExtra("ADDDBA", false);
-            LogUtils.d("addDBA", "addDBA" + addDBA);
+            addDBA = getIntent().getBooleanExtra(Utils.ADD_DBA, false);
         }
 
         initFields();

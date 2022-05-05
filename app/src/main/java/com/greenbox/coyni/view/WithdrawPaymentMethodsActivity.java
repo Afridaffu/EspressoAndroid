@@ -187,7 +187,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            walletResponse = objMyApplication.getWalletResponseData();
+            walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
             walletBalance = objMyApplication.getGBTBalance();
             if (paymentMethodsResponse != null) {
                 getPayments(paymentMethodsResponse.getData().getData());

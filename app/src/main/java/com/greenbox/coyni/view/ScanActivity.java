@@ -316,7 +316,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                 tvSaveUserName.setText(savedStrName);
             }
             saveToAlbumbindImage();
-            WalletResponseData walletResponse = objMyApplication.getWalletResponseData();
+            WalletResponseData walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
             if (walletResponse != null && walletResponse.getWalletNames() != null
                     && walletResponse.getWalletNames().get(0) != null
                     && walletResponse.getWalletNames().get(0).getWalletId() != null) {
@@ -406,7 +406,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                         myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                         ClipData myClip;
-                        String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
+                        String text = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId();
                         myClip = ClipData.newPlainText("text", text);
                         myClipboard.setPrimaryClip(myClip);
 

@@ -50,7 +50,8 @@ public class AccountsActivity extends AppCompatActivity {
     public void bindImage() {
         try {
 
-            setUserBalance(objMyApplication.getWalletResponseData());
+//            setUserBalance(objMyApplication.getWalletResponseData());
+            setUserBalance(objMyApplication.getCurrentUserData().getTokenWalletResponse());
 
             userNameTV.setText(objMyApplication.getStrUserName());
             imgProfile.setVisibility(View.GONE);

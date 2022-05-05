@@ -103,7 +103,7 @@ public class BenificialMaillingAddressActivity extends AppCompatActivity {
                 if (!b) {
                     mailadressET.setHint("");
                     if (mailadressET.getText().toString().trim().length() > 1) {
-                        mailadressTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        mailadressTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(BenificialMaillingAddressActivity.this));
                         mailadressET.setHintTextColor(getColor(R.color.light_gray));
                         Utils.setUpperHintColor(mailadressTIL, getColor(R.color.primary_black));
                         mailadresErrorLL.setVisibility(GONE);
@@ -115,7 +115,7 @@ public class BenificialMaillingAddressActivity extends AppCompatActivity {
                         mailadresErrorLL.setVisibility(VISIBLE);
                         mailAdressTV.setText("Minimum 2 Characters Required");
                     } else {
-                        mailadressTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        mailadressTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailadressTIL, getColor(R.color.light_gray));
                         mailadresErrorLL.setVisibility(VISIBLE);
                         mailAdressTV.setText("Field Required");
@@ -135,7 +135,7 @@ public class BenificialMaillingAddressActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
                     mailadressET2.setHint("");
-                    mailadressTIL2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                    mailadressTIL2.setBoxStrokeColorStateList(Utils.getNormalColorState(BenificialMaillingAddressActivity.this));
                     Utils.setUpperHintColor(mailadressTIL2, getColor(R.color.light_gray));
                 } else {
 //                    mailadressET2.setHint("Apt#, Suit, Floor ");
@@ -153,11 +153,11 @@ public class BenificialMaillingAddressActivity extends AppCompatActivity {
                     mailcityET.setHint("");
                     if (mailcityET.getText().toString().trim().length() > 0) {
                         mailcityErrorLL.setVisibility(GONE);
-                        mailcityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        mailcityTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailcityTIL, getColor(R.color.primary_black));
 
                     } else {
-                        mailcityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        mailcityTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailcityTIL, getColor(R.color.light_gray));
                         mailcityErrorLL.setVisibility(VISIBLE);
                         mailcityTV.setText("Field Required");
@@ -178,11 +178,11 @@ public class BenificialMaillingAddressActivity extends AppCompatActivity {
                     mailstateET.setHint("");
                     if (mailstateET.getText().toString().trim().length() > 0) {
                         mailstateErrorLL.setVisibility(GONE);
-                        mailstateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        mailstateTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailstateTIL, getColor(R.color.primary_black));
 
                     } else {
-                        mailstateTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        mailstateTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailstateTIL, getColor(R.color.light_gray));
                         mailstateErrorLL.setVisibility(VISIBLE);
                         mailstateTV.setText("Field Required");
@@ -202,16 +202,16 @@ public class BenificialMaillingAddressActivity extends AppCompatActivity {
                     mailzipcodeET.setHint("");
                     if (mailzipcodeET.getText().toString().trim().length() > 0 && mailzipcodeET.getText().toString().trim().length() == 5) {
                         mailzipcodeTIL.setVisibility(GONE);
-                        mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailzipcodeTIL, getColor(R.color.primary_black));
 
                     } else if (mailzipcodeET.getText().toString().trim().length() >= 1 && mailzipcodeET.getText().toString().trim().length() <= 4) {
-                        mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailzipcodeTIL, getColor(R.color.error_red));
                         mailzipErrorLL.setVisibility(VISIBLE);
                         mailzipTV.setText("Minimum 5 Digits Required");
                     } else {
-                        mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                        mailzipcodeTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(BenificialMaillingAddressActivity.this));
                         Utils.setUpperHintColor(mailzipcodeTIL, getColor(R.color.light_gray));
                         mailzipErrorLL.setVisibility(VISIBLE);
                         mailzipTV.setText("Field Required");

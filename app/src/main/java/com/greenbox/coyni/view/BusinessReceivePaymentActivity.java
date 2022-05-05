@@ -204,9 +204,9 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
 //                tvWalletAddress.setText(walletResponse.getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
 //            }
 
-            strWallet = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
+            strWallet = objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getWalletId();
             generateQRCode(strWallet);
-            tvWalletAddress.setText(objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
+            tvWalletAddress.setText(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getWalletId().substring(0, 16) + "...");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -220,7 +220,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
                     ClipData myClip;
-                    String text = objMyApplication.getWalletResponseData().getWalletNames().get(0).getWalletId();
+                    String text = objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getWalletId();
                     myClip = ClipData.newPlainText("text", text);
                     myClipboard.setPrimaryClip(myClip);
 
