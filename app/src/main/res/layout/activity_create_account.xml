@@ -457,7 +457,7 @@
                     <TextView
                         android:id="@+id/spannableTV"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_40sdp"
+                        android:layout_height="@dimen/_60sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/spannable_text"
                         android:textColor="@color/primary_black"

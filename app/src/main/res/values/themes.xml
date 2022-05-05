@@ -51,6 +51,7 @@
         <item name="colorPrimary">@color/primary_green</item>
         <item name="colorPrimaryDark">@color/primary_green</item>
         <item name="colorAccent">@color/primary_green</item>
+        <item name="android:windowTranslucentStatus">@color/white</item>
     </style>
 
     <style name="TextInputLayout.OutlinedBox" parent="Base.Widget.MaterialComponents.TextInputLayout">

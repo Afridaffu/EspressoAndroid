@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,7 +47,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     ProgressDialog dialog;
     LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
-    RelativeLayout layoutMain;
+    LinearLayout layoutMain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
     String fromStr = "";
@@ -56,6 +57,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_forgot_password);

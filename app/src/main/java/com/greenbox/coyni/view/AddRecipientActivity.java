@@ -28,6 +28,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -84,6 +86,9 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_add_recipient);
             initialization();
             initObserver();
@@ -383,7 +388,8 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
         try {
             if (users != null && users.size() > 0) {
                 for (int i = 0; i < users.size(); i++) {
-                    if (!users.get(i).getWalletId().equals(objMyApplication.getGbtWallet().getWalletId())) {
+//                    if (!users.get(i).getWalletId().equals(objMyApplication.getGbtWallet().getWalletId())) {
+                    if (!users.get(i).getWalletId().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId())) {
                         listCoyniUsers.add(users.get(i));
                     }
                 }
@@ -528,7 +534,7 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
             List<RegUsersResponseData> nWAList = new ArrayList<>();
             if (contacts != null && contacts.size() > 0) {
                 for (int i = 0; i < contacts.size(); i++) {
-                    if (contacts.get(i).getWalletAddress() != null && !contacts.get(i).getWalletAddress().equals(objMyApplication.getGbtWallet().getWalletId())) {
+                    if (contacts.get(i).getWalletAddress() != null && !contacts.get(i).getWalletAddress().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId())) {
 //                        contactsList.add(contacts.get(i));
                         wWAList.add(contacts.get(i));
                     } else if (contacts.get(i).getWalletAddress() == null) {
