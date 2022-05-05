@@ -416,17 +416,9 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
         String iconText = "";
-        if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())
-                && objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
-            iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
-            userName = objMyApplication.getMyProfile().getData().getDbaName();
-            if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
-            } else {
-                mTvUserName.setText("Hi! " + userName);
-            }
-        } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                && objMyApplication.getMyProfile().getData().getFirstName() != null) {
+        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                && objMyApplication.getMyProfile().getData().getFirstName() != null &&
+                    objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
             String firstName = objMyApplication.getMyProfile().getData().getFirstName();
             iconText = firstName.substring(0, 1).toUpperCase();
             userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
@@ -443,6 +435,16 @@ public class BusinessDashboardActivity extends BaseActivity {
             } else {
                 mTvUserName.setText("Hi! " + userName);
             }
+        }else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+            if (objMyApplication.getMyProfile().getData().getDbaName() != null) {
+                iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
+            }
+            userName = objMyApplication.getMyProfile().getData().getDbaName();
+            if (userName != null && userName.length() > 21) {
+                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
+            } else if(userName != null) {
+                mTvUserName.setText("Hi! " + userName);
+            }
         }
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getImage() != null) {
@@ -450,7 +452,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             mIvUserIcon.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(objMyApplication.getMyProfile().getData().getImage())
-                    .placeholder(R.drawable.ic_profile_male_user)
+                    .placeholder(R.drawable.acct_profile)
                     .into(mIvUserIcon);
         } else {
             mTvUserIconText.setVisibility(View.VISIBLE);
