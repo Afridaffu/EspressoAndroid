@@ -294,7 +294,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         TextView type, reserveAmount, status, date, referenceId, reserveRules, depositTo, tokenType;
         TextView reserveHeld, reservedOn, reserveId;
 
-        LinearLayout reserveIDCopy,mCloseButton;
+        LinearLayout reserveIDCopy, mCloseButton;
 
         type = findViewById(R.id.reserve_type);
         reserveAmount = findViewById(R.id.reserve_amount);
@@ -406,7 +406,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
 
     private void paidOrderToken(TransactionData paidOrderData) {
         TextView mTransactionType, mPaidStatus, mPaidAmount, mPaidDateAndTime, mAccountBalance, mReferenceID, mMerchantAccountID, mDbaName, mCustomerServiceEmail, mCustomerServicePhone, mDescription;
-        LinearLayout mReferenceCopy, mMerchantAccountCopy,mBackButton;
+        LinearLayout mReferenceCopy, mMerchantAccountCopy, mBackButton;
         TextView mAmountPaid, mDateAndTime, mPaidReferenceID;
 
         mTransactionType = findViewById(R.id.transaction_types);
@@ -427,7 +427,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         mAmountPaid = findViewById(R.id.amount_paid);
         mDateAndTime = findViewById(R.id.date_and_time);
         mPaidReferenceID = findViewById(R.id.reference_id);
-
 
 
         if (paidOrderData.getTransactionType() != null && paidOrderData.getTransactionSubtype() != null) {
@@ -556,8 +555,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         mBackButton.setOnClickListener(view -> finish());
-
-
 
 
     }
@@ -1244,8 +1241,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void withdrawBank(TransactionData objData) {
         TextView withBankHeader, withBankAmount, withBankDescription, withBankStatus, withBankDateTime, withBankWithdrawalAmount, withBankProcessingFee, withBankTotal, withBankAccountBal, withBankWithdrawalId, withBankRefId;
         TextView withBankNameOnAccount, withBankName, withBankAccount;
-
         LinearLayout withBankCloseLL, withBankWithdrawalID, withBankReference;
+        CardView cvCancelWB;
 
         withBankHeader = findViewById(R.id.withBankHeaderTV);
         withBankAmount = findViewById(R.id.withBankAmount);
@@ -1265,6 +1262,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withBankAccount = findViewById(R.id.withBankbankaccountTV);
 
         withBankCloseLL = findViewById(R.id.withbankCloseLL);
+        cvCancelWB = findViewById(R.id.cvCancelWB);
 
         if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
             withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
@@ -1285,6 +1283,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             withBankDescription.setVisibility(View.GONE);
 
         }
+        cvCancelWB.setVisibility(View.GONE);
         if (objData.getStatus() != null) {
             withBankStatus.setText(objData.getStatus());
             switch (objData.getStatus().toLowerCase()) {
@@ -1296,6 +1295,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 case Utils.transInProgress:
                     withBankStatus.setTextColor(getResources().getColor(R.color.inprogress_status));
                     withBankStatus.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    cvCancelWB.setVisibility(View.VISIBLE);
                     break;
                 case Utils.transPending:
                     withBankStatus.setTextColor(getResources().getColor(R.color.pending_status));
@@ -1374,6 +1374,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         if (objData.getBankAccountNumber() != null && objData.getBankAccountNumber().length() > 4) {
             withBankAccount.setText("\u2022\u2022\u2022\u2022" + objData.getBankAccountNumber().substring(objData.getBankAccountNumber().length() - 4));
         }
+
+        cvCancelWB.setOnClickListener(view -> {
+            cancelPopup();
+        });
 
         withBankCloseLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2088,7 +2092,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 try {
                     dialog.dismiss();
                     progressDialog = Utils.showProgressDialog(TransactionDetailsActivity.this);
-                    dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
+                    if (txnType == 2)
+                        dashboardViewModel.cancelBuyToken(strGbxTxnIdType);
+                    else
+                        dashboardViewModel.cancelWithdrawToken(strGbxTxnIdType);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
