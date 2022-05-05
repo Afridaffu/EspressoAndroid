@@ -1900,7 +1900,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                         etCardNumber.setText("");
                         etExpiry.setText("");
-                        etCVV.setText("");
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            etCVV.setText("");
+                        }
                         etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
 
