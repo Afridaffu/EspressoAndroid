@@ -91,7 +91,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     PaymentMethodsViewModel paymentMethodsViewModel;
     MyApplication objMyApplication;
     RelativeLayout layoutCard, layoutAddress;
-    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv, llError;
+    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, lyExpiry, layoutCvv, llError;
     LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
     public LinearLayout cardErrorLL;
     View divider1, divider2;
@@ -205,7 +205,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             cardErrorLL = findViewById(R.id.cardErrorLL);
             expiryErrorLL = findViewById(R.id.expiryErrorLL);
             cvvErrorLL = findViewById(R.id.cvvErrorLL);
-            layoutExpiry = findViewById(R.id.layoutExpiry);
+            lyExpiry = findViewById(R.id.lyExpiry);
             layoutCvv = findViewById(R.id.layoutCvv);
             etlName = findViewById(R.id.etlName);
             etlExpiry = findViewById(R.id.etlExpiry);
@@ -279,8 +279,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 layoutCvv.setVisibility(GONE);
                 isCvv = true;
                 LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams buttonLayoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 buttonLayoutParams.setMargins(0, 0, 0, 0);
+                buttonLayoutParams1.setMargins(0, 0, 0, 0);
                 layoutCvv.setLayoutParams(buttonLayoutParams);
+                lyExpiry.setLayoutParams(buttonLayoutParams1);
                 etExpiry.setImeOptions(EditorInfo.IME_ACTION_DONE);
             } else {
                 layoutCvv.setVisibility(VISIBLE);
