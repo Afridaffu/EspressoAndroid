@@ -694,6 +694,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
@@ -1036,6 +1040,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             cvNext.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                        return;
+                                    }
+                                    mLastClickTime = SystemClock.elapsedRealtime();
                                     if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                         isBank = true;
                                         Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
@@ -1244,6 +1252,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     dialog.dismiss();
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, EditCardActivity.class);
                             startActivity(i);

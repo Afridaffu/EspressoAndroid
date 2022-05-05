@@ -37,6 +37,8 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
+import okhttp3.internal.Util;
+
 public class ForgotPasswordActivity extends BaseActivity {
     CardView cvNext;
     TextInputEditText etEmail;
@@ -94,28 +96,10 @@ public class ForgotPasswordActivity extends BaseActivity {
                         public void run() {
                             finish();
                         }
-                    }, 500);
+                    }, 300);
 
                 }
             });
-            fromStr = getIntent().getStringExtra("screen");
-            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPwd")) {
-                tvHead.setText("Forgot Your Password?");
-                tvMessage.setText("Before we can reset your password, we will need to verify your identity.\nPlease enter the email register with your account.");
-            } else {
-                tvHead.setText("Forgot Your PIN?");
-                tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
-                etEmail.setText(Utils.getUserEmail(this));
-                validEmail();
-                Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
-                etEmail.setEnabled(false);
-            }
-
-            if (getIntent().getStringExtra("email") != null && !getIntent().getStringExtra("email").equals("")) {
-                etEmail.setText(getIntent().getStringExtra("email"));
-                validEmail();
-                Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
-            }
 
             etEmail.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -174,10 +158,11 @@ public class ForgotPasswordActivity extends BaseActivity {
                 @Override
                 public void onFocusChange(View view, boolean b) {
                     if (b) {
-                        if (!Utils.isKeyboardVisible)
+//                    if (!Utils.isKeyboardVisible)
+//                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
 //                        Utils.shwForcedKeypad(ForgotPasswordActivity.this);
 //                        etEmail.setHint("Email");
-                            etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_green));
                         layoutEmailError.setVisibility(GONE);
                     } else {
@@ -186,16 +171,35 @@ public class ForgotPasswordActivity extends BaseActivity {
                 }
             });
 
+            fromStr = getIntent().getStringExtra("screen");
+            if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("ForgotPwd")) {
+                tvHead.setText("Forgot Your Password?");
+                tvMessage.setText("Before we can reset your password, we will need to verify your identity.\nPlease enter the email register with your account.");
+            } else {
+                tvHead.setText("Forgot Your PIN?");
+                tvMessage.setText("Before we can reset your PIN, we will need to verify your identity.\nPlease enter the email register with your account.");
+                etEmail.setText(Utils.getUserEmail(this));
+                validEmail();
+                Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
+                etEmail.setEnabled(false);
+            }
+
+            if (getIntent().getStringExtra("email") != null && !getIntent().getStringExtra("email").equals("")) {
+                etEmail.setText(getIntent().getStringExtra("email"));
+                validEmail();
+                Utils.setUpperHintColor(etlEmail, getColor(R.color.text_color));
+            }
+
+
             cvNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (isSaveEnabled) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            Utils.hideKeypad(ForgotPasswordActivity.this, v);
                             if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
@@ -281,6 +285,7 @@ public class ForgotPasswordActivity extends BaseActivity {
         try {
             if (fromStr.equals("ForgotPwd")) {
                 etEmail.requestFocus();
+                etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                 if (!Utils.isKeyboardVisible)
                     Utils.shwForcedKeypad(this);
             } else {
@@ -341,8 +346,9 @@ public class ForgotPasswordActivity extends BaseActivity {
 //    }
 
     private void validEmail() {
-        isemail = true;
-        enable();
+        if (isemail) {
+            enable();
+        }
     }
 
 }
