@@ -322,21 +322,21 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditAddressActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EditEmailActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.EnableAuthID"
@@ -368,13 +368,13 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.LoginActivity"
             android:configChanges="uiMode"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.PINActivity"
@@ -423,7 +423,6 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 
         <activity
