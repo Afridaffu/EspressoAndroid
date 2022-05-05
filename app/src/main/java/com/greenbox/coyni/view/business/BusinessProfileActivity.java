@@ -46,6 +46,7 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.ConfirmPasswordActivity;
 import com.greenbox.coyni.view.CustomerProfileActivity;
+import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PreferencesActivity;
@@ -735,7 +736,7 @@ public class BusinessProfileActivity extends BaseActivity {
         myApplication.setStrRetrEmail("");
         myApplication.clearUserData();
         dropAllTables();
-        Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
+        Intent i = new Intent(BusinessProfileActivity.this, LoginActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
