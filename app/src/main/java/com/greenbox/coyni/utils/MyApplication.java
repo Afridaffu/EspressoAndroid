@@ -62,11 +62,17 @@ import java.util.List;
 public class MyApplication extends Application {
 
     private UserData mCurrentUserData;
+    private static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
         mCurrentUserData = new UserData();
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
     public UserData getCurrentUserData() {
@@ -97,13 +103,13 @@ public class MyApplication extends Application {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
     }
 
-    public Double getMerchantBalance() {
-        return mCurrentUserData.getMerchantBalance();
-    }
-
-    public void setMerchantBalance(Double merchantBalance) {
-        mCurrentUserData.setMerchantBalance(merchantBalance);
-    }
+//    public Double getMerchantBalance() {
+//        return mCurrentUserData.getMerchantBalance();
+//    }
+//
+//    public void setMerchantBalance(Double merchantBalance) {
+//        mCurrentUserData.setMerchantBalance(merchantBalance);
+//    }
 
     public int getDbaOwnerId() {
         return mCurrentUserData.getDbaOwnerId();
@@ -346,20 +352,27 @@ public class MyApplication extends Application {
     }
 
     public Double getGBTBalance() {
-        return mCurrentUserData.getGBTBalance();
+        return mCurrentUserData.getTokenGBTBalance();
     }
 
-    public void setGBTBalance(Double gBTBalance) {
-        mCurrentUserData.setGBTBalance(gBTBalance);
+
+    public void setGBTBalance(Double gBTBalance, String walletType) {
+        if (walletType.equals(Utils.TOKEN_STR)) {
+            mCurrentUserData.setTokenGBTBalance(gBTBalance);
+        } else if (walletType.equals(Utils.MERCHANT_STR)) {
+            mCurrentUserData.setMerchnatGBTBalance(gBTBalance);
+        } else if (walletType.equals(Utils.RESERVE_STR)) {
+            mCurrentUserData.setReserveGBTBalance(gBTBalance);
+        }
     }
 
-    public Double getReserveBalance() {
-        return mCurrentUserData.getReserveBalance();
-    }
-
-    public void setReserveBalance(Double reserveBalance) {
-        mCurrentUserData.setReserveBalance(reserveBalance);
-    }
+//    public Double getReserveBalance() {
+//        return mCurrentUserData.getReserveBalance();
+//    }
+//
+//    public void setReserveBalance(Double reserveBalance) {
+//        mCurrentUserData.setReserveBalance(reserveBalance);
+//    }
 
     public PaymentsList getSelectedCard() {
         return mCurrentUserData.getSelectedCard();
@@ -613,12 +626,20 @@ public class MyApplication extends Application {
         mCurrentUserData.setAccountType(accountType);
     }
 
-    public WalletResponseData getWalletResponseData() {
-        return mCurrentUserData.getWalletResponseData();
-    }
+//    public WalletResponseData getWalletResponseData() {
+//        return mCurrentUserData.getWalletResponseData();
+//    }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
-        mCurrentUserData.setWalletResponseData(walletResponseData);
+        if(walletResponseData.getWalletNames().size() > 0) {
+            if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
+                mCurrentUserData.setTokenWalletResponse(walletResponseData);
+            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
+                mCurrentUserData.setMerchantWalletResponse(walletResponseData);
+            } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
+                mCurrentUserData.setReserveWalletResponse(walletResponseData);
+            }
+        }
     }
 
     public Boolean isDeviceID() {
@@ -673,25 +694,26 @@ public class MyApplication extends Application {
         try {
             Intent dashboardIntent = new Intent(context, DashboardActivity.class);
             if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                BusinessTrackerResponse btr = getBusinessTrackerResponse();
-                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
-                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
-
-                    if (btr.getData().isProfileVerified()) {
-                        dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
-                    }
-//                    else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
-//                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+                dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
+//                BusinessTrackerResponse btr = getBusinessTrackerResponse();
+//                if (btr != null && btr.getData().isCompanyInfo() && btr.getData().isDbaInfo() && btr.getData().isBeneficialOwners()
+//                        && btr.getData().isIsbankAccount() && btr.getData().isAgreementSigned() && btr.getData().isApplicationSummary()) {
+//
+//                    if (btr.getData().isProfileVerified()) {
+//                        dashboardIntent = new Intent(context, BusinessDashboardActivity.class);
 //                    }
-                    else {
-                        dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
-                        dashboardIntent.putExtra("FROM", fromScreen);
-                    }
-
-                } else {
-                    dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
-                    dashboardIntent.putExtra("FROM", fromScreen);
-                }
+////                    else if (btr.getData().isApplicationSummary() && !btr.getData().isProfileVerified()) {
+////                        dashboardIntent = new Intent(context, ReviewApplicationActivity.class);
+////                    }
+//                    else {
+//                        dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+//                        dashboardIntent.putExtra("FROM", fromScreen);
+//                    }
+//
+//                } else {
+//                    dashboardIntent = new Intent(context, BusinessRegistrationTrackerActivity.class);
+//                    dashboardIntent.putExtra("FROM", fromScreen);
+//                }
             }
             dashboardIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(dashboardIntent);

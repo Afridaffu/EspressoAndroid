@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -9,25 +10,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
-import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.MyApplication;
-import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BindingLayoutActivity;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
 public class BusinessAddNewAccountActivity extends AppCompatActivity {
 
-    private ImageView imageViewClose,ivPersonalProfileIcon;
+    private ImageView imageViewClose, ivPersonalProfileIcon;
     private TextView tvPersonalProfileName;
-    private LinearLayout llBusinessAccount,llPersonalAccount;
+    private LinearLayout llBusinessAccount, llPersonalAccount;
     private String personalAccountSize;
     private IdentityVerificationViewModel identityVerificationViewModel;
     private String personalAccountAvailable;
+    private Long mLastClickTimeQA = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +34,7 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.business_onboarding_open_new_account);
 
-       // personalAccountSize = getIntent().getStringExtra("PersonalAccountSize");
+        // personalAccountSize = getIntent().getStringExtra("PersonalAccountSize");
 
         llBusinessAccount = findViewById(R.id.businessAccontLL);
         llPersonalAccount = findViewById(R.id.personalAccontLL);
@@ -64,6 +61,10 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
         llBusinessAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 startActivity(new Intent(BusinessAddNewAccountActivity.this, BusinessAddNewBusinessAccountActivity.class));
             }
         });
@@ -71,8 +72,12 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
         llPersonalAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 startActivity(new Intent(BusinessAddNewAccountActivity.this, BindingLayoutActivity.class)
-                        .putExtra("screen","profileGetStarted"));
+                        .putExtra("screen", "profileGetStarted"));
                 //identityVerificationViewModel.getPostAddCustomer();
 
             }
@@ -81,10 +86,14 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
         imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 finish();
             }
         });
-       // initObservers();
+        // initObservers();
 
     }
 

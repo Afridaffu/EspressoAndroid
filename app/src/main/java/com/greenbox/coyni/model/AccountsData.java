@@ -33,6 +33,9 @@ public class AccountsData {
     }
 
     private void processData() {
+        if (profilesList == null) {
+            return;
+        }
         for (ProfilesResponse.Profiles profile : profilesList) {
             if (profile.getAccountType().equals(Utils.BUSINESS)) {
                 if (profile.getDbaOwner() == null) {

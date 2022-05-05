@@ -1,5 +1,8 @@
 package com.greenbox.coyni.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -101,6 +104,7 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                     finish();
                 }
             });
+
             currentPassET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -192,6 +196,9 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                             if (loginResponse.getError().getErrorDescription().contains("Invalid credentials")) {
                                 layoutPwdError.setVisibility(View.VISIBLE);
                                 tvPwdError.setText("Password Not Matched");
+                                currentPassET.clearFocus();
+                                Utils.setUpperHintColor(currentTIL, getColor(R.color.error_red));
+                                currentTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(ConfirmPasswordActivity.this));
                             } else {
                                 layoutPwdError.setVisibility(View.GONE);
                                 Utils.displayAlert(loginResponse.getError().getErrorDescription(), ConfirmPasswordActivity.this, "", loginResponse.getError().getFieldErrors().get(0));
@@ -200,6 +207,20 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            currentPassET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b) {
+
+                    } else {
+                        Utils.setUpperHintColor(currentTIL, getColor(R.color.primary_green));
+                        currentTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+                        layoutPwdError.setVisibility(GONE);
+                    }
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

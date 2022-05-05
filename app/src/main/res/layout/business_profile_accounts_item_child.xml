@@ -52,7 +52,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/opensans_semibold"
             android:padding="@dimen/_10sdp"
-            android:text="Title "
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
 

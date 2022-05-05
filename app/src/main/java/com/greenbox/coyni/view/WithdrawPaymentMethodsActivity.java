@@ -86,6 +86,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_withdraw_payment_methods);
@@ -186,7 +187,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
-            walletResponse = objMyApplication.getWalletResponseData();
+            walletResponse = objMyApplication.getCurrentUserData().getTokenWalletResponse();
             walletBalance = objMyApplication.getGBTBalance();
             if (paymentMethodsResponse != null) {
                 getPayments(paymentMethodsResponse.getData().getData());
@@ -693,6 +694,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
@@ -1035,6 +1040,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             cvNext.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                        return;
+                                    }
+                                    mLastClickTime = SystemClock.elapsedRealtime();
                                     if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                                         isBank = true;
                                         Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
@@ -1243,6 +1252,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     dialog.dismiss();
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (!objPayment.getPaymentMethod().toLowerCase().equals("bank")) {
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, EditCardActivity.class);
                             startActivity(i);

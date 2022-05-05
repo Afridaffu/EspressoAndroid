@@ -91,7 +91,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     PaymentMethodsViewModel paymentMethodsViewModel;
     MyApplication objMyApplication;
     RelativeLayout layoutCard, layoutAddress;
-    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, layoutExpiry, layoutCvv, llError;
+    LinearLayout layoutClose, nameErrorLL, expiryErrorLL, cvvErrorLL, lyExpiry, layoutCvv, llError;
     LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL;
     public LinearLayout cardErrorLL;
     View divider1, divider2;
@@ -140,7 +140,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
-                    Utils.shwForcedKeypad(AddCardActivity.this);
+//                    Utils.shwForcedKeypad(AddCardActivity.this);
 
                 }
 
@@ -151,7 +151,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         divider1.setBackgroundResource(R.drawable.bg_core_colorfill);
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                     } else if (position == 1) {
-                        Utils.shwForcedKeypad(AddCardActivity.this);
                         if (isNextEnabled && validation()) {
                             strName = etName.getText().toString().trim();
                             strCardNo = etCardNumber.getText().toString().trim().replace(" ", "");
@@ -206,7 +205,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             cardErrorLL = findViewById(R.id.cardErrorLL);
             expiryErrorLL = findViewById(R.id.expiryErrorLL);
             cvvErrorLL = findViewById(R.id.cvvErrorLL);
-            layoutExpiry = findViewById(R.id.layoutExpiry);
+            lyExpiry = findViewById(R.id.lyExpiry);
             layoutCvv = findViewById(R.id.layoutCvv);
             etlName = findViewById(R.id.etlName);
             etlExpiry = findViewById(R.id.etlExpiry);
@@ -280,8 +279,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 layoutCvv.setVisibility(GONE);
                 isCvv = true;
                 LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams buttonLayoutParams1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 buttonLayoutParams.setMargins(0, 0, 0, 0);
+                buttonLayoutParams1.setMargins(0, 0, 0, 0);
                 layoutCvv.setLayoutParams(buttonLayoutParams);
+                lyExpiry.setLayoutParams(buttonLayoutParams1);
                 etExpiry.setImeOptions(EditorInfo.IME_ACTION_DONE);
             } else {
                 layoutCvv.setVisibility(VISIBLE);
@@ -348,11 +350,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             cvNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         if (isNextEnabled && validation()) {
                             viewPager.setCurrentItem(1);
                             divider1.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
@@ -893,6 +895,8 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                             }
                         } else {
 //                            etAddress1.setHint("Billing Address Line 1");
+                            if (!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(AddCardActivity.this);
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             address1ErrorLL.setVisibility(GONE);
@@ -1899,7 +1903,9 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                         divider2.setBackgroundResource(R.drawable.bg_core_new_4r_colorfill);
                         etCardNumber.setText("");
                         etExpiry.setText("");
-                        etCVV.setText("");
+                        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                            etCVV.setText("");
+                        }
                         etlCVV.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
 
