@@ -587,8 +587,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     tvSignetHead.setTextColor(getColor(R.color.primary_black));
                     tvSignetCount.setTextColor(getColor(R.color.dark_grey));
                     tvSignetMsg.setTextColor(getColor(R.color.dark_grey));
-//                    imgSignetArrow.clearColorFilter();
-                    imgBankArrow.setColorFilter(getColor(R.color.primary_black));
+                    imgSignetArrow.setColorFilter(getColor(R.color.primary_black));
 //                    imgSignetLogo.setImageResource(R.drawable.ic_credit_debit_card);
                     imgSignetLogo.setImageResource(R.drawable.ic_signetactive);
 
