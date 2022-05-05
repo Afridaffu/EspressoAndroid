@@ -304,17 +304,17 @@ public class EditEmailActivity extends AppCompatActivity {
                 public void onFocusChange(View view, boolean b) {
                     if (!b) {
                         if (b_newEmailET.getText().toString().trim().length() > 5 && !Utils.isValidEmail(b_newEmailET.getText().toString().trim())) {
-                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditEmailActivity.this));
                             Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
                             b_newEmailErrorLL.setVisibility(VISIBLE);
                             b_newEmailErrorTV.setText("Please enter a valid Email");
                         } else if (b_newEmailET.getText().toString().trim().length() > 5 && Utils.isValidEmail(b_newEmailET.getText().toString().trim())) {
-                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(EditEmailActivity.this));
                             Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_black));
                             b_newEmailErrorLL.setVisibility(GONE);
                             loginViewModel.validateEmail(b_newEmailET.getText().toString().trim());
                         } else {
-                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditEmailActivity.this));
                             Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
                             b_newEmailErrorLL.setVisibility(VISIBLE);
                             b_newEmailErrorTV.setText("Field Required");
@@ -431,11 +431,11 @@ public class EditEmailActivity extends AppCompatActivity {
                     if (emailExistsResponse != null) {
                         if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                             if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
-                                newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(EditEmailActivity.this));
                                 Utils.setUpperHintColor(newEmailTIL, getColor(R.color.primary_black));
                                 newEmailErrorLL.setVisibility(GONE);
                             } else {
-                                newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditEmailActivity.this));
                                 Utils.setUpperHintColor(newEmailTIL, getColor(R.color.error_red));
                                 newEmailErrorLL.setVisibility(VISIBLE);
                                 newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());
@@ -443,11 +443,11 @@ public class EditEmailActivity extends AppCompatActivity {
                         }
                         if (myApplicationObj.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                             if (!emailExistsResponse.getStatus().toLowerCase().equals("error")) {
-                                b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                b_newEmailTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(EditEmailActivity.this));
                                 Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.primary_black));
                                 b_newEmailErrorLL.setVisibility(GONE);
                             } else {
-                                b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                b_newEmailTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(EditEmailActivity.this));
                                 Utils.setUpperHintColor(b_newEmailTIL, getColor(R.color.error_red));
                                 b_newEmailErrorLL.setVisibility(VISIBLE);
                                 b_newEmailErrorTV.setText(emailExistsResponse.getError().getErrorDescription());

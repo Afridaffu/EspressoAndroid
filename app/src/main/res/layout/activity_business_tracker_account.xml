@@ -22,8 +22,9 @@
                 android:id="@+id/businessTrackerCloseIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_44sdp"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_39sdp"
                 android:src="@drawable/ic_x"
                 android:visibility="visible" />
 
@@ -32,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_60sdp"
+                android:layout_marginTop="@dimen/_57sdp"
                 android:src="@drawable/ic_appl_inprogress" />
         </RelativeLayout>
 
@@ -742,7 +743,7 @@
                         android:id="@+id/aggrementsCompleteLL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_35sdp"
                         android:background="@drawable/bg_primary_color_primary_border"
                         android:gravity="center"
                         android:paddingLeft="@dimen/_14sdp"

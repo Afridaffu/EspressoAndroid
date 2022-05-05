@@ -249,7 +249,7 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                             firstTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.primary_black));
                         } else if (firstName.getText().toString().trim().length() == 1) {
-                            firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            firstTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(RetrieveEmailActivity.this));
                             Utils.setUpperHintColor(firstTIL, getColor(R.color.error_red));
                             firstName.setText(strFirstName);
                             firstNameErrorLL.setVisibility(VISIBLE);
@@ -281,16 +281,16 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
                         String strLastName = lastName.getText().toString().trim();
                         if (lastName.getText().toString().trim().length() > 1) {
                             lastNameErrorLL.setVisibility(GONE);
-                            lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            lastTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(RetrieveEmailActivity.this));
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.primary_black));
                         } else if (lastName.getText().toString().trim().length() == 1) {
-                            lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(RetrieveEmailActivity.this));
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.error_red));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastName.setText(strLastName);
                             lastNameErrorTV.setText("Minimum 2 Characters Required");
                         } else {
-                            lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                            lastTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(RetrieveEmailActivity.this));
                             Utils.setUpperHintColor(lastTIL, getColor(R.color.light_gray));
                             lastNameErrorLL.setVisibility(VISIBLE);
                             lastNameErrorTV.setText("Field Required");

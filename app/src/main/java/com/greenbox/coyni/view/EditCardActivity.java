@@ -80,6 +80,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_edit_card);
@@ -101,10 +102,10 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
 
     private void initialization() {
         try {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
 
             editCardActivity = this;
             objMyApplication = (MyApplication) getApplicationContext();
@@ -144,13 +145,13 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
             etAddress2.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             etCity.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
 
-            etlName.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlName.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
+            etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
+            etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
+            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
+            etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
+            etlState.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
+            etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
             setKeyboardVisibilityListener(this);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
             etName.setEnabled(false);
@@ -190,7 +191,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 if (selectedCard.getExpired()) {
                     isExpiry = false;
                     etExpiry.setEnabled(true);
-                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                 } else {
                     isExpiry = true;
@@ -414,24 +415,25 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                                 if (validateExpiry()) {
                                     isExpiry = true;
                                     expiryErrorLL.setVisibility(GONE);
-                                    etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    etlExpiry.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_black));
                                 } else {
                                     isExpiry = false;
                                     expiryErrorLL.setVisibility(VISIBLE);
                                     expiryErrorTV.setText("Please enter a valid Expiry Date");
-                                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                                     Utils.setUpperHintColor(etlExpiry, getColor(R.color.error_red));
                                 }
                             } else {
                                 isExpiry = false;
                                 expiryErrorLL.setVisibility(VISIBLE);
                                 expiryErrorTV.setText("Field Required");
-                                etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlExpiry.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlExpiry, getColor(R.color.light_gray));
                             }
                         } else {
                             etExpiry.setHint("MM/YY");
+                            Utils.shwForcedKeypad(EditCardActivity.this);
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                             expiryErrorLL.setVisibility(GONE);
@@ -451,11 +453,11 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             etAddress1.setHint("");
                             if (etAddress1.getText().toString().trim().length() > 0) {
                                 address1ErrorLL.setVisibility(GONE);
-                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_black));
 
                             } else {
-                                etlAddress1.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlAddress1.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlAddress1, getColor(R.color.light_gray));
                                 address1ErrorLL.setVisibility(VISIBLE);
                                 address1ErrorTV.setText("Field Required");
@@ -486,11 +488,11 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                     } else {
                         if (etAddress2.getText().length() > 0) {
                             etAddress2.setHint("");
-                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_black));
                         } else {
                             etAddress2.setHint("");
-                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                            etlAddress2.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
                             Utils.setUpperHintColor(etlAddress2, getColor(R.color.light_gray));
                         }
                     }
@@ -505,11 +507,11 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             etCity.setHint("");
                             if (etCity.getText().toString().trim().length() > 0) {
                                 cityErrorLL.setVisibility(GONE);
-                                etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlCity.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.primary_black));
 
                             } else {
-                                etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlCity.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlCity, getColor(R.color.light_gray));
                                 cityErrorLL.setVisibility(VISIBLE);
                                 cityErrorTV.setText("Field Required");
@@ -537,11 +539,11 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                         if (!b) {
                             if (etState.getText().toString().trim().length() > 0) {
                                 stateErrorLL.setVisibility(GONE);
-                                etlState.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlState.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlState, getColor(R.color.primary_black));
 
                             } else {
-                                etlState.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlState.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlState, getColor(R.color.light_gray));
                                 stateErrorLL.setVisibility(VISIBLE);
                                 stateErrorTV.setText("Field Required");
@@ -565,15 +567,15 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             if (etZipcode.getText().toString().trim().length() > 0 && etZipcode.getText().toString().trim().length() > 4) {
                                 isZipcode = true;
                                 zipErrorLL.setVisibility(GONE);
-                                etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getNormalColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.primary_black));
                             } else if (etZipcode.getText().toString().trim().length() == 0) {
-                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.light_gray));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Field Required");
                             } else {
-                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                etlZipCode.setBoxStrokeColorStateList(Utils.getErrorColorState(EditCardActivity.this));
                                 Utils.setUpperHintColor(etlZipCode, getColor(R.color.error_red));
                                 zipErrorLL.setVisibility(VISIBLE);
                                 zipErrorTV.setText("Minimum 5 Digits Required");

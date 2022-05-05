@@ -1,12 +1,10 @@
 package com.greenbox.coyni.view.business;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,36 +20,19 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AddNewBusinessAccountDBAAdapter;
-import com.greenbox.coyni.adapters.BusinessProfileRecyclerAdapter;
-import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
-import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
-import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
-import com.greenbox.coyni.model.profile.Profile;
-import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
-import com.greenbox.coyni.view.BuyTokenActivity;
-import com.greenbox.coyni.view.IdVeAdditionalActionActivity;
-import com.greenbox.coyni.view.IdentityVerificationActivity;
-import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
-import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
-import com.microsoft.appcenter.ingestion.models.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
 
@@ -66,6 +46,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private int companyId;
+    private Long mLastClickTimeQA = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +68,21 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         llNewComapny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 identityVerificationViewModel.getAddBusinessUser();
-
-
             }
         });
 
         llNewDba.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 listComapny.clear();
                 displayAlert(BusinessAddNewBusinessAccountActivity.this);
 
@@ -107,13 +93,15 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         imageViewClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 finish();
             }
         });
 
         initObservers();
-
-
     }
 
     private void displayAlert(Context mContext) {
@@ -129,14 +117,11 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         RecyclerView rvCompanyList = dialog.findViewById(R.id.rv_company_list);
         CardView addDBACardView = dialog.findViewById(R.id.cvAction);
 
-//        for(ProfilesResponse.Profiles c: businessAccountList){
-//            listComapny.add(c.getCompanyName());
-//        }
-        LogUtils.d(TAG,"businessAccountList"+businessAccountList.toString());
-        AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, new AddNewBusinessAccountDBAAdapter.OnSelectListner(){
+        LogUtils.d(TAG, "businessAccountList" + businessAccountList.toString());
+        AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, new AddNewBusinessAccountDBAAdapter.OnSelectListner() {
             @Override
             public void selectedItem(ProfilesResponse.Profiles item) {
-                LogUtils.d("dbaselected", "dbaselectes" + item.toString());
+                LogUtils.d(TAG, "ProfilesResponse.Profiles  " + item.toString());
                 addDBACardView.setEnabled(true);
                 addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
                 companyId = item.getId();
@@ -148,7 +133,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         rvCompanyList.setAdapter(addNewBusinessAccountDBAAdapter);
         LogUtils.d(TAG, "eeee" + companyId);
 
-        if (companyId != 0){
+        if (companyId != 0) {
             addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
             addDBACardView.setEnabled(true);
         } else {
@@ -191,11 +176,11 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                     if (profilesResponse != null) {
                         filterList = profilesResponse.getData();
                         for (ProfilesResponse.Profiles c : filterList) {
-                            LogUtils.d(TAG,"getProfileRespMutableLiveData"+c.getDbaOwner());
-                            if (c.getDbaOwner()==null && c.getAccountType().equals(Utils.BUSINESS) ) {
+                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
+                            if (c.getDbaOwner() == null && c.getAccountType().equals(Utils.BUSINESS)) {
                                 businessAccountList.add(c);
                             } else {
-         }
+                            }
                         }
                     }
                 }
@@ -211,8 +196,8 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", true)
-                                .putExtra("ADDDBA", false));
+                                .putExtra(Utils.ADD_BUSINESS, true)
+                                .putExtra(Utils.ADD_DBA, false));
 
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
@@ -227,13 +212,12 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d("addDBAresponse", "addDBAresponse" + identityImageResponse);
+                    LogUtils.d(TAG, "identityImageResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra("ADDBUSINESS", true)
-                                .putExtra("ADDDBA", true));
-                        //displayAlert(BusinessAddNewBusinessAccountActivity.this);
+                                .putExtra(Utils.ADD_BUSINESS, true)
+                                .putExtra(Utils.ADD_DBA, true));
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
@@ -244,11 +228,4 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         }
     }
 
-//    @Override
-//    public void selectedItem(ProfilesResponse.Profiles item) {
-//
-//        LogUtils.d("dbaselected", "dbaselectes" + item.toString());
-//        addDBACardView.setEnabled(true);
-//        companyId = item.getId();
-//    }
 }

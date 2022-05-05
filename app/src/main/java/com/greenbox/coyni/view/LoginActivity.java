@@ -165,11 +165,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //                        etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         clearEmailControl();
                         Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-                        etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
                     }
                     etEmail.setText(objMyApplication.getStrRetrEmail());
                     if (isEmailValid(etEmail.getText().toString().trim())) {
-                        etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                        etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
                         Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                         layoutEmailError.setVisibility(GONE);
                     }
@@ -185,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etPassword.setText("");
             etPassword.setHint("");
             Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
         }
 
     }
@@ -242,8 +242,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etEmail.setFilters(new InputFilter[]{new InputFilter.LengthFilter(255)});
 
             etPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
-            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
-            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
+            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
 
 
             if ((getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel"))) {
@@ -314,18 +314,18 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             if (!hasFocus) {
                                 if ((etEmail.getText().toString().trim().length() != 0 && !Utils.isValidEmail(etEmail.getText().toString().trim()))
                                         || (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() < 6)) {
-                                    etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(LoginActivity.this));
                                     Utils.setUpperHintColor(etlEmail, getColor(R.color.error_red));
                                     layoutEmailError.setVisibility(VISIBLE);
                                     tvEmailError.setText("Please enter a valid Email");
                                 } else if (etEmail.getText().toString().trim().length() == 0) {
-                                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
                                     Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
                                     etEmail.setHint("");
                                     etlEmail.setHint("Email");
                                     layoutEmailError.setVisibility(GONE);
                                 } else if ((etEmail.getText().toString().trim().length() > 5 && Utils.isValidEmail(etEmail.getText().toString().trim()))) {
-                                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
                                     Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                                     etEmail.setHint("");
                                     etlEmail.setHint("Email");
@@ -353,18 +353,18 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         if (!closeClicked) {
                             if (!hasFocus) {
                                 if (etPassword.getText().toString().trim().length() < 8 && etPassword.getText().toString().trim().length() > 0) {
-                                    etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState());
+                                    etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState(LoginActivity.this));
                                     Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
                                     layoutPwdError.setVisibility(VISIBLE);
 //                                tvPwdError.setText("Invalid Password");
                                     tvPwdError.setText("Please enter a valid Password");
                                 } else if (etPassword.getText().toString().trim().length() == 0) {
-                                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
                                     Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
                                     etPassword.setHint("");
                                     layoutPwdError.setVisibility(GONE);
                                 } else if (etPassword.getText().toString().trim().length() >= 8) {
-                                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
                                     Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_black));
                                     layoutPwdError.setVisibility(GONE);
                                 }
@@ -644,7 +644,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etEmail.setText(value);
             if (isEmailValid(etEmail.getText().toString().trim())) {
                 Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+                etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
                 layoutEmailError.setVisibility(GONE);
             }
             chkRemember.setChecked(true);
@@ -1048,7 +1048,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         try {
             etEmail.setText("");
             Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
-            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1059,7 +1059,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etPassword.setText("");
             etPassword.setHint("");
             Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState());
+            etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

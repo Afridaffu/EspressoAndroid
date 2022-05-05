@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_11sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="@string/driverlicense"
@@ -75,7 +75,7 @@
                 android:id="@+id/rightarrowbtndl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@color/white"
                 android:src="@drawable/ic_rightarrow" />
         </LinearLayout>
@@ -129,7 +129,7 @@
                 android:id="@+id/rightarrowbtnpp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@color/white"
                 android:src="@drawable/ic_rightarrow" />
         </LinearLayout>
@@ -183,7 +183,7 @@
                 android:id="@+id/rightarrowbtnsic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@color/white"
                 android:src="@drawable/ic_rightarrow" />
         </LinearLayout>

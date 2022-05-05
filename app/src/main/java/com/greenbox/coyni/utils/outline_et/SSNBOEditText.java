@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.MaskEditText.Action;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.view.IdVeAdditionalActionActivity;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
@@ -191,6 +193,11 @@ public class SSNBOEditText extends ConstraintLayout {
     public void setFrom(String fromm, Context context) {
         FROM = fromm;
         mContext = context;
+        if (fromm.equals("ADD_BO")) {
+            ssnET.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        } else if (fromm.equals("IDVE_SSN")) {
+            ssnET.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        }
     }
 
     public void setSelection() {

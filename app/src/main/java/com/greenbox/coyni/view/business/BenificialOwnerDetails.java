@@ -2,6 +2,8 @@ package com.greenbox.coyni.view.business;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +24,9 @@ public class BenificialOwnerDetails extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_benificial_owner_details);
         beneficialOwner = (BOResp.BeneficialOwner) getIntent().getSerializableExtra(Utils.boData);
         position = getIntent().getIntExtra(Utils.position, position);
@@ -79,8 +84,8 @@ public class BenificialOwnerDetails extends BaseActivity {
             mMailingAddress.append(", " + beneficialOwner.getZipCode());
         }
         if (beneficialOwner.getSsn() != null && !beneficialOwner.getSsn().equals("")) {
-            String converted = beneficialOwner.getSsn().replaceAll("\\w(?=\\w{2})", ".");
-            String hifened = converted.substring(0, 3) + "_" + converted.substring(3, 5) + "_" + converted.substring(5, converted.length());
+            String converted = beneficialOwner.getSsn().replaceAll("\\w(?=\\w{2})", "•");
+            String hifened = converted.substring(0, 3) + "-" + converted.substring(3, 5) + "-" + converted.substring(5, converted.length());
             mSSN.setText(hifened);
         }
 
