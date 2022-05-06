@@ -67,7 +67,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     List<PaymentsList> signetList;
-    Dialog payDialog;
+    Dialog payDialog, addPayDialog;
     String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
@@ -176,24 +176,31 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (strOnPauseScreen.equals("externalBank")) {
-            ControlMethod("externalBank");
-            strCurrent = "externalBank";
-            strOnPauseScreen = "";
-        } else if (strCurrent.equals("externalBank")) {
-            ControlMethod("withdrawpay");
-            withdrawPaymentMethod("bank");
-            strScreen = "withdrawpay";
-        } else if (strCurrent.equals("debit")) {
-            ControlMethod("withdrawpay");
-            withdrawPaymentMethod("card");
-            strScreen = "withdrawpay";
-        } else if (strScreen != null && strScreen.equals("banksuccess")) {
-            //Added on 29-03-2022 - VT
-        } else if (!isPayments) {
-            getPaymentMethods();
+        try {
+            if (addPayDialog != null) {
+                addPayDialog.dismiss();
+            }
+            if (strOnPauseScreen.equals("externalBank")) {
+                ControlMethod("externalBank");
+                strCurrent = "externalBank";
+                strOnPauseScreen = "";
+            } else if (strCurrent.equals("externalBank")) {
+                ControlMethod("withdrawpay");
+                withdrawPaymentMethod("bank");
+                strScreen = "withdrawpay";
+            } else if (strCurrent.equals("debit")) {
+                ControlMethod("withdrawpay");
+                withdrawPaymentMethod("card");
+                strScreen = "withdrawpay";
+            } else if (strScreen != null && strScreen.equals("banksuccess")) {
+                //Added on 29-03-2022 - VT
+            } else if (!isPayments) {
+                getPaymentMethods();
+            }
+            super.onResume();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        super.onResume();
     }
 
     private void initialization() {
@@ -994,9 +1001,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         if (signetList != null && signetList.size() > 0) {
                             selectPayMethod(signetList);
                         } else {
-                            strCurrent = "signet";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                            startActivityForResult(i, 4);
+//                            strCurrent = "signet";
+//                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+//                            startActivityForResult(i, 4);
+                            showAddPayment("signet");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1471,11 +1479,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                                 signetList.add(allPayments.get(i));
                                 break;
                         }
-//                        if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
-//                            bankList.add(allPayments.get(i));
-//                        } else if (allPayments.get(i).getPaymentMethod().toLowerCase().equals("debit")) {
-//                            cardList.add(allPayments.get(i));
-//                        }
                     }
                 }
             } else {
@@ -1537,4 +1540,68 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
+    private void showAddPayment(String strType) {
+        try {
+            addPayDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
+            addPayDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            addPayDialog.setContentView(R.layout.withdraw_pay_method);
+            addPayDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvHead = addPayDialog.findViewById(R.id.tvPayHead);
+            TextView tvPayHead = addPayDialog.findViewById(R.id.tvPayMethod);
+            TextView tvCnt = addPayDialog.findViewById(R.id.tvCount);
+            TextView tvMessage = addPayDialog.findViewById(R.id.tvPayMMessage);
+            LinearLayout lyClose = addPayDialog.findViewById(R.id.lyWPayClose);
+            LinearLayout layoutPayClick = addPayDialog.findViewById(R.id.lyPayClick);
+            ImageView imgLogo = addPayDialog.findViewById(R.id.imgPayLogo);
+            ImageView imgPaymnt = addPayDialog.findViewById(R.id.imgPayment);
+            if (strType.equals("signet")) {
+                tvHead.setText("Add Signet Account");
+                tvPayHead.setText("Signet Account");
+                tvCnt.setVisibility(View.GONE);
+                tvMessage.setText("Can be used for making coyni purchases or withdrawing funds.");
+                imgLogo.setImageResource(R.drawable.ic_add_signet);
+                imgPaymnt.setImageResource(R.drawable.ic_signetactive);
+            }
+            Window window = addPayDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+            addPayDialog.show();
+            lyClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addPayDialog.dismiss();
+                }
+            });
+
+            layoutPayClick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                        startActivityForResult(i, 4);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
