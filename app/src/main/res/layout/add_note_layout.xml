@@ -50,7 +50,7 @@
                 android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="top"
-                android:hint="Enter the reason of decline here.(Maximum 120 characters)"
+                android:hint="Optional: Add Note (Maximum 120 characters)"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine|textCapSentences"
                 android:lineSpacingExtra="3dp"

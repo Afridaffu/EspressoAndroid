@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -49,6 +50,7 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequiredViewModel;
+import com.journeyapps.barcodescanner.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -164,7 +166,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             JSONObject proposalsObj = new JSONObject();
             JSONArray proposalsArray = new JSONArray();
 
-            if (actionRequired.getData().getInformationChange() != null ) {
+            if (actionRequired.getData().getInformationChange() != null) {
                 for (int i = 0; i < actionRequired.getData().getInformationChange().size(); i++) {
                     InformationChangeData data = actionRequired.getData().getInformationChange().get(i);
                     List<ProposalsData> proposalsData = data.getProposals();
@@ -382,7 +384,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         if (informationChangeData != null && informationChangeData.size() > 0) {
             InformationChangeData changeData = informationChangeData.get(0);
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
-                for(int count = 0; count < changeData.getProposals().size(); count++) {
+                for (int count = 0; count < changeData.getProposals().size(); count++) {
                     List<ProposalsPropertiesData> proposalsPropertiesData = changeData.getProposals().get(count).getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
@@ -401,7 +403,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
 //                            companyNameTV.setText(propertiesData.getName());
                             String companyname = capFirstLetter(propertiesData.getName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
-                            if(propertiesData.getName()!=null) {
+                            if (propertiesData.getName() != null) {
                                 companyNameTV.setText(companyname);
                             }
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
@@ -450,12 +452,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             }
         }
     }
-//
-    private String capFirstLetter(String text){
-        if(text == null || text.equals("")) {
+
+    //
+    private String capFirstLetter(String text) {
+        if (text == null || text.equals("")) {
             return "";
         }
-        if(text.length() == 1) {
+        if (text.length() == 1) {
             return text.toUpperCase();
         }
         return text.substring(0, 1).toUpperCase() + text.substring(1);
@@ -472,10 +475,11 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                if (action.equalsIgnoreCase(Utils.COMMENT_ACTION) && tv.getText()!= null) {
+                Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
+                if (action.equalsIgnoreCase(Utils.COMMENT_ACTION) && tv.getText() != null) {
                     String comm = (String) value;
                     tvRemarks.setText("\"" + comm + "\"");
-                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+//                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     imvAcceptTick.setVisibility(View.VISIBLE);
                     imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
                     tvRemarks.setVisibility(View.VISIBLE);
@@ -488,11 +492,19 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
                         fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
                     }
+                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     enableOrDisableNext();
                 }
             }
         });
         dialog.show();
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+            }
+        });
     }
 
     private void showReserveRule(ActionRequiredResponse actionRequiredResponse) {
@@ -513,9 +525,17 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("CYN","").trim()));
-        tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("CYN","").trim()));
-        String percent =  Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
+        if(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")){
+            tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
+        }else {
+            tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("", "CYN")));
+        }
+        if(actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")){
+            tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
+        }else {
+            tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
+        }
+        String percent = Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
         tv_reserveAmount.setText(percent.replace("0*$", "") + " %");
         tv_reservePeriod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 

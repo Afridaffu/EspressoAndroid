@@ -1,6 +1,7 @@
 package com.greenbox.coyni.view.business;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -724,6 +725,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
 //
                     } else {
+                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         cKey.disableButton();
                         addNoteTIL.setCounterEnabled(false);
                     }
@@ -765,6 +767,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
             cvvDialog.show();
+            cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    Utils.hideKeypad(RefundTransactionActivity.this);
+                }
+            });
 
         } catch (Exception ex) {
             ex.printStackTrace();
