@@ -191,6 +191,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
         }
 
+        if(Utils.isKeyboardVisible)
+            Utils.hideKeypad(LoginActivity.this);
     }
 
     @Override
