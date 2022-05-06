@@ -371,6 +371,7 @@ public class Utils {
 
     public static final String active = "Active";
     public static final String inActive = "Inactive";
+    public static final String DeActivated = "DeActivated";
     public static final String teammemberpending = "Pending";
     public static final String resendInvitation = "Resend Invitation";
     public static final String canceled = "Canceled";
