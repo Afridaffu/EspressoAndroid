@@ -141,8 +141,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         super.onResume();
         companynameET.requestFocus();
 ////        companyaddressET.requestFocus();
-        if (Utils.isKeyboardVisible)
-            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+        Utils.shwForcedKeypad(CompanyInformationActivity.this);
     }
 
     public void initFields() {
