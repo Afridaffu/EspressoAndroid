@@ -38,7 +38,8 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_back" />
+                        android:src="@drawable/ic_back"
+                        android:contentDescription="@string/back_button"/>
 
                 </LinearLayout>
 
@@ -56,8 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_toLeftOf="@id/profilePicCL"
-                        android:layout_weight="1"
+                        android:layout_toStartOf="@id/profilePicCL"
                         android:orientation="vertical"
                         android:paddingStart="@dimen/_21sdp"
                         android:weightSum="2">
@@ -103,7 +103,7 @@
                                 android:layout_marginStart="5dp"
                                 android:layout_marginTop="@dimen/_6sdp"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="Active"
+                                android:text="@string/active"
                                 android:textColor="@color/active_green"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -139,7 +139,7 @@
                                 android:id="@+id/business_userProfileCV"
                                 android:layout_width="@dimen/_46sdp"
                                 android:layout_height="@dimen/_46sdp"
-                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
                                 android:layout_gravity="center"
                                 android:elevation="0dp"
                                 app:cardCornerRadius="@dimen/_23sdp"
@@ -153,6 +153,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="fitXY"
+                                    android:contentDescription="@string/profile_image"
                                     android:src="@drawable/ic_profile_male_user"
                                     android:visibility="gone" />
 
@@ -182,7 +183,8 @@
                             app:layout_constraintHorizontal_bias=".80"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.9" />
+                            app:layout_constraintVertical_bias="0.9"
+                            android:contentDescription="@string/qr_code"/>
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -232,39 +234,34 @@
                         android:layout_marginEnd="14dp"
                         android:background="@color/white"
                         android:orientation="vertical"
-
                         android:paddingStart="@dimen/_11sdp"
                         android:paddingTop="@dimen/_11sdp">
 
                         <LinearLayout
                             android:id="@+id/business_UserDetailsLL"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:text="@string/setting_userdetails"
+                                    android:layout_weight="1"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp" />
 
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_marginTop="3dp"
+                                    android:contentDescription="@string/arrow_right"
                                     android:src="@drawable/ic_rightarrow" />
 
-                            </RelativeLayout>
                         </LinearLayout>
 
                         <View
@@ -311,6 +308,7 @@
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -326,7 +324,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="3dp"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -341,6 +339,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -356,6 +355,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
                         </LinearLayout>
 
@@ -370,6 +370,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -385,6 +386,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -399,6 +401,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -414,6 +417,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -428,6 +432,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -443,6 +448,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -457,6 +463,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -472,6 +479,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -486,6 +494,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -501,6 +510,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -515,6 +525,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -530,7 +541,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -545,6 +556,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -560,6 +572,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/arrow_right"
                                 android:src="@drawable/ic_right_arrow_ed" />
 
                         </LinearLayout>
@@ -605,20 +618,23 @@
 
                         <LinearLayout
                             android:id="@+id/businessResetPin"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_semibold"
+                                    android:layout_alignParentStart="true"
                                     android:text="@string/security_resetpin"
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_12ssp" />
@@ -626,7 +642,9 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerInParent="true"
+                                    android:contentDescription="@string/arrow_right"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>
@@ -639,8 +657,9 @@
 
                         <LinearLayout
                             android:id="@+id/cpFaceIdSetting"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:orientation="horizontal">
 
                             <RelativeLayout
@@ -664,7 +683,8 @@
                                     android:id="@+id/switchOff"
                                     android:layout_width="@dimen/_55sdp"
                                     android:layout_height="@dimen/_26sdp"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerInParent="true"
                                     android:layout_marginTop="@dimen/_10sdp"
                                     android:layout_marginBottom="@dimen/_10sdp"
                                     android:background="@drawable/switchbtn_strokecolor"
@@ -676,6 +696,7 @@
                                         android:layout_height="@dimen/_22sdp"
                                         android:layout_marginStart="@dimen/_2sdp"
                                         android:layout_marginTop="@dimen/_2sdp"
+                                        android:contentDescription="@string/active"
                                         android:src="@drawable/ic_baseline_circle" />
 
                                     <TextView
@@ -686,7 +707,6 @@
                                         android:fontFamily="@font/opensans_regular"
                                         android:text="Off"
                                         android:textColor="@color/black"
-
                                         android:textSize="@dimen/_11sdp" />
                                 </LinearLayout>
 
@@ -716,6 +736,7 @@
                                         android:layout_height="@dimen/_22sdp"
                                         android:layout_marginStart="@dimen/_8sdp"
                                         android:layout_marginTop="@dimen/_2sdp"
+                                        android:contentDescription="@string/arrow_right"
                                         android:src="@drawable/ic_baseline_circle_white" />
 
                                 </LinearLayout>
@@ -730,9 +751,10 @@
 
                         <LinearLayout
                             android:id="@+id/b_cpChangePassword"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:gravity="center"
                             android:paddingTop="@dimen/_16sdp"
                             android:paddingBottom="@dimen/_16sdp">
 
@@ -751,7 +773,9 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerInParent="true"
+                                    android:contentDescription="@string/arrow_right"
                                     android:src="@drawable/ic_rightarrow" />
 
                             </RelativeLayout>

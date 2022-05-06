@@ -88,6 +88,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     private JSONObject informationJSON;
     public static File mediaFile;
     private boolean reservedRuleAccepted = false;
+    private boolean reservedRule = false;
     private ImageView imvCLose;
     private HashMap<String, ProposalsPropertiesData> proposalsMap;
 
@@ -102,6 +103,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 //        enableOrDisableNext();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(!reservedRule) {
+            super.onBackPressed();
+        }
+    }
     private void initFields() {
 
         additionReservedLL = findViewById(R.id.lladditionReserve);
@@ -513,7 +520,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         llBottomView.setVisibility(View.GONE);
         scrollview.setVisibility(View.GONE);
         llApprovedReserved.setVisibility(View.VISIBLE);
-
+        reservedRule = true;
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         View reserveRule = getLayoutInflater().inflate(R.layout.activity_business_application_approved, null);
@@ -553,6 +560,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             }
         });
         llApprovedReserved.addView(reserveRule, layoutParams);
+
 
         cardAccept.setOnClickListener(new View.OnClickListener() {
             @Override

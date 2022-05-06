@@ -103,6 +103,9 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         LayoutParams layoutParams = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         int width = seekBar.getWidth();
+        int valueInPixels24 = (int) getResources().getDimension(R.dimen._24sdp);
+        int valueInPixels10 = (int) getResources().getDimension(R.dimen._7sdp);
+        int valueInPixels5 = (int) getResources().getDimension(R.dimen._7sdp);
         int calculatedWidth = (width / 24);
         String text = "";
 
@@ -118,17 +121,19 @@ public class SeekBarWithFloatingText extends RelativeLayout {
                 text = progress + ":00am";
             }
 //            text = totalAmount.toLowerCase();
-            calculatedWidth = calculatedWidth + 20 * progress;
+            calculatedWidth = calculatedWidth + valueInPixels10 * progress;
         } else if (progress == 12) {
             text = progress + ":00pm";
 //            text = totalAmount.toLowerCase();
-            calculatedWidth = calculatedWidth + 20 * progress;
+            calculatedWidth = calculatedWidth + valueInPixels10 * progress;
         } else {
-            if (progress > 12 && progress < 20) {
-                calculatedWidth = calculatedWidth + 20 * progress;
-            } else {
-                calculatedWidth = 20 * 20 + 20 - calculatedWidth;  // for fix the Position
-            }
+//            if (progress > 12 && progress < 20) {
+                calculatedWidth = calculatedWidth + valueInPixels10 * progress;
+//            }
+//            else {
+//                calculatedWidth = calculatedWidth + valueInPixels10 * progress;
+////                calculatedWidth = valueInPixels5 * 20 + 20 - calculatedWidth;  // for fix the Position
+//            }
             if (progress != 24) {
                 text = (progress - 12) + ":00pm";
             }
@@ -145,7 +150,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         if (earningList != null) {
             for (int position = 0; position < earningList.size(); position++) {
                 if (progress == earningList.get(position).getKey()) {
-                    tvFloatingText.setText(text + " " + earningList.get(position).getTotalAmount() + " CYN");
+                    tvFloatingText.setText(text + " " + earningList.get(position).getAmount() + " CYN");
                     break;
                 } else {
                     tvFloatingText.setText(text + defaultValue);
