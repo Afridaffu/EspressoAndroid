@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.EditAddressActivity">
 
@@ -68,7 +69,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/addressLineOneTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -130,7 +131,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/addressLineTwoTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/address1ErrorLL"
@@ -194,7 +195,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/cityTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/address2ErrorLL"
@@ -280,7 +281,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/stateTIL"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/state"
@@ -323,7 +324,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/zipcodeTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/stateCL"
@@ -401,7 +402,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/countryTIL"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/country"
@@ -534,7 +535,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/b_addressLineOneTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Address"
@@ -595,7 +596,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/b_cityTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
@@ -678,7 +679,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/b_stateTIL"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20sp"
@@ -719,7 +720,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/b_zipcodeTIL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_14sdp"
@@ -796,7 +797,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/b_countryTIL"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/country"

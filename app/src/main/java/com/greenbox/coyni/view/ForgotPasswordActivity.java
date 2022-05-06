@@ -81,7 +81,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
             tvHead = findViewById(R.id.tvHead);
             layoutMain = findViewById(R.id.layoutMain);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-            Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
+//            Utils.statusBar(ForgotPasswordActivity.this, "#FFFFFF");
             objMyApplication = (MyApplication) getApplicationContext();
             etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
 
