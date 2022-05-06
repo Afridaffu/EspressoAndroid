@@ -18,11 +18,13 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.ActionMode;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -142,6 +144,16 @@ public class ConfirmPasswordActivity extends AppCompatActivity {
                     }
                 }
             });
+
+//            currentPassET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                        Utils.hideKeypad(ConfirmPasswordActivity.this);
+//                    }
+//                    return false;
+//                }
+//            });
 
             currentPassET.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
 
