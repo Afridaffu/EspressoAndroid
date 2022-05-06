@@ -128,11 +128,12 @@ public class SelectedPaymentMethodsAdapter extends RecyclerView.Adapter<Selected
                     holder.layoutError.setVisibility(View.VISIBLE);
                     holder.tvError.setText("There’s a issue with your payment ");
                 }
-                holder.tvBankName.setText("Signet Account");
+//                holder.tvBankName.setText("Signet Account");
+                holder.tvBankName.setVisibility(View.GONE);
                 if (objData.getAccountNumber() != null && objData.getAccountNumber().length() > 14) {
-                    holder.tvAccount.setText(objData.getAccountNumber().substring(0, 5) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
+                    holder.tvAccount.setText("Signet Account " + objData.getAccountNumber().substring(0, 5) + "**** " + objData.getAccountNumber().substring(objData.getAccountNumber().length() - 4));
                 } else {
-                    holder.tvAccount.setText(objData.getAccountNumber());
+                    holder.tvAccount.setText("Signet Account " + objData.getAccountNumber());
                 }
             } else {
                 holder.layoutBank.setVisibility(View.GONE);
