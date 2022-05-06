@@ -722,7 +722,7 @@ public class BusinessProfileActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
-            profileSV.scrollTo(0, 0);
+//            profileSV.scrollTo(0, 0);
             dashboardViewModel.meProfile();
             businessIdentityVerificationViewModel.getDBAInfo();
             businessIdentityVerificationViewModel.getBusinessType();

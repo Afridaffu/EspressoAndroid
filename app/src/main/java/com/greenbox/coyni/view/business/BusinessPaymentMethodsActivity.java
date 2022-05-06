@@ -72,6 +72,9 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_payment_methods);
         initialization();
         initObserver();
@@ -558,7 +561,6 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                     tvBankHead.setTextColor(getColor(R.color.primary_black));
                     tvBankCount.setTextColor(getColor(R.color.dark_grey));
                     tvBankMsg.setTextColor(getColor(R.color.dark_grey));
-//                    imgBankArrow.clearColorFilter();
                     imgBankArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }

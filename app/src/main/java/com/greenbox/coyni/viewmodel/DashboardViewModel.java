@@ -707,6 +707,42 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
         }
     }
+
+    public void cancelWithdrawToken(String gbxTxnId) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<CancelBuyTokenResponse> mCall = apiService.cancelWithdrawToken(gbxTxnId);
+            mCall.enqueue(new Callback<CancelBuyTokenResponse>() {
+                @Override
+                public void onResponse(Call<CancelBuyTokenResponse> call, Response<CancelBuyTokenResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            CancelBuyTokenResponse obj = response.body();
+                            cancelBuyTokenResponseMutableLiveData.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<CancelBuyTokenResponse>() {
+                            }.getType();
+                            CancelBuyTokenResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            cancelBuyTokenResponseMutableLiveData.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        cancelBuyTokenResponseMutableLiveData.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CancelBuyTokenResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    cancelBuyTokenResponseMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void refundDetails(RefundReferenceRequest refundrefrequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);

@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -319,6 +320,11 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
     public void setFrom(String fromm) {
         FROM = fromm;
+        if (fromm.equals("ADD_TEAM_MEMBER")) {
+            pnET.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        } else if (fromm.equals("EDIT_TEAM_MEMBER")) {
+            pnET.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        }
     }
 
     public void setText(String text) {

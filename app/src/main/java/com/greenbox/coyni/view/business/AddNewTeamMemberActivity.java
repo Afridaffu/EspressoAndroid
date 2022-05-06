@@ -438,7 +438,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
         try {
             if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
-                Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " ");

@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -38,7 +39,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import okhttp3.internal.Util;
 
-public class ForgotPasswordActivity extends BaseActivity {
+public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     CardView cvNext;
     TextInputEditText etEmail;
     LoginViewModel loginViewModel;
@@ -46,7 +47,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     ProgressDialog dialog;
     LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
-    RelativeLayout layoutMain;
+    LinearLayout layoutMain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
     String fromStr = "";
@@ -56,6 +57,7 @@ public class ForgotPasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_forgot_password);
@@ -68,7 +70,7 @@ public class ForgotPasswordActivity extends BaseActivity {
 
     private void initialization() {
         try {
-//            setKeyboardVisibilityListener(ForgotPasswordActivity.this);
+            setKeyboardVisibilityListener(ForgotPasswordActivity.this);
             llClose = findViewById(R.id.llClose);
             cvNext = findViewById(R.id.cvNext);
             etEmail = findViewById(R.id.etEmail);
@@ -295,32 +297,6 @@ public class ForgotPasswordActivity extends BaseActivity {
         }
     }
 
-    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
-        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            private boolean alreadyOpen;
-            private final int defaultKeyboardHeightDP = 100;
-            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
-            private final Rect rect = new Rect();
-
-            @Override
-            public void onGlobalLayout() {
-                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
-                parentView.getWindowVisibleDisplayFrame(rect);
-                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
-                boolean isShown = heightDiff >= estimatedKeyboardHeight;
-
-                if (isShown == alreadyOpen) {
-                    Log.i("Keyboard state", "Ignoring global layout change...");
-                    return;
-                }
-                alreadyOpen = isShown;
-                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
-            }
-        });
-    }
-
     public void enable() {
         if (isemail) {
             isSaveEnabled = true;
@@ -347,6 +323,38 @@ public class ForgotPasswordActivity extends BaseActivity {
         if (isemail) {
             enable();
         }
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+        Log.e("keyboard", Utils.isKeyboardVisible + "");
     }
 
 }

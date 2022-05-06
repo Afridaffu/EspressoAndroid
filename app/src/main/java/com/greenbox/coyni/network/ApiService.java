@@ -635,5 +635,8 @@ public interface ApiService {
     @POST("/api/v2/transactions/admin/merchant-activity-chart")
     Call<MerchantActivityResp> merchantActivity(@Body MerchantActivityRequest request);
 
+    @POST("api/v2/node/cancel-withdraw/{gbxTxnId}")
+    Call<CancelBuyTokenResponse> cancelWithdrawToken(@Path("gbxTxnId") String gbxTxnId);
+
 }
 
