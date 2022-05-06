@@ -226,7 +226,7 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void launchBuyTokens() {
         try {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();

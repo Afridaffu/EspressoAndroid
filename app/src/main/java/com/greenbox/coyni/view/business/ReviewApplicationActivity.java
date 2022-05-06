@@ -20,6 +20,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -295,8 +296,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         mDbFillingDateTx = (TextView) findViewById(R.id.db_filling_date);
         mPrivacyVno = (TextView) findViewById(R.id.privacy_policy);
         mTermsVno = (TextView) findViewById(R.id.terms_of_service);
-        tosTV = (TextView) findViewById(R.id.tosTV);
-        prTv = (TextView) findViewById(R.id.privacyTV);
+//        tosTV = (TextView) findViewById(R.id.tosTV);
+//        prTv = (TextView) findViewById(R.id.privacyTV);
         mMerchantsVno = (TextView) findViewById(R.id.merchant_agreements);
         mPrivacyImg = (ImageView) findViewById(R.id.privacy);
         mTermsImg = (ImageView) findViewById(R.id.terms);
@@ -312,23 +313,23 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //                startActivity(browserIntent);
             }
         });
-        tosTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                dashboardViewModel.agreementsByType("1");
-                showProgressDialog();
-                dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
-
-            }
-        });
-        prTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                dashboardViewModel.agreementsByType("0");
-                showProgressDialog();
-                dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
-            }
-        });
+//        tosTV.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                dashboardViewModel.agreementsByType("1");
+//                showProgressDialog();
+//                dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
+//
+//            }
+//        });
+//        prTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                dashboardViewModel.agreementsByType("0");
+//                showProgressDialog();
+//                dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
+//            }
+//        });
 
         mTermsImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -966,7 +967,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
     public void setSpannableText() {
 
-        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy");
+        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
@@ -1024,9 +1025,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         };
 
-        ss.setSpan(clickableSpan, 64, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 64, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 
