@@ -561,7 +561,6 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                     tvBankHead.setTextColor(getColor(R.color.primary_black));
                     tvBankCount.setTextColor(getColor(R.color.dark_grey));
                     tvBankMsg.setTextColor(getColor(R.color.dark_grey));
-//                    imgBankArrow.clearColorFilter();
                     imgBankArrow.setColorFilter(getColor(R.color.primary_black));
                     imgBankIcon.setImageResource(R.drawable.ic_bank_account_active);
                 }

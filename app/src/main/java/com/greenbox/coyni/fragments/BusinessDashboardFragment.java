@@ -489,10 +489,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             grossAmount = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
                                         if (data.get(position).getCount() > 0) {
-                                            mTransactions.setText(String.valueOf(data.get(position).getCount()).split("\\.")[0]);
+                                            mTransactions.setText(String.valueOf(data.get(position).getCount()));
                                             totalTransactions = data.get(position).getCount();
                                         } else {
-                                            mTransactions.setText(defaultAmount);
+                                            mTransactions.setText("0");
                                         }
 
                                         if (data.get(position).getFee() != null) {
@@ -888,7 +888,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
                 businessActivityAPICall(strFromDate, strToDate);
-                commissionActivityCall(todayValue);
+                commissionActivityCall(strFromDate,strToDate);
             }
             break;
             case yesterdayValue: {
@@ -898,7 +898,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
-                commissionActivityCall(yesterdayValue);
+                commissionActivityCall(strFromDate,strToDate);
             }
             break;
             case monthDate: {
@@ -955,9 +955,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
-    private void commissionActivityCall(String value) {
+    private void commissionActivityCall(String strFromDate,String strToDate) {
         MerchantActivityRequest request = new MerchantActivityRequest();
-        request.setDuration(value.toUpperCase());
+//        request.setDuration(value.toUpperCase());
+        request.setStartDate(strFromDate);
+        request.setEndDate(strToDate);
+
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null)
             request.setUserId("" + myApplication.getMyProfile().getData().getId());
         businessDashboardViewModel.merchantActivity(request);
