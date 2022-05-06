@@ -44,7 +44,7 @@ public class AddCommentsDialog extends BaseDialog {
             addNoteET.setText(comment.trim());
             addNoteET.setSelection(comment.trim().length());
         }
-
+        addNoteET.setHint(R.string.reason);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

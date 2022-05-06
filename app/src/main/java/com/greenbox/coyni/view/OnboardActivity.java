@@ -68,6 +68,7 @@ public class OnboardActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             onboardActivity = this;
             dbHandler = DatabaseHandler.getInstance(OnboardActivity.this);
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);

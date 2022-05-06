@@ -138,10 +138,26 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (!isBankSuccess) {
             if (strCurrent.equals("externalBank")) {
-                strCurrent = "";
-                ControlMethod("withdrawpay");
-                withdrawPaymentMethod("bank");
-                strScreen = "withdrawpay";
+                if (bankList != null && bankList.size() > 0) {
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        ControlMethod("addpayment");
+                        addPayment();
+                        strCurrent = "addpayment";
+                    } else {
+                        ControlMethod("addbpayment");
+                        addMerchantPayment();
+                        strCurrent = "addbpayment";
+                    }
+                } else {
+                    strCurrent = "";
+                    ControlMethod("withdrawpay");
+                    withdrawPaymentMethod("bank");
+                    strScreen = "withdrawpay";
+                }
+//                strCurrent = "";
+//                ControlMethod("withdrawpay");
+//                withdrawPaymentMethod("bank");
+//                strScreen = "withdrawpay";
             } else if (strCurrent.equals("debit")) {
                 strCurrent = "";
                 ControlMethod("withdrawpay");
@@ -1107,6 +1123,16 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             List<PaymentsList> listData = new ArrayList<>();
             if (paymentMethodsResponse != null) {
                 listData = paymentMethodsResponse.getData().getData();
+                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+                    List<PaymentsList> filterData = new ArrayList<>();
+                    for (int i = 0; i < listData.size(); i++) {
+                        if (listData.get(i).getPaymentMethod().toLowerCase().equals("bank")) {
+                            filterData.add(listData.get(i));
+                        }
+                    }
+                    listData = new ArrayList<>();
+                    listData = filterData;
+                }
                 if (listData != null && listData.size() > 0) {
                     rvPayMethods.setVisibility(VISIBLE);
                     SelectedPaymentMethodsAdapter selectedPaymentMethodsAdapter = new SelectedPaymentMethodsAdapter(listData, WithdrawPaymentMethodsActivity.this, "withdraw");

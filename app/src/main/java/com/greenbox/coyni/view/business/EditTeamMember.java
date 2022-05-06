@@ -416,7 +416,6 @@ public class EditTeamMember extends BaseActivity {
             if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
                 if (sendCV != null) {
-                    Utils.hideSoftKeyboard(EditTeamMember.this);
                     sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                 }
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " " + isPhoneNumber + " ");

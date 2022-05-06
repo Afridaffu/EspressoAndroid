@@ -109,15 +109,18 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
                 } else if (strCurrent.equals("paymentMethods")) {
-
                     //Why is empty , so i have added on backpressed
-                    super.onBackPressed();
-                } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
                     super.onBackPressed();
                 } else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
                     ControlMethod("paymentMethods");
                     strCurrent = "paymentMethods";
+                } else if ((!strCurrent.equals("firstError")) || (strScreen.equals("dashboard") && strCurrent.equals("addpayment"))) {
+                    super.onBackPressed();
                 }
+//                else if (!strScreen.equals("withdraw") && !strScreen.equals("buytoken") && (strCurrent.equals("addpay") || strCurrent.equals("debit") || strCurrent.equals("credit") || strCurrent.equals("addpayment"))) {
+//                    ControlMethod("paymentMethods");
+//                    strCurrent = "paymentMethods";
+//                }
             } else {
                 if (strCurrent.equals("debit") || strCurrent.equals("credit")) {
                     ControlMethod("addpayment");
@@ -164,7 +167,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
-                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                        onBackPressed();
+                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");
