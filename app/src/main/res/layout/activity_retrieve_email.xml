@@ -100,7 +100,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/reFirstNameTIL"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_21sdp"
@@ -162,7 +162,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/reLastNameTIL"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"

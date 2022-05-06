@@ -136,7 +136,7 @@ public class CreatePasswordActivity extends BaseActivity {
             cvSave.setEnabled(false);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-            Utils.statusBar(CreatePasswordActivity.this, "#FFFFFF");
+//            Utils.statusBar(CreatePasswordActivity.this, "#FFFFFF");
 
             passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
             confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
@@ -151,6 +151,9 @@ public class CreatePasswordActivity extends BaseActivity {
                 tvHead.setText("Change Password");
                 tvchangepass.setVisibility(VISIBLE);
                 tvMessage.setVisibility(GONE);
+                passwordET.requestFocus();
+                if (!Utils.isKeyboardVisible)
+                    Utils.shwForcedKeypad(CreatePasswordActivity.this);
             } else {
                 tvMessage.setVisibility(View.GONE);
                 tvHead.setText("Create New Password");

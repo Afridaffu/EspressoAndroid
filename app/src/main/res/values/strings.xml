@@ -300,7 +300,7 @@
     <string name="rollingperiod">rolling period.</string>
     <string name="reserverule"> [%] per Sale Order with a 90 day</string>
     <string name="a_u_pay"> Your active batch is set to automatically pay</string>
-    <string name="merchant_balance">Merchant Balance = Net volume processed since your\nlast batch + Reserve Balance</string>
+    <string name="merchant_balance">Merchant Balance = Net volume processed since your last batch + Reserve Balance</string>
     <string name="business_type">Business Type</string>
     <string name="application_completed">Application completed!</string>
     <string name="start">Start</string>
