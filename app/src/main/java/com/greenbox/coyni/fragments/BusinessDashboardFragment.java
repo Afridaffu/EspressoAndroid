@@ -86,7 +86,7 @@ import java.util.List;
 public class BusinessDashboardFragment extends BaseFragment {
 
     private View mCurrentView, batchView, releaseView;
-    private TextView tv_PayoutNoHistory, batchNoTransaction, nextReleaseNATV,
+    private TextView tv_PayoutNoHistory,tv_PayoutFullHistory, batchNoTransaction, nextReleaseNATV,
             lastReleaseNATV, releaseNoTransaction;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
@@ -251,6 +251,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         dbHandler = DatabaseHandler.getInstance(getActivity());
 
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
+        tv_PayoutFullHistory = mCurrentView.findViewById(R.id.tv_PayoutFullHistory);
         batchView = mCurrentView.findViewById(R.id.batchView);
         batchNoTransaction = mCurrentView.findViewById(R.id.batchNoTransaction);
 
@@ -386,8 +387,9 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (batchPayoutListResponse != null) {
                     if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
                         if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
-                            tv_PayoutNoHistory.setVisibility(View.GONE);
+//                            tv_PayoutNoHistory.setVisibility(View.GONE);
                             batchView.setVisibility(View.GONE);
+                            tv_PayoutFullHistory.setVisibility(View.GONE);
                             mPayoutHistory.setVisibility(View.VISIBLE);
                             showData(batchPayoutListResponse.getData().getItems());
                         } else {
@@ -490,7 +492,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             mTransactions.setText(String.valueOf(data.get(position).getCount()));
                                             totalTransactions = data.get(position).getCount();
                                         } else {
-                                            mTransactions.setText(defaultAmount);
+                                            mTransactions.setText("0");
                                         }
 
                                         if (data.get(position).getFee() != null) {
@@ -588,8 +590,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         LogUtils.d(TAG, "tracker iddddd" + myApplication.getDbaOwnerId());
         if (myApplication.getDbaOwnerId() != 0) {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
-            inTracker.putExtra("ADDBUSINESS", true);
-            inTracker.putExtra("ADDDBA", true);
+            inTracker.putExtra(Utils.ADD_BUSINESS, true);
+            inTracker.putExtra(Utils.ADD_DBA, true);
             startActivity(inTracker);
         } else {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
@@ -617,15 +619,19 @@ public class BusinessDashboardFragment extends BaseFragment {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
 //        LogUtils.d(TAG, "dashboardmyApplication" + myApplication.getBusinessTrackerResponse());
 //        LogUtils.d(TAG, "dashboardisProfileVerified" + myApplication.getBusinessTrackerResponse().getData().isProfileVerified());
-        if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
-                && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
-            showGetStartedView();
-        } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+//        if (myApplication.getBusinessTrackerResponse() != null && myApplication.getBusinessTrackerResponse().getData() != null
+//                && !myApplication.getBusinessTrackerResponse().getData().isProfileVerified()) {
+//
+//        } else
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getAccountStatus() != null) {
             String accountStatus = myApplication.getMyProfile().getData().getAccountStatus();
-            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                showGetStartedView();
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                 showIdentityVerificationReview();
-            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus()) || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
+            } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
+                    || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
                 showAdditionalActionView();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
@@ -882,7 +888,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
                 businessActivityAPICall(strFromDate, strToDate);
-                commissionActivityCall(todayValue);
+                commissionActivityCall(strFromDate,strToDate);
             }
             break;
             case yesterdayValue: {
@@ -892,7 +898,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
-                commissionActivityCall(yesterdayValue);
+                commissionActivityCall(strFromDate,strToDate);
             }
             break;
             case monthDate: {
@@ -949,9 +955,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
-    private void commissionActivityCall(String value) {
+    private void commissionActivityCall(String strFromDate,String strToDate) {
         MerchantActivityRequest request = new MerchantActivityRequest();
-        request.setDuration(value.toUpperCase());
+//        request.setDuration(value.toUpperCase());
+        request.setStartDate(strFromDate);
+        request.setEndDate(strToDate);
+
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null)
             request.setUserId("" + myApplication.getMyProfile().getData().getId());
         businessDashboardViewModel.merchantActivity(request);
@@ -1087,7 +1096,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
             mPayoutHistory.setVisibility(View.GONE);
-            tv_PayoutNoHistory.setVisibility(View.VISIBLE);
+//            tv_PayoutNoHistory.setVisibility(View.VISIBLE);
+            tv_PayoutFullHistory.setVisibility(View.VISIBLE);
             mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             mCvBatchNow.setClickable(false);
 

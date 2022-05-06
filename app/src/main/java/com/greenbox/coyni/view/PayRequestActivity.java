@@ -104,6 +104,9 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_pay_request);
             initialization();
             initObservers();
@@ -447,7 +450,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             dollarFont = tvCurrency.getTextSize();
             availBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
             avaBal = objMyApplication.getGBTBalance();
-            cynWallet = objMyApplication.getGbtWallet();
+            cynWallet = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0);
             payRequestET.requestFocus();
             payRequestET.setShowSoftInputOnFocus(false);
             // payRequestET.setMovementMethod(null);
@@ -1052,7 +1055,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
-            request.setSourceWalletId(objMyApplication.getGbtWallet().getWalletId());
+            request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
@@ -1069,7 +1072,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             request.setTokens(payRequestET.getText().toString().trim().replace(",", ""));
             request.setRemarks(addNoteTV.getText().toString().trim());
             request.setRecipientWalletId(recipientAddress);
-            request.setSourceWalletId(objMyApplication.getGbtWallet().getWalletId());
+            request.setSourceWalletId(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId());
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
         } catch (Exception ex) {
@@ -1226,8 +1229,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() == 0) {
                         addNoteTIL.setCounterEnabled(false);
+                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     } else {
                         addNoteTIL.setCounterEnabled(true);
+                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                     }
                 }
 

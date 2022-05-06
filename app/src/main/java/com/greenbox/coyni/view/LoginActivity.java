@@ -97,11 +97,14 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_login);
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -188,6 +191,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
         }
 
+        if(Utils.isKeyboardVisible)
+            Utils.hideKeypad(LoginActivity.this);
     }
 
     @Override
@@ -1040,8 +1045,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     public void hideAndClearFocus() {
         etEmail.clearFocus();
         etPassword.clearFocus();
-        if (Utils.isKeyboardVisible)
-            Utils.hideKeypad(LoginActivity.this);
+//        if (Utils.isKeyboardVisible)
+//            Utils.hideKeypad(LoginActivity.this);
     }
 
     private void clearEmailControl() {

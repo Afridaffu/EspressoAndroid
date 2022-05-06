@@ -237,7 +237,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             dollarFont = tvCurrency.getTextSize();
             availBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
             avaBal = objMyApplication.getGBTBalance();
-            cynWallet = objMyApplication.getGbtWallet();
+            cynWallet = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0);
             payET.requestFocus();
             payET.setShowSoftInputOnFocus(false);
             payToMerchantActivity = this;
@@ -959,7 +959,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             mLastClickTime = SystemClock.elapsedRealtime();
             convertDecimal();
 
-            if (payValidation())  {
+            if (payValidation()) {
                 isPayClick = true;
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                 cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
@@ -976,8 +976,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 //                                    i.putExtra("screen", "payRequest");
 //                                    startActivity(i);
 //                                }
-            }
         }
+    }
 
 
     private void showPayToMerchantWithAmountDialog(String amount, UserDetails userDetails, boolean isPayToMerchantActivity, Double balance) {
