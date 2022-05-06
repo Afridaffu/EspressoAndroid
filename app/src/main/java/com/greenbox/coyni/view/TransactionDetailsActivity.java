@@ -1305,6 +1305,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                     withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
                     withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                     break;
+                case Utils.transCancelled: {
+                    withBankStatus.setTextColor(getResources().getColor(R.color.failed_status));
+                    withBankStatus.setBackgroundResource(R.drawable.txn_failed_bg);
+                }
             }
         }
 
