@@ -225,7 +225,17 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                 TextView ssnTV = customView.findViewById(R.id.ssnTV);
                 TextView einTV = customView.findViewById(R.id.einTV);
                 TextView typeTV = customView.findViewById(R.id.typeTV);
+                LinearLayout einLL = customView.findViewById(R.id.einLL);
+                LinearLayout ssnLL = customView.findViewById(R.id.ssnLL);
                 typeTV.setText(ssnType.getText().toString());
+
+                if (ssnType.getText().toString().equals("SSN")) {
+                    ssnLL.setVisibility(GONE);
+                    einLL.setVisibility(VISIBLE);
+                } else {
+                    ssnLL.setVisibility(VISIBLE);
+                    einLL.setVisibility(GONE);
+                }
 
                 ssnTV.setOnClickListener(new OnClickListener() {
                     @Override
@@ -409,4 +419,15 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
             return einET.getUnMasked();
         }
     }
+
+    public void disableDropDown() {
+        ssnDDLL.setClickable(false);
+        dropdownIV.setVisibility(GONE);
+    }
+
+    public void enableDropDown() {
+        ssnDDLL.setClickable(true);
+        dropdownIV.setVisibility(VISIBLE);
+    }
+
 }
