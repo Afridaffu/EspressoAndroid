@@ -40,6 +40,8 @@ public class AddCommentsDialog extends BaseDialog {
         addNoteTIL = findViewById(R.id.etlMessage);
         cancelBtn = findViewById(R.id.cancelBtn);
 
+        addNoteET.requestFocus();
+
         if (comment != null && !comment.trim().equals("")) {
             addNoteET.setText(comment.trim());
             addNoteET.setSelection(comment.trim().length());
