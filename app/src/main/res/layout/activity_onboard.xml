@@ -31,7 +31,8 @@
                 android:layout_height="@dimen/_12sdp"
                 app:tabBackground="@drawable/viewpager_tab_selector"
                 app:tabGravity="center"
-                app:tabIndicatorHeight="0dp" />
+                app:tabIndicatorHeight="0dp"
+                android:background="@color/white"/>
 
         </LinearLayout>
 
