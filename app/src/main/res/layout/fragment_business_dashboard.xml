@@ -1173,7 +1173,7 @@
                                 android:layout_marginTop="@dimen/_17sdp"
                                 android:layout_marginBottom="@dimen/_14sdp"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="@string/full_payouts_history"
+                                android:text="@string/v_p_history"
                                 android:textColor="@color/dark_gray"
                                 android:textSize="@dimen/_11ssp" />
 

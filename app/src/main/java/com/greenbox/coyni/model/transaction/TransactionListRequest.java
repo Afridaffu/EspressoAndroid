@@ -19,6 +19,7 @@ public class TransactionListRequest {
     private String updatedToDate;
     private String updatedToDateOperator;
     private String gbxTransactionId;
+    private  boolean isFilters;
 
     private ArrayList<Integer> transactionType;
     private ArrayList<Integer> transactionSubType;
@@ -151,4 +152,13 @@ public class TransactionListRequest {
     public void setManualUpdate(boolean manualUpdate) {
         isManualUpdate = manualUpdate;
     }
+
+    public boolean isFilters() {
+        return isFilters;
+    }
+
+    public void setFilters(boolean filters) {
+        isFilters = filters;
+    }
+
 }

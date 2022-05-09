@@ -160,6 +160,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             strEndAmount = "";
             isFilters = false;
             strSelectedDate = "";
+
+
         }
 
         resetFiltersTV.setOnClickListener(view -> {
@@ -205,6 +207,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             getDateFromPickerET.setText("");
             getOnDialogClickListener().onDialogClicked(Utils.resetFilter, null);
 //            dismiss();
+
 
         });
 
@@ -314,10 +317,10 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    txnStatus.add(Utils.inProgress);
+                    txnStatus.add(Utils.cancelled);
                 } else {
                     for (int i = 0; i < txnStatus.size(); i++) {
-                        if (txnStatus.get(i) == Utils.inProgress) {
+                        if (txnStatus.get(i) == Utils.cancelled) {
                             txnStatus.remove(i);
                             break;
                         }
@@ -520,6 +523,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                         strEndAmount = "";
                     }
                 }
+                filterTransactionListRequest.setFilters(isFilters);
                 getOnDialogClickListener().onDialogClicked(Utils.applyFilter, filterTransactionListRequest);
                 dismiss();
             }
