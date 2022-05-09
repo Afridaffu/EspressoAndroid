@@ -60,7 +60,9 @@
         <activity
             android:name=".view.business.MerchantTransactionDetailsActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+
         <activity
             android:name=".view.business.PayToMerchantActivity"
             android:exported="false"
@@ -74,10 +76,12 @@
         <activity
             android:name=".view.business.AddNewTeamMemberActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.PayingDBAFilterActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AdditionalInformationRequiredActivity"

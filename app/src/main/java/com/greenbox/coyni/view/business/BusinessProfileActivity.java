@@ -476,7 +476,19 @@ public class BusinessProfileActivity extends BaseActivity {
                     account_status.setText(accountStatus);
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
 //                    fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
-                    if (myApplication.getMyProfile().getData().getDbaName() != null) {
+                    if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                            && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                            && myApplication.getMyProfile().getData().getFirstName() != null) {
+                        String firstName = myApplication.getMyProfile().getData().getFirstName();
+                       // iconText = firstName.substring(0, 1).toUpperCase();
+                        fullname = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                        if (myApplication.getMyProfile().getData().getLastName() != null) {
+                            String lastName = myApplication.getMyProfile().getData().getLastName();
+                            //iconText = iconText + lastName.substring(0, 1).toUpperCase();
+                            fullname = fullname + " ";
+                            fullname = fullname + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                        }
+                    } else if (myApplication.getMyProfile().getData().getDbaName() != null && !myApplication.getMyProfile().getData().getDbaName().equals(" ")) {
                         fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
                     }
                     if (fullname.length() > 22){
@@ -653,7 +665,19 @@ public class BusinessProfileActivity extends BaseActivity {
                                 account_status.setText(profile.getData().getAccountStatus());
                                 account_id.setText("Account ID M-" + profile.getData().getId());
 //                                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                                if (profile.getData().getDbaName() != null) {
+                                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                                        && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                                        && myApplication.getMyProfile().getData().getFirstName() != null) {
+                                    String firstName = myApplication.getMyProfile().getData().getFirstName();
+                                    // iconText = firstName.substring(0, 1).toUpperCase();
+                                    fullname = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                                    if (myApplication.getMyProfile().getData().getLastName() != null) {
+                                        String lastName = myApplication.getMyProfile().getData().getLastName();
+                                        //iconText = iconText + lastName.substring(0, 1).toUpperCase();
+                                        fullname = fullname + " ";
+                                        fullname = fullname + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                                    }
+                                } else if (profile.getData().getDbaName() != null) {
                                     fullname = Utils.capitalize(profile.getData().getDbaName());
                                 }
 //                                userFullname.setText(fullname);

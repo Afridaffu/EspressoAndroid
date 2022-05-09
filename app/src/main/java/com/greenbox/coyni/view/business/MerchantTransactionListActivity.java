@@ -132,6 +132,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
                                 noMoreTransactionTV.setVisibility(View.GONE);
                             } else {
+                                noTransactionTV.setVisibility(View.GONE);
                                 noMoreTransactionTV.setVisibility(View.VISIBLE);
                             }
                         } catch (Exception e) {
@@ -168,7 +169,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             layoutTransactionsPending.setVisibility(View.GONE);
             pendingTxt.setVisibility(View.GONE);
             noTransactionTV.setVisibility(View.VISIBLE);
-        } else if (charSequence.toString().trim().length() == 0) {
+        }
+        else if (charSequence.toString().trim().length() == 0) {
             loadData();
         }
     }
@@ -238,6 +240,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 
                                 if (globalPending.size() > 0 || globalPosted.size() > 0) {
                                     noTransactionTV.setVisibility(View.GONE);
+                                }else {
+//                                    noTransactionTV.setVisibility(View.VISIBLE);
                                 }
 
                                 layoutTransactionsPending.setVisibility(globalPending.size() == 0 ? View.GONE : View.VISIBLE);
@@ -256,6 +260,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                         rvTransactionsPending.scrollToPosition(0);
                                     }
                                 } else {
+                                    noTransactionTV.setVisibility(View.VISIBLE);
                                     pendingTxt.setVisibility(View.GONE);
                                 }
 
@@ -279,6 +284,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                         getRvTransactionsPosted.scrollToPosition(0);
                                     }
                                 } else {
+                                    noTransactionTV.setVisibility(View.VISIBLE);
                                     bottomCorners.setVisibility(View.GONE);
                                 }
                             } catch (Exception e) {
@@ -304,6 +310,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             globalPending.clear();
             globalPosted.clear();
             currentPage = 0;
+            total = 0;
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
@@ -318,7 +325,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
     }
 
     private void getTransactions(TransactionListRequest transactionListRequest) {
-        showProgressDialog();
+//        showProgressDialog();
         dashboardViewModel.meTransactionList(transactionListRequest);
     }
 
@@ -343,6 +350,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         if (filterTransactionList != null && filterTransactionList.isManualUpdate()) {
             filterTransactionList.setTransactionType(new ArrayList<>());
             filterTransactionList.setManualUpdate(false);
+
         }
         MerchantTransactionsFilterDialog filterDialog = new MerchantTransactionsFilterDialog(MerchantTransactionListActivity.this, filterTransactionList);
         filterDialog.setOnDialogClickListener(new OnDialogClickListener() {
@@ -357,12 +365,9 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         filterTransactionList.setTransactionType(getDefaultTransactionTypes());
                         filterTransactionList.setManualUpdate(true);
                     }
-                    if (filterTransactionList != null) {
-                        isFilters = true;
-                    }
-                    if (isFilters) {
+                    if (filterTransactionList.isFilters()) {
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
-                    } else {
+                    }else {
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                     }
                     getTransactions(filterTransactionList);
@@ -371,7 +376,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     filterIV.setImageResource(R.drawable.ic_filter_enabled);
                 } else if (action.equals(Utils.resetFilter)) {
                     filterTransactionList = null;
-//                    loadData();
+                    loadData();
                 }
             }
         });

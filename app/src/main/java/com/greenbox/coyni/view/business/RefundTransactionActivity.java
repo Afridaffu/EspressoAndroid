@@ -27,6 +27,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.util.Util;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
@@ -75,6 +76,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_refund_transaction);
             transactionData = (TransactionData) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
             gbxid = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID);
@@ -164,6 +168,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 displayComments();
+                addNoteET.requestFocus();
+                if (!Utils.isKeyboardVisible)
+                Utils.shwForcedKeypad(RefundTransactionActivity.this);
             }
         });
 
@@ -692,6 +699,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
 
 
+
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -720,14 +728,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.length() >= 1) {
-                        addNoteTIL.setCounterEnabled(true);
-                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
-//
-                    } else {
-                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
-                        cKey.disableButton();
+                    if (charSequence.length() == 0) {
                         addNoteTIL.setCounterEnabled(false);
+                        cKey.disableButton();
+//                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                    } else {
+                        addNoteTIL.setCounterEnabled(true);
+//                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                     }
                 }
 

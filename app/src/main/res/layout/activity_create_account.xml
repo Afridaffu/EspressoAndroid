@@ -9,7 +9,6 @@
     android:fillViewport="true"
     android:orientation="vertical"
     android:paddingLeft="22dp"
-    android:paddingTop="22dp"
     android:paddingRight="22dp"
     android:screenReaderFocusable="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
@@ -25,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_45sdp"
             android:orientation="vertical">
 
             <ImageView
@@ -458,10 +457,10 @@
                         android:id="@+id/spannableTV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:fontFamily="@font/opensans_regular"
                         android:text="@string/spannable_text"
                         android:textColor="@color/primary_black"
-                        android:layout_marginBottom="@dimen/_10sdp"
                         android:textSize="@dimen/_11ssp"
                         android:visibility="visible" />
 

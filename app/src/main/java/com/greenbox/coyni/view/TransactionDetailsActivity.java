@@ -36,6 +36,8 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import org.w3c.dom.Text;
 
+import okhttp3.internal.Util;
+
 public class TransactionDetailsActivity extends AppCompatActivity {
     DashboardViewModel dashboardViewModel;
     MyApplication objMyApplication;
@@ -1171,8 +1173,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
 
-        if (objData.getAccountBalance() != null) {
-            withAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            if (objData.getAccountBalance() != null) {
+                withAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
+            }
+        }
+        else {
+            findViewById(R.id.account_balance_ll).setVisibility(View.GONE);
         }
 
         if (objData.getWithdrawalId() != null) {
