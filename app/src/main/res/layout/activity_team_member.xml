@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".view.business.TeamMemberActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottomradius"
@@ -20,7 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/_44sdp"
+            android:layout_marginTop="@dimen/_35sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -32,16 +33,16 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_35sdp"
             android:fontFamily="@font/opensans_semibold"
             android:text="Team"
+            android:paddingEnd="@dimen/_40sdp"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -57,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginTop="@dimen/_21sdp"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
                 android:layout_marginBottom="@dimen/_14sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
@@ -126,7 +127,6 @@
                             android:layout_width="10dp"
                             android:layout_height="10dp"
                             android:layout_marginEnd="6dp"
-                            android:background="@drawable/pending_dot"
                             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                             app:layout_constraintEnd_toEndOf="@+id/linearLayout" />
 
@@ -169,7 +169,6 @@
                         android:fontFamily="@font/opensans_bold"
                         android:gravity="center"
                         android:text=""
-                        android:textColor="@color/orange"
                         android:textSize="@dimen/_7ssp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -191,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_4sdp"
-                android:layout_marginBottom="@dimen/_161sdp"
+                android:layout_marginBottom="@dimen/_141sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
@@ -325,7 +324,7 @@
                 android:layout_marginStart="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_21sdp"
-                android:layout_marginBottom="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="@dimen/_22sdp">
 

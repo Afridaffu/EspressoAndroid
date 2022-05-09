@@ -441,10 +441,10 @@ public class EditTeamMember extends BaseActivity {
             PhoneNumberTeam phone = new PhoneNumberTeam();
             phone.setCountryCode(Utils.strCCode);
 
-            if (firstName.equalsIgnoreCase(this.firstName) && lastName.equalsIgnoreCase(this.lastName)
-                    && emailAddress.equalsIgnoreCase(this.emailAddress) && phoneNumber.equalsIgnoreCase(this.phoneNumber)) {
-                Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.please_modify_details), R.drawable.ic_custom_tick, "Update");
-            } else {
+//            if (firstName.equalsIgnoreCase(this.firstName) && lastName.equalsIgnoreCase(this.lastName)
+//                    && emailAddress.equalsIgnoreCase(this.emailAddress) && phoneNumber.equalsIgnoreCase(this.phoneNumber)) {
+//                Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.please_modify_details), R.drawable.ic_custom_tick, "Update");
+//            } else {
                 TeamRequest teamRequest = new TeamRequest();
                 teamRequest.setFirstName(firstName);
                 teamRequest.setLastName(lastName);
@@ -454,7 +454,7 @@ public class EditTeamMember extends BaseActivity {
                 teamRequest.setRoleId(19);
                 showProgressDialog();
                 teamViewModel.updateTeamMember(teamRequest, teamMemberId);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -522,7 +522,7 @@ public class EditTeamMember extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        editEmailET.requestFocus();
+        editFNameET.requestFocus();
         Utils.shwForcedKeypad(EditTeamMember.this);
     }
 
