@@ -139,6 +139,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isNextEnabled) {
+                    Utils.hideKeypad(AddNewTeamMemberActivity.this);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
