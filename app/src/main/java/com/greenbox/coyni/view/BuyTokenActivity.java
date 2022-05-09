@@ -333,7 +333,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
-            if (getIntent().getStringExtra("cvv") == null && getIntent().getStringExtra("notoken") != null) {
+            if (getIntent().getStringExtra("cvv") == null && getIntent().getStringExtra("notoken") != null && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 displayCVV(selectedCard);
             }
             setFaceLock();

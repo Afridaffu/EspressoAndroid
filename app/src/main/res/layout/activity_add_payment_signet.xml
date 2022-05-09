@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.business.AddPaymentSignetActivity">
@@ -12,6 +13,7 @@
         android:id="@+id/layoutDetails"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <LinearLayout
@@ -40,8 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_21sdp"
                 android:layout_marginTop="@dimen/_13sdp"
+                android:layout_marginEnd="@dimen/_21sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/add_a_signet_account"
                 android:textColor="@color/black"
@@ -153,8 +155,8 @@
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"
                         android:inputType="text|textNoSuggestions"
+                        android:maxLength="50"
                         android:maxLines="1"
-                       android:maxLength="50"
                         android:padding="@dimen/_14sdp"
                         android:privateImeOptions="disableSticker=true;disableGifKeyboard=true"
                         android:singleLine="true"

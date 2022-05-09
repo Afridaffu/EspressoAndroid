@@ -79,10 +79,10 @@ public class TeamMemberActivity extends BaseActivity {
                                 }
                                 if (data.getStatus() != null && !data.getStatus().equals("")) {
                                     teamStatus = data.getStatus();
-                                    if (data.getStatus().equalsIgnoreCase(Utils.canceled)) {
-                                        txStatus.setText(Utils.expired);
-                                    }
-                                    else if(data.getStatus().equalsIgnoreCase(Utils.teammemberpending)){
+                                    data.getStatus().equalsIgnoreCase(Utils.canceled);
+                                        txStatus.setText(Utils.canceled);
+
+                                    if(data.getStatus().equalsIgnoreCase(Utils.teammemberpending)){
                                         mResendInvitation.setVisibility(View.GONE);
                                         mCancelCV.setVisibility(View.VISIBLE);
                                         mEditCv.setVisibility(View.VISIBLE);
@@ -215,7 +215,7 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.active_green));
             mStatusIcon.setBackgroundResource(R.drawable.active_dot);
             txStatus.setBackgroundResource(R.drawable.txn_active_bg);
-        } else if (status.equalsIgnoreCase(Utils.canceled)) {
+        } else if (status.equalsIgnoreCase(Utils.expired)) {
             mCancelCV.setVisibility(View.GONE);
             mEditCv.setVisibility(View.GONE);
             mResendInvitation.setVisibility(View.VISIBLE);
@@ -231,7 +231,15 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.xdark_gray));
             mStatusIcon.setBackgroundResource(R.drawable.inactive_bg);
             txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
-        } else {
+        } else if (status.equalsIgnoreCase(Utils.canceled)) {
+            mCancelCV.setVisibility(View.GONE);
+            mEditCv.setVisibility(View.GONE);
+            mResendInvitation.setVisibility(View.VISIBLE);
+            mRemoveCv.setVisibility(View.VISIBLE);
+            txStatus.setTextColor(getResources().getColor(R.color.error_red));
+            mStatusIcon.setBackgroundResource(R.drawable.resend_invitation_bg);
+            txStatus.setBackgroundResource(R.drawable.txn_resend_invitation_bg);
+        }else {
             mResendInvitation.setVisibility(View.GONE);
             mCancelCV.setVisibility(View.VISIBLE);
             mEditCv.setVisibility(View.VISIBLE);
