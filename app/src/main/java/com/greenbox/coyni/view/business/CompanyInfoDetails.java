@@ -134,7 +134,7 @@ public class CompanyInfoDetails extends BaseActivity {
                                     companyCountryCode = cir.getPhoneNumberDto().getCountryCode();
                                 }
                                 if (cir.getAddressLine1() != null && !cir.getAddressLine1().equals("")) {
-                                    mAddressTx.setText(cir.getAddressLine1() + cir.getAddressLine2());
+                                    mAddressTx.setText(cir.getAddressLine1());
                                 }
                                 if (cir.getAddressLine2() != null && !cir.getAddressLine2().equals("")) {
                                     mAddressTx.append(", " + cir.getAddressLine2());
@@ -145,11 +145,11 @@ public class CompanyInfoDetails extends BaseActivity {
                                 if (cir.getState() != null && !cir.getState().equals("")) {
                                     mAddressTx.append(", " + cir.getState());
                                 }
-                                if (cir.getCountry() != null && !cir.getCountry().equals("")) {
-                                    mAddressTx.append(", " + cir.getCountry());
-                                }
+//                                if (cir.getCountry() != null && !cir.getCountry().equals("")) {
+//                                    mAddressTx.append(", " + cir.getCountry());
+//                                }
                                 if (cir.getZipCode() != null && !cir.getZipCode().equals("")) {
-                                    mAddressTx.append(", " + cir.getZipCode());
+                                    mAddressTx.append(", " + cir.getZipCode() + ".");
                                 }
 
                                 companyId = cir.getId();
