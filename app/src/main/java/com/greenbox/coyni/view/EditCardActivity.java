@@ -221,6 +221,9 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 public void onClick(View view) {
                     onBackPressed();
                     finish();
+                    if (Utils.isKeyboardVisible){
+                        Utils.hideKeypad(EditCardActivity.this);
+                    }
                 }
             });
 

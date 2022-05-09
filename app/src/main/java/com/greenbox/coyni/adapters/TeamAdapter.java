@@ -86,9 +86,12 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                     holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.canceled)) {
+                    holder.txStatus.setText(Utils.canceled);
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
+                } else if (objData.getStatus().equalsIgnoreCase(Utils.expired)) {
                     holder.txStatus.setText(Utils.resendInvitation);
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
-                } else {
+                }else {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
                 }
@@ -124,8 +127,6 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             txStatus = itemView.findViewById(R.id.status);
             txImageName = itemView.findViewById(R.id.imageTextTV);
             itemView.setOnClickListener(this);
-
-
         }
 
         @Override

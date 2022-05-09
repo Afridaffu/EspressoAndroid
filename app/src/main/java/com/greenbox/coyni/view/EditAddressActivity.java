@@ -40,6 +40,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.StatesListAdapter;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.users.User;
 import com.greenbox.coyni.model.users.UserData;
@@ -52,7 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class EditAddressActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class EditAddressActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     TextInputEditText address1ET, address2ET, cityET, stateET, zipcodeET;
     TextInputEditText b_address1ET, b_cityET, b_stateET, b_zipcodeET;
@@ -78,10 +79,10 @@ public class EditAddressActivity extends AppCompatActivity implements OnKeyboard
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_edit_address);
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+//            Window window = getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
             initfields();
             if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                 try {

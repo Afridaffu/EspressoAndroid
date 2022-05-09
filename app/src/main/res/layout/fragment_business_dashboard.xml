@@ -1742,6 +1742,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
+                            android:layout_marginHorizontal="@dimen/_11sdp"
                             android:background="@color/white"
                             android:orientation="vertical">
 
@@ -1760,7 +1761,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_28sdp"
                                 android:fontFamily="@font/opensans_semibold"
-                                android:padding="@dimen/_5sdp"
                                 android:text="@string/cp_almost"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_14ssp" />
@@ -1770,8 +1770,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_15sdp"
                                 android:fontFamily="@font/opensans_regular"
-                                android:gravity="center"
-                                android:padding="@dimen/_5sdp"
+                                android:textAlignment="center"
                                 android:text="@string/complete_application_step_by_step"
                                 android:textColor="@color/primary_black"
                                 android:textSize="@dimen/_12ssp" />
@@ -1780,9 +1779,7 @@
                                 android:id="@+id/cv_app_get_started"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_42sdp"
-                                android:layout_marginLeft="@dimen/_12sdp"
                                 android:layout_marginTop="@dimen/_25sdp"
-                                android:layout_marginRight="@dimen/_12sdp"
                                 android:layout_marginBottom="@dimen/_10sdp"
                                 app:cardBackgroundColor="@color/primary_green"
                                 app:cardCornerRadius="@dimen/_21sdp">
