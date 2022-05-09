@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AccountLimitsActivity;
@@ -759,10 +760,13 @@ public class BusinessProfileActivity extends BaseActivity {
                 profileImage.setVisibility(View.VISIBLE);
 //                userProfileCL.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 profileText.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(profileImage);
+                profileImage.setImageResource(R.drawable.ic_profile_male_user);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.GONE);
                 profileText.setVisibility(View.VISIBLE);

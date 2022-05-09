@@ -72,7 +72,10 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                identityVerificationViewModel.getAddBusinessUser();
+                //identityVerificationViewModel.getAddBusinessUser();
+                startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
+                        .putExtra(Utils.ADD_BUSINESS, true)
+                        .putExtra(Utils.ADD_DBA, false));
             }
         });
 
@@ -193,7 +196,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
             identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                    if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
                                 .putExtra(Utils.ADD_BUSINESS, true)

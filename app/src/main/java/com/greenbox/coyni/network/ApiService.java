@@ -1,5 +1,6 @@
 package com.greenbox.coyni.network;
 
+import com.greenbox.coyni.model.AbstractResponse;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
@@ -95,6 +96,8 @@ import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
+import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -625,6 +628,8 @@ public interface ApiService {
     @POST("api/v2/transactions/admin/reserve/summary")
     Call<ReserveListResponse> getReserveListItems();
 
+    @POST("api/v2/profile/download-url")
+    Call<DownloadImageResponse> getDownloadUrl(@Body DownloadUrlRequest downloadUrlRequest);
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);

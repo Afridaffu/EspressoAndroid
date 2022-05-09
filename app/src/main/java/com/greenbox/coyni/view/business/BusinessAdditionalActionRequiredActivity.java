@@ -45,6 +45,7 @@ import com.greenbox.coyni.model.underwriting.InformationChangeData;
 import com.greenbox.coyni.model.underwriting.ProposalsData;
 import com.greenbox.coyni.model.underwriting.ProposalsPropertiesData;
 import com.greenbox.coyni.utils.CustomTypefaceSpan;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
@@ -350,12 +351,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
             if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
                 imgWebsite.setVisibility(View.VISIBLE);
-                int width = imgWebsite.getWidth();
-                Glide.with(this)
-                        .load(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1())
-                        .fitCenter()
-                        .override(imgWebsite.getWidth(), Target.SIZE_ORIGINAL)
-                        .into(imgWebsite);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite, 0);
+//                Glide.with(this)
+//                        .load(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1())
+//                        .fitCenter()
+//                        .override(imgWebsite.getWidth(), Target.SIZE_ORIGINAL)
+//                        .into(imgWebsite);
             } else {
                 imgWebsite.setVisibility(View.GONE);
             }

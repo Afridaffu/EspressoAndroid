@@ -14,6 +14,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 
@@ -91,17 +92,21 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             childItem.setText(detailInfo.getCompanyName());
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
-                Glide.with(context)
-                        .load(detailInfo.getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(profileImage);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
+                utility.addImage(detailInfo.getImage(), profileImage, R.drawable.ic_case);
+                profileImage.setImageResource(R.drawable.ic_case);
+//                Glide.with(context)
+//                        .load(detailInfo.getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
-                profileImageText.setVisibility(View.GONE);
-                Glide.with(context)
-                        .load(detailInfo.getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(profileImage);
+
+//                profileImageText.setVisibility(View.GONE);
+//                Glide.with(context)
+//                        .load(detailInfo.getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(profileImage);
             }
         } else if (detailInfo.getAccountType().equals(Utils.PERSONAL)) {
             if (detailInfo.getFullName() != null) {
