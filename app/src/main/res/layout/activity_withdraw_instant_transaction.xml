@@ -291,6 +291,7 @@
                               android:textSize="@dimen/_11ssp" />
                       </LinearLayout>
                       <LinearLayout
+                          android:id="@+id/account_balance_ll"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"
                           android:orientation="horizontal"
