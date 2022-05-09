@@ -1007,7 +1007,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     if (charSequence.length() > 0) {
-//                        timezoneTIL.setHint("Time Zone");
+                        timezoneTIL.setHint("Time Zone");
 //                        if (!timeZoneET.hasFocus())
                             Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
                         isTimeZone = true;

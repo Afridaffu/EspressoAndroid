@@ -257,18 +257,18 @@ public class BusinessDashboardActivity extends BaseActivity {
         int unSelectedTextColor = getColor(R.color.dark_grey);
         int selectedTextColor = getColor(R.color.primary_green);
         if (selectedTab == Tabs.ACCOUNT) {
-            mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
-            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_disabled);
+            mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : unSelectedTextColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_inactive);
         } else {
-            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
-            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
+//            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+//            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
         }
         if (selectedTab == Tabs.TRANSACTIONS) {
             mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
-            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_disabled);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_inactive);
         } else {
-            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
-            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
+//            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+//            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
         }
 //        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
     }
