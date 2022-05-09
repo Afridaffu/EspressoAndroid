@@ -164,13 +164,11 @@
                         android:id="@+id/etPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^*()_+={}[]|\;:,.?/"
                         android:fontFamily="@font/opensans_semibold"
-                        android:gravity="center_vertical"
                         android:imeOptions="actionDone"
                         android:importantForAutofill="no"
-                        android:inputType="textPassword|textNoSuggestions"
                         android:longClickable="false"
                         android:maxLength="12"
                         android:maxLines="1"
@@ -180,6 +178,7 @@
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/light_gray"
                         android:textCursorDrawable="@drawable/cursor_color"
+                        android:textIsSelectable="false"
                         android:textSize="@dimen/_10ssp" />
                 </com.google.android.material.textfield.TextInputLayout>
 

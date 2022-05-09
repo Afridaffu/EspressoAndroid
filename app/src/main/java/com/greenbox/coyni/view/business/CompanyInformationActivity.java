@@ -254,9 +254,15 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     Log.e("onPageScrolled", "onPageScrolled " + position);
 
                     if (position == 0) {
+                        companynameET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         findViewById(R.id.basicInfoSL).setVisibility(VISIBLE);
                         enableOrDisableNext();
                     } else if (position == 1) {
+                        companyaddressET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         enableOrDisableAddressNext();
                     } else if (position == 2) {
                         findViewById(R.id.basicInfoSL).setVisibility(GONE);
@@ -1418,7 +1424,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     chooseEntityDialog.dismiss();
 
                 ssnET.enableDropDown();
-                ssnET.requestETFocus();
+                ssnET.requestETFocus("SSN");
             });
 
             cCorpTV.setOnClickListener(view -> {
@@ -1427,7 +1433,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 else
                     chooseEntityDialog.dismiss();
                 ssnET.disableDropDown();
-                ssnET.requestETFocus();
+                ssnET.requestETFocus("EIN");
             });
 
             sCorpTV.setOnClickListener(view -> {
@@ -1436,7 +1442,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 else
                     chooseEntityDialog.dismiss();
                 ssnET.disableDropDown();
-                ssnET.requestETFocus();
+                ssnET.requestETFocus("EIN");
             });
 
             partnershipTV.setOnClickListener(view -> {
@@ -1445,7 +1451,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 else
                     chooseEntityDialog.dismiss();
                 ssnET.disableDropDown();
-                ssnET.requestETFocus();
+                ssnET.requestETFocus("EIN");
             });
 
             trustTV.setOnClickListener(view -> {
@@ -1454,7 +1460,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 else
                     chooseEntityDialog.dismiss();
                 ssnET.disableDropDown();
-                ssnET.requestETFocus();
+                ssnET.requestETFocus("EIN");
             });
 
             llcTV.setOnClickListener(view -> {
@@ -1463,7 +1469,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 else
                     chooseEntityDialog.dismiss();
                 ssnET.disableDropDown();
-                ssnET.requestETFocus();
+                ssnET.requestETFocus("EIN");
             });
 
             chooseEntityDialog.show();

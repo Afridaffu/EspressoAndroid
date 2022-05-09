@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -17,6 +18,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextWatcher;
@@ -51,6 +53,7 @@ import com.greenbox.coyni.model.identity_verification.PhotoIDEntityObject;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.model.underwriting.ProposalsPropertiesData;
+import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
@@ -100,6 +103,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     }
 
     private void initFields() {
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         ssnCloseLL = findViewById(R.id.ssnCloseLL);
         ssnCloseLL.setOnClickListener(view -> finish());
@@ -397,8 +402,6 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(AdditionalActionUploadActivity.this);
                         chooseFilePopup(AdditionalActionUploadActivity.this, selectedDocType);
 
                     }
@@ -412,12 +415,17 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
         SpannableString ss = new SpannableString("Upload " + documentName);
 
-        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
-        ss.setSpan(new RelativeSizeSpan(1f), 7, ss.length(), 0);
-        ss.setSpan(bss, 7, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(color)), 7, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        final StyleSpan bss = new StyleSpan(android.graphics.Typeface.BOLD);
+//        ss.setSpan(new RelativeSizeSpan(1f), 7, ss.length(), 0);
+//        ss.setSpan(bss, 7, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(new ForegroundColorSpan(getColor(color)), 7, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        sscuploadFileTV.setText(ss);
+        Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
+        SpannableStringBuilder SS = new SpannableStringBuilder(ss);
+        SS.setSpan(new CustomTypefaceSpan("", font), 7, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+        SS.setSpan(new ForegroundColorSpan(getColor(color)), 0, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        sscuploadFileTV.setText(SS);
         sscuploadFileTV.setMovementMethod(LinkMovementMethod.getInstance());
         sscuploadFileTV.setHighlightColor(Color.TRANSPARENT);
     }
