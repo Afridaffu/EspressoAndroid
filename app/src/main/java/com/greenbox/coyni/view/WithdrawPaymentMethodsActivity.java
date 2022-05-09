@@ -67,7 +67,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     List<PaymentsList> signetList;
-    Dialog payDialog, addPayDialog;
+    Dialog payDialog, addPayDialog, extBankDialog;
     String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
@@ -154,10 +154,6 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                     withdrawPaymentMethod("bank");
                     strScreen = "withdrawpay";
                 }
-//                strCurrent = "";
-//                ControlMethod("withdrawpay");
-//                withdrawPaymentMethod("bank");
-//                strScreen = "withdrawpay";
             } else if (strCurrent.equals("debit")) {
                 strCurrent = "";
                 ControlMethod("withdrawpay");
@@ -179,6 +175,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         try {
             if (addPayDialog != null) {
                 addPayDialog.dismiss();
+            }
+            if (extBankDialog != null) {
+                extBankDialog.dismiss();
             }
             if (strOnPauseScreen.equals("externalBank")) {
                 ControlMethod("externalBank");
@@ -952,9 +951,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         if (bankList != null && bankList.size() > 0) {
                             selectPayMethod(bankList);
                         } else {
-                            ControlMethod("withdrawpay");
-                            withdrawPaymentMethod("bank");
-                            strScreen = "withdrawpay";
+//                            ControlMethod("withdrawpay");
+//                            withdrawPaymentMethod("bank");
+//                            strScreen = "withdrawpay";
+                            showAddPayment("bank");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -973,9 +973,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         if (cardList != null && cardList.size() > 0) {
                             selectPayMethod(cardList);
                         } else {
-                            ControlMethod("withdrawpay");
-                            withdrawPaymentMethod("card");
-                            strScreen = "withdrawpay";
+//                            ControlMethod("withdrawpay");
+//                            withdrawPaymentMethod("card");
+//                            strScreen = "withdrawpay";
+                            showAddPayment("card");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1541,6 +1542,72 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
         }
     }
 
+    private void showExternalBank() {
+        try {
+            extBankDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
+            extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
+            extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvLearn = extBankDialog.findViewById(R.id.tvLearnMore);
+            CardView cNext = extBankDialog.findViewById(R.id.cvNext);
+            LinearLayout lyClose = extBankDialog.findViewById(R.id.lyExternalClose);
+
+            Window window = extBankDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+            extBankDialog.show();
+            tvLearn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
+                }
+            });
+            lyClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    extBankDialog.dismiss();
+                }
+            });
+            cNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                            isBank = true;
+                            objMyApplication.setResolveUrl(true);
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
+                            i.putExtra("signon", signOnData);
+                            startActivityForResult(i, 1);
+                        } else {
+                            Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void showAddPayment(String strType) {
         try {
             addPayDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
@@ -1559,13 +1626,28 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             LinearLayout layoutPayClick = addPayDialog.findViewById(R.id.lyPayClick);
             ImageView imgLogo = addPayDialog.findViewById(R.id.imgPayLogo);
             ImageView imgPaymnt = addPayDialog.findViewById(R.id.imgPayment);
-            if (strType.equals("signet")) {
+
+            if (strType.equals("bank")) {
+                tvHead.setText("Add Bank Account");
+                tvPayHead.setText("External Bank Account");
+                tvCnt.setText("(0/2)");
+                tvMessage.setText("Can be used for making coyni purchases or withdrawing funds.");
+                imgLogo.setImageResource(R.drawable.ic_add_bank);
+                imgPaymnt.setImageResource(R.drawable.ic_bank_account_active);
+            } else if (strType.equals("signet")) {
                 tvHead.setText("Add Signet Account");
                 tvPayHead.setText("Signet Account");
                 tvCnt.setVisibility(View.GONE);
                 tvMessage.setText("Can be used for making coyni purchases or withdrawing funds.");
                 imgLogo.setImageResource(R.drawable.ic_add_signet);
                 imgPaymnt.setImageResource(R.drawable.ic_signetactive);
+            } else {
+                tvHead.setText("Add Instant Pay");
+                tvPayHead.setText("Debit Card");
+                tvCnt.setText("(0/4)");
+                tvMessage.setText("Visa or Mastercard debit cards");
+                imgLogo.setImageResource(R.drawable.ic_notokenavail);
+                imgPaymnt.setImageResource(R.drawable.ic_credit_debit_card);
             }
             Window window = addPayDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -1591,8 +1673,18 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
-                        startActivityForResult(i, 4);
+                        if (strType.equals("bank")) {
+                            strCurrent = "externalBank";
+                            showExternalBank();
+                        } else if (strType.equals("signet")) {
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 4);
+                        } else {
+                            strCurrent = "debit";
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
+                            i.putExtra("card", "debit");
+                            startActivityForResult(i, 3);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

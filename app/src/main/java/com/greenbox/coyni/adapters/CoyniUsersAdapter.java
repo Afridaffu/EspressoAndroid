@@ -79,7 +79,7 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
 //                } else {
 //                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId());
 //                }
-            String strPhContact = "", strEcoSysName = "";
+            String strPhContact = "", strEcoSysName = "", strName = "";
             if (objData.getFullName() != null && !objData.getFullName().equals("")) {
                 if (objData.getFullName().length() > 24) {
                     strEcoSysName = objData.getFullName().substring(0, 24) + "...";
@@ -90,10 +90,16 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
                 strEcoSysName = "";
             }
             if (objMyApplication.getObjPhContacts().containsKey(objData.getPhoneNumber().replace("(1)", ""))) {
-                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
-                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
+                strName = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getFirstName() + " " + objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getLastName();
+//                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
+//                } else {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
+//                }
+                if (strName.length() > 24) {
+                    strPhContact = strName.substring(0, 24) + "...";
                 } else {
-                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
+                    strPhContact = strName;
                 }
             } else {
                 strPhContact = "";

@@ -893,7 +893,6 @@ public class Utils {
 //            e.printStackTrace();
 //        }
 //    }
-
     public static void setUpperHintColor(TextInputLayout til, int color) {
         try {
             int[][] states = new int[][]{
@@ -1869,7 +1868,11 @@ public class Utils {
                             strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[2].substring(0, 1).toUpperCase();
                         }
                     } else {
-                        strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                        if (strName.split(" ").length > 1) {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                        } else {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase();
+                        }
                     }
                 } else {
                     strNameHead = strName.split(" ")[0].toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();

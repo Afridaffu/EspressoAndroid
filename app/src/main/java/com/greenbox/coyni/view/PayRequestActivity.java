@@ -737,7 +737,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            }
 
-            String strPhContact = "", strEcoSysName = "", strPhone = "";
+            String strPhContact = "", strEcoSysName = "", strPhone = "", strName = "";
             if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
                 if (userDetails.getData().getFullName().length() > 20) {
                     strEcoSysName = userDetails.getData().getFullName().substring(0, 20) + "...";
@@ -753,10 +753,16 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 strPhone = "";
             }
             if (!strPhone.equals("") && objMyApplication.getObjPhContacts().containsKey(strPhone)) {
-                if (objMyApplication.getObjPhContacts().get(strPhone).getUserName().length() > 24) {
-                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName().substring(0, 24) + "...";
+                strName = objMyApplication.getObjPhContacts().get(strPhone).getFirstName() + " " + objMyApplication.getObjPhContacts().get(strPhone).getLastName();
+//                if (objMyApplication.getObjPhContacts().get(strPhone).getUserName().length() > 24) {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName().substring(0, 24) + "...";
+//                } else {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName();
+//                }
+                if (strName.length() > 24) {
+                    strPhContact = strName.substring(0, 24) + "...";
                 } else {
-                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName();
+                    strPhContact = strName;
                 }
             } else {
                 strPhContact = "";

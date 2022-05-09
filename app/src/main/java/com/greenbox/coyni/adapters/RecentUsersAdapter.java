@@ -58,7 +58,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
         try {
             RecentUsersData objData = listUsers.get(position);
 
-            String strPhContact = "", strEcoSysName = "";
+            String strPhContact = "", strEcoSysName = "", strName = "";
             if (objData.getUserName() != null && !objData.getUserName().equals("")) {
                 if (objData.getUserName().length() > 24) {
                     strEcoSysName = objData.getUserName().substring(0, 24) + "...";
@@ -69,10 +69,16 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                 strEcoSysName = "";
             }
             if (objMyApplication.getObjPhContacts().containsKey(objData.getPhoneNumber().replace("(1)", ""))) {
-                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
-                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
+                strName = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getFirstName() + " " + objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getLastName();
+//                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
+//                } else {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
+//                }
+                if (strName.length() > 24) {
+                    strPhContact = strName.substring(0, 24) + "...";
                 } else {
-                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
+                    strPhContact = strName;
                 }
             } else {
                 strPhContact = "";
