@@ -536,8 +536,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         }else {
             tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("", "CYN")));
         }
+
         if(actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")){
-            tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
+            tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket()));
         }else {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
         }
