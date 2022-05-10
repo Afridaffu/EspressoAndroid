@@ -767,14 +767,19 @@ public class BusinessProfileActivity extends BaseActivity {
 
     private void bindImage(String imageString) {
         try {
-            profileImage.setVisibility(View.GONE);
-            profileText.setVisibility(View.VISIBLE);
+            profileImage.setVisibility(View.VISIBLE);
+//            profileText.setVisibility(View.VISIBLE);
             String imageTextNew = "";
-            if(myApplication.getMyProfile().getData().getFirstName() != null && !myApplication.getMyProfile().getData().getFirstName().equals("")) {
-                imageTextNew = myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase();
-            }
-            if(myApplication.getMyProfile().getData().getLastName() != null && !myApplication.getMyProfile().getData().getLastName().equals("")) {
-                imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            if (myApplication.getMyProfile().getData() != null && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                if(myApplication.getMyProfile().getData().getFirstName() != null && !myApplication.getMyProfile().getData().getFirstName().equals("")) {
+                    imageTextNew = myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase();
+                }
+                if(myApplication.getMyProfile().getData().getLastName() != null && !myApplication.getMyProfile().getData().getLastName().equals("")) {
+                    imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                }
+            } else if (myApplication.getMyProfile().getData() != null && myApplication.getMyProfile().getData().getDbaName() != null
+                        && !myApplication.getMyProfile().getData().getDbaName().equals("")) {
+                imageTextNew = myApplication.getMyProfile().getData().getDbaName().substring(0,1).toUpperCase();
             }
 
             profileText.setText(imageTextNew);
@@ -785,11 +790,11 @@ public class BusinessProfileActivity extends BaseActivity {
                 profileText.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
+                        .placeholder(R.drawable.acct_profile)
                         .into(profileImage);
             } else {
-                profileImage.setVisibility(View.GONE);
-                profileText.setVisibility(View.VISIBLE);
+                profileImage.setVisibility(View.VISIBLE);
+//                profileText.setVisibility(View.VISIBLE);
             }
 
         } catch (Exception ex) {
