@@ -434,6 +434,7 @@ public class DBAInfoDetails extends BaseActivity {
 
                 }
             });
+
             dashboardViewModel.getProfileMutableLiveData().observe(this, new Observer<Profile>() {
                 @Override
                 public void onChanged(Profile profile) {
@@ -445,17 +446,6 @@ public class DBAInfoDetails extends BaseActivity {
                             e.printStackTrace();
                         }
 
-                    }
-                }
-            });
-
-            dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
-                @Override
-                public void onChanged(DownloadImageResponse downloadImageResponse) {
-                    if (downloadImageResponse != null) {
-                        if (downloadImageResponse.getStatus() != null && downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                            showImage(downloadImageResponse.getData().getDownloadUrl());
-                        }
                     }
                 }
             });
@@ -498,6 +488,7 @@ public class DBAInfoDetails extends BaseActivity {
         }
 
     }
+
 
     private void showImage(String imageUrl) {
 

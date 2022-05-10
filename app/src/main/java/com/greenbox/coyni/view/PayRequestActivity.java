@@ -794,7 +794,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
 
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(PayRequestActivity.this);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
                 userProfile.setImageResource(R.drawable.ic_profilelogo);
 

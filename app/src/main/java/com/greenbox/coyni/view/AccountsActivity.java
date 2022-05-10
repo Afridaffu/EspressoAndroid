@@ -66,7 +66,11 @@ public class AccountsActivity extends AppCompatActivity {
             if (imageString != null && !imageString.trim().equals("")) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userShortInfoTV.setVisibility(View.GONE);
+<<<<<<< HEAD
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+=======
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+>>>>>>> 0653b80f3314a262c574978a706773f8a0e80556
                 utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
                 imgProfile.setImageResource(R.drawable.ic_profile_male_user);
 

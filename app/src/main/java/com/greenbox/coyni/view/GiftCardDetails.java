@@ -347,6 +347,10 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 //                            DisplayImageUtility utility = DisplayImageUtility.getInstance(GiftCardDetails.this);
 //                            utility.addImage(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim(), brandIV,);
 
+                            Glide.with(GiftCardDetails.this)
+                                    .load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim())
+                                    .into(brandIV);
+
                             if (objBrand.getItems() != null && objBrand.getItems().size() > 0) {
                                 listAmounts = new ArrayList<>();
                                 for (int i = 0; i < objBrand.getItems().size(); i++) {

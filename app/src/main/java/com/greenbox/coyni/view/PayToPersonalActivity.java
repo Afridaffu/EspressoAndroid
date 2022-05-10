@@ -424,10 +424,9 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 userProfile.setVisibility(View.VISIBLE);
                 tvTitle.setVisibility(View.GONE);
 
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(ScanActivity.scanActivity);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
                 userProfile.setImageResource(R.drawable.ic_profilelogo);
-
 
 //                Glide.with(PayToPersonalActivity.this)
 //                        .load(userDetails.getData().getImage())

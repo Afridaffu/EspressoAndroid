@@ -1098,10 +1098,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                 imgProfile.setVisibility(View.VISIBLE);
                 userNameTV.setVisibility(View.GONE);
 
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
                 imgProfile.setImageResource(R.drawable.ic_profile_male_user);
-
 
 //                Glide.with(this)
 //                        .load(imageString)
@@ -1137,7 +1136,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                 saveProfileIV.setVisibility(View.VISIBLE);
                 saveProfileTitle.setVisibility(View.GONE);
 
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
                 saveProfileIV.setImageResource(R.drawable.ic_profile_male_user);
 

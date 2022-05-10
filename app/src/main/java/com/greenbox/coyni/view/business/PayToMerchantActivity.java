@@ -531,7 +531,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(PayToMerchantActivity.this);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
                 userProfile.setImageResource(R.drawable.ic_profilelogo);
 
