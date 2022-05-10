@@ -68,6 +68,7 @@ import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -791,15 +792,22 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 business_userProfileIV.setVisibility(View.VISIBLE);
                 business_imageTextTV.setVisibility(View.GONE);
 
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(userProfileIV);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageString, userProfileIV, R.drawable.ic_profile_male_user);
+                userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
 
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(business_userProfileIV);
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(userProfileIV);
+
+                utility.addImage(imageString, business_userProfileIV, R.drawable.ic_profile_male_user);
+                business_userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(business_userProfileIV);
             } else {
                 userProfileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);
