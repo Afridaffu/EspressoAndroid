@@ -283,6 +283,7 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
 
             BeneficialOwnersAdapter beneficialOwnersAdapter = new BeneficialOwnersAdapter(this, boResp);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+            beneficialOwnersRV.setNestedScrollingEnabled(false);
             beneficialOwnersRV.setLayoutManager(mLayoutManager);
             beneficialOwnersRV.setItemAnimator(new DefaultItemAnimator());
             beneficialOwnersRV.setAdapter(beneficialOwnersAdapter);

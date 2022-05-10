@@ -293,7 +293,7 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, IdVeAdditionalActionActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, AdditionalActionUploadActivity.class));
                 }
             });
 

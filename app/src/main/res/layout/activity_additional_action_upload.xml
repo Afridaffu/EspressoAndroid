@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/_21sdp"
-    android:layout_marginRight="@dimen/_21sdp"
     android:background="@color/white"
     android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_21sdp"
     tools:context=".view.IdVeAdditionalActionActivity">
+
     <LinearLayout
         android:id="@+id/ssnCloseLL"
         android:layout_width="wrap_content"
@@ -59,20 +59,17 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="Thank you for your interest in coyni. After reviewing your account. The coyni team requires you to upload the following documentation
 within 30 days to continue account verification."
-                android:textAlignment="center"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text=""
-                android:textAlignment="center"
+                android:text="@string/please_click_the_upload_button_below_to_proceed"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
-
 
             <LinearLayout
                 android:id="@+id/clickBottomSheet"
@@ -80,7 +77,8 @@ within 30 days to continue account verification."
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_19sdp"
                 android:background="@drawable/card_background"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
 
                 <ImageView
@@ -143,6 +141,15 @@ within 30 days to continue account verification."
 
                 </LinearLayout>
 
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_document_required"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
 
             </LinearLayout>
 

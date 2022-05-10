@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.model.APIError;
+import com.greenbox.coyni.model.actionRqrd.ActionRqrdResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.network.ApiService;
@@ -39,6 +40,7 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
     }
 
     private MutableLiveData<ActionRequiredResponse> ActionRequiredResponseMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ActionRqrdResponse> ActionRqrdCustRespMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<ActionRequiredSubmitResponse> ActionRequiredSubmitResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<APIError> apiErrorMutableLiveData = new MutableLiveData<>();
 
@@ -48,6 +50,10 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
 
     public MutableLiveData<ActionRequiredSubmitResponse> getActionRequiredSubmitResponseMutableLiveData() {
         return ActionRequiredSubmitResponseMutableLiveData;
+    }
+
+    public MutableLiveData<ActionRqrdResponse> getActionRqrdCustRespMutableLiveData() {
+        return ActionRqrdCustRespMutableLiveData;
     }
 
     public void getAdditionalActionRequiredData() {
@@ -167,4 +173,40 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
         });
     }
 
+
+    public void getActionRequiredCustData() {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<ActionRqrdResponse> mCall = apiService.getActionRqrdCust();
+
+            mCall.enqueue(new Callback<ActionRqrdResponse>() {
+
+                @Override
+                public void onResponse(Call<ActionRqrdResponse> call, Response<ActionRqrdResponse> response) {
+                    LogUtils.d(TAG, "" + response);
+                    if (response.isSuccessful()) {
+                        ActionRqrdResponse obj = response.body();
+                        ActionRqrdCustRespMutableLiveData.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ActionRqrdResponse>() {
+                        }.getType();
+                        ActionRqrdResponse errorResponse = gson.fromJson(response.errorBody().charStream(), type);
+                        if (errorResponse != null) {
+                            ActionRqrdCustRespMutableLiveData.setValue(errorResponse);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ActionRqrdResponse> call, Throwable t) {
+                    LogUtils.d(TAG, "UnderwritingUserActionRequired" + t.getMessage());
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    ActionRqrdCustRespMutableLiveData.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
