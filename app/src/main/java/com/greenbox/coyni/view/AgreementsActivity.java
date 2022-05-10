@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,8 +23,11 @@ import com.greenbox.coyni.adapters.PastAgreeListAdapter;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.Item;
+import com.greenbox.coyni.model.profile.DownloadImageData;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
@@ -49,7 +51,6 @@ public class AgreementsActivity extends BaseActivity {
     MyApplication objMyApplication;
     TextView pastTV, activeTV;
     int i = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ public class AgreementsActivity extends BaseActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         dashboardViewModel.meAgreementsById();
+        //dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
         initObserver();
         objMyApplication = (MyApplication) getApplicationContext();
 
@@ -104,7 +106,7 @@ public class AgreementsActivity extends BaseActivity {
                             int cPPVersion = 0, cTSVersion = 0, bMAVersion = 0;
                             if (agreements.getData().getItems() != null && agreements.getData().getItems().size() > 0) {
                                 for (int i = 0; i < agreements.getData().getItems().size(); i++) {
-                                    if (agreements.getData().getItems().get(i).getSignatureType() == 0) {
+                                    if (agreements.getData().getItems().get(i).getSignatureType() == Utils.mTOS) {
                                         if (cTSVersion == 0) {
                                             cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                         } else {
@@ -113,7 +115,7 @@ public class AgreementsActivity extends BaseActivity {
                                             }
                                         }
                                     }
-                                    if (agreements.getData().getItems().get(i).getSignatureType() == 1) {
+                                    if (agreements.getData().getItems().get(i).getSignatureType() == Utils.mPP) {
                                         if (cPPVersion == 0) {
                                             cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                         } else {
@@ -123,7 +125,7 @@ public class AgreementsActivity extends BaseActivity {
                                         }
                                     }
                                     if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                        if (agreements.getData().getItems().get(i).getSignatureType() == 5) {
+                                        if (agreements.getData().getItems().get(i).getSignatureType() == Utils.mAgmt) {
                                             if (bMAVersion == 0) {
                                                 bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
                                             } else {
@@ -146,13 +148,13 @@ public class AgreementsActivity extends BaseActivity {
                                     if (agreements.getData().getItems().get(i).getDocumentVersion().contains("v") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                         versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim()));
                                     }
-                                    if (cTSVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 0) {
+                                    if (cTSVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mTOS) {
                                         activeItems.add(agreements.getData().getItems().get(i));
                                         tos = agreements.getData().getItems().get(i);
-                                    } else if (cPPVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 1) {
+                                    } else if (cPPVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mPP) {
                                         activeItems.add(agreements.getData().getItems().get(i));
                                         privacyPolicy = agreements.getData().getItems().get(i);
-                                    } else if (bMAVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == 5) {
+                                    } else if (bMAVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mAgmt) {
                                         activeItems.add(agreements.getData().getItems().get(i));
                                         merchantAgre = agreements.getData().getItems().get(i);
                                     } else {
@@ -169,11 +171,10 @@ public class AgreementsActivity extends BaseActivity {
                                 }
                             }
 
-
                             adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, dashboardViewModel, listener);
                             recyclerView.setAdapter(adapter);
 
-                            if (activeItems != null && activeItems.size() > 0){
+                            if (activeItems != null && activeItems.size() > 0) {
                                 findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
                             }
 
@@ -202,67 +203,58 @@ public class AgreementsActivity extends BaseActivity {
             dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
                 @Override
                 public void onChanged(AgreementsPdf agreementsPdf) {
-                    if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
-//                        objMyApplication.setAgreementsPdf(agreementsPdf);
+                    if (agreementsPdf.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         adapter = new AgreeListAdapter(AgreementsActivity.this, agreements.getData().getItems(), dashboardViewModel, listener);
                         recyclerView.setAdapter(adapter);
                     }
                 }
             });
+
+            dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+                @Override
+                public void onChanged(DownloadImageResponse downloadImageResponse) {
+                    dismissDialog();
+                    if(downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
+                        if(downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            DownloadImageData data = downloadImageResponse.getData();
+                            if(data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                                launchDocumentUrl(data.getDownloadUrl());
+                            }
+                        } else {
+                            Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), AgreementsActivity.this, "", "");
+                        }
+                    }
+                }
+            });
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
+    private void launchDocumentUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse("https://docs.google.com/viewer?url=" +url);
+        intent.setDataAndType(uri,"text/html");
+        startActivity(intent);
+    }
+
     private void setOnClickListener() {
         try {
-
             listener = (view, position) -> {
-                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                    if (position == 1) {
-                        Intent inte = new Intent(Intent.ACTION_VIEW);
-                        inte.setDataAndType(
-                                Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-                                "application/pdf");
-                        startActivity(inte);
-
-                    }
-                    if (position == 0) {
-                        Intent inte = new Intent(Intent.ACTION_VIEW);
-                        inte.setDataAndType(
-                                Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-                                "application/pdf");
-                        startActivity(inte);
-
-                    }
-                    if (position == 2) {
-                        Intent inte = new Intent(Intent.ACTION_VIEW);
-                        inte.setDataAndType(
-                                Uri.parse(merchantagreeURL + "?" + System.currentTimeMillis()),
-                                "application/pdf");
-                        startActivity(inte);
-
-                    }
+                showProgressDialog();
+                switch (position) {
+                    case 0:
+                        dashboardViewModel.getDocumentUrl(1);
+                        break;
+                    case 1:
+                        dashboardViewModel.getDocumentUrl(0);
+                        break;
+                    case 2:
+                        dashboardViewModel.getDocumentUrl(5);
+                        break;
                 }
-                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                    if (position == 1) {
-                        Intent inte = new Intent(Intent.ACTION_VIEW);
-                        inte.setDataAndType(
-                                Uri.parse(tosURL + "?" + System.currentTimeMillis()),
-                                "application/pdf");
-                        startActivity(inte);
 
-                    }
-                    if (position == 0) {
-                        Intent inte = new Intent(Intent.ACTION_VIEW);
-                        inte.setDataAndType(
-                                Uri.parse(privacyURL + "?" + System.currentTimeMillis()),
-                                "application/pdf");
-                        startActivity(inte);
-
-                    }
-
-                }
             };
         } catch (Exception ex) {
             ex.printStackTrace();
