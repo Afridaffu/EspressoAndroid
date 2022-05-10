@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.LogUtils;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public final String TAG = getClass().getName();
     private ProgressDialog dialog;

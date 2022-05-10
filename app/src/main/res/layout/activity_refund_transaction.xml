@@ -70,8 +70,8 @@
                     android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="@dimen/_280sdp"
-                        android:layout_height="@dimen/_350sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_380sdp"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginRight="@dimen/_10sdp"
@@ -94,14 +94,14 @@
                                 <LinearLayout
                                     android:id="@+id/lyAmount"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/_75sdp"
+                                    android:layout_height="@dimen/_65sdp"
                                     android:layout_marginLeft="@dimen/_5sdp"
                                     android:orientation="horizontal">
 
                                     <EditText
                                         android:id="@+id/refundAmountET"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="@dimen/_72sdp"
+                                        android:layout_height="@dimen/_78sdp"
                                         android:background="@color/white"
                                         android:fontFamily="@font/opensans_bold"
                                         android:gravity="center_vertical|right"
@@ -263,7 +263,7 @@
                                     android:layout_height="@dimen/_54sdp"
                                     android:layout_marginLeft="@dimen/_15sdp"
                                     android:layout_marginRight="@dimen/_15sdp"
-                                    android:layout_marginBottom="@dimen/_109sdp"
+                                    android:layout_marginBottom="@dimen/_150sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:hint="Reason for Refund (Maximun 120 characters)"
                                     android:padding="@dimen/_6sdp"

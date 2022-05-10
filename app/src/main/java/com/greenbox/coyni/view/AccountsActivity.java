@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
@@ -65,10 +66,15 @@ public class AccountsActivity extends AppCompatActivity {
             if (imageString != null && !imageString.trim().equals("")) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userShortInfoTV.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(imgProfile);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                imgProfile.setImageResource(R.drawable.ic_profile_male_user);
+
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(imgProfile);
             } else {
                 imgProfile.setVisibility(View.GONE);
                 userShortInfoTV.setVisibility(View.VISIBLE);
