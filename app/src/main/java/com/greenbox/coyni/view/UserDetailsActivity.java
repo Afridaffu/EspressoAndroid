@@ -90,6 +90,7 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.internal.Util;
 
 public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
@@ -543,24 +544,24 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
     private void setProfilesAdapter() {
 
-        boolean showDBA=false;
+        boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData,myApplicationObj.getLoginUserId(),showDBA);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, myApplicationObj.getLoginUserId(), showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onGroupClicked(int position, String accountType, Integer id,String fullname) {
-                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id +"fullname"+ fullname);
+            public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
+                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id + "fullname" + fullname);
                 childid = id;
                 SelectedDBAName = fullname;
             }
 
             @Override
             public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
-                LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId()+"detailInfo"+ detailInfo.getDbaName());
+                LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId() + "detailInfo" + detailInfo.getDbaName());
                 childid = detailInfo.getId();
-                SelectedDBAName=detailInfo.getDbaName();
+                SelectedDBAName = detailInfo.getDbaName();
             }
 
             @Override
@@ -651,7 +652,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         }
                     }
                     dashboardViewModel.getProfiles();
-                    if(preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
+                    if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
                         accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
                     }
                 } catch (Exception e) {
@@ -725,11 +726,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), UserDetailsActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
-                        LogUtils.d(TAG,"userPreference"+userPreference);
+                        LogUtils.d(TAG, "userPreference" + userPreference);
                         if (SelectedDBAName.equals(""))
                             business_defaultaccountET.setText("");
                         else
-                        business_defaultaccountET.setText(SelectedDBAName);
+                            business_defaultaccountET.setText(SelectedDBAName);
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -758,11 +759,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             public void onChanged(ProfilesResponse profilesResponse) {
                 if (profilesResponse != null) {
                     filterList = profilesResponse.getData();
-                    LogUtils.v(TAG,"getProfileRespMutableLiveData"+profilesResponse.getData());
-                    LogUtils.v(TAG,"accountTypeId"+accountTypeId);
+                    LogUtils.v(TAG, "getProfileRespMutableLiveData" + profilesResponse.getData());
+                    LogUtils.v(TAG, "accountTypeId" + accountTypeId);
                     globalProfileResp = profilesResponse;
                     for (ProfilesResponse.Profiles c : filterList) {
-                        if(c.getId()== accountTypeId){
+                        if (c.getId() == accountTypeId) {
                             SelectedDBAName = c.getDbaName();
                             business_defaultaccountET.setText(c.getDbaName());
                         }
@@ -792,18 +793,19 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 business_userProfileIV.setVisibility(View.VISIBLE);
                 business_imageTextTV.setVisibility(View.GONE);
 
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                utility.addImage(imageString, userProfileIV, R.drawable.ic_profile_male_user);
-                userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
-
+                if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageString, userProfileIV, R.drawable.ic_profile_male_user);
+                    userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+                } else {
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageString, business_userProfileIV, R.drawable.ic_profile_male_user);
+                    business_userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+                }
 //                Glide.with(this)
 //                        .load(imageString)
 //                        .placeholder(R.drawable.ic_profile_male_user)
 //                        .into(userProfileIV);
-
-                utility.addImage(imageString, business_userProfileIV, R.drawable.ic_profile_male_user);
-                business_userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
-
 //                Glide.with(this)
 //                        .load(imageString)
 //                        .placeholder(R.drawable.ic_profile_male_user)
@@ -997,11 +999,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "", "");
-                        displayAlertNew("Requires Access to Camera.", UserDetailsActivity.this, "");
+                    displayAlertNew("Requires Access to Camera.", UserDetailsActivity.this, "");
 
                 } else if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        displayAlertNew("Requires Access to Your Storage.", UserDetailsActivity.this, "");
+                    displayAlertNew("Requires Access to Your Storage.", UserDetailsActivity.this, "");
 
                 } else {
 //                    chooseImage(this);

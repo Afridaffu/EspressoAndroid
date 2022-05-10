@@ -344,8 +344,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                             brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "), Html.FROM_HTML_MODE_COMPACT).toString().trim()));
 //                            Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
 
-//                            DisplayImageUtility utility = DisplayImageUtility.getInstance(GiftCardDetails.this);
-//                            utility.addImage(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim(), brandIV,);
+                            DisplayImageUtility utility = DisplayImageUtility.getInstance(GiftCardDetails.this);
+                            utility.addImage(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim(), brandIV,0);
 
                             Glide.with(GiftCardDetails.this)
                                     .load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim())
