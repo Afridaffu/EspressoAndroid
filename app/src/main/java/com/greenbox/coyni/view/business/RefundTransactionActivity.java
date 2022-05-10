@@ -65,9 +65,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     public static RefundTransactionActivity refundTransactionActivity;
     private TransactionData transactionData;
     private String refundamount = "", etvalue = "", refundreason = "", gbxid = "", recipientAddress = "", strUserName = "", walletbalance = "", hamount = "";
-    private int  wallettype;
+    private int wallettype;
     private boolean isRefundProcessCalled = false, insufficientTokenBalance = false, insufficientMerchantBalance = false;
-    private double value, value1, Value, etValue,processingFee;
+    private double value, value1, Value, etValue, processingFee;
     private int enteramout, textamount;
     private static final String ACTION = "RefundPreviewDialog";
     private static final String ACTIONN = "insuffintmerchantbalancedialog ";
@@ -170,7 +170,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 displayComments();
                 addNoteET.requestFocus();
                 if (!Utils.isKeyboardVisible)
-                Utils.shwForcedKeypad(RefundTransactionActivity.this);
+                    Utils.shwForcedKeypad(RefundTransactionActivity.this);
             }
         });
 
@@ -298,7 +298,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
                             refundInfo(refundDataResponce);
                         } else {
-                            if (!refundDataResponce.getError().getErrorDescription().equals("")) {
+                            if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equalsIgnoreCase("")) {
                                 Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
                             } else {
                                 Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
@@ -318,13 +318,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 dismissDialog();
                 try {
                     if (refundDataResponce != null) {
-                            if (refundDataResponce.getData() != null) {
-                                if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
-                                    Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
-                                    i.putExtra(Utils.amount, refundET.getText().toString());
-                                    i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
-                                    startActivity(i);
-                                } else {
+                        if (refundDataResponce.getData() != null) {
+                            if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
+                                Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
+                                i.putExtra(Utils.amount, refundET.getText().toString());
+                                i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
+                                startActivity(i);
+                            } else {
                                 Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
                                 startActivity(i);
                             }
@@ -359,8 +359,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             if (refundDataResponce.getData().getWalletType() != null) {
                 wallettype = refundDataResponce.getData().getWalletType();
             }
-            insufficientMerchantBalance = refundDataResponce.getData().getInsufficientMerchantBalance();
-            insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
+            if (refundDataResponce.getData().getInsufficientMerchantBalance() != null) {
+                insufficientMerchantBalance = refundDataResponce.getData().getInsufficientMerchantBalance();
+            }
+            if (refundDataResponce.getData().getInsufficientTokenBalance() != null) {
+                insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
+            }
             if (!insufficientMerchantBalance && !insufficientTokenBalance) {
                 refundPreview();
                 enableRefund();
@@ -573,7 +577,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 if (editable.length() > 0 && !editable.toString().equals(".")
                         && !editable.toString().equals(".00")) {
                     refundET.setHint("");
-                      convertUSDValue();
+                    convertUSDValue();
                     if (editable.length() == 5 || editable.length() == 6) {
                         refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -699,12 +703,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
 
 
-
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     cvvDialog.dismiss();
-                    Utils.hideKeypad(RefundTransactionActivity.this);
+                    if (!Utils.isKeyboardVisible)
+                        Utils.hideSoftKeyboard(RefundTransactionActivity.this);
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -714,7 +718,8 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         etremarksTV.setText(addNoteET.getText().toString().trim());
                         cvvDialog.dismiss();
                         enableRefund();
-                        Utils.hideKeypad(RefundTransactionActivity.this);
+                        if (!Utils.isKeyboardVisible)
+                            Utils.hideSoftKeyboard(RefundTransactionActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -777,7 +782,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialogInterface) {
-                    Utils.hideKeypad(RefundTransactionActivity.this);
+                    Utils.hideSoftKeyboard(RefundTransactionActivity.this);
                 }
             });
 
