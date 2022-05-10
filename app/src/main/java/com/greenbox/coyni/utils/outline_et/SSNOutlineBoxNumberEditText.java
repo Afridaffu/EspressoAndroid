@@ -67,6 +67,9 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         viewSSNIV = findViewById(R.id.viewSSNIV);
         weightRL = findViewById(R.id.weightRL);
 
+        ssnET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        einET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
         ssnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -75,7 +78,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                     if (b) {
                         if (FROM.equals("CompanyInfo")) {
                             comp.ssnErrorLL.setVisibility(GONE);
-                            comp.basicInfoSL.scrollTo(comp.basicNextCV.getLeft(), comp.basicNextCV.getBottom());
+//                            comp.basicInfoSL.scrollTo(comp.basicNextCV.getLeft(), comp.basicNextCV.getBottom());
                         }
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
@@ -136,7 +139,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                     if (b) {
                         if (FROM.equals("CompanyInfo")) {
                             comp.ssnErrorLL.setVisibility(GONE);
-                            comp.basicInfoSL.scrollTo(comp.basicNextCV.getLeft(), comp.basicNextCV.getBottom());
+//                            comp.basicInfoSL.scrollTo(comp.basicNextCV.getLeft(), comp.basicNextCV.getBottom());
                         }
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                     } else {
@@ -225,7 +228,17 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                 TextView ssnTV = customView.findViewById(R.id.ssnTV);
                 TextView einTV = customView.findViewById(R.id.einTV);
                 TextView typeTV = customView.findViewById(R.id.typeTV);
+                LinearLayout einLL = customView.findViewById(R.id.einLL);
+                LinearLayout ssnLL = customView.findViewById(R.id.ssnLL);
                 typeTV.setText(ssnType.getText().toString());
+
+                if (ssnType.getText().toString().equals("SSN")) {
+                    ssnLL.setVisibility(GONE);
+                    einLL.setVisibility(VISIBLE);
+                } else {
+                    ssnLL.setVisibility(VISIBLE);
+                    einLL.setVisibility(GONE);
+                }
 
                 ssnTV.setOnClickListener(new OnClickListener() {
                     @Override
@@ -349,9 +362,13 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         return ssnET.getId();
     }
 
-    public void requestETFocus() {
-        ssnET.requestFocus();
-        Utils.shwForcedKeypad(mContext);
+    public void requestETFocus(String type) {
+        if (type.equals("SSN"))
+            ssnET.requestFocus();
+        else
+            einET.requestFocus();
+        if (!Utils.isKeyboardVisible)
+            Utils.shwForcedKeypad(mContext);
     }
 
     public void setSSNTypeText(String text) {
@@ -409,4 +426,15 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
             return einET.getUnMasked();
         }
     }
+
+    public void disableDropDown() {
+        ssnDDLL.setClickable(false);
+        dropdownIV.setVisibility(GONE);
+    }
+
+    public void enableDropDown() {
+        ssnDDLL.setClickable(true);
+        dropdownIV.setVisibility(VISIBLE);
+    }
+
 }
