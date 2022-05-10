@@ -373,7 +373,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                    Utils.hideKeypad(CompanyInformationActivity.this);
                 chooseBusinessEntityPopup(CompanyInformationActivity.this, businessET);
 
             });
@@ -384,7 +384,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(this);
+                    Utils.hideKeypad(CompanyInformationActivity.this);
                 chooseBusinessEntityPopup(CompanyInformationActivity.this, businessET);
 
             });
