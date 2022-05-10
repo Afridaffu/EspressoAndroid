@@ -72,7 +72,10 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                identityVerificationViewModel.getAddBusinessUser();
+//                identityVerificationViewModel.getAddBusinessUser();
+                startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
+                                .putExtra(Utils.ADD_BUSINESS, true)
+                                .putExtra(Utils.ADD_DBA, false));
             }
         });
 
@@ -190,20 +193,20 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         }
 
         try {
-            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
-                @Override
-                public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                        startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra(Utils.ADD_BUSINESS, true)
-                                .putExtra(Utils.ADD_DBA, false));
-
-                    } else {
-                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
-                    }
-                }
-            });
+//            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
+//                @Override
+//                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+//                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+//                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+//                        startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
+//                                .putExtra(Utils.ADD_BUSINESS, true)
+//                                .putExtra(Utils.ADD_DBA, false));
+//
+//                    } else {
+//                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+//                    }
+//                }
+//            });
         } catch (Exception e) {
             e.printStackTrace();
         }

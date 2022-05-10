@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -62,6 +63,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private boolean review = false, isBOStart = false;
     private ImageView bagIV;
     private int dbaID = 0;
+    private boolean isNewCompany = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 startActivity(new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class));
             });
             initFields();
+
+            if (!addBusiness) {
+                showProgressDialog();
+                businessIdentityVerificationViewModel.getBusinessTracker();
+            }
             initObservers();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -147,7 +154,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             objMyApplication = (MyApplication) getApplicationContext();
-            businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
+            //businessTrackerResponse = objMyApplication.getBusinessTrackerResponse();
             caStartTV = findViewById(R.id.caStartTV);
             dbaStartTV = findViewById(R.id.dbaStartTV);
             boStartTV = findViewById(R.id.boStartTV);
@@ -194,9 +201,9 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             aggrementsInProgressIV = findViewById(R.id.aggrementsInProgressIV);
             mReviewCv = findViewById(R.id.reviewCv);
 
-            if (businessTrackerResponse != null) {
-                reloadTrackerDashboard(businessTrackerResponse);
-            }
+//            if (businessTrackerResponse != null) {
+//                reloadTrackerDashboard(businessTrackerResponse);
+//            }
 
             businessTrackerCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -220,7 +227,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     mLastClickTime = SystemClock.elapsedRealtime();
                     Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, CompanyInformationActivity.class);
                     intent.putExtra("FROM", "TRACKER");
-                    startActivity(intent);
+                    if (addBusiness) {
+                        intent.putExtra("isNew", isNewCompany);
+                    }
+                    startActivityForResult(intent, 1234);
+
                 }
             });
 
@@ -604,8 +615,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             super.onResume();
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
-            showProgressDialog();
-            businessIdentityVerificationViewModel.getBusinessTracker();
+//            if (!addBusiness) {
+//                showProgressDialog();
+//                businessIdentityVerificationViewModel.getBusinessTracker();
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -766,5 +779,14 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == 1234) {
+            isNewCompany = false;
+            showProgressDialog();
+            businessIdentityVerificationViewModel.getBusinessTracker();
+        }
+    }
 }
