@@ -14,8 +14,10 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.PayRequestActivity;
 import com.greenbox.coyni.view.ScanActivity;
 
 public class PayToMerchantWithAmountDialog extends BaseDialog {
@@ -170,10 +172,16 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
-                Glide.with(ScanActivity.scanActivity)
-                        .load(userDetails.getData().getImage())
-                        .placeholder(R.drawable.ic_profilelogo)
-                        .into(userProfile);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(ScanActivity.scanActivity);
+                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+                userProfile.setImageResource(R.drawable.ic_profilelogo);
+
+
+//                Glide.with(ScanActivity.scanActivity)
+//                        .load(userDetails.getData().getImage())
+//                        .placeholder(R.drawable.ic_profilelogo)
+//                        .into(userProfile);
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);

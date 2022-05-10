@@ -46,6 +46,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -530,10 +531,14 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
-                Glide.with(PayToMerchantActivity.this)
-                        .load(userDetails.getData().getImage())
-                        .placeholder(R.drawable.ic_profilelogo)
-                        .into(userProfile);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(PayToMerchantActivity.this);
+                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+                userProfile.setImageResource(R.drawable.ic_profilelogo);
+
+//                Glide.with(PayToMerchantActivity.this)
+//                        .load(userDetails.getData().getImage())
+//                        .placeholder(R.drawable.ic_profilelogo)
+//                        .into(userProfile);
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);

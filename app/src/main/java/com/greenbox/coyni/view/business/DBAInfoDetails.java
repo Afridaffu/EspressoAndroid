@@ -68,7 +68,7 @@ public class DBAInfoDetails extends BaseActivity {
     ProgressDialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
-    String emailID, phone_Number, bType;
+    String emailID, phone_Number, bType=" ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -500,10 +500,15 @@ public class DBAInfoDetails extends BaseActivity {
     }
 
     private void showImage(String imageUrl) {
-        Glide.with(DBAInfoDetails.this)
-                .load(imageUrl)
-                .placeholder(R.drawable.ic_profile_male_user)
-                .into(dba_userProfileIV);
+
+        DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+        utility.addImage(imageUrl,dba_userProfileIV, R.drawable.ic_profile_male_user);
+        dba_userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+
+//        Glide.with(DBAInfoDetails.this)
+//                .load(imageUrl)
+//                .placeholder(R.drawable.ic_profile_male_user)
+//                .into(dba_userProfileIV);
     }
 
     private void bindImage(String imageString, DBAInfoResp dbaInfoResp) {
