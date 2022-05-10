@@ -4,15 +4,20 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -33,6 +38,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.RefundInsufficeintTokenDialog;
 import com.greenbox.coyni.dialogs.RefundInsufficientMerchnatDialog;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
 import com.greenbox.coyni.model.transaction.RefundReferenceRequest;
 import com.greenbox.coyni.model.transaction.TransactionData;
@@ -44,7 +50,7 @@ import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-public class RefundTransactionActivity extends BaseActivity implements TextWatcher {
+public class RefundTransactionActivity extends BaseActivity implements TextWatcher,OnKeyboardVisibilityListener {
     MyApplication objMyApplication;
     private ImageView refundBackIV;
     private TextView etremarksTV, fullamounttv, halfamounttv;
@@ -65,9 +71,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     public static RefundTransactionActivity refundTransactionActivity;
     private TransactionData transactionData;
     private String refundamount = "", etvalue = "", refundreason = "", gbxid = "", recipientAddress = "", strUserName = "", walletbalance = "", hamount = "";
-    private int  wallettype;
+    private int wallettype;
     private boolean isRefundProcessCalled = false, insufficientTokenBalance = false, insufficientMerchantBalance = false;
-    private double value, value1, Value, etValue,processingFee;
+    private double value, value1, Value, etValue, processingFee;
     private int enteramout, textamount;
     private static final String ACTION = "RefundPreviewDialog";
     private static final String ACTIONN = "insuffintmerchantbalancedialog ";
@@ -97,7 +103,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     }
 
     private void initialization() {
-
+        setKeyboardVisibilityListener(this);
         etremarksTV = findViewById(R.id.eTremarks);
         refundBackIV = findViewById(R.id.RefundbackIV);
         refundET = findViewById(R.id.refundAmountET);
@@ -110,9 +116,11 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         halfamounttv = findViewById(R.id.halfamountTV);
         refundTransactionActivity = this;
 
+
         objMyApplication = (MyApplication) getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         refundET.requestFocus();
+        refundET.setSelection(refundET.getText().length());
         refundET.setShowSoftInputOnFocus(false);
         refundET.setSelected(false);
         refundET.setOnClickListener(new View.OnClickListener() {
@@ -124,7 +132,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         refundET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Utils.hideSoftKeypad(RefundTransactionActivity.this, v);
+                Utils.hideKeypad(RefundTransactionActivity.this);
                 if (!hasFocus) {
                     if (!refundET.getText().toString().equals("")) {
                         InputFilter[] FilterArray = new InputFilter[1];
@@ -171,6 +179,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 addNoteET.requestFocus();
                 if (!Utils.isKeyboardVisible)
                 Utils.shwForcedKeypad(RefundTransactionActivity.this);
+
             }
         });
 
@@ -298,7 +307,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         if (refundDataResponce.getStatus().equalsIgnoreCase(Utils.Success)) {
                             refundInfo(refundDataResponce);
                         } else {
-                            if (!refundDataResponce.getError().getErrorDescription().equals("")) {
+                            if (refundDataResponce.getError().getErrorDescription() != null && !refundDataResponce.getError().getErrorDescription().equalsIgnoreCase("")) {
                                 Utils.displayAlert(refundDataResponce.getError().getErrorDescription(), RefundTransactionActivity.this, "", refundDataResponce.getError().getFieldErrors().get(0));
                             } else {
                                 Utils.displayAlert(refundDataResponce.getError().getFieldErrors().get(0), RefundTransactionActivity.this, "", "");
@@ -318,13 +327,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 dismissDialog();
                 try {
                     if (refundDataResponce != null) {
-                            if (refundDataResponce.getData() != null) {
-                                if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
-                                    Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
-                                    i.putExtra(Utils.amount, refundET.getText().toString());
-                                    i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
-                                    startActivity(i);
-                                } else {
+                        if (refundDataResponce.getData() != null) {
+                            if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
+                                Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
+                                i.putExtra(Utils.amount, refundET.getText().toString());
+                                i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
+                                startActivity(i);
+                            } else {
                                 Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionFailed.class);
                                 startActivity(i);
                             }
@@ -359,8 +368,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             if (refundDataResponce.getData().getWalletType() != null) {
                 wallettype = refundDataResponce.getData().getWalletType();
             }
-            insufficientMerchantBalance = refundDataResponce.getData().getInsufficientMerchantBalance();
-            insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
+            if (refundDataResponce.getData().getInsufficientMerchantBalance() != null) {
+                insufficientMerchantBalance = refundDataResponce.getData().getInsufficientMerchantBalance();
+            }
+            if (refundDataResponce.getData().getInsufficientTokenBalance() != null) {
+                insufficientTokenBalance = refundDataResponce.getData().getInsufficientTokenBalance();
+            }
             if (!insufficientMerchantBalance && !insufficientTokenBalance) {
                 refundPreview();
                 enableRefund();
@@ -573,7 +586,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 if (editable.length() > 0 && !editable.toString().equals(".")
                         && !editable.toString().equals(".00")) {
                     refundET.setHint("");
-                      convertUSDValue();
+                    convertUSDValue();
                     if (editable.length() == 5 || editable.length() == 6) {
                         refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42);
                         tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -598,14 +611,14 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 } else if (editable.length() == 0) {
                     refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65);
                     refundET.setHint("0.00");
-                    tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    tvcynTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                     refundcurrencyTV.setVisibility(View.VISIBLE);
                     cKey.disableButton();
                     cKey.clearData();
                 } else {
                     refundET.setText("");
                     LogUtils.d(TAG, "lengthhh zeroo");
-                    refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 70);
+                    refundET.setTextSize(TypedValue.COMPLEX_UNIT_SP, 65);
                     cKey.disableButton();
                     cKey.clearData();
 //                    clearAmountCards();
@@ -699,12 +712,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
 
 
-
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     cvvDialog.dismiss();
-                    Utils.hideKeypad(RefundTransactionActivity.this);
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(RefundTransactionActivity.this);
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -714,6 +727,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         etremarksTV.setText(addNoteET.getText().toString().trim());
                         cvvDialog.dismiss();
                         enableRefund();
+                        if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(RefundTransactionActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -772,7 +786,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             window.setAttributes(wlp);
 
             cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
+            cvvDialog.setCanceledOnTouchOutside(true);
             cvvDialog.show();
             cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
@@ -799,5 +813,35 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
+    }
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
     }
 }
