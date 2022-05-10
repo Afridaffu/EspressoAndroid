@@ -26,6 +26,7 @@ import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -174,19 +175,24 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             });
         }
 
-//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-//                && myApplication.getMyProfile().getData().getImage() != null) {
-//            userShortInfoTV.setVisibility(View.GONE);
-//            imgProfile.setVisibility(View.VISIBLE);
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                && myApplication.getMyProfile().getData().getImage() != null) {
+            userShortInfoTV.setVisibility(View.GONE);
+            imgProfile.setVisibility(View.VISIBLE);
+
+            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+            utility.addImage(myApplication.getMyProfile().getData().getImage(), imgProfile, R.drawable.ic_profile_male_user);
+            imgProfile.setImageResource(R.drawable.ic_profile_male_user);
+
 //            Glide.with(this)
 //                    .load(myApplication.getMyProfile().getData().getImage())
 //                    .placeholder(R.drawable.ic_profile_male_user)
 //                    .into(imgProfile);
-//        } else {
-//            userShortInfoTV.setVisibility(View.VISIBLE);
-//            imgProfile.setVisibility(View.GONE);
-//            userShortInfoTV.setText(iconText);
-//        }
+        } else {
+            userShortInfoTV.setVisibility(View.VISIBLE);
+            imgProfile.setVisibility(View.GONE);
+            userShortInfoTV.setText(iconText);
+        }
 
 //        setUserBalance(myApplication.getWalletResponseData());
         setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
