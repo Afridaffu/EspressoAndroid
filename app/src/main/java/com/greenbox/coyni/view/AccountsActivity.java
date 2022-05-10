@@ -52,7 +52,7 @@ public class AccountsActivity extends AppCompatActivity {
         try {
 
 //            setUserBalance(objMyApplication.getWalletResponseData());
-            setUserBalance(objMyApplication.getCurrentUserData().getTokenWalletResponse());
+            setUserBalance(objMyApplication.getCurrentUserData().getMerchantWalletResponse());
 
             userNameTV.setText(objMyApplication.getStrUserName());
             imgProfile.setVisibility(View.GONE);

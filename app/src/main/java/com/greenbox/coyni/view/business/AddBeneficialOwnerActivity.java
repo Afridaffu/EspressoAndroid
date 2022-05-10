@@ -1391,6 +1391,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_green));
                     address1ErrorLL.setVisibility(GONE);
+
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
                 }
             }
         });

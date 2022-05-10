@@ -29,6 +29,7 @@ import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.greenbox.coyni.model.actionRqrd.ActionRqrdResponse;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.BanksResponseModel;
@@ -578,6 +579,9 @@ public interface ApiService {
 
     @GET("api/v2/underwriting/user/action-required")
     Call<ActionRequiredResponse> postAdditionActionRequired();
+
+    @GET("api/v2/underwriting/user/action-required")
+    Call<ActionRqrdResponse> getActionRqrdCust();
 
     @Multipart
     @POST("api/v2/underwriting/user/business/action-required")

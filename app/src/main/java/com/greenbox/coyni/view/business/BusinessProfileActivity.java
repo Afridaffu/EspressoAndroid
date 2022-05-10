@@ -761,7 +761,7 @@ public class BusinessProfileActivity extends BaseActivity {
         myApplication.setStrRetrEmail("");
         myApplication.clearUserData();
         dropAllTables();
-        Intent i = new Intent(BusinessProfileActivity.this, LoginActivity.class);
+        Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
