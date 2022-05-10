@@ -36,9 +36,10 @@ public class DisplayImageUtility {
     }
 
     public void addImage(String key, ImageView imageView, Integer resId) {
-        imagePlaceHolderMap.put(key, resId);
+
         if (!android.util.Patterns.WEB_URL.matcher(key).matches()) {
             imageIdMap.put(key, imageView);
+            imagePlaceHolderMap.put(key, resId);
             DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
             downloadUrlRequest.setKey(key);
             getDownloadUrl(downloadUrlRequest);
@@ -54,9 +55,10 @@ public class DisplayImageUtility {
             return;
         }
         if (response.getData() != null && response.getData().getKey() != null) {
-            ImageView iv = imageIdMap.get(response.getData().getKey());
+            int placeholder = imagePlaceHolderMap.remove(response.getData().getKey());
+            ImageView iv = imageIdMap.remove(response.getData().getKey());
             if (iv != null) {
-                setImageWithUrl(response.getData().getDownloadUrl(), iv, imagePlaceHolderMap.get(response.getData().getKey()));
+                setImageWithUrl(response.getData().getDownloadUrl(), iv, placeholder);
             }
         }
     }

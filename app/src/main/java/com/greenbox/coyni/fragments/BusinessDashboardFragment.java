@@ -1113,25 +1113,26 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showReserveRelease(ReserveListData listData) {
         showReserveReleaseBalance();
-        List<ReserveListItems> items = listData.getResponseList();
-        if (items != null && items.size() > 0) {
+        mTvReserveList.setVisibility(View.VISIBLE);
+        disable_reserve_list.setVisibility(View.GONE);
+
+        if(listData.getNextReserveReleaseAmount() != null) {
             nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
+        }
+
+        if(listData.getNextReserveReleaseDate() != null) {
             String date = listData.getNextReserveReleaseDate();
             if (date.contains(".")) {
-                String res = date.substring(0, date.lastIndexOf("."));
-                nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
-            } else {
-                Log.d("date format", date);
+                date = date.substring(0, date.lastIndexOf("."));
             }
-        } else {
-            nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
-        }
-        if (items != null && items.size() > 0) {
-            mTvReserveList.setVisibility(View.VISIBLE);
-            disable_reserve_list.setVisibility(View.GONE);
-            lastReleaseDateTV.setVisibility(View.VISIBLE);
             nextReleaseNATV.setVisibility(View.GONE);
             nextReleaseDateTV.setVisibility(View.VISIBLE);
+            nextReleaseDateTV.setText(myApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+        }
+        List<ReserveListItems> items = listData.getResponseList();
+        if (items != null && items.size() > 0) {
+
+            lastReleaseDateTV.setVisibility(View.VISIBLE);
             lastReleaseNATV.setVisibility(View.GONE);
             releaseView.setVisibility(View.GONE);
             releaseNoTransaction.setVisibility(View.GONE);
@@ -1178,8 +1179,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
 
         } else {
-            releaseNoTransaction.setVisibility(View.VISIBLE);
-            mTvReserveList.setVisibility(View.GONE);
+//            releaseNoTransaction.setVisibility(View.VISIBLE);
+//            mTvReserveList.setVisibility(View.GONE);
             LogUtils.v(TAG, "Reserve release summary is empty");
         }
     }
