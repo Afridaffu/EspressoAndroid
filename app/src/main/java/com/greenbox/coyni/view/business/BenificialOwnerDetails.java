@@ -77,11 +77,11 @@ public class BenificialOwnerDetails extends BaseActivity {
         if (beneficialOwner.getState() != null && !beneficialOwner.getState().equals("")) {
             mMailingAddress.append(", " + beneficialOwner.getState());
         }
-        if (beneficialOwner.getCountry() != null && !beneficialOwner.getCountry().equals("")) {
-            mMailingAddress.append(", " + beneficialOwner.getCountry());
-        }
+//        if (beneficialOwner.getCountry() != null && !beneficialOwner.getCountry().equals("")) {
+//            mMailingAddress.append(", " + beneficialOwner.getCountry());
+//        }
         if (beneficialOwner.getZipCode() != null && !beneficialOwner.getZipCode().equals("")) {
-            mMailingAddress.append(", " + beneficialOwner.getZipCode());
+            mMailingAddress.append(", " + beneficialOwner.getZipCode() + ".");
         }
         if (beneficialOwner.getSsn() != null && !beneficialOwner.getSsn().equals("")) {
             String converted = beneficialOwner.getSsn().replaceAll("\\w(?=\\w{2})", "•");

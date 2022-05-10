@@ -49,13 +49,16 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
                 if (items.get(pos).getSignatureType() == 1 && items.get(pos).getDocumentVersion()!=null) {
-                    holder.agreementTV.setText(context.getResources().getString(R.string.privay_policy) +" " +items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                    holder.agreementTV.setText(context.getResources().getString(R.string.privay_policy) +" ");
+                    holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
 
                 } else if (items.get(pos).getSignatureType() == 0 && items.get(pos).getDocumentVersion()!=null) {
-                    holder.agreementTV.setText(context.getResources().getString(R.string.tos) +" "+items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                    holder.agreementTV.setText(context.getResources().getString(R.string.tos) +" ");
+                    holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
                 }
                 else if(items.get(pos).getSignatureType() == 5 && items.get(pos).getDocumentVersion()!=null) {
-                    holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) +" "+items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
+                    holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) +" ");
+                    holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
                 }
     }
     @Override
@@ -72,11 +75,12 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView agreementTV;
+        TextView agreementTV,listDocsTV;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             agreementTV = itemView.findViewById(R.id.listagreementsTV);
+            listDocsTV = itemView.findViewById(R.id.listDocsTV);
             itemView.setOnClickListener(this);
         }
 

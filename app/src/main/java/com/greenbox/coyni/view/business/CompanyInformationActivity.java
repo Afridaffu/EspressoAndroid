@@ -141,8 +141,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     protected void onResume() {
         super.onResume();
         companynameET.requestFocus();
-////        companyaddressET.requestFocus();
-        Utils.shwForcedKeypad(CompanyInformationActivity.this);
+//        companyaddressET.requestFocus();
+//        Utils.shwForcedKeypad(CompanyInformationActivity.this);
     }
 
     public void initFields() {
@@ -153,7 +153,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             from = getIntent().getStringExtra("FROM");
-            showProgressDialog();
+//            showProgressDialog();
             businessIdentityVerificationViewModel.getCompanyInfo();
 
             basicInfoSL = findViewById(R.id.basicInfoSL);

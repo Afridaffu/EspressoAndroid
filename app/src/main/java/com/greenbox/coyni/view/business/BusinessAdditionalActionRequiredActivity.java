@@ -22,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -96,7 +97,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_additional_action_required);
-
         businessAdditionalActionRequired = this;
         initFields();
         initObserver();
@@ -378,9 +378,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     enableOrDisableNext();
                 }
             });
-
         }
-
     }
 
     private void informationRevision(ActionRequiredResponse actionRequiredResponse) {
@@ -415,7 +413,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             }
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
                             companyNameProposed.setText(propertiesData.getProposedValue());
-                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + ".\"");
+                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
                             proposalsMap.put(companyname, propertiesData);
                             fileUpload.put(companyname.trim().hashCode(), null);
 
@@ -450,6 +448,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
+
                                     Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                                 }
                             });
@@ -537,8 +536,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         }else {
             tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("", "CYN")));
         }
+
         if(actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")){
-            tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
+            tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket()));
         }else {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
         }
