@@ -29,6 +29,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
@@ -245,13 +246,18 @@ public class MerchantsAgrementActivity extends BaseActivity {
                         if (agreements.getData().getItems().get(i).getSignatureType() == 5
                                 && agreements.getData().getItems().get(i).getSignature() != null
                                 && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
-                            Glide.with(MerchantsAgrementActivity.this)
-                                    .load(agreements.getData().getItems().get(i).getSignature())
-                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                    .skipMemoryCache(true)
-                                    .override(Target.SIZE_ORIGINAL)
-                                    .placeholder(R.drawable.ic_sign)
-                                    .into(mIVSignature);
+
+                            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                            utility.addImage(agreements.getData().getItems().get(i).getSignature(), mIVSignature, R.drawable.ic_sign);
+                            mIVSignature.setImageResource(R.drawable.ic_sign);
+
+//                            Glide.with(MerchantsAgrementActivity.this)
+//                                    .load(agreements.getData().getItems().get(i).getSignature())
+//                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                                    .skipMemoryCache(true)
+//                                    .override(Target.SIZE_ORIGINAL)
+//                                    .placeholder(R.drawable.ic_sign)
+//                                    .into(mIVSignature);
                             doneCV.setVisibility(View.VISIBLE);
                         } else {
                             doneCV.setVisibility(View.GONE);

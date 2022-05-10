@@ -24,6 +24,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.bumptech.glide.Glide;
@@ -1096,10 +1097,14 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
             if (imageString != null && !imageString.trim().equals("")) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userNameTV.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(imgProfile);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                imgProfile.setImageResource(R.drawable.ic_profile_male_user);
+
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(imgProfile);
             } else {
                 imgProfile.setVisibility(View.GONE);
                 userNameTV.setVisibility(View.VISIBLE);
@@ -1129,10 +1134,15 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
             if (imageString != null && !imageString.trim().equals("")) {
                 saveProfileIV.setVisibility(View.VISIBLE);
                 saveProfileTitle.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(saveProfileIV);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+                saveProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(saveProfileIV);
             } else {
                 saveProfileIV.setVisibility(View.GONE);
                 saveProfileTitle.setVisibility(View.VISIBLE);
