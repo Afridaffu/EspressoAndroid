@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.PaymentMethodsAdapter;
+import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
@@ -37,10 +38,12 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PaymentMethodsActivity extends AppCompatActivity {
@@ -62,6 +65,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     CardView cvTryAgain, cvDone;
+    Dialog extBankDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +178,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
+            if (extBankDialog != null) {
+                extBankDialog.dismiss();
+            }
             if (!isBankSuccess) {
                 if (strCurrent.equals("firstError")) {
                     displayError();
@@ -385,6 +392,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             tvLearnMore = findViewById(R.id.tvLearnMore);
             tvMessage = findViewById(R.id.tvMessage);
             imgLogo = findViewById(R.id.imgLogo);
+            tvLearnMore.setVisibility(View.VISIBLE);
             if (strScreen != null && strScreen.equals("dashboard")) {
                 imgLogo.setVisibility(View.GONE);
                 tvExtBHead.setText("Bank Account");
@@ -481,7 +489,6 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
                             Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
-//                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity1.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
                         } else {
@@ -875,15 +882,16 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             Intent i = new Intent(PaymentMethodsActivity.this, EditCardActivity.class);
                             startActivity(i);
                         } else {
-                            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                                isBank = true;
-                                objMyApplication.setResolveUrl(true);
-                                Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
-                                i.putExtra("signon", signOnData);
-                                startActivityForResult(i, 1);
-                            } else {
-                                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "", "");
-                            }
+//                            if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+//                                isBank = true;
+//                                objMyApplication.setResolveUrl(true);
+//                                Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
+//                                i.putExtra("signon", signOnData);
+//                                startActivityForResult(i, 1);
+//                            } else {
+//                                Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "", "");
+//                            }
+                            showExternalBank();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -904,6 +912,67 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void showExternalBank() {
+        try {
+            extBankDialog = new Dialog(PaymentMethodsActivity.this);
+            extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
+            extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvBankHead = extBankDialog.findViewById(R.id.tvBankHead);
+            TextView tvEBMessage = extBankDialog.findViewById(R.id.tvEBMessage);
+            TextView tvLearn = extBankDialog.findViewById(R.id.tvLearnMore);
+            CardView cNext = extBankDialog.findViewById(R.id.cvNext);
+            LinearLayout lyClose = extBankDialog.findViewById(R.id.lyExternalClose);
+            tvBankHead.setText("Link External Bank Account");
+            tvEBMessage.setText("We will now redirect you to our trusted partner Fiserv. Who will help you verify your external bank account with us. Are you ready to begin the process?");
+            tvLearn.setVisibility(View.GONE);
+
+            Window window = extBankDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+            extBankDialog.show();
+            lyClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    extBankDialog.dismiss();
+                }
+            });
+            cNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                            isBank = true;
+                            objMyApplication.setResolveUrl(true);
+                            Intent i = new Intent(PaymentMethodsActivity.this, WebViewActivity.class);
+                            i.putExtra("signon", signOnData);
+                            startActivityForResult(i, 1);
+                        } else {
+                            Utils.displayAlert(strSignOn, PaymentMethodsActivity.this, "", "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

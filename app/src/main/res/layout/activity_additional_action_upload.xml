@@ -9,29 +9,30 @@
     android:paddingHorizontal="@dimen/_21sdp"
     tools:context=".view.IdVeAdditionalActionActivity">
 
-    <LinearLayout
-        android:id="@+id/ssnCloseLL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_45sdp">
-
-        <ImageView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ssnCloseLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/_15sdp"
-            android:src="@drawable/ic_close" />
+            android:layout_marginTop="@dimen/_45sdp"
+            android:layout_alignParentTop="true">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:src="@drawable/ic_close" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/idveriErrWithSSNLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/actRqrdSubmitCV"
+            android:layout_below="@+id/ssnCloseLL"
             android:orientation="vertical">
 
 
@@ -62,14 +63,6 @@ within 30 days to continue account verification."
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:fontFamily="@font/opensans_regular"
-                android:text="@string/please_click_the_upload_button_below_to_proceed"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_11ssp" />
 
             <LinearLayout
                 android:id="@+id/clickBottomSheet"
@@ -144,37 +137,55 @@ within 30 days to continue account verification."
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_document_required"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:scrollbars="none">
 
-            </LinearLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/idveridoneBtn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_43sdp"
-                android:layout_marginLeft="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_70sdp"
-                android:layout_marginRight="@dimen/_21sdp"
-                android:layout_marginBottom="@dimen/_100sdp"
-                app:cardBackgroundColor="@color/inactive_color"
-                app:cardCornerRadius="@dimen/_21sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/ll_document_required"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="@string/done"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_marginTop="@dimen/_19sdp"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:paddingBottom="@dimen/_30sdp">
+
+                    <TextView
+                        android:id="@+id/adminMsgTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regular"
+                        android:text="@string/please_click_the_upload_button_below_to_proceed"
+                        android:textColor="@color/primary_black"
+                        android:textSize="@dimen/_11ssp"
+                        android:layout_marginBottom="@dimen/_10sdp"/>
+
+                </LinearLayout>
+            </ScrollView>
 
         </LinearLayout>
-    </ScrollView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/actRqrdSubmitCV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_43sdp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_47sdp"
+            app:cardBackgroundColor="@color/inactive_color"
+            app:cardCornerRadius="@dimen/_21sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/opensans_bold"
+                android:text="@string/submit"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
 </LinearLayout>

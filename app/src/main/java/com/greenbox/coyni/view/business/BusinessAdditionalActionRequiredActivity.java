@@ -110,6 +110,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             super.onBackPressed();
         }
     }
+
     private void initFields() {
 
         additionReservedLL = findViewById(R.id.lladditionReserve);
@@ -214,7 +215,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         RequestBody.create(informationJSON.toString().getBytes(), MediaType.parse("application/json")));
 
         for (int i = 0; i < documentsFIle.size(); i++) {
-            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName() + ".jpg", RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
+            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName(), RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
         }
 
         MultipartBody requestBody = buildernew.build();
@@ -392,7 +393,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             InformationChangeData changeData = informationChangeData.get(0);
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
-                    List<ProposalsPropertiesData> proposalsPropertiesData = changeData.getProposals().get(count).getProperties();
+                    ProposalsData data = changeData.getProposals().get(count);
+                    List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
                         proposalsMap = new HashMap<>();
@@ -416,6 +418,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
                             companyNameProposed.setText(propertiesData.getProposedValue());
                             tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
+
+
+//                            if(propertiesData.getAdminMessage().contains("\"" + "\"")) {
+//                                tvMessage.setText(propertiesData.getAdminMessage());
+//                            }else{
+//                                tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
+//                            }
                             proposalsMap.put(companyname, propertiesData);
                             fileUpload.put(companyname.trim().hashCode(), null);
 
@@ -450,7 +459,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
-
                                     Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                                 }
                             });
@@ -493,20 +501,19 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvRemarks.setVisibility(View.VISIBLE);
                     llAccept.setVisibility(View.GONE);
                     tvDeclinedMsg.setVisibility(View.VISIBLE);
-                    tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to : ");
+                    tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
                     llDecline.setVisibility(View.GONE);
                     proposalsMap.get(tv.getText().toString()).setUserAccepted(false);
                     proposalsMap.get(tv.getText().toString()).setUserMessage(comm);
                     if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
                         fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
                     }
-                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                    Utils.hideSoftKeyboard(BusinessAdditionalActionRequiredActivity.this);
                     enableOrDisableNext();
                 }
             }
         });
         dialog.show();
-
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
@@ -792,15 +799,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             LogUtils.d(TAG, "fileUpload" + fileUpload);
             if (fileUpload.containsValue(null)) {
                 isSubmitEnabled = false;
-                submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 submitCV.setClickable(false);
                 submitCV.setEnabled(false);
-
+                submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             } else {
                 isSubmitEnabled = true;
-                submitCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                 submitCV.setClickable(true);
                 submitCV.setEnabled(true);
+                submitCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             }
 
         } catch (Exception e) {

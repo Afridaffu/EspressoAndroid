@@ -67,7 +67,9 @@ public class AccountTypeActivity extends AppCompatActivity {
         }
         mLastClickTime = SystemClock.elapsedRealtime();
         objMyApplication.setAccountType(accountType);
-        startActivity(new Intent(AccountTypeActivity.this, CreateAccountActivity.class));
+        Intent createIntent = new Intent(AccountTypeActivity.this, CreateAccountActivity.class);
+        createIntent.putExtra(Utils.ACCOUNT_TYPE,accountType);
+        startActivity(createIntent);
         finish();
         overridePendingTransition(0, 0);
     }

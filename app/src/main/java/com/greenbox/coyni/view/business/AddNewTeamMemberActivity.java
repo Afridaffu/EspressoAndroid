@@ -139,13 +139,13 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isNextEnabled) {
-                    Utils.hideKeypad(AddNewTeamMemberActivity.this);
+                    Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                     showProgressDialog();
-                    Utils.hideKeypad(AddNewTeamMemberActivity.this);
                     teamInfoAddAPICall(prepareRequest());
                 }
             }

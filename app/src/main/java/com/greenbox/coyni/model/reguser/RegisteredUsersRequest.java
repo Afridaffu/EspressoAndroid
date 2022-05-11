@@ -3,7 +3,9 @@ package com.greenbox.coyni.model.reguser;
 public class RegisteredUsersRequest {
     private String countryCode;
     private String phoneNumber;
-    private String userName;
+//    private String userName;
+    private String firstName;
+    private String lastName;
     private String imagePath;
 
     public String getCountryCode() {
@@ -22,12 +24,29 @@ public class RegisteredUsersRequest {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getUserName() {
-        return userName;
+//    public String getUserName() {
+//        return userName;
+//    }
+//
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
+
+
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getImagePath() {

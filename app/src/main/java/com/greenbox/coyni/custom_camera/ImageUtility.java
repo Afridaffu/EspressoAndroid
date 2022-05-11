@@ -16,6 +16,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.greenbox.coyni.view.AdditionalActionUploadActivity;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
 import com.greenbox.coyni.view.business.AdditionalInformationRequiredActivity;
@@ -111,24 +112,22 @@ public class ImageUtility {
 //                CompanyInformationActivity.companyInformationActivity.removeAndUploadAdditionalDoc(7);
             } else if (from.equals("DBA_INFO")) {
                 DBAInfoAcivity.dbaFile = mediaFile;
-              // DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
+                // DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
             } else if (from.equals("ADD_BO")) {
                 AddBeneficialOwnerActivity.identityFile = mediaFile;
 //                DBAInfoAcivity.dbaInfoAcivity.removeAndUploadAdditionalDoc(8);
-            } else if(from.equals("BAARA")) {
+            } else if (from.equals("BAARA")) {
                 BusinessAdditionalActionRequiredActivity.businessAdditionalActionRequired.saveFileFromCamera(mediaFile);
-            }
-            else if(from.equals("AAR-SecFile")) {
+            } else if (from.equals("AAR-SecFile")) {
                 BusinessAdditionalActionRequiredActivity.additional2fFle = mediaFile;
-            }
-            else if(from.equals("AAR-FBL")) {
+            } else if (from.equals("AAR-FBL")) {
                 BusinessAdditionalActionRequiredActivity.businessLicenceFile = mediaFile;
-            }
-            else if(from.equals("AAR-securityCard")){
+            } else if (from.equals("AAR-securityCard")) {
                 AdditionalInformationRequiredActivity.securityFile = mediaFile;
-            }
-            else if(from.equals("AAR-actionReq2File")){
+            } else if (from.equals("AAR-actionReq2File")) {
                 AdditionalInformationRequiredActivity.actionReq2File = mediaFile;
+            } else if (from.equals("ActRqrdDocs")) {
+                AdditionalActionUploadActivity.additionalActionUploadActivity.saveFileFromCamera(mediaFile);
             }
 
         } catch (Exception e) {

@@ -417,6 +417,11 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 enableOrDisableSave();
 
+                if (address1ET.getText().toString().contains("  ")) {
+                    address1ET.setText(address1ET.getText().toString().replace("  ", " "));
+                    address1ET.setSelection(address1ET.getText().length());
+                }
+
             }
 
             @Override
@@ -459,6 +464,11 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
 //                    isAddress2 = false;
 //                }
                 enableOrDisableSave();
+
+                if (address2ET.getText().toString().contains("  ")){
+                    address2ET.setText(address2ET.getText().toString().replace("  "," "));
+                    address2ET.setSelection(address2ET.getText().length());
+                }
             }
 
             @Override
@@ -499,6 +509,11 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                     isCity = false;
                 }
                 enableOrDisableSave();
+
+                if (cityET.getText().toString().contains("  ")){
+                    cityET.setText(cityET.getText().toString().replace("  "," "));
+                    cityET.setSelection(cityET.getText().length());
+                }
             }
 
             @Override
