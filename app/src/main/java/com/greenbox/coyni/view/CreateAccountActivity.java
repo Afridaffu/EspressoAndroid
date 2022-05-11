@@ -63,6 +63,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Matcher;
@@ -80,6 +81,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     public String passwordString = "";
     public CardView nextCV;
     Long mLastClickTime = 0L;
+    DashboardViewModel dashboardViewModel;
 
     private LinearLayout stregnthViewLL;
     private View stregnthOne, stregnthTwo, stregnthThree;
@@ -127,6 +129,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             window.setStatusBarColor(Color.TRANSPARENT);
             initFields();
             initObservers();
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1159,6 +1163,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                dashboardViewModel.getDocumentUrl(Utils.cTOS);
 
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                 browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
@@ -1187,6 +1192,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
+                dashboardViewModel.getDocumentUrl(Utils.cPP);
 
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW);
                 browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");

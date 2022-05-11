@@ -140,6 +140,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         setContentView(R.layout.activity_review_application);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setKeyboardVisibilityListener(ReviewApplicationActivity.this);
+        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
         objMyApplication = (MyApplication) getApplicationContext();
 
@@ -689,7 +690,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             llPrivacy.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-//                                        dashboardViewModel.agreementsByType("0");
+                                    dashboardViewModel.getDocumentUrl(Utils.mPP);
                                     showProgressDialog();
                                     dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
                                 }
@@ -697,7 +698,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             llTerms.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-//                                        dashboardViewModel.agreementsByType("1");
+                                    dashboardViewModel.getDocumentUrl(Utils.mTOS);
                                     showProgressDialog();
                                     dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
 
@@ -706,9 +707,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             llMerchant.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    dashboardViewModel.getDocumentUrl(Utils.mAgmt);
                                     showProgressDialog();
                                     dashboardViewModel.agreementsByType(String.valueOf(Utils.mAgmt));
-
                                 }
                             });
                             if (agreements != null && agreements1.getItems().size() > 0) {

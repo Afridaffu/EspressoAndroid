@@ -392,7 +392,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             InformationChangeData changeData = informationChangeData.get(0);
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
-                    List<ProposalsPropertiesData> proposalsPropertiesData = changeData.getProposals().get(count).getProperties();
+                    ProposalsData data = changeData.getProposals().get(count);
+                    List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
                         proposalsMap = new HashMap<>();
@@ -416,6 +417,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             companyNameOriginal.setText(propertiesData.getOriginalValue());
                             companyNameProposed.setText(propertiesData.getProposedValue());
                             tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
+
+
+//                            if(propertiesData.getAdminMessage().contains("\"" + "\"")) {
+//                                tvMessage.setText(propertiesData.getAdminMessage());
+//                            }else{
+//                                tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
+//                            }
                             proposalsMap.put(companyname, propertiesData);
                             fileUpload.put(companyname.trim().hashCode(), null);
 
