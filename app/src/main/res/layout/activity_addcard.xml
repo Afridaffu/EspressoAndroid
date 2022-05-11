@@ -255,7 +255,6 @@
                                     android:layout_below="@+id/etlCard"
                                     android:layout_marginLeft="@dimen/_5sdp"
                                     android:layout_marginTop="@dimen/_5sdp"
-                                    android:gravity="center"
                                     android:orientation="horizontal"
                                     android:visibility="gone">
 
@@ -324,7 +323,6 @@
                                     android:layout_below="@+id/etlCard"
                                     android:layout_marginLeft="@dimen/_5sdp"
                                     android:layout_marginTop="@dimen/_5sdp"
-                                    android:gravity="center"
                                     android:orientation="horizontal"
                                     android:visibility="gone">
 

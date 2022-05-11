@@ -50,6 +50,7 @@ import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -543,10 +544,15 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (imageString != null && !imageString.trim().equals("")) {
                     saveProfileIV.setVisibility(View.VISIBLE);
                     saveProfileTitle.setVisibility(View.GONE);
-                    Glide.with(this)
-                            .load(imageString)
-                            .placeholder(R.drawable.ic_profile_male_user)
-                            .into(saveProfileIV);
+
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+                    utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+                    saveProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+
+//                    Glide.with(this)
+//                            .load(imageString)
+//                            .placeholder(R.drawable.ic_profile_male_user)
+//                            .into(saveProfileIV);
                 } else {
                     saveProfileIV.setVisibility(View.GONE);
                     saveProfileTitle.setVisibility(View.VISIBLE);
@@ -575,10 +581,14 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (imageString != null && !imageString.trim().equals("")) {
                     imgProfile.setVisibility(View.VISIBLE);
                     userInfo.setVisibility(View.GONE);
-                    Glide.with(this)
-                            .load(imageString)
-                            .placeholder(R.drawable.ic_profile_male_user)
-                            .into(imgProfile);
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+                    utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                    imgProfile.setImageResource(R.drawable.ic_profile_male_user);
+
+//                    Glide.with(this)
+//                            .load(imageString)
+//                            .placeholder(R.drawable.ic_profile_male_user)
+//                            .into(imgProfile);
                 } else {
                     imgProfile.setVisibility(View.GONE);
                     userInfo.setVisibility(View.VISIBLE);
@@ -1151,10 +1161,14 @@ public class CustomerProfileActivity extends BaseActivity {
                 profileIV.setVisibility(View.VISIBLE);
 //                userProfile.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 imageTextTV.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(profileIV);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+                utility.addImage(imageString, profileIV, R.drawable.ic_profile_male_user);
+                profileIV.setImageResource(R.drawable.ic_profile_male_user);
+
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(profileIV);
             } else {
                 profileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);

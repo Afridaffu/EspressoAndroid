@@ -11,18 +11,20 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.APIError;
-//import com.greenbox.coyni.model.Agreements;
-import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
-import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
-import com.greenbox.coyni.model.preferences.Preferences;
-import com.greenbox.coyni.model.preferences.ProfilesResponse;
-import com.greenbox.coyni.model.preferences.UserPreference;
-import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
-import com.greenbox.coyni.model.profile.ImageResponse;
+import com.greenbox.coyni.model.AbstractResponse;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
+import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.preferences.Preferences;
+import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
+import com.greenbox.coyni.model.profile.DownloadUrlRequest;
+import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
 import com.greenbox.coyni.model.transaction.RefundReferenceRequest;
@@ -32,6 +34,7 @@ import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
@@ -62,6 +65,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<TransactionDetails> transactionDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RefundDataResponce> refundDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RefundDataResponce> refundProcessMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<DownloadImageResponse> downloadUrlResponse = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -73,6 +77,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<TransactionList> getTransactionListMutableLiveData() {
         return transactionListMutableLiveData;
+    }
+
+    public MutableLiveData<DownloadImageResponse> getDownloadUrlResponse() {
+        return downloadUrlResponse;
     }
 
     public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
@@ -139,11 +147,48 @@ public class DashboardViewModel extends AndroidViewModel {
     public MutableLiveData<CancelBuyTokenResponse> getCancelBuyTokenResponseMutableLiveData() {
         return cancelBuyTokenResponseMutableLiveData;
     }
-    public  MutableLiveData<RefundDataResponce> getRefundDetailsMutableLiveData(){
+
+    public MutableLiveData<RefundDataResponce> getRefundDetailsMutableLiveData() {
         return refundDetailsMutableLiveData;
     }
-    public  MutableLiveData<RefundDataResponce> getRefundProcessMutableLiveData(){
+
+    public MutableLiveData<RefundDataResponce> getRefundProcessMutableLiveData() {
         return refundProcessMutableLiveData;
+    }
+
+    public void getDownloadUrl(DownloadUrlRequest downloadUrlRequest) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DownloadImageResponse> mCall = apiService.getDownloadUrl(downloadUrlRequest);
+            mCall.enqueue(new Callback<DownloadImageResponse>() {
+                @Override
+                public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DownloadImageResponse obj = response.body();
+                            downloadUrlResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DownloadImageResponse>() {
+                            }.getType();
+                            DownloadImageResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            downloadUrlResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        downloadUrlResponse.setValue(null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
+                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
+                    downloadUrlResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void meProfile() {
@@ -217,8 +262,37 @@ public class DashboardViewModel extends AndroidViewModel {
             ex.printStackTrace();
 
         }
+    }
 
+    public void getDocumentUrl(int docId) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<DownloadImageResponse> mcall = apiService.getAgreementUrl(docId+"");
+        mcall.enqueue(new Callback<DownloadImageResponse>() {
+            @Override
+            public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        DownloadImageResponse obj = response.body();
+                        downloadUrlResponse.setValue(obj);
+                    } else {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<DownloadImageResponse>() {
+                        }.getType();
+                        DownloadImageResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                        downloadUrlResponse.setValue(errorResponse);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    downloadUrlResponse.setValue(null);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
+                LogUtils.v("getDocumentUrl failure", ""+ t.getLocalizedMessage());
+                downloadUrlResponse.setValue(null);
+            }
+        });
     }
 
     public void agreementsByType(String agreementsType) {
@@ -777,6 +851,7 @@ public class DashboardViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
     public void refundprocessDetails(RefundReferenceRequest refundrefrequest) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);

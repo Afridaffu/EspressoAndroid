@@ -10,6 +10,8 @@ public class RegUsersResponseData {
     private String image;
     private String status;
     private String fullName;
+    private String firstName;
+    private String lastName;
 
     public String getCountryCode() {
         return countryCode;
@@ -81,6 +83,22 @@ public class RegUsersResponseData {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
 

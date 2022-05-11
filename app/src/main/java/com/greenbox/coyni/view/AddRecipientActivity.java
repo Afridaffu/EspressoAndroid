@@ -209,7 +209,11 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                                     wIndex = usersList.get(i).getWalletAddress().toLowerCase().contains(search_key.toLowerCase());
                                 }
                                 if (objMyApplication.getObjPhContacts().containsKey(usersList.get(i).getPhoneNumber().replace("(1)", ""))) {
-                                    ecoIndex = objMyApplication.getObjPhContacts().get(usersList.get(i).getPhoneNumber().replace("(1)", "")).getUserName().toLowerCase().contains(search_key.toLowerCase());
+//                                    ecoIndex = objMyApplication.getObjPhContacts().get(usersList.get(i).getPhoneNumber().replace("(1)", "")).getUserName().toLowerCase().contains(search_key.toLowerCase());
+                                    ecoIndex = objMyApplication.getObjPhContacts().get(usersList.get(i).getPhoneNumber().replace("(1)", "")).getFirstName().toLowerCase().contains(search_key.toLowerCase());
+                                    if (!ecoIndex) {
+                                        ecoIndex = objMyApplication.getObjPhContacts().get(usersList.get(i).getPhoneNumber().replace("(1)", "")).getLastName().toLowerCase().contains(search_key.toLowerCase());
+                                    }
                                 }
 //                                if (sIndex || wIndex) {
                                 if (sIndex || wIndex || ecoIndex) {
@@ -424,8 +428,16 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                     objContact.setId(id);
                     @SuppressLint("Range") String name = cur.getString(cur.getColumnIndex(
                             ContactsContract.Contacts.DISPLAY_NAME));
-                    objContact.setName(name);
-                    nameList.add(name);
+//                    objContact.setName(name);
+                    String strName = getFLName(id);
+                    if (strName.contains(";")) {
+                        objContact.setFirstName(strName.split(";")[0]);
+                        objContact.setLastName(strName.split(";")[1]);
+                    } else {
+                        objContact.setFirstName(strName);
+                        objContact.setLastName("");
+                    }
+//                    nameList.add(name);
                     if (cur.getInt(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
                         Cursor pCur = cr.query(
                                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -459,6 +471,35 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
         return listContacts;
     }
 
+    private String getFLName(String contactId) {
+        String strName = "";
+        try {
+            String[] projection = {ContactsContract.Data.CONTACT_ID, ContactsContract.Data.DISPLAY_NAME, ContactsContract.Data.MIMETYPE, ContactsContract.Data.DATA1, ContactsContract.Data.DATA2, ContactsContract.Data.DATA3};
+//            String selection = ContactsContract.Data.CONTACT_ID + "=" + contactId + " AND " +
+//                    ContactsContract.Data.MIMETYPE + " IN ('" + ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE + "', '" + ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE + "')";
+            String selection = ContactsContract.Data.CONTACT_ID + "=" + contactId + " AND " +
+                    ContactsContract.Data.MIMETYPE + " IN ('" + ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE + "')";
+            ContentResolver cr = getContentResolver();
+            Cursor cur = cr.query(ContactsContract.Data.CONTENT_URI, projection, selection, null, null);
+
+            while (cur.moveToNext()) {
+                String mime = cur.getString(2); // type of data (phone / birthday / email)
+                switch (mime) {
+                    case ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE:
+                        strName = cur.getString(4);
+                        if (cur.getString(5) != null) {
+                            strName = strName + ";" + cur.getString(5);
+                        }
+                        break;
+                }
+            }
+            cur.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strName;
+    }
+
     private void prepareContacts() {
         try {
             if (mobileArray != null && mobileArray.size() > 0) {
@@ -481,7 +522,9 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                         strPhone = mobileArray.get(i).getNumber().get(0).replace("-", "");
                         obj.setCountryCode(strCCode);
                         obj.setPhoneNumber(strPhone);
-                        obj.setUserName(mobileArray.get(i).getName());
+//                        obj.setUserName(mobileArray.get(i).getName());
+                        obj.setFirstName(mobileArray.get(i).getFirstName());
+                        obj.setLastName(mobileArray.get(i).getLastName());
                         obj.setImagePath(mobileArray.get(i).getPhoto());
                         listUsers.add(obj);
                         objUsers.put(obj.getPhoneNumber(), obj);
@@ -500,7 +543,9 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                             strPhone = mobileArray.get(i).getNumber().get(j).replace("-", "");
                             obj.setCountryCode(strCCode);
                             obj.setPhoneNumber(strPhone);
-                            obj.setUserName(mobileArray.get(i).getName());
+//                            obj.setUserName(mobileArray.get(i).getName());
+                            obj.setFirstName(mobileArray.get(i).getFirstName());
+                            obj.setLastName(mobileArray.get(i).getLastName());
                             obj.setImagePath(mobileArray.get(i).getPhoto());
                             listUsers.add(obj);
                             objUsers.put(obj.getPhoneNumber(), obj);

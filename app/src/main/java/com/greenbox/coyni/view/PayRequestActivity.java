@@ -59,10 +59,12 @@ import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.PayRequestCustomKeyboard;
+import com.greenbox.coyni.view.business.MerchantsAgrementActivity;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -737,7 +739,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //                tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            }
 
-            String strPhContact = "", strEcoSysName = "", strPhone = "";
+            String strPhContact = "", strEcoSysName = "", strPhone = "", strName = "";
             if (userDetails.getData().getFullName() != null && !userDetails.getData().getFullName().equals("")) {
                 if (userDetails.getData().getFullName().length() > 20) {
                     strEcoSysName = userDetails.getData().getFullName().substring(0, 20) + "...";
@@ -753,10 +755,16 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 strPhone = "";
             }
             if (!strPhone.equals("") && objMyApplication.getObjPhContacts().containsKey(strPhone)) {
-                if (objMyApplication.getObjPhContacts().get(strPhone).getUserName().length() > 24) {
-                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName().substring(0, 24) + "...";
+                strName = objMyApplication.getObjPhContacts().get(strPhone).getFirstName() + " " + objMyApplication.getObjPhContacts().get(strPhone).getLastName();
+//                if (objMyApplication.getObjPhContacts().get(strPhone).getUserName().length() > 24) {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName().substring(0, 24) + "...";
+//                } else {
+//                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName();
+//                }
+                if (strName.length() > 24) {
+                    strPhContact = strName.substring(0, 24) + "...";
                 } else {
-                    strPhContact = objMyApplication.getObjPhContacts().get(strPhone).getUserName();
+                    strPhContact = strName;
                 }
             } else {
                 strPhContact = "";
@@ -791,10 +799,15 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
-                Glide.with(PayRequestActivity.this)
-                        .load(userDetails.getData().getImage())
-                        .placeholder(R.drawable.ic_profilelogo)
-                        .into(userProfile);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+                userProfile.setImageResource(R.drawable.ic_profilelogo);
+
+//                Glide.with(PayRequestActivity.this)
+//                        .load(userDetails.getData().getImage())
+//                        .placeholder(R.drawable.ic_profilelogo)
+//                        .into(userProfile);
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);

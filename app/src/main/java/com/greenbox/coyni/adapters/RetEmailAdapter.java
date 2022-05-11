@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.view.BindingLayoutActivity;
 import com.greenbox.coyni.view.EditAddressActivity;
@@ -58,10 +59,15 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
 //            holder.tvEmail.setText(objData.getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
             holder.tvEmail.setText(objData.getEmail());
             if (objData.getProfileImage() != null && !objData.getProfileImage().equals("")) {
-                Glide.with(mContext)
-                        .load(objData.getProfileImage())
-                        .placeholder(R.drawable.ic_profilelogo)
-                        .into(holder.imgProfilePic);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
+                utility.addImage(objData.getProfileImage(), holder.imgProfilePic, R.drawable.ic_profilelogo);
+                holder.imgProfilePic.setImageResource(R.drawable.ic_profilelogo);
+
+//                Glide.with(mContext)
+//                        .load(objData.getProfileImage())
+//                        .placeholder(R.drawable.ic_profilelogo)
+//                        .into(holder.imgProfilePic);
             } else {
                 holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
             }

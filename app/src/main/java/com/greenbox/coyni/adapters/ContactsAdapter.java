@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.reguser.RegUsersResponseData;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddRecipientActivity;
@@ -89,7 +90,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
                 holder.tvWalletAddress.setVisibility(View.VISIBLE);
                 holder.imgInvite.setVisibility(View.GONE);
-                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
                 holder.tvWalletAddress.setVisibility(View.GONE);
@@ -107,10 +109,15 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.imgUser.setVisibility(View.VISIBLE);
                 holder.tvNameHead.setVisibility(View.GONE);
                 if (objData.getImage().contains("https://")) {
-                    Glide.with(mContext)
-                            .load(objData.getImage())
-                            .placeholder(R.drawable.ic_profilelogo)
-                            .into(holder.imgUser);
+
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
+                    utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
+                    holder.imgUser.setImageResource(R.drawable.ic_profilelogo);
+
+//                    Glide.with(mContext)
+//                            .load(objData.getImage())
+//                            .placeholder(R.drawable.ic_profilelogo)
+//                            .into(holder.imgUser);
                 } else {
                     holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
                 }

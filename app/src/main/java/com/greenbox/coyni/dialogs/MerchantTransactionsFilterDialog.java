@@ -371,7 +371,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlendecimal)))});
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                     USFormat(transAmountStartET, "START");
 
                     try {
@@ -393,7 +393,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                         e.printStackTrace();
                     }
                 } else {
-                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlength)))});
+                    transAmountStartET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 }
             }
         });
@@ -407,7 +407,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 }
 
                 if (!hasFocus) {
-                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlendecimal)))});
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                     USFormat(transAmountEndET, "END");
                     try {
 
@@ -430,7 +430,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                         e.printStackTrace();
                     }
                 } else {
-                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlength)))});
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 }
             }
         });
@@ -452,7 +452,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlendecimal)))});
+                    transAmountEndET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                     USFormat(transAmountEndET, "END");
                     transAmountEndET.clearFocus();
                     if (transAmountStartET.getText().toString().equals("")) {
