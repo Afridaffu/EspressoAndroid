@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/_20sdp">
 
@@ -9,7 +10,7 @@
         android:id="@+id/lyWPayClose"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_14sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal">

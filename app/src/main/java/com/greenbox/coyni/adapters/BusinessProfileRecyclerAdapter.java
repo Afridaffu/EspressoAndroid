@@ -14,8 +14,10 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.AccountsData;
 import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.ScanActivity;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -91,17 +93,21 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             childItem.setText(detailInfo.getCompanyName());
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
-                Glide.with(context)
-                        .load(detailInfo.getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(profileImage);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
+                utility.addImage(detailInfo.getImage(), profileImage, R.drawable.ic_case);
+                profileImage.setImageResource(R.drawable.ic_case);
+//                Glide.with(context)
+//                        .load(detailInfo.getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
-                profileImageText.setVisibility(View.GONE);
-                Glide.with(context)
-                        .load(detailInfo.getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(profileImage);
+
+//                profileImageText.setVisibility(View.GONE);
+//                Glide.with(context)
+//                        .load(detailInfo.getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(profileImage);
             }
         } else if (detailInfo.getAccountType().equals(Utils.PERSONAL)) {
             if (detailInfo.getFullName() != null) {
@@ -117,17 +123,22 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
-                Glide.with(context)
-                        .load(detailInfo.getImage())
-                        .placeholder(R.drawable.acct_profile)
-                        .into(profileImage);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
+                utility.addImage(detailInfo.getImage(), profileImage, R.drawable.acct_profile);
+                profileImage.setImageResource(R.drawable.acct_profile);
+                //                Glide.with(context)
+//                        .load(detailInfo.getImage())
+//                        .placeholder(R.drawable.acct_profile)
+//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
                 profileImageText.setVisibility(View.GONE);
-                Glide.with(context)
-                        .load(detailInfo.getImage())
-                        .placeholder(R.drawable.acct_profile)
-                        .into(profileImage);
+
+//                Glide.with(context)
+//                        .load(detailInfo.getImage())
+//                        .placeholder(R.drawable.acct_profile)
+//                        .into(profileImage);
             }
         }
         if(showdba && isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
@@ -249,13 +260,18 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             } else {
                 heading.setText("");
             }
-            if (headerInfo.getImage() != null) {
+            if (headerInfo.getImage() != null && !headerInfo.getImage().trim().equals("")) {
                 personalText.setVisibility(View.GONE);
                 profileImage.setVisibility(View.VISIBLE);
-                Glide.with(context)
-                        .load(headerInfo.getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(profileImage);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
+                utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
+                profileImage.setImageResource(R.drawable.ic_case);
+
+//                Glide.with(context)
+//                        .load(headerInfo.getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(profileImage);
             } else {
                 personalText.setVisibility(View.VISIBLE);
                 profileImage.setVisibility(View.GONE);
@@ -272,10 +288,15 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);
                 profileImage.setVisibility(View.VISIBLE);
-                Glide.with(context)
-                        .load(headerInfo.getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(profileImage);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
+                utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
+                profileImage.setImageResource(R.drawable.ic_case);
+
+//                Glide.with(context)
+//                        .load(headerInfo.getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(profileImage);
             } else {
                 personalText.setVisibility(View.GONE);
                 profileImage.setVisibility(View.VISIBLE);

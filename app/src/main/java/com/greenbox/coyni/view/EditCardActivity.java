@@ -436,6 +436,8 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             }
                         } else {
                             etExpiry.setHint("MM/YY");
+                            etExpiry.requestFocus();
+                            if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(EditCardActivity.this);
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
@@ -467,6 +469,8 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             }
                         } else {
 //                            etAddress1.setHint("Billing Address Line 1");
+                            if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(EditCardActivity.this);
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             etAddress1.setSelection(etAddress1.getText().length());
@@ -669,6 +673,12 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                         isAddress1 = false;
                     }
                     enableOrDisableNext();
+
+                    if (etAddress1.getText().toString().contains("  ")){
+                        etAddress1.setText(etAddress1.getText().toString().replace("  "," "));
+                        etAddress1.setSelection(etAddress1.getText().length());
+                    }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -707,6 +717,12 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 if (etAddress2.getText().toString().length() > 0) {
                     Utils.setUpperHintColor(etlAddress2, getColor(R.color.primary_green));
                 }
+
+
+                if (etAddress2.getText().toString().contains("  ")){
+                    etAddress2.setText(etAddress2.getText().toString().replace("  "," "));
+                    etAddress2.setSelection(etAddress2.getText().length());
+                }
             }
 
             @Override
@@ -739,6 +755,12 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                         isCity = false;
                     }
                     enableOrDisableNext();
+
+                    if (etCity.getText().toString().contains("  ")){
+                        etCity.setText(etCity.getText().toString().replace("  "," "));
+                        etCity.setSelection(etCity.getText().length());
+                    }
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

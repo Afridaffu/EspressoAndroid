@@ -19,6 +19,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -84,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/_10sdp"
-            android:layout_weight="0.8"
+            android:layout_weight="1"
             android:fontFamily="@font/opensans_regular"
             android:text="Recipient’s Address"
             android:textColor="@color/dark_grey"
@@ -94,7 +96,7 @@
             android:id="@+id/copyRecipientLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.2"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -224,22 +226,22 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-<!--        <TextView-->
-<!--            android:id="@+id/tv_lable"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:ellipsize="end"-->
-<!--            android:gravity="center"-->
-<!--            android:paddingEnd="16dp"-->
-<!--            android:paddingRight="16dp"-->
-<!--            android:text="Slide to Confirm"-->
-<!--            android:textColor="@color/primary_green"-->
-<!--            android:textSize="@dimen/_15sdp"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_lable"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="8dp"-->
+        <!--            android:ellipsize="end"-->
+        <!--            android:gravity="center"-->
+        <!--            android:paddingEnd="16dp"-->
+        <!--            android:paddingRight="16dp"-->
+        <!--            android:text="Slide to Confirm"-->
+        <!--            android:textColor="@color/primary_green"-->
+        <!--            android:textSize="@dimen/_15sdp"-->
+        <!--            android:textStyle="bold"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@id/im_lock"-->
+        <!--            app:layout_constraintStart_toEndOf="@+id/im_lock"-->
+        <!--            app:layout_constraintTop_toTopOf="@+id/im_lock" />-->
 
         <TextView
             android:id="@+id/tv_lable_verify"
@@ -254,10 +256,10 @@
             android:textColor="@color/primary_green"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/im_lock"
             app:layout_constraintStart_toEndOf="@+id/im_lock"
-            app:layout_constraintTop_toTopOf="@+id/im_lock"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toTopOf="@+id/im_lock" />
 
         <com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView
             android:id="@+id/tv_lable"
@@ -278,9 +280,9 @@
             app:layout_constraintBottom_toBottomOf="@id/im_lock"
             app:layout_constraintStart_toEndOf="@+id/im_lock"
             app:layout_constraintTop_toTopOf="@+id/im_lock"
-            app:speed="500"
             app:maxFPS="24"
-            app:simultaneousColors="8"/>
+            app:simultaneousColors="8"
+            app:speed="500" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/im_lock"

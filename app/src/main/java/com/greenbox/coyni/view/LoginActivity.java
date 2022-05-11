@@ -22,12 +22,15 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,6 +39,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
@@ -69,6 +73,8 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
+import okhttp3.internal.Util;
 
 public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlEmail, etlPassword;
@@ -250,6 +256,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
 
+            etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
             if ((getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel"))) {
                 layoutClose.setVisibility(GONE);
@@ -380,6 +387,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                                 layoutPwdError.setVisibility(GONE);
                                 etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
+//                                etPassword.setHint("★★★★★★★★★★★★");
+
                                 if (etPassword.getText().toString().length() > 0)
                                     etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                                 else
@@ -581,6 +590,21 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     }
                 }
             });
+
+//            etEmail.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                    if (actionId == EditorInfo.IME_ACTION_NEXT) {
+////                        etEmail.clearFocus();
+//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//                        etPassword.requestFocus();
+//                        if(!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(LoginActivity.this);
+//                        return true;
+//                    }
+//                    return false;
+//                }
+//            });
             enableIcon();
 
             setDB();
@@ -1045,8 +1069,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
     public void hideAndClearFocus() {
         etEmail.clearFocus();
         etPassword.clearFocus();
-//        if (Utils.isKeyboardVisible)
-//            Utils.hideKeypad(LoginActivity.this);
+        if (Utils.isKeyboardVisible)
+            Utils.hideKeypad(LoginActivity.this);
     }
 
     private void clearEmailControl() {

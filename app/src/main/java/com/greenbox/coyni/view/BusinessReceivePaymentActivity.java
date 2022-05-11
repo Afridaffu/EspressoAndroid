@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
@@ -409,10 +410,14 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             if (imageString != null && !imageString.trim().equals("")) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userNameTV.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(imgProfile);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+                utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                imgProfile.setImageResource(R.drawable.ic_profile_male_user);
+
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(imgProfile);
             } else {
                 imgProfile.setVisibility(View.GONE);
                 userNameTV.setVisibility(View.VISIBLE);
@@ -440,10 +445,14 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             if (imageString != null && !imageString.trim().equals("")) {
                 saveProfileIV.setVisibility(View.VISIBLE);
                 saveProfileTitle.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(saveProfileIV);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
+                utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+                saveProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(saveProfileIV);
             } else {
                 saveProfileIV.setVisibility(View.GONE);
                 saveProfileTitle.setVisibility(View.VISIBLE);

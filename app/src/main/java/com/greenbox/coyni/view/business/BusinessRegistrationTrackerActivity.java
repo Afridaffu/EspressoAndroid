@@ -399,7 +399,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
                 @Override
                 public void onChanged(BusinessTrackerResponse btResp) {
-                    dismissDialog();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             objMyApplication.setBusinessTrackerResponse(btResp);
@@ -540,13 +539,15 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             businessIdentityVerificationViewModel.getBeneficialOwnersResponse().observe(this, new Observer<BOResp>() {
                 @Override
                 public void onChanged(BOResp boResp) {
-
+                    dismissDialog();
                     if (boResp != null) {
                         if (boResp.getStatus().toLowerCase().toString().equals("success") && boResp.getData().size() > 0) {
                             objMyApplication.setBeneficialOwnersResponse(boResp);
                             if (boAPICallFrom.equals("INCOMPLETE")) {
+                                Log.e("One","One");
                                 Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
                                 startActivity(intent);
+                                Log.e("Two","Two");
                             } else {
                                 boTV.setTextColor(getResources().getColor(R.color.primary_green));
                                 boIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
@@ -566,6 +567,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                             }
                         }
                     }
+
+                    boIncompleteLL.setClickable(true);
                 }
             });
         } catch (Exception e) {
@@ -627,6 +630,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 
     private void reloadTrackerDashboard(BusinessTrackerResponse businessTrackerResponse) {
         boAPICallFrom = "RESUME";
+        boIncompleteLL.setClickable(false);
         businessIdentityVerificationViewModel.getBeneficialOwners();
         LogUtils.d("BusinessTrackerResponse", "BusinessTrackerResponse" + new Gson().toJson(businessTrackerResponse));
 

@@ -428,7 +428,7 @@
                         style="@style/TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Select Time Zone"
+                        android:hint="Time Zone"
                         android:textColorHint="@color/light_gray"
                         app:boxStrokeColor="@color/primary_green"
                         app:errorIconDrawable="@null"

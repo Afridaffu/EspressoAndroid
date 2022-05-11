@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <RelativeLayout
         android:id="@+id/layoutOnBoarding"
@@ -30,7 +31,8 @@
                 android:layout_height="@dimen/_12sdp"
                 app:tabBackground="@drawable/viewpager_tab_selector"
                 app:tabGravity="center"
-                app:tabIndicatorHeight="0dp" />
+                app:tabIndicatorHeight="0dp"
+                android:background="@color/white"/>
 
         </LinearLayout>
 
@@ -89,12 +91,14 @@
         android:id="@+id/layoutAuth"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_bg_splash"></ImageView>
+            android:src="@drawable/ic_bg_splash"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-40dp"/>
 
         <ImageView
             android:id="@+id/bottomIV"

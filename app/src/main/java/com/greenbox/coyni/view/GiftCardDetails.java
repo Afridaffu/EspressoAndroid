@@ -72,6 +72,7 @@ import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
@@ -341,7 +342,14 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 //                            }
                             strBrandDesc = (Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "), Html.FROM_HTML_MODE_COMPACT).toString().trim());
                             brandDescTV.setText((Html.fromHtml(brandsResponse.getData().getBrands().get(0).getDescription().replaceAll("[\\t\\r]+", " ").replaceAll("\\s+", " "), Html.FROM_HTML_MODE_COMPACT).toString().trim()));
-                            Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
+//                            Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
+
+                            DisplayImageUtility utility = DisplayImageUtility.getInstance(GiftCardDetails.this);
+                            utility.addImage(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim(), brandIV,0);
+
+                            Glide.with(GiftCardDetails.this)
+                                    .load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim())
+                                    .into(brandIV);
 
                             if (objBrand.getItems() != null && objBrand.getItems().size() > 0) {
                                 listAmounts = new ArrayList<>();
@@ -590,6 +598,11 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                     } else {
                         isFirstName = false;
                     }
+
+                    if (firstNameET.getText().toString().contains("  ")){
+                        firstNameET.setText(firstNameET.getText().toString().replace("  "," "));
+                        firstNameET.setSelection(firstNameET.getText().length());
+                    }
                     enableOrDisableNext();
                 }
 
@@ -635,6 +648,11 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 //                        lastNameErrorTV.setText("Field Required");
                     } else {
                         isLastName = false;
+                    }
+
+                    if (lastNameET.getText().toString().contains("  ")){
+                        lastNameET.setText(lastNameET.getText().toString().replace("  "," "));
+                        lastNameET.setSelection(lastNameET.getText().length());
                     }
                     enableOrDisableNext();
                 }

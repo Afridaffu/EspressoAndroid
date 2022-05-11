@@ -162,6 +162,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
@@ -178,10 +179,11 @@
                             android:id="@+id/llEIN"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="right"
+                            android:gravity="right|center"
                             android:background="@drawable/ic_eyeclose"
-                            android:paddingTop="@dimen/_3sdp"
-                            android:paddingBottom="@dimen/_3sdp" />
+                            android:paddingTop="@dimen/_5sdp"
+                            android:paddingBottom="@dimen/_5sdp"
+                            />
                     </LinearLayout>
 
                     <View

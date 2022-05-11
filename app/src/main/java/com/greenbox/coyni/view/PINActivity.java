@@ -363,8 +363,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                         try {
 //                                            launchDashboard();
                                             dbHandler.clearAllTables();
-                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
-//                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
+//                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
+                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
                                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(i);
                                         } catch (Exception ex) {
@@ -393,8 +393,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                         try {
                                             objMyApplication.setStrRetrEmail("");
                                             dbHandler.clearAllTables();
-//                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
-                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
+                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
+//                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
                                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(i);
                                         } catch (Exception ex) {

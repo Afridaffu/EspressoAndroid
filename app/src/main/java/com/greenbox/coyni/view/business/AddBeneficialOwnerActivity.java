@@ -781,6 +781,12 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 } else {
                     isfname = false;
                 }
+
+                if (fnameET.getText().toString().contains("  ")){
+                    fnameET.setText(fnameET.getText().toString().replace("  "," "));
+                    fnameET.setSelection(fnameET.getText().length());
+                }
+
                 enableOrDisableNext();
             }
 
@@ -828,6 +834,13 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 } else {
                     islname = false;
                 }
+
+
+                if (lnameET.getText().toString().contains("  ")){
+                    lnameET.setText(lnameET.getText().toString().replace("  "," "));
+                    lnameET.setSelection(lnameET.getText().length());
+                }
+
                 enableOrDisableNext();
             }
 
@@ -1391,6 +1404,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_green));
                     address1ErrorLL.setVisibility(GONE);
+
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
                 }
             }
         });
