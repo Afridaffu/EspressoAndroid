@@ -32,7 +32,7 @@
                     android:layout_width="@dimen/_38sdp"
                     android:layout_height="@dimen/_38sdp"
                     android:layout_gravity="center_vertical"
-                    android:background="@drawable/circle_bg"
+                    android:background="@drawable/corecircle"
                     android:gravity="center"
                     android:padding="@dimen/_2sdp">
 
@@ -54,14 +54,15 @@
 
                         <TextView
                             android:id="@+id/tv_user_icon_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
-                            android:layout_gravity="center"
+                            android:gravity="center"
                             android:fontFamily="@font/opensans_bold"
+                            android:background="@color/price"
                             android:text="KM"
-                            android:textColor="@color/primary_black"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/_16sdp"
                             android:visibility="gone" />
 
@@ -1684,6 +1685,7 @@
                                 android:src="@drawable/ic_failed" />
 
                             <TextView
+                                android:id="@+id/idVeriStatus"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_25sdp"

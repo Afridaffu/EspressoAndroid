@@ -229,10 +229,10 @@ public class BusinessDashboardActivity extends BaseActivity {
 
     public void launchBuyTokens() {
         try {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
+//            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+//                return;
+//            }
+//            mLastClickTimeQA = SystemClock.elapsedRealtime();
             Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
             i.putExtra("screen", "dashboard");
             startActivity(i);
@@ -245,7 +245,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         mIvDashboard.setImageResource(isDashboard ? R.drawable.ic_dashboard_active : R.drawable.ic_dashboard_inactive);
         mIvAccount.setImageResource(isAccount ? R.drawable.ic_account_active : R.drawable.ic_account_inactive);
         mIvTransactions.setImageResource(isTransactions ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_inactive);
-        mIvProfile.setImageResource(isProfile ? R.drawable.ic_profile_active : R.drawable.ic_profile);
+        mIvProfile.setImageResource(isProfile ? R.drawable.ic_profile_active : R.drawable.ic_profile_inactive);
 
         int selectedTextColor = getColor(R.color.primary_green);
         int unSelectedTextColor = getColor(R.color.dark_grey);
@@ -443,11 +443,11 @@ public class BusinessDashboardActivity extends BaseActivity {
                 && objMyApplication.getMyProfile().getData().getFirstName() != null &&
                     objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
             String firstName = objMyApplication.getMyProfile().getData().getFirstName();
-            iconText = firstName.substring(0, 1).toUpperCase();
+//            iconText = firstName.substring(0, 1).toUpperCase();
             userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
             if (objMyApplication.getMyProfile().getData().getLastName() != null) {
                 String lastName = objMyApplication.getMyProfile().getData().getLastName();
-                iconText = iconText + lastName.substring(0, 1).toUpperCase();
+//                iconText = iconText + lastName.substring(0, 1).toUpperCase();
                 userName = userName + " ";
                 userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
             }
@@ -477,7 +477,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
-            mIvUserIcon.setImageResource(R.drawable.acct_profile);
+//            mIvUserIcon.setImageResource(R.drawable.acct_profile);
 //            if (!android.util.Patterns.WEB_URL.matcher(imageUrl).matches()) {
 //                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
 //                downloadUrlRequest.setKey(imageUrl);
@@ -489,9 +489,9 @@ public class BusinessDashboardActivity extends BaseActivity {
 //                        .into(mIvUserIcon);
 //            }
         } else {
-            mTvUserIconText.setVisibility(View.VISIBLE);
-            mIvUserIcon.setVisibility(View.GONE);
-            mTvUserIconText.setText(iconText);
+//            mTvUserIconText.setVisibility(View.VISIBLE);
+            mIvUserIcon.setVisibility(View.VISIBLE);
+//            mTvUserIconText.setText(iconText);
         }
 
         mTvUserName.setOnClickListener(view -> {

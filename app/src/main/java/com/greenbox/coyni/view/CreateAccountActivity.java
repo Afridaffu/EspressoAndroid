@@ -507,6 +507,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         isFirstName = false;
                     }
 
+                    if (firstNameET.getText().toString().contains("  ")){
+                        firstNameET.setText(firstNameET.getText().toString().replace("  "," "));
+                        firstNameET.setSelection(firstNameET.getText().length());
+                    }
+
 //                    else if (firstNameET.getText().toString().trim().length() == 0) {
 //                        firstNameErrorLL.setVisibility(VISIBLE);
 //                        firstNameErrorTV.setText("Field Required");
@@ -568,6 +573,11 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 //                    } else {
 //                        isLastName = false;
 //                    }
+
+                    if (lastNameET.getText().toString().contains("  ")){
+                        lastNameET.setText(lastNameET.getText().toString().replace("  "," "));
+                        lastNameET.setSelection(lastNameET.getText().length());
+                    }
                     enableOrDisableNext();
                 }
 
