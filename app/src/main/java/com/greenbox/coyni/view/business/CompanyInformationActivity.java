@@ -1659,8 +1659,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
-            finish();
+                setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
+                finish();
 
             //super.onBackPressed();
         } else if (selectedPage == 1) {

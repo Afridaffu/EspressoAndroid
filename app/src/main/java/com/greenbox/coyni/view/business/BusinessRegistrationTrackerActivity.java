@@ -96,10 +96,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             });
             initFields();
 
-            if (!addBusiness) {
-                showProgressDialog();
-                businessIdentityVerificationViewModel.getBusinessTracker();
-            }
+//            if (!addBusiness) {
+//                showProgressDialog();
+//                businessIdentityVerificationViewModel.getBusinessTracker();
+//            }
             initObservers();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -615,10 +615,10 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             super.onResume();
             if (Utils.isKeyboardVisible)
                 Utils.hideKeypad(this);
-//            if (!addBusiness) {
-//                showProgressDialog();
-//                businessIdentityVerificationViewModel.getBusinessTracker();
-//            }
+            if (!addBusiness) {
+                showProgressDialog();
+                businessIdentityVerificationViewModel.getBusinessTracker();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -784,9 +784,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1234) {
-            isNewCompany = false;
-            showProgressDialog();
-            businessIdentityVerificationViewModel.getBusinessTracker();
+            if (resultCode == RESULT_OK) {
+                isNewCompany = false;
+                showProgressDialog();
+                businessIdentityVerificationViewModel.getBusinessTracker();
+            }
         }
     }
 }
