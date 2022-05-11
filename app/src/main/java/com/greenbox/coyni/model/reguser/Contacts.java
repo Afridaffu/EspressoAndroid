@@ -6,7 +6,9 @@ import java.util.List;
 
 public class Contacts {
     private String id;
-    private String name;
+//    private String name;
+    private String firstName;
+    private String lastName;
     private List<String> number;
     private String photo;
 
@@ -18,12 +20,29 @@ public class Contacts {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+
+
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public List<String> getNumber() {

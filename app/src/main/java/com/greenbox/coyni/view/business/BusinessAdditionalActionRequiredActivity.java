@@ -110,6 +110,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             super.onBackPressed();
         }
     }
+
     private void initFields() {
 
         additionReservedLL = findViewById(R.id.lladditionReserve);
@@ -214,7 +215,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         RequestBody.create(informationJSON.toString().getBytes(), MediaType.parse("application/json")));
 
         for (int i = 0; i < documentsFIle.size(); i++) {
-            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName() + ".jpg", RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
+            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName(), RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
         }
 
         MultipartBody requestBody = buildernew.build();
@@ -458,7 +459,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
-
                                     Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                                 }
                             });
@@ -501,7 +501,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvRemarks.setVisibility(View.VISIBLE);
                     llAccept.setVisibility(View.GONE);
                     tvDeclinedMsg.setVisibility(View.VISIBLE);
-                    tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to : ");
+                    tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
                     llDecline.setVisibility(View.GONE);
                     proposalsMap.get(tv.getText().toString()).setUserAccepted(false);
                     proposalsMap.get(tv.getText().toString()).setUserMessage(comm);
@@ -518,7 +518,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                Utils.hideSoftKeyboard(BusinessAdditionalActionRequiredActivity.this);
             }
         });
     }
@@ -800,15 +800,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             LogUtils.d(TAG, "fileUpload" + fileUpload);
             if (fileUpload.containsValue(null)) {
                 isSubmitEnabled = false;
-                submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                 submitCV.setClickable(false);
                 submitCV.setEnabled(false);
-
+                submitCV.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             } else {
                 isSubmitEnabled = true;
-                submitCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
                 submitCV.setClickable(true);
                 submitCV.setEnabled(true);
+                submitCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
             }
 
         } catch (Exception e) {

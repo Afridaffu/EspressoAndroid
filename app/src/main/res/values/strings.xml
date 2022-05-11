@@ -86,7 +86,7 @@
     <string name="businessProfileAccountItemChildImage">Business Profile account Sub Profile Image</string>
     <string name="businessProfileAccountItemImage">Business Profile account Profile Image</string>
     <string name="businessProfileAccountExpandDownArrow">Business Profile account Profile Expand Down Arrow</string>
-
+    <string name="unable_to_get_document">Failed to get the document. Please try again</string>
     <string name="transAmountAlert">From Amount\' should not be greater than \'To Amount</string>
     <string name="email_field_alert">Please enter a valid Email</string>
 

@@ -40,6 +40,8 @@ public class AddCommentsDialog extends BaseDialog {
         addNoteTIL = findViewById(R.id.etlMessage);
         cancelBtn = findViewById(R.id.cancelBtn);
 
+        doneBtn.setCardBackgroundColor(context.getResources().getColor(R.color.inactive_color));
+
         addNoteET.requestFocus();
 
         if (comment != null && !comment.trim().equals("")) {
@@ -54,6 +56,7 @@ public class AddCommentsDialog extends BaseDialog {
                 dismiss();
             }
         });
+
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override

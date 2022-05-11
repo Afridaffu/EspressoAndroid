@@ -389,8 +389,8 @@ public class Utils {
     public static final String datePicker = "DatePicker";
 
     public static final String position = "Position";
-    public static final int cPP = 0;
-    public static final int cTOS = 1;
+    public static final int cPP = 1;
+    public static final int cTOS = 0;
     public static final int mPP = 8;
     public static final int mTOS = 7;
     public static final int mAgmt = 5;
@@ -893,7 +893,6 @@ public class Utils {
 //            e.printStackTrace();
 //        }
 //    }
-
     public static void setUpperHintColor(TextInputLayout til, int color) {
         try {
             int[][] states = new int[][]{
@@ -1869,7 +1868,11 @@ public class Utils {
                             strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[2].substring(0, 1).toUpperCase();
                         }
                     } else {
-                        strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                        if (strName.split(" ").length > 1) {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
+                        } else {
+                            strNameHead = strName.split(" ")[0].substring(0, 1).toUpperCase();
+                        }
                     }
                 } else {
                     strNameHead = strName.split(" ")[0].toUpperCase() + strName.split(" ")[1].substring(0, 1).toUpperCase();
