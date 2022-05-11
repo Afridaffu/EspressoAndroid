@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_15sdp"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="Thank you for your interest in coyni. After\nreviewing your account. The coyni team requires \nyou to upload the following documentation\nwithin 30 days to continue account verification."
+                    android:text="Thank you for your interest in coyni. After reviewing your account. The coyni team requires you to upload the following documentation within 30 days to continue account verification."
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>
@@ -230,6 +230,7 @@
                     android:paddingTop="@dimen/_13sdp"
                     android:paddingBottom="@dimen/_13sdp"
                     android:text="@string/submit"
+                    android:clickable="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />
             </androidx.cardview.widget.CardView>
