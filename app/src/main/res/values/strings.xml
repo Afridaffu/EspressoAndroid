@@ -418,6 +418,7 @@
     <string name="released_on">Released on</string>
     <string name="reserve_rules">Reserve Rules</string>
     <string name="deposit_to">Deposit To</string>
+    <string name="reserve_rule">Reserve Rule</string>
     <string name="reserve_information">Reserve Information</string>
     <string name="reserve_held">Reserve Held</string>
     <string name="reserved_on">Reserved on</string>

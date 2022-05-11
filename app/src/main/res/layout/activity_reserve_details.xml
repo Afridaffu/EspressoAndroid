@@ -230,7 +230,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_regular"
-                            android:text="@string/reserve_rules"
+                            android:text="@string/reserve_rule"
                             android:textColor="@color/xdark_gray"
                             android:textSize="@dimen/_11ssp" />
 

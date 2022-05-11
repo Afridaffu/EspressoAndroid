@@ -570,6 +570,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(LoginActivity.this);
                         hideAndClearFocus();
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
@@ -781,7 +783,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onChanged(APIError apiError) {
                     dialog.dismiss();
                     if (apiError != null) {
-                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+//                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "",apiError.getError().getFieldErrors().get(0));
                     }
                 }
             });

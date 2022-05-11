@@ -265,34 +265,38 @@ public class DashboardViewModel extends AndroidViewModel {
     }
 
     public void getDocumentUrl(int docId) {
-        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-        Call<DownloadImageResponse> mcall = apiService.getAgreementUrl(docId+"");
-        mcall.enqueue(new Callback<DownloadImageResponse>() {
-            @Override
-            public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
-                try {
-                    if (response.isSuccessful()) {
-                        DownloadImageResponse obj = response.body();
-                        downloadUrlResponse.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<DownloadImageResponse>() {
-                        }.getType();
-                        DownloadImageResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                        downloadUrlResponse.setValue(errorResponse);
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DownloadImageResponse> mcall = apiService.getAgreementUrl(docId + "");
+            mcall.enqueue(new Callback<DownloadImageResponse>() {
+                @Override
+                public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DownloadImageResponse obj = response.body();
+                            downloadUrlResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DownloadImageResponse>() {
+                            }.getType();
+                            DownloadImageResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            downloadUrlResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        downloadUrlResponse.setValue(null);
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                }
+
+                @Override
+                public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
+                    LogUtils.v("getDocumentUrl failure", "" + t.getLocalizedMessage());
                     downloadUrlResponse.setValue(null);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
-                LogUtils.v("getDocumentUrl failure", ""+ t.getLocalizedMessage());
-                downloadUrlResponse.setValue(null);
-            }
-        });
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void agreementsByType(String agreementsType) {

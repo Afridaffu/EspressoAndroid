@@ -75,9 +75,11 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AddNewTeamMemberActivity"
-            android:exported="false"
+            android:configChanges="uiMode"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/ThemeFullSCreen" />
         <activity
             android:name=".view.business.PayingDBAFilterActivity"
             android:exported="true"
@@ -105,9 +107,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.EditTeamMember"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/ThemeFullSCreen" />
         <activity
             android:name=".view.business.TeamMemberActivity"
             android:exported="false"
