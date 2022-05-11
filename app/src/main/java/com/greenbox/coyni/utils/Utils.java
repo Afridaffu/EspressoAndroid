@@ -389,8 +389,8 @@ public class Utils {
     public static final String datePicker = "DatePicker";
 
     public static final String position = "Position";
-    public static final int cPP = 0;
-    public static final int cTOS = 1;
+    public static final int cPP = 1;
+    public static final int cTOS = 0;
     public static final int mPP = 8;
     public static final int mTOS = 7;
     public static final int mAgmt = 5;
