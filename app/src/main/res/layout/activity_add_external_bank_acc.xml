@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/_21sdp">
 
@@ -55,6 +56,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvEBMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"

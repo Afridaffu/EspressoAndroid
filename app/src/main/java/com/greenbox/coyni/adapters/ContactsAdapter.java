@@ -90,7 +90,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
                 holder.tvWalletAddress.setVisibility(View.VISIBLE);
                 holder.imgInvite.setVisibility(View.GONE);
-                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
                 holder.tvWalletAddress.setVisibility(View.GONE);

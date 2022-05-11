@@ -54,7 +54,7 @@
             android:layout_marginTop="@dimen/_24sdp"
             android:layout_marginEnd="@dimen/_21sdp"
             android:fontFamily="@font/opensans_regular"
-            android:gravity="left"
+            android:gravity="center"
             android:lineHeight="@dimen/_16ssp"
             android:text="@string/application_cancelled_message"
             android:textColor="@color/primary_black"
