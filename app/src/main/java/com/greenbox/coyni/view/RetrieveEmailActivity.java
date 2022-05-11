@@ -105,6 +105,11 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 //                firstNameErrorLL.setVisibility(VISIBLE);
 //                firstNameErrorTV.setText("Field Required");
 //            }
+            if (firstName.getText().toString().contains("  ")){
+                firstName.setText(firstName.getText().toString().replace("  "," "));
+                firstName.setSelection(firstName.getText().length());
+            }
+
             enableButton();
         } else if (charSequence == lastName.getEditableText()) {
             if (charSequence.toString().trim().length() > 1 && charSequence.toString().trim().length() < 31) {
@@ -120,6 +125,12 @@ public class RetrieveEmailActivity extends AppCompatActivity implements TextWatc
 //                lastNameErrorLL.setVisibility(VISIBLE);
 //                lastNameErrorTV.setText("Field Required");
 //            }
+
+            if (lastName.getText().toString().contains("  ")){
+                lastName.setText(lastName.getText().toString().replace("  "," "));
+                lastName.setSelection(lastName.getText().length());
+            }
+
             enableButton();
         }
     }

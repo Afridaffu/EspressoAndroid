@@ -1685,6 +1685,7 @@
                                 android:src="@drawable/ic_failed" />
 
                             <TextView
+                                android:id="@+id/idVeriStatus"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_25sdp"

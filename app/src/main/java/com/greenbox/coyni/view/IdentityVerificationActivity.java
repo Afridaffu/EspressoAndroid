@@ -405,6 +405,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             isMailAddr1 = false;
                         }
                         enableORdiableSubmit();
+
+                        if (mailAddr1.getText().toString().contains("  ")){
+                            mailAddr1.setText(mailAddr1.getText().toString().replace("  "," "));
+                            mailAddr1.setSelection(mailAddr1.getText().length());
+                        }
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }
@@ -453,6 +458,12 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 //                    isAddress2 = false;
 //                }
                         enableORdiableSubmit();
+
+                        if (mailAddr2.getText().toString().contains("  ")){
+                            mailAddr2.setText(mailAddr2.getText().toString().replace("  "," "));
+                            mailAddr2.setSelection(mailAddr2.getText().length());
+                        }
+
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }
@@ -500,6 +511,11 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                             isCity = false;
                         }
                         enableORdiableSubmit();
+
+                        if (cityET.getText().toString().contains("  ")){
+                            cityET.setText(cityET.getText().toString().replace("  "," "));
+                            cityET.setSelection(cityET.getText().length());
+                        }
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }
