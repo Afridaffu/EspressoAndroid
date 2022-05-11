@@ -141,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -1173,7 +1173,7 @@
                                 android:layout_marginTop="@dimen/_17sdp"
                                 android:layout_marginBottom="@dimen/_14sdp"
                                 android:fontFamily="@font/opensans_bold"
-                                android:text="@string/full_payouts_history"
+                                android:text="@string/v_p_history"
                                 android:textColor="@color/dark_gray"
                                 android:textSize="@dimen/_11ssp" />
 
@@ -1576,7 +1576,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"

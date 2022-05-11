@@ -49,6 +49,7 @@ import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
@@ -293,7 +294,7 @@ public class DashboardActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(DashboardActivity.this, IdVeAdditionalActionActivity.class));
+                    startActivity(new Intent(DashboardActivity.this, AdditionalActionUploadActivity.class));
                 }
             });
 
@@ -922,14 +923,22 @@ public class DashboardActivity extends AppCompatActivity {
                 imgProfileSmall.setVisibility(View.VISIBLE);
                 tvUserInfoSmall.setVisibility(View.GONE);
 
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(imgProfile);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(imgProfileSmall);
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(imgProfile);
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(imgProfileSmall);
+
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                imgProfile.setImageResource(R.drawable.ic_profile_male_user);
+
+                utility.addImage(imageString, imgProfileSmall, R.drawable.ic_profile_male_user);
+                imgProfileSmall.setImageResource(R.drawable.ic_profile_male_user);
+
 
             } else {
                 imgProfile.setVisibility(View.GONE);

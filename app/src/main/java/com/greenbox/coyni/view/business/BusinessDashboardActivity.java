@@ -31,7 +31,10 @@ import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
+import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -257,18 +260,18 @@ public class BusinessDashboardActivity extends BaseActivity {
         int unSelectedTextColor = getColor(R.color.dark_grey);
         int selectedTextColor = getColor(R.color.primary_green);
         if (selectedTab == Tabs.ACCOUNT) {
-            mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
-            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_disabled);
+            mTvAccount.setTextColor(isTabsEnabled ? selectedTextColor : unSelectedTextColor);
+            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_active : R.drawable.ic_account_inactive);
         } else {
-            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
-            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
+//            mTvAccount.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+//            mIvAccount.setImageResource(isTabsEnabled ? R.drawable.ic_account_inactive : R.drawable.ic_account_disabled);
         }
         if (selectedTab == Tabs.TRANSACTIONS) {
             mTvTransactions.setTextColor(isTabsEnabled ? selectedTextColor : disabledColor);
-            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_disabled);
+            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_active : R.drawable.ic_transactions_inactive);
         } else {
-            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
-            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
+//            mTvTransactions.setTextColor(isTabsEnabled ? unSelectedTextColor : disabledColor);
+//            mIvTransactions.setImageResource(isTabsEnabled ? R.drawable.ic_transactions_inactive : R.drawable.ic_transactions_disabled);
         }
 //        mIvMenu.setImageResource(isTabsEnabled ? R.drawable.quick_action_btn : R.drawable.quick_action_btn_disabled);
     }
@@ -389,6 +392,17 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
+        mDashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+            @Override
+            public void onChanged(DownloadImageResponse downloadImageResponse) {
+                if (downloadImageResponse != null) {
+                    if (downloadImageResponse.getStatus() != null && downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        showImage(downloadImageResponse.getData().getDownloadUrl());
+                    }
+                }
+            }
+        });
+
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
@@ -414,6 +428,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void showImage(String imageUrl) {
+//        Glide.with(this)
+//                .load(imageUrl)
+//                .placeholder(R.drawable.acct_profile)
+//                .into(mIvUserIcon);
     }
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
@@ -452,10 +473,21 @@ public class BusinessDashboardActivity extends BaseActivity {
                 && objMyApplication.getMyProfile().getData().getImage() != null) {
             mTvUserIconText.setVisibility(View.GONE);
             mIvUserIcon.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .load(objMyApplication.getMyProfile().getData().getImage())
-                    .placeholder(R.drawable.acct_profile)
-                    .into(mIvUserIcon);
+
+            String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+            utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
+            mIvUserIcon.setImageResource(R.drawable.acct_profile);
+//            if (!android.util.Patterns.WEB_URL.matcher(imageUrl).matches()) {
+//                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
+//                downloadUrlRequest.setKey(imageUrl);
+//                mDashboardViewModel.getDownloadUrl(downloadUrlRequest);
+//            } else {
+//                Glide.with(this)
+//                        .load(objMyApplication.getMyProfile().getData().getImage())
+//                        .placeholder(R.drawable.acct_profile)
+//                        .into(mIvUserIcon);
+//            }
         } else {
             mTvUserIconText.setVisibility(View.VISIBLE);
             mIvUserIcon.setVisibility(View.GONE);

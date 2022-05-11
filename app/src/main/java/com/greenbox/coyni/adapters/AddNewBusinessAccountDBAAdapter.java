@@ -1,5 +1,7 @@
 package com.greenbox.coyni.adapters;
 
+import static com.microblink.blinkcard.MicroblinkSDK.getApplicationContext;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -94,21 +97,26 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
             }
 
-            if (listCompany.get(position).getImage() != null && !listCompany.get(position).getImage().trim().equals("")) {
+            if (listCompany.get(position).getImage() != null
+                    && !listCompany.get(position).getImage().trim().equals("")) {
                 // profileImageText.setVisibility(View.GONE);
                 holder.profileImage.setVisibility(View.VISIBLE);
-                Glide.with(mContext)
-                        .load(listCompany.get(position).getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(holder.profileImage);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
+                utility.addImage(listCompany.get(position).getImage(), holder.profileImage, R.drawable.ic_case);
+                holder.profileImage.setImageResource(R.drawable.ic_case);
+//                Glide.with(mContext)
+//                        .load(listCompany.get(position).getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(holder.profileImage);
 
             } else {
                 holder.profileImage.setVisibility(View.VISIBLE);
+                holder.profileImage.setImageResource(R.drawable.ic_case);
                 // profileImageText.setVisibility(View.VISIBLE);
-                Glide.with(mContext)
-                        .load(listCompany.get(position).getImage())
-                        .placeholder(R.drawable.ic_case)
-                        .into(holder.profileImage);
+//                Glide.with(mContext)
+//                        .load(listCompany.get(position).getImage())
+//                        .placeholder(R.drawable.ic_case)
+//                        .into(holder.profileImage);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

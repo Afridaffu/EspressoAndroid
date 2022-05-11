@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AccountLimitsActivity;
@@ -475,7 +476,19 @@ public class BusinessProfileActivity extends BaseActivity {
                     account_status.setText(accountStatus);
                     account_id.setText("Account ID M-" + myApplication.getMyProfile().getData().getId());
 //                    fullname = Utils.capitalize(myApplication.getMyProfile().getData().getFirstName() + " " + myApplication.getMyProfile().getData().getLastName());
-                    if (myApplication.getMyProfile().getData().getDbaName() != null) {
+                    if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                            && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                            && myApplication.getMyProfile().getData().getFirstName() != null) {
+                        String firstName = myApplication.getMyProfile().getData().getFirstName();
+                       // iconText = firstName.substring(0, 1).toUpperCase();
+                        fullname = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                        if (myApplication.getMyProfile().getData().getLastName() != null) {
+                            String lastName = myApplication.getMyProfile().getData().getLastName();
+                            //iconText = iconText + lastName.substring(0, 1).toUpperCase();
+                            fullname = fullname + " ";
+                            fullname = fullname + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                        }
+                    } else if (myApplication.getMyProfile().getData().getDbaName() != null && !myApplication.getMyProfile().getData().getDbaName().equals(" ")) {
                         fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
                     }
                     if (fullname.length() > 22){
@@ -652,7 +665,19 @@ public class BusinessProfileActivity extends BaseActivity {
                                 account_status.setText(profile.getData().getAccountStatus());
                                 account_id.setText("Account ID M-" + profile.getData().getId());
 //                                String fullname = Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName());
-                                if (profile.getData().getDbaName() != null) {
+                                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                                        && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                                        && myApplication.getMyProfile().getData().getFirstName() != null) {
+                                    String firstName = myApplication.getMyProfile().getData().getFirstName();
+                                    // iconText = firstName.substring(0, 1).toUpperCase();
+                                    fullname = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                                    if (myApplication.getMyProfile().getData().getLastName() != null) {
+                                        String lastName = myApplication.getMyProfile().getData().getLastName();
+                                        //iconText = iconText + lastName.substring(0, 1).toUpperCase();
+                                        fullname = fullname + " ";
+                                        fullname = fullname + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                                    }
+                                } else if (profile.getData().getDbaName() != null) {
                                     fullname = Utils.capitalize(profile.getData().getDbaName());
                                 }
 //                                userFullname.setText(fullname);
@@ -736,7 +761,7 @@ public class BusinessProfileActivity extends BaseActivity {
         myApplication.setStrRetrEmail("");
         myApplication.clearUserData();
         dropAllTables();
-        Intent i = new Intent(BusinessProfileActivity.this, LoginActivity.class);
+        Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
@@ -759,10 +784,13 @@ public class BusinessProfileActivity extends BaseActivity {
                 profileImage.setVisibility(View.VISIBLE);
 //                userProfileCL.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 profileText.setVisibility(View.GONE);
-                Glide.with(this)
-                        .load(imageString)
-                        .placeholder(R.drawable.ic_profile_male_user)
-                        .into(profileImage);
+                profileImage.setImageResource(R.drawable.ic_profile_male_user);
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
+//                Glide.with(this)
+//                        .load(imageString)
+//                        .placeholder(R.drawable.ic_profile_male_user)
+//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.GONE);
                 profileText.setVisibility(View.VISIBLE);

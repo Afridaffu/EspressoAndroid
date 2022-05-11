@@ -395,6 +395,7 @@
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"
                             android:textIsSelectable="false"
+                            android:editable="true"
                             android:textSize="@dimen/_11ssp" />
 
                     </LinearLayout>
@@ -427,6 +428,7 @@
                             android:imeOptions="actionDone"
                             android:inputType="numberDecimal"
                             android:maxLength="@string/maxlength"
+                            android:editable="true"
                             android:textColor="@color/primary_black"
                             android:textColorHint="@color/light_gray"
                             android:textCursorDrawable="@drawable/cursor_color"

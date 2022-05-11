@@ -86,7 +86,7 @@ import java.util.List;
 public class BusinessDashboardFragment extends BaseFragment {
 
     private View mCurrentView, batchView, releaseView;
-    private TextView tv_PayoutNoHistory,tv_PayoutFullHistory, batchNoTransaction, nextReleaseNATV,
+    private TextView tv_PayoutNoHistory, batchNoTransaction, nextReleaseNATV,
             lastReleaseNATV, releaseNoTransaction;
     private MyApplication myApplication;
     private ImageView mIvUserIcon;
@@ -251,7 +251,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         dbHandler = DatabaseHandler.getInstance(getActivity());
 
         tv_PayoutNoHistory = mCurrentView.findViewById(R.id.tv_PayoutNoHistory);
-        tv_PayoutFullHistory = mCurrentView.findViewById(R.id.tv_PayoutFullHistory);
         batchView = mCurrentView.findViewById(R.id.batchView);
         batchNoTransaction = mCurrentView.findViewById(R.id.batchNoTransaction);
 
@@ -387,9 +386,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (batchPayoutListResponse != null) {
                     if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
                         if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
-//                            tv_PayoutNoHistory.setVisibility(View.GONE);
+                            tv_PayoutNoHistory.setVisibility(View.GONE);
                             batchView.setVisibility(View.GONE);
-                            tv_PayoutFullHistory.setVisibility(View.GONE);
                             mPayoutHistory.setVisibility(View.VISIBLE);
                             showData(batchPayoutListResponse.getData().getItems());
                         } else {
@@ -1096,8 +1094,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
             mPayoutHistory.setVisibility(View.GONE);
-//            tv_PayoutNoHistory.setVisibility(View.VISIBLE);
-            tv_PayoutFullHistory.setVisibility(View.VISIBLE);
+            tv_PayoutNoHistory.setVisibility(View.VISIBLE);
             mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
             mCvBatchNow.setClickable(false);
 
@@ -1116,25 +1113,26 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void showReserveRelease(ReserveListData listData) {
         showReserveReleaseBalance();
-        List<ReserveListItems> items = listData.getResponseList();
-        if (items != null && items.size() > 0) {
+        mTvReserveList.setVisibility(View.VISIBLE);
+        disable_reserve_list.setVisibility(View.GONE);
+
+        if(listData.getNextReserveReleaseAmount() != null) {
             nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
+        }
+
+        if(listData.getNextReserveReleaseDate() != null) {
             String date = listData.getNextReserveReleaseDate();
             if (date.contains(".")) {
-                String res = date.substring(0, date.lastIndexOf("."));
-                nextReleaseDateTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
-            } else {
-                Log.d("date format", date);
+                date = date.substring(0, date.lastIndexOf("."));
             }
-        } else {
-            nextReleaseDateTV.setText(listData.getNextReserveReleaseDate());
-        }
-        if (items != null && items.size() > 0) {
-            mTvReserveList.setVisibility(View.VISIBLE);
-            disable_reserve_list.setVisibility(View.GONE);
-            lastReleaseDateTV.setVisibility(View.VISIBLE);
             nextReleaseNATV.setVisibility(View.GONE);
             nextReleaseDateTV.setVisibility(View.VISIBLE);
+            nextReleaseDateTV.setText(myApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy"));
+        }
+        List<ReserveListItems> items = listData.getResponseList();
+        if (items != null && items.size() > 0) {
+
+            lastReleaseDateTV.setVisibility(View.VISIBLE);
             lastReleaseNATV.setVisibility(View.GONE);
             releaseView.setVisibility(View.GONE);
             releaseNoTransaction.setVisibility(View.GONE);
@@ -1181,8 +1179,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
 
         } else {
-            releaseNoTransaction.setVisibility(View.VISIBLE);
-            mTvReserveList.setVisibility(View.GONE);
+//            releaseNoTransaction.setVisibility(View.VISIBLE);
+//            mTvReserveList.setVisibility(View.GONE);
             LogUtils.v(TAG, "Reserve release summary is empty");
         }
     }

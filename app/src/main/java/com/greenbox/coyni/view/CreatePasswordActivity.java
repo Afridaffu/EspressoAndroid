@@ -152,6 +152,7 @@ public class CreatePasswordActivity extends BaseActivity {
                 tvchangepass.setVisibility(VISIBLE);
                 tvMessage.setVisibility(GONE);
                 passwordET.requestFocus();
+                passwordTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                 if (!Utils.isKeyboardVisible)
                     Utils.shwForcedKeypad(CreatePasswordActivity.this);
             } else {

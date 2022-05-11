@@ -139,13 +139,14 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isNextEnabled) {
+                    Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                     showProgressDialog();
                     teamInfoAddAPICall(prepareRequest());
-                    Utils.hideKeypad(AddNewTeamMemberActivity.this);
                 }
             }
         });
@@ -439,6 +440,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                Utils.hideKeypad(AddNewTeamMemberActivity.this);
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " ");
             } else {

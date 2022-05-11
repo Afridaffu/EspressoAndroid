@@ -28,6 +28,7 @@ import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.greenbox.coyni.model.actionRqrd.ActionRqrdResponse;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.BanksResponseModel;
@@ -55,8 +56,6 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
 import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
-import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
-import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -81,6 +80,8 @@ import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.model.logout.LogoutResponse;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
+import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
@@ -95,6 +96,8 @@ import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
+import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.model.profile.ImageResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
@@ -135,8 +138,8 @@ import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
 import com.greenbox.coyni.model.team.TeamGetDataModel;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
-import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.team.TeamListResponse;
+import com.greenbox.coyni.model.team.TeamRequest;
 import com.greenbox.coyni.model.templates.TemplateRequest;
 import com.greenbox.coyni.model.templates.TemplateResponse;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
@@ -576,6 +579,9 @@ public interface ApiService {
     @GET("api/v2/underwriting/user/action-required")
     Call<ActionRequiredResponse> postAdditionActionRequired();
 
+    @GET("api/v2/underwriting/user/action-required")
+    Call<ActionRqrdResponse> getActionRqrdCust();
+
     @Multipart
     @POST("api/v2/underwriting/user/business/action-required")
     Call<ActionRequiredSubmitResponse> submitActionRequired(@Part MultipartBody information);
@@ -608,10 +614,10 @@ public interface ApiService {
     Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
     @POST("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
+    Call<BatchPayoutListResponse> getPayoutlistData(@Query("searchKey") String searchKey);
 
     @POST("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+    Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate, @Query("toDate") String toDate);
 
     @POST("api/v2/node/refund/verify")
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
@@ -625,6 +631,11 @@ public interface ApiService {
     @POST("api/v2/transactions/admin/reserve/summary")
     Call<ReserveListResponse> getReserveListItems();
 
+    @POST("api/v2/profile/download-url")
+    Call<DownloadImageResponse> getDownloadUrl(@Body DownloadUrlRequest downloadUrlRequest);
+
+    @GET("api/v2/agreements/url")
+    Call<DownloadImageResponse> getAgreementUrl(@Query("agreementType") String agreementType);
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
