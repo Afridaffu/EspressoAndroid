@@ -477,7 +477,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
-            mIvUserIcon.setImageResource(R.drawable.acct_profile);
+//            mIvUserIcon.setImageResource(R.drawable.acct_profile);
 //            if (!android.util.Patterns.WEB_URL.matcher(imageUrl).matches()) {
 //                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
 //                downloadUrlRequest.setKey(imageUrl);
