@@ -254,8 +254,19 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getTotalAmount() != null) {
                 refundtotalAmounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));
             }
+//            if (objData.getData().getSaleOrderDateAndTime() != null) {
+//                refundOTIdatetv.setText(objMyApplication.exportDate(objData.getData().getSaleOrderDateAndTime()));
+//
+//            }
             if (objData.getData().getSaleOrderDateAndTime() != null) {
-                refundOTIdatetv.setText(objData.getData().getSaleOrderDateAndTime());
+                String datee = objData.getData().getSaleOrderDateAndTime();
+
+                if (datee != null && !datee.equals("")) {
+                    if (datee.contains(".")) {
+                        datee = datee.substring(0, datee.lastIndexOf("."));
+                    }
+                    refundOTIdatetv.setText(objMyApplication.convertZoneDateTime(datee, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy HH:mm:ss"));
+                }
             }
             if (objData.getData().getSaleOrderGrossAmount() != null) {
                 refundOTIgrossamounttv.setText(Utils.convertTwoDecimal(objData.getData().getSaleOrderGrossAmount().replace("CYN", "").trim()));
@@ -293,11 +304,11 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        startActivity(new Intent(MerchantTransactionDetailsActivity.this, MerchantTransactionListActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-    }
+//    @Override
+//    public void onBackPressed() {
+//        startActivity(new Intent(MerchantTransactionDetailsActivity.this, MerchantTransactionListActivity.class)
+//                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+//    }
 
     @SuppressLint("SetTextI18n")
     private void saleOrderMerchant(TransactionDetails objData) {
