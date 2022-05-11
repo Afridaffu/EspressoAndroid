@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +29,8 @@ import com.bumptech.glide.request.target.Target;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.greenbox.coyni.model.profile.DownloadImageData;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
@@ -79,9 +82,12 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webView.invalidate();
         webSettings.setJavaScriptEnabled(true);
         webView.setVerticalScrollBarEnabled(true);
-        String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
-        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
         showProgressDialog();
+        dashboardViewModel.getDocumentUrl(Utils.mAgmt);
+//        String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
+//        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
+
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -122,7 +128,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.meAgreementsById();
+        //dashboardViewModel.meAgreementsById();
     }
 
     private void launchSignature() {
@@ -267,6 +273,37 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 }
             }
         });
+
+        dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+            @Override
+            public void onChanged(DownloadImageResponse downloadImageResponse) {
+                dismissDialog();
+                if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
+                    if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        DownloadImageData data = downloadImageResponse.getData();
+                        if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                            launchDocumentUrl(data.getDownloadUrl());
+
+                        } else {
+                            Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
+                        }
+                    } else {
+                        Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), MerchantsAgrementActivity.this, "", "");
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void launchDocumentUrl(String url) {
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        Uri uri = Uri.parse(url);
+//        intent.setDataAndType(uri, "application/pdf");
+//        startActivity(intent);
+
+        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
+
     }
 }
 
