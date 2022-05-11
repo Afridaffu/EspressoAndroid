@@ -128,6 +128,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount,
             saleOrdersText, mAverageTicket, mHighestTicket, mDateHighestTicket;
     private LinearLayout mTicketsLayout;
+    private TextView mIdVeriStatus;
     private UserData userData;
 
     //Processing Volume Types
@@ -247,6 +248,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         reserveListDateTV = mCurrentView.findViewById(R.id.reserveListDateTV);
         reserveReleaseListLL = mCurrentView.findViewById(R.id.reserveReleaseListLL);
         reserveDetailsLL = mCurrentView.findViewById(R.id.reserveDetailsLL);
+        mIdVeriStatus = mCurrentView.findViewById(R.id.idVeriStatus);
         monthlyVolumeViewLl = mCurrentView.findViewById(R.id.tv_monthly_volume_view);
         dbHandler = DatabaseHandler.getInstance(getActivity());
 
@@ -633,9 +635,9 @@ public class BusinessDashboardFragment extends BaseFragment {
                 showAdditionalActionView();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
-                showIdentityVerificationFailed();
+                showIdentityVerificationFailed(accountStatus);
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-                showIdentityVerificationFailed();
+                showIdentityVerificationFailed(accountStatus);
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 showBusinessDashboardView();
             }
@@ -644,12 +646,16 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
-    private void showIdentityVerificationFailed() {
+    private void showIdentityVerificationFailed(String accountStatus) {
         mLlIdentityVerificationReview.setVisibility(View.GONE);
         mLlBusinessDashboardView.setVisibility(View.GONE);
         mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
         mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
         mLlGetStartedView.setVisibility(View.GONE);
+
+        if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())){
+            mIdVeriStatus.setText("Application Declined");
+        }
 
         mTvContactUs.setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
