@@ -375,12 +375,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".view.LoginActivity"
-            android:configChanges="uiMode"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".view.PINActivity"
             android:configChanges="uiMode"
@@ -412,6 +407,23 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.LoginActivity"
+            android:configChanges="uiMode"
+            android:screenOrientation="portrait"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="myownandroid.testing" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+                <data
+                    android:scheme="https"
+                    android:host="www.coyni.com"/>
             </intent-filter>
         </activity>
         <activity
