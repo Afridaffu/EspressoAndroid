@@ -148,20 +148,20 @@ public class AgreementsActivity extends BaseActivity {
                                     if (agreements.getData().getItems().get(i).getDocumentVersion().contains("v") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                         versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim()));
                                     }
-                                    if (cTSVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mTOS) {
+                                    int signatureType = agreements.getData().getItems().get(i).getSignatureType();
+                                    if (cTSVersion == versions.get(i) && (signatureType == Utils.mTOS || signatureType == Utils.cTOS)) {
                                         activeItems.add(agreements.getData().getItems().get(i));
                                         tos = agreements.getData().getItems().get(i);
-                                    } else if (cPPVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mPP) {
+                                    } else if (cPPVersion == versions.get(i) && (signatureType == Utils.mPP || signatureType == Utils.cPP)) {
                                         activeItems.add(agreements.getData().getItems().get(i));
                                         privacyPolicy = agreements.getData().getItems().get(i);
-                                    } else if (bMAVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mAgmt) {
+                                    } else if (bMAVersion == versions.get(i) && signatureType == Utils.mAgmt) {
                                         activeItems.add(agreements.getData().getItems().get(i));
                                         merchantAgre = agreements.getData().getItems().get(i);
                                     } else {
                                         pastItems.add(agreements.getData().getItems().get(i));
                                     }
                                 }
-
 
                                 activeItems = new ArrayList<>();
                                 activeItems.add(privacyPolicy);
@@ -234,26 +234,27 @@ public class AgreementsActivity extends BaseActivity {
 
     private void launchDocumentUrl(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("https://docs.google.com/viewer?url=" +url);
-        intent.setDataAndType(uri,"text/html");
+        Uri uri = Uri.parse(url);
+        intent.setDataAndType(uri,"application/pdf");
         startActivity(intent);
     }
 
     private void setOnClickListener() {
         try {
-            listener = (view, position) -> {
+            listener = (view, doc) -> {
                 showProgressDialog();
-                switch (position) {
-                    case 0:
-                        dashboardViewModel.getDocumentUrl(1);
-                        break;
-                    case 1:
-                        dashboardViewModel.getDocumentUrl(0);
-                        break;
-                    case 2:
-                        dashboardViewModel.getDocumentUrl(5);
-                        break;
-                }
+                dashboardViewModel.getDocumentUrl(doc);
+//                switch (position) {
+//                    case 0:
+//                        dashboardViewModel.getDocumentUrl(1);
+//                        break;
+//                    case 1:
+//                        dashboardViewModel.getDocumentUrl(0);
+//                        break;
+//                    case 2:
+//                        dashboardViewModel.getDocumentUrl(5);
+//                        break;
+//                }
 
             };
         } catch (Exception ex) {

@@ -17,8 +17,6 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.internal.Util;
-
 public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyViewHolder> {
 
     Context context;
@@ -50,17 +48,30 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
-        if (items.get(pos).getSignatureType() == Utils.mPP && items.get(pos).getDocumentVersion() != null) {
+        int docId = 0;
+        if ((items.get(pos).getSignatureType() == Utils.mPP || items.get(pos).getSignatureType() == Utils.cPP)
+                && items.get(pos).getDocumentVersion() != null) {
+            docId = Utils.cPP;
             holder.agreementTV.setText(context.getResources().getString(R.string.privay_policy) + " ");
             holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
-
-        } else if (items.get(pos).getSignatureType() == Utils.mTOS && items.get(pos).getDocumentVersion() != null) {
+        } else if ((items.get(pos).getSignatureType() == Utils.mTOS || items.get(pos).getSignatureType() == Utils.cTOS)
+                && items.get(pos).getDocumentVersion() != null) {
+            docId = Utils.cTOS;
             holder.agreementTV.setText(context.getResources().getString(R.string.tos) + " ");
             holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
         } else if (items.get(pos).getSignatureType() == Utils.mAgmt && items.get(pos).getDocumentVersion() != null) {
+            docId = Utils.mAgmt;
             holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) + " ");
             holder.listDocsTV.setText(items.get(pos).getDocumentVersion().toLowerCase(Locale.ROOT).replace(" ", ""));
         }
+        holder.itemView.setTag(docId);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int doc = (int) view.getTag();
+                recyclerClickListener.click(view, doc);
+            }
+        });
     }
 
     @Override
@@ -72,23 +83,19 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
     }
 
     public interface RecyclerClickListener {
-        void click(View view, int position);
+        void click(View view, int docId);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        View itemView;
         TextView agreementTV, listDocsTV;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.itemView = itemView;
             agreementTV = itemView.findViewById(R.id.listagreementsTV);
             listDocsTV = itemView.findViewById(R.id.listDocsTV);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            recyclerClickListener.click(view, getAdapterPosition());
         }
     }
 }
