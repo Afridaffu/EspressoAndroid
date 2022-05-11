@@ -55,6 +55,8 @@ import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
+import com.greenbox.coyni.model.profile.DownloadImageData;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.Agreements;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
@@ -68,6 +70,7 @@ import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.WebViewActivity;
@@ -105,8 +108,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private List<Item1> agreements = new ArrayList<>();
     private List<RequiredDocument> companyReqDocList = new ArrayList<>();
     private List<RequiredDocument> dbReqDocList = new ArrayList<>();
-    private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
-    private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
+//    private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
+//    private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
     private LinearLayout llPrivacy, llTerms, llMerchant;
     private ProgressDialog progressDialog;
@@ -140,6 +143,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         setContentView(R.layout.activity_review_application);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setKeyboardVisibilityListener(ReviewApplicationActivity.this);
+
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
         objMyApplication = (MyApplication) getApplicationContext();
@@ -801,44 +805,70 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-        dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
+//        dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
+//            @Override
+//            public void onChanged(AgreementsPdf agreementsPdf) {
+//                LogUtils.d(TAG, "pdf" + agreementsPdf);
+//                dismissDialog();
+//                if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
+//                    if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
+//                        //new code for showing pdf , modify later
+//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+//                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf")) {
+//                            dashboardViewModel.getDocumentUrl(Utils.cPP);
+//                            dashboardViewModel.getDocumentUrl(Utils.cTOS);
+//
+//
+////                            browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
+////                            switch (agreementsPdf.getData().getAgreementType()) {
+////                                case Utils.mTOS:
+////                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+////                                    break;
+////                                case Utils.mAgmt:
+////                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+////                                    break;
+////                            }
+//                        }
+//                        else {
+//                            dashboardViewModel.getDocumentUrl(Utils.mPP);
+//                            dashboardViewModel.getDocumentUrl(Utils.mTOS);
+//                            dashboardViewModel.getDocumentUrl(Utils.mAgmt);
+////                            switch (agreementsPdf.getData().getAgreementType()) {
+////                                case Utils.mPP:
+////                                    browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
+////                                    break;
+////                                case Utils.mTOS:
+////                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
+////                                    break;
+////                                case Utils.mAgmt:
+////                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
+////                                    break;
+////                            }
+//                        }
+//                        try {
+//                            startActivity(browserIntent);
+//                        } catch (ActivityNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//        });
+
+        dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
             @Override
-            public void onChanged(AgreementsPdf agreementsPdf) {
-                LogUtils.d(TAG, "pdf" + agreementsPdf);
+            public void onChanged(DownloadImageResponse downloadImageResponse) {
                 dismissDialog();
-                if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
-                    if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
-                        //new code for showing pdf , modify later
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf")) {
-                            browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
-                            switch (agreementsPdf.getData().getAgreementType()) {
-                                case Utils.mTOS:
-                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-                                    break;
-                                case Utils.mAgmt:
-                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
-                                    break;
-                            }
+                if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
+                    if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        DownloadImageData data = downloadImageResponse.getData();
+                        if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                            launchDocumentUrl(data.getDownloadUrl());
+                        } else {
+                            Utils.displayAlert(getString(R.string.unable_to_get_document), ReviewApplicationActivity.this, "", "");
                         }
-                        else {
-                            switch (agreementsPdf.getData().getAgreementType()) {
-                                case Utils.mPP:
-                                    browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
-                                    break;
-                                case Utils.mTOS:
-                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-                                    break;
-                                case Utils.mAgmt:
-                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
-                                    break;
-                            }
-                        }
-                        try {
-                            startActivity(browserIntent);
-                        } catch (ActivityNotFoundException e) {
-                            e.printStackTrace();
-                        }
+                    } else {
+                        Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), ReviewApplicationActivity.this, "", "");
                     }
                 }
             }
@@ -977,18 +1007,9 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-
-//                dashboardViewModel.agreementsByType("1");
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-//                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-//                try {
-//                    startActivity(browserIntent);
-//                } catch (ActivityNotFoundException e) {
-//                    e.printStackTrace();
-//                }
                 showProgressDialog();
-                dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
-            }
+                dashboardViewModel.getDocumentUrl(Utils.mTOS);
+                }
 
             @Override
             public void updateDrawState(TextPaint ds) {
@@ -1005,17 +1026,8 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-
-//                dashboardViewModel.agreementsByType("0");
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-//                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-//                try {
-//                    startActivity(browserIntent);
-//                } catch (ActivityNotFoundException e) {
-//                    e.printStackTrace();
-//                }
                 showProgressDialog();
-                dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
+                dashboardViewModel.getDocumentUrl(Utils.mPP);
 
             }
 
@@ -1035,5 +1047,12 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         spannableTV.setText(ss);
         spannableTV.setMovementMethod(LinkMovementMethod.getInstance());
         spannableTV.setHighlightColor(Color.TRANSPARENT);
+    }
+
+    private void launchDocumentUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse(url);
+        intent.setDataAndType(uri, "application/pdf");
+        startActivity(intent);
     }
 }

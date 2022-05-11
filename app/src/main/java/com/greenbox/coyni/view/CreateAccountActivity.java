@@ -5,6 +5,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.app.ProgressDialog;
+import android.app.UiAutomation;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -55,6 +56,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.model.profile.DownloadImageData;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
 import com.greenbox.coyni.model.register.CustRegisterResponse;
 import com.greenbox.coyni.model.register.EmailExistsResponse;
@@ -88,6 +91,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     private Pattern strong, medium;
     LinearLayout layoutClose;
     ImageView createAccountCloseIV;
+    private int accountType = Utils.PERSONAL_ACCOUNT;
 
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
@@ -102,8 +106,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     LoginViewModel loginViewModel;
     String phoneNumber;
 
-    String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
-    String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
+//    String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
+//    String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
 
     int[][] errorState, state;
     int[] errorColor, color;
@@ -122,14 +126,17 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
-
+            if(getIntent()!= null){
+                accountType =  getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
+            }
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(Color.TRANSPARENT);
+
+            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             initFields();
             initObservers();
-            dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -426,6 +433,26 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 }
             }
         });
+
+        dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+            @Override
+            public void onChanged(DownloadImageResponse downloadImageResponse) {
+                dismissDialog();
+                if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
+                    if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        DownloadImageData data = downloadImageResponse.getData();
+                        if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                            launchDocumentUrl(data.getDownloadUrl());
+                        } else {
+                            Utils.displayAlert(getString(R.string.unable_to_get_document), CreateAccountActivity.this, "", "");
+                        }
+                    } else {
+                        Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), CreateAccountActivity.this, "", "");
+                    }
+                }
+            }
+        });
+
 
         loginViewModel.getEmailExistsResponseMutableLiveData().observe(this, new Observer<EmailExistsResponse>() {
             @Override
@@ -1149,76 +1176,73 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 //        }
 //        return encoded;
 //    }
+    private void launchDocumentUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse(url);
+        intent.setDataAndType(uri, "application/pdf");
+        startActivity(intent);
+    }
 
     public void setSpannableText() {
+            SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(CreateAccountActivity.this);
 
-        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(CreateAccountActivity.this);
-
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    showProgressDialog();
+                    if(accountType == Utils.BUSINESS_ACCOUNT){
+                        dashboardViewModel.getDocumentUrl(Utils.mTOS);
+                    }else {
+                        dashboardViewModel.getDocumentUrl(Utils.cTOS);
+                    }
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                dashboardViewModel.getDocumentUrl(Utils.cTOS);
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-                try {
-                    startActivity(browserIntent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(true);
                 }
-            }
+            };
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
+            ClickableSpan clickableSpan2 = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(CreateAccountActivity.this);
 
-        ClickableSpan clickableSpan2 = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                if (Utils.isKeyboardVisible)
-                    Utils.hideKeypad(CreateAccountActivity.this);
-
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    showProgressDialog();
+                    if(accountType == Utils.BUSINESS_ACCOUNT){
+                        dashboardViewModel.getDocumentUrl(Utils.mPP);
+                    }else {
+                        dashboardViewModel.getDocumentUrl(Utils.cPP);
+                    }
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
 
-                dashboardViewModel.getDocumentUrl(Utils.cPP);
-
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
-                try {
-                    startActivity(browserIntent);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(true);
                 }
-            }
+            };
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
+            ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-
-        spannableText.setText(ss);
-        spannableText.setMovementMethod(LinkMovementMethod.getInstance());
-        spannableText.setHighlightColor(Color.TRANSPARENT);
+            spannableText.setText(ss);
+            spannableText.setMovementMethod(LinkMovementMethod.getInstance());
+            spannableText.setHighlightColor(Color.TRANSPARENT);
     }
 
 //    public void setSpannableText() {
