@@ -213,7 +213,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         RequestBody.create(informationJSON.toString().getBytes(), MediaType.parse("application/json")));
 
         for (int i = 0; i < documentsFIle.size(); i++) {
-            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName() + ".jpg", RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
+            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName(), RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
         }
 
         MultipartBody requestBody = buildernew.build();

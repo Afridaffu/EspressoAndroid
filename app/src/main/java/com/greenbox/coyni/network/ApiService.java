@@ -29,6 +29,7 @@ import com.greenbox.coyni.model.EmptyRequest;
 import com.greenbox.coyni.model.SearchKeyRequest;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
 import com.greenbox.coyni.model.actionRqrd.ActionRqrdResponse;
+import com.greenbox.coyni.model.actionRqrd.SubmitActionRqrdResponse;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.BankResponse;
 import com.greenbox.coyni.model.bank.BanksResponseModel;
@@ -612,10 +613,10 @@ public interface ApiService {
     Call<BatchPayoutIdDetailsResponse> batchPayoutIdDetails(@Body BatchPayoutDetailsRequest batchPayoutDetailsRequest);
 
     @POST("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutlistData( @Query("searchKey") String searchKey);
+    Call<BatchPayoutListResponse> getPayoutlistData(@Query("searchKey") String searchKey);
 
     @POST("api/v2/transactions/admin/totalPayout")
-    Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate,@Query("toDate") String toDate);
+    Call<BatchPayoutListResponse> getPayoutlistdata(@Query("fromDate") String fromDate, @Query("toDate") String toDate);
 
     @POST("api/v2/node/refund/verify")
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
@@ -642,5 +643,9 @@ public interface ApiService {
     @POST("api/v2/node/cancel-withdraw/{gbxTxnId}")
     Call<CancelBuyTokenResponse> cancelWithdrawToken(@Path("gbxTxnId") String gbxTxnId);
 
+    @Multipart
+    @POST("api/v2/underwriting/user/customer/action-required")
+    Call<SubmitActionRqrdResponse> submitActRqrd(@Part MultipartBody.Part[] body,
+                                                  @Part("underwritingActionRequired") RequestBody type);
 }
 

@@ -91,12 +91,14 @@
         android:id="@+id/layoutAuth"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_bg_splash"></ImageView>
+            android:src="@drawable/ic_bg_splash"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-40dp"/>
 
         <ImageView
             android:id="@+id/bottomIV"
