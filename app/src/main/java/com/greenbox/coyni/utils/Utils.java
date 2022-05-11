@@ -274,6 +274,7 @@ public class Utils {
     public static final int monthlyservicefee = 17;
     public static final int withdraw = 3;
     public static final int refund = 9;
+    public static final int refunded = 7;
     public static final int partialRefund = 8;
     public static final int accountTransfer = 0; //Not available
     public static final int paidInvoice = 15;
