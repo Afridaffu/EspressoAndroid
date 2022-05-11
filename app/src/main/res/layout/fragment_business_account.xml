@@ -45,18 +45,19 @@
                         android:contentDescription="@string/user_details"
                         android:scaleType="fitXY"
                         android:src="@drawable/acct_profile"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_user_icon_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:text="KM"
+                        android:background="@color/price"
                         android:fontFamily="@font/opensans_bold"
-                        android:textColor="@color/primary_black"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_16sdp"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                 </androidx.cardview.widget.CardView>
 

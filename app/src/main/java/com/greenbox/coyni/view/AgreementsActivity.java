@@ -3,7 +3,6 @@ package com.greenbox.coyni.view;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,13 +20,14 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AgreeListAdapter;
 import com.greenbox.coyni.adapters.PastAgreeListAdapter;
 import com.greenbox.coyni.model.Agreements;
+import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.business.ReviewApplicationActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
@@ -91,6 +91,64 @@ public class AgreementsActivity extends BaseActivity {
 
     }
 
+    private void processAgreements(AgreementsData data) {
+        if (data == null) {
+            return;
+        }
+        List<Item> activeItems = new ArrayList<>();
+        List<Item> pastItems = new ArrayList<>();
+
+        if (data.getItems() != null && data.getItems().size() > 0) {
+            for (int i = 0; i < data.getItems().size(); i++) {
+                Item item = data.getItems().get(i);
+                if (!activeItems.contains(item)) {
+                    activeItems.add(item);
+                } else {
+                    for (int count = 0; count < activeItems.size(); count++) {
+                        Item existingItem = activeItems.get(count);
+                        if (existingItem.getSignatureType() == item.getSignatureType()) {
+                            if (existingItem.getDocumentVersion() != null && !existingItem.getDocumentVersion().trim().equals("")
+                                    && item.getDocumentVersion() != null && !item.getDocumentVersion().trim().equals("")) {
+                                double existingVersion = Double.parseDouble(existingItem.getDocumentVersion().toLowerCase().replace("v", "").replace(" ", "").trim());
+                                double itemVersion = Double.parseDouble(item.getDocumentVersion().toLowerCase().replace("v", "").replace(" ", "").trim());
+                                if (existingVersion < itemVersion) {
+                                    pastItems.add(existingItem);
+                                    activeItems.remove(existingItem);
+                                    activeItems.add(item);
+                                } else {
+                                    pastItems.add(item);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, listener);
+        recyclerView.setAdapter(adapter);
+
+        if (activeItems.size() > 0) {
+            findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
+        }
+
+        if (pastItems.size() > 0) {
+            cvPast.setVisibility(View.VISIBLE);
+            pastTV.setVisibility(View.VISIBLE);
+            activeTV.setVisibility(View.VISIBLE);
+            findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
+            pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
+            recyclPastAgree.setLayoutManager(mLayoutManager);
+            recyclPastAgree.setItemAnimator(new DefaultItemAnimator());
+            recyclPastAgree.setAdapter(pastAdapter);
+        } else {
+            pastTV.setVisibility(View.GONE);
+            cvPast.setVisibility(View.GONE);
+            activeTV.setVisibility(View.GONE);
+        }
+    }
+
     private void initObserver() {
         try {
             dashboardViewModel.getAgreementsMutableLiveData().observe(this, new Observer<Agreements>() {
@@ -98,101 +156,9 @@ public class AgreementsActivity extends BaseActivity {
                 public void onChanged(Agreements agreements) {
                     try {
                         dismissDialog();
-                        Log.e("act", agreements.getStatus());
-                        if (agreements.getStatus().contains("SUCCESS")) {
-                            List<Item> activeItems = new ArrayList<>();
-                            List<Item> pastItems = new ArrayList<>();
-                            List<Integer> versions = new ArrayList<>();
-                            int cPPVersion = 0, cTSVersion = 0, bMAVersion = 0;
-                            if (agreements.getData().getItems() != null && agreements.getData().getItems().size() > 0) {
-                                for (int i = 0; i < agreements.getData().getItems().size(); i++) {
-                                    if (agreements.getData().getItems().get(i).getSignatureType() == Utils.mTOS) {
-                                        if (cTSVersion == 0) {
-                                            cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
-                                        } else {
-                                            if (cTSVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim())) {
-                                                cTSVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
-                                            }
-                                        }
-                                    }
-                                    if (agreements.getData().getItems().get(i).getSignatureType() == Utils.mPP) {
-                                        if (cPPVersion == 0) {
-                                            cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
-                                        } else {
-                                            if (cPPVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim())) {
-                                                cPPVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
-                                            }
-                                        }
-                                    }
-                                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                        if (agreements.getData().getItems().get(i).getSignatureType() == Utils.mAgmt) {
-                                            if (bMAVersion == 0) {
-                                                bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
-                                            } else {
-                                                if (bMAVersion < Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim())) {
-                                                    bMAVersion = Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim());
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                                Item privacyPolicy = new Item();
-                                Item tos = new Item();
-                                Item merchantAgre = new Item();
-
-                                for (int i = 0; i < agreements.getData().getItems().size(); i++) {
-                                    if (agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().contains("v")) {
-                                        versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim()));
-                                    }
-                                    if (agreements.getData().getItems().get(i).getDocumentVersion().contains("v") && objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                        versions.add(Integer.parseInt(agreements.getData().getItems().get(i).getDocumentVersion().toLowerCase().replace("v", "").replace(".", "").trim()));
-                                    }
-                                    if (cTSVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mTOS) {
-                                        activeItems.add(agreements.getData().getItems().get(i));
-                                        tos = agreements.getData().getItems().get(i);
-                                    } else if (cPPVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mPP) {
-                                        activeItems.add(agreements.getData().getItems().get(i));
-                                        privacyPolicy = agreements.getData().getItems().get(i);
-                                    } else if (bMAVersion == versions.get(i) && agreements.getData().getItems().get(i).getSignatureType() == Utils.mAgmt) {
-                                        activeItems.add(agreements.getData().getItems().get(i));
-                                        merchantAgre = agreements.getData().getItems().get(i);
-                                    } else {
-                                        pastItems.add(agreements.getData().getItems().get(i));
-                                    }
-                                }
-
-
-                                activeItems = new ArrayList<>();
-                                activeItems.add(privacyPolicy);
-                                activeItems.add(tos);
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                    activeItems.add(merchantAgre);
-                                }
-                            }
-
-                            adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, dashboardViewModel, listener);
-                            recyclerView.setAdapter(adapter);
-
-                            if (activeItems != null && activeItems.size() > 0) {
-                                findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
-                            }
-
-                            if (pastItems != null && pastItems.size() > 0) {
-                                cvPast.setVisibility(View.VISIBLE);
-                                pastTV.setVisibility(View.VISIBLE);
-                                activeTV.setVisibility(View.VISIBLE);
-                                findViewById(R.id.cvActive).setVisibility(View.VISIBLE);
-                                pastAdapter = new PastAgreeListAdapter(pastItems, AgreementsActivity.this);
-                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(AgreementsActivity.this);
-                                recyclPastAgree.setLayoutManager(mLayoutManager);
-                                recyclPastAgree.setItemAnimator(new DefaultItemAnimator());
-                                recyclPastAgree.setAdapter(pastAdapter);
-                            } else {
-                                pastTV.setVisibility(View.GONE);
-                                cvPast.setVisibility(View.GONE);
-                                activeTV.setVisibility(View.GONE);
-                            }
+                        LogUtils.v(TAG, agreements.getStatus());
+                        if (agreements.getStatus().contains(Utils.SUCCESS)) {
+                            processAgreements(agreements.getData());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -204,7 +170,7 @@ public class AgreementsActivity extends BaseActivity {
                 @Override
                 public void onChanged(AgreementsPdf agreementsPdf) {
                     if (agreementsPdf.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        adapter = new AgreeListAdapter(AgreementsActivity.this, agreements.getData().getItems(), dashboardViewModel, listener);
+                        adapter = new AgreeListAdapter(AgreementsActivity.this, agreements.getData().getItems(), listener);
                         recyclerView.setAdapter(adapter);
                     }
                 }
@@ -214,11 +180,13 @@ public class AgreementsActivity extends BaseActivity {
                 @Override
                 public void onChanged(DownloadImageResponse downloadImageResponse) {
                     dismissDialog();
-                    if(downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
-                        if(downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
+                        if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                             DownloadImageData data = downloadImageResponse.getData();
-                            if(data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                            if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
                                 launchDocumentUrl(data.getDownloadUrl());
+                            } else {
+                                Utils.displayAlert(getString(R.string.unable_to_get_document), AgreementsActivity.this, "", "");
                             }
                         } else {
                             Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), AgreementsActivity.this, "", "");
@@ -234,27 +202,16 @@ public class AgreementsActivity extends BaseActivity {
 
     private void launchDocumentUrl(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse("https://docs.google.com/viewer?url=" +url);
-        intent.setDataAndType(uri,"text/html");
+        Uri uri = Uri.parse(url);
+        intent.setDataAndType(uri, "application/pdf");
         startActivity(intent);
     }
 
     private void setOnClickListener() {
         try {
-            listener = (view, position) -> {
+            listener = (view, doc) -> {
                 showProgressDialog();
-                switch (position) {
-                    case 0:
-                        dashboardViewModel.getDocumentUrl(1);
-                        break;
-                    case 1:
-                        dashboardViewModel.getDocumentUrl(0);
-                        break;
-                    case 2:
-                        dashboardViewModel.getDocumentUrl(5);
-                        break;
-                }
-
+                dashboardViewModel.getDocumentUrl(doc);
             };
         } catch (Exception ex) {
             ex.printStackTrace();

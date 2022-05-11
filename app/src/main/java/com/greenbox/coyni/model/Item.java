@@ -3,6 +3,8 @@ package com.greenbox.coyni.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 public class Item {
 
     @SerializedName("id")
@@ -92,6 +94,17 @@ public class Item {
 
     public void setDocumentVersion(String documentVersion) {
         this.documentVersion = documentVersion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Item item = (Item) o;
+        return signatureType == (item.signatureType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 
