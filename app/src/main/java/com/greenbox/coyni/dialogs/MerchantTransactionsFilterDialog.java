@@ -119,7 +119,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                         case Utils.refund:
                             transStatusRefund.setChecked(true);
                             break;
-                        case Utils.cancelled:
+                        case Utils.partialRefund:
                             transStatusPartialRefund.setChecked(true);
                             break;
                     }
@@ -317,10 +317,10 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    txnStatus.add(Utils.cancelled);
+                    txnStatus.add(Utils.partialRefund);
                 } else {
                     for (int i = 0; i < txnStatus.size(); i++) {
-                        if (txnStatus.get(i) == Utils.cancelled) {
+                        if (txnStatus.get(i) == Utils.partialRefund) {
                             txnStatus.remove(i);
                             break;
                         }
