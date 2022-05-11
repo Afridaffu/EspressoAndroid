@@ -150,12 +150,13 @@ public class EditTeamMember extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isNextEnabled) {
+                    Utils.hideSoftKeyboard(EditTeamMember.this);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.hideSoftKeyboard(EditTeamMember.this);
                     sendUpdateRequest();
-                    Utils.hideKeypad(EditTeamMember.this);
                 }
 
             }
