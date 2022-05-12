@@ -87,6 +87,19 @@ public class BusinessDashboardActivity extends BaseActivity {
         super.onResume();
         try {
             mDashboardViewModel.meProfile();
+
+
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.MERCHANT);
+            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.TOKEN);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.RESERVE);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -411,15 +424,8 @@ public class BusinessDashboardActivity extends BaseActivity {
                         objMyApplication.setWalletResponseData(businessWalletResponse.getData());
 
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-//                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
-//                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
-////                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
 //
-//                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
-////                                objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-//
-//                            }
-                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount(),
+                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
                                     businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
                         }
                     }
@@ -441,7 +447,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         String iconText = "";
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getFirstName() != null &&
-                    objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
             String firstName = objMyApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();
             userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
@@ -458,14 +464,14 @@ public class BusinessDashboardActivity extends BaseActivity {
             } else {
                 mTvUserName.setText("Hi! " + userName);
             }
-        }else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+        } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
             if (objMyApplication.getMyProfile().getData().getDbaName() != null) {
                 iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
             }
             userName = objMyApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 21) {
                 mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
-            } else if(userName != null) {
+            } else if (userName != null) {
                 mTvUserName.setText("Hi! " + userName);
             }
         }

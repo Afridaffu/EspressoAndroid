@@ -171,8 +171,8 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private Double getMerchantBalance() {
         Double amt = 0.0;
-        if (myApplication.getGBTBalance() != null) {
-            amt += myApplication.getGBTBalance();
+        if (myApplication.getCurrentUserData().getReserveGBTBalance() != null) {
+            amt += myApplication.getCurrentUserData().getReserveGBTBalance();
         }
         if (myApplication.getCurrentUserData().getMerchnatGBTBalance() != null) {
             amt += myApplication.getCurrentUserData().getMerchnatGBTBalance();
@@ -571,7 +571,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                             userData.setEarningList(merchantActivityResp.getData().getEarnings());
 
                             mSbTodayVolume.setEnabled(true);
-                            mSbTodayVolume.setProgressWithText(0, userData.getEarningList());
+                            if (merchantActivityResp.getData().getEarnings() != null && merchantActivityResp.getData().getEarnings().size() > 0)
+                                mSbTodayVolume.setProgressWithText(merchantActivityResp.getData().getEarnings().get(0).getKey(), userData.getEarningList());
+                            else
+                                mSbTodayVolume.setProgressWithText(0, userData.getEarningList());
                         }
 
                     }
@@ -653,8 +656,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
         mLlGetStartedView.setVisibility(View.GONE);
 
-        if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())){
-            mIdVeriStatus.setText("Application Declined");
+        if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+            mIdVeriStatus.setText(R.string.declined_text);
+        } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
+            mIdVeriStatus.setText(R.string.canceled_text);
         }
 
         mTvContactUs.setOnClickListener(v -> {
@@ -892,7 +897,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
                 businessActivityAPICall(strFromDate, strToDate);
-                commissionActivityCall(strFromDate,strToDate);
+                commissionActivityCall(strFromDate, strToDate);
             }
             break;
             case yesterdayValue: {
@@ -902,7 +907,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 strFromDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + startTime;
                 strToDate = myApplication.convertZoneDateTime(getYesterdayDateString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
-                commissionActivityCall(strFromDate,strToDate);
+                commissionActivityCall(strFromDate, strToDate);
             }
             break;
             case monthDate: {
@@ -959,7 +964,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
-    private void commissionActivityCall(String strFromDate,String strToDate) {
+    private void commissionActivityCall(String strFromDate, String strToDate) {
         MerchantActivityRequest request = new MerchantActivityRequest();
 //        request.setDuration(value.toUpperCase());
         request.setStartDate(strFromDate);
@@ -1122,11 +1127,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         mTvReserveList.setVisibility(View.VISIBLE);
         disable_reserve_list.setVisibility(View.GONE);
 
-        if(listData.getNextReserveReleaseAmount() != null) {
+        if (listData.getNextReserveReleaseAmount() != null) {
             nextReleaseAmountTV.setText(listData.getNextReserveReleaseAmount());
         }
 
-        if(listData.getNextReserveReleaseDate() != null) {
+        if (listData.getNextReserveReleaseDate() != null) {
             String date = listData.getNextReserveReleaseDate();
             if (date.contains(".")) {
                 date = date.substring(0, date.lastIndexOf("."));

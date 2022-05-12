@@ -97,9 +97,9 @@ public class AccountsActivity extends AppCompatActivity {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
 //                        objMyApplication.setGbtWallet(walletInfo.get(i));
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
                     userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-                    objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount(), walletInfo.get(0).getWalletType());
+                    objMyApplication.setGBTBalance(walletInfo.get(i).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
 //                    }
                 }
             }

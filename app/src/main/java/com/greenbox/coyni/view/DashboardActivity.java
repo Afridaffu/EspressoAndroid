@@ -980,9 +980,9 @@ public class DashboardActivity extends AppCompatActivity {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
 //                    objMyApplication.setWalletResponseData(walletResponse);
 //                    objMyApplication.setGbtWallet(walletInfo.get(i));
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
                     tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
-                    objMyApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount(), walletInfo.get(0).getWalletType());
+                    objMyApplication.setGBTBalance(walletInfo.get(i).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
 //                    }
                 }
             }
