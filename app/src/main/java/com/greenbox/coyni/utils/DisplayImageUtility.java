@@ -2,24 +2,22 @@ package com.greenbox.coyni.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -31,7 +29,7 @@ public class DisplayImageUtility {
     private Context context;
     private static DisplayImageUtility sInstance;
     private HashMap<String, List<ImageView>> imageIdMap;
-    private HashMap<String, String> tempMap;
+    private LinkedHashMap<String, String> tempMap;
     private LruCache<String, Bitmap> imageCache;
 
     public static class ImageHolder {
@@ -43,7 +41,7 @@ public class DisplayImageUtility {
     private DisplayImageUtility(Context context) {
         this.context = context;
         imageIdMap = new HashMap<>();
-        tempMap = new HashMap<>();
+        tempMap = new LinkedHashMap<>();
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 8;
         imageCache = new LruCache<>(cacheSize) {
@@ -71,16 +69,16 @@ public class DisplayImageUtility {
                 if (imageCache.get(holder.key) != null) {
                     LogUtils.v(TAG, "from cache");
                     holder.imageView.setImageBitmap(imageCache.get(holder.key));
-                    return;
+                    continue;
                 }
                 holder.imageView.setImageResource(holder.resId);
                 if (!imageIdMap.containsKey(holder.key)) {
                     imageIdMap.put(holder.key, new ArrayList<>());
+                    DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
+                    downloadUrlRequest.setKey(holder.key);
+                    urlList.add(downloadUrlRequest);
                 }
                 imageIdMap.get(holder.key).add(holder.imageView);
-                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
-                downloadUrlRequest.setKey(holder.key);
-                urlList.add(downloadUrlRequest);
             } else {
                 holder.imageView.setImageResource(holder.resId);
                 getImageFromUrl(holder.key);
@@ -115,10 +113,6 @@ public class DisplayImageUtility {
         }
     }
 
-    public void clearCache() {
-
-    }
-
     private void setData(DownloadImageResponse response) {
         if (response == null || response.getStatus() == null
                 || !response.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -128,13 +122,18 @@ public class DisplayImageUtility {
         List<DownloadImageData> dataList = response.getData();
         if (dataList != null) {
             for (DownloadImageData data : dataList) {
+                LogUtils.v(TAG, "Glide loop triger " + data.getKey());
                 tempMap.put(data.getDownloadUrl(), data.getKey());
                 getImageFromUrl(data.getDownloadUrl());
             }
         }
+
     }
 
     private void updateViews(String key) {
+        if(key == null || key.equals("")) {
+            return;
+        }
         List<ImageView> ivList = imageIdMap.remove(key);
         if (ivList != null) {
             for (int i = 0; i < ivList.size(); i++) {
@@ -143,25 +142,71 @@ public class DisplayImageUtility {
         }
     }
 
-    private void getImageFromUrl(String url) {
-        LogUtils.v(TAG, "Glide load started");
-        Glide.with(context)
-                .asBitmap()
-                .load(url)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-                        String key = tempMap.remove(url);
-                        LogUtils.v(TAG, "Glide resource ready");
-                        imageCache.put(key, bitmap);
-                        updateViews(key);
-                    }
+    public class GetImageFromUrl extends AsyncTask<Void, Void, String> {
+        private String url;
+        public GetImageFromUrl(String url) {
+            this.url = url;
+        }
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                        LogUtils.v(TAG, "Glide ronLoadCleared");
-                    }
-                });
+        @Override
+        protected String doInBackground(Void... vals) {
+            InputStream inputStream;
+            String key = tempMap.remove(url);
+            try {
+                inputStream = new java.net.URL(url).openStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                LogUtils.v(TAG, url + " - Glide Image resource ready " + key);
+                if(key != null && bitmap != null) {
+                    imageCache.put(key, bitmap);
+                }
+            } catch (IOException e) {
+                LogUtils.v(TAG, "Glide IOException " + url);
+                e.printStackTrace();
+            }
+            return key;
+        }
+
+        @Override
+        protected void onPostExecute(String key){
+            super.onPostExecute(key);
+            updateViews(key);
+        }
+    }
+
+    private synchronized void getImageFromUrl(final String url) {
+        LogUtils.v(TAG, "Glide load started");
+        new GetImageFromUrl(url).execute();
+//        Glide.with(context)
+//                .asBitmap()
+//                .load(url)
+//                .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
+//                        String key = tempMap.remove(url);
+//                        LogUtils.v(TAG, "Glide resource ready");
+//                        imageCache.put(key, bitmap);
+//                        updateViews(key);
+//                        loadNextImage();
+//                    }
+//                });
+//        Glide.with(context)
+//                .asBitmap()
+//                .load(url)
+//                .into(new CustomTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
+//                        String key = tempMap.remove(url);
+//                        LogUtils.v(TAG, "Glide resource ready");
+//                        imageCache.put(key, bitmap);
+//                        updateViews(key);
+//                        loadNextImage();
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(@Nullable Drawable placeholder) {
+//                        LogUtils.v(TAG, "Glide onLoadCleared");
+//                    }
+//                });
     }
 
     private void getDownloadUrl(List<DownloadUrlRequest> downloadUrlRequestList) {

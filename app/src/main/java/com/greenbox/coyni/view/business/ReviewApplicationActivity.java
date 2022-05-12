@@ -696,25 +696,36 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             llPrivacy.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                                        return;
+                                    }
+                                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
                                     dashboardViewModel.getDocumentUrl(Utils.mPP);
-                                    //dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
                                 }
                             });
                             llTerms.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                                        return;
+                                    }
+                                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
                                     dashboardViewModel.getDocumentUrl(Utils.mTOS);
-                                    //dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
                                 }
                             });
                             llMerchant.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+
+                                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                                        return;
+                                    }
+                                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
                                     dashboardViewModel.getDocumentUrl(Utils.mAgmt);
-                                    //dashboardViewModel.agreementsByType(String.valueOf(Utils.mAgmt));
+
                                 }
                             });
                             if (agreements != null && agreements1.getItems().size() > 0) {

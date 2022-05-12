@@ -754,6 +754,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityVerificationFailedView.setVisibility(View.GONE);
         mLlGetStartedView.setVisibility(View.GONE);
         String message = getString(R.string.identity_review_cancel_message);
+        message+= " ";
         SpannableString spannableString = new SpannableString(message);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
@@ -771,7 +772,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 ds.setUnderlineText(true);
             }
         };
-        spannableString.setSpan(clickableSpan, message.length() - 10, message.length(),
+        spannableString.setSpan(clickableSpan, message.length() - 11, message.length()-1,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvIdentityReviewCancelMessage.setText(spannableString);
         mTvIdentityReviewCancelMessage.setMovementMethod(LinkMovementMethod.getInstance());
