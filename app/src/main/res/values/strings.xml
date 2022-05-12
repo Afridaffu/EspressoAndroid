@@ -365,7 +365,7 @@
     <string name="dear_name">Dear %1$s,</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant \nprocessing through coyni. However, we regret to \ninform you that your application has not been \napproved and is no longer in consideration.</string>
+    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name: %1$s</string>
     <string name="verification_dba_name">DBA: %1$s</string>
     <string name="we_thank_for_interest">Again, we thank you for your interest and wish \nyou the best of luck.</string>
