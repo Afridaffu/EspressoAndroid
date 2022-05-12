@@ -725,7 +725,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
                                     dashboardViewModel.getDocumentUrl(Utils.mAgmt);
-                                   
+
                                 }
                             });
                             if (agreements != null && agreements1.getItems().size() > 0) {
