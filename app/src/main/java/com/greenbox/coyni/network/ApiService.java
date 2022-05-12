@@ -97,6 +97,7 @@ import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
+import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.model.profile.ImageResponse;
@@ -170,6 +171,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -180,6 +182,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface ApiService {
 
@@ -633,10 +636,10 @@ public interface ApiService {
     Call<ReserveListResponse> getReserveListItems();
 
     @POST("api/v2/profile/download-url")
-    Call<DownloadImageResponse> getDownloadUrl(@Body DownloadUrlRequest downloadUrlRequest);
+    Call<DownloadImageResponse> getDownloadUrl(@Body List<DownloadUrlRequest> downloadUrlRequest);
 
     @GET("api/v2/agreements/url")
-    Call<DownloadImageResponse> getAgreementUrl(@Query("agreementType") String agreementType);
+    Call<DownloadDocumentResponse> getAgreementUrl(@Query("agreementType") String agreementType);
 
     @POST("/api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);

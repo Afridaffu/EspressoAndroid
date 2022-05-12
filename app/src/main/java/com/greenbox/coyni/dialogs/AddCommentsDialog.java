@@ -1,6 +1,7 @@
 package com.greenbox.coyni.dialogs;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,9 +12,11 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.util.Util;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 
 public class AddCommentsDialog extends BaseDialog {
 
@@ -41,14 +44,13 @@ public class AddCommentsDialog extends BaseDialog {
         cancelBtn = findViewById(R.id.cancelBtn);
 
         doneBtn.setCardBackgroundColor(context.getResources().getColor(R.color.inactive_color));
-
         addNoteET.requestFocus();
+        addNoteET.setHint(R.string.reason);
 
         if (comment != null && !comment.trim().equals("")) {
             addNoteET.setText(comment.trim());
             addNoteET.setSelection(comment.trim().length());
         }
-        addNoteET.setHint(R.string.reason);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

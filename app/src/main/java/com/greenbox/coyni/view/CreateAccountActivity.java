@@ -56,6 +56,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.model.profile.DownloadDocumentData;
+import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.register.CustRegisRequest;
@@ -69,6 +71,7 @@ import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -438,20 +441,22 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             }
         });
 
-        dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+        dashboardViewModel.getDownloadDocumentResponse().observe(this, new Observer<DownloadDocumentResponse>() {
             @Override
-            public void onChanged(DownloadImageResponse downloadImageResponse) {
+            public void onChanged(DownloadDocumentResponse downloadDocumentResponse) {
                 dismissDialog();
-                if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
-                    if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        DownloadImageData data = downloadImageResponse.getData();
-                        if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                            launchDocumentUrl(data.getDownloadUrl());
-                        } else {
-                            Utils.displayAlert(getString(R.string.unable_to_get_document), CreateAccountActivity.this, "", "");
+                if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
+                    if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        DownloadDocumentData data = downloadDocumentResponse.getData();
+                        if(data != null ) {
+                            if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                                launchDocumentUrl(data.getDownloadUrl());
+                            } else {
+                                Utils.displayAlert(getString(R.string.unable_to_get_document), CreateAccountActivity.this, "", "");
+                            }
                         }
                     } else {
-                        Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), CreateAccountActivity.this, "", "");
+                        Utils.displayAlert(downloadDocumentResponse.getError().getErrorDescription(), CreateAccountActivity.this, "", "");
                     }
                 }
             }

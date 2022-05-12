@@ -489,19 +489,6 @@ public class DBAInfoDetails extends BaseActivity {
 
     }
 
-
-    private void showImage(String imageUrl) {
-
-        DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-        utility.addImage(imageUrl,dba_userProfileIV, R.drawable.ic_profile_male_user);
-        dba_userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
-
-//        Glide.with(DBAInfoDetails.this)
-//                .load(imageUrl)
-//                .placeholder(R.drawable.ic_profile_male_user)
-//                .into(dba_userProfileIV);
-    }
-
     private void bindImage(String imageString, DBAInfoResp dbaInfoResp) {
         try {
             dba_userProfileIV.setVisibility(View.GONE);
@@ -520,8 +507,7 @@ public class DBAInfoDetails extends BaseActivity {
                     dba_imageTextTV.setVisibility(View.GONE);
 
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                    utility.addImage(imageString.trim(), dba_userProfileIV, R.drawable.ic_profile_male_user);
-                    dba_userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
+                    utility.addImage(imageString.trim(), dba_userProfileIV, R.drawable.acct_profile);
 
                 } catch (Exception e) {
                     e.printStackTrace();

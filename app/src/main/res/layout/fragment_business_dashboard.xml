@@ -1699,14 +1699,14 @@
                                 android:id="@+id/failedcontent"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_21sdp"
                                 android:layout_marginTop="@dimen/_18sdp"
-                                android:layout_marginRight="@dimen/_21sdp"
+                                android:layout_marginStart="@dimen/_21sdp"
+                                android:layout_marginEnd="@dimen/_21sdp"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/iv_verification_failed_content"
                                 android:textAlignment="center"
                                 android:textColor="@color/primary_black"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_11ssp" />
 
                             <TextView
                                 android:id="@+id/contactUSTV"

@@ -11,6 +11,10 @@ public class ProposalsPropertiesData {
     @Expose
     private String name;
 
+    @SerializedName("displayName")
+    @Expose
+    private String displayName;
+
     @SerializedName("originalValue")
     @Expose
     private String originalValue;
@@ -38,6 +42,14 @@ public class ProposalsPropertiesData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getOriginalValue() {

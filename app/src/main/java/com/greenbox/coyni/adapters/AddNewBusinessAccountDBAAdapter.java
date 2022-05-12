@@ -103,20 +103,9 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                 holder.profileImage.setVisibility(View.VISIBLE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                 utility.addImage(listCompany.get(position).getImage(), holder.profileImage, R.drawable.ic_case);
-                holder.profileImage.setImageResource(R.drawable.ic_case);
-//                Glide.with(mContext)
-//                        .load(listCompany.get(position).getImage())
-//                        .placeholder(R.drawable.ic_case)
-//                        .into(holder.profileImage);
-
             } else {
                 holder.profileImage.setVisibility(View.VISIBLE);
                 holder.profileImage.setImageResource(R.drawable.ic_case);
-                // profileImageText.setVisibility(View.VISIBLE);
-//                Glide.with(mContext)
-//                        .load(listCompany.get(position).getImage())
-//                        .placeholder(R.drawable.ic_case)
-//                        .into(holder.profileImage);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
