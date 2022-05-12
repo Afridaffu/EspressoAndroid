@@ -772,7 +772,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 ds.setUnderlineText(true);
             }
         };
-        spannableString.setSpan(clickableSpan, message.length() - 11, message.length()-1,
+        spannableString.setSpan(clickableSpan, message.length() - 10, message.length(),
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         mTvIdentityReviewCancelMessage.setText(spannableString);
         mTvIdentityReviewCancelMessage.setMovementMethod(LinkMovementMethod.getInstance());
