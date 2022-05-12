@@ -440,7 +440,7 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-                Utils.hideKeypad(AddNewTeamMemberActivity.this);
+//                Utils.hideKeypad(AddNewTeamMemberActivity.this);
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " ");
             } else {
