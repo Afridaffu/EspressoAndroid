@@ -365,10 +365,10 @@
     <string name="dear_name">Dear %1$s,</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant \nprocessing through coyni. However, we regret to \ninform you that your application has not been \napproved and is no longer in consideration.</string>
+    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name: %1$s</string>
     <string name="verification_dba_name">DBA: %1$s</string>
-    <string name="we_thank_for_interest">Again, we thank you for your interest and wish \nyou the best of luck.</string>
+    <string name="we_thank_for_interest">Again, we thank you for your interest and wish you the best of luck.</string>
     <string name="documents_required">Documents Required</string>
     <string name="copy_of_social_security_card">Copy of Social Security card</string>
     <string name="upload_file">Upload File</string>
@@ -494,7 +494,7 @@
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
     <string name="additional_action_required">Additional Action Required</string>
-    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application  click here </string>
+    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application  click here</string>
     <string name="cancel_application">Cancel Application</string>
     <string name="cancel_application_message">Are you sure to cancel your merchant application?</string>
     <string name="today_current_batch">Today(Current batch)</string>
