@@ -861,7 +861,7 @@
         </ScrollView>
 
         <RelativeLayout
-            android:id="@+id/additionalDocsRL"
+            android:id="@+id/companyAdditionalDocsRL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingLeft="@dimen/_21sdp"

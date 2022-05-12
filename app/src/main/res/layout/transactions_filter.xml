@@ -218,13 +218,13 @@
                         app:chipMinHeight="@dimen/_32sdp" />
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/transSubTypeSignt"
+                        android:id="@+id/transSubTypeGiftCard"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/opensans_semibold"
-                        android:text=""
+                        android:text="Gift Card"
                         android:textAlignment="center"
                         android:textColor="@color/chip_text_color"
                         android:textSize="@dimen/_11ssp"
