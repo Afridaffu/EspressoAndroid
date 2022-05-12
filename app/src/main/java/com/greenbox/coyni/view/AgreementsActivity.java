@@ -23,6 +23,8 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.Item;
+import com.greenbox.coyni.model.profile.DownloadDocumentData;
+import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.utils.LogUtils;
@@ -176,20 +178,22 @@ public class AgreementsActivity extends BaseActivity {
                 }
             });
 
-            dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+            dashboardViewModel.getDownloadDocumentResponse().observe(this, new Observer<DownloadDocumentResponse>() {
                 @Override
-                public void onChanged(DownloadImageResponse downloadImageResponse) {
+                public void onChanged(DownloadDocumentResponse downloadDocumentResponse) {
                     dismissDialog();
-                    if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
-                        if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                            DownloadImageData data = downloadImageResponse.getData();
-                            if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                                launchDocumentUrl(data.getDownloadUrl());
-                            } else {
-                                Utils.displayAlert(getString(R.string.unable_to_get_document), AgreementsActivity.this, "", "");
+                    if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
+                        if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            DownloadDocumentData data = downloadDocumentResponse.getData();
+                            if(data != null ) {
+                                if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                                    launchDocumentUrl(data.getDownloadUrl());
+                                } else {
+                                    Utils.displayAlert(getString(R.string.unable_to_get_document), AgreementsActivity.this, "", "");
+                                }
                             }
                         } else {
-                            Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), AgreementsActivity.this, "", "");
+                            Utils.displayAlert(downloadDocumentResponse.getError().getErrorDescription(), AgreementsActivity.this, "", "");
                         }
                     }
                 }

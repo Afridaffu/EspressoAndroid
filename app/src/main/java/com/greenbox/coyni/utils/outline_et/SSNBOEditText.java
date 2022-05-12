@@ -4,13 +4,10 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,16 +15,10 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.utils.MaskEditText.Action;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
+import com.greenbox.coyni.utils.PasswordCustomTransformationMethod;
 import com.greenbox.coyni.view.IdVeAdditionalActionActivity;
-import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
-import com.greenbox.coyni.view.business.CompanyInformationActivity;
-import com.greenbox.coyni.view.business.DBAInfoAcivity;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SSNBOEditText extends ConstraintLayout {
     private TextView hintName;
@@ -37,6 +28,7 @@ public class SSNBOEditText extends ConstraintLayout {
     public String FROM = "", hintString = "";
     private ImageView viewSSNIV;
     private Boolean isCPwdEye = true;
+    private PasswordCustomTransformationMethod passwordCustomTransformationMethod;
 
     public SSNBOEditText(Context context) {
         this(context, null, 0);
@@ -57,6 +49,8 @@ public class SSNBOEditText extends ConstraintLayout {
         ssnET = findViewById(R.id.ssnET);
         hintName = findViewById(R.id.ssnhintTV);
         viewSSNIV = findViewById(R.id.viewSSNIV);
+        passwordCustomTransformationMethod = new PasswordCustomTransformationMethod();
+        ssnET.setTransformationMethod(passwordCustomTransformationMethod);
 
         ssnET.setOnFocusChangeListener((view, b) -> {
 
@@ -172,7 +166,7 @@ public class SSNBOEditText extends ConstraintLayout {
                     if (!isCPwdEye) {
                         isCPwdEye = true;
                         viewSSNIV.setBackgroundResource(R.drawable.ic_eyeclose);
-                        ssnET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        ssnET.setTransformationMethod(passwordCustomTransformationMethod);
                     } else {
                         isCPwdEye = false;
                         viewSSNIV.setBackgroundResource(R.drawable.ic_eyeopen);
