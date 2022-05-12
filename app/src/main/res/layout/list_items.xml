@@ -31,7 +31,7 @@
                     android:layout_marginEnd="@dimen/_1sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
-                    android:text="asdfgtyuiluytrertyuioiuytrsd"
+                    android:text=""
                     android:textSize="@dimen/_12ssp" />
 
                 <TextView
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
-                    android:text="jhgfdfghjkhgfdghjhhjg"
+                    android:text=""
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>
 
