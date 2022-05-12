@@ -31,6 +31,7 @@
                     android:layout_marginEnd="@dimen/_1sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
+                    android:text=""
                     android:textSize="@dimen/_12ssp" />
 
                 <TextView
@@ -39,11 +40,14 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/opensans_regular"
                     android:textColor="@color/primary_black"
+                    android:text=""
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/_5sdp"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_rightarrow" />
 

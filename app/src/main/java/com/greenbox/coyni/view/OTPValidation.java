@@ -338,6 +338,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     smsRequest.setEmail(EMAIL.trim());
                                     smsRequest.setOtp(charSequence.toString().trim());
                                     loginViewModel.emailotpValidate(smsRequest);
+                                    otpValidationCloseIV.setClickable(false);
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
                                 if (charSequence.length() == 6) {
@@ -1060,6 +1061,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         overridePendingTransition(0, 0);
                         startActivity(getIntent());
                         overridePendingTransition(0, 0);
+                        otpValidationCloseIV.setClickable(true);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1072,6 +1074,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 
     public void shakeAnimateUpDown() {
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_up_down));
+        otpValidationCloseIV.setClickable(true);
     }
 
     public void vibrateAction() {

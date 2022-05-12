@@ -547,12 +547,6 @@ public class CustomerProfileActivity extends BaseActivity {
 
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
                     utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
-                    saveProfileIV.setImageResource(R.drawable.ic_profile_male_user);
-
-//                    Glide.with(this)
-//                            .load(imageString)
-//                            .placeholder(R.drawable.ic_profile_male_user)
-//                            .into(saveProfileIV);
                 } else {
                     saveProfileIV.setVisibility(View.GONE);
                     saveProfileTitle.setVisibility(View.VISIBLE);
@@ -583,12 +577,6 @@ public class CustomerProfileActivity extends BaseActivity {
                     userInfo.setVisibility(View.GONE);
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
                     utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
-                    imgProfile.setImageResource(R.drawable.ic_profile_male_user);
-
-//                    Glide.with(this)
-//                            .load(imageString)
-//                            .placeholder(R.drawable.ic_profile_male_user)
-//                            .into(imgProfile);
                 } else {
                     imgProfile.setVisibility(View.GONE);
                     userInfo.setVisibility(View.VISIBLE);
@@ -1163,12 +1151,6 @@ public class CustomerProfileActivity extends BaseActivity {
                 imageTextTV.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
                 utility.addImage(imageString, profileIV, R.drawable.ic_profile_male_user);
-                profileIV.setImageResource(R.drawable.ic_profile_male_user);
-
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(profileIV);
             } else {
                 profileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);

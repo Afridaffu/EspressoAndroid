@@ -66,15 +66,8 @@ public class AccountsActivity extends AppCompatActivity {
             if (imageString != null && !imageString.trim().equals("")) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userShortInfoTV.setVisibility(View.GONE);
-
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
-                imgProfile.setImageResource(R.drawable.ic_profile_male_user);
-
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(imgProfile);
             } else {
                 imgProfile.setVisibility(View.GONE);
                 userShortInfoTV.setVisibility(View.VISIBLE);

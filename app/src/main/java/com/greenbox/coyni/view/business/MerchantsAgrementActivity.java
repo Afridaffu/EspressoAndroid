@@ -29,6 +29,8 @@ import com.bumptech.glide.request.target.Target;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.greenbox.coyni.model.profile.DownloadDocumentData;
+import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
@@ -36,10 +38,12 @@ import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.io.File;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -254,15 +258,6 @@ public class MerchantsAgrementActivity extends BaseActivity {
                                 && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
                             DisplayImageUtility utility = DisplayImageUtility.getInstance(MerchantsAgrementActivity.this);
                             utility.addImage(agreements.getData().getItems().get(i).getSignature(), mIVSignature, R.drawable.ic_sign);
-                            mIVSignature.setImageResource(R.drawable.ic_sign);
-
-//                            Glide.with(MerchantsAgrementActivity.this)
-//                                    .load(agreements.getData().getItems().get(i).getSignature())
-//                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                                    .skipMemoryCache(true)
-//                                    .override(Target.SIZE_ORIGINAL)
-//                                    .placeholder(R.drawable.ic_sign)
-//                                    .into(mIVSignature);
                             doneCV.setVisibility(View.VISIBLE);
                         } else {
                             doneCV.setVisibility(View.GONE);
@@ -274,21 +269,22 @@ public class MerchantsAgrementActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+        dashboardViewModel.getDownloadDocumentResponse().observe(this, new Observer<DownloadDocumentResponse>() {
             @Override
-            public void onChanged(DownloadImageResponse downloadImageResponse) {
+            public void onChanged(DownloadDocumentResponse downloadDocumentResponse) {
                 dismissDialog();
-                if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
-                    if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        DownloadImageData data = downloadImageResponse.getData();
-                        if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                            launchDocumentUrl(data.getDownloadUrl());
-
-                        } else {
-                            Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
+                if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
+                    if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        DownloadDocumentData data = downloadDocumentResponse.getData();
+                        if(data != null ) {
+                            if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                                launchDocumentUrl(data.getDownloadUrl());
+                            } else {
+                                Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
+                            }
                         }
                     } else {
-                        Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), MerchantsAgrementActivity.this, "", "");
+                        Utils.displayAlert(downloadDocumentResponse.getError().getErrorDescription(), MerchantsAgrementActivity.this, "", "");
                     }
                 }
             }

@@ -50,7 +50,7 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
             try {
                 if (b) {
 //                    websiteET.setHint(hintString);
-                    websiteET.setHint("");
+                    websiteET.setHint("www.example.com");
                     hintName.setVisibility(VISIBLE);
                     hintName.setTextColor(getResources().getColor(R.color.primary_color));
                     hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
@@ -131,6 +131,9 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
                         websiteET.setSelection(websiteET.getText().length());
                     } else if (str.length() > 0 && String.valueOf(str.charAt(0)).equals(" ")) {
                         websiteET.setText(str.trim());
+                    } else if (str.length() > 0 && str.contains(" ")) {
+                        websiteET.setText(websiteET.getText().toString().replaceAll(" ", ""));
+                        websiteET.setSelection(websiteET.getText().length());
                     }
 
                 } catch (Exception ex) {

@@ -104,17 +104,10 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                 holder.tvNameHead.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                 utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
-                holder.imgUser.setImageResource(R.drawable.ic_profilelogo);
-
-//                Glide.with(mContext)
-//                        .load(objData.getImage())
-//                        .placeholder(R.drawable.ic_profilelogo)
-//                        .into(holder.imgUser);
             } else {
                 holder.imgUser.setVisibility(View.GONE);
                 holder.tvNameHead.setVisibility(View.VISIBLE);
             }
-//            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

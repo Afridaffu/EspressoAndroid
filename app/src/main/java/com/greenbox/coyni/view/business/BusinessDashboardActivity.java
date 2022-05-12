@@ -405,17 +405,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        mDashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
-            @Override
-            public void onChanged(DownloadImageResponse downloadImageResponse) {
-                if (downloadImageResponse != null) {
-                    if (downloadImageResponse.getStatus() != null && downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        showImage(downloadImageResponse.getData().getDownloadUrl());
-                    }
-                }
-            }
-        });
-
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
@@ -434,13 +423,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    private void showImage(String imageUrl) {
-//        Glide.with(this)
-//                .load(imageUrl)
-//                .placeholder(R.drawable.acct_profile)
-//                .into(mIvUserIcon);
     }
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
@@ -483,17 +465,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
-//            mIvUserIcon.setImageResource(R.drawable.acct_profile);
-//            if (!android.util.Patterns.WEB_URL.matcher(imageUrl).matches()) {
-//                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
-//                downloadUrlRequest.setKey(imageUrl);
-//                mDashboardViewModel.getDownloadUrl(downloadUrlRequest);
-//            } else {
-//                Glide.with(this)
-//                        .load(objMyApplication.getMyProfile().getData().getImage())
-//                        .placeholder(R.drawable.acct_profile)
-//                        .into(mIvUserIcon);
-//            }
         } else {
 //            mTvUserIconText.setVisibility(View.VISIBLE);
             mIvUserIcon.setVisibility(View.VISIBLE);

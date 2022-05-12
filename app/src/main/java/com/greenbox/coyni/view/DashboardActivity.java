@@ -934,11 +934,8 @@ public class DashboardActivity extends AppCompatActivity {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
-                imgProfile.setImageResource(R.drawable.ic_profile_male_user);
 
                 utility.addImage(imageString, imgProfileSmall, R.drawable.ic_profile_male_user);
-                imgProfileSmall.setImageResource(R.drawable.ic_profile_male_user);
-
 
             } else {
                 imgProfile.setVisibility(View.GONE);

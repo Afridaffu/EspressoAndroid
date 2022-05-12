@@ -112,12 +112,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
 
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                     utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
-                    holder.imgUser.setImageResource(R.drawable.ic_profilelogo);
-
-//                    Glide.with(mContext)
-//                            .load(objData.getImage())
-//                            .placeholder(R.drawable.ic_profilelogo)
-//                            .into(holder.imgUser);
                 } else {
                     holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
                 }

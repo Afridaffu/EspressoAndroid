@@ -55,6 +55,8 @@ import com.greenbox.coyni.model.bank.BankDeleteResponseData;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.bank.SignOnData;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
+import com.greenbox.coyni.model.profile.DownloadDocumentData;
+import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
@@ -694,26 +696,36 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                             llPrivacy.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    dashboardViewModel.getDocumentUrl(Utils.mPP);
+                                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                                        return;
+                                    }
+                                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
-                                    dashboardViewModel.agreementsByType(String.valueOf(Utils.mPP));
+                                    dashboardViewModel.getDocumentUrl(Utils.mPP);
                                 }
                             });
                             llTerms.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    dashboardViewModel.getDocumentUrl(Utils.mTOS);
+                                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                                        return;
+                                    }
+                                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
-                                    dashboardViewModel.agreementsByType(String.valueOf(Utils.mTOS));
-
+                                    dashboardViewModel.getDocumentUrl(Utils.mTOS);
                                 }
                             });
                             llMerchant.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    dashboardViewModel.getDocumentUrl(Utils.mAgmt);
+
+                                    if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+                                        return;
+                                    }
+                                    mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
-                                    dashboardViewModel.agreementsByType(String.valueOf(Utils.mAgmt));
+                                    dashboardViewModel.getDocumentUrl(Utils.mAgmt);
+
                                 }
                             });
                             if (agreements != null && agreements1.getItems().size() > 0) {
@@ -805,70 +817,22 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
             }
         });
 
-//        dashboardViewModel.getAgreementsPdfMutableLiveData().observe(this, new Observer<AgreementsPdf>() {
-//            @Override
-//            public void onChanged(AgreementsPdf agreementsPdf) {
-//                LogUtils.d(TAG, "pdf" + agreementsPdf);
-//                dismissDialog();
-//                if (agreementsPdf.getStatus().equalsIgnoreCase("SUCCESS")) {
-//                    if (agreementsPdf.getData().getAgreementFileRefPath() != null) {
-//                        //new code for showing pdf , modify later
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-//                        if (agreementsPdf.getData().getAgreementFileRefPath().contains("pdf")) {
-//                            dashboardViewModel.getDocumentUrl(Utils.cPP);
-//                            dashboardViewModel.getDocumentUrl(Utils.cTOS);
-//
-//
-////                            browserIntent.setDataAndType(Uri.parse(agreementsPdf.getData().getAgreementFileRefPath()), "application/pdf");
-////                            switch (agreementsPdf.getData().getAgreementType()) {
-////                                case Utils.mTOS:
-////                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-////                                    break;
-////                                case Utils.mAgmt:
-////                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
-////                                    break;
-////                            }
-//                        }
-//                        else {
-//                            dashboardViewModel.getDocumentUrl(Utils.mPP);
-//                            dashboardViewModel.getDocumentUrl(Utils.mTOS);
-//                            dashboardViewModel.getDocumentUrl(Utils.mAgmt);
-////                            switch (agreementsPdf.getData().getAgreementType()) {
-////                                case Utils.mPP:
-////                                    browserIntent.setDataAndType(Uri.parse(privacyURL), "application/pdf");
-////                                    break;
-////                                case Utils.mTOS:
-////                                    browserIntent.setDataAndType(Uri.parse(tosURL), "application/pdf");
-////                                    break;
-////                                case Utils.mAgmt:
-////                                    browserIntent.setDataAndType(Uri.parse("https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf"), "application/pdf");
-////                                    break;
-////                            }
-//                        }
-//                        try {
-//                            startActivity(browserIntent);
-//                        } catch (ActivityNotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//            }
-//        });
-
-        dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+        dashboardViewModel.getDownloadDocumentResponse().observe(this, new Observer<DownloadDocumentResponse>() {
             @Override
-            public void onChanged(DownloadImageResponse downloadImageResponse) {
+            public void onChanged(DownloadDocumentResponse downloadDocumentResponse) {
                 dismissDialog();
-                if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
-                    if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        DownloadImageData data = downloadImageResponse.getData();
-                        if (data != null && data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                            launchDocumentUrl(data.getDownloadUrl());
-                        } else {
-                            Utils.displayAlert(getString(R.string.unable_to_get_document), ReviewApplicationActivity.this, "", "");
+                if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
+                    if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        DownloadDocumentData data = downloadDocumentResponse.getData();
+                        if(data != null ) {
+                            if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                                launchDocumentUrl(data.getDownloadUrl());
+                            } else {
+                                Utils.displayAlert(getString(R.string.unable_to_get_document), ReviewApplicationActivity.this, "", "");
+                            }
                         }
                     } else {
-                        Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), ReviewApplicationActivity.this, "", "");
+                        Utils.displayAlert(downloadDocumentResponse.getError().getErrorDescription(), ReviewApplicationActivity.this, "", "");
                     }
                 }
             }

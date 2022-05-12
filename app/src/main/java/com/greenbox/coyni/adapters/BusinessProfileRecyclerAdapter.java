@@ -95,11 +95,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 profileImage.setVisibility(View.VISIBLE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(detailInfo.getImage(), profileImage, R.drawable.ic_case);
-                profileImage.setImageResource(R.drawable.ic_case);
-//                Glide.with(context)
-//                        .load(detailInfo.getImage())
-//                        .placeholder(R.drawable.ic_case)
-//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
 
@@ -126,11 +121,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(detailInfo.getImage(), profileImage, R.drawable.acct_profile);
-                profileImage.setImageResource(R.drawable.acct_profile);
-                //                Glide.with(context)
-//                        .load(detailInfo.getImage())
-//                        .placeholder(R.drawable.acct_profile)
-//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
                 profileImageText.setVisibility(View.GONE);
@@ -266,12 +256,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
-                profileImage.setImageResource(R.drawable.ic_case);
-
-//                Glide.with(context)
-//                        .load(headerInfo.getImage())
-//                        .placeholder(R.drawable.ic_case)
-//                        .into(profileImage);
             } else {
                 personalText.setVisibility(View.VISIBLE);
                 profileImage.setVisibility(View.GONE);
@@ -291,12 +275,6 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
-                profileImage.setImageResource(R.drawable.ic_case);
-
-//                Glide.with(context)
-//                        .load(headerInfo.getImage())
-//                        .placeholder(R.drawable.ic_case)
-//                        .into(profileImage);
             } else {
                 personalText.setVisibility(View.GONE);
                 profileImage.setVisibility(View.VISIBLE);

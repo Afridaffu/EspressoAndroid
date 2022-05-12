@@ -176,9 +176,9 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     backIV.setVisibility(VISIBLE);
                     divider1.setBackgroundResource(R.drawable.button_background1);
                     divider2.setBackgroundResource(R.drawable.button_background);
-                    address1ET.requestFocus();
-                    if (!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
+//                    address1ET.requestFocus();
+//                    if (!Utils.isKeyboardVisible)
+//                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
                 }
             }
 
@@ -1401,12 +1401,14 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     }
                 } else {
 //                    address1ET.setHint("Street Address");
+                    address1ET.requestFocus();
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
                     address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     Utils.setUpperHintColor(address1TIL, getColor(R.color.primary_green));
                     address1ErrorLL.setVisibility(GONE);
 
-                    if (!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(AddBeneficialOwnerActivity.this);
+
                 }
             }
         });

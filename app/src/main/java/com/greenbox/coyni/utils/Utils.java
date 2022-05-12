@@ -536,9 +536,7 @@ public class Utils {
                         Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager.isAcceptingText()) {
             inputMethodManager.hideSoftInputFromWindow(
-                    activity.getCurrentFocus().getWindowToken(),
-                    0
-            );
+                    activity.getCurrentFocus().getWindowToken(),0);
         }
     }
 
