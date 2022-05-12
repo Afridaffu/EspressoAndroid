@@ -754,6 +754,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         mLlIdentityVerificationFailedView.setVisibility(View.GONE);
         mLlGetStartedView.setVisibility(View.GONE);
         String message = getString(R.string.identity_review_cancel_message);
+        message+= " ";
         SpannableString spannableString = new SpannableString(message);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override

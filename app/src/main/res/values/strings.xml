@@ -494,7 +494,7 @@
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
     <string name="additional_action_required">Additional Action Required</string>
-    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application  click here </string>
+    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application  click here</string>
     <string name="cancel_application">Cancel Application</string>
     <string name="cancel_application_message">Are you sure to cancel your merchant application?</string>
     <string name="today_current_batch">Today(Current batch)</string>
