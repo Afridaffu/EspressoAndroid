@@ -126,7 +126,7 @@
     <string name="iv_success_content">Thank you for verifying your identification and trusting us as your token account platform. Lastly, add a payment method to your account profile.</string>
 
     <string name="iv_failed">Identity Verification Canceled</string>
-    <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
+    <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please \ncontact coyni customer support if you need further assistance.</string>
     <string name="iv_failedcontentextention"> If you need any help please</string>
     <string name="contactus"><u>Contact Us</u></string>
 
@@ -365,7 +365,7 @@
     <string name="dear_name">Dear %1$s,</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant \nprocessing through coyni.However, we regret to \ninform you that your application has not been \napproved and is no longer in consideration.</string>
+    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant \nprocessing through coyni. However, we regret to \ninform you that your application has not been \napproved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name: %1$s</string>
     <string name="verification_dba_name">DBA: %1$s</string>
     <string name="we_thank_for_interest">Again, we thank you for your interest and wish \nyou the best of luck.</string>

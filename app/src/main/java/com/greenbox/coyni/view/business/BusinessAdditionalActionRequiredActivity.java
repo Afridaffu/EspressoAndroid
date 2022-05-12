@@ -382,6 +382,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             });
         }
+        enableOrDisableNext();
     }
 
     private void informationRevision(ActionRequiredResponse actionRequiredResponse) {
@@ -394,6 +395,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
+                        String type = data.getType();
                     List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
@@ -402,6 +404,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
                             LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
                             TextView companyNameTV = inf1.findViewById(R.id.comapny_nameTV);
+                            TextView displayNameTV = inf1.findViewById(R.id.display_nameTV);
                             TextView companyNameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
                             TextView companyNameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
                             TextView tvMessage = inf1.findViewById(R.id.tvMessage);
@@ -410,21 +413,33 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-//                            companyNameTV.setText(propertiesData.getName());
-                            String companyname = capFirstLetter(propertiesData.getName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
-                            if (propertiesData.getName() != null) {
+                           if(data.getType()!=null) {
+                               displayNameTV.setText(type); }
+                            String companyname = capFirstLetter(propertiesData.getDisplayName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
+                            if (propertiesData.getDisplayName() != null ) {
                                 companyNameTV.setText(companyname);
                             }
-                            companyNameOriginal.setText(propertiesData.getOriginalValue());
-                            companyNameProposed.setText(propertiesData.getProposedValue());
-                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
+
+                            if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                                companyNameOriginal.setText(propertiesData.getOriginalValue());
+                                companyNameProposed.setText(propertiesData.getProposedValue());
+                            } else {
+                                companyNameOriginal.setText(propertiesData.getOriginalValue());
+                                companyNameProposed.setText(propertiesData.getProposedValue());
+                            }
 
 
-//                            if(propertiesData.getAdminMessage().contains("\"" + "\"")) {
-//                                tvMessage.setText(propertiesData.getAdminMessage());
-//                            }else{
-//                                tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
-//                            }
+                            if(propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
+                                String message = "";
+                                if(!propertiesData.getAdminMessage().startsWith("\"")) {
+                                    message += "\"";
+                                }
+                                message += propertiesData.getAdminMessage();
+                                if(!propertiesData.getAdminMessage().endsWith("\"")) {
+                                    message += "\"";
+                                }
+                                tvMessage.setText(message);
+                            }
                             proposalsMap.put(companyname, propertiesData);
                             fileUpload.put(companyname.trim().hashCode(), null);
 
@@ -467,6 +482,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             }
         }
+        enableOrDisableNext();
     }
 
     //
@@ -487,15 +503,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         LinearLayout llDecline = view.findViewById(R.id.declineLL);
         LinearLayout llAccept = view.findViewById(R.id.acceptLL);
         TextView tvDeclinedMsg = view.findViewById(R.id.declineMsgTV);
+        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
         AddCommentsDialog dialog = new AddCommentsDialog(BusinessAdditionalActionRequiredActivity.this, null);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                 if (action.equalsIgnoreCase(Utils.COMMENT_ACTION) && tv.getText() != null) {
                     String comm = (String) value;
                     tvRemarks.setText("\"" + comm + "\"");
-//                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     imvAcceptTick.setVisibility(View.VISIBLE);
                     imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
                     tvRemarks.setVisibility(View.VISIBLE);
@@ -508,7 +523,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
                         fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
                     }
-                    Utils.hideSoftKeyboard(BusinessAdditionalActionRequiredActivity.this);
+                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     enableOrDisableNext();
                 }
             }
