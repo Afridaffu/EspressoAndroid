@@ -312,16 +312,16 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.MERCHANT);
-            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.RESERVE);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//            WalletRequest walletRequest = new WalletRequest();
+//            walletRequest.setWalletType(Utils.MERCHANT);
+//            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//
+//            walletRequest.setWalletType(Utils.TOKEN);
+//            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//
+//            walletRequest.setWalletType(Utils.RESERVE);
+//            businessDashboardViewModel.meMerchantWallet(walletRequest);
 
 //            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
 //            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
