@@ -45,6 +45,7 @@ public class RefundTransactionSuccessActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     startActivity(new Intent(RefundTransactionSuccessActivity.this,MerchantTransactionDetailsActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID,getIntent().getStringExtra(Utils.gbxTransID))
                     .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE,Utils.refundtxntype));
                 } catch (Exception e) {
@@ -87,4 +88,8 @@ public class RefundTransactionSuccessActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+    }
 }

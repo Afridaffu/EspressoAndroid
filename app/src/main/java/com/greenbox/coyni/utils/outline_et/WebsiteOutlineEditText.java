@@ -50,7 +50,7 @@ public class WebsiteOutlineEditText extends ConstraintLayout {
             try {
                 if (b) {
 //                    websiteET.setHint(hintString);
-                    websiteET.setHint("");
+                    websiteET.setHint("www.example.com");
                     hintName.setVisibility(VISIBLE);
                     hintName.setTextColor(getResources().getColor(R.color.primary_color));
                     hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));

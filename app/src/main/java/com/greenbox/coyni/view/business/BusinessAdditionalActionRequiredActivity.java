@@ -354,11 +354,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 imgWebsite.setVisibility(View.VISIBLE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite, 0);
-//                Glide.with(this)
-//                        .load(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1())
-//                        .fitCenter()
-//                        .override(imgWebsite.getWidth(), Target.SIZE_ORIGINAL)
-//                        .into(imgWebsite);
             } else {
                 imgWebsite.setVisibility(View.GONE);
             }

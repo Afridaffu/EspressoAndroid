@@ -2,19 +2,14 @@ package com.greenbox.coyni.utils.outline_et;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.SystemClock;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -25,10 +20,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
+import com.greenbox.coyni.utils.PasswordCustomTransformationMethod;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
-
-import okhttp3.internal.Util;
 
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     public static TextView ssnType;
@@ -41,6 +35,7 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     private View anchorView;
     private Boolean isCPwdEye = true;
     private Long mLastClickTime = 0L;
+    private PasswordCustomTransformationMethod passwordCustomTransformationMethod;
 
     public SSNOutlineBoxNumberEditText(Context context) {
         this(context, null, 0);
@@ -67,8 +62,9 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
         viewSSNIV = findViewById(R.id.viewSSNIV);
         weightRL = findViewById(R.id.weightRL);
 
-        ssnET.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        einET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        passwordCustomTransformationMethod = new PasswordCustomTransformationMethod();
+        ssnET.setTransformationMethod(passwordCustomTransformationMethod);
+        einET.setTransformationMethod(passwordCustomTransformationMethod);
 
         ssnET.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
@@ -95,6 +91,8 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_unfocused));
                             comp.ssnErrorLL.setVisibility(GONE);
                         }
+
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -186,7 +184,6 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
@@ -304,8 +301,8 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                     if (!isCPwdEye) {
                         isCPwdEye = true;
                         viewSSNIV.setBackgroundResource(R.drawable.ic_eyeclose);
-                        ssnET.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        einET.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                        ssnET.setTransformationMethod(passwordCustomTransformationMethod);
+                        einET.setTransformationMethod(passwordCustomTransformationMethod);
                     } else {
                         isCPwdEye = false;
                         viewSSNIV.setBackgroundResource(R.drawable.ic_eyeopen);
