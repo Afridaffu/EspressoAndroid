@@ -34,6 +34,12 @@ public class DisplayImageUtility {
     private HashMap<String, String> tempMap;
     private LruCache<String, Bitmap> imageCache;
 
+    public static class ImageHolder {
+        public String key;
+        public ImageView imageView;
+        public Integer resId;
+    }
+
     private DisplayImageUtility(Context context) {
         this.context = context;
         imageIdMap = new HashMap<>();
@@ -53,6 +59,36 @@ public class DisplayImageUtility {
             sInstance = new DisplayImageUtility(context);
         }
         return sInstance;
+    }
+
+    public void addImages(List<ImageHolder> imagesList) {
+        if (imagesList == null) {
+            return;
+        }
+        ArrayList<DownloadUrlRequest> urlList = new ArrayList<>();
+        for (ImageHolder holder : imagesList) {
+            if (!android.util.Patterns.WEB_URL.matcher(holder.key).matches()) {
+                if (imageCache.get(holder.key) != null) {
+                    LogUtils.v(TAG, "from cache");
+                    holder.imageView.setImageBitmap(imageCache.get(holder.key));
+                    return;
+                }
+                holder.imageView.setImageResource(holder.resId);
+                if (!imageIdMap.containsKey(holder.key)) {
+                    imageIdMap.put(holder.key, new ArrayList<>());
+                }
+                imageIdMap.get(holder.key).add(holder.imageView);
+                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
+                downloadUrlRequest.setKey(holder.key);
+                urlList.add(downloadUrlRequest);
+            } else {
+                holder.imageView.setImageResource(holder.resId);
+                getImageFromUrl(holder.key);
+            }
+        }
+        if (urlList.size() > 0) {
+            getDownloadUrl(urlList);
+        }
     }
 
     public void addImage(String key, ImageView imageView, Integer resId) {
@@ -79,6 +115,10 @@ public class DisplayImageUtility {
         }
     }
 
+    public void clearCache() {
+
+    }
+
     private void setData(DownloadImageResponse response) {
         if (response == null || response.getStatus() == null
                 || !response.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -86,10 +126,11 @@ public class DisplayImageUtility {
         }
 
         List<DownloadImageData> dataList = response.getData();
-        if (dataList != null && dataList.size() > 0) {
-            DownloadImageData data = dataList.get(0);
-            tempMap.put(data.getDownloadUrl(), data.getKey());
-            getImageFromUrl(data.getDownloadUrl());
+        if (dataList != null) {
+            for (DownloadImageData data : dataList) {
+                tempMap.put(data.getDownloadUrl(), data.getKey());
+                getImageFromUrl(data.getDownloadUrl());
+            }
         }
     }
 
@@ -110,7 +151,7 @@ public class DisplayImageUtility {
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-                       String key = tempMap.remove(url);
+                        String key = tempMap.remove(url);
                         LogUtils.v(TAG, "Glide resource ready");
                         imageCache.put(key, bitmap);
                         updateViews(key);
