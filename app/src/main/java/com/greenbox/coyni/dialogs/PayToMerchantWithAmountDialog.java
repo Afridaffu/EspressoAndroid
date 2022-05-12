@@ -175,13 +175,6 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(ScanActivity.scanActivity);
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
-                userProfile.setImageResource(R.drawable.ic_profilelogo);
-
-
-//                Glide.with(ScanActivity.scanActivity)
-//                        .load(userDetails.getData().getImage())
-//                        .placeholder(R.drawable.ic_profilelogo)
-//                        .into(userProfile);
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);

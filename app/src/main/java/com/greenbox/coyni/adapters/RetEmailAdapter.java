@@ -62,12 +62,6 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                 utility.addImage(objData.getProfileImage(), holder.imgProfilePic, R.drawable.ic_profilelogo);
-                holder.imgProfilePic.setImageResource(R.drawable.ic_profilelogo);
-
-//                Glide.with(mContext)
-//                        .load(objData.getProfileImage())
-//                        .placeholder(R.drawable.ic_profilelogo)
-//                        .into(holder.imgProfilePic);
             } else {
                 holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
             }

@@ -127,11 +127,6 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                 utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
-                holder.imgUser.setImageResource(R.drawable.ic_profilelogo);
-//                Glide.with(mContext)
-//                        .load(objData.getImage())
-//                        .placeholder(R.drawable.ic_profilelogo)
-//                        .into(holder.imgUser);
             } else {
                 holder.imgUser.setVisibility(View.GONE);
                 holder.tvNameHead.setVisibility(View.VISIBLE);
