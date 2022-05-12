@@ -792,10 +792,6 @@ public class BusinessProfileActivity extends BaseActivity {
                 profileImage.setImageResource(R.drawable.ic_profile_male_user);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
 //                profileText.setVisibility(View.VISIBLE);

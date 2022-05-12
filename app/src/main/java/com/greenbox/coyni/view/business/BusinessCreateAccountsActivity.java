@@ -182,12 +182,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImage(myApplication.getMyProfile().getData().getImage(), imgProfile, R.drawable.ic_profile_male_user);
-            imgProfile.setImageResource(R.drawable.ic_profile_male_user);
-
-//            Glide.with(this)
-//                    .load(myApplication.getMyProfile().getData().getImage())
-//                    .placeholder(R.drawable.ic_profile_male_user)
-//                    .into(imgProfile);
         } else {
             userShortInfoTV.setVisibility(View.VISIBLE);
             imgProfile.setVisibility(View.GONE);

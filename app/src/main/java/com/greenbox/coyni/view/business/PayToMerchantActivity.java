@@ -533,12 +533,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 userName.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
-                userProfile.setImageResource(R.drawable.ic_profilelogo);
-
-//                Glide.with(PayToMerchantActivity.this)
-//                        .load(userDetails.getData().getImage())
-//                        .placeholder(R.drawable.ic_profilelogo)
-//                        .into(userProfile);
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);

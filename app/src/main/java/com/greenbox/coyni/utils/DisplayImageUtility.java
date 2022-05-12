@@ -1,9 +1,18 @@
 package com.greenbox.coyni.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.util.LruCache;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.network.ApiService;
@@ -18,16 +27,25 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DisplayImageUtility {
-
+    public final String TAG = getClass().getName();
     private Context context;
     private static DisplayImageUtility sInstance;
     private HashMap<String, List<ImageView>> imageIdMap;
-    private HashMap<String, Integer> imagePlaceHolderMap;
+    private HashMap<String, String> tempMap;
+    private LruCache<String, Bitmap> imageCache;
 
     private DisplayImageUtility(Context context) {
         this.context = context;
         imageIdMap = new HashMap<>();
-        imagePlaceHolderMap = new HashMap<>();
+        tempMap = new HashMap<>();
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
+        imageCache = new LruCache<>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
 
     public static synchronized DisplayImageUtility getInstance(Context context) {
@@ -38,21 +56,27 @@ public class DisplayImageUtility {
     }
 
     public void addImage(String key, ImageView imageView, Integer resId) {
-
         if (!android.util.Patterns.WEB_URL.matcher(key).matches()) {
-            if(!imageIdMap.containsKey(key)) {
+            if (imageCache.get(key) != null) {
+                LogUtils.v(TAG, "from cache");
+                imageView.setImageBitmap(imageCache.get(key));
+                return;
+            }
+            imageView.setImageResource(resId);
+            if (!imageIdMap.containsKey(key)) {
                 imageIdMap.put(key, new ArrayList<>());
             }
             imageIdMap.get(key).add(imageView);
-            //imageIdMap.put(key, imageView);
-            imagePlaceHolderMap.put(key, resId);
             DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
             downloadUrlRequest.setKey(key);
-            getDownloadUrl(downloadUrlRequest);
+            ArrayList<DownloadUrlRequest> urlList = new ArrayList<>();
+            urlList.add(downloadUrlRequest);
+            LogUtils.v(TAG, "from url " + key);
+            getDownloadUrl(urlList);
         } else {
-            setImageWithUrl(key, imageView, resId);
+            imageView.setImageResource(resId);
+            getImageFromUrl(key);
         }
-
     }
 
     private void setData(DownloadImageResponse response) {
@@ -60,28 +84,49 @@ public class DisplayImageUtility {
                 || !response.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
             return;
         }
-        if (response.getData() != null && response.getData().getKey() != null) {
-            Integer placeholder = imagePlaceHolderMap.remove(response.getData().getKey());
-            List<ImageView> ivList = imageIdMap.remove(response.getData().getKey());
-            if (ivList != null) {
-                for (int i =0 ;i< ivList.size();i++) {
-                    setImageWithUrl(response.getData().getDownloadUrl(), ivList.get(i), placeholder);
-                }
+
+        List<DownloadImageData> dataList = response.getData();
+        if (dataList != null && dataList.size() > 0) {
+            DownloadImageData data = dataList.get(0);
+            tempMap.put(data.getDownloadUrl(), data.getKey());
+            getImageFromUrl(data.getDownloadUrl());
+        }
+    }
+
+    private void updateViews(String key) {
+        List<ImageView> ivList = imageIdMap.remove(key);
+        if (ivList != null) {
+            for (int i = 0; i < ivList.size(); i++) {
+                ivList.get(i).setImageBitmap(imageCache.get(key));
             }
         }
     }
 
-    private void setImageWithUrl(String url, ImageView iv, Integer placeHolder) {
+    private void getImageFromUrl(String url) {
+        LogUtils.v(TAG, "Glide load started");
         Glide.with(context)
+                .asBitmap()
                 .load(url)
-                .placeholder(placeHolder)
-                .into(iv);
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
+                       String key = tempMap.remove(url);
+                        LogUtils.v(TAG, "Glide resource ready");
+                        imageCache.put(key, bitmap);
+                        updateViews(key);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        LogUtils.v(TAG, "Glide ronLoadCleared");
+                    }
+                });
     }
 
-    private void getDownloadUrl(DownloadUrlRequest downloadUrlRequest) {
+    private void getDownloadUrl(List<DownloadUrlRequest> downloadUrlRequestList) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<DownloadImageResponse> mCall = apiService.getDownloadUrl(downloadUrlRequest);
+            Call<DownloadImageResponse> mCall = apiService.getDownloadUrl(downloadUrlRequestList);
             mCall.enqueue(new Callback<DownloadImageResponse>() {
                 @Override
                 public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
