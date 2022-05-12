@@ -335,7 +335,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         websiteRevisionRequiredLL.setVisibility(View.VISIBLE);
 
         LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
+        ArrayList<DisplayImageUtility.ImageHolder> imagesList = new ArrayList<>();
         for (int i = 0; i < actionRequiredResponse.getData().getWebsiteChange().size(); i++) {
             View websiteView = getLayoutInflater().inflate(R.layout.additional_website_changes_item, null);
             TextView tvheading = websiteView.findViewById(R.id.tvheading);
@@ -352,8 +352,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
             if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
                 imgWebsite.setVisibility(View.VISIBLE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                utility.addImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite, 0);
+                DisplayImageUtility.ImageHolder holder = new DisplayImageUtility.ImageHolder();
+                holder.key = actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1();
+                holder.imageView = imgWebsite;
+                holder.resId = 0;
+                imagesList.add(holder);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+//                utility.addImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite, 0);
             } else {
                 imgWebsite.setVisibility(View.GONE);
             }
@@ -376,6 +381,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     enableOrDisableNext();
                 }
             });
+        }
+        if(imagesList.size() > 0) {
+            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+            utility.addImages(imagesList);
         }
         enableOrDisableNext();
     }
@@ -579,7 +588,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             }
         });
         llApprovedReserved.addView(reserveRule, layoutParams);
-
 
         cardAccept.setOnClickListener(new View.OnClickListener() {
             @Override
