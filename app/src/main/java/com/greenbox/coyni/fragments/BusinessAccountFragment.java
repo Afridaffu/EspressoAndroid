@@ -140,8 +140,8 @@ public class BusinessAccountFragment extends BaseFragment {
                         List<WalletInfo> walletInfo = businessWalletResponse.getData().getWalletNames();
                         if (walletInfo != null && walletInfo.size() > 0) {
                             String strAmount;
-                            objMyApplication.setGBTBalance(walletInfo.get(0).getExchangeAmount(), walletInfo.get(0).getWalletType());
-                            strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(0).getExchangeAmount()));
+                            objMyApplication.setGBTBalance(walletInfo.get(0).getAvailabilityToUse(), walletInfo.get(0).getWalletType());
+                            strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(0).getAvailabilityToUse()));
                             tvBalance.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
                         }
                     } catch (Exception ex) {

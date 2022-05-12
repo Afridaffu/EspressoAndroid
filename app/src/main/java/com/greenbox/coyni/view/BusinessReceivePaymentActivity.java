@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
@@ -93,6 +94,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         listeners();
 
 
+
     }
 
 
@@ -126,12 +128,15 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     ctKey.disableButton();
                 } else if (editable.length() == 0) {
                     setAmount.setHint("0.00");
+                    setAmount.setTextDirection(View.TEXT_DIRECTION_RTL);
                     ctKey.disableButton();
                     ctKey.clearData();
                     setDefaultLength();
                 } else {
                     setAmount.setText("");
                 }
+                setAmount.setSelection(setAmount.getText().length());
+                setAmount.setTextDirection(View.TEXT_DIRECTION_LTR);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -272,6 +277,16 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                         setAmount.requestFocus();
                         setAmount.setShowSoftInputOnFocus(false);
                         setAmount.addTextChangedListener(BusinessReceivePaymentActivity.this);
+
+                        setAmount.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                            @Override
+                            public void sendAccessibilityEvent(View host, int eventType) {
+                                super.sendAccessibilityEvent(host, eventType);
+                                if (eventType == AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED) {
+                                    setAmount.setSelection(setAmount.getText().toString().length());
+                                }
+                            }
+                        });
                         setAmount.setOnClickListener(v -> Utils.hideSoftKeypad(BusinessReceivePaymentActivity.this, v));
                         Window window = setAmountDialog.getWindow();
                         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -492,7 +507,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", BusinessReceivePaymentActivity.this, "Oops!", "");
             } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
                 value = false;
-                Utils.displayAlert("Amount should be grater than zero.", BusinessReceivePaymentActivity.this, "Oops!", "");
+                Utils.displayAlert("Amount should be greater than zero.", BusinessReceivePaymentActivity.this, "Oops!", "");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

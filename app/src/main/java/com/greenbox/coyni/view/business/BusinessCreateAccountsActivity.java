@@ -189,7 +189,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         }
 
 //        setUserBalance(myApplication.getWalletResponseData());
-        setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
+        setUserBalance(myApplication.getCurrentUserData().getMerchantWalletResponse());
 
     }
 
@@ -205,7 +205,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
 //                    myApplication.setGbtWallet(walletInfo.get(i));
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
                     userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
 //                    myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
 //                    }
