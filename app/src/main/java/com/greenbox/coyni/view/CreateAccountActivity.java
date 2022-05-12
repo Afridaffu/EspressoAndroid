@@ -75,6 +75,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import okhttp3.internal.Util;
+
 public class CreateAccountActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     OutLineBoxPhoneNumberEditText phoneNumberET;
     TextInputEditText firstNameET, lastNameET, emailET, passwordET, confirmPasswordET;
@@ -168,6 +170,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             firstNameET.requestFocus();
         }
 
+        if (!Utils.isKeyboardVisible)
+            Utils.shwForcedKeypad(CreateAccountActivity.this);
         Log.e("ID", "" + focusedID);
     }
 
