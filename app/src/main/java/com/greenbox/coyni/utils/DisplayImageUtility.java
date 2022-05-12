@@ -112,8 +112,10 @@ public class DisplayImageUtility {
                     public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                        String key = tempMap.remove(url);
                         LogUtils.v(TAG, "Glide resource ready");
-                        imageCache.put(key, bitmap);
-                        updateViews(key);
+                        if(key != null && bitmap != null) {
+                            imageCache.put(key, bitmap);
+                            updateViews(key);
+                        }
                     }
 
                     @Override
