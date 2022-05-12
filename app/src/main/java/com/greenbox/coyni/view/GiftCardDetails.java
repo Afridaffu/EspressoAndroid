@@ -598,6 +598,11 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                     } else {
                         isFirstName = false;
                     }
+
+                    if (firstNameET.getText().toString().contains("  ")){
+                        firstNameET.setText(firstNameET.getText().toString().replace("  "," "));
+                        firstNameET.setSelection(firstNameET.getText().length());
+                    }
                     enableOrDisableNext();
                 }
 
@@ -643,6 +648,11 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
 //                        lastNameErrorTV.setText("Field Required");
                     } else {
                         isLastName = false;
+                    }
+
+                    if (lastNameET.getText().toString().contains("  ")){
+                        lastNameET.setText(lastNameET.getText().toString().replace("  "," "));
+                        lastNameET.setSelection(lastNameET.getText().length());
                     }
                     enableOrDisableNext();
                 }

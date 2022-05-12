@@ -274,6 +274,8 @@ public class Utils {
     public static final int monthlyservicefee = 17;
     public static final int withdraw = 3;
     public static final int refund = 9;
+    public static final int refunded = 7;
+    public static final int partialRefund = 8;
     public static final int accountTransfer = 0; //Not available
     public static final int paidInvoice = 15;
     public static final int businessPayout = 19;
@@ -389,8 +391,8 @@ public class Utils {
     public static final String datePicker = "DatePicker";
 
     public static final String position = "Position";
-    public static final int cPP = 0;
-    public static final int cTOS = 1;
+    public static final int cPP = 1;
+    public static final int cTOS = 0;
     public static final int mPP = 8;
     public static final int mTOS = 7;
     public static final int mAgmt = 5;

@@ -906,6 +906,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         isdbaName = false;
                     }
                     enableOrDisableNext();
+
+                    if (dbanameET.getText().toString().contains("  ")){
+                        dbanameET.setText(dbanameET.getText().toString().replace("  "," "));
+                        dbanameET.setSelection(dbanameET.getText().length());
+                    }
                 }
 
                 @Override
@@ -1045,6 +1050,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             isCompanyAdress1 = false;
                         }
                         enableOrDisableAddressNext();
+
+                        if (companyaddressET.getText().toString().contains("  ")){
+                            companyaddressET.setText(companyaddressET.getText().toString().replace("  "," "));
+                            companyaddressET.setSelection(companyaddressET.getText().length());
+                        }
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1087,6 +1097,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                                 Utils.setUpperHintColor(companyaddress2til, getResources().getColor(R.color.primary_black));
                         }
                         enableOrDisableAddressNext();
+
+
+                        if (companyaddress2ET.getText().toString().contains("  ")){
+                            companyaddress2ET.setText(companyaddress2ET.getText().toString().replace("  "," "));
+                            companyaddress2ET.setSelection(companyaddress2ET.getText().length());
+                        }
+
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1134,6 +1151,14 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                             isCity = false;
                         }
                         enableOrDisableAddressNext();
+
+
+
+                        if (cityET.getText().toString().contains("  ")){
+                            cityET.setText(cityET.getText().toString().replace("  "," "));
+                            cityET.setSelection(cityET.getText().length());
+                        }
+
                     } catch (Resources.NotFoundException e) {
                         e.printStackTrace();
                     }
