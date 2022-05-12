@@ -42,6 +42,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -90,6 +91,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public static CompanyInformationActivity companyInformationActivity;
     CompanyInforamtionPager companyInforamtionPager;
     OneDirectionViewPager viewPager;
+    //    ViewPager2 viewPager;
     Long mLastClickTime = 0L;
 
     //Address
@@ -246,7 +248,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
             companyInforamtionPager = new CompanyInforamtionPager();
             viewPager = findViewById(R.id.view_pager);
-            viewPager.setAdapter(companyInforamtionPager);
             viewPager.setAllowedSwipeDirection(SwipeDirection.NONE);
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -255,18 +256,21 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     if (position == 0) {
                         companynameET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-                        findViewById(R.id.basicInfoSL).setVisibility(VISIBLE);
-                        enableOrDisableNext();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+//                        findViewById(R.id.basicInfoSL).setVisibility(VISIBLE);
+//                        enableOrDisableNext();
                     } else if (position == 1) {
                         companyaddressET.requestFocus();
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-                        enableOrDisableAddressNext();
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+//                        enableOrDisableAddressNext();
                     } else if (position == 2) {
-                        findViewById(R.id.basicInfoSL).setVisibility(GONE);
-                        enableOrDisableDocsDone();
+//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(CompanyInformationActivity.this);
+//                        findViewById(R.id.basicInfoSL).setVisibility(GONE);
+//                        enableOrDisableDocsDone();
                     }
                 }
 
@@ -296,9 +300,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         if (!Utils.isKeyboardVisible)
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         enableOrDisableAddressNext();
-                        setUI_IdentificationType();
                     } else if (position == 2) {
-                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
@@ -306,13 +309,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background);
 
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(CompanyInformationActivity.this);
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(CompanyInformationActivity.this);
 
                         enableOrDisableDocsDone();
-
-                        companyInforamtionPager.notifyDataSetChanged();
-
 
                     }
                 }
@@ -322,6 +322,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     Log.e("onPageScrollStateChanged", state + "");
                 }
             });
+            viewPager.setAdapter(companyInforamtionPager);
+            viewPager.setOffscreenPageLimit(2);
 
             companynametil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
             companyemailtil.setBoxStrokeColorStateList(Utils.getNormalColorState(myActivity));
@@ -986,8 +988,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (selectedPage == 0)
                         enableOrDisableNext();
 
-                    if (companynameET.getText().toString().contains("  ")){
-                        companynameET.setText(companynameET.getText().toString().replace("  "," "));
+                    if (companynameET.getText().toString().contains("  ")) {
+                        companynameET.setText(companynameET.getText().toString().replace("  ", " "));
                         companynameET.setSelection(companynameET.getText().length());
                     }
                 }
@@ -1106,8 +1108,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             isCompanyAdress1 = false;
                         }
                         enableOrDisableAddressNext();
-                        if (companyaddressET.getText().toString().contains("  ")){
-                            companyaddressET.setText(companyaddressET.getText().toString().replace("  "," "));
+                        if (companyaddressET.getText().toString().contains("  ")) {
+                            companyaddressET.setText(companyaddressET.getText().toString().replace("  ", " "));
                             companyaddressET.setSelection(companyaddressET.getText().length());
                         }
 
@@ -1155,8 +1157,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                         enableOrDisableAddressNext();
 
-                        if (companyaddress2ET.getText().toString().contains("  ")){
-                            companyaddress2ET.setText(companyaddress2ET.getText().toString().replace("  "," "));
+                        if (companyaddress2ET.getText().toString().contains("  ")) {
+                            companyaddress2ET.setText(companyaddress2ET.getText().toString().replace("  ", " "));
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
                         }
                     } catch (Resources.NotFoundException e) {
@@ -1207,8 +1209,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                         enableOrDisableAddressNext();
 
-                        if (cityET.getText().toString().contains("  ")){
-                            cityET.setText(cityET.getText().toString().replace("  "," "));
+                        if (cityET.getText().toString().contains("  ")) {
+                            cityET.setText(cityET.getText().toString().replace("  ", " "));
                             cityET.setSelection(cityET.getText().length());
                         }
 
@@ -1381,14 +1383,20 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         public Object instantiateItem(ViewGroup collection, int position) {
             int resId = 0;
             switch (position) {
-                case 0:
+                case 1:
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     resId = R.id.basicInfoSL;
                     break;
-                case 1:
+                case 2:
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     resId = R.id.addressSL;
                     break;
-                case 2:
-                    resId = R.id.additionalDocsRL;
+                case 3:
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(CompanyInformationActivity.this);
+                    resId = R.id.companyAdditionalDocsRL;
                     break;
             }
             return findViewById(resId);
@@ -1578,11 +1586,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     public void onVisibilityChanged(boolean visible) {
         if (visible) {
             Utils.isKeyboardVisible = true;
-//            pageOneView.setVisibility(VISIBLE);
-//            pageTwoView.setVisibility(VISIBLE);
         } else {
-//            pageOneView.setVisibility(GONE);
-//            pageTwoView.setVisibility(GONE);
             Utils.isKeyboardVisible = false;
         }
     }
