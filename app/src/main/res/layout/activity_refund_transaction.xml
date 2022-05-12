@@ -108,6 +108,7 @@
                                         android:hint="0.00"
                                         android:textIsSelectable="false"
                                         android:cursorVisible="true"
+                                        android:autofillHints="creditCardSecurityCode"
                                         android:longClickable="false"
                                         android:clickable="false"
                                         android:inputType="numberDecimal"
