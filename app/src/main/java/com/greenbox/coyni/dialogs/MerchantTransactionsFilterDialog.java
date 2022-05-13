@@ -144,12 +144,11 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(String.valueOf(R.string.maxlendecimal)));
                 transAmountEndET.setFilters(FilterArray);
                 transAmountEndET.setText(strEndAmount);
-
-            }else {
-                storedSelectDate = "";
             }
             storedSelectDate = mSharedPref.getString(Utils.SelectStoredDate, tempStrSelectedDate);
-            getDateFromPickerET.setText(storedSelectDate);
+            if (!storedSelectDate.equals("")) {
+                getDateFromPickerET.setText(storedSelectDate);
+            }
         } else {
             if (transactionType != null) {
                 transactionType.clear();
