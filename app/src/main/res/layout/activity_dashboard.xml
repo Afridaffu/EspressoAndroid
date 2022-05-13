@@ -551,7 +551,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_7sdp"
                                     android:fontFamily="@font/opensans_regular"
-                                    android:text="Our team is still reviewing your account. This process may take \nup to 3 business days."
+                                    android:text="Our team is still reviewing your account. This process may take up to 3 business days."
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp"
                                     android:layout_marginBottom="@dimen/_16sdp"/>
