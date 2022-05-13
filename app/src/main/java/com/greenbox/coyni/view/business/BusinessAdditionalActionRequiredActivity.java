@@ -185,9 +185,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             for (int k = 0; k < proposal.getProperties().size(); k++) {
                                 ProposalsPropertiesData property = proposal.getProperties().get(k);
                                 JSONObject propertyObj = new JSONObject();
-                                propertyObj.put("isUserAccepted", proposalsMap.get(capFirstLetter(property.getName())).isUserAccepted());
+                                propertyObj.put("isUserAccepted", proposalsMap.get(capFirstLetter(property.getDisplayName())).isUserAccepted());
                                 propertyObj.put("name", property.getName());
-                                propertyObj.put("userMessage", proposalsMap.get(capFirstLetter(property.getName())).getUserMessage());
+                                propertyObj.put("userMessage", proposalsMap.get(capFirstLetter(property.getDisplayName())).getUserMessage());
                                 proposalsArray.put(propertyObj);
                             }
                         }
@@ -571,7 +571,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
         }
         String percent = Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
-        tv_reserveAmount.setText(percent.replace("0*$", "") + " %");
+        tv_reserveAmount.setText(Utils.convertTwoDecimal(percent.replace("0*$", "") + " %"));
         tv_reservePeriod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 
         ImageView i_iconIV = reserveRule.findViewById(R.id.i_iconIV);

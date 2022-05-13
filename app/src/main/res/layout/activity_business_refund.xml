@@ -579,14 +579,14 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_regular"
                                 android:text="@string/reference_id"
+                                android:layout_weight="1"
                                 android:textColor="@color/dark_grey"
                                 android:textSize="@dimen/_11ssp" />
 
                             <TextView
                                 android:id="@+id/refundOTIrefrenceTV"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:fontFamily="@font/opensans_semibold"
                                 android:gravity="right"
                                 android:text=""
