@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_13sdp"
             android:layout_marginTop="@dimen/_43sdp"
-            android:padding="@dimen/_8sdp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/_8sdp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -113,16 +113,16 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cvAddPayment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_11sdp"
+        android:layout_marginVertical="@dimen/_11sdp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp">
 
         <LinearLayout
             android:id="@+id/addTeamMemberL"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_9sdp"
             android:orientation="vertical">
@@ -155,20 +155,20 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1sdp"
-                android:background="@color/viewcolor"
-                android:layout_marginBottom="@dimen/_2sdp"/>
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:background="@color/viewcolor" />
 
-            <ScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fillViewport="true"
-                android:scrollbars="none">
+            <!--            <ScrollView-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:fillViewport="true"-->
+            <!--                android:scrollbars="none">-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvTeam"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </ScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTeam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!--            </ScrollView>-->
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -177,13 +177,13 @@
         android:id="@+id/no_team_member"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Team member not found"
-        android:textSize="@dimen/_11ssp"
         android:layout_marginTop="@dimen/_20sdp"
         android:fontFamily="@font/opensans_regular"
         android:gravity="center_vertical|center_horizontal"
-        android:visibility="gone"
-        android:textColor="@color/primary_black"/>
+        android:text="Team member not found"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_11ssp"
+        android:visibility="gone" />
 
 
 </LinearLayout>
