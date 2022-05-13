@@ -527,7 +527,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
                         fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
                     }
-                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                    if(Utils.isKeyboardVisible) {
+                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                    }
                     enableOrDisableNext();
                 }
             }
@@ -536,7 +538,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                if(Utils.isKeyboardVisible) {
+                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                }
             }
         });
     }
