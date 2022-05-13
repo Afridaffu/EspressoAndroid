@@ -100,6 +100,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         filterTransactionList = null;
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
                         TransactionListRequest transactionListRequest = new TransactionListRequest();
+                        transactionListRequest.setMerchantTransactions(true);
                         transactionListRequest.setTransactionType(getDefaultTransactionTypes());
                         transactionListRequest.setPageNo(String.valueOf(currentPage));
                         transactionListRequest.setWalletCategory(Utils.walletCategory);
@@ -124,6 +125,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 loadMoreTV.setVisibility(View.VISIBLE);
                                 currentPage = currentPage + 1;
                                 TransactionListRequest transactionListRequest = new TransactionListRequest();
+                                transactionListRequest.setMerchantTransactions(true);
                                 transactionListRequest.setPageNo(String.valueOf(currentPage));
                                 transactionListRequest.setWalletCategory(Utils.walletCategory);
                                 transactionListRequest.setTransactionType(getDefaultTransactionTypes());
@@ -160,6 +162,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             globalPending.clear();
             globalPosted.clear();
             TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setMerchantTransactions(true);
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setGbxTransactionId(charSequence.toString());
@@ -314,6 +317,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setMerchantTransactions(true);
             transactionListRequest.setTransactionType(getDefaultTransactionTypes());
             transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
             transactionListRequest.setWalletCategory(Utils.walletCategory);
