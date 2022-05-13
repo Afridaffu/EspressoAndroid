@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -71,6 +72,13 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
         });
         recyclerViewTeam = findViewById(R.id.rvTeam);
 
+        recyclerViewTeam.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(TeamActivity.this);
+            }           
+        });
         addTeamMemberL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

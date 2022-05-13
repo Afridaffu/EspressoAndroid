@@ -179,11 +179,14 @@
                             android:id="@+id/llEIN"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="right|center"
-                            android:background="@drawable/ic_eyeclose"
-                            android:paddingTop="@dimen/_5sdp"
-                            android:paddingBottom="@dimen/_5sdp"
-                            />
+                            android:layout_gravity="right|center"
+                            android:paddingTop="@dimen/_3sdp"
+                            android:paddingBottom="@dimen/_3sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:layout_marginEnd="@dimen/_1sdp"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:background="@drawable/ic_eyeclose" />
+
                     </LinearLayout>
 
                     <View
