@@ -302,7 +302,7 @@ public class Utils {
     public static final int paid = 5;
 
     public static final int reserveRelease = 16;
-    public static final int batchNow = 7;
+    public static final int batchNow = 19;
     public static final int open = 1;
     public static final int onHold = 7;
     public static final int released = 8;
