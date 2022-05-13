@@ -311,6 +311,10 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isFirstName = false;
                 }
                 enableOrDisableNext();
+                if (editFNameET.getText().toString().contains("  ")){
+                    editFNameET.setText(editFNameET.getText().toString().replace("  "," "));
+                    editFNameET.setSelection(editFNameET.getText().length());
+                }
             }
 
             @Override
@@ -354,6 +358,10 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isLastName = false;
                 }
                 enableOrDisableNext();
+                if (editLNameET.getText().toString().contains("  ")){
+                    editLNameET.setText(editLNameET.getText().toString().replace("  "," "));
+                    editLNameET.setSelection(editLNameET.getText().length());
+                }
             }
 
             @Override
