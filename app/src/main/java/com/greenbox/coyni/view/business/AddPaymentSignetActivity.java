@@ -34,6 +34,7 @@ import com.greenbox.coyni.model.signet.SignetRequest;
 import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.AddCardActivity;
 import com.greenbox.coyni.view.EditEmailActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
@@ -165,6 +166,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(AddPaymentSignetActivity.this);
                             progressDialog = Utils.showProgressDialog(AddPaymentSignetActivity.this);
                             SignetRequest obj = new SignetRequest();
                             obj.setAccountCategory("Signet");
