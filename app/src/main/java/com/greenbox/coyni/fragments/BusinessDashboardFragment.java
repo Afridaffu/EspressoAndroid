@@ -1015,11 +1015,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
-        if (listItems != null && listItems.size() > 0) {
+        int i = 0;
+        boolean isOpen = false, isPaid = false;
+        if (listItems != null && listItems.size() > 0 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isPaid) {
             batchNoTransaction.setVisibility(View.GONE);
-            int i = 0;
             Collections.sort(listItems, Collections.reverseOrder());
-            boolean isOpen = false, isPaid = false;
             while (i < listItems.size()) {
                 if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
 
