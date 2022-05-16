@@ -69,10 +69,10 @@ public class TeamMemberActivity extends BaseActivity {
                                 if (data.getLastName() != null && !data.getLastName().equals("")) {
                                     lastName = data.getLastName();
                                 }
-                                txName.setText(firstName + " " + lastName);
+                                txName.setText(Utils.capitalize(firstName) + " " + Utils.capitalize(lastName));
                                 char first = firstName.charAt(0);
                                 char lastname = lastName.charAt(0);
-                                String imageName = String.valueOf(first) + lastname;
+                                String imageName = String.valueOf(first).toUpperCase() + String.valueOf(lastname).toUpperCase();
                                 txImageName.setText(imageName);
                                 if (data.getRoleName() != null && !data.getRoleName().equals("")) {
                                     txRole.setText(data.getRoleName());
@@ -80,9 +80,9 @@ public class TeamMemberActivity extends BaseActivity {
                                 if (data.getStatus() != null && !data.getStatus().equals("")) {
                                     teamStatus = data.getStatus();
                                     data.getStatus().equalsIgnoreCase(Utils.canceled);
-                                        txStatus.setText(Utils.canceled);
+                                    txStatus.setText(Utils.canceled);
 
-                                    if(data.getStatus().equalsIgnoreCase(Utils.teammemberpending)){
+                                    if (data.getStatus().equalsIgnoreCase(Utils.teammemberpending)) {
                                         mResendInvitation.setVisibility(View.GONE);
                                         mCancelCV.setVisibility(View.VISIBLE);
                                         mEditCv.setVisibility(View.VISIBLE);
@@ -91,8 +91,7 @@ public class TeamMemberActivity extends BaseActivity {
                                         mStatusIcon.setBackgroundResource(R.drawable.pending_dot);
                                         txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
                                         txStatus.setText(data.getStatus());
-                                    }
-                                    else {
+                                    } else {
                                         txStatus.setText(data.getStatus());
                                     }
                                 }
@@ -239,7 +238,7 @@ public class TeamMemberActivity extends BaseActivity {
             txStatus.setTextColor(getResources().getColor(R.color.error_red));
             mStatusIcon.setBackgroundResource(R.drawable.resend_invitation_bg);
             txStatus.setBackgroundResource(R.drawable.txn_resend_invitation_bg);
-        }else {
+        } else {
             mResendInvitation.setVisibility(View.GONE);
             mCancelCV.setVisibility(View.VISIBLE);
             mEditCv.setVisibility(View.VISIBLE);

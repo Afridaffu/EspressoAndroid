@@ -140,7 +140,8 @@
             android:name=".view.business.TeamActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".view.business.FeesActivity"
             android:exported="false"

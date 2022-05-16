@@ -67,6 +67,8 @@ public class EditTeamMember extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         firstName = bundle.getString(Utils.teamFirstName, firstName);
         lastName = bundle.getString(Utils.teamLastName, lastName);
+        firstName = Utils.capitalize(firstName);
+        lastName = Utils.capitalize(lastName);
         emailAddress = bundle.getString(Utils.teamEmailAddress, emailAddress);
         phoneNumber = bundle.getString(Utils.teamPhoneNumber, phoneNumber);
         teamMemberId = bundle.getInt(Utils.teamMemberId, teamMemberId);
@@ -519,7 +521,8 @@ public class EditTeamMember extends BaseActivity {
 
                             }, 2000);
                         } else {
-                            Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), EditTeamMember.this, "", teamInfoAddModel.getError().getFieldErrors().get(0));
+                            Utils.displayAlert(teamInfoAddModel.getError().getErrorDescription(), EditTeamMember.this, "",
+                                    teamInfoAddModel.getError().getFieldErrors().get(0));
                         }
                     } else {
                         Toast.makeText(EditTeamMember.this, "Something Went Wrong", Toast.LENGTH_SHORT).show();

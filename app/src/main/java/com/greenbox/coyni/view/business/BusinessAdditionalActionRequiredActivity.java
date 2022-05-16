@@ -8,16 +8,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -40,6 +46,7 @@ import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.dialogs.AddCommentsDialog;
 import com.greenbox.coyni.dialogs.ApplicationApprovedDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.model.underwriting.InformationChangeData;
@@ -67,7 +74,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
+public class BusinessAdditionalActionRequiredActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     public ScrollView scrollview;
     private LinearLayout additionReservedLL, llApprovedReserved, llHeading, llBottomView, additionalDocumentRequiredLL,
             websiteRevisionRequiredLL, informationRevisionLL;
@@ -106,7 +113,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(!reservedRule) {
+        if (!reservedRule) {
             super.onBackPressed();
         }
     }
@@ -129,6 +136,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         fileUpload = new HashMap<Integer, String>();
         documentsFIle = new ArrayList<>();
+
+        setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivity.this);
 
         imvCLose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,7 +391,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             });
         }
-        if(imagesList.size() > 0) {
+        if (imagesList.size() > 0) {
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImages(imagesList);
         }
@@ -399,7 +408,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
-                        String type = data.getType();
+                    String type = data.getType();
                     List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
@@ -417,14 +426,15 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-                           if(data.getType()!=null) {
-                               displayNameTV.setText(type); }
+                            if (data.getType() != null) {
+                                displayNameTV.setText(type);
+                            }
                             String companyname = capFirstLetter(propertiesData.getDisplayName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
-                            if (propertiesData.getDisplayName() != null ) {
+                            if (propertiesData.getDisplayName() != null) {
                                 companyNameTV.setText(companyname);
                             }
 
-                            if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                            if (propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
                                 companyNameOriginal.setText(propertiesData.getOriginalValue());
                                 companyNameProposed.setText(propertiesData.getProposedValue());
                             } else {
@@ -433,13 +443,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             }
 
 
-                            if(propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
+                            if (propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
                                 String message = "";
-                                if(!propertiesData.getAdminMessage().startsWith("\"")) {
+                                if (!propertiesData.getAdminMessage().startsWith("\"")) {
                                     message += "\"";
                                 }
                                 message += propertiesData.getAdminMessage();
-                                if(!propertiesData.getAdminMessage().endsWith("\"")) {
+                                if (!propertiesData.getAdminMessage().endsWith("\"")) {
                                     message += "\"";
                                 }
                                 tvMessage.setText(message);
@@ -527,7 +537,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
                         fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
                     }
-                    if(Utils.isKeyboardVisible) {
+                    if (Utils.isKeyboardVisible) {
                         Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     }
                     enableOrDisableNext();
@@ -538,7 +548,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if(Utils.isKeyboardVisible) {
+                if (Utils.isKeyboardVisible) {
                     Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                 }
             }
@@ -563,15 +573,15 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        if(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")){
+        if (actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")) {
             tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
-        }else {
+        } else {
             tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("", "CYN")));
         }
 
-        if(actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")){
+        if (actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")) {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket()));
-        }else {
+        } else {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
         }
         String percent = Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
@@ -757,7 +767,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     }
 
-
     public void saveFileFromCamera(File cameraFIle) {
 
         LogUtils.d(TAG, "camera" + cameraFIle);
@@ -781,7 +790,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         enableOrDisableNext();
         LogUtils.d(TAG, "fileUpload" + fileUpload);
     }
-
 
     public void uploadDocumentFromLibrary(Uri uri, int reqType) {
         try {
@@ -834,6 +842,37 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
     }
 
 }
