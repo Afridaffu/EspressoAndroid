@@ -119,7 +119,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.hideKeypad(AddPaymentSignetActivity.this);
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddPaymentSignetActivity.this);
                     Utils.populateStates(AddPaymentSignetActivity.this, etState, objMyApplication);
                 }
             });
@@ -131,6 +132,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
+                    if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(AddPaymentSignetActivity.this);
                     Utils.populateStates(AddPaymentSignetActivity.this, etState, objMyApplication);
                 }
@@ -144,7 +146,8 @@ public class AddPaymentSignetActivity extends AppCompatActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.hideKeypad(AddPaymentSignetActivity.this);
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(AddPaymentSignetActivity.this);
                     Utils.populateStates(AddPaymentSignetActivity.this, etState, objMyApplication);
                 }
             });
