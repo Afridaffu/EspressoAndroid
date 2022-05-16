@@ -128,8 +128,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                         LogUtils.v("Param - ", str);
                     }
                 }
+                String authority = uri.getAuthority();
                 Set<String> queryParams = uri.getQueryParameterNames();
-                String message = "";
+                String message = "authority - " + authority + "\n";
                 for(String s : queryParams) {
                     message += s+ " - " + uri.getQueryParameter(s) + "\n";
                 }
