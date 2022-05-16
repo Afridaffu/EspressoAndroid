@@ -172,8 +172,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             informationJSON.put("websiteUpdates", website);
 
             JSONArray proposals = new JSONArray();
-            JSONObject proposalsObj = new JSONObject();
-            JSONArray proposalsArray = new JSONArray();
 
             if (actionRequired.getData().getInformationChange() != null) {
                 for (int i = 0; i < actionRequired.getData().getInformationChange().size(); i++) {
@@ -181,13 +179,17 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     List<ProposalsData> proposalsData = data.getProposals();
                     for (int j = 0; j < proposalsData.size(); j++) {
                         ProposalsData proposal = proposalsData.get(j);
+                        String type = proposal.getType();
+                        JSONObject proposalsObj = new JSONObject();
+                        JSONArray proposalsArray = new JSONArray();
                         if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
                             for (int k = 0; k < proposal.getProperties().size(); k++) {
                                 ProposalsPropertiesData property = proposal.getProperties().get(k);
                                 JSONObject propertyObj = new JSONObject();
-                                propertyObj.put("isUserAccepted", proposalsMap.get(capFirstLetter(property.getDisplayName())).isUserAccepted());
+                                String verificationKey = type+ "" + capFirstLetter(property.getDisplayName());
+                                propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
                                 propertyObj.put("name", property.getName());
-                                propertyObj.put("userMessage", proposalsMap.get(capFirstLetter(property.getDisplayName())).getUserMessage());
+                                propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
                                 proposalsArray.put(propertyObj);
                             }
                         }
@@ -197,7 +199,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         proposalsObj.put("properties", proposalsArray);
 
                         proposals.put(proposalsObj);
-
                         informationJSON.put("proposals", proposals);
                     }
 
@@ -397,13 +398,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         if (informationChangeData != null && informationChangeData.size() > 0) {
             InformationChangeData changeData = informationChangeData.get(0);
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
+                proposalsMap = new HashMap<>();
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
-                        String type = data.getType();
                     List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
-                        proposalsMap = new HashMap<>();
                         for (int i = 0; i < proposalsPropertiesData.size(); i++) {
                             View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
                             LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
@@ -418,11 +418,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
                            if(data.getType()!=null) {
-                               displayNameTV.setText(type); }
-                            String companyname = capFirstLetter(propertiesData.getDisplayName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
-                            if (propertiesData.getDisplayName() != null ) {
-                                companyNameTV.setText(companyname);
-                            }
+                               displayNameTV.setText(data.getType());
+                           }
+
+                            String companyname = propertiesData.getDisplayName() != null ? propertiesData.getDisplayName() : "";
+//                            if (propertiesData.getDisplayName() != null ) {
+//                                companyname = propertiesData.getDisplayName();
+//                            }
+                            companyNameTV.setText(companyname);
                             if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
                                 companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
                                 companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
@@ -442,8 +445,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                 }
                                 tvMessage.setText(message);
                             }
-                            proposalsMap.put(companyname, propertiesData);
-                            fileUpload.put(companyname.trim().hashCode(), null);
+
+                            String verificationKey = data.getType()+ "" + companyname;
+                            proposalsMap.put(verificationKey, propertiesData);
+                            fileUpload.put(verificationKey.trim().hashCode(), null);
 
                             informationRevisionLL.addView(inf1, layoutParams);
                             llAccept.setTag(inf1);
@@ -457,11 +462,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
                                     View v = (View) view.getTag();
                                     TextView tv = v.findViewById(R.id.comapny_nameTV);
-                                    if (fileUpload.containsKey(companyname.trim().hashCode())) {
-                                        fileUpload.replace(companyname.trim().hashCode(), "true");
+                                    TextView displayNameTV = v.findViewById(R.id.display_nameTV);
+                                    String verificationKey1 = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                                    if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
+                                        fileUpload.replace(verificationKey1.trim().hashCode(), "true");
                                     }
-                                    proposalsMap.get(companyname).setUserAccepted(true);
-                                    proposalsMap.get(companyname).setUserMessage("Accepted");
+                                    proposalsMap.get(verificationKey1).setUserAccepted(true);
+                                    proposalsMap.get(verificationKey1).setUserMessage("Accepted");
                                     enableOrDisableNext();
 
                                 }
@@ -500,6 +507,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     private void showCommentDialog(final View view) {
         TextView tv = view.findViewById(R.id.comapny_nameTV);
+        TextView displayNameTV = view.findViewById(R.id.display_nameTV);
         TextView tvRemarks = view.findViewById(R.id.remarksTV);
         ImageView imvAcceptTick = view.findViewById(R.id.imvAccepttick);
         LinearLayout llDecline = view.findViewById(R.id.declineLL);
@@ -520,10 +528,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvDeclinedMsg.setVisibility(View.VISIBLE);
                     tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
                     llDecline.setVisibility(View.GONE);
-                    proposalsMap.get(tv.getText().toString()).setUserAccepted(false);
-                    proposalsMap.get(tv.getText().toString()).setUserMessage(comm);
-                    if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
-                        fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
+
+                    String verificationKey = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                    proposalsMap.get(verificationKey).setUserAccepted(false);
+                    proposalsMap.get(verificationKey).setUserMessage(comm);
+                    if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
+                        fileUpload.replace(verificationKey.trim().hashCode(), "false");
                     }
                     if(Utils.isKeyboardVisible) {
                         Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
