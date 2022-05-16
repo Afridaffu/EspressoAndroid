@@ -280,7 +280,6 @@
                 android:id="@+id/editphoneErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -308,6 +307,7 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="*Please Note: New team members get full\nadministrator permission"
                 android:textColor="@color/xdark_gray"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:textSize="@dimen/_11ssp" />
 
             <LinearLayout

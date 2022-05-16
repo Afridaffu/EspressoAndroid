@@ -2175,6 +2175,20 @@ public class Utils {
         }
     }
 
+    public static String formatPhoneNumber(String phoneNumber) {
+        if (phoneNumber == null && phoneNumber.equals("")) {
+            return "";
+        }
+        if (phoneNumber.contains("(")) {
+            return phoneNumber;
+        }
+
+        if (phoneNumber.length() != 10) {
+            return phoneNumber;
+        }
+        return "(" + phoneNumber.substring(0, 3) + ") " + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+    }
+
     public static String convertNotificationTime(String date, String zoneId) {
         String strDate = "";
         String timeAgo = "";
