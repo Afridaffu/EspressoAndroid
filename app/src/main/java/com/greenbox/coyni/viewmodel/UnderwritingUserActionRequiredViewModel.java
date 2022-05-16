@@ -169,10 +169,16 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
                         }.getType();
                         ActionRequiredSubmitResponse res = gson.fromJson(strResponse, type);
                         ActionRequiredSubmitResponseMutableLiveData.postValue(res);
+                        LogUtils.d(TAG, "onFailure callback -- " + response);
                     } else {
-                        ActionRequiredSubmitResponseMutableLiveData.postValue(null);
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<ActionRequiredSubmitResponse>() {
+                        }.getType();
+                        ActionRequiredSubmitResponse res = gson.fromJson(response.body().string(), type);
+                        ActionRequiredSubmitResponseMutableLiveData.postValue(res);
                     }
                 } catch (Exception e) {
+                    LogUtils.d(TAG, "onFailure callback -- " + e.getMessage());
                     ActionRequiredSubmitResponseMutableLiveData.postValue(null);
                 }
 
@@ -216,11 +222,11 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
         }
     }
 
-    public void submitActionRequiredCustomer(MultipartBody.Part[] requestBody,RequestBody underWriting) {
+    public void submitActionRequiredCustomer(MultipartBody.Part[] requestBody, RequestBody underWriting) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
 //            LogUtils.d(TAG, "submitActionRequired" + documentsImageList);
-            Call<SubmitActionRqrdResponse> mCall = apiService.submitActRqrd(requestBody,underWriting);
+            Call<SubmitActionRqrdResponse> mCall = apiService.submitActRqrd(requestBody, underWriting);
 
             mCall.enqueue(new Callback<SubmitActionRqrdResponse>() {
                 @Override
