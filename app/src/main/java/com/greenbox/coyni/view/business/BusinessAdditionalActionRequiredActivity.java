@@ -425,8 +425,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             }
 
                             if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
-                                companyNameOriginal.setText(propertiesData.getOriginalValue());
-                                companyNameProposed.setText(propertiesData.getProposedValue());
+                                companyNameOriginal.setText("(" + propertiesData.getOriginalValue().substring(0, 3) + ") " + propertiesData.getOriginalValue().substring(3, 6) + "-" + propertiesData.getOriginalValue().substring(6, 10));
+                                companyNameProposed.setText("(" + propertiesData.getProposedValue().substring(0, 3) + ") " + propertiesData.getProposedValue().substring(3, 6) + "-" + propertiesData.getProposedValue().substring(6, 10));
                             } else {
                                 companyNameOriginal.setText(propertiesData.getOriginalValue());
                                 companyNameProposed.setText(propertiesData.getProposedValue());
