@@ -433,17 +433,15 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             if (propertiesData.getDisplayName() != null) {
                                 companyNameTV.setText(companyname);
                             }
-
-                            if (propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
-                                companyNameOriginal.setText(propertiesData.getOriginalValue());
-                                companyNameProposed.setText(propertiesData.getProposedValue());
+                            if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                                companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
+                                companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
                             } else {
                                 companyNameOriginal.setText(propertiesData.getOriginalValue());
                                 companyNameProposed.setText(propertiesData.getProposedValue());
                             }
 
-
-                            if (propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
+                            if(propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
                                 String message = "";
                                 if (!propertiesData.getAdminMessage().startsWith("\"")) {
                                     message += "\"";
