@@ -117,6 +117,9 @@
                     android:layout_gravity="right|center"
                     android:paddingTop="@dimen/_3sdp"
                     android:paddingBottom="@dimen/_3sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginEnd="@dimen/_1sdp"
                     android:background="@drawable/ic_eyeclose" />
             </LinearLayout>
 

@@ -185,9 +185,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             for (int k = 0; k < proposal.getProperties().size(); k++) {
                                 ProposalsPropertiesData property = proposal.getProperties().get(k);
                                 JSONObject propertyObj = new JSONObject();
-                                propertyObj.put("isUserAccepted", proposalsMap.get(capFirstLetter(property.getName())).isUserAccepted());
+                                propertyObj.put("isUserAccepted", proposalsMap.get(capFirstLetter(property.getDisplayName())).isUserAccepted());
                                 propertyObj.put("name", property.getName());
-                                propertyObj.put("userMessage", proposalsMap.get(capFirstLetter(property.getName())).getUserMessage());
+                                propertyObj.put("userMessage", proposalsMap.get(capFirstLetter(property.getDisplayName())).getUserMessage());
                                 proposalsArray.put(propertyObj);
                             }
                         }
@@ -335,7 +335,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         websiteRevisionRequiredLL.setVisibility(View.VISIBLE);
 
         LinearLayout.LayoutParams layoutParamss1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
+        ArrayList<DisplayImageUtility.ImageHolder> imagesList = new ArrayList<>();
         for (int i = 0; i < actionRequiredResponse.getData().getWebsiteChange().size(); i++) {
             View websiteView = getLayoutInflater().inflate(R.layout.additional_website_changes_item, null);
             TextView tvheading = websiteView.findViewById(R.id.tvheading);
@@ -352,8 +352,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
             if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
                 imgWebsite.setVisibility(View.VISIBLE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                utility.addImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite, 0);
+                DisplayImageUtility.ImageHolder holder = new DisplayImageUtility.ImageHolder();
+                holder.key = actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1();
+                holder.imageView = imgWebsite;
+                holder.resId = 0;
+                imagesList.add(holder);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+//                utility.addImage(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1(), imgWebsite, 0);
             } else {
                 imgWebsite.setVisibility(View.GONE);
             }
@@ -377,6 +382,11 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             });
         }
+        if(imagesList.size() > 0) {
+            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+            utility.addImages(imagesList);
+        }
+        enableOrDisableNext();
     }
 
     private void informationRevision(ActionRequiredResponse actionRequiredResponse) {
@@ -389,6 +399,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
+                        String type = data.getType();
                     List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
@@ -397,6 +408,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
                             LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
                             TextView companyNameTV = inf1.findViewById(R.id.comapny_nameTV);
+                            TextView displayNameTV = inf1.findViewById(R.id.display_nameTV);
                             TextView companyNameOriginal = inf1.findViewById(R.id.comapnyNameOriginal);
                             TextView companyNameProposed = inf1.findViewById(R.id.comapnyNamePropesed);
                             TextView tvMessage = inf1.findViewById(R.id.tvMessage);
@@ -405,21 +417,33 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-//                            companyNameTV.setText(propertiesData.getName());
-                            String companyname = capFirstLetter(propertiesData.getName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
-                            if (propertiesData.getName() != null) {
+                           if(data.getType()!=null) {
+                               displayNameTV.setText(type); }
+                            String companyname = capFirstLetter(propertiesData.getDisplayName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
+                            if (propertiesData.getDisplayName() != null ) {
                                 companyNameTV.setText(companyname);
                             }
-                            companyNameOriginal.setText(propertiesData.getOriginalValue());
-                            companyNameProposed.setText(propertiesData.getProposedValue());
-                            tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
+
+                            if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                                companyNameOriginal.setText(propertiesData.getOriginalValue());
+                                companyNameProposed.setText(propertiesData.getProposedValue());
+                            } else {
+                                companyNameOriginal.setText(propertiesData.getOriginalValue());
+                                companyNameProposed.setText(propertiesData.getProposedValue());
+                            }
 
 
-//                            if(propertiesData.getAdminMessage().contains("\"" + "\"")) {
-//                                tvMessage.setText(propertiesData.getAdminMessage());
-//                            }else{
-//                                tvMessage.setText("\"" + propertiesData.getAdminMessage() + "\"");
-//                            }
+                            if(propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
+                                String message = "";
+                                if(!propertiesData.getAdminMessage().startsWith("\"")) {
+                                    message += "\"";
+                                }
+                                message += propertiesData.getAdminMessage();
+                                if(!propertiesData.getAdminMessage().endsWith("\"")) {
+                                    message += "\"";
+                                }
+                                tvMessage.setText(message);
+                            }
                             proposalsMap.put(companyname, propertiesData);
                             fileUpload.put(companyname.trim().hashCode(), null);
 
@@ -462,6 +486,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             }
         }
+        enableOrDisableNext();
     }
 
     //
@@ -482,15 +507,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         LinearLayout llDecline = view.findViewById(R.id.declineLL);
         LinearLayout llAccept = view.findViewById(R.id.acceptLL);
         TextView tvDeclinedMsg = view.findViewById(R.id.declineMsgTV);
+        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
         AddCommentsDialog dialog = new AddCommentsDialog(BusinessAdditionalActionRequiredActivity.this, null);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
-                Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                 if (action.equalsIgnoreCase(Utils.COMMENT_ACTION) && tv.getText() != null) {
                     String comm = (String) value;
                     tvRemarks.setText("\"" + comm + "\"");
-//                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                     imvAcceptTick.setVisibility(View.VISIBLE);
                     imvAcceptTick.setImageDrawable(getResources().getDrawable(R.drawable.ic_decline));
                     tvRemarks.setVisibility(View.VISIBLE);
@@ -503,7 +527,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
                         fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
                     }
-                    Utils.hideSoftKeyboard(BusinessAdditionalActionRequiredActivity.this);
+                    if(Utils.isKeyboardVisible) {
+                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                    }
                     enableOrDisableNext();
                 }
             }
@@ -512,7 +538,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                if(Utils.isKeyboardVisible) {
+                    Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+                }
             }
         });
     }
@@ -547,7 +575,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
         }
         String percent = Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
-        tv_reserveAmount.setText(percent.replace("0*$", "") + " %");
+        tv_reserveAmount.setText(Utils.convertTwoDecimal(percent.replace("0*$", "") + " %"));
         tv_reservePeriod.setText(actionRequiredResponse.getData().getReserveRule().getReservePeriod() + " " + "days");
 
         ImageView i_iconIV = reserveRule.findViewById(R.id.i_iconIV);
@@ -564,7 +592,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             }
         });
         llApprovedReserved.addView(reserveRule, layoutParams);
-
 
         cardAccept.setOnClickListener(new View.OnClickListener() {
             @Override

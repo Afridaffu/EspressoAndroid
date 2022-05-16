@@ -92,10 +92,12 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                     searchET.setText("");
                     searchET.clearFocus();
                     getReserveRollingData();
+                    dismissDialog();
                 } else {
                     searchET.setText("");
                     searchET.clearFocus();
                     getManualData();
+                    dismissDialog();
                 }
             }
         });
@@ -405,10 +407,12 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                     reserveFilter = (ReserveFilter) value;
                     ivFilterIcon.setImageResource(R.drawable.ic_filter_enabled);
                     getReserveRollingData();
+//                    dismissDialog();
                 } else if (action.equalsIgnoreCase(resetFilter)) {
                     reserveFilter = (ReserveFilter) value;
                     ivFilterIcon.setImageResource(R.drawable.ic_filtericon);
                     getReserveRollingData();
+                    dismissDialog();
                 }
             }
         });
@@ -474,6 +478,8 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
                 reserveRecyclerView.setVisibility(View.VISIBLE);
                 getManualData();
                 dismissDialog();
+
+
             }
         }
     }

@@ -278,7 +278,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
                         DownloadDocumentData data = downloadDocumentResponse.getData();
                         if(data != null ) {
                             if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
-                                launchDocumentUrl(data.getDownloadUrl());
+                                launchDocumentUrl(data.getDownloadUrl().replace("&","%26"));
                             } else {
                                 Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
                             }

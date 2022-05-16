@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
@@ -119,7 +120,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         objMyApplication = (MyApplication) getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-//        refundET.requestFocus();
+        refundET.requestFocus();
         refundET.setSelection(refundET.getText().length());
         refundET.setShowSoftInputOnFocus(false);
         refundET.setSelected(false);
@@ -128,6 +129,15 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             public void onClick(View v) {
 //                if (Utils.isKeyboardVisible)
 //                    Utils.hideKeypad(RefundTransactionActivity.this);
+            }
+        });
+        refundET.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+            @Override
+            public void sendAccessibilityEvent(View host, int eventType) {
+                super.sendAccessibilityEvent(host, eventType);
+                if (eventType == AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED) {
+                    refundET.setSelection(refundET.getText().toString().length());
+                }
             }
         });
         refundET.setOnFocusChangeListener(new View.OnFocusChangeListener() {

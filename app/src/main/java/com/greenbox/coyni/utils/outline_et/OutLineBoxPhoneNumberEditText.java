@@ -194,6 +194,7 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                             }
                         } else {
                             etm.editPhonLL.setVisibility(GONE);
+                            pnET.setSelection(pnET.getText().length());
                         }
                     }
                 } catch (Exception ex) {

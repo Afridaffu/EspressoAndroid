@@ -116,6 +116,7 @@ public class EditTeamMember extends BaseActivity {
         if (firstName != null
                 && !firstName.equals("")) {
             editFNameET.setText(firstName);
+            editFNameET.setSelection(editFNameET.getText().length());
             Utils.setUpperHintColor(editFNameTil, getResources().getColor(R.color.primary_black));
             isFirstName = true;
         } else {
@@ -124,6 +125,7 @@ public class EditTeamMember extends BaseActivity {
         if (lastName != null
                 && !lastName.equals("")) {
             editLNameET.setText(lastName);
+            editLNameET.setSelection(editLNameET.getText().length());
             Utils.setUpperHintColor(editLNameTil, getResources().getColor(R.color.primary_black));
             isLastName = true;
         } else {
@@ -132,6 +134,7 @@ public class EditTeamMember extends BaseActivity {
         if (emailAddress != null
                 && !emailAddress.equals("")) {
             editEmailET.setText(emailAddress);
+            editEmailET.setSelection(editEmailET.getText().length());
             Utils.setUpperHintColor(editEmailTil, getResources().getColor(R.color.primary_black));
             isEmail = true;
         } else {

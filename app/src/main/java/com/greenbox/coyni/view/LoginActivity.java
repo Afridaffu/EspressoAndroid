@@ -446,9 +446,9 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
                             etEmail.setSelection(etEmail.getText().length());
                         }
-                        if (isEmailValid(str)) {
-                            Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-                        }
+//                        if (isEmailValid(str)) {
+//                            Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

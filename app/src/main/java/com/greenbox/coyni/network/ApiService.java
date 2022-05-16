@@ -641,13 +641,13 @@ public interface ApiService {
     @GET("api/v2/agreements/url")
     Call<DownloadDocumentResponse> getAgreementUrl(@Query("agreementType") String agreementType);
 
-    @POST("/api/v2/node/paidOrder")
+    @POST("api/v2/node/paidOrder")
     Call<PaidOrderResp> paidOrder(@Body PaidOrderRequest request);
 
-    @POST("/api/v2/transactions/business-activity")
+    @POST("api/v2/transactions/business-activity")
     Call<BusinessActivityResp> businessActivity(@Body BusinessActivityRequest businessActivityRequest);
 
-    @POST("/api/v2/transactions/admin/merchant-activity-chart")
+    @POST("api/v2/transactions/admin/merchant-activity-chart")
     Call<MerchantActivityResp> merchantActivity(@Body MerchantActivityRequest request);
 
     @POST("api/v2/node/cancel-withdraw/{gbxTxnId}")
