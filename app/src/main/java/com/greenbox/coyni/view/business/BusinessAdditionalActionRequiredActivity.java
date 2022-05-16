@@ -423,16 +423,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             if (propertiesData.getDisplayName() != null ) {
                                 companyNameTV.setText(companyname);
                             }
-
                             if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
-                                companyNameOriginal.setText("(" + propertiesData.getOriginalValue().substring(0, 3) + ") " + propertiesData.getOriginalValue().substring(3, 6) + "-" + propertiesData.getOriginalValue().substring(6, 10));
-                                companyNameProposed.setText("(" + propertiesData.getProposedValue().substring(0, 3) + ") " + propertiesData.getProposedValue().substring(3, 6) + "-" + propertiesData.getProposedValue().substring(6, 10));
+                                companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
+                                companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
                             } else {
                                 companyNameOriginal.setText(propertiesData.getOriginalValue());
                                 companyNameProposed.setText(propertiesData.getProposedValue());
                             }
-
-
+                            
                             if(propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
                                 String message = "";
                                 if(!propertiesData.getAdminMessage().startsWith("\"")) {
