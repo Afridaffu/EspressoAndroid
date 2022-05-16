@@ -169,13 +169,14 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
                         }.getType();
                         ActionRequiredSubmitResponse res = gson.fromJson(strResponse, type);
                         ActionRequiredSubmitResponseMutableLiveData.postValue(res);
-                        LogUtils.d(TAG, "onFailure callback -- " + response);
+                        LogUtils.d(TAG, "Success callback -- " + new Gson().toJson(res).toString());
                     } else {
                         Gson gson = new Gson();
                         Type type = new TypeToken<ActionRequiredSubmitResponse>() {
                         }.getType();
                         ActionRequiredSubmitResponse res = gson.fromJson(response.body().string(), type);
                         ActionRequiredSubmitResponseMutableLiveData.postValue(res);
+                        LogUtils.d(TAG, "onFailure callback -- " + new Gson().toJson(res).toString());
                     }
                 } catch (Exception e) {
                     LogUtils.d(TAG, "onFailure callback -- " + e.getMessage());

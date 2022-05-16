@@ -2,9 +2,15 @@ package com.greenbox.coyni.view.business;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -19,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.team.Data;
 import com.greenbox.coyni.model.team.TeamData;
@@ -27,6 +34,8 @@ import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
+
+import okhttp3.internal.Util;
 
 public class TeamMemberActivity extends BaseActivity {
     private TextView txName, txRole, txStatus, txImageName, txEmailAddress, txPhoneNumber;
@@ -45,6 +54,7 @@ public class TeamMemberActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_team_member);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Bundle bundle = getIntent().getExtras();
         teamMemberId = bundle.getInt(Utils.teamMemberId, teamMemberId);
         status = bundle.getString(Utils.teamStatus, status);
@@ -302,7 +312,6 @@ public class TeamMemberActivity extends BaseActivity {
         teamViewModel.getTeamMember(teamMemberId);
     }
 
-
     private void showRemoveMemberDialog() {
         DialogAttributes dialogAttributes = new DialogAttributes(getResources().getString(R.string.remove_team_members), getString(R.string.account_permissions, firstName + " " + lastName), getString(R.string.yes), getString(R.string.no));
         CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
@@ -321,4 +330,5 @@ public class TeamMemberActivity extends BaseActivity {
 
         customConfirmationDialog.show();
     }
+
 }

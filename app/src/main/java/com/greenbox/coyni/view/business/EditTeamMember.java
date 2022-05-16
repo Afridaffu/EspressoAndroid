@@ -38,7 +38,7 @@ import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
-public class EditTeamMember extends BaseActivity {
+public class EditTeamMember extends BaseActivity implements OnKeyboardVisibilityListener {
     private TextInputLayout editFNameTil, editLNameTil, editEmailTil, editPhoneTil;
     private TextInputEditText editFNameET, editLNameET, editEmailET;
     private OutLineBoxPhoneNumberEditText editPhoneET;
@@ -81,12 +81,14 @@ public class EditTeamMember extends BaseActivity {
 
     private void initFields() {
         editTeamMember = this;
+        setKeyboardVisibilityListener(this);
         backBtn = findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-                Utils.hideKeypad(EditTeamMember.this);
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(EditTeamMember.this);
             }
         });
         editFNameTil = findViewById(R.id.edit_fName_til);
@@ -303,8 +305,8 @@ public class EditTeamMember extends BaseActivity {
                 }
                 enableOrDisableNext();
 
-                if (editFNameET.getText().toString().contains("  ")){
-                    editFNameET.setText(editFNameET.getText().toString().replace("  "," "));
+                if (editFNameET.getText().toString().contains("  ")) {
+                    editFNameET.setText(editFNameET.getText().toString().replace("  ", " "));
                     editFNameET.setSelection(editFNameET.getText().length());
                 }
             }
@@ -352,8 +354,8 @@ public class EditTeamMember extends BaseActivity {
                 }
                 enableOrDisableNext();
 
-                if (editLNameET.getText().toString().contains("  ")){
-                    editLNameET.setText(editLNameET.getText().toString().replace("  "," "));
+                if (editLNameET.getText().toString().contains("  ")) {
+                    editLNameET.setText(editLNameET.getText().toString().replace("  ", " "));
                     editLNameET.setSelection(editLNameET.getText().length());
                 }
             }
@@ -461,15 +463,15 @@ public class EditTeamMember extends BaseActivity {
 //                    && emailAddress.equalsIgnoreCase(this.emailAddress) && phoneNumber.equalsIgnoreCase(this.phoneNumber)) {
 //                Utils.showCustomToast(EditTeamMember.this, getResources().getString(R.string.please_modify_details), R.drawable.ic_custom_tick, "Update");
 //            } else {
-                TeamRequest teamRequest = new TeamRequest();
-                teamRequest.setFirstName(firstName);
-                teamRequest.setLastName(lastName);
-                phone.setPhoneNumber(phoneNumber);
-                teamRequest.setPhoneNumber(phone);
-                teamRequest.setEmailAddress(emailAddress);
-                teamRequest.setRoleId(19);
-                showProgressDialog();
-                teamViewModel.updateTeamMember(teamRequest, teamMemberId);
+            TeamRequest teamRequest = new TeamRequest();
+            teamRequest.setFirstName(firstName);
+            teamRequest.setLastName(lastName);
+            phone.setPhoneNumber(phoneNumber);
+            teamRequest.setPhoneNumber(phone);
+            teamRequest.setEmailAddress(emailAddress);
+            teamRequest.setRoleId(19);
+            showProgressDialog();
+            teamViewModel.updateTeamMember(teamRequest, teamMemberId);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -502,6 +504,12 @@ public class EditTeamMember extends BaseActivity {
             }
         });
     }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+    }
+
 
     private void initObservers() {
         teamViewModel.getTeamUpdateMutableLiveData().observe(this, new Observer<TeamInfoAddModel>() {
