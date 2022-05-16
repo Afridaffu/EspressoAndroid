@@ -136,6 +136,9 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
         if (!isBankSuccess) {
             if (strCurrent.equals("addpay") || strCurrent.equals("addpayment")) {
                 getPaymentMethods();
+            } else if (strCurrent.equals("externalBank")) {
+                ControlMethod("addpayment");
+                strCurrent = "addpayment";
             } else {
                 super.onBackPressed();
             }
@@ -375,7 +378,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             lyAddBank = findViewById(R.id.lyAddBank);
             lyExternalClose = findViewById(R.id.lyExternalClose);
             layoutSignet = findViewById(R.id.layoutSignet);
-            layoutDCard = findViewById(R.id.layoutDCard);
+            layoutDCard = findViewById(R.id.layoutBDCard);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
 

@@ -9,6 +9,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.AccountsData;
@@ -29,7 +30,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     private AccountsData accountsData;
     private int selectedID;
     private boolean showdba;
-    private long mLastClickTime =0l;
+    private boolean isAddDbaFlag = true;
+    private long mLastClickTime = 0l;
 
     public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData, int selectedID, boolean showdba) {
         this.context = context;
@@ -86,8 +88,22 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         TextView statusTV = view.findViewById(R.id.statusTV);
         LinearLayout childView = view.findViewById(R.id.ll_child_view);
         LinearLayout addDBA = view.findViewById(R.id.ll_add_dba);
+        TextView addDbaText = view.findViewById(R.id.addDbaText);
 
         LogUtils.d("isLastChild", "isLastChild" + isLastChild);
+
+        for (int position = 0; position < profilesList.size(); position++) {
+            if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                addDBA.setEnabled(false);
+                addDbaText.setEnabled(false);
+                break;
+            } else {
+                addDBA.setEnabled(true);
+                addDbaText.setEnabled(true);
+            }
+        }
 
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
             childItem.setText(detailInfo.getCompanyName());
@@ -131,7 +147,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //                        .into(profileImage);
             }
         }
-        if(showdba && isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
+        if (showdba && isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             addDBA.setVisibility(View.VISIBLE);
         } else {
             addDBA.setVisibility(View.GONE);
@@ -169,7 +185,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         childView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SystemClock.elapsedRealtime()-mLastClickTime<2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
@@ -197,6 +213,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
         return view;
     }
+
 
     @Override
     public Object getGroup(int groupPosition) {
@@ -288,7 +305,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     if (listener != null) {
                         selectedID = headerInfo.getId();
-                        listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(),headerInfo.getFullName());
+                        listener.onGroupClicked(groupPosition, headerInfo.getAccountType(), headerInfo.getId(), headerInfo.getFullName());
                         notifyDataSetChanged();
                     }
                 }
@@ -314,7 +331,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
     public interface OnItemClickListener {
 
-        void onGroupClicked(int position, String accountType, Integer id,String fullName);
+        void onGroupClicked(int position, String accountType, Integer id, String fullName);
 
         void onChildClicked(ProfilesResponse.Profiles detailInfo);
 

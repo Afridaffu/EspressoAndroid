@@ -1441,10 +1441,10 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() == 0) {
                         addNoteTIL.setCounterEnabled(false);
-                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        //doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     } else {
                         addNoteTIL.setCounterEnabled(true);
-                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+                        //doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                     }
                 }
 

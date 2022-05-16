@@ -63,7 +63,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     WalletResponseData walletResponse;
     Double walletBalance = 0.0;
     Long mLastClickTime = 0L;
-    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false;
+    Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false, isNoToken = false, isSignet = false;
     List<PaymentsList> bankList;
     List<PaymentsList> cardList;
     List<PaymentsList> signetList;
@@ -72,7 +72,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
     SignOnData signOnData;
     ProgressDialog dialog, pDialog;
     LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
-    RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutSignet;
+    RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutSignet, layoutBDCard;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
@@ -124,6 +124,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                         strCurrent = "";
                     }
                     getPaymentMethods();
+                }
+            } else if (requestCode == 4) {
+                if (strCurrent.equals("signet")) {
+                    isSignet = true;
+                    ControlMethod("addbpayment");
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -348,6 +353,11 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                             strCurrent = "addbpayment";
                             numberOfMerchantAccounts();
                         }
+                    } else if (isSignet) {
+                        isSignet = false;
+                        ControlMethod("addbpayment");
+                        strCurrent = "addbpayment";
+                        numberOfMerchantAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
                         if (isNoToken || objMyApplication.getGBTBalance() == 0) {
@@ -640,7 +650,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             tvSignetHead = findViewById(R.id.tvSignetHead);
             tvSignetCount = findViewById(R.id.tvSignetCount);
             tvSignetMsg = findViewById(R.id.tvSignetMsg);
-            layoutDCard = findViewById(R.id.layoutDCard);
+            layoutBDCard = findViewById(R.id.layoutBDCard);
             layoutSignet = findViewById(R.id.layoutSignet);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
@@ -672,7 +682,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 }
             });
 
-            layoutDCard.setOnClickListener(new View.OnClickListener() {
+            layoutBDCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
@@ -692,11 +702,10 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (paymentMethodsResponse.getData().getCreditCardCount() < paymentMethodsResponse.getData().getMaxCreditCardsAllowed()) {
-                            strCurrent = "credit";
-                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
-                            i.putExtra("card", "credit");
-                            startActivityForResult(i, 3);
+                        if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
+                            strCurrent = "signet";
+                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
+                            startActivityForResult(i, 4);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

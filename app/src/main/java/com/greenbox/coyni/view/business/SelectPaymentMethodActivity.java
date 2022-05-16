@@ -151,9 +151,10 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 3) {
                 if (objMyApplication.getStrScreen() == null || objMyApplication.getStrScreen().equals("")) {
-                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
-                        onBackPressed();
-                    } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
+//                    if (strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+//                        onBackPressed();
+//                    } else
+                    if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit")) {
                         if (!objMyApplication.getCardSave()) {
                             isDeCredit = true;
                             ControlMethod("addpayment");
@@ -420,7 +421,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             tvSignetHead = findViewById(R.id.tvSignetHead);
             tvSignetCount = findViewById(R.id.tvSignetCount);
             tvSignetMsg = findViewById(R.id.tvSignetMsg);
-            layoutDCard = findViewById(R.id.layoutDCard);
+            layoutDCard = findViewById(R.id.layoutBDCard);
             layoutSignet = findViewById(R.id.layoutSignet);
             cvNext = findViewById(R.id.cvNext);
             tvLearnMore = findViewById(R.id.tvLearnMore);
