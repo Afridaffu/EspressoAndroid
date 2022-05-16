@@ -94,7 +94,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     RelativeLayout secureAccountRL;
     CardView secureNextCV;
     MyApplication objMyApplication;
-//    SQLiteDatabase mydatabase;
+    //    SQLiteDatabase mydatabase;
     Cursor dsUserDetails;
     String strFirstUser = "";
     private int mAccountType = Utils.PERSONAL_ACCOUNT;
@@ -102,6 +102,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
     Long mLastClickTime = 0L;
+    private static boolean isActivityVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1057,11 +1058,13 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     try {
                         otpPV.setText("");
                         otpPV.requestFocus();
-                        finish();
-                        overridePendingTransition(0, 0);
-                        startActivity(getIntent());
-                        overridePendingTransition(0, 0);
-                        otpValidationCloseIV.setClickable(true);
+                        if (isActivityVisible) {
+                            finish();
+                            overridePendingTransition(0, 0);
+                            startActivity(getIntent());
+                            overridePendingTransition(0, 0);
+                            otpValidationCloseIV.setClickable(true);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -1094,6 +1097,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     @Override
     protected void onResume() {
         super.onResume();
+        isActivityVisible = true;
         otpPV.requestFocus();
         new Handler().post(new Runnable() {
             @Override
@@ -1317,4 +1321,15 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
         Log.e("isKeyboardVisible", Utils.isKeyboardVisible + "");
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isActivityVisible = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isActivityVisible = false;
+    }
 }

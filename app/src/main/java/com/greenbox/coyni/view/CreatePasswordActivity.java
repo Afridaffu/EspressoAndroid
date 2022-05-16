@@ -408,6 +408,7 @@ public class CreatePasswordActivity extends BaseActivity {
                                 } else {
                                     Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.primary_black));
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
+                                    confPasswordTIL.setHint("Confirm Password");
                                 }
 
                             } else if (passwordET.getText().toString().trim().equals(confirmPasswordET.getText().toString().trim())) {
@@ -418,7 +419,7 @@ public class CreatePasswordActivity extends BaseActivity {
                                 Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_green));
 
                                 if (confirmPasswordET.getText().toString().trim().length() == 0) {
-                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(CreatePasswordActivity.this));
+//                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(CreatePasswordActivity.this));
                                 } else {
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
                                 }
@@ -433,7 +434,7 @@ public class CreatePasswordActivity extends BaseActivity {
 //                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
 
 //                                    confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState());
-//                                    confPasswordTIL.setHint("Password doesn’t match");
+                                    confPasswordTIL.setHint("Password doesn’t match");
                                     confPasswordTIL.setBoxStrokeColorStateList(Utils.getErrorColorState(CreatePasswordActivity.this));
                                     Utils.setUpperHintColor(confPasswordTIL, getColor(R.color.error_red));
                                 } else if (confirmPasswordET.getText().toString().trim().length() == 0) {

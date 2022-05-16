@@ -236,7 +236,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/layoutDCard"
+                android:id="@+id/layoutBDCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"

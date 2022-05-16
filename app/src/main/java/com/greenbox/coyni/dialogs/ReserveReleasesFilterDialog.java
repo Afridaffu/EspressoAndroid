@@ -1,10 +1,12 @@
 package com.greenbox.coyni.dialogs;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,12 +23,16 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
     private Context context;
     private Chip openC, releasedC, onHoldC, canceledC;
     private CardView applyFilter;
-    private TextView resetFilter, dateRange;
+    private TextView resetFilter;
+    private EditText dateRange;
     private LinearLayout dateClick;
     private RangeDates rangeDates;
     private DateRangePickerDialog dateRangePickerDialog;
     private ReserveFilter filter;
     private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor mEditor;
+    private  String storedSelectDate = "",tempStrSelectedDate = "";
 
 
     public ReserveReleasesFilterDialog(Context context, ReserveFilter filter) {
@@ -39,6 +45,9 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_reserve_filter);
+        sharedPreferences = context.getSharedPreferences("", 0);
+        mEditor = sharedPreferences.edit();
+        storedSelectDate = sharedPreferences.getString(Utils.SelectStoredDate,tempStrSelectedDate);
 
         if(filter == null) {
             filter = new ReserveFilter();
@@ -63,7 +72,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             onHoldC.setChecked(filter.isOnHold());
             releasedC.setChecked(filter.isReleased());
             canceledC.setChecked(filter.isCancelled());
-
+            dateRange.setText(storedSelectDate);
         }
 
         openC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -94,6 +103,8 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                 filter.setCancelled(isChecked);
             }
         });
+
+
         dateClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,8 +157,11 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                 onHoldC.setChecked(false);
                 canceledC.setChecked(false);
                 releasedC.setChecked(false);
+                storedSelectDate = "";
                 dateRange.setText("");
                 filter.isFilterApplied = false;
+                mEditor.putString(Utils.SelectStoredDate, tempStrSelectedDate);
+                mEditor.commit();
                 if (getOnDialogClickListener() != null) {
                     getOnDialogClickListener().onDialogClicked("ResetFilter", filter);
                 }
@@ -166,7 +180,10 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                     rangeDates = (RangeDates) value;
                     filter.setUpdatedFromDate(rangeDates.getUpdatedFromDate());
                     filter.setUpdatedToDate(rangeDates.getUpdatedToDate());
-                    dateRange.setText(rangeDates.getFullDate());
+                    tempStrSelectedDate = rangeDates.getFullDate();
+                    dateRange.setText(tempStrSelectedDate);
+                    mEditor.putString(Utils.SelectStoredDate,tempStrSelectedDate);
+                    mEditor.commit();
                 }
 
             }

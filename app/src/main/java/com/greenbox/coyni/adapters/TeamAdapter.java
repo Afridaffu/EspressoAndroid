@@ -66,10 +66,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
             String name = firstName + " " + lastName;
             holder.txName.setText(name);
 
-            if (name.length() > 22){
-                holder.txName.setText(name.substring(0,22)+"...");
-            }
-            else {
+            if (name.length() > 22) {
+                holder.txName.setText(name.substring(0, 22) + "...");
+            } else {
                 holder.txName.setText(name);
             }
 
@@ -77,8 +76,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                 holder.txRole.setText(objData.getRoleName());
             }
 
+
             if (objData.getStatus() != null && !objData.getStatus().equals("")) {
-                holder.txStatus.setText(objData.getStatus().toString());
+                holder.txStatus.setText(objData.getStatus());
                 if (objData.getStatus().equalsIgnoreCase(Utils.teammemberpending)) {
                     holder.txStatus.setTextColor(getContext().getColor(R.color.pending_color));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_pending_bg);
@@ -86,15 +86,20 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
                     holder.txStatus.setTextColor(getContext().getColor(R.color.active_green));
                     holder.txStatus.setBackgroundResource(R.drawable.txn_active_bg);
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.canceled)) {
-                    holder.txStatus.setText(Utils.canceled);
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
+                    holder.txStatus.setBackgroundResource(R.drawable.txn_failed_bg);
                 } else if (objData.getStatus().equalsIgnoreCase(Utils.expired)) {
                     holder.txStatus.setText(Utils.resendInvitation);
                     holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
-                }else {
-                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
-                    holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
+                    holder.txStatus.setBackground(null);
+                } else if (objData.getStatus().equalsIgnoreCase(Utils.resendInvitation)) {
+                    holder.txStatus.setTextColor(getContext().getColor(R.color.error_red));
+                    holder.txStatus.setBackground(null);
                 }
+//                else {
+//                    holder.txStatus.setTextColor(getContext().getColor(R.color.xdark_gray));
+//                    holder.txStatus.setBackgroundResource(R.drawable.txn_in_active_bg);
+//                }
             }
 
 

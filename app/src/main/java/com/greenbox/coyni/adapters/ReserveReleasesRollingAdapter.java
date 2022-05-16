@@ -80,10 +80,10 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
             }
             date = myApplication.convertZoneDateTime(date, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma");
             if(objData.getStatus().equalsIgnoreCase(String.valueOf(Utils.ROLLING_LIST_STATUS.RELEASED))){
-                holder.dateTime.setText(date);
+                holder.dateTime.setText(date.toLowerCase());
 
             } else {
-                holder.dateTime.setText("Release: " + date);
+                holder.dateTime.setText("Release: " + date.toLowerCase());
             }
         }
 

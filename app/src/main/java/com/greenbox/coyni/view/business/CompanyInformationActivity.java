@@ -258,19 +258,13 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         companynameET.requestFocus();
 //                        if (!Utils.isKeyboardVisible)
 //                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-//                        findViewById(R.id.basicInfoSL).setVisibility(VISIBLE);
-//                        enableOrDisableNext();
                     } else if (position == 1) {
                         companyaddressET.requestFocus();
 //                        if (!Utils.isKeyboardVisible)
 //                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
-//                        enableOrDisableAddressNext();
                     } else if (position == 2) {
-//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 //                        if (Utils.isKeyboardVisible)
 //                            Utils.hideKeypad(CompanyInformationActivity.this);
-//                        findViewById(R.id.basicInfoSL).setVisibility(GONE);
-//                        enableOrDisableDocsDone();
                     }
                 }
 
@@ -285,9 +279,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         divider0.setBackgroundResource(R.drawable.button_background);
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background1);
-//                        companynameET.requestFocus();
-//                        if (!Utils.isKeyboardVisible)
-//                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                        companynameET.requestFocus();
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
 
                         enableOrDisableNext();
                     } else if (position == 1) {
@@ -301,16 +295,14 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             Utils.shwForcedKeypad(CompanyInformationActivity.this);
                         enableOrDisableAddressNext();
                     } else if (position == 2) {
-//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(CompanyInformationActivity.this);
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         close.setVisibility(GONE);
                         backIV.setVisibility(VISIBLE);
                         divider0.setBackgroundResource(R.drawable.button_background1);
                         divider1.setBackgroundResource(R.drawable.button_background1);
                         divider2.setBackgroundResource(R.drawable.button_background);
-
-//                        if (Utils.isKeyboardVisible)
-//                            Utils.hideKeypad(CompanyInformationActivity.this);
 
                         enableOrDisableDocsDone();
 
@@ -1383,19 +1375,13 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         public Object instantiateItem(ViewGroup collection, int position) {
             int resId = 0;
             switch (position) {
-                case 1:
-                    if (!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                case 0:
                     resId = R.id.basicInfoSL;
                     break;
-                case 2:
-                    if (!Utils.isKeyboardVisible)
-                        Utils.shwForcedKeypad(CompanyInformationActivity.this);
+                case 1:
                     resId = R.id.addressSL;
                     break;
-                case 3:
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(CompanyInformationActivity.this);
+                case 2:
                     resId = R.id.companyAdditionalDocsRL;
                     break;
             }

@@ -175,6 +175,8 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     holder.fromRequesterLL.setVisibility(View.VISIBLE);
                     holder.payLL.setVisibility(View.VISIBLE);
                     holder.denyLL.setVisibility(View.VISIBLE);
+                    holder.messageTV.setVisibility(View.VISIBLE);
+                    holder.messageTV.setText(notifications.get(position).getRemarks());
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
                     Log.e("cancelled", "cancelled");
                     holder.meRequestLL.setVisibility(View.GONE);

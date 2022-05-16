@@ -394,7 +394,7 @@
     <string name="new_dba">New DBA</string>
     <string name="add_dba">Add DBA</string>
     <string name="open_new_account">Open New Account</string>
-    <string name="application_cancelled_message">Thank you for your interest in merchant processing through coyni. Hope to see you again </string>
+    <string name="application_cancelled_message">Thank you for your interest in merchant processing through coyni. Hope to see you again. </string>
 
     <string name="buy_tokens_signet">Buy Tokens - Signet</string>
     <string name="descriptor_name">Descriptor Name</string>
@@ -675,6 +675,8 @@
     <string name="not_available_description">We’re sorry but this feature currently is not available, please wait until we finish your identity verification.</string>
     <string name="application_declined">Application Declined</string>
     <string name="please_click_the_upload_button_below_to_proceed">Please click the “Upload” button below to proceed.</string>
+    <string name="canceled_text">Application Canceled</string>
+    <string name="declined_text">Application Declined</string>
 
 
 </resources>
