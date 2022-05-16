@@ -1890,10 +1890,10 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
         actionCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
+//                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                    return;
+//                }
+//                mLastClickTime = SystemClock.elapsedRealtime();
                 try {
                     dialog.dismiss();
                     if (layoutAddress.getVisibility() == View.VISIBLE) {
