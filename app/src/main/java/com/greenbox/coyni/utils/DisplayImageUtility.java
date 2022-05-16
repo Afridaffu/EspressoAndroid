@@ -109,6 +109,12 @@ public class DisplayImageUtility {
             getDownloadUrl(urlList);
         } else {
             imageView.setImageResource(resId);
+            if (imageCache.get(key) != null) {
+                LogUtils.v(TAG, "from cache");
+                imageView.setImageBitmap(imageCache.get(key));
+                return;
+            }
+            tempMap.put(key, key);
             getImageFromUrl(key);
         }
     }
