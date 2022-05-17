@@ -170,8 +170,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             firstNameET.requestFocus();
         }
 
-        if (!Utils.isKeyboardVisible)
-            Utils.shwForcedKeypad(CreateAccountActivity.this);
+//        if (!Utils.isKeyboardVisible)
+//            Utils.shwForcedKeypad(CreateAccountActivity.this);
         Log.e("ID", "" + focusedID);
     }
 
@@ -270,6 +270,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
+                    if(Utils.isKeyboardVisible)
+                        Utils.hideKeypad(CreateAccountActivity.this);
+                    
                     dialog = new ProgressDialog(CreateAccountActivity.this, R.style.MyAlertDialogStyle);
                     dialog.setIndeterminate(false);
                     dialog.setMessage("Please wait...");
@@ -892,8 +895,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             firstNameErrorTV.setText("Field Required");
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CreateAccountActivity.this);
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CreateAccountActivity.this);
                         firstNameErrorLL.setVisibility(GONE);
                         focusedID = firstNameET.getId();
 //                        firstNameET.setHint("First Name");
