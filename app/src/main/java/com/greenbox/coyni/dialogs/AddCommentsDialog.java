@@ -47,9 +47,10 @@ public class AddCommentsDialog extends BaseDialog {
         doneBtn.setEnabled(false);
         addNoteET.requestFocus();
         addNoteET.setHint(R.string.reason);
-
-        if (Utils.isKeyboardVisible)
+        if(!Utils.isKeyboardVisible) {
             Utils.shwForcedKeypad(context);
+        }
+
         if (comment != null && !comment.trim().equals("")) {
             addNoteET.setText(comment.trim());
             addNoteET.setSelection(comment.trim().length());
@@ -121,5 +122,4 @@ public class AddCommentsDialog extends BaseDialog {
             }
         });
     }
-
 }
