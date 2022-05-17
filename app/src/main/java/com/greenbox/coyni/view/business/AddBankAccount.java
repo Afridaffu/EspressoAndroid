@@ -46,7 +46,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.List;
 
 public class AddBankAccount extends BaseActivity {
-    String strScreen = "", strSignOn = "";
+    String strScreen = "", strSignOn = "", strCurrent = "";
     CustomerProfileViewModel customerProfileViewModel;
     MyApplication objMyApplication;
     SignOnData signOnData;
@@ -68,9 +68,19 @@ public class AddBankAccount extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (!strScreen.equals("firstError")) {
-            super.onBackPressed();
-            finish();
+        try {
+            if (strScreen.equals("tryAgain") && strCurrent.equals("banksuccess")) {
+                ControlMethod("banksuccess");
+                strScreen = "banksuccess";
+            } else if (strScreen.equals("tryAgain")) {
+                ControlMethod("externalBank");
+                strScreen = "externalBank";
+            } else if (!strScreen.equals("firstError")) {
+                super.onBackPressed();
+                finish();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -207,6 +217,7 @@ public class AddBankAccount extends BaseActivity {
                         if (bankResponse.getStatus().toLowerCase().equals("success")) {
                             ControlMethod("banksuccess");
                             strScreen = "banksuccess";
+                            strCurrent = "banksuccess";
 //                            bankSuccess(bankResponse.getData().getItems());
                             bankSuccess(bankResponse.getData());
                         } else {
@@ -320,9 +331,10 @@ public class AddBankAccount extends BaseActivity {
             lySuccesslClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ControlMethod("externalBank");
-                    strScreen = "externalBank";
-                    externalBank();
+//                    ControlMethod("externalBank");
+//                    strScreen = "externalBank";
+//                    externalBank();
+                    onBackPressed();
                 }
             });
         } catch (Exception ex) {
@@ -373,7 +385,8 @@ public class AddBankAccount extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     ControlMethod("externalBank");
-                    strScreen = "externalBank";
+//                    strScreen = "externalBank";
+                    strScreen = "tryAgain";
                 }
             });
         } catch (Exception ex) {

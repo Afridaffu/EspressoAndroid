@@ -571,8 +571,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        if (Utils.isKeyboardVisible)
-                            Utils.hideKeypad(LoginActivity.this);
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(LoginActivity.this);
                         hideAndClearFocus();
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
