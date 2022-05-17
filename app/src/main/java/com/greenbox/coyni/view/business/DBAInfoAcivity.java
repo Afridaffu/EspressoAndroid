@@ -95,7 +95,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L,mLastClickTimeAddr = 0L;
     MyApplication objMyApplication;
     public ScrollView dbaBasicSL, addressSL;
 
@@ -446,10 +446,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             });
 
             addressNextCV.setOnClickListener(v -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeAddr < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeAddr = SystemClock.elapsedRealtime();
                 if (isAddressNextEnabled) {
                     businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
                 }

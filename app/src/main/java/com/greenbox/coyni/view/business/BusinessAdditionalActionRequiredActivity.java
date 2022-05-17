@@ -433,7 +433,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             if (propertiesData.getDisplayName() != null) {
                                 companyNameTV.setText(companyname);
                             }
-                            if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                            if (propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
                                 companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
                                 companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
                             } else {
@@ -441,7 +441,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                 companyNameProposed.setText(propertiesData.getProposedValue());
                             }
 
-                            if(propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
+                            if (propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
                                 String message = "";
                                 if (!propertiesData.getAdminMessage().startsWith("\"")) {
                                     message += "\"";
@@ -486,7 +486,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                     mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
-                                    Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                    if (!Utils.isKeyboardVisible)
+                                        Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                                 }
                             });
                         }
@@ -515,7 +516,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         LinearLayout llDecline = view.findViewById(R.id.declineLL);
         LinearLayout llAccept = view.findViewById(R.id.acceptLL);
         TextView tvDeclinedMsg = view.findViewById(R.id.declineMsgTV);
-        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
         AddCommentsDialog dialog = new AddCommentsDialog(BusinessAdditionalActionRequiredActivity.this, null);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
