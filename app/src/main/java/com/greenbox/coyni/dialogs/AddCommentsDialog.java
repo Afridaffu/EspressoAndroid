@@ -47,8 +47,8 @@ public class AddCommentsDialog extends BaseDialog {
         doneBtn.setEnabled(false);
         addNoteET.requestFocus();
         addNoteET.setHint(R.string.reason);
-        if(Utils.isKeyboardVisible) {
-            Utils.hideKeypad(context);
+        if(!Utils.isKeyboardVisible) {
+            Utils.shwForcedKeypad(context);
         }
 
         if (comment != null && !comment.trim().equals("")) {
