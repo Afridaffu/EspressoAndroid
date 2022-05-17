@@ -23,7 +23,6 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
     String strScreen = "";
     LinearLayout successCloseIV,underReviewCloseIV;
     MyApplication objMyApplication;
-    SQLiteDatabase mydatabase;
     CardView ivSuccessCV,idveriCardViewExitBtn,idveriDoneBtn;
     TextView contactUSTV;
 
@@ -56,7 +55,6 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
             underReviewCloseIV = findViewById(R.id.underReviewCloseIV);
             idveriDoneBtn = findViewById(R.id.idveriDoneBtn);
 
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
             Log.d("objMyApplication","objMyApplication"+objMyApplication.getAccountType());
