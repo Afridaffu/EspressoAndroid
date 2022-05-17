@@ -605,8 +605,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     protected void onResume() {
         try {
             super.onResume();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
+//            if (Utils.isKeyboardVisible)
+//                Utils.hideKeypad(this);
             showProgressDialog();
             businessIdentityVerificationViewModel.getBusinessTracker();
 

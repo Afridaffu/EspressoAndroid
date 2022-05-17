@@ -2259,4 +2259,12 @@ public class Utils {
         }
         return timeAgo;
     }
+
+    private String capitizeString(String name){
+        String captilizedString="";
+        if(!name.trim().equals("")){
+            captilizedString = name.substring(0,1).toUpperCase() + name.substring(1);
+        }
+        return captilizedString;
+    }
 }

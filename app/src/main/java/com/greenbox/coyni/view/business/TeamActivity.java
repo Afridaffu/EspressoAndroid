@@ -16,8 +16,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,6 +47,9 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
     private List<TeamData> rvTeamList = new ArrayList<>();
     private EditText searchET;
     private TeamAdapter.TeamMemberClickListener memberClickListener;
+    private TextView noTeamMemberTV;
+    private View dividerView;
+    private CardView teamsCV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,9 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
         addTeamMemberL = findViewById(R.id.addTeamMemberL);
         searchET = findViewById(R.id.searchET);
         clearTextLL = findViewById(R.id.clearTextLL);
+        noTeamMemberTV = findViewById(R.id.noTeamMemberTV);
+        dividerView = findViewById(R.id.dividerView);
+        teamsCV = findViewById(R.id.teamsCV);
         setKeyboardVisibilityListener(TeamActivity.this);
         bpBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +85,7 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 if (Utils.isKeyboardVisible)
                     Utils.hideKeypad(TeamActivity.this);
-            }           
+            }
         });
         addTeamMemberL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,25 +123,39 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
                     }
                 }
 
+//                teamsCV.getLayoutParams().height= ViewGroup.LayoutParams.MATCH_PARENT;
+
                 if (rvTeamList.size() > 0) {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
                     teamAdapter = new TeamAdapter(TeamActivity.this, rvTeamList, memberClickListener);
                     recyclerViewTeam.setLayoutManager(layoutManager);
                     recyclerViewTeam.setAdapter(teamAdapter);
-                    findViewById(R.id.no_team_member).setVisibility(View.GONE);
-                } else if (originalTeamList.size() > 0) {
-                    rvTeamList = originalTeamList;
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
-                    teamAdapter = new TeamAdapter(TeamActivity.this, rvTeamList, memberClickListener);
-                    recyclerViewTeam.setLayoutManager(layoutManager);
-                    recyclerViewTeam.setAdapter(teamAdapter);
-                    findViewById(R.id.no_team_member).setVisibility(View.GONE);
-                } else {
+                    recyclerViewTeam.setVisibility(View.VISIBLE);
+                    dividerView.setVisibility(View.VISIBLE);
+                    noTeamMemberTV.setVisibility(View.GONE);
+                    teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+                }
+//                else if (originalTeamList.size() > 0) {
+//                    rvTeamList = originalTeamList;
+//                    LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
+//                    teamAdapter = new TeamAdapter(TeamActivity.this, rvTeamList, memberClickListener);
+//                    recyclerViewTeam.setLayoutManager(layoutManager);
+//                    recyclerViewTeam.setAdapter(teamAdapter);
+//                    recyclerViewTeam.setVisibility(View.VISIBLE);
+//                    dividerView.setVisibility(View.VISIBLE);
+//                    noTeamMemberTV.setVisibility(View.GONE);
+//                }
+                else {
                     LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
                     teamAdapter = new TeamAdapter(TeamActivity.this, null, memberClickListener);
                     recyclerViewTeam.setLayoutManager(layoutManager);
                     recyclerViewTeam.setAdapter(teamAdapter);
-                    findViewById(R.id.no_team_member).setVisibility(View.VISIBLE);
+                    recyclerViewTeam.setVisibility(View.GONE);
+                    dividerView.setVisibility(View.VISIBLE);
+                    noTeamMemberTV.setVisibility(View.VISIBLE);
+                    teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+
                 }
             }
 
@@ -174,9 +196,9 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
         super.onResume();
         showProgressDialog();
         searchET.setText("");
-        if (findViewById(R.id.no_team_member).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.no_team_member).setVisibility(View.GONE);
-        }
+//        if (noTeamMemberTV.getVisibility() == View.VISIBLE) {
+//            noTeamMemberTV.setVisibility(View.GONE);
+//        }
         teamViewModel.retrieveTeamInfo();
     }
 
@@ -197,8 +219,15 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
                             recyclerViewTeam.setLayoutManager(layoutManager);
                             teamAdapter = new TeamAdapter(TeamActivity.this, rvTeamList, memberClickListener);
                             recyclerViewTeam.setAdapter(teamAdapter);
+                            recyclerViewTeam.setVisibility(View.VISIBLE);
+                            dividerView.setVisibility(View.VISIBLE);
+                            noTeamMemberTV.setVisibility(View.GONE);
+//                            teamsCV.getLayoutParams().height= ViewGroup.LayoutParams.MATCH_PARENT;
                         } else {
                             recyclerViewTeam.setVisibility(View.GONE);
+                            dividerView.setVisibility(View.GONE);
+                            noTeamMemberTV.setVisibility(View.GONE);
+                            teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                         }
                     } else {
                         Utils.displayAlert(teamResponseModel.getError().getErrorDescription(), TeamActivity.this, "", teamResponseModel.getError().getFieldErrors().get(0));
@@ -207,6 +236,7 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
             });
         } catch (Exception e) {
             e.printStackTrace();
+            dismissDialog();
         }
 
     }

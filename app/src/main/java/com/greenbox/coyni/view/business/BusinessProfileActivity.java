@@ -454,7 +454,7 @@ public class BusinessProfileActivity extends BaseActivity {
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.orange));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                    }else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                    } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                         account_status.setTextColor(getResources().getColor(R.color.orange));
                         statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                     } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
@@ -480,7 +480,7 @@ public class BusinessProfileActivity extends BaseActivity {
                             && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
                             && myApplication.getMyProfile().getData().getFirstName() != null) {
                         String firstName = myApplication.getMyProfile().getData().getFirstName();
-                       // iconText = firstName.substring(0, 1).toUpperCase();
+                        // iconText = firstName.substring(0, 1).toUpperCase();
                         fullname = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
                         if (myApplication.getMyProfile().getData().getLastName() != null) {
                             String lastName = myApplication.getMyProfile().getData().getLastName();
@@ -491,10 +491,9 @@ public class BusinessProfileActivity extends BaseActivity {
                     } else if (myApplication.getMyProfile().getData().getDbaName() != null && !myApplication.getMyProfile().getData().getDbaName().equals(" ")) {
                         fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
                     }
-                    if (fullname.length() > 22){
-                        userFullname.setText(fullname.substring(0,22)+" ");
-                    }
-                    else {
+                    if (fullname.length() > 22) {
+                        userFullname.setText(fullname.substring(0, 22) + " ");
+                    } else {
                         userFullname.setText(fullname);
                     }
 
@@ -659,7 +658,7 @@ public class BusinessProfileActivity extends BaseActivity {
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.error_red));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.error_red));
-                                }else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.orange));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
                                 } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
@@ -783,15 +782,15 @@ public class BusinessProfileActivity extends BaseActivity {
 //            profileText.setVisibility(View.VISIBLE);
             String imageTextNew = "";
             if (myApplication.getMyProfile().getData() != null && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                if(myApplication.getMyProfile().getData().getFirstName() != null && !myApplication.getMyProfile().getData().getFirstName().equals("")) {
+                if (myApplication.getMyProfile().getData().getFirstName() != null && !myApplication.getMyProfile().getData().getFirstName().equals("")) {
                     imageTextNew = myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase();
                 }
-                if(myApplication.getMyProfile().getData().getLastName() != null && !myApplication.getMyProfile().getData().getLastName().equals("")) {
+                if (myApplication.getMyProfile().getData().getLastName() != null && !myApplication.getMyProfile().getData().getLastName().equals("")) {
                     imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
                 }
             } else if (myApplication.getMyProfile().getData() != null && myApplication.getMyProfile().getData().getDbaName() != null
-                        && !myApplication.getMyProfile().getData().getDbaName().equals("")) {
-                imageTextNew = myApplication.getMyProfile().getData().getDbaName().substring(0,1).toUpperCase();
+                    && !myApplication.getMyProfile().getData().getDbaName().equals("")) {
+                imageTextNew = myApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
             }
 
             profileText.setText(imageTextNew);
@@ -856,7 +855,7 @@ public class BusinessProfileActivity extends BaseActivity {
                             .putExtra("AUTH_TYPE", "PIN");
                     startActivity(i);
                 }
-            }else if (requestCode == CODE_AUTHENTICATION) {
+            } else if (requestCode == CODE_AUTHENTICATION) {
                 if (resultCode == RESULT_OK) {
                     isSwitchEnable();
                 }

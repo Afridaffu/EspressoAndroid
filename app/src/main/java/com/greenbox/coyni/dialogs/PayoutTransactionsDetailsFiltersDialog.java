@@ -2,6 +2,7 @@ package com.greenbox.coyni.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -36,10 +37,13 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     private Context context;
     private MyApplication objMyApplication;
     private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor mEditor;
+    private  String storedSelectDate = "",tempStrSelectedDate = "";
+
 
     private Boolean isFilters = false;
 
-    private String tempStrSelectedDate = "";
     public boolean isfilterdatePickET = false, isapplyEnabled = false;
 
     private RangeDates rangeDates;
@@ -58,6 +62,10 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payout_transactions_filter);
         objMyApplication = (MyApplication) context.getApplicationContext();
+        sharedPreferences = context.getSharedPreferences("", 0);
+        mEditor = sharedPreferences.edit();
+        storedSelectDate = sharedPreferences.getString(Utils.SelectStoredDate,tempStrSelectedDate);
+
 
         datePickLL = findViewById(R.id.payoutDateRangePickerLL);
         datePickIV = findViewById(R.id.datePickIV);
@@ -95,6 +103,10 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
                 showCalendarDialog();
             }
         });
+
+        if(filter.isFilterApplied) {
+            filterDatePickET.setText(storedSelectDate);
+        }
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +135,8 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
             public void onClick(View view) {
                 filterDatePickET.setText("");
                 filter.isFilterApplied = false;
+                mEditor.putString(Utils.SelectStoredDate, tempStrSelectedDate);
+                mEditor.commit();
                 if (getOnDialogClickListener() != null) {
                     getOnDialogClickListener().onDialogClicked("ResetFilter", filter);
                 }
@@ -140,7 +154,10 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
                     filter.isFilterApplied = true;
                     filter.setUpdatedFromDate(rangeDates.getUpdatedFromDate());
                     filter.setUpdatedToDate(rangeDates.getUpdatedToDate());
-                    filterDatePickET.setText(rangeDates.getFullDate());
+                    tempStrSelectedDate = rangeDates.getFullDate();
+                    filterDatePickET.setText(tempStrSelectedDate);
+                    mEditor.putString(Utils.SelectStoredDate,tempStrSelectedDate);
+                    mEditor.commit();
                 }
             }
         });
