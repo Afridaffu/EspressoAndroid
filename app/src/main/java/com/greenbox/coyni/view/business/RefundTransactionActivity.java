@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
@@ -126,24 +127,36 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         refundET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.hideSoftKeypad(RefundTransactionActivity.this, v);
+//                if (Utils.isKeyboardVisible)
+//                    Utils.hideKeypad(RefundTransactionActivity.this);
+            }
+        });
+        refundET.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+            @Override
+            public void sendAccessibilityEvent(View host, int eventType) {
+                super.sendAccessibilityEvent(host, eventType);
+                if (eventType == AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED) {
+                    refundET.setSelection(refundET.getText().toString().length());
+                }
             }
         });
         refundET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Utils.hideKeypad(RefundTransactionActivity.this);
+
                 if (!hasFocus) {
                     if (!refundET.getText().toString().equals("")) {
                         InputFilter[] FilterArray = new InputFilter[1];
                         FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
                         refundET.setFilters(FilterArray);
                         USFormat(refundET);
+
                     }
                 } else {
                     InputFilter[] FilterArray = new InputFilter[1];
                     FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlengthValue)));
                     refundET.setFilters(FilterArray);
+
                 }
             }
         });
@@ -176,9 +189,6 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 displayComments();
-                addNoteET.requestFocus();
-                if (!Utils.isKeyboardVisible)
-                Utils.shwForcedKeypad(RefundTransactionActivity.this);
 
             }
         });
@@ -698,6 +708,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
     private void displayComments() {
         try {
+
             cvvDialog = new Dialog(RefundTransactionActivity.this);
             cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             cvvDialog.setContentView(R.layout.add_note_layout);
@@ -715,9 +726,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             cancelBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    cvvDialog.dismiss();
                     if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(RefundTransactionActivity.this);
+                    cvvDialog.dismiss();
                 }
             });
             doneBtn.setOnClickListener(new View.OnClickListener() {
@@ -725,10 +736,10 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onClick(View view) {
                     try {
                         etremarksTV.setText(addNoteET.getText().toString().trim());
+                        if(Utils.isKeyboardVisible)
+                            Utils.hideKeypad(RefundTransactionActivity.this);
                         cvvDialog.dismiss();
                         enableRefund();
-                        if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(RefundTransactionActivity.this);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -786,18 +797,20 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             window.setAttributes(wlp);
 
             cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-            cvvDialog.setCanceledOnTouchOutside(true);
+//            cvvDialog.setCanceledOnTouchOutside(true);
             cvvDialog.show();
-            cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    Utils.hideKeypad(RefundTransactionActivity.this);
-                }
-            });
-
-        } catch (Exception ex) {
+            addNoteET.requestFocus();
+            Utils.shwForcedKeypad(RefundTransactionActivity.this);
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
         }
+        cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                Utils.hideKeypad(RefundTransactionActivity.this);
+            }
+        });
     }
 
     public void clearAmountCards() {
@@ -814,6 +827,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             e.printStackTrace();
         }
     }
+
     private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
         final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

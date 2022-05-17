@@ -71,7 +71,7 @@ public class ReserveDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_reserve_details);
 
         selected = (BatchPayoutListItems) getIntent().getSerializableExtra(Utils.DATA);
-        showProgressDialog();
+//        showProgressDialog();
         initFields();
         initObserver();
         displayingDetails();
@@ -300,7 +300,7 @@ public class ReserveDetailsActivity extends BaseActivity {
         if (selected != null && selected.getBatchId() != null) {
             batchId = selected.getBatchId();
             reserveID.setText(batchId);
-            reserveIDTV.setText(batchId);
+            reserveIDTV.setText(Html.fromHtml("<u>"+batchId+"</u>"));
         }
         getDateDescription();
 

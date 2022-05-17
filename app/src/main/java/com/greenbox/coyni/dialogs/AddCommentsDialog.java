@@ -1,6 +1,7 @@
 package com.greenbox.coyni.dialogs;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,9 +12,11 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.util.Util;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 
 public class AddCommentsDialog extends BaseDialog {
 
@@ -41,18 +44,23 @@ public class AddCommentsDialog extends BaseDialog {
         cancelBtn = findViewById(R.id.cancelBtn);
 
         doneBtn.setCardBackgroundColor(context.getResources().getColor(R.color.inactive_color));
-
+        doneBtn.setEnabled(false);
         addNoteET.requestFocus();
+        addNoteET.setHint(R.string.reason);
+        if(Utils.isKeyboardVisible) {
+            Utils.hideKeypad(context);
+        }
 
         if (comment != null && !comment.trim().equals("")) {
             addNoteET.setText(comment.trim());
             addNoteET.setSelection(comment.trim().length());
         }
-        addNoteET.setHint(R.string.reason);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.hideKeypad(context);
+                if(Utils.isKeyboardVisible) {
+                    Utils.hideKeypad(context);
+                }
                 dismiss();
             }
         });
@@ -63,8 +71,10 @@ public class AddCommentsDialog extends BaseDialog {
             public void onClick(View view) {
                 try {
                     getOnDialogClickListener().onDialogClicked(Utils.COMMENT_ACTION, addNoteET.getText().toString().trim());
-                    Utils.hideKeypad(context);
                     dismiss();
+                    if(Utils.isKeyboardVisible) {
+                        Utils.hideKeypad(context);
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -80,9 +90,11 @@ public class AddCommentsDialog extends BaseDialog {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() == 0) {
                     addNoteTIL.setCounterEnabled(false);
+                    doneBtn.setEnabled(false);
                     doneBtn.setCardBackgroundColor(context.getResources().getColor(R.color.inactive_color));
                 } else {
                     addNoteTIL.setCounterEnabled(true);
+                    doneBtn.setEnabled(true);
                     doneBtn.setCardBackgroundColor(context.getResources().getColor(R.color.primary_color));
                 }
 

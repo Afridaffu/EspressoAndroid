@@ -1,36 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.business.EditTeamMember">
 
-    <ImageView
-        android:id="@+id/backBtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/header_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_21sdp"
-        android:layout_marginTop="@dimen/_44sdp"
-        android:layout_marginBottom="@dimen/_13sdp"
-        android:src="@drawable/ic_chevron_left" />
+        android:orientation="vertical"
+        android:layout_alignParentTop="true">
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginTop="@dimen/_44sdp"
+            android:layout_marginBottom="@dimen/_13sdp"
+            android:src="@drawable/ic_back" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_21sdp"
-        android:layout_marginBottom="@dimen/_11sdp"
-        android:fontFamily="@font/opensans_bold"
-        android:text="Edit Team Member"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_16ssp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:fontFamily="@font/opensans_bold"
+            android:text="Edit Team Member"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16ssp" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/header_title"
+        android:layout_alignParentBottom="true"
         android:fillViewport="true"
         android:scrollbars="none">
 
@@ -269,7 +280,6 @@
                 android:id="@+id/editphoneErrorLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -297,6 +307,7 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="*Please Note: New team members get full\nadministrator permission"
                 android:textColor="@color/xdark_gray"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:textSize="@dimen/_11ssp" />
 
             <LinearLayout
@@ -337,4 +348,4 @@
 
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</RelativeLayout>

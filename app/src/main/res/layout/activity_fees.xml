@@ -75,6 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_1sdp"
                     android:elevation="0dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
@@ -188,6 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_1sdp"
                     android:elevation="0dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
@@ -417,12 +419,19 @@
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:elevation="0dp"
+                    android:layout_margin="@dimen/_1sdp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
 
@@ -552,6 +561,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:elevation="0dp"
+                    android:layout_margin="@dimen/_1sdp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_10sdp">
 

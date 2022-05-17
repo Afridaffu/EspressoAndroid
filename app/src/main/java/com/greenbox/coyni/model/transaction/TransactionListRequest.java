@@ -20,6 +20,7 @@ public class TransactionListRequest {
     private String updatedToDateOperator;
     private String gbxTransactionId;
     private  boolean isFilters;
+    private boolean isMerchantTransactions;
 
     private ArrayList<Integer> transactionType;
     private ArrayList<Integer> transactionSubType;
@@ -161,4 +162,7 @@ public class TransactionListRequest {
         isFilters = filters;
     }
 
+    public void setMerchantTransactions(boolean merchantTransactions) {
+        isMerchantTransactions = merchantTransactions;
+    }
 }

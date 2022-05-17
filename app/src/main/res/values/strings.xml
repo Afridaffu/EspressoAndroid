@@ -126,7 +126,7 @@
     <string name="iv_success_content">Thank you for verifying your identification and trusting us as your token account platform. Lastly, add a payment method to your account profile.</string>
 
     <string name="iv_failed">Identity Verification Canceled</string>
-    <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
+    <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please \ncontact coyni customer support if you need further assistance.</string>
     <string name="iv_failedcontentextention"> If you need any help please</string>
     <string name="contactus"><u>Contact Us</u></string>
 
@@ -365,10 +365,10 @@
     <string name="dear_name">Dear %1$s,</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
-    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant \nprocessing through coyni.However, we regret to \ninform you that your application has not been \napproved and is no longer in consideration.</string>
+    <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name: %1$s</string>
     <string name="verification_dba_name">DBA: %1$s</string>
-    <string name="we_thank_for_interest">Again, we thank you for your interest and wish \nyou the best of luck.</string>
+    <string name="we_thank_for_interest">Again, we thank you for your interest and wish you the best of luck.</string>
     <string name="documents_required">Documents Required</string>
     <string name="copy_of_social_security_card">Copy of Social Security card</string>
     <string name="upload_file">Upload File</string>
@@ -394,7 +394,7 @@
     <string name="new_dba">New DBA</string>
     <string name="add_dba">Add DBA</string>
     <string name="open_new_account">Open New Account</string>
-    <string name="application_cancelled_message">Thank you for your interest in merchant processing through coyni. Hope to see you again </string>
+    <string name="application_cancelled_message">Thank you for your interest in merchant processing through coyni. Hope to see you again. </string>
 
     <string name="buy_tokens_signet">Buy Tokens - Signet</string>
     <string name="descriptor_name">Descriptor Name</string>
@@ -418,6 +418,7 @@
     <string name="released_on">Released on</string>
     <string name="reserve_rules">Reserve Rules</string>
     <string name="deposit_to">Deposit To</string>
+    <string name="reserve_rule">Reserve Rule</string>
     <string name="reserve_information">Reserve Information</string>
     <string name="reserve_held">Reserve Held</string>
     <string name="reserved_on">Reserved on</string>
@@ -493,7 +494,7 @@
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
     <string name="additional_action_required">Additional Action Required</string>
-    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application  click here</string>
+    <string name="identity_review_cancel_message">Thank you for your submission to the coyni review team. No additional information needed at this time. Please check back here for updates. If you wish to cancel your merchant application click here</string>
     <string name="cancel_application">Cancel Application</string>
     <string name="cancel_application_message">Are you sure to cancel your merchant application?</string>
     <string name="today_current_batch">Today(Current batch)</string>
@@ -674,6 +675,8 @@
     <string name="not_available_description">We’re sorry but this feature currently is not available, please wait until we finish your identity verification.</string>
     <string name="application_declined">Application Declined</string>
     <string name="please_click_the_upload_button_below_to_proceed">Please click the “Upload” button below to proceed.</string>
+    <string name="canceled_text">Application Canceled</string>
+    <string name="declined_text">Application Declined</string>
 
 
 </resources>

@@ -2,6 +2,7 @@ package com.greenbox.coyni.dialogs;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -34,7 +35,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
 
     private Long mLastClickTimeFilters = 0L;
-    private String dateSelected = null;
+    private String dateSelected = null, storedSelectDate = "";
     private MyApplication objMyApplication;
     private Context context;
     private TransactionListRequest filterTransactionListRequest = null;
@@ -42,6 +43,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private RangeDates rangeDates;
     private Activity activity;
     private DateRangePickerDialog dateRangePickerDialog;
+    private SharedPreferences mSharedPref;
+    private SharedPreferences.Editor mEditor;
 
     public MerchantTransactionsFilterDialog(Context context, TransactionListRequest filterTransactionListRequest) {
         super(context);
@@ -54,6 +57,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.merchant_transactions_filter);
+        mSharedPref = context.getSharedPreferences("", 0);
+        mEditor = mSharedPref.edit();
         initFields();
 
     }
@@ -116,7 +121,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                         case Utils.completed:
                             transStatusCompleted.setChecked(true);
                             break;
-                        case Utils.refund:
+                        case Utils.refunded:
                             transStatusRefund.setChecked(true);
                             break;
                         case Utils.partialRefund:
@@ -140,26 +145,28 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 transAmountEndET.setFilters(FilterArray);
                 transAmountEndET.setText(strEndAmount);
             }
-
-            if (!strSelectedDate.equals("")) {
-                getDateFromPickerET.setText(strSelectedDate);
+            storedSelectDate = mSharedPref.getString(Utils.SelectStoredDate, tempStrSelectedDate);
+            if (!storedSelectDate.equals("")) {
+                getDateFromPickerET.setText(storedSelectDate);
             }
         } else {
-            if(transactionType != null) {
+            if (transactionType != null) {
                 transactionType.clear();
             }
-            if(transactionSubType != null) {
+            if (transactionSubType != null) {
                 transactionSubType.clear();
             }
-            if(txnStatus != null) {
+            if (txnStatus != null) {
                 txnStatus.clear();
             }
             strFromDate = "";
             strToDate = "";
             strStartAmount = "";
             strEndAmount = "";
-            isFilters = false;
-            strSelectedDate = "";
+//            isFilters = false;
+            tempStrSelectedDate = "";
+            storedSelectDate = "";
+
 
 
         }
@@ -169,13 +176,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 return;
             }
             mLastClickTimeFilters = SystemClock.elapsedRealtime();
-            if(transactionType != null) {
+            if (transactionType != null) {
                 transactionType.clear();
             }
-            if(transactionSubType != null) {
+            if (transactionSubType != null) {
                 transactionSubType.clear();
             }
-            if(txnStatus != null) {
+            if (txnStatus != null) {
                 txnStatus.clear();
             }
             strFromDate = "";
@@ -184,6 +191,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             strEndAmount = "";
             isFilters = false;
             strSelectedDate = "";
+            tempStrSelectedDate = "";
+            storedSelectDate = "";
             transAmountStartET.setText("");
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
@@ -206,6 +215,10 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
             getOnDialogClickListener().onDialogClicked(Utils.resetFilter, null);
+
+            mEditor.putString(Utils.SelectStoredDate, tempStrSelectedDate);
+            mEditor.commit();
+
 //            dismiss();
 
 
@@ -299,12 +312,12 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    txnStatus.add(Utils.refund);
+                    txnStatus.add(Utils.refunded);
 //                    transStatusCanceled.setChecked(false);
                 } else {
 //                    transStatusCanceled.setChecked(false);
                     for (int i = 0; i < txnStatus.size(); i++) {
-                        if (txnStatus.get(i) == Utils.refund) {
+                        if (txnStatus.get(i) == Utils.refunded) {
                             txnStatus.remove(i);
                             break;
                         }
@@ -467,7 +480,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             @Override
             public void onClick(View view) {
                 filterTransactionListRequest = new TransactionListRequest();
-                isFilters = false;
+//                isFilters = false;
                 transAmountStartET.clearFocus();
                 transAmountEndET.clearFocus();
 
@@ -570,6 +583,8 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                     strToDate = rangeDates.getUpdatedToDate();
                     tempStrSelectedDate = rangeDates.getFullDate();
                     getDateFromPickerET.setText(tempStrSelectedDate);
+                    mEditor.putString(Utils.SelectStoredDate, tempStrSelectedDate);
+                    mEditor.commit();
                 }
             }
         });

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -28,15 +29,21 @@ import com.bumptech.glide.request.target.Target;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.UpdateSignAgree.UpdateSignAgreementsResponse;
+import com.greenbox.coyni.model.profile.DownloadDocumentData;
+import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
+import com.greenbox.coyni.model.profile.DownloadImageData;
+import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.signedagreements.SignedAgreementResponse;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.io.File;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -79,9 +86,12 @@ public class MerchantsAgrementActivity extends BaseActivity {
         webView.invalidate();
         webSettings.setJavaScriptEnabled(true);
         webView.setVerticalScrollBarEnabled(true);
-        String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
-        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
         showProgressDialog();
+        dashboardViewModel.getDocumentUrl(Utils.mAgmt);
+//        String fileURL = "https://crypto-resources.s3.amazonaws.com/Gen-3-V1-Merchant-TOS-v6.pdf";
+//        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + fileURL);
+
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -122,7 +132,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
             }
         });
 
-        dashboardViewModel.meAgreementsById();
+        //dashboardViewModel.meAgreementsById();
     }
 
     private void launchSignature() {
@@ -248,15 +258,6 @@ public class MerchantsAgrementActivity extends BaseActivity {
                                 && android.util.Patterns.WEB_URL.matcher(agreements.getData().getItems().get(i).getSignature()).matches()) {
                             DisplayImageUtility utility = DisplayImageUtility.getInstance(MerchantsAgrementActivity.this);
                             utility.addImage(agreements.getData().getItems().get(i).getSignature(), mIVSignature, R.drawable.ic_sign);
-                            mIVSignature.setImageResource(R.drawable.ic_sign);
-
-//                            Glide.with(MerchantsAgrementActivity.this)
-//                                    .load(agreements.getData().getItems().get(i).getSignature())
-//                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                                    .skipMemoryCache(true)
-//                                    .override(Target.SIZE_ORIGINAL)
-//                                    .placeholder(R.drawable.ic_sign)
-//                                    .into(mIVSignature);
                             doneCV.setVisibility(View.VISIBLE);
                         } else {
                             doneCV.setVisibility(View.GONE);
@@ -267,6 +268,38 @@ public class MerchantsAgrementActivity extends BaseActivity {
                 }
             }
         });
+
+        dashboardViewModel.getDownloadDocumentResponse().observe(this, new Observer<DownloadDocumentResponse>() {
+            @Override
+            public void onChanged(DownloadDocumentResponse downloadDocumentResponse) {
+                dismissDialog();
+                if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
+                    if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        DownloadDocumentData data = downloadDocumentResponse.getData();
+                        if(data != null ) {
+                            if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
+                                launchDocumentUrl(data.getDownloadUrl().replace("&","%26"));
+                            } else {
+                                Utils.displayAlert(getString(R.string.unable_to_get_document), MerchantsAgrementActivity.this, "", "");
+                            }
+                        }
+                    } else {
+                        Utils.displayAlert(downloadDocumentResponse.getError().getErrorDescription(), MerchantsAgrementActivity.this, "", "");
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void launchDocumentUrl(String url) {
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        Uri uri = Uri.parse(url);
+//        intent.setDataAndType(uri, "application/pdf");
+//        startActivity(intent);
+
+        webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
+
     }
 }
 

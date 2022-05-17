@@ -8,14 +8,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.utils.MyApplication;
@@ -23,7 +30,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
+public class BusinessUserDetailsPreviewActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     private String authenticateType = "", phoneFormat = "";
     private TextView heading, title, value;
@@ -43,6 +50,7 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_business_user_details_preview);
+        setKeyboardVisibilityListener(BusinessUserDetailsPreviewActivity.this);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         heading = findViewById(R.id.intentName);
@@ -421,8 +429,45 @@ public class BusinessUserDetailsPreviewActivity extends AppCompatActivity {
                 businessIdentityVerificationViewModel.getCompanyInfo();
             }
             initObservers();
+
+
+            if (Utils.isKeyboardVisible) {
+                Utils.hideKeypad(BusinessUserDetailsPreviewActivity.this);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+    }
+
 }

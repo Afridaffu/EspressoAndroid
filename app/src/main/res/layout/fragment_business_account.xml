@@ -45,7 +45,7 @@
                         android:contentDescription="@string/user_details"
                         android:scaleType="fitXY"
                         android:src="@drawable/acct_profile"
-                        android:visibility="gone" />
+                        android:visibility="visible" />
 
                     <TextView
                         android:id="@+id/tv_user_icon_text"
@@ -57,7 +57,7 @@
                         android:fontFamily="@font/opensans_bold"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_16sdp"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                 </androidx.cardview.widget.CardView>
 

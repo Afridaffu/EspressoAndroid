@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
 import java.util.Locale;
@@ -81,6 +83,7 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
             this.itemView = itemView;
             agreementTV = itemView.findViewById(R.id.listagreementsTV);
             listDocsTV = itemView.findViewById(R.id.listDocsTV);
+
         }
     }
 }

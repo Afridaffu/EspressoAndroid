@@ -647,16 +647,27 @@ public class BusinessProfileActivity extends BaseActivity {
 
                         if (profile.getData().getAccountStatus() != null) {
                             try {
-                                if (profile.getData().getAccountStatus().equals("Active")) {
+                                if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.active_green));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                                } else if (profile.getData().getAccountStatus().equals("Unverified")) {
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.orange));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                                } else if (profile.getData().getAccountStatus().equals("Under Review")) {
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                                     account_status.setTextColor(getResources().getColor(R.color.under_review_blue));
                                     statusDot.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                                    account_status.setTextColor(getResources().getColor(R.color.error_red));
+                                    statusDot.setCardBackgroundColor(getResources().getColor(R.color.error_red));
+                                }else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                                    account_status.setTextColor(getResources().getColor(R.color.orange));
+                                    statusDot.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                                } else if (profile.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                                        || profile.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+                                    account_status.setTextColor(getResources().getColor(R.color.error_red));
+                                    statusDot.setCardBackgroundColor(getResources().getColor(R.color.error_red));
                                 }
+
                                 //                    if (myApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
                                 //                        cardviewYourAccount.setVisibility(View.VISIBLE);
                                 //                    } else {
@@ -792,10 +803,6 @@ public class BusinessProfileActivity extends BaseActivity {
                 profileImage.setImageResource(R.drawable.ic_profile_male_user);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(profileImage);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
 //                profileText.setVisibility(View.VISIBLE);

@@ -197,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
         }
 
-        if(Utils.isKeyboardVisible)
+        if (Utils.isKeyboardVisible)
             Utils.hideKeypad(LoginActivity.this);
     }
 
@@ -420,7 +420,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
                             etEmail.setSelection(etEmail.getText().length());
                         }
-//                        if (s.length() > 0) {
+//                        if (isEmailValid(str)) {
 //                            Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
 //                        }
                     } catch (Exception ex) {
@@ -544,6 +544,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+//                        if (Utils.isKeyboardVisible)
+//                            Utils.hideKeypad(LoginActivity.this);
                         hideAndClearFocus();
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
@@ -755,7 +757,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 public void onChanged(APIError apiError) {
                     dialog.dismiss();
                     if (apiError != null) {
-                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+//                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "",apiError.getError().getFieldErrors().get(0));
                     }
                 }
             });

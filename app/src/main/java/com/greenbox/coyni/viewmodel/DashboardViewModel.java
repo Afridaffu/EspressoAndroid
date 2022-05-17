@@ -22,6 +22,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.preferences.UserPreference;
+import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.model.profile.ImageResponse;
@@ -66,6 +67,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<RefundDataResponce> refundDetailsMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<RefundDataResponce> refundProcessMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<DownloadImageResponse> downloadUrlResponse = new MutableLiveData<>();
+    private MutableLiveData<DownloadDocumentResponse> downloadDocumentResponse = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -81,6 +83,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<DownloadImageResponse> getDownloadUrlResponse() {
         return downloadUrlResponse;
+    }
+
+    public MutableLiveData<DownloadDocumentResponse> getDownloadDocumentResponse() {
+        return downloadDocumentResponse;
     }
 
     public MutableLiveData<UserDetails> getUserDetailsMutableLiveData() {
@@ -110,7 +116,6 @@ public class DashboardViewModel extends AndroidViewModel {
     public MutableLiveData<ImageResponse> getImageResponseMutableLiveData() {
         return imageResponseMutableLiveData;
     }
-
 
     public MutableLiveData<Agreements> getAgreementsMutableLiveData() {
         return agreementsMutableLiveData;
@@ -154,41 +159,6 @@ public class DashboardViewModel extends AndroidViewModel {
 
     public MutableLiveData<RefundDataResponce> getRefundProcessMutableLiveData() {
         return refundProcessMutableLiveData;
-    }
-
-    public void getDownloadUrl(DownloadUrlRequest downloadUrlRequest) {
-        try {
-            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<DownloadImageResponse> mCall = apiService.getDownloadUrl(downloadUrlRequest);
-            mCall.enqueue(new Callback<DownloadImageResponse>() {
-                @Override
-                public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            DownloadImageResponse obj = response.body();
-                            downloadUrlResponse.setValue(obj);
-                        } else {
-                            Gson gson = new Gson();
-                            Type type = new TypeToken<DownloadImageResponse>() {
-                            }.getType();
-                            DownloadImageResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                            downloadUrlResponse.setValue(errorResponse);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        downloadUrlResponse.setValue(null);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
-                    Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
-                    downloadUrlResponse.setValue(null);
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void meProfile() {
@@ -265,34 +235,38 @@ public class DashboardViewModel extends AndroidViewModel {
     }
 
     public void getDocumentUrl(int docId) {
-        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-        Call<DownloadImageResponse> mcall = apiService.getAgreementUrl(docId+"");
-        mcall.enqueue(new Callback<DownloadImageResponse>() {
-            @Override
-            public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
-                try {
-                    if (response.isSuccessful()) {
-                        DownloadImageResponse obj = response.body();
-                        downloadUrlResponse.setValue(obj);
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<DownloadImageResponse>() {
-                        }.getType();
-                        DownloadImageResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
-                        downloadUrlResponse.setValue(errorResponse);
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DownloadDocumentResponse> mcall = apiService.getAgreementUrl(docId + "");
+            mcall.enqueue(new Callback<DownloadDocumentResponse>() {
+                @Override
+                public void onResponse(Call<DownloadDocumentResponse> call, Response<DownloadDocumentResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DownloadDocumentResponse obj = response.body();
+                            downloadDocumentResponse.setValue(obj);
+                        } else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DownloadDocumentResponse>() {
+                            }.getType();
+                            DownloadDocumentResponse errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            downloadDocumentResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        downloadDocumentResponse.setValue(null);
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    downloadUrlResponse.setValue(null);
                 }
-            }
 
-            @Override
-            public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
-                LogUtils.v("getDocumentUrl failure", ""+ t.getLocalizedMessage());
-                downloadUrlResponse.setValue(null);
-            }
-        });
+                @Override
+                public void onFailure(Call<DownloadDocumentResponse> call, Throwable t) {
+                    LogUtils.v("getDocumentUrl failure", "" + t.getLocalizedMessage());
+                    downloadDocumentResponse.setValue(null);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void agreementsByType(String agreementsType) {

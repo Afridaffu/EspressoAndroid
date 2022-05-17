@@ -796,20 +796,10 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 if (myApplicationObj.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                     utility.addImage(imageString, userProfileIV, R.drawable.ic_profile_male_user);
-                    userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
                 } else {
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                     utility.addImage(imageString, business_userProfileIV, R.drawable.ic_profile_male_user);
-                    business_userProfileIV.setImageResource(R.drawable.ic_profile_male_user);
                 }
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(userProfileIV);
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(business_userProfileIV);
             } else {
                 userProfileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);

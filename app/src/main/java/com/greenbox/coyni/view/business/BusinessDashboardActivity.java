@@ -87,6 +87,19 @@ public class BusinessDashboardActivity extends BaseActivity {
         super.onResume();
         try {
             mDashboardViewModel.meProfile();
+
+
+            WalletRequest walletRequest = new WalletRequest();
+            walletRequest.setWalletType(Utils.MERCHANT);
+            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.TOKEN);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+            walletRequest.setWalletType(Utils.RESERVE);
+            businessDashboardViewModel.meMerchantWallet(walletRequest);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -299,16 +312,16 @@ public class BusinessDashboardActivity extends BaseActivity {
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
 
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.MERCHANT);
-            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.RESERVE);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//            WalletRequest walletRequest = new WalletRequest();
+//            walletRequest.setWalletType(Utils.MERCHANT);
+//            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//
+//            walletRequest.setWalletType(Utils.TOKEN);
+//            businessDashboardViewModel.meMerchantWallet(walletRequest);
+//
+//            walletRequest.setWalletType(Utils.RESERVE);
+//            businessDashboardViewModel.meMerchantWallet(walletRequest);
 
 //            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
 //            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
@@ -392,17 +405,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        mDashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
-            @Override
-            public void onChanged(DownloadImageResponse downloadImageResponse) {
-                if (downloadImageResponse != null) {
-                    if (downloadImageResponse.getStatus() != null && downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        showImage(downloadImageResponse.getData().getDownloadUrl());
-                    }
-                }
-            }
-        });
-
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
@@ -411,15 +413,8 @@ public class BusinessDashboardActivity extends BaseActivity {
                         objMyApplication.setWalletResponseData(businessWalletResponse.getData());
 
                         if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-//                            if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
-//                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.RESERVE_STR)) {
-////                                objMyApplication.setReserveBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
 //
-//                            } else if (businessWalletResponse.getData().getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
-////                                objMyApplication.setMerchantBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount());
-//
-//                            }
-                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getExchangeAmount(),
+                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
                                     businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
                         }
                     }
@@ -430,18 +425,11 @@ public class BusinessDashboardActivity extends BaseActivity {
         });
     }
 
-    private void showImage(String imageUrl) {
-//        Glide.with(this)
-//                .load(imageUrl)
-//                .placeholder(R.drawable.acct_profile)
-//                .into(mIvUserIcon);
-    }
-
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
         String iconText = "";
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getFirstName() != null &&
-                    objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
             String firstName = objMyApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();
             userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
@@ -458,14 +446,14 @@ public class BusinessDashboardActivity extends BaseActivity {
             } else {
                 mTvUserName.setText("Hi! " + userName);
             }
-        }else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+        } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
             if (objMyApplication.getMyProfile().getData().getDbaName() != null) {
                 iconText = objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
             }
             userName = objMyApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 21) {
                 mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
-            } else if(userName != null) {
+            } else if (userName != null) {
                 mTvUserName.setText("Hi! " + userName);
             }
         }
@@ -477,17 +465,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
-            mIvUserIcon.setImageResource(R.drawable.acct_profile);
-//            if (!android.util.Patterns.WEB_URL.matcher(imageUrl).matches()) {
-//                DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
-//                downloadUrlRequest.setKey(imageUrl);
-//                mDashboardViewModel.getDownloadUrl(downloadUrlRequest);
-//            } else {
-//                Glide.with(this)
-//                        .load(objMyApplication.getMyProfile().getData().getImage())
-//                        .placeholder(R.drawable.acct_profile)
-//                        .into(mIvUserIcon);
-//            }
         } else {
 //            mTvUserIconText.setVisibility(View.VISIBLE);
             mIvUserIcon.setVisibility(View.VISIBLE);

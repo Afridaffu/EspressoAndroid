@@ -1,9 +1,13 @@
 package com.greenbox.coyni.dialogs;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +31,9 @@ public class DateRangePickerDialog extends BaseDialog {
     private Context context;
 
     public DateRangePickerDialog(Context context) {
+
         super(context);
+        this.context = context;
     }
 
     public long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
@@ -41,11 +47,13 @@ public class DateRangePickerDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_dialog);
-
+        int height = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.90);
+        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, height);
         initFields();
     }
 
     public void initFields() {
+
         ImageView closeIV = findViewById(R.id.closeIV);
         TextView doneTV = findViewById(R.id.doneTV);
         TextView rangeDateTV = findViewById(R.id.rangeDateTV);

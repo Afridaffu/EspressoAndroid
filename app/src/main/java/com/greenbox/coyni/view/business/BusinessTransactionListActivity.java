@@ -473,7 +473,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
 //        Chip transSubTypeDC = dialog.findViewById(R.id.transSubTypeDC);
         Chip transSubTypeSignet = dialog.findViewById(R.id.transSubTypeSignet);
         Chip transSubTypeIP = dialog.findViewById(R.id.transSubTypeIP);
-//        Chip transSubTypeGiftCard = dialog.findViewById(R.id.transSubTypeGiftCard);
+        Chip transSubTypeGiftCard = dialog.findViewById(R.id.transSubTypeGiftCard);
 //        Chip transSubTypeSOToken = dialog.findViewById(R.id.transSubTypeSOToken);
 //        Chip transSubTypeFW = dialog.findViewById(R.id.transSubTypeFW);
 //        Chip transSubTypeCW = dialog.findViewById(R.id.transSubTypeCW);
@@ -563,9 +563,9 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
                             transSubTypeIP.setChecked(true);
                             break;
 //
-//                        case Utils.giftCard:
-//                            transSubTypeGiftCard.setChecked(true);
-//                            break;
+                        case Utils.giftCard:
+                            transSubTypeGiftCard.setChecked(true);
+                            break;
 
 //                    case Utils.saleOrderToken:
 //                        transSubTypeSOToken.setChecked(true);
@@ -694,7 +694,7 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
 //            transSubTypeDC.setChecked(false);
             transSubTypeSignet.setChecked(false);
             transSubTypeIP.setChecked(false);
-//            transSubTypeGiftCard.setChecked(false);
+            transSubTypeGiftCard.setChecked(false);
 //            transSubTypeSOToken.setChecked(false);
 //            transSubTypeFW.setChecked(false);
 //            transSubTypeCW.setChecked(false);
@@ -979,22 +979,22 @@ public class BusinessTransactionListActivity extends AppCompatActivity implement
             }
         });
 //
-//        transSubTypeGiftCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//                if (b) {
-//                    transactionSubType.add(Utils.giftCard);
-//                } else {
-//                    for (int i = 0; i < transactionSubType.size(); i++) {
-//                        if (transactionSubType.get(i) == Utils.giftCard) {
-//                            transactionSubType.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
+        transSubTypeGiftCard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                if (b) {
+                    transactionSubType.add(Utils.giftCard);
+                } else {
+                    for (int i = 0; i < transactionSubType.size(); i++) {
+                        if (transactionSubType.get(i) == Utils.giftCard) {
+                            transactionSubType.remove(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
 //
 //        transSubTypeSOToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override

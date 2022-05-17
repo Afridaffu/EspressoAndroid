@@ -182,12 +182,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImage(myApplication.getMyProfile().getData().getImage(), imgProfile, R.drawable.ic_profile_male_user);
-            imgProfile.setImageResource(R.drawable.ic_profile_male_user);
-
-//            Glide.with(this)
-//                    .load(myApplication.getMyProfile().getData().getImage())
-//                    .placeholder(R.drawable.ic_profile_male_user)
-//                    .into(imgProfile);
         } else {
             userShortInfoTV.setVisibility(View.VISIBLE);
             imgProfile.setVisibility(View.GONE);
@@ -195,7 +189,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         }
 
 //        setUserBalance(myApplication.getWalletResponseData());
-        setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
+        setUserBalance(myApplication.getCurrentUserData().getMerchantWalletResponse());
 
     }
 
@@ -211,7 +205,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 for (int i = 0; i < walletInfo.size(); i++) {
 //                    if (walletInfo.get(i).getWalletType().equals(getString(R.string.currency))) {
 //                    myApplication.setGbtWallet(walletInfo.get(i));
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getExchangeAmount()));
+                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(walletInfo.get(i).getAvailabilityToUse()));
                     userBalanceTV.setText(Utils.USNumberFormat(Double.parseDouble(strAmount)));
 //                    myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
 //                    }
