@@ -3,6 +3,8 @@ package com.greenbox.coyni.view.business;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -10,7 +12,10 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -24,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.team.PhoneNumberTeam;
 import com.greenbox.coyni.model.team.TeamInfoAddModel;
 import com.greenbox.coyni.model.team.TeamRequest;
@@ -33,7 +39,7 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.RetrieveEmailActivity;
 import com.greenbox.coyni.viewmodel.TeamViewModel;
 
-public class AddNewTeamMemberActivity extends BaseActivity {
+public class AddNewTeamMemberActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     private TextInputLayout editFNameTil, editLNameTil, editEmailTil, editPhoneTil;
     private TextInputEditText editFNameET, editLNameET, editEmailET;
@@ -99,12 +105,14 @@ public class AddNewTeamMemberActivity extends BaseActivity {
 
     private void initFields() {
 
+        setKeyboardVisibilityListener(AddNewTeamMemberActivity.this);
         addNewTeamMemberActivity = this;
         backBtnLL = findViewById(R.id.backBtnLL);
         backBtnLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.hideKeypad(AddNewTeamMemberActivity.this);
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(AddNewTeamMemberActivity.this);
                 onBackPressed();
             }
         });
@@ -139,12 +147,12 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (isNextEnabled) {
-                    Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideSoftKeyboard(AddNewTeamMemberActivity.this);
                     showProgressDialog();
                     teamInfoAddAPICall(prepareRequest());
                 }
@@ -311,8 +319,8 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isFirstName = false;
                 }
                 enableOrDisableNext();
-                if (editFNameET.getText().toString().contains("  ")){
-                    editFNameET.setText(editFNameET.getText().toString().replace("  "," "));
+                if (editFNameET.getText().toString().contains("  ")) {
+                    editFNameET.setText(editFNameET.getText().toString().replace("  ", " "));
                     editFNameET.setSelection(editFNameET.getText().length());
                 }
             }
@@ -358,8 +366,8 @@ public class AddNewTeamMemberActivity extends BaseActivity {
                     isLastName = false;
                 }
                 enableOrDisableNext();
-                if (editLNameET.getText().toString().contains("  ")){
-                    editLNameET.setText(editLNameET.getText().toString().replace("  "," "));
+                if (editLNameET.getText().toString().contains("  ")) {
+                    editLNameET.setText(editLNameET.getText().toString().replace("  ", " "));
                     editLNameET.setSelection(editLNameET.getText().length());
                 }
             }
@@ -440,7 +448,8 @@ public class AddNewTeamMemberActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         editFNameET.requestFocus();
-        Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
+//        if (!Utils.isKeyboardVisible)
+//            Utils.shwForcedKeypad(AddNewTeamMemberActivity.this);
     }
 
     public void enableOrDisableNext() {
@@ -448,7 +457,6 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             if (isFirstName && isLastName && isEmail && isPhoneNumber) {
                 isNextEnabled = true;
                 sendCV.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
-//                Utils.hideKeypad(AddNewTeamMemberActivity.this);
 
                 Log.e("All boolean", isFirstName + " " + isLastName + " " + isEmail + " ");
             } else {
@@ -462,6 +470,37 @@ public class AddNewTeamMemberActivity extends BaseActivity {
             e.printStackTrace();
         }
 
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
     }
 
 }

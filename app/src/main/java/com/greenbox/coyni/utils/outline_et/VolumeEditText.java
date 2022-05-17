@@ -70,12 +70,13 @@ public class VolumeEditText extends ConstraintLayout {
                     else
                         hintName.setVisibility(GONE);
 
-                    if (volumeET.getText().toString().length() > 0 && volumeET.getText().toString().equals("0.00")) {
-                        hintName.setTextColor(getResources().getColor(R.color.error_red));
-                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
-                        volumeErrorLL.setVisibility(VISIBLE);
-                        volumeErrorTV.setText(hintString + " must be greater than 0.");
-                    } else if ((volumeET.getText().length() == 0)) {
+//                    if (volumeET.getText().toString().length() > 0 && volumeET.getText().toString().equals("0.00")) {
+//                        hintName.setTextColor(getResources().getColor(R.color.error_red));
+//                        hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
+//                        volumeErrorLL.setVisibility(VISIBLE);
+//                        volumeErrorTV.setText(hintString + " must be greater than 0.");
+//                    } else
+                    if ((volumeET.getText().length() == 0)) {
                         hintName.setTextColor(getResources().getColor(R.color.error_red));
                         hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         volumeErrorLL.setVisibility(VISIBLE);
@@ -104,7 +105,8 @@ public class VolumeEditText extends ConstraintLayout {
 
                 if (FROM.equals("DBA_INFO")) {
                     DBAInfoAcivity dia = (DBAInfoAcivity) mContext;
-                    if (!charSequence.toString().equals("") && !volumeET.getText().toString().equals("0.00")) {
+//                    if (!charSequence.toString().equals("") && !volumeET.getText().toString().equals("0.00")) {
+                    if (!charSequence.toString().equals("")) {
                         if (mType.equals("MPV")) {
                             dia.isMPV = true;
                         } else if (mType.equals("HT")) {
