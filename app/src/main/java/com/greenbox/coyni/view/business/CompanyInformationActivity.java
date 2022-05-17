@@ -130,6 +130,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     CompanyInformationActivity myActivity;
     View globalView;
     private boolean isApiCalled = false;
+    private boolean isNewCompanyFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +161,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             from = getIntent().getStringExtra("FROM");
 
 
-            if (!getIntent().getBooleanExtra("isNew",false)) {
+            if (!getIntent().getBooleanExtra("isNew", false)) {
                 showProgressDialog();
                 businessIdentityVerificationViewModel.getCompanyInfo();
             }
@@ -393,7 +394,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    setResult(isApiCalled?RESULT_OK:RESULT_CANCELED);
+                    setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
                     finish();
                 }
             });
@@ -423,10 +424,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isBasicNextEnabled) {
 //                    companyInfoAPICall(prepareRequest());
-                    if (getIntent().getBooleanExtra("isNew",false))
-                    identityVerificationViewModel.getAddBusinessUser();
-                    else
+                    if (getIntent().getBooleanExtra("isNew", false)) {
+                        identityVerificationViewModel.getAddBusinessUser();
+                    } else {
                         companyInfoAPICall(prepareRequest());
+                    }
                 }
             });
 
@@ -436,10 +438,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isAddressNextEnabled) {
-                    if (companyid.length() > 0)
-                    companyInfoAPICall(prepareRequest());
-                    else
+                    if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
                         identityVerificationViewModel.getAddBusinessUser();
+                    } else {
+                        companyInfoAPICall(prepareRequest());
+                    }
                 }
             });
 
@@ -483,7 +486,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
                     if (isDocsDoneEnabled) {
-                        businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
+                        if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
+                            identityVerificationViewModel.getAddBusinessUser();
+                        }else {
+                            businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
+                        }
                     }
                 }
             });
@@ -633,7 +640,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                         }
                                     }
                                 }
-                                companyid = ""+cir.getId();
+
+                                companyid = "" + cir.getId();
 
                                 if (selectedPage == 0)
                                     enableOrDisableNext();
@@ -655,8 +663,13 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
                     if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-
-                        companyInfoAPICall(prepareRequest());
+                        isNewCompanyFlag = true;
+                        if (selectedPage == 2){
+                            businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
+                        }
+                        else {
+                            companyInfoAPICall(prepareRequest());
+                        }
 
                     } else {
                         Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), CompanyInformationActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
@@ -780,8 +793,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (companyInfoResponse != null) {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             isPostSuccess = true;
+                            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
                             finish();
-                            setResult(isApiCalled? RESULT_OK : RESULT_CANCELED);
                         } else {
                             isPostSuccess = false;
                             Utils.displayAlert(companyInfoResponse.getError().getErrorDescription(),
@@ -1698,8 +1711,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-                setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
-                finish();
+            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
+            finish();
 
             //super.onBackPressed();
         } else if (selectedPage == 1) {

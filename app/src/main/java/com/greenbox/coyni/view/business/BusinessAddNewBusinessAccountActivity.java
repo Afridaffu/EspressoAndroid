@@ -72,10 +72,13 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                     return;
                 }
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
-                identityVerificationViewModel.getAddBusinessUser();
-//
+                //identityVerificationViewModel.getAddBusinessUser();
+                startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
+                        .putExtra(Utils.ADD_BUSINESS, true)
+                        .putExtra(Utils.ADD_DBA, false));
             }
         });
+
 
         llNewDba.setOnClickListener(new View.OnClickListener() {
             @Override
