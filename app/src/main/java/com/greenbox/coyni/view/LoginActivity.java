@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 }
                 String authority = uri.getAuthority();
                 Set<String> queryParams = uri.getQueryParameterNames();
-                String message = "authority - " + authority + "\n";
+                String message = "flow - " + authority + "\n";
                 for(String s : queryParams) {
                     message += s+ " - " + uri.getQueryParameter(s) + "\n";
                 }
