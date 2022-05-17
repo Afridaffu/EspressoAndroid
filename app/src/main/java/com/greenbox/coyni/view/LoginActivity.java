@@ -138,11 +138,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         isPwdEye = false;
         try {
             if (!isExpiry) {
-//                mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//                Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
-//                cursor.moveToFirst();
-//                if (cursor.getCount() > 0) {
-//                    String value = cursor.getString(1);
                 String value = dbHandler.getTableRemember();
 
                 if (value != null && !value.equals("")) {

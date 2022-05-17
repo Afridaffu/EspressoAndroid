@@ -711,6 +711,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                         }
                     }
                     isApiCalled = true;
+                    setResult(RESULT_OK);
 
                 }
             });

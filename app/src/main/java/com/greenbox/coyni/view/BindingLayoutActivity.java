@@ -43,7 +43,6 @@ public class BindingLayoutActivity extends BaseActivity {
     MyApplication objMyApplication;
     CardView reTryAgainBtn, btnChangePassCV, nextGetStartedCV;
     CardView editEmailLogoutCV;
-    SQLiteDatabase mydatabase;
     DatabaseHandler dbHandler;
     RetEmailAdapter retEmailAdapter;
     RecyclerView retEmailRV;
@@ -84,7 +83,6 @@ public class BindingLayoutActivity extends BaseActivity {
             dbHandler = DatabaseHandler.getInstance(BindingLayoutActivity.this);
             txvVerifyDescription = findViewById(R.id.txv_verify_description);
 
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
 
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
@@ -238,21 +236,6 @@ public class BindingLayoutActivity extends BaseActivity {
 
     private void dropAllTables() {
         try {
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblUserDetails;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblRemember;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblThumbPinLock;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblFacePinLock;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblPermanentToken;");
-//            mydatabase.execSQL("DROP TABLE IF EXISTS tblDontRemind;");
-
-            //Shiva Changed
-//            mydatabase.execSQL("Delete from tblUserDetails;");
-//            mydatabase.execSQL("Delete from tblRemember;");
-//            mydatabase.execSQL("Delete from tblThumbPinLock;");
-//            mydatabase.execSQL("Delete from tblFacePinLock;");
-//            mydatabase.execSQL("Delete from tblPermanentToken;");
-//            mydatabase.execSQL("Delete from tblDontRemind;");
-
             dbHandler.clearAllTables();
 
             SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);

@@ -84,17 +84,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
-    //Shiva Changed
-    //    private void saveThumb(String value) {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-//            mydatabase.execSQL("Delete from tblThumbPinLock");
-//            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
     private void saveThumb(String value) {
         try {
             dbHandler.clearThumbPinLockTable();
@@ -105,16 +94,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     }
 
 
-//    private void saveFace(String value) {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-//            mydatabase.execSQL("Delete from tblFacePinLock");
-//            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void saveFace(String value) {
         try {
@@ -125,17 +104,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         }
     }
 
-//    private void saveToken(String value) {
-//        try {
-//            objMyApplication.setStrMobileToken(value);
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
-//            mydatabase.execSQL("Delete from tblPermanentToken");
-//            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void saveToken(String value) {
         try {
