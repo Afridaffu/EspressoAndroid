@@ -58,7 +58,7 @@ public class AddCommentsDialog extends BaseDialog {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Utils.isKeyboardVisible) {
+                if (Utils.isKeyboardVisible) {
                     Utils.hideKeypad(context);
                 }
                 dismiss();
@@ -72,7 +72,7 @@ public class AddCommentsDialog extends BaseDialog {
                 try {
                     getOnDialogClickListener().onDialogClicked(Utils.COMMENT_ACTION, addNoteET.getText().toString().trim());
                     dismiss();
-                    if(Utils.isKeyboardVisible) {
+                    if (Utils.isKeyboardVisible) {
                         Utils.hideKeypad(context);
                     }
                 } catch (Exception ex) {

@@ -108,12 +108,18 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
             if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
                 holder.imgUser.setVisibility(View.VISIBLE);
                 holder.tvNameHead.setVisibility(View.GONE);
-                if (objData.getImage().contains("https://")) {
-
+//                if (objData.getImage().contains("https://")) {
+//
+//                    DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
+//                    utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
+//                } else {
+//                    holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
+//                }
+                if (objData.getImage().startsWith("content:")) {
+                    holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
+                } else {
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                     utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
-                } else {
-                    holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
                 }
             } else {
                 holder.imgUser.setVisibility(View.GONE);

@@ -2,61 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timezoneLL"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/timezoneLL"
     android:background="@color/white"
+    android:orientation="vertical"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:id="@+id/profileLL"
-        android:layout_marginTop="@dimen/_10ssp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/_16sdp">
+        android:layout_marginTop="@dimen/_10ssp"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:orientation="horizontal">
 
-        <ImageView
+        <androidx.cardview.widget.CardView
             android:layout_width="@dimen/_33sdp"
             android:layout_height="@dimen/_33sdp"
-            android:id="@+id/profileImage"
-            android:src="@drawable/profile" />
+            app:cardCornerRadius="@dimen/_16sdp">
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/profile" />
+        </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/title"
-            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_semibold"
-            android:textColor="@color/primary_black"
             android:layout_marginLeft="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10ssp"
-            android:textSize="@dimen/text_size_14sp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:fontFamily="@font/opensans_semibold"
+            android:text=""
+            android:textColor="@drawable/dba_text_enable_disable"
+            android:textSize="@dimen/text_size_14sp" />
 
         <LinearLayout
             android:id="@+id/statusLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_alignParentLeft="true"
             android:layout_gravity="center"
-            app:layout_constraintStart_toStartOf="@id/title"
+            android:layout_marginRight="@dimen/_10ssp"
+            android:background="@drawable/txn_pending_bg"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tickIcon"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="@dimen/_10ssp"
-            app:layout_constraintTop_toTopOf="@id/tickIcon"
-            android:layout_alignParentLeft="true"
-            android:background="@drawable/txn_pending_bg"
-            android:visibility="gone">
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintTop_toTopOf="@id/tickIcon">
 
             <TextView
                 android:id="@+id/statusTV"
                 android:layout_width="@dimen/_68sdp"
                 android:layout_height="@dimen/_14sdp"
                 android:fontFamily="@font/opensans_bold"
-                android:text=""
                 android:gravity="center"
+                android:text=""
                 android:textColor="#FFA701"
                 android:textSize="@dimen/_7ssp" />
 
@@ -64,17 +71,18 @@
 
         <ImageView
             android:id="@+id/tickIcon"
-            android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/_10ssp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10ssp"
             android:src="@drawable/ic_custom_tick"
+            android:visibility="gone"
             app:tint="@color/primary_green" />
 
     </LinearLayout>
+
     <View
         android:id="@+id/viewLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/light_gray"/>
+        android:background="@color/light_gray" />
 </LinearLayout>
