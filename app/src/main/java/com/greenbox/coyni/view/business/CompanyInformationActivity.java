@@ -93,7 +93,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     CompanyInforamtionPager companyInforamtionPager;
     OneDirectionViewPager viewPager;
     //    ViewPager2 viewPager;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeAddr = 0L, mLastClickTimeDocs = 0L;
     private String companyid = "";
 
     //Address
@@ -488,7 +488,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (isDocsDoneEnabled) {
                         if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
                             identityVerificationViewModel.getAddBusinessUser();
-                        }else {
+                        } else {
                             businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
                         }
                     }
@@ -664,10 +664,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         isNewCompanyFlag = true;
-                        if (selectedPage == 2){
+                        if (selectedPage == 2) {
                             businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
-                        }
-                        else {
+                        } else {
                             companyInfoAPICall(prepareRequest());
                         }
 
