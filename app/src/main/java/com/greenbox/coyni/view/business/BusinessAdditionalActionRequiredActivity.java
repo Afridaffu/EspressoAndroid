@@ -545,9 +545,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
                         fileUpload.replace(verificationKey.trim().hashCode(), "false");
                     }
-                    if (Utils.isKeyboardVisible) {
-                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                    }
+//                    if (Utils.isKeyboardVisible) {
+//                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+//                    }
                     enableOrDisableNext();
                 }
             }
