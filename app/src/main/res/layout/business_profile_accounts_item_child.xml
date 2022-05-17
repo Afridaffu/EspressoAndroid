@@ -109,12 +109,13 @@
                 android:src="@drawable/ic_add_circle" />
 
             <TextView
+                android:id="@+id/addDbaText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:fontFamily="@font/opensans_semibold"
                 android:text="Add DBA "
-                android:textColor="@color/primary_black"
+                android:textColor="@drawable/dba_text_enable_disable"
                 android:textSize="@dimen/_11sdp" />
         </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import static com.microblink.blinkcard.MicroblinkSDK.getApplicationContext;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,10 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView txvCompanyName;
-        private ImageView imvTickIcon,profileImage;
+        private ImageView imvTickIcon, profileImage;
         private View viewLine;
-        private  TextView statusTV;
-        private  LinearLayout statusLL;
+//        private TextView statusTV;
+//        private LinearLayout statusLL;
 
 
         public MyViewHolder(View view) {
@@ -41,13 +42,13 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
             imvTickIcon = (ImageView) view.findViewById(R.id.tickIcon);
             profileImage = (ImageView) view.findViewById(R.id.profileImage);
             viewLine = (View) view.findViewById(R.id.viewLine);
-             statusTV = (TextView) view.findViewById(R.id.statusTV);
-             statusLL = (LinearLayout) view.findViewById(R.id.statusLL);
+//            statusTV = (TextView) view.findViewById(R.id.statusTV);
+//            statusLL = (LinearLayout) view.findViewById(R.id.statusLL);
         }
     }
 
 
-    public AddNewBusinessAccountDBAAdapter(List<ProfilesResponse.Profiles> list, Context context,OnSelectListner listener) {
+    public AddNewBusinessAccountDBAAdapter(List<ProfilesResponse.Profiles> list, Context context, OnSelectListner listener) {
         this.mContext = context;
         this.listCompany = list;
         this.listener = listener;
@@ -60,6 +61,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
         return new MyViewHolder(itemView);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
@@ -70,31 +72,41 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                 holder.viewLine.setVisibility(View.VISIBLE);
             }
 
+
             if (listCompany.get(position).isSelected()) {
                 holder.imvTickIcon.setVisibility(View.VISIBLE);
                 holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_green));
-                holder.statusLL.setVisibility(View.GONE);
+//                holder.statusLL.setVisibility(View.GONE);
             } else {
                 holder.imvTickIcon.setVisibility(View.GONE);
-                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
-                if(!listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+//                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
+//                if (!listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//
+//                    if (listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+//                        holder.statusLL.setVisibility(View.VISIBLE);
+//                        holder.statusLL.setBackgroundColor(mContext.getColor(R.color.default_red));
+//                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
+//                    } else if (listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+//                        holder.statusLL.setVisibility(View.VISIBLE);
+//                        holder.statusLL.setBackgroundColor(mContext.getColor(R.color.under_review_blue));
+//                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
+//                    } else {
+//                        holder.statusLL.setVisibility(View.VISIBLE);
+//                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
+//                    }
+//                } else {
+//                    holder.statusLL.setVisibility(View.GONE);
+//                }
 
-                    if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())){
-                        holder.statusLL.setVisibility(View.VISIBLE);
-                        holder.statusLL.setBackgroundColor(mContext.getColor(R.color.default_red));
-                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
-                    } else if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())){
-                        holder.statusLL.setVisibility(View.VISIBLE);
-                        holder.statusLL.setBackgroundColor(mContext.getColor(R.color.under_review_blue));
-                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
-                    } else {
-                        holder.statusLL.setVisibility(View.VISIBLE);
-                        holder.statusTV.setText(listCompany.get(position).getAccountStatus());
-                    }
-                } else {
-                    holder.statusLL.setVisibility(View.GONE);
-                }
-
+            }
+            if (listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                    listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                    listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                holder.itemView.setEnabled(false);
+                holder.txvCompanyName.setEnabled(false);
+            } else {
+                holder.itemView.setEnabled(true);
+                holder.txvCompanyName.setEnabled(true);
             }
 
             if (listCompany.get(position).getImage() != null
@@ -121,7 +133,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
                         } else {
                             listCompany.get(i).setSelected(false);
-                           // listener.selectedItem(null);
+                            // listener.selectedItem(null);
                         }
                     }
                     notifyDataSetChanged();
@@ -137,7 +149,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
         return listCompany.size();
     }
 
-    public interface OnSelectListner{
+    public interface OnSelectListner {
         void selectedItem(ProfilesResponse.Profiles item);
     }
 
