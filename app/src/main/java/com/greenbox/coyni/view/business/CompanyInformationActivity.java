@@ -664,6 +664,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         isNewCompanyFlag = true;
+                        isApiCalled = true;
+                        setResult(RESULT_OK);
                         if (selectedPage == 2) {
                             businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
                         } else {
@@ -709,8 +711,6 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     CompanyInformationActivity.this, "", companyInfoResponse.getError().getFieldErrors().get(0));
                         }
                     }
-                    isApiCalled = true;
-                    setResult(RESULT_OK);
 
                 }
             });
