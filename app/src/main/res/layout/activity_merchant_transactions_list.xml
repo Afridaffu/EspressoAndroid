@@ -67,6 +67,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:layout_toLeftOf="@id/filtericonIV"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"

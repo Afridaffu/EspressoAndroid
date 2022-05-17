@@ -92,7 +92,7 @@ public class DisplayImageUtility {
     public void addImage(String key, ImageView imageView, Integer resId) {
         if (!android.util.Patterns.WEB_URL.matcher(key).matches()) {
             if (imageCache.get(key) != null) {
-                LogUtils.v(TAG, "from cache");
+                LogUtils.v(TAG, "Glide from cache");
                 imageView.setImageBitmap(imageCache.get(key));
                 return;
             }
@@ -110,11 +110,15 @@ public class DisplayImageUtility {
         } else {
             imageView.setImageResource(resId);
             if (imageCache.get(key) != null) {
-                LogUtils.v(TAG, "from cache");
+                LogUtils.v(TAG, "Glide from cache1");
                 imageView.setImageBitmap(imageCache.get(key));
                 return;
             }
             tempMap.put(key, key);
+            if (!imageIdMap.containsKey(key)) {
+                imageIdMap.put(key, new ArrayList<>());
+            }
+            imageIdMap.get(key).add(imageView);
             getImageFromUrl(key);
         }
     }
