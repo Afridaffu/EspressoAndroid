@@ -260,7 +260,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    Log.e("onPageScrolled", "onPageScrolled " + position);
+                    Log.e("onPageScrolled", "onPageScrolled " + position + " " + positionOffset + " " + positionOffsetPixels);
 
                     if (position == 0) {
                         companynameET.requestFocus();
@@ -433,10 +433,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             });
 
             addressNextCV.setOnClickListener(v -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeAddr < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeAddr = SystemClock.elapsedRealtime();
                 if (isAddressNextEnabled) {
                     if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
                         identityVerificationViewModel.getAddBusinessUser();
@@ -481,10 +481,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTimeDocs < 2000) {
                         return;
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
+                    mLastClickTimeDocs = SystemClock.elapsedRealtime();
                     if (isDocsDoneEnabled) {
                         if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
                             identityVerificationViewModel.getAddBusinessUser();
@@ -1459,6 +1459,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         public int getItemPosition(@NonNull Object object) {
             return POSITION_NONE;
         }
+
     }
 
     private void chooseBusinessEntityPopup(final Context context, EditText editText) {

@@ -95,11 +95,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 startActivity(new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class));
             });
             initFields();
-
-//            if (!addBusiness) {
-//                showProgressDialog();
-//                businessIdentityVerificationViewModel.getBusinessTracker();
-//            }
             initObservers();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -616,8 +611,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     protected void onResume() {
         try {
             super.onResume();
-            if (Utils.isKeyboardVisible)
-                Utils.hideKeypad(this);
+//            if (Utils.isKeyboardVisible)
+//                Utils.hideKeypad(this);
             if (!addBusiness) {
                 showProgressDialog();
                 businessIdentityVerificationViewModel.getBusinessTracker();
