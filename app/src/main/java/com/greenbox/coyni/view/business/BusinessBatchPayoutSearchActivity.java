@@ -124,7 +124,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                             BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
                             batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
                             batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
-
+                            dismissDialog();
                             noMorePayoutTransactions.setVisibility(View.GONE);
                         } else {
                             noMorePayoutTransactions.setVisibility(View.VISIBLE);
@@ -148,11 +148,12 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     noMorePayoutTransactions.setVisibility(View.GONE);
                     filterIconIV.setImageResource(R.drawable.ic_filtericon);
                     getBatchListData();
+                    dismissDialog();
 //                    BatchPayoutListData batchPayoutListData = new BatchPayoutListData();
 //                    batchPayoutListData.setCurrentPageNo(String.valueOf(currentPage));
 //                    batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
                     cynTV.setVisibility(View.VISIBLE);
-                    getBatchListData();
+//                    getBatchListData();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -181,6 +182,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                     batchFilter = (ReserveFilter) value;
                     filterIconIV.setImageResource(R.drawable.ic_filtericon);
                     getBatchListData();
+                    dismissDialog();
+
                 }
                 payoutList.clear();
             }
@@ -253,12 +256,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (charSequence.length() > 12) {
+        if (charSequence.length() > 30) {
             payoutList.clear();
             payoutAPI(charSequence.toString());
+            dismissDialog();
             cynTV.setVisibility(View.VISIBLE);
             noPayoutTransactions.setVisibility(View.GONE);
-        } else if (charSequence.length() > 0 && charSequence.length() < 12) {
+        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
             noPayoutTransactions.setVisibility(View.VISIBLE);
             cynTV.setVisibility(View.GONE);
             recyclerViewPayouts.setVisibility(View.GONE);
@@ -268,6 +272,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             recyclerViewPayouts.setVisibility(View.VISIBLE);
 //            businessDashboardViewModel.getPayoutListData(li);
             getBatchListData();
+            dismissDialog();
         }
     }
 
