@@ -57,7 +57,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends BaseActivity {
-    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
+    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType;
     private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
@@ -97,7 +97,7 @@ public class DBAInfoDetails extends BaseActivity {
             phoneNumberTV = findViewById(R.id.phoneNumberTV);
             addressTV = findViewById(R.id.addressTV);
             businessType = findViewById(R.id.businessTypeTV);
-            dba_imageTextTV = findViewById(R.id.dba_imageTextTV);
+//            dba_imageTextTV = findViewById(R.id.dba_imageTextTV);
             dba_userProfileIV = findViewById(R.id.dba_userProfileIV);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -460,12 +460,6 @@ public class DBAInfoDetails extends BaseActivity {
                         if (imageResponse.getStatus().toLowerCase().equals("success")) {
 
                             try {
-                                dba_userProfileIV.setVisibility(View.GONE);
-                                dba_imageTextTV.setVisibility(View.VISIBLE);
-                                String imageTextNew = "";
-                                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-                                dba_imageTextTV.setText(imageTextNew);
                                 dashboardViewModel.meProfile();
                                 Utils.showCustomToast(DBAInfoDetails.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                             } catch (Exception e) {
@@ -491,20 +485,20 @@ public class DBAInfoDetails extends BaseActivity {
 
     private void bindImage(String imageString, DBAInfoResp dbaInfoResp) {
         try {
-            dba_userProfileIV.setVisibility(View.GONE);
-            dba_imageTextTV.setVisibility(View.VISIBLE);
+//            dba_userProfileIV.setVisibility(View.GONE);
+//            dba_imageTextTV.setVisibility(View.VISIBLE);
 //            business_userProfileIV.setVisibility(View.GONE);
 //            business_imageTextTV.setVisibility(View.VISIBLE);
-            String imageTextNew = "";
-            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-            dba_imageTextTV.setText(imageTextNew);
+//            String imageTextNew = "";
+//            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+//                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+//            dba_imageTextTV.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
                 try {
 
                     dba_userProfileIV.setVisibility(View.VISIBLE);
-                    dba_imageTextTV.setVisibility(View.GONE);
+//                    dba_imageTextTV.setVisibility(View.GONE);
 
                     DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                     utility.addImage(imageString.trim(), dba_userProfileIV, R.drawable.acct_profile);
@@ -513,25 +507,26 @@ public class DBAInfoDetails extends BaseActivity {
                     e.printStackTrace();
                 }
 
-            } else {
-                dba_userProfileIV.setVisibility(View.GONE);
-                dba_imageTextTV.setVisibility(View.VISIBLE);
-
-                String imageText = "";
-                try {
-                    if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 0) {
-                        if (dbaInfoResp.getData().getName().length() > 1) {
-                            imageText = imageText + dbaInfoResp.getData().getName().substring(0, 1).toUpperCase() +
-                                    dbaInfoResp.getData().getName().split(" ")[1].substring(0, 1).toUpperCase();
-                        } else {
-                            imageText = dbaInfoResp.getData().getName().toUpperCase();
-                        }
-                    }
-                    dba_imageTextTV.setText(imageText);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+//            else {
+//                dba_userProfileIV.setVisibility(View.GONE);
+//                dba_imageTextTV.setVisibility(View.VISIBLE);
+//
+//                String imageText = "";
+//                try {
+//                    if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 0) {
+//                        if (dbaInfoResp.getData().getName().length() > 1) {
+//                            imageText = imageText + dbaInfoResp.getData().getName().substring(0, 1).toUpperCase() +
+//                                    dbaInfoResp.getData().getName().split(" ")[1].substring(0, 1).toUpperCase();
+//                        } else {
+//                            imageText = dbaInfoResp.getData().getName().toUpperCase();
+//                        }
+//                    }
+//                    dba_imageTextTV.setText(imageText);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -591,8 +586,8 @@ public class DBAInfoDetails extends BaseActivity {
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     if (resultCode == RESULT_OK) {
                         Uri resultUri = result.getUri();
-                        dba_userProfileIV.setVisibility(View.VISIBLE);
-                        dba_imageTextTV.setVisibility(View.GONE);
+//                        dba_userProfileIV.setVisibility(View.VISIBLE);
+//                        dba_imageTextTV.setVisibility(View.GONE);
                         dba_userProfileIV.setImageURI(resultUri);
                         uploadImage();
 
