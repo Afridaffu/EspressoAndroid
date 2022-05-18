@@ -104,7 +104,7 @@
                             android:gravity="center"
                             android:fontFamily="@font/opensans_bold"
                             android:text="VT"
-                            android:background="@color/blue_light"
+                            android:background="@color/profile_gray"
                             android:textColor="@color/primary_green"
                             android:textSize="@dimen/_20sdp"
                             android:visibility="visible" />
