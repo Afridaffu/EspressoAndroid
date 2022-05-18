@@ -74,7 +74,6 @@ public class CustomerProfileActivity extends BaseActivity {
     ConstraintLayout userProfile;
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L, mLastClickTimeShare = 0L;
-    public static SQLiteDatabase mydatabase;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
     CoyniViewModel coyniViewModel;
@@ -138,7 +137,6 @@ public class CustomerProfileActivity extends BaseActivity {
             cardviewYourAccount = findViewById(R.id.cardviewYourAccount);
             statusDotCV = findViewById(R.id.statusDotCV);
             tvVersion = findViewById(R.id.tvVersion);
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);

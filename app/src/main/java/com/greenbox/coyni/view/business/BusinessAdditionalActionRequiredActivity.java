@@ -8,16 +8,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -40,6 +46,7 @@ import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.dialogs.AddCommentsDialog;
 import com.greenbox.coyni.dialogs.ApplicationApprovedDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.model.underwriting.InformationChangeData;
@@ -67,7 +74,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
+public class BusinessAdditionalActionRequiredActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     public ScrollView scrollview;
     private LinearLayout additionReservedLL, llApprovedReserved, llHeading, llBottomView, additionalDocumentRequiredLL,
             websiteRevisionRequiredLL, informationRevisionLL;
@@ -106,7 +113,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(!reservedRule) {
+        if (!reservedRule) {
             super.onBackPressed();
         }
     }
@@ -129,6 +136,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
         fileUpload = new HashMap<Integer, String>();
         documentsFIle = new ArrayList<>();
+
+        setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivity.this);
 
         imvCLose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,8 +181,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
             informationJSON.put("websiteUpdates", website);
 
             JSONArray proposals = new JSONArray();
-            JSONObject proposalsObj = new JSONObject();
-            JSONArray proposalsArray = new JSONArray();
 
             if (actionRequired.getData().getInformationChange() != null) {
                 for (int i = 0; i < actionRequired.getData().getInformationChange().size(); i++) {
@@ -181,13 +188,17 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     List<ProposalsData> proposalsData = data.getProposals();
                     for (int j = 0; j < proposalsData.size(); j++) {
                         ProposalsData proposal = proposalsData.get(j);
+                        String type = proposal.getDisplayName();
+                        JSONObject proposalsObj = new JSONObject();
+                        JSONArray proposalsArray = new JSONArray();
                         if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
                             for (int k = 0; k < proposal.getProperties().size(); k++) {
                                 ProposalsPropertiesData property = proposal.getProperties().get(k);
                                 JSONObject propertyObj = new JSONObject();
-                                propertyObj.put("isUserAccepted", proposalsMap.get(capFirstLetter(property.getDisplayName())).isUserAccepted());
+                                String verificationKey = type+ "" + capFirstLetter(property.getDisplayName());
+                                propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
                                 propertyObj.put("name", property.getName());
-                                propertyObj.put("userMessage", proposalsMap.get(capFirstLetter(property.getDisplayName())).getUserMessage());
+                                propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
                                 proposalsArray.put(propertyObj);
                             }
                         }
@@ -197,7 +208,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                         proposalsObj.put("properties", proposalsArray);
 
                         proposals.put(proposalsObj);
-
                         informationJSON.put("proposals", proposals);
                     }
 
@@ -382,7 +392,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                 }
             });
         }
-        if(imagesList.size() > 0) {
+        if (imagesList.size() > 0) {
             DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
             utility.addImages(imagesList);
         }
@@ -397,13 +407,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         if (informationChangeData != null && informationChangeData.size() > 0) {
             InformationChangeData changeData = informationChangeData.get(0);
             if (changeData.getProposals() != null && changeData.getProposals().size() > 0) {
+                proposalsMap = new HashMap<>();
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
-                        String type = data.getType();
                     List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
-                        proposalsMap = new HashMap<>();
                         for (int i = 0; i < proposalsPropertiesData.size(); i++) {
                             View inf1 = getLayoutInflater().inflate(R.layout.additional_information_change, null);
                             LinearLayout websiteChangeLL = inf1.findViewById(R.id.informationChange);
@@ -418,11 +427,14 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
                            if(data.getType()!=null) {
-                               displayNameTV.setText(type); }
-                            String companyname = capFirstLetter(propertiesData.getDisplayName());//.substring(0, 1).toUpperCase() + propertiesData.getName().substring(1);
-                            if (propertiesData.getDisplayName() != null ) {
-                                companyNameTV.setText(companyname);
-                            }
+                               displayNameTV.setText(data.getDisplayName());
+                           }
+
+                            String companyname = propertiesData.getDisplayName() != null ? propertiesData.getDisplayName() : "";
+//                            if (propertiesData.getDisplayName() != null ) {
+//                                companyname = propertiesData.getDisplayName();
+//                            }
+                            companyNameTV.setText(companyname);
                             if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
                                 companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
                                 companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
@@ -430,20 +442,22 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                 companyNameOriginal.setText(propertiesData.getOriginalValue());
                                 companyNameProposed.setText(propertiesData.getProposedValue());
                             }
-                            
-                            if(propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
+
+                            if (propertiesData.getAdminMessage() != null && !propertiesData.getAdminMessage().equalsIgnoreCase("")) {
                                 String message = "";
-                                if(!propertiesData.getAdminMessage().startsWith("\"")) {
+                                if (!propertiesData.getAdminMessage().startsWith("\"")) {
                                     message += "\"";
                                 }
                                 message += propertiesData.getAdminMessage();
-                                if(!propertiesData.getAdminMessage().endsWith("\"")) {
+                                if (!propertiesData.getAdminMessage().endsWith("\"")) {
                                     message += "\"";
                                 }
                                 tvMessage.setText(message);
                             }
-                            proposalsMap.put(companyname, propertiesData);
-                            fileUpload.put(companyname.trim().hashCode(), null);
+
+                            String verificationKey = data.getDisplayName()+ "" + companyname;
+                            proposalsMap.put(verificationKey, propertiesData);
+                            fileUpload.put(verificationKey.trim().hashCode(), null);
 
                             informationRevisionLL.addView(inf1, layoutParams);
                             llAccept.setTag(inf1);
@@ -457,11 +471,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     tvAcceptMsg.setText(getResources().getString(R.string.Accepted) + " " + Utils.getCurrentDate());
                                     View v = (View) view.getTag();
                                     TextView tv = v.findViewById(R.id.comapny_nameTV);
-                                    if (fileUpload.containsKey(companyname.trim().hashCode())) {
-                                        fileUpload.replace(companyname.trim().hashCode(), "true");
+                                    TextView displayNameTV = v.findViewById(R.id.display_nameTV);
+                                    String verificationKey1 = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                                    if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
+                                        fileUpload.replace(verificationKey1.trim().hashCode(), "true");
                                     }
-                                    proposalsMap.get(companyname).setUserAccepted(true);
-                                    proposalsMap.get(companyname).setUserMessage("Accepted");
+                                    proposalsMap.get(verificationKey1).setUserAccepted(true);
+                                    proposalsMap.get(verificationKey1).setUserMessage("Accepted");
                                     enableOrDisableNext();
 
                                 }
@@ -476,7 +492,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                                     mLastClickTime = SystemClock.elapsedRealtime();
                                     View v = (View) view.getTag();
                                     showCommentDialog(v);
-                                    Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
+                                    if (!Utils.isKeyboardVisible)
+                                        Utils.shwForcedKeypad(BusinessAdditionalActionRequiredActivity.this);
                                 }
                             });
                         }
@@ -500,12 +517,12 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     private void showCommentDialog(final View view) {
         TextView tv = view.findViewById(R.id.comapny_nameTV);
+        TextView displayNameTV = view.findViewById(R.id.display_nameTV);
         TextView tvRemarks = view.findViewById(R.id.remarksTV);
         ImageView imvAcceptTick = view.findViewById(R.id.imvAccepttick);
         LinearLayout llDecline = view.findViewById(R.id.declineLL);
         LinearLayout llAccept = view.findViewById(R.id.acceptLL);
         TextView tvDeclinedMsg = view.findViewById(R.id.declineMsgTV);
-        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
         AddCommentsDialog dialog = new AddCommentsDialog(BusinessAdditionalActionRequiredActivity.this, null);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
@@ -520,14 +537,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
                     tvDeclinedMsg.setVisibility(View.VISIBLE);
                     tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
                     llDecline.setVisibility(View.GONE);
-                    proposalsMap.get(tv.getText().toString()).setUserAccepted(false);
-                    proposalsMap.get(tv.getText().toString()).setUserMessage(comm);
-                    if (fileUpload.containsKey(tv.getText().toString().trim().hashCode())) {
-                        fileUpload.replace(tv.getText().toString().trim().hashCode(), "false");
+
+                    String verificationKey = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                    proposalsMap.get(verificationKey).setUserAccepted(false);
+                    proposalsMap.get(verificationKey).setUserMessage(comm);
+                    if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
+                        fileUpload.replace(verificationKey.trim().hashCode(), "false");
                     }
-                    if(Utils.isKeyboardVisible) {
-                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
-                    }
+//                    if (Utils.isKeyboardVisible) {
+//                        Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
+//                    }
                     enableOrDisableNext();
                 }
             }
@@ -536,7 +555,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if(Utils.isKeyboardVisible) {
+                if (Utils.isKeyboardVisible) {
                     Utils.hideKeypad(BusinessAdditionalActionRequiredActivity.this);
                 }
             }
@@ -561,15 +580,15 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
-        if(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")){
+        if (actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")) {
             tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
-        }else {
+        } else {
             tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().replace("", "CYN")));
         }
 
-        if(actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")){
+        if (actionRequiredResponse.getData().getReserveRule().getHighTicket().contains("CYN")) {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket()));
-        }else {
+        } else {
             tv_ht.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getHighTicket().replace("", "CYN")));
         }
         String percent = Utils.convertBigDecimalUSDC(String.valueOf(actionRequiredResponse.getData().getReserveRule().getReserveAmount().toString()));
@@ -755,7 +774,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
 
     }
 
-
     public void saveFileFromCamera(File cameraFIle) {
 
         LogUtils.d(TAG, "camera" + cameraFIle);
@@ -779,7 +797,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         enableOrDisableNext();
         LogUtils.d(TAG, "fileUpload" + fileUpload);
     }
-
 
     public void uploadDocumentFromLibrary(Uri uri, int reqType) {
         try {
@@ -832,6 +849,37 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
     }
 
 }

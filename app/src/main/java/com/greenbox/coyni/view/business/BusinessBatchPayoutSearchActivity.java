@@ -305,6 +305,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         listRequest.setPayoutType(Utils.batchNow);
         ArrayList<Integer> status = new ArrayList<>();
         status.add(Utils.paid);
+        status.add(Utils.payoutInProgress);
         //status.add(4);
         listRequest.setStatus(status);
         if (batchFilter != null && batchFilter.isFilterApplied) {

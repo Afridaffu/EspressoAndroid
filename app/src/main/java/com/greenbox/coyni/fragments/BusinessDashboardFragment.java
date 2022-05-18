@@ -55,6 +55,7 @@ import com.greenbox.coyni.model.business_id_verification.CancelApplicationRespon
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.profile.Profile;
+import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
@@ -104,7 +105,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutAmountTV, cynTV;
-    private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV, mTvMonthlyVolume, mTvHighTickets;
+    private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV, mTvMonthlyVolume, mTvHighTickets,reserveRuleTV;
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
@@ -276,6 +277,11 @@ public class BusinessDashboardFragment extends BaseFragment {
         mHighestTicket = mCurrentView.findViewById(R.id.highest_ticket);
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
+        reserveRuleTV = mCurrentView.findViewById(R.id.reserveRuleTV);
+        mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
+
+//        businessDashboardViewModel.getRollingRuleDetails();
+
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
@@ -341,6 +347,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             startTracker();
         });
+
     }
 
     private void initObservers() {
@@ -431,7 +438,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
-
 
         businessDashboardViewModel.getBatchNowSlideResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchNowResponse>() {
             @Override
@@ -586,6 +592,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
+
     }
 
     private void showData(List<BatchPayoutListItems> items) {
@@ -1023,11 +1030,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
-        if (listItems != null && listItems.size() > 0) {
+        int i = 0;
+        boolean isOpen = false, isPaid = false;
+        if (listItems != null && listItems.size() > 0 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isPaid) {
             batchNoTransaction.setVisibility(View.GONE);
-            int i = 0;
             Collections.sort(listItems, Collections.reverseOrder());
-            boolean isOpen = false, isPaid = false;
             while (i < listItems.size()) {
                 if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
 
@@ -1049,7 +1056,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                         Log.d("date format", date);
                     }
                     isOpen = true;
-                } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
+                } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.INPROGRESS) && !isPaid) {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
@@ -1105,6 +1112,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
                 j++;
             }
+            batchView.setVisibility(View.VISIBLE);
+
         } else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
