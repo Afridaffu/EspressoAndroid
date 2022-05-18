@@ -478,6 +478,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     try {
                         if (paymentMethodsResponse.getData().getSignetCount() < paymentMethodsResponse.getData().getMaxSignetAccountsAllowed()) {
                             strCurrent = "signet";
+                            strOnPauseScreen = "";
                             Intent i = new Intent(SelectPaymentMethodActivity.this, AddPaymentSignetActivity.class);
                             startActivityForResult(i, 2);
                         }

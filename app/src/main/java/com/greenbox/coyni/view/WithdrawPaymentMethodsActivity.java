@@ -127,8 +127,18 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 4) {
                 if (strCurrent.equals("signet")) {
-                    isSignet = true;
-                    ControlMethod("addbpayment");
+//                    isSignet = true;
+                    //ControlMethod("addbpayment");
+                    if (signetList != null && signetList.size() > 0) {
+                        isSignet = true;
+                        ControlMethod("addbpayment");
+                    } else {
+                        ControlMethod("withdrawmethod");
+                        selectWithdrawMethod();
+                        strScreen = "withdrawmethod";
+                        strCurrent = "";
+                    }
+                    getPaymentMethods();
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -997,6 +1007,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        strCurrent = "";
+                        strScreen = "";
                         startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1014,6 +1026,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 //                            strCurrent = "signet";
 //                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
 //                            startActivityForResult(i, 4);
+                            strCurrent = "signet";
                             showAddPayment("signet");
                         }
                     } catch (Exception ex) {
