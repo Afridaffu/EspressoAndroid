@@ -279,7 +279,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         reserveRuleTV = mCurrentView.findViewById(R.id.reserveRuleTV);
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
-        businessDashboardViewModel.getRollingRuleDetails();
+//        businessDashboardViewModel.getRollingRuleDetails();
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
