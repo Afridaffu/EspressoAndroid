@@ -120,24 +120,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                 LogUtils.v("TAG", getIntent().getExtras()+"");
             }
 
-            Uri uri = getIntent().getData();
-            if(uri != null) {
-                List<String> parameters = uri.getPathSegments();
-                if(parameters != null) {
-                    for (String str : parameters) {
-                        LogUtils.v("Param - ", str);
-                    }
-                }
-                String authority = uri.getAuthority();
-                Set<String> queryParams = uri.getQueryParameterNames();
-                String message = "flow - " + authority + "\n";
-                for(String s : queryParams) {
-                    message += s+ " - " + uri.getQueryParameter(s) + "\n";
-                }
-
-                Utils.displayAlert(message, LoginActivity.this, "", "");
-            }
-
             initialization();
             initObserver();
         } catch (Exception ex) {

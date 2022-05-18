@@ -18,17 +18,15 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
-import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
-import com.greenbox.coyni.utils.CheckOutUtils;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
-import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
@@ -71,7 +69,6 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,7 +86,6 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
-import com.greenbox.coyni.view.business.TeamActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -894,9 +890,9 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKe
                                     if (uri != null && uri.isAbsolute() && !strScanWallet.equals(strWallet)) {
                                         Set<String> queryParams = uri.getQueryParameterNames();
                                         for (String s : queryParams) {
-                                            if (s.equalsIgnoreCase(CheckOutUtils.AMOUNT)) {
+                                            if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
                                                 strQRAmount = uri.getQueryParameter(s);
-                                            } else if (s.equalsIgnoreCase(CheckOutUtils.WALLET)) {
+                                            } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
                                                 strScanWallet = uri.getQueryParameter(s);
                                             }
                                         }

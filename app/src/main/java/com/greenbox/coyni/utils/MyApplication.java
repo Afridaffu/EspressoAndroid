@@ -63,12 +63,48 @@ public class MyApplication extends Application {
 
     private UserData mCurrentUserData;
     private static Context context;
+    private boolean isCheckOutFlag;
+    private String checkOutWalletId;
+    private String checkOutAmount;
+    private String action;
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = this;
         mCurrentUserData = new UserData();
+    }
+
+    public boolean isCheckOutFlag() {
+        return isCheckOutFlag;
+    }
+
+    public void setCheckOutFlag(boolean checkOutFlag) {
+        isCheckOutFlag = checkOutFlag;
+    }
+
+    public String getCheckOutWalletId() {
+        return checkOutWalletId;
+    }
+
+    public void setCheckOutWalletId(String checkOutWalletId) {
+        this.checkOutWalletId = checkOutWalletId;
+    }
+
+    public String getCheckOutAmount() {
+        return checkOutAmount;
+    }
+
+    public void setCheckOutAmount(String amount) {
+        this.checkOutAmount = amount;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 
     public static Context getContext() {

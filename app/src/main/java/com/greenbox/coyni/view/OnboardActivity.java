@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,7 +32,9 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -44,6 +47,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Set;
 
 public class OnboardActivity extends BaseActivity {
     private static final int AUTO_SCROLL_THRESHOLD_IN_MILLI = 3000;
@@ -110,6 +114,18 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setStrReferer(refererUrl);
             }
 
+            Uri uri = getIntent().getData();
+            if (uri != null && uri.isAbsolute() ) {
+                Set<String> queryParams = uri.getQueryParameterNames();
+                objMyApplication.setCheckOutFlag(true);
+                for (String s : queryParams) {
+                    if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
+                        objMyApplication.setCheckOutAmount( uri.getQueryParameter(s));
+                    } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
+                        objMyApplication.setCheckOutWalletId( uri.getQueryParameter(s));
+                    }
+                }
+            }
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
                     layoutOnBoarding.setVisibility(View.GONE);
@@ -120,7 +136,11 @@ public class OnboardActivity extends BaseActivity {
                     faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
                 }
             } else {
-                if (strFirstUser.equals("")) {
+                if (objMyApplication.isCheckOutFlag()){
+                    startActivity(new Intent(OnboardActivity.this,LoginActivity.class));
+                    finish();
+                }
+                else if (strFirstUser.equals("")) {
                     layoutOnBoarding.setVisibility(View.VISIBLE);
                     layoutAuth.setVisibility(View.GONE);
                 } else {
@@ -130,6 +150,7 @@ public class OnboardActivity extends BaseActivity {
                     finish();
                 }
             }
+
 
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);

@@ -45,6 +45,7 @@ import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
 import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
@@ -251,6 +252,18 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     dashboardViewModel.getUserDetail(strWalletId);
                 } else {
                     Utils.displayAlert(getString(R.string.internet), PayToMerchantActivity.this, "", "");
+                }
+            }
+
+            if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount)!= null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")){
+                String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
+                payET.setText(Utils.convertTwoDecimal(amount));
+                payET.setEnabled(false);
+                if (payValidation()) {
+                    isPayClick = true;
+                    pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+                    cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+                    calculateFee(Utils.USNumberFormat(cynValue));
                 }
             }
             businessIdentityVerificationViewModel.getBusinessType();

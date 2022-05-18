@@ -40,6 +40,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
@@ -52,11 +54,15 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
+import com.greenbox.coyni.model.wallet.UserDetails;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
+import com.greenbox.coyni.view.business.PayToMerchantActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -106,6 +112,7 @@ public class DashboardActivity extends AppCompatActivity {
             initialization();
             initObserver();
             firebaseToken();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -184,6 +191,12 @@ public class DashboardActivity extends AppCompatActivity {
             SetDB();
             if (strFirstUser == null || strFirstUser.equals("")) {
                 saveFirstUser();
+            }
+
+            if (objMyApplication.isCheckOutFlag() && objMyApplication.getCheckOutWalletId() != null && objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+                startActivity(new Intent(DashboardActivity.this,PayToMerchantActivity.class)
+                .putExtra(CheckOutConstants.WALLET_ID,objMyApplication.getCheckOutWalletId())
+                .putExtra(CheckOutConstants.CheckOutAmount,objMyApplication.getCheckOutAmount()));
             }
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -770,6 +783,7 @@ public class DashboardActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     //Shiva Changes
@@ -1112,6 +1126,8 @@ public class DashboardActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+
     }
 
 }
