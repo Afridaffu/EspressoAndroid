@@ -23,6 +23,7 @@ import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
+import com.greenbox.coyni.utils.CheckOutUtils;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
@@ -70,6 +71,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -102,12 +104,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKeyboardVisibilityListener {
+public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKeyboardVisibilityListener {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
     LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL, scanMeScanCodeLL;
     ConstraintLayout flashLL;
@@ -884,8 +887,23 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                                     } else {
                                         strScanWallet = result.toString();
                                     }
-//                                    getUserDetails(strScanWallet);
-                                    if (!strScanWallet.equals(strWallet)) {
+                                    Uri uri = null;
+                                    if (strScanWallet!=null) {
+                                        uri = Uri.parse(strScanWallet);
+                                    }
+                                    if (uri != null && uri.isAbsolute() && !strScanWallet.equals(strWallet)) {
+                                        Set<String> queryParams = uri.getQueryParameterNames();
+                                        for (String s : queryParams) {
+                                            if (s.equalsIgnoreCase(CheckOutUtils.AMOUNT)) {
+                                                strQRAmount = uri.getQueryParameter(s);
+                                            } else if (s.equalsIgnoreCase(CheckOutUtils.WALLET)) {
+                                                strScanWallet = uri.getQueryParameter(s);
+                                            }
+                                        }
+                                        getUserDetails(strScanWallet);
+
+//
+                                    } else if (!strScanWallet.equals(strWallet)) {
                                         if (!android.util.Patterns.WEB_URL.matcher(strScanWallet).matches()) {
                                             if (!isQRScan) {
                                                 isQRScan = true;

@@ -73,6 +73,7 @@ import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
+import com.journeyapps.barcodescanner.Util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -511,7 +512,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                             && data.get(position).getTransactionSubType() == null) {
 
                                         if (data.get(position).getTotalAmount() != null) {
-                                            mMISCFees.setText(data.get(position).getTotalAmount());
+                                            mMISCFees.setText(Utils.convertTwoDecimal(data.get(position).getTotalAmount()));
                                             miscFee = Double.parseDouble(data.get(position).getTotalAmount());
                                         }
                                     } else if (data.get(position).getTransactionType() == null && data.get(position).getTransactionSubType() == null) {
@@ -544,6 +545,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                                 mNetAmount.setText(defaultAmount);
                                 mAverageTicket.setText(defaultAmount);
                                 mHighestTicket.setText(defaultAmount);
+                                mDateHighestTicket.setText("");
                             }
                         } else {
                             mGrossAmount.setText(defaultAmount);
@@ -554,6 +556,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                             mNetAmount.setText(defaultAmount);
                             mAverageTicket.setText(defaultAmount);
                             mHighestTicket.setText(defaultAmount);
+                            mDateHighestTicket.setText("");
                         }
                     }
                 } catch (NumberFormatException e) {
@@ -1202,6 +1205,15 @@ public class BusinessDashboardFragment extends BaseFragment {
         request.setFromDate(strFromDate);
         request.setToDate(strToDate);
         try {
+            mGrossAmount.setText(defaultAmount);
+            mTransactions.setText("0");
+            mRefunds.setText(defaultAmount);
+            mProcessingFees.setText(defaultAmount);
+            mMISCFees.setText(defaultAmount);
+            mNetAmount.setText(defaultAmount);
+            mAverageTicket.setText(defaultAmount);
+            mHighestTicket.setText(defaultAmount);
+            mDateHighestTicket.setText("");
             businessDashboardViewModel.businessActivity(request);
         } catch (Exception e) {
             e.printStackTrace();
