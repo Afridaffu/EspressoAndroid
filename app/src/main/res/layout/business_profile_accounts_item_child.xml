@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/businessProfileAccountItemChildImage"
                 android:scaleType="fitXY"
-                android:src="@color/light_gray"
+                android:src="@drawable/acct_profile"
                 android:visibility="visible" />
 
             <TextView

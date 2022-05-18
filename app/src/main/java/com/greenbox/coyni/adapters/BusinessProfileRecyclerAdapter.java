@@ -123,13 +123,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (detailInfo.getFullName() != null) {
                 childItem.setText(detailInfo.getFullName());
             } else {
-                childItem.setText("");
+                childItem.setText("DBA Name");
             }
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             if (detailInfo.getDbaName() != null) {
                 childItem.setText(detailInfo.getDbaName());
             } else {
-                childItem.setText("");
+                childItem.setText("DBA Name");
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
@@ -146,11 +146,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //                        .into(profileImage);
             }
         }
-        if (showdba && isLastChild && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
-            addDBA.setVisibility(View.VISIBLE);
-        } else {
+        if (showdba && isLastChild && detailInfo.getAccountType().equals(Utils.PERSONAL)) {
             addDBA.setVisibility(View.GONE);
         }
+//        else {
+//            addDBA.setVisibility(View.GONE);
+//        }
 
         if (selectedID == detailInfo.getId()) {
             imvTickIcon.setVisibility(View.VISIBLE);
