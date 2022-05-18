@@ -115,24 +115,24 @@ public class DashboardActivity extends BaseActivity {
             initObserver();
             firebaseToken();
             Handler handler = new Handler();
-            handler. postDelayed(new Runnable() {
-                public void run() {
-                    try {
-                        if (objMyApplication.getCheckOutModel() != null) {
-                            CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
-                            if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null && objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
-                                showProgressDialog();
+            if (objMyApplication.getCheckOutModel() != null) {
+                showProgressDialog();
+                CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
+                if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null && objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+                    handler. postDelayed(new Runnable() {
+                        public void run() {
+                            try {
                                 startActivity(new Intent(DashboardActivity.this,PayToMerchantActivity.class)
                                         .putExtra(CheckOutConstants.WALLET_ID,checkOutModel.getCheckOutWalletId())
                                         .putExtra(CheckOutConstants.CheckOutAmount,checkOutModel.getCheckOutAmount()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
 
+                        }
+                    }, 10000);
                 }
-            }, 10000);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
