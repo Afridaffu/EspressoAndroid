@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -36,6 +37,7 @@ import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
@@ -52,6 +54,7 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.GiftCardBindingLayoutActivity;
 import com.greenbox.coyni.view.PINActivity;
@@ -61,7 +64,7 @@ import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
-public class PayToMerchantActivity extends AppCompatActivity implements TextWatcher {
+public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
     MyApplication objMyApplication;
     EditText payET;
     Dialog cvvDialog, prevDialog;
@@ -99,8 +102,30 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_pay_to_merchant);
+            dismissDialog();
             initialization();
             initObservers();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount)!= null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")){
+                        String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
+                        payET.setText(Utils.convertTwoDecimal(amount));
+                        payET.setEnabled(false);
+                        if (payValidation()) {
+                            isPayClick = true;
+                            pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+                            cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+                            calculateFee(Utils.USNumberFormat(cynValue));
+                        }
+                    }
+                }
+            },2000);
+
+            CheckOutModel checkOutModel = new CheckOutModel();
+            objMyApplication.setCheckOutModel(checkOutModel);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -255,17 +280,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
 
-            if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount)!= null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")){
-                String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
-                payET.setText(Utils.convertTwoDecimal(amount));
-                payET.setEnabled(false);
-                if (payValidation()) {
-                    isPayClick = true;
-                    pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-                    cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
-                    calculateFee(Utils.USNumberFormat(cynValue));
-                }
-            }
             businessIdentityVerificationViewModel.getBusinessType();
 
             payET.addTextChangedListener(this);

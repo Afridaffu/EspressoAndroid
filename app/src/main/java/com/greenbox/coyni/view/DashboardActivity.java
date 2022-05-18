@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -47,6 +48,7 @@ import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
@@ -73,7 +75,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends BaseActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
     LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
@@ -112,7 +114,25 @@ public class DashboardActivity extends AppCompatActivity {
             initialization();
             initObserver();
             firebaseToken();
+            Handler handler = new Handler();
+            handler. postDelayed(new Runnable() {
+                public void run() {
+                    try {
+                        if (objMyApplication.getCheckOutModel() != null) {
+                            CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
+                            if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null && objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+                                showProgressDialog();
+                                startActivity(new Intent(DashboardActivity.this,PayToMerchantActivity.class)
+                                        .putExtra(CheckOutConstants.WALLET_ID,checkOutModel.getCheckOutWalletId())
+                                        .putExtra(CheckOutConstants.CheckOutAmount,checkOutModel.getCheckOutAmount()));
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
+                }
+            }, 10000);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -193,11 +213,6 @@ public class DashboardActivity extends AppCompatActivity {
                 saveFirstUser();
             }
 
-            if (objMyApplication.isCheckOutFlag() && objMyApplication.getCheckOutWalletId() != null && objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
-                startActivity(new Intent(DashboardActivity.this,PayToMerchantActivity.class)
-                .putExtra(CheckOutConstants.WALLET_ID,objMyApplication.getCheckOutWalletId())
-                .putExtra(CheckOutConstants.CheckOutAmount,objMyApplication.getCheckOutAmount()));
-            }
             layoutMainMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

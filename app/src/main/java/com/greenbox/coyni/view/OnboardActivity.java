@@ -30,6 +30,7 @@ import com.greenbox.coyni.fragments.FaceIdDisabled_BottomSheet;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.utils.CheckOutConstants;
@@ -115,16 +116,18 @@ public class OnboardActivity extends BaseActivity {
             }
 
             Uri uri = getIntent().getData();
+            CheckOutModel checkOutModel = new CheckOutModel();
             if (uri != null && uri.isAbsolute() ) {
                 Set<String> queryParams = uri.getQueryParameterNames();
-                objMyApplication.setCheckOutFlag(true);
+                checkOutModel.setCheckOutFlag(true);
                 for (String s : queryParams) {
                     if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
-                        objMyApplication.setCheckOutAmount( uri.getQueryParameter(s));
+                        checkOutModel.setCheckOutAmount( uri.getQueryParameter(s));
                     } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
-                        objMyApplication.setCheckOutWalletId( uri.getQueryParameter(s));
+                        checkOutModel.setCheckOutWalletId( uri.getQueryParameter(s));
                     }
                 }
+                objMyApplication.setCheckOutModel(checkOutModel);
             }
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
@@ -136,7 +139,7 @@ public class OnboardActivity extends BaseActivity {
                     faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
                 }
             } else {
-                if (objMyApplication.isCheckOutFlag()){
+                if (checkOutModel.isCheckOutFlag()){
                     startActivity(new Intent(OnboardActivity.this,LoginActivity.class));
                     finish();
                 }

@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -63,10 +64,7 @@ public class MyApplication extends Application {
 
     private UserData mCurrentUserData;
     private static Context context;
-    private boolean isCheckOutFlag;
-    private String checkOutWalletId;
-    private String checkOutAmount;
-    private String action;
+    private CheckOutModel checkOutModel;
 
     @Override
     public void onCreate() {
@@ -75,37 +73,14 @@ public class MyApplication extends Application {
         mCurrentUserData = new UserData();
     }
 
-    public boolean isCheckOutFlag() {
-        return isCheckOutFlag;
+    public CheckOutModel getCheckOutModel() {
+        return checkOutModel;
     }
 
-    public void setCheckOutFlag(boolean checkOutFlag) {
-        isCheckOutFlag = checkOutFlag;
+    public void setCheckOutModel(CheckOutModel checkOutModel) {
+        this.checkOutModel = checkOutModel;
     }
 
-    public String getCheckOutWalletId() {
-        return checkOutWalletId;
-    }
-
-    public void setCheckOutWalletId(String checkOutWalletId) {
-        this.checkOutWalletId = checkOutWalletId;
-    }
-
-    public String getCheckOutAmount() {
-        return checkOutAmount;
-    }
-
-    public void setCheckOutAmount(String amount) {
-        this.checkOutAmount = amount;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
 
     public static Context getContext() {
         return context;
