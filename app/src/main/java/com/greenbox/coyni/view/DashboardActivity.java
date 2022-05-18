@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.bank.SignOn;
@@ -101,7 +105,7 @@ public class DashboardActivity extends AppCompatActivity {
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
-//            getStates();
+            firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1080,6 +1084,31 @@ public class DashboardActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_CONTACTS},
                         REQUEST_READ_CONTACTS);
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void firebaseToken() {
+        try {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("", "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            String token = task.getResult();
+
+                            // Log and toast
+//                            String msg = getString(R.string.msg_token_fmt, token);
+//                            Log.d("", msg);
+//                            Toast.makeText(DashboardActivity.this, token, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         } catch (Exception ex) {
             ex.printStackTrace();
         }

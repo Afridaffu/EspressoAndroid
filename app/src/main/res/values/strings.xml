@@ -677,6 +677,8 @@
     <string name="please_click_the_upload_button_below_to_proceed">Please click the “Upload” button below to proceed.</string>
     <string name="canceled_text">Application Canceled</string>
     <string name="declined_text">Application Declined</string>
+    <string name="act_rqrd_description">Thank you for your interest in coyni. After reviewing your account, the coyni team requires you to upload the following documentation within 30 days to continue account verification.</string>
+    <string name="default_notification_channel_id">Channel ID</string>
 
 
 </resources>

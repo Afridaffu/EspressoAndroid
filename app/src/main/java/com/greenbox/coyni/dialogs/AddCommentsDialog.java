@@ -122,4 +122,5 @@ public class AddCommentsDialog extends BaseDialog {
             }
         });
     }
+
 }

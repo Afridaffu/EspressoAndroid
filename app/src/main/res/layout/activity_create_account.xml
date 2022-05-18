@@ -187,7 +187,7 @@
                         android:id="@+id/emailET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="creditCardSecurityCode"
+                        android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                         android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@+-_."
                         android:fontFamily="@font/opensans_semibold"
                         android:imeOptions="actionNext"

@@ -364,6 +364,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
 //                                            launchDashboard();
 //                                            dbHandler.clearAllTables();
 //                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
+                                            objMyApplication.setStrRetrEmail("");
                                             Intent i = new Intent(PINActivity.this, LoginActivity.class);
                                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(i);
@@ -391,7 +392,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
 //                                        }
 
                                         try {
-//                                            objMyApplication.setStrRetrEmail("");
+                                            objMyApplication.setStrRetrEmail("");
 //                                            dbHandler.clearAllTables();
                                             Intent i = new Intent(PINActivity.this, LoginActivity.class);
 //                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
