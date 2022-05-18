@@ -95,7 +95,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L,mLastClickTimeAddr = 0L;
     MyApplication objMyApplication;
     public ScrollView dbaBasicSL, addressSL;
 
@@ -446,10 +446,10 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             });
 
             addressNextCV.setOnClickListener(v -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeAddr < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeAddr = SystemClock.elapsedRealtime();
                 if (isAddressNextEnabled) {
                     businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
                 }
@@ -907,8 +907,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     }
                     enableOrDisableNext();
 
-                    if (dbanameET.getText().toString().contains("  ")){
-                        dbanameET.setText(dbanameET.getText().toString().replace("  "," "));
+                    if (dbanameET.getText().toString().contains("  ")) {
+                        dbanameET.setText(dbanameET.getText().toString().replace("  ", " "));
                         dbanameET.setSelection(dbanameET.getText().length());
                     }
                 }
@@ -1014,7 +1014,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                     if (charSequence.length() > 0) {
                         timezoneTIL.setHint("Time Zone");
 //                        if (!timeZoneET.hasFocus())
-                            Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(timezoneTIL, getResources().getColor(R.color.primary_black));
                         isTimeZone = true;
                     } else {
                         timezoneTIL.setHint("Select Time Zone");
@@ -1051,8 +1051,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         }
                         enableOrDisableAddressNext();
 
-                        if (companyaddressET.getText().toString().contains("  ")){
-                            companyaddressET.setText(companyaddressET.getText().toString().replace("  "," "));
+                        if (companyaddressET.getText().toString().contains("  ")) {
+                            companyaddressET.setText(companyaddressET.getText().toString().replace("  ", " "));
                             companyaddressET.setSelection(companyaddressET.getText().length());
                         }
                     } catch (Resources.NotFoundException e) {
@@ -1099,8 +1099,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         enableOrDisableAddressNext();
 
 
-                        if (companyaddress2ET.getText().toString().contains("  ")){
-                            companyaddress2ET.setText(companyaddress2ET.getText().toString().replace("  "," "));
+                        if (companyaddress2ET.getText().toString().contains("  ")) {
+                            companyaddress2ET.setText(companyaddress2ET.getText().toString().replace("  ", " "));
                             companyaddress2ET.setSelection(companyaddress2ET.getText().length());
                         }
 
@@ -1153,9 +1153,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         enableOrDisableAddressNext();
 
 
-
-                        if (cityET.getText().toString().contains("  ")){
-                            cityET.setText(cityET.getText().toString().replace("  "," "));
+                        if (cityET.getText().toString().contains("  ")) {
+                            cityET.setText(cityET.getText().toString().replace("  ", " "));
                             cityET.setSelection(cityET.getText().length());
                         }
 
@@ -1520,19 +1519,22 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         dbaFillingLL.setVisibility(VISIBLE);
                     }
 
-                    if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Double.parseDouble(cir.getMonthlyProcessingVolume()) > 0) {
+//                    if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("") && Double.parseDouble(cir.getMonthlyProcessingVolume()) > 0) {
+                    if (cir.getMonthlyProcessingVolume() != null && !cir.getMonthlyProcessingVolume().equals("")) {
                         mpvOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getMonthlyProcessingVolume())));
                         isMPV = true;
                         mpvOET.setSelection();
                     }
 
-                    if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Double.parseDouble(cir.getHighTicket()) > 0) {
+//                    if (cir.getHighTicket() != null && !cir.getHighTicket().equals("") && Double.parseDouble(cir.getHighTicket()) > 0) {
+                    if (cir.getHighTicket() != null && !cir.getHighTicket().equals("")) {
                         highTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getHighTicket())));
                         isHighTkt = true;
                         highTicketOET.setSelection();
                     }
 
-                    if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Double.parseDouble(cir.getAverageTicket()) > 0) {
+//                    if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("") && Double.parseDouble(cir.getAverageTicket()) > 0) {
+                    if (cir.getAverageTicket() != null && !cir.getAverageTicket().equals("")) {
                         avgTicketOET.setText(Utils.USNumberFormat(Double.parseDouble(cir.getAverageTicket())));
                         isAvgTkt = true;
                         avgTicketOET.setSelection();

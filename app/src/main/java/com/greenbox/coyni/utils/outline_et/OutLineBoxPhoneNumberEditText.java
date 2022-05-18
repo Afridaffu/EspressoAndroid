@@ -59,7 +59,10 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
 
                             hintName.setVisibility(VISIBLE);
                             pnET.setHint("");
-                            CreateAccountActivity.focusedID = pnET.getId();
+
+                            if (FROM.equals("CREATE_ACCOUNT")) {
+                                CreateAccountActivity.focusedID = pnET.getId();
+                            }
                             hintName.setTextColor(getResources().getColor(R.color.error_red));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_error));
                         } else {
@@ -77,7 +80,9 @@ OutLineBoxPhoneNumberEditText extends ConstraintLayout {
                         if (b) {
                             hintName.setVisibility(VISIBLE);
                             pnET.setHint("");
-                            CreateAccountActivity.focusedID = pnET.getId();
+                            if (FROM.equals("CREATE_ACCOUNT")) {
+                                CreateAccountActivity.focusedID = pnET.getId();
+                            }
                             hintName.setTextColor(getResources().getColor(R.color.primary_color));
                             hintHolder.setBackground(getResources().getDrawable(R.drawable.outline_box_focused));
                         } else {

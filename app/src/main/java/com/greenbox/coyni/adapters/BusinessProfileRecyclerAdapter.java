@@ -30,8 +30,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     private AccountsData accountsData;
     private int selectedID;
     private boolean showdba;
-    private boolean isAddDbaFlag = true;
-    private long mLastClickTime = 0l;
+    private long mLastClickTime = 0L;
 
     public BusinessProfileRecyclerAdapter(Context context, AccountsData accountsData, int selectedID, boolean showdba) {
         this.context = context;
