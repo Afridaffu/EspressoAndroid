@@ -1125,7 +1125,7 @@
                                 android:layout_height="@dimen/_42sdp"
                                 android:layout_marginLeft="@dimen/_68sdp"
                                 android:layout_marginRight="@dimen/_77sdp"
-                                app:cardBackgroundColor="@color/primary_green"
+                                app:cardBackgroundColor="@color/inactive_color"
                                 app:cardCornerRadius="@dimen/_21sdp">
 
                                 <TextView

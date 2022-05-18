@@ -1069,6 +1069,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                         mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         mCvBatchNow.setClickable(false);
                     } else {
+                        mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                        mCvBatchNow.setClickable(true);
                         nextPayoutAmountTV.setText(amt);
                     }
                     String date = listItems.get(i).getCreatedAt();
