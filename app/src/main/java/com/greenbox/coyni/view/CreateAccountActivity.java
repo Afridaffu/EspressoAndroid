@@ -904,6 +904,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
 //                        firstNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
+                        firstNameET.setSelection(firstNameET.getText().toString().trim().length());
                     }
                 }
             });
@@ -941,6 +942,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
 //                        lastNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                        lastNameET.setSelection(lastNameET.getText().toString().trim().length());
 
                     }
                 }

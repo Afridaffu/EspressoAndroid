@@ -23,6 +23,7 @@ import com.greenbox.coyni.utils.MaskEditText.widget.MaskEditText;
 import com.greenbox.coyni.utils.PasswordCustomTransformationMethod;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.CompanyInformationActivity;
+import com.journeyapps.barcodescanner.Util;
 
 public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
     public static TextView ssnType;
@@ -260,6 +261,8 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                             );
                             weightRL.setLayoutParams(param);
                             comAct.setUI_IdentificationType();
+                            if(!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(mContext);
                         }
                     }
                 });
@@ -287,6 +290,8 @@ public class SSNOutlineBoxNumberEditText extends ConstraintLayout {
                             );
                             weightRL.setLayoutParams(param);
                             comAct.setUI_IdentificationType();
+                            if(!Utils.isKeyboardVisible)
+                                Utils.shwForcedKeypad(mContext);
                         }
                     }
                 });
