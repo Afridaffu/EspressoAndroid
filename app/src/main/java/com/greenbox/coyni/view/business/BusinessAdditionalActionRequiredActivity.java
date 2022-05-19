@@ -100,6 +100,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private boolean reservedRule = false;
     private ImageView imvCLose;
     private HashMap<String, ProposalsPropertiesData> proposalsMap;
+    private TextView adminMessageTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         informationRevisionLL = findViewById(R.id.information_revision);
         imvCLose = findViewById(R.id.imvCLose);
         submitCV = findViewById(R.id.submitCV);
+        adminMessageTV = findViewById(R.id.adminMessageTV);
 
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
         underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
@@ -195,7 +197,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             for (int k = 0; k < proposal.getProperties().size(); k++) {
                                 ProposalsPropertiesData property = proposal.getProperties().get(k);
                                 JSONObject propertyObj = new JSONObject();
-                                String verificationKey = type+ "" + capFirstLetter(property.getDisplayName());
+                                String verificationKey = type + "" + capFirstLetter(property.getDisplayName());
                                 propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
                                 propertyObj.put("name", property.getName());
                                 propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
@@ -264,6 +266,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                                 if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
+                                    if (actionRequiredResponse.getData().getMessage() != null) {
+                                        adminMessageTV.setText(actionRequiredResponse.getData().getMessage());
+                                    }
                                     if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
                                             actionRequiredResponse.getData().getAdditionalDocument().size() != 0) {
                                         additionalRequiredDocuments(actionRequiredResponse);
@@ -426,16 +431,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-                           if(data.getType()!=null) {
-                               displayNameTV.setText(data.getDisplayName());
-                           }
+                            if (data.getType() != null) {
+                                displayNameTV.setText(data.getDisplayName());
+                            }
 
                             String companyname = propertiesData.getDisplayName() != null ? propertiesData.getDisplayName() : "";
 //                            if (propertiesData.getDisplayName() != null ) {
 //                                companyname = propertiesData.getDisplayName();
 //                            }
                             companyNameTV.setText(companyname);
-                            if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                            if (propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
                                 companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
                                 companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
                             } else {
@@ -455,7 +460,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                 tvMessage.setText(message);
                             }
 
-                            String verificationKey = data.getDisplayName()+ "" + companyname;
+                            String verificationKey = data.getDisplayName() + "" + companyname;
                             proposalsMap.put(verificationKey, propertiesData);
                             fileUpload.put(verificationKey.trim().hashCode(), null);
 
@@ -472,7 +477,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                     View v = (View) view.getTag();
                                     TextView tv = v.findViewById(R.id.comapny_nameTV);
                                     TextView displayNameTV = v.findViewById(R.id.display_nameTV);
-                                    String verificationKey1 = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                                    String verificationKey1 = displayNameTV.getText().toString() + "" + tv.getText().toString();
                                     if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
                                         fileUpload.replace(verificationKey1.trim().hashCode(), "true");
                                     }
@@ -538,7 +543,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
                     llDecline.setVisibility(View.GONE);
 
-                    String verificationKey = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                    String verificationKey = displayNameTV.getText().toString() + "" + tv.getText().toString();
                     proposalsMap.get(verificationKey).setUserAccepted(false);
                     proposalsMap.get(verificationKey).setUserMessage(comm);
                     if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
