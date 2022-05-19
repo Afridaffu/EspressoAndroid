@@ -450,11 +450,11 @@ public class DashboardViewModel extends AndroidViewModel {
 //        }
 //    }
 
-    public void meChangePassword(ChangePasswordRequest changePasswordRequest) {
+    public void meChangePassword(ChangePasswordRequest changePasswordRequest,String token) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
 //            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest);
-            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest, Utils.getStrToken());
+            Call<ChangePassword> mcall = apiService.mChangePassword(changePasswordRequest, token);
             mcall.enqueue(new Callback<ChangePassword>() {
                 @Override
                 public void onResponse(Call<ChangePassword> call, Response<ChangePassword> response) {

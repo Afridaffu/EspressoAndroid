@@ -977,7 +977,8 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                           objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
                         startActivity(cp);

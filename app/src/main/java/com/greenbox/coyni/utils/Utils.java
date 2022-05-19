@@ -177,7 +177,6 @@ public class Utils {
     public static String strDesc = "abcd";
     public static String strCCode = "";
     public static String strAuth;
-    public static String strToken = "";
     public static String appVersion;
     public static String strReferer;
     public static String strURL_PRODUCTION;
@@ -435,14 +434,6 @@ public class Utils {
 
     public static void setStrAuth(String strAuth) {
         Utils.strAuth = strAuth;
-    }
-
-    public static String getStrToken() {
-        return strToken;
-    }
-
-    public static void setStrToken(String strToken) {
-        Utils.strToken = strToken;
     }
 
     public static String getStrReferer() {

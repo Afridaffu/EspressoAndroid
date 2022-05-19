@@ -295,16 +295,18 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKe
                 scanMeScanCodeLL.setVisibility(View.GONE);
             }
 
-            if (objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
-                String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
-//                if (strName != null && strName.length() > 22) {
-//                    tvName.setText(strName.substring(0, 22) + "...");
-//                } else {
-//                    tvName.setText(strName);
-//                }
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+                if (objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                    String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+                    //                if (strName != null && strName.length() > 22) {
+                    //                    tvName.setText(strName.substring(0, 22) + "...");
+                    //                } else {
+                    //                    tvName.setText(strName);
+                    //                }
 
-                if (strName != null) {
-                    tvName.setText(strName);
+                    if (strName != null) {
+                        tvName.setText(strName);
+                    }
                 }
             }
             bindImage();
@@ -732,7 +734,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKe
                     if (dialog != null) {
                         dialog.dismiss();
                     }
-                    Utils.setStrToken("");
+//                    Utils.setStrToken("");
+                    objMyApplication.clearStrToken();
                     objMyApplication.setPaidOrderResp(paidOrderResp);
                     if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
                         startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
@@ -783,7 +786,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKe
             if (biometricTokenResponse != null) {
                 if (biometricTokenResponse.getStatus().equalsIgnoreCase("success")) {
                     if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                     }
                     payTransaction();
                 }
@@ -884,7 +888,7 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKe
                                         strScanWallet = result.toString();
                                     }
                                     Uri uri = null;
-                                    if (strScanWallet!=null) {
+                                    if (strScanWallet != null) {
                                         uri = Uri.parse(strScanWallet);
                                     }
                                     if (uri != null && uri.isAbsolute() && !strScanWallet.equals(strWallet)) {
@@ -1671,7 +1675,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKe
             PaidOrderRequest request = new PaidOrderRequest();
             request.setTokensAmount(Double.parseDouble(strQRAmount.trim().replace(",", "").trim()));
             request.setRecipientWalletId(strScanWallet);
-            request.setRequestToken(Utils.getStrToken());
+//            request.setRequestToken(Utils.getStrToken());
+            request.setRequestToken(objMyApplication.getStrToken());
             objMyApplication.setPaidOrderRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(ScanActivity.this)) {

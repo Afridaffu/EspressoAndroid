@@ -114,7 +114,7 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
                         payET.setText(Utils.convertTwoDecimal(amount));
                         if (payValidation()) {
                             pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-                            isPayClick =true;
+                            isPayClick = true;
                             cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
                             calculateFee(Utils.USNumberFormat(cynValue));
                         }
@@ -284,11 +284,11 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
                 USFormat(payET);
                 cKey.setVisibility(View.GONE);
             }
-                //enableButtons();
-                cKey = (CustomKeyboard) findViewById(R.id.ckb);
-                InputConnection ic = payET.onCreateInputConnection(new EditorInfo());
-                cKey.setInputConnection(ic);
-                cKey.setScreenName("payToMerch");
+            //enableButtons();
+            cKey = (CustomKeyboard) findViewById(R.id.ckb);
+            InputConnection ic = payET.onCreateInputConnection(new EditorInfo());
+            cKey.setInputConnection(ic);
+            cKey.setScreenName("payToMerch");
             payET.setOnClickListener(v -> Utils.hideSoftKeypad(PayToMerchantActivity.this, v));
 
             payET.setOnFocusChangeListener((view, b) -> {
@@ -404,7 +404,8 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
                     if (pDialog != null) {
                         pDialog.dismiss();
                     }
-                    Utils.setStrToken("");
+//                    Utils.setStrToken("");
+                    objMyApplication.clearStrToken();
                     objMyApplication.setPaidOrderResp(paidOrderResp);
                     if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
                         startActivity(new Intent(PayToMerchantActivity.this, GiftCardBindingLayoutActivity.class)
@@ -489,7 +490,8 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
             if (biometricTokenResponse != null) {
                 if (biometricTokenResponse.getStatus().equalsIgnoreCase("success")) {
                     if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                     }
                     payTransaction();
                 }
@@ -583,7 +585,7 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
             //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = payET.getText().toString().trim().replace("\"", "");
 
-            if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()){
+            if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
                 payET.setEnabled(false);
                 payET.setClickable(false);
                 payET.setTextColor(getColor(R.color.primary_green));
@@ -620,9 +622,8 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
             } else if (objResponse != null && objResponse.getData() != null && objResponse.getData().getTransactionLimit() != null && cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 Utils.displayAlert("Amount entered exceeds transaction limit.", PayToMerchantActivity.this, "Oops!", "");
                 value = false;
-            }
-            else {
-                 value = true;
+            } else {
+                value = true;
             }
 //            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
 //                Utils.displayAlert("Amount entered exceeds available balance", PayToMerchantActivity.this, "", "");
@@ -739,7 +740,8 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
             PaidOrderRequest request = new PaidOrderRequest();
             request.setTokensAmount(Double.parseDouble(payET.getText().toString().trim().replace(",", "").trim()));
             request.setRecipientWalletId(recipientAddress);
-            request.setRequestToken(Utils.getStrToken());
+//            request.setRequestToken(Utils.getStrToken());
+            request.setRequestToken(objMyApplication.getStrToken());
             objMyApplication.setPaidOrderRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayToMerchantActivity.this)) {
@@ -1057,7 +1059,7 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
         });
         payToMerchantWithAmountDialog.show();
 
-        if (objMyApplication.getCheckOutModel() != null) {
+        if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             payToMerchantWithAmountDialog.setCanceledOnTouchOutside(false);
         }
 
@@ -1065,7 +1067,7 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 isAuthenticationCalled = false;
-                if (objMyApplication.getCheckOutModel().isCheckOutFlag()){
+                if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
                     onBackPressed();
                 }
             }
@@ -1144,8 +1146,8 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        CheckOutModel checkOutModel = new CheckOutModel();
-        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+        if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+            CheckOutModel checkOutModel = new CheckOutModel();
             objMyApplication.setCheckOutModel(checkOutModel);
             finish();
         }

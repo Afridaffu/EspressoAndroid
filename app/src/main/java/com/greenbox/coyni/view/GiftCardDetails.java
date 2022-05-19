@@ -425,7 +425,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                     if (pDialog != null) {
                         pDialog.dismiss();
                     }
-                    Utils.setStrToken("");
+//                    Utils.setStrToken("");
+                    objMyApplication.clearStrToken();
                     if (withdrawResponse != null) {
                         objMyApplication.setWithdrawResponse(withdrawResponse);
                         if (withdrawResponse.getStatus().equalsIgnoreCase("success")) {
@@ -452,7 +453,8 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         withdrawGiftCard();
                     }
@@ -1206,7 +1208,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
     private void withdrawGiftCard() {
         try {
             if (Utils.checkInternet(GiftCardDetails.this)) {
-                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest());
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(),objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

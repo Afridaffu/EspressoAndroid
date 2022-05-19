@@ -106,6 +106,13 @@ public class MyApplication extends Application {
         return mCurrentUserData.getPaidOrderRequest();
     }
 
+    public String getStrToken(){
+        return mCurrentUserData.getStrToken();
+    }
+
+    public void setStrToken(String strToken){
+        mCurrentUserData.setStrToken(strToken);
+    }
     public PaidOrderResp getPaidOrderResp() {
         return mCurrentUserData.getPaidOrderResp();
     }
@@ -813,6 +820,10 @@ public class MyApplication extends Application {
 
     public void clearUserData() {
         mCurrentUserData = new UserData();
+    }
+
+    public void clearStrToken(){
+        mCurrentUserData.setStrToken("");
     }
 
 }
