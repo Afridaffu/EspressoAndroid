@@ -214,7 +214,6 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
                     dismissDialog();
                     if (teamResponseModel != null && teamResponseModel.getStatus() != null
                             && teamResponseModel.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-
                         if (teamResponseModel.getData() != null
                                 && teamResponseModel.getData().getItems() != null
                                 && teamResponseModel.getData().getItems().size() > 0) {
