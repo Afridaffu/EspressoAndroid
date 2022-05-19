@@ -103,6 +103,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private boolean reservedRule = false;
     private ImageView imvCLose;
     private HashMap<String, ProposalsPropertiesData> proposalsMap;
+    private TextView adminMessageTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +134,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         informationRevisionLL = findViewById(R.id.information_revision);
         imvCLose = findViewById(R.id.imvCLose);
         submitCV = findViewById(R.id.submitCV);
+        adminMessageTV = findViewById(R.id.adminMessageTV);
 
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
         underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
@@ -268,7 +270,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     List<ProposalsData> proposalsData = data.getProposals();
                     for (int j = 0; j < proposalsData.size(); j++) {
                         ProposalsData proposal = proposalsData.get(j);
-                        String type = proposal.getType();
+                        String type = proposal.getDisplayName();
                         JSONObject proposalsObj = new JSONObject();
                         JSONArray proposalsArray = new JSONArray();
                         if (proposal != null && proposal.getProperties() != null && proposal.getProperties().size() > 0) {
@@ -356,6 +358,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                                 if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
+                                    if (actionRequiredResponse.getData().getMessage() != null) {
+                                        adminMessageTV.setText(actionRequiredResponse.getData().getMessage());
+                                    }
                                     if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
                                             actionRequiredResponse.getData().getAdditionalDocument().size() != 0) {
                                         additionalRequiredDocuments(actionRequiredResponse);
@@ -503,7 +508,6 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 proposalsMap = new HashMap<>();
                 for (int count = 0; count < changeData.getProposals().size(); count++) {
                     ProposalsData data = changeData.getProposals().get(count);
-                    String type = data.getType();
                     List<ProposalsPropertiesData> proposalsPropertiesData = data.getProperties();
                     if (proposalsPropertiesData != null && proposalsPropertiesData.size() > 0) {
                         informationRevisionLL.setVisibility(View.VISIBLE);
@@ -521,7 +525,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
                             if (data.getType() != null) {
-                                displayNameTV.setText(data.getType());
+                                displayNameTV.setText(data.getDisplayName());
                             }
 
                             String companyname = propertiesData.getDisplayName() != null ? propertiesData.getDisplayName() : "";
@@ -549,7 +553,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                 tvMessage.setText(message);
                             }
 
-                            String verificationKey = data.getType() + "" + companyname;
+                            String verificationKey = data.getDisplayName() + "" + companyname;
                             proposalsMap.put(verificationKey, propertiesData);
                             fileUpload.put(verificationKey.trim().hashCode(), null);
 

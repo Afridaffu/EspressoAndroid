@@ -3,10 +3,20 @@ package com.greenbox.coyni.view.business;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,17 +47,22 @@ import com.greenbox.coyni.model.BeneficialOwners.BOResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOValidateResp;
 import com.greenbox.coyni.model.BeneficialOwners.DeleteBOResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
+import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AgreementsActivity;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.CreateAccountActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdditionalBeneficialOwnersActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     ImageView backIV;
     RecyclerView beneficialOwnersRV;
-    TextView percentageTV, notFoundTV;
+    TextView percentageTV, notFoundTV, boDescTV;
     MyApplication objMyApplication;
     LinearLayout addNewBOLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
@@ -85,6 +100,8 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
             notFoundTV = findViewById(R.id.notFoundTV);
             addNewBOLL = findViewById(R.id.addNewBOLL);
             validateCV = findViewById(R.id.validateCV);
+            boDescTV = findViewById(R.id.boDescTV);
+            setSpannableText();
 
 //            loadBeneficialOwners();
 
@@ -256,16 +273,21 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
 
     public void loadBeneficialOwners(BOResp boResp) {
 
+//        BOResp finalBOResp = new BOResp();
+//        List<BOResp.BeneficialOwner> finalBOList = new ArrayList();
+
         if (boResp.getData().size() > 0) {
             notFoundTV.setVisibility(View.GONE);
             beneficialOwnersRV.setVisibility(View.VISIBLE);
 
             int totalPercentage = 0;
 
+//            List<BOResp.BeneficialOwner> noNameList = new ArrayList<>();
+
             for (int i = 0; i < boResp.getData().size(); i++) {
+
                 totalPercentage = totalPercentage + boResp.getData().get(i).getOwnershipParcentage();
                 BOResp.BeneficialOwner bo = boResp.getData().get(i);
-
                 try {
                     boResp.getData().get(i).setDraft(bo.getFirstName().equals("") || bo.getLastName().equals("") || bo.getDob().equals("")
                             || bo.getOwnershipParcentage() <= 0 || bo.getAddressLine1().equals("")
@@ -276,10 +298,24 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
                     boResp.getData().get(i).setDraft(true);
                 }
 
-                if (boResp.getData().get(i).isDraft())
+                if (boResp.getData().get(i).isDraft()) {
                     hasDrafts = true;
-
+//                    try {
+//                        if (bo.getFirstName().equals("") || bo.getFirstName() == null || bo.getLastName().equals("") || bo.getLastName() == null
+//                                || bo.getOwnershipParcentage() <= 0) {
+//                            noNameList.add(boResp.getData().get(i));
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        noNameList.add(boResp.getData().get(i));
+//                    }
+                } else {
+//                    finalBOList.add(boResp.getData().get(i));
+//                    totalPercentage = totalPercentage + boResp.getData().get(i).getOwnershipParcentage();
+                }
             }
+
+//            finalBOResp.setData(finalBOList);
 
             BeneficialOwnersAdapter beneficialOwnersAdapter = new BeneficialOwnersAdapter(this, boResp);
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -288,7 +324,11 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
             beneficialOwnersRV.setItemAnimator(new DefaultItemAnimator());
             beneficialOwnersRV.setAdapter(beneficialOwnersAdapter);
 
-
+//            if (noNameList.size() > 0) {
+//                for (int i = 0; i < noNameList.size(); i++) {
+//                    businessIdentityVerificationViewModel.deleteBeneficialOwner(noNameList.get(i).getId());
+//                }
+//            }
             if (totalPercentage >= Utils.boTargetPercentage && !hasDrafts) {
                 percentageTV.setVisibility(View.GONE);
                 isValidateEnabled = true;
@@ -360,6 +400,21 @@ public class AdditionalBeneficialOwnersActivity extends BaseActivity implements 
         } else {
             Utils.isKeyboardVisible = false;
         }
+    }
+
+    public void setSpannableText() {
+        SpannableString ss = new SpannableString(boDescTV.getText().toString());
+
+        Typeface font = Typeface.createFromAsset(getAssets(), "font/opensans_bold.ttf");
+        SpannableStringBuilder SS = new SpannableStringBuilder(ss);
+        SS.setSpan(new CustomTypefaceSpan("", font), ss.length() - 16, ss.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+
+        SS.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), ss.length() - 16, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SS.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), ss.length() - 16, ss.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        boDescTV.setText(SS);
+        boDescTV.setMovementMethod(LinkMovementMethod.getInstance());
+        boDescTV.setHighlightColor(Color.TRANSPARENT);
     }
 
 }

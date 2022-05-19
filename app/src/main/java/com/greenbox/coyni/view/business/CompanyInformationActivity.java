@@ -263,11 +263,11 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     Log.e("onPageScrolled", "onPageScrolled " + position + " " + positionOffset + " " + positionOffsetPixels);
 
                     if (position == 0) {
-                        companynameET.requestFocus();
+//                        companynameET.requestFocus();
 //                        if (!Utils.isKeyboardVisible)
 //                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 1) {
-                        companyaddressET.requestFocus();
+//                        companyaddressET.requestFocus();
 //                        if (!Utils.isKeyboardVisible)
 //                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 2) {
