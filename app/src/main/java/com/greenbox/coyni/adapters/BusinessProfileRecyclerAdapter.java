@@ -105,7 +105,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         }
 
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
-            childItem.setText(detailInfo.getCompanyName());
+            if (detailInfo.getCompanyName() != null) {
+                childItem.setText(detailInfo.getCompanyName());
+            } else {
+                childItem.setText("");
+            }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
@@ -123,7 +127,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             if (detailInfo.getFullName() != null) {
                 childItem.setText(detailInfo.getFullName());
             } else {
-                childItem.setText("DBA Name");
+                childItem.setText("");
             }
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
             if (detailInfo.getDbaName() != null) {
@@ -146,12 +150,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //                        .into(profileImage);
             }
         }
-        if (showdba && isLastChild && detailInfo.getAccountType().equals(Utils.PERSONAL)) {
+        if (showdba && (childPosition == profilesList.size() - 1) && detailInfo.getAccountType().equals(Utils.BUSINESS)) {
+            addDBA.setVisibility(View.VISIBLE);
+        } else {
             addDBA.setVisibility(View.GONE);
         }
-//        else {
-//            addDBA.setVisibility(View.GONE);
-//        }
 
         if (selectedID == detailInfo.getId()) {
             imvTickIcon.setVisibility(View.VISIBLE);
@@ -262,10 +265,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 arrowImg.setVisibility(View.GONE);
                 tickIcon.setVisibility(View.GONE);
             }
-            if (headerInfo.getFullName() != null) {
-                heading.setText(headerInfo.getFullName());
+            if (headerInfo.getFullName() != null && headerInfo.getFullName().length() > 21) {
+                heading.setText(headerInfo.getFullName().substring(0, 20));
             } else {
-                heading.setText("");
+                heading.setText("Personal ");
             }
             if (headerInfo.getImage() != null && !headerInfo.getImage().trim().equals("")) {
                 personalText.setVisibility(View.GONE);
@@ -281,10 +284,10 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
-            if (headerInfo.getCompanyName() != null) {
-                heading.setText(headerInfo.getCompanyName());
+            if (headerInfo.getCompanyName() != null && headerInfo.getCompanyName().length() > 21) {
+                heading.setText(headerInfo.getCompanyName().substring(0, 20));
             } else {
-                heading.setText("");
+                heading.setText("Comapany Name");
             }
             if (headerInfo.getImage() != null) {
                 personalText.setVisibility(View.GONE);

@@ -88,6 +88,7 @@ public class BusinessProfileActivity extends BaseActivity {
     private ScrollView profileSV;
     private String fullname = "";
     private LoginViewModel loginViewModel;
+    private DisplayImageUtility displayImageUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class BusinessProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_business_profile);
 
         try {
+            displayImageUtility = DisplayImageUtility.getInstance(getApplicationContext());
             initFields();
             initObservers();
         } catch (Exception e) {
@@ -771,6 +773,7 @@ public class BusinessProfileActivity extends BaseActivity {
         myApplication.setStrRetrEmail("");
         myApplication.clearUserData();
         dropAllTables();
+        displayImageUtility.clearCache();
         Intent i = new Intent(BusinessProfileActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
@@ -800,8 +803,7 @@ public class BusinessProfileActivity extends BaseActivity {
 //                userProfileCL.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 profileText.setVisibility(View.GONE);
                 profileImage.setImageResource(R.drawable.ic_profile_male_user);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                utility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
+                displayImageUtility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
             } else {
                 profileImage.setVisibility(View.VISIBLE);
 //                profileText.setVisibility(View.VISIBLE);
