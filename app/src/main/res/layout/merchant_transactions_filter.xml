@@ -271,6 +271,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_weight="1"
+                    android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                     android:background="@android:color/transparent"
                     android:digits="0123456789."
                     android:fontFamily="@font/opensans_semibold"
@@ -312,11 +313,15 @@
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/opensans_semibold"
                     android:hint="(CYN)"
+                    android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                     android:imeOptions="actionDone"
                     android:inputType="numberDecimal"
                     android:maxLength="8"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textColor="@color/primary_black"
                     android:textColorHint="@color/light_gray"
+                    android:textIsSelectable="false"
                     android:textCursorDrawable="@drawable/cursor_color"
                     android:textSize="@dimen/_11ssp" />
             </LinearLayout>

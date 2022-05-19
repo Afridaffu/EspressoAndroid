@@ -442,13 +442,13 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
         int id_length = charSequence.toString().trim().length();
         if(isRolling) {
-            if (id_length >= 14 && id_length<=34 ) {
+            if (id_length > 10 ) {
                 rollingList.clear();
                 RollingAPI(charSequence.toString());
                 noTransactions.setVisibility(View.GONE);
                 noMoreTransactions.setVisibility(View.GONE);
                 reserveRecyclerView.setVisibility(View.VISIBLE);
-            } else if (id_length > 0 && id_length <10) {
+            } else if (id_length > 0 && id_length < 10) {
                 noTransactions.setVisibility(View.VISIBLE);
                 noMoreTransactions.setVisibility(View.GONE);
                 reserveRecyclerView.setVisibility(View.GONE);
@@ -462,7 +462,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             }
 
         } else {
-            if (id_length >= 10 && id_length<=34 ) {
+            if (id_length > 10 ) {
                 manualItems.clear();
                 manualAPI(charSequence.toString());
                 noMoreTransactions.setVisibility(View.GONE);
