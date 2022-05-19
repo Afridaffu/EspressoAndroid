@@ -275,7 +275,16 @@ public class CustomerProfileActivity extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
 
                     if (Utils.checkAuthentication(CustomerProfileActivity.this)) {
-                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+//                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+//                            Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
+//                        } else {
+//                            if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+//                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "TOUCH");
+//                            } else {
+//                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "FACE");
+//                            }
+//                        }
+                        if (isBiometric && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled())) {
                             Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
                         } else {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
@@ -460,14 +469,12 @@ public class CustomerProfileActivity extends BaseActivity {
                     try {
                         String strEndPoint = "";
                         strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
-                        Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
+                        //Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
-
-            //customerProfileViewModel.meSyncAccount();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

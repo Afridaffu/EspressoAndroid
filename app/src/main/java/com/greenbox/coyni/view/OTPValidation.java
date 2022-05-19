@@ -521,8 +521,14 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                resendTV.setVisibility(View.VISIBLE);
-                                newCodeTV.setVisibility(View.GONE);
+                                try {
+                                    resendTV.setVisibility(View.VISIBLE);
+                                    newCodeTV.setVisibility(View.GONE);
+                                    if (!Utils.isKeyboardVisible)
+                                        Utils.shwForcedKeypad(OTPValidation.this);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
                             }
                         });
 
