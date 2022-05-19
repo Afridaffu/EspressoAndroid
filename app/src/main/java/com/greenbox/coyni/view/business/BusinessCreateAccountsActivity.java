@@ -227,12 +227,20 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             @Override
             public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 changeAccount(id);
             }
 
             @Override
             public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
                 LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId());
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 changeAccount(detailInfo.getId());
             }
 

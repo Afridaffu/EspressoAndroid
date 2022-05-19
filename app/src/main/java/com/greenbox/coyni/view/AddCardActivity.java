@@ -1675,6 +1675,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             if (preAuthDialog != null) {
                 preAuthDialog.dismiss();
             }
+
             preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.activity_all_done_card);
