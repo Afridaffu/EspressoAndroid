@@ -114,25 +114,11 @@ public class DashboardActivity extends BaseActivity {
             initialization();
             initObserver();
             firebaseToken();
-            Handler handler = new Handler();
-            if (objMyApplication.getCheckOutModel() != null) {
-                showProgressDialog();
-                CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
-                if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null && objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
-                    handler. postDelayed(new Runnable() {
-                        public void run() {
-                            try {
-                                startActivity(new Intent(DashboardActivity.this,PayToMerchantActivity.class)
-                                        .putExtra(CheckOutConstants.WALLET_ID,checkOutModel.getCheckOutWalletId())
-                                        .putExtra(CheckOutConstants.CheckOutAmount,checkOutModel.getCheckOutAmount()));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
 
-                        }
-                    }, 10000);
-                }
+            if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+                showProgressDialog("connecting...");
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -645,6 +631,31 @@ public class DashboardActivity extends BaseActivity {
                             txnRV.setAdapter(latestTxnAdapter);
                         }
 
+                    }
+//                    Handler handler = new Handler();
+                    if (objMyApplication.getCheckOutModel() != null) {
+                        CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
+                        if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null) {
+                            if (objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                                handler.postDelayed(new Runnable() {
+//                                    public void run() {
+//                                        try {
+                                            dismissDialog();
+                                            startActivity(new Intent(DashboardActivity.this, PayToMerchantActivity.class)
+                                                    .putExtra(CheckOutConstants.WALLET_ID, checkOutModel.getCheckOutWalletId())
+                                                    .putExtra(CheckOutConstants.CheckOutAmount, checkOutModel.getCheckOutAmount()));
+//                                        } catch (Exception e) {
+//                                            e.printStackTrace();
+//                                        }
+
+//                                    }
+//                                }, 100);
+                            } else {
+                                dismissDialog();
+                                objMyApplication.setCheckOutModel(new CheckOutModel());
+                                Utils.displayAlertNew("Please use active user account to make payments", DashboardActivity.this, "Coyni");
+                            }
+                        }
                     }
                 }
             });

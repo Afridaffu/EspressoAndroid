@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -52,16 +53,19 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityData;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
@@ -70,6 +74,7 @@ import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
+import com.greenbox.coyni.view.business.PayToMerchantActivity;
 import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -281,6 +286,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
 //        businessDashboardViewModel.getRollingRuleDetails();
+
+        if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+            ((BusinessDashboardActivity)getActivity()).showProgressDialog("connecting...");
+        }
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -563,6 +572,32 @@ public class BusinessDashboardFragment extends BaseFragment {
                             mAverageTicket.setText(defaultAmount);
                             mHighestTicket.setText(defaultAmount);
                             mDateHighestTicket.setText("");
+                        }
+                    }
+
+                    Handler handler = new Handler();
+                    if (myApplication.getCheckOutModel() != null) {
+                        CheckOutModel checkOutModel = myApplication.getCheckOutModel();
+                        if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null) {
+                            if (myApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                                handler.postDelayed(new Runnable() {
+                                    public void run() {
+                                        try {
+                                            ((BusinessDashboardActivity) getActivity()).dismissDialog();
+                                            startActivity(new Intent(getContext(), PayToMerchantActivity.class)
+                                                    .putExtra(CheckOutConstants.WALLET_ID, checkOutModel.getCheckOutWalletId())
+                                                    .putExtra(CheckOutConstants.CheckOutAmount, checkOutModel.getCheckOutAmount()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }, 100);
+                            } else {
+                                ((BusinessDashboardActivity) getActivity()).dismissDialog();
+                                myApplication.setCheckOutModel(new CheckOutModel());
+                                Utils.displayAlertNew("Please use active user account to make payments", getContext(), "Coyni");
+                            }
                         }
                     }
                 } catch (NumberFormatException e) {
