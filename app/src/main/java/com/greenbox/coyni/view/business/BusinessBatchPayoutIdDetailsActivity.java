@@ -234,14 +234,30 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
         if (objData.getAmount() != null && !objData.getAmount().equals("")) {
             payoutIDAmountTV.setText((objData.getAmount()));
         }
+//        if (objData.getStatus() != null && !objData.getStatus().equals("")) {
+//            payoutStatusTV.setText(objData.getStatus());
+//        }
         if (objData.getStatus() != null && !objData.getStatus().equals("")) {
             payoutStatusTV.setText(objData.getStatus());
+            switch (objData.getStatus().toLowerCase()) {
+                case "closed":
+                    payoutStatusTV.setTextColor(getColor(R.color.completed_status));
+                    payoutStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
+                case "in progress":
+                    payoutStatusTV.setTextColor(getColor(R.color.inprogress_status));
+                    payoutStatusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
+                    break;
+            }
         }
-        String date = objData.getPayoutDate();
-        if (date.contains(".")) {
-            String formatedDate = date.substring(0, date.lastIndexOf("."));
-            payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formatedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a"));
+        if(objData.getPayoutDate()!=null && objData.getPayoutDate().equals("")) {
+            String date = objData.getPayoutDate();
+            if (date.contains(".")) {
+                String formatedDate = date.substring(0, date.lastIndexOf("."));
+                payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formatedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a"));
+            }
         }
+
         if (objData.getPayoutReferenceId() != null && !objData.getPayoutReferenceId().equals("")) {
             if (objData.getPayoutReferenceId().length() > 10) {
                 payoutRefIdTV.setText((objData.getPayoutReferenceId().substring(0, 10)));

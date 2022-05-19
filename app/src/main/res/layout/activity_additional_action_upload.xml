@@ -58,8 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:fontFamily="@font/opensans_regular"
-                android:text="Thank you for your interest in coyni. After reviewing your account. The coyni team requires you to upload the following documentation
-within 30 days to continue account verification."
+                android:text="@string/act_rqrd_description"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp" />
 

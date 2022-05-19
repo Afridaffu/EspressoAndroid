@@ -44,7 +44,6 @@ public class EnableAuthID extends AppCompatActivity {
     RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
     String enableType, enableTypeCopy, strScreen = "";
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
-    SQLiteDatabase mydatabase;
     DatabaseHandler dbHandler;
     ImageView succesCloseIV;
     CoyniViewModel coyniViewModel;
@@ -143,24 +142,21 @@ public class EnableAuthID extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(EnableAuthID.this)) {
-                    if (isBiometric && ((isTouchId && Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
-                        Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
-                    } else {
-                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-                    }
+//                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(EnableAuthID.this)) {
+//                    if (isBiometric && ((isTouchId && Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
+//                        Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
+//                    } else {
+//                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+//                    }
+//                } else {
+//                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+//                }
+
+                if (isBiometric && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled()) && Utils.checkAuthentication(EnableAuthID.this)) {
+                    Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
                 } else {
                     startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
                 }
-
-//                dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-//                dialog.setIndeterminate(false);
-//                dialog.setMessage("Please wait...");
-//                dialog.show();
-//                BiometricRequest biometricRequest = new BiometricRequest();
-//                biometricRequest.setBiometricEnabled(true);
-//                biometricRequest.setDeviceId(Utils.getDeviceID());
-//                coyniViewModel.saveBiometric(biometricRequest);
             });
 
             dontRemindFace.setOnClickListener(view -> {
@@ -205,20 +201,34 @@ public class EnableAuthID extends AppCompatActivity {
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    if (Utils.checkAuthentication(EnableAuthID.this)) {
-                        if (isBiometric && ((Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
-                            Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
-                        } else {
-                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-                            if (!fingerprintManager.isHardwareDetected()) {
-                                Log.e("Not support", "Not support");
-                            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-                                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                                        BIOMETRIC_STRONG);
-                                startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
-                            }
-                        }
+//                    if (Utils.checkAuthentication(EnableAuthID.this)) {
+//                        if (isBiometric && ((Utils.isFingerPrint(EnableAuthID.this)) || (isFaceLock))) {
+//                            Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
+//                        } else {
+//                            FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+//                            if (!fingerprintManager.isHardwareDetected()) {
+//                                Log.e("Not support", "Not support");
+//                            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+//                                final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+//                                enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+//                                        BIOMETRIC_STRONG);
+//                                startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+//                            }
+//                        }
+//                    } else {
+//                        FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
+//                        if (!fingerprintManager.isHardwareDetected()) {
+//                            Log.e("Not support", "Not support");
+//                        } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+//                            final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
+//                            enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+//                                    BIOMETRIC_STRONG);
+//                            startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
+//                        }
+//                    }
+
+                    if (isBiometric && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled()) && Utils.checkAuthentication(EnableAuthID.this)) {
+                        Utils.checkAuthentication(EnableAuthID.this, CODE_AUTHENTICATION_VERIFICATION);
                     } else {
                         FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                         if (!fingerprintManager.isHardwareDetected()) {
@@ -230,31 +240,6 @@ public class EnableAuthID extends AppCompatActivity {
                             startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                         }
                     }
-
-
-//                    FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
-//                    if (!fingerprintManager.isHardwareDetected()) {
-//                        Log.e("Not support", "Not support");
-//                    } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-//                        final Intent enrollIntent = new Intent(Settings.ACTION_FINGERPRINT_ENROLL);
-//                        enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-//                                BIOMETRIC_STRONG);
-//                        startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
-//                    } else {
-//
-//                        dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-//                        dialog.setIndeterminate(false);
-//                        dialog.setMessage("Please wait...");
-//                        dialog.show();
-//                        BiometricRequest biometricRequest = new BiometricRequest();
-//                        biometricRequest.setBiometricEnabled(true);
-//                        biometricRequest.setDeviceId(Utils.getDeviceID());
-//                        try {
-//                            coyniViewModel.saveBiometric(biometricRequest);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -470,51 +455,6 @@ public class EnableAuthID extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
-//    private void saveThumb(String value) {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblThumbPinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-//            mydatabase.execSQL("Delete from tblThumbPinLock");
-//            mydatabase.execSQL("INSERT INTO tblThumbPinLock(id,isLock) VALUES(null,'" + value + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void saveFace(String value) {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblFacePinLock(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isLock TEXT);");
-//            mydatabase.execSQL("Delete from tblFacePinLock");
-//            mydatabase.execSQL("INSERT INTO tblFacePinLock(id,isLock) VALUES(null,'" + value + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void saveToken(String value) {
-//        try {
-//            objMyApplication.setStrMobileToken(value);
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblPermanentToken(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, perToken TEXT);");
-//            mydatabase.execSQL("Delete from tblPermanentToken");
-//            mydatabase.execSQL("INSERT INTO tblPermanentToken(id,perToken) VALUES(null,'" + value + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
-//
-//    private void saveDontRemind(String value) {
-//        try {
-//            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//            mydatabase.execSQL("CREATE TABLE IF NOT EXISTS tblDontRemind(id INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, isDontRemind TEXT);");
-//            mydatabase.execSQL("Delete from tblDontRemind");
-//            mydatabase.execSQL("INSERT INTO tblDontRemind(id,isDontRemind) VALUES(null,'" + value + "')");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
 
     private void saveThumb(String value) {
         try {

@@ -142,13 +142,11 @@
                             android:id="@+id/payoutStatusTV"
                             android:layout_width="@dimen/_68sdp"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/txn_completed_bg"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
                             android:paddingTop="@dimen/_3sdp"
                             android:paddingBottom="@dimen/_3sdp"
                             android:text=""
-                            android:textColor="@color/active_green"
                             android:textSize="@dimen/_7sdp" />
 
                     </LinearLayout>

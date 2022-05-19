@@ -61,9 +61,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 //            char last = lastName.charAt(0);
 
 
-            String imageName = first + String.valueOf(last);
+            String imageName = String.valueOf(first).toUpperCase() + String.valueOf(last).toUpperCase();
             holder.txImageName.setText(imageName);
-            String name = firstName + " " + lastName;
+            String name = Utils.capitalize(firstName) + " " + Utils.capitalize(lastName);
             holder.txName.setText(name);
 
             if (name.length() > 22) {

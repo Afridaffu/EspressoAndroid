@@ -74,7 +74,6 @@ public class CustomerProfileActivity extends BaseActivity {
     ConstraintLayout userProfile;
     LinearLayout cpUserDetailsLL, cpPaymentMethodsLL, cpResetPin, cpAccountLimitsLL, cpAgreementsLL, cpChangePasswordLL, switchOff, switchOn, cpPreferencesLL;
     Long mLastClickTime = 0L, mLastClickTimeShare = 0L;
-    public static SQLiteDatabase mydatabase;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
     CoyniViewModel coyniViewModel;
@@ -138,7 +137,6 @@ public class CustomerProfileActivity extends BaseActivity {
             cardviewYourAccount = findViewById(R.id.cardviewYourAccount);
             statusDotCV = findViewById(R.id.statusDotCV);
             tvVersion = findViewById(R.id.tvVersion);
-            mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
             objMyApplication = (MyApplication) getApplicationContext();
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
@@ -277,7 +275,16 @@ public class CustomerProfileActivity extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
 
                     if (Utils.checkAuthentication(CustomerProfileActivity.this)) {
-                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+//                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+//                            Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
+//                        } else {
+//                            if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+//                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "TOUCH");
+//                            } else {
+//                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "FACE");
+//                            }
+//                        }
+                        if (isBiometric && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled())) {
                             Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
                         } else {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
@@ -462,14 +469,12 @@ public class CustomerProfileActivity extends BaseActivity {
                     try {
                         String strEndPoint = "";
                         strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
-                        Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
+                        //Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
-
-            //customerProfileViewModel.meSyncAccount();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

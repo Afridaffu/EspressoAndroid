@@ -57,6 +57,7 @@ import com.greenbox.coyni.model.CompanyInfo.CompanyInfoUpdateResp;
 import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.MyApplication;
@@ -92,7 +93,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     CompanyInforamtionPager companyInforamtionPager;
     OneDirectionViewPager viewPager;
     //    ViewPager2 viewPager;
-    Long mLastClickTime = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeAddr = 0L, mLastClickTimeDocs = 0L;
+    private String companyid = "";
 
     //Address
     TextInputLayout companyaddresstil, companyaddress2til, citytil, statetil, zipcodetil, countryTIL;
@@ -127,6 +129,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     String selectedDocType = "", from = "";
     CompanyInformationActivity myActivity;
     View globalView;
+    private boolean isApiCalled = false;
+    private boolean isNewCompanyFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +159,12 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             from = getIntent().getStringExtra("FROM");
-//            showProgressDialog();
-            businessIdentityVerificationViewModel.getCompanyInfo();
+
+
+            if (!getIntent().getBooleanExtra("isNew", false)) {
+                showProgressDialog();
+                businessIdentityVerificationViewModel.getCompanyInfo();
+            }
 
             basicInfoSL = findViewById(R.id.basicInfoSL);
             addressSL = findViewById(R.id.addressSL);
@@ -252,14 +260,14 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    Log.e("onPageScrolled", "onPageScrolled " + position);
+                    Log.e("onPageScrolled", "onPageScrolled " + position + " " + positionOffset + " " + positionOffsetPixels);
 
                     if (position == 0) {
-                        companynameET.requestFocus();
+//                        companynameET.requestFocus();
 //                        if (!Utils.isKeyboardVisible)
 //                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 1) {
-                        companyaddressET.requestFocus();
+//                        companyaddressET.requestFocus();
 //                        if (!Utils.isKeyboardVisible)
 //                            Utils.shwForcedKeypad(CompanyInformationActivity.this);
                     } else if (position == 2) {
@@ -383,7 +391,13 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
             });
 
-            close.setOnClickListener(v -> finish());
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
+                    finish();
+                }
+            });
 
             backIV.setOnClickListener(v -> {
                 if (selectedPage == 1) {
@@ -409,17 +423,26 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isBasicNextEnabled) {
-                    companyInfoAPICall(prepareRequest());
+//                    companyInfoAPICall(prepareRequest());
+                    if (getIntent().getBooleanExtra("isNew", false)) {
+                        identityVerificationViewModel.getAddBusinessUser();
+                    } else {
+                        companyInfoAPICall(prepareRequest());
+                    }
                 }
             });
 
             addressNextCV.setOnClickListener(v -> {
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeAddr < 2000) {
                     return;
                 }
-                mLastClickTime = SystemClock.elapsedRealtime();
+                mLastClickTimeAddr = SystemClock.elapsedRealtime();
                 if (isAddressNextEnabled) {
-                    companyInfoAPICall(prepareRequest());
+                    if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
+                        identityVerificationViewModel.getAddBusinessUser();
+                    } else {
+                        companyInfoAPICall(prepareRequest());
+                    }
                 }
             });
 
@@ -458,12 +481,16 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             doneCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTimeDocs < 2000) {
                         return;
                     }
-                    mLastClickTime = SystemClock.elapsedRealtime();
+                    mLastClickTimeDocs = SystemClock.elapsedRealtime();
                     if (isDocsDoneEnabled) {
-                        businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
+                        if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
+                            identityVerificationViewModel.getAddBusinessUser();
+                        } else {
+                            businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
+                        }
                     }
                 }
             });
@@ -614,6 +641,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     }
                                 }
 
+                                companyid = "" + cir.getId();
+
                                 if (selectedPage == 0)
                                     enableOrDisableNext();
                                 else if (selectedPage == 1)
@@ -625,6 +654,26 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                             }
 
                         }
+                    }
+                }
+            });
+
+            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
+                @Override
+                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                    if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                        isNewCompanyFlag = true;
+                        isApiCalled = true;
+                        setResult(RESULT_OK);
+                        if (selectedPage == 2) {
+                            businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
+                        } else {
+                            companyInfoAPICall(prepareRequest());
+                        }
+
+                    } else {
+                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), CompanyInformationActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
                     }
                 }
             });
@@ -662,6 +711,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                                     CompanyInformationActivity.this, "", companyInfoResponse.getError().getFieldErrors().get(0));
                         }
                     }
+
                 }
             });
         } catch (Exception e) {
@@ -743,6 +793,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (companyInfoResponse != null) {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             isPostSuccess = true;
+                            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
                             finish();
                         } else {
                             isPostSuccess = false;
@@ -1407,6 +1458,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
         public int getItemPosition(@NonNull Object object) {
             return POSITION_NONE;
         }
+
     }
 
     private void chooseBusinessEntityPopup(final Context context, EditText editText) {
@@ -1660,7 +1712,10 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-            super.onBackPressed();
+            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
+            finish();
+
+            //super.onBackPressed();
         } else if (selectedPage == 1) {
             close.setVisibility(VISIBLE);
             backIV.setVisibility(GONE);

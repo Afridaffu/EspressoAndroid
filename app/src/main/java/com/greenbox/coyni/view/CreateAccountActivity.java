@@ -170,8 +170,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
             firstNameET.requestFocus();
         }
 
-        if (!Utils.isKeyboardVisible)
-            Utils.shwForcedKeypad(CreateAccountActivity.this);
+//        if (!Utils.isKeyboardVisible)
+//            Utils.shwForcedKeypad(CreateAccountActivity.this);
         Log.e("ID", "" + focusedID);
     }
 
@@ -270,6 +270,9 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
+                    if(Utils.isKeyboardVisible)
+                        Utils.hideKeypad(CreateAccountActivity.this);
+                    
                     dialog = new ProgressDialog(CreateAccountActivity.this, R.style.MyAlertDialogStyle);
                     dialog.setIndeterminate(false);
                     dialog.setMessage("Please wait...");
@@ -892,8 +895,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                             firstNameErrorTV.setText("Field Required");
                         }
                     } else {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(CreateAccountActivity.this);
+//                        if (!Utils.isKeyboardVisible)
+//                            Utils.shwForcedKeypad(CreateAccountActivity.this);
                         firstNameErrorLL.setVisibility(GONE);
                         focusedID = firstNameET.getId();
 //                        firstNameET.setHint("First Name");
@@ -901,6 +904,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         Utils.setUpperHintColor(firstNameTIL, getColor(R.color.primary_green));
 //                        firstNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
+                        firstNameET.setSelection(firstNameET.getText().toString().trim().length());
                     }
                 }
             });
@@ -938,6 +942,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         lastNameTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                         Utils.setUpperHintColor(lastNameTIL, getColor(R.color.primary_green));
 //                        lastNameET.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                        lastNameET.setSelection(lastNameET.getText().toString().trim().length());
 
                     }
                 }

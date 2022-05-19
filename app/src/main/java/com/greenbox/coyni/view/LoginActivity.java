@@ -138,11 +138,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
         isPwdEye = false;
         try {
             if (!isExpiry) {
-//                mydatabase = openOrCreateDatabase("Coyni", MODE_PRIVATE, null);
-//                Cursor cursor = mydatabase.rawQuery("Select * from tblRemember", null);
-//                cursor.moveToFirst();
-//                if (cursor.getCount() > 0) {
-//                    String value = cursor.getString(1);
                 String value = dbHandler.getTableRemember();
 
                 if (value != null && !value.equals("")) {
@@ -280,8 +275,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                 if ((isTouchId && Utils.isFingerPrint(LoginActivity.this)) || (isFaceLock)) {
                                     Utils.checkAuthentication(LoginActivity.this, CODE_AUTHENTICATION_VERIFICATION);
                                 } else {
-//                                    FaceIdDisabled_BottomSheet faceIdNotAvailable_bottomSheet = FaceIdDisabled_BottomSheet.newInstance(isTouchId, isFaceLock);
-//                                    faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
                                     if (isFaceLock) {
                                         Utils.displayAlert(getResources().getString(R.string.faceiddisable), LoginActivity.this, "Face ID Temporarily disabled", "");
                                     } else if (isTouchId) {
@@ -289,8 +282,6 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     }
                                 }
                             } else {
-//                                FaceIdNotAvailable_BottomSheet faceIdNotAvailable_bottomSheet = new FaceIdNotAvailable_BottomSheet();
-//                                faceIdNotAvailable_bottomSheet.show(getSupportFragmentManager(), faceIdNotAvailable_bottomSheet.getTag());
                                 if (Utils.getIsTouchEnabled()) {
                                     Utils.displayAlert(getResources().getString(R.string.touchidnotavaidescri), LoginActivity.this, "Touch ID Not available", "");
                                 } else if (Utils.getIsFaceEnabled()) {
