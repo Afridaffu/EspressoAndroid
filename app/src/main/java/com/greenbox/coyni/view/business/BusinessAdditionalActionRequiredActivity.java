@@ -69,6 +69,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -89,6 +91,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     public CardView submitCV;
     private UnderwritingUserActionRequiredViewModel underwritingUserActionRequiredViewModel;
     private HashMap<Integer, String> fileUpload;
+    private HashMap<Integer, File> filesToUpload;
     private ActionRequiredResponse actionRequired;
     private int documentID;
     private LinearLayout selectedLayout = null;
@@ -137,6 +140,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
 
         fileUpload = new HashMap<Integer, String>();
+        filesToUpload = new HashMap<Integer, File>();
         documentsFIle = new ArrayList<>();
 
         setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivity.this);
@@ -162,6 +166,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     }
 
     private void postSubmitAPiCall() {
+        showProgressDialog();
+
         informationJSON = new JSONObject();
         try {
             JSONArray documents = new JSONArray();
@@ -216,23 +222,35 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 }
             }
 
-        } catch (JSONException je) {
-            je.printStackTrace();
+
+            // new code
+            List<MultipartBody.Part> multiparts = new ArrayList<>();
+
+            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
+
+            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
+
+            for (Map.Entry<Integer, File> entry : map.entrySet()) {
+                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
+                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documents",
+                        entry.getValue().getName(), requestBody);
+                multiparts.add(fileToUpload);
+                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
+            }
+
+            for (int i = 0; i < multiparts.size(); i++) {
+                docs[i] = multiparts.get(i);
+            }
+
+            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
+                    String.valueOf(informationJSON));
+            underwritingUserActionRequiredViewModel.submitActionRequired(docs, underwritingActionRequired);
+
+            //new code
+        } catch (Exception e) {
+            e.printStackTrace();
+            dismissDialog();
         }
-
-        LogUtils.d(TAG, "jsonnn    " + informationJSON.toString());
-        MultipartBody.Builder buildernew = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("information", null,
-                        RequestBody.create(informationJSON.toString().getBytes(), MediaType.parse("application/json")));
-
-        for (int i = 0; i < documentsFIle.size(); i++) {
-            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName(), RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
-        }
-
-        MultipartBody requestBody = buildernew.build();
-        showProgressDialog();
-        underwritingUserActionRequiredViewModel.submitAdditionalActionRequired(requestBody);
     }
 
     private void initObserver() {
@@ -321,6 +339,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             sscFileUploadLL.setTag(i);
 
             fileUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentId(), null);
+            filesToUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentId(), null);
 
             sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -795,6 +814,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             documentsFIle.add(mediaFile);
         }
 
+        if (filesToUpload.containsKey(documentID)) {
+            filesToUpload.replace(documentID, mediaFile);
+        }
+
         if (selectedLayout != null) {
             selectedLayout.setVisibility(View.VISIBLE);
             selectedText.setVisibility(View.GONE);
@@ -819,6 +842,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             if (fileUpload.containsKey(documentID)) {
                 fileUpload.replace(documentID, mediaFile.getAbsolutePath());
                 documentsFIle.add(mediaFile);
+            }
+
+            if (filesToUpload.containsKey(documentID)) {
+                filesToUpload.replace(documentID, mediaFile);
             }
 
             if (selectedLayout != null) {
