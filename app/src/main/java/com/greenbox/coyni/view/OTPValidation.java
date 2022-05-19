@@ -103,6 +103,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     String layoutType = "OTP"; //SECURE: if VISIBLITY ON FOR SECURE ACCOUNT SCREEN AFTER API CALL
     Long mLastClickTime = 0L;
     private static boolean isActivityVisible = false;
+    private boolean isBackEnabled = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,7 +318,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             });
 
             otpValidationCloseIV.setOnClickListener(view -> {
-                finish();
+                if (isBackEnabled)
+                    finish();
             });
 
             otpPV.addTextChangedListener(new TextWatcher() {
@@ -339,7 +341,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     smsRequest.setEmail(EMAIL.trim());
                                     smsRequest.setOtp(charSequence.toString().trim());
                                     loginViewModel.emailotpValidate(smsRequest);
-                                    otpValidationCloseIV.setClickable(false);
+                                    isBackEnabled = false;
                                 }
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("retEmail")) {
                                 if (charSequence.length() == 6) {
@@ -1069,7 +1071,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             overridePendingTransition(0, 0);
                             startActivity(getIntent());
                             overridePendingTransition(0, 0);
-                            otpValidationCloseIV.setClickable(true);
+                            isBackEnabled = true;
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1083,7 +1085,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 
     public void shakeAnimateUpDown() {
         otpPV.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_up_down));
-        otpValidationCloseIV.setClickable(true);
+        isBackEnabled = true;
     }
 
     public void vibrateAction() {
@@ -1172,15 +1174,17 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     @Override
     public void onBackPressed() {
         try {
-            switch (layoutType) {
-                case "SECURE":
+            if (isBackEnabled) {
+                switch (layoutType) {
+                    case "SECURE":
 //                    Intent intent = new Intent(OTPValidation.this, OnboardActivity.class);
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                    startActivity(intent);
-                    break;
-                case "OTP": {
-                    super.onBackPressed();
-                    break;
+                        break;
+                    case "OTP": {
+                        super.onBackPressed();
+                        break;
+                    }
                 }
             }
         } catch (Exception ex) {

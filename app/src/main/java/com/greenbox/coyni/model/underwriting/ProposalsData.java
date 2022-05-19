@@ -23,12 +23,15 @@ public class ProposalsData {
     @Expose
     private String lastName;
 
+    @SerializedName("displayName")
+    @Expose
+    private String displayName;
+
     @SerializedName("properties")
     @Expose
     private List<ProposalsPropertiesData> properties;
 
     private List<ProposalsPropertiesSubmitRequestData> propertiesSubmitRequest;
-
 
     public int getDbId() {
         return dbId;
@@ -60,6 +63,14 @@ public class ProposalsData {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public List<ProposalsPropertiesData> getProperties() {

@@ -40,6 +40,7 @@ import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -823,6 +824,46 @@ public class DashboardViewModel extends AndroidViewModel {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void getDownloadUrl(List<DownloadUrlRequest> downloadUrlRequestList) {
+        try {
+            ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+            Call<DownloadImageResponse> mCall = apiService.getDownloadUrl(downloadUrlRequestList);
+            mCall.enqueue(new Callback<DownloadImageResponse>() {
+                @Override
+                public void onResponse(Call<DownloadImageResponse> call, Response<DownloadImageResponse> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            DownloadImageResponse obj = response.body();
+                            downloadUrlResponse.setValue(obj);
+                            //setData(obj);
+                        }
+                        else {
+                            Gson gson = new Gson();
+                            Type type = new TypeToken<DownloadImageResponse>() {
+                            }.getType();
+                            DownloadImageResponse errorResponse = null;
+                            try {
+                                errorResponse = gson.fromJson(response.errorBody().string(), type);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            downloadUrlResponse.setValue(errorResponse);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DownloadImageResponse> call, Throwable t) {
+                    downloadUrlResponse.setValue(null);
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

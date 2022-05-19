@@ -59,6 +59,7 @@ import com.greenbox.coyni.model.profile.DownloadDocumentData;
 import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
 import com.greenbox.coyni.model.profile.DownloadImageData;
 import com.greenbox.coyni.model.profile.DownloadImageResponse;
+import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.model.submit.ApplicationSubmitResponseModel;
 import com.greenbox.coyni.model.summary.Agreements;
 import com.greenbox.coyni.model.summary.ApplicationSummaryModelResponse;
@@ -110,7 +111,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private List<Item1> agreements = new ArrayList<>();
     private List<RequiredDocument> companyReqDocList = new ArrayList<>();
     private List<RequiredDocument> dbReqDocList = new ArrayList<>();
-//    private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
+    //    private String privacyURL = "https://crypto-resources.s3.amazonaws.com/Greenbox+POS+GDPR+Privacy+Policy.pdf";
 //    private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
     private LinearLayout llPrivacy, llTerms, llMerchant;
@@ -404,7 +405,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         ex.printStackTrace();
                     }
                 } else {
-                   dismissDialog();
+                    dismissDialog();
                 }
             }
         });
@@ -733,13 +734,13 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     String doc = agreements1.getItems().get(i).getDocumentVersion();
                                     switch (agreements1.getItems().get(i).getSignatureType()) {
                                         case Utils.mPP:
-                                            mPrivacyVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
+                                            mPrivacyVno.setText(doc.substring(0, 1).toLowerCase() + doc.substring(1).trim());
                                             break;
                                         case Utils.mTOS:
-                                            mTermsVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
+                                            mTermsVno.setText(doc.substring(0, 1).toLowerCase() + doc.substring(1).trim());
                                             break;
                                         case Utils.mAgmt:
-                                            mMerchantsVno.setText(doc.substring(0,1).toLowerCase()+doc.substring(1).trim());
+                                            mMerchantsVno.setText(doc.substring(0, 1).toLowerCase() + doc.substring(1).trim());
                                             break;
                                     }
 //                                    if (agreements1.getItems().get(i).getSignatureType() == Utils.mPP) {
@@ -824,7 +825,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
                     if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         DownloadDocumentData data = downloadDocumentResponse.getData();
-                        if(data != null ) {
+                        if (data != null) {
                             if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
                                 launchDocumentUrl(data.getDownloadUrl());
                             } else {
@@ -849,40 +850,69 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
             }
         });
+
+        dashboardViewModel.getDownloadUrlResponse().observe(this, new Observer<DownloadImageResponse>() {
+            @Override
+            public void onChanged(DownloadImageResponse downloadImageResponse) {
+                dismissDialog();
+                if (downloadImageResponse != null && downloadImageResponse.getStatus() != null) {
+                    if (downloadImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        List<DownloadImageData> data = downloadImageResponse.getData();
+                        if (data != null && data.size() > 0) {
+                            if (data.get(0).getDownloadUrl() != null && !data.get(0).getDownloadUrl().equals("")) {
+                                convertPdfUrl(data.get(0).getDownloadUrl());
+                            } else {
+                                Utils.displayAlert(getString(R.string.unable_to_get_document), ReviewApplicationActivity.this, "", "");
+                            }
+                        }
+                    } else {
+                        Utils.displayAlert(downloadImageResponse.getError().getErrorDescription(), ReviewApplicationActivity.this, "", "");
+                    }
+                }
+            }
+        });
+
     }
 
-    private void showFile(String fileUrl) {
+    private void showFile(String key) {
         try {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();
-            if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
-                if (fileUrl.contains(".pdf")) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-                    browserIntent.setDataAndType(Uri.parse(fileUrl), "application/pdf");
-                    try {
-                        startActivity(browserIntent);
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    //Call the activity here
-                    Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
-                    intent.putExtra("FILEURL", fileUrl);
-                    startActivity(intent);
-
-                }
-
-
-            } else {
-                LogUtils.v(TAG, "fileUrl is null or empty");
-            }
+            DownloadUrlRequest downloadUrlRequest = new DownloadUrlRequest();
+            downloadUrlRequest.setKey(key);
+            ArrayList<DownloadUrlRequest> urlList = new ArrayList<>();
+            urlList.add(downloadUrlRequest);
+            dashboardViewModel.getDownloadUrl(urlList);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+    }
+
+    public void convertPdfUrl(String fileUrl) {
+        if (fileUrl != null && !fileUrl.trim().equalsIgnoreCase("")) {
+            if (fileUrl.contains(".pdf")) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setDataAndType(Uri.parse(fileUrl), "application/pdf");
+                try {
+                    startActivity(browserIntent);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Intent intent = new Intent(ReviewApplicationActivity.this, WebViewShowFileActivity.class);
+                intent.putExtra("FILEURL", fileUrl);
+                startActivity(intent);
+
+            }
+
+
+        } else {
+            LogUtils.v(TAG, "fileUrl is null or empty");
+        }
     }
 
     @Override
@@ -973,7 +1003,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 mLastClickTime = SystemClock.elapsedRealtime();
                 showProgressDialog();
                 dashboardViewModel.getDocumentUrl(Utils.mTOS);
-                }
+            }
 
             @Override
             public void updateDrawState(TextPaint ds) {
