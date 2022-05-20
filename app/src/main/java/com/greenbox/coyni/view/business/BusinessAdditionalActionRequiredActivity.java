@@ -69,6 +69,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -89,6 +91,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     public CardView submitCV;
     private UnderwritingUserActionRequiredViewModel underwritingUserActionRequiredViewModel;
     private HashMap<Integer, String> fileUpload;
+    private HashMap<Integer, File> filesToUpload;
     private ActionRequiredResponse actionRequired;
     private int documentID;
     private LinearLayout selectedLayout = null;
@@ -100,6 +103,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     private boolean reservedRule = false;
     private ImageView imvCLose;
     private HashMap<String, ProposalsPropertiesData> proposalsMap;
+    private TextView adminMessageTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,11 +134,13 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
         informationRevisionLL = findViewById(R.id.information_revision);
         imvCLose = findViewById(R.id.imvCLose);
         submitCV = findViewById(R.id.submitCV);
+        adminMessageTV = findViewById(R.id.adminMessageTV);
 
         underwritingUserActionRequiredViewModel = new ViewModelProvider(this).get(UnderwritingUserActionRequiredViewModel.class);
         underwritingUserActionRequiredViewModel.getAdditionalActionRequiredData();
 
         fileUpload = new HashMap<Integer, String>();
+        filesToUpload = new HashMap<Integer, File>();
         documentsFIle = new ArrayList<>();
 
         setKeyboardVisibilityListener(BusinessAdditionalActionRequiredActivity.this);
@@ -160,6 +166,8 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
     }
 
     private void postSubmitAPiCall() {
+        showProgressDialog();
+
         informationJSON = new JSONObject();
         try {
             JSONArray documents = new JSONArray();
@@ -195,7 +203,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             for (int k = 0; k < proposal.getProperties().size(); k++) {
                                 ProposalsPropertiesData property = proposal.getProperties().get(k);
                                 JSONObject propertyObj = new JSONObject();
-                                String verificationKey = type+ "" + capFirstLetter(property.getDisplayName());
+                                String verificationKey = type + "" + capFirstLetter(property.getDisplayName());
                                 propertyObj.put("isUserAccepted", proposalsMap.get(verificationKey).isUserAccepted());
                                 propertyObj.put("name", property.getName());
                                 propertyObj.put("userMessage", proposalsMap.get(verificationKey).getUserMessage());
@@ -214,23 +222,35 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                 }
             }
 
-        } catch (JSONException je) {
-            je.printStackTrace();
+
+            // new code
+            List<MultipartBody.Part> multiparts = new ArrayList<>();
+
+            MultipartBody.Part[] docs = new MultipartBody.Part[filesToUpload.size()];
+
+            Map<Integer, File> map = new TreeMap<Integer, File>(filesToUpload);
+
+            for (Map.Entry<Integer, File> entry : map.entrySet()) {
+                RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), entry.getValue());
+                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("documents",
+                        entry.getValue().getName(), requestBody);
+                multiparts.add(fileToUpload);
+                LogUtils.e("Key and Name", "" + entry.getKey() + " - " + entry.getValue().getName());
+            }
+
+            for (int i = 0; i < multiparts.size(); i++) {
+                docs[i] = multiparts.get(i);
+            }
+
+            RequestBody underwritingActionRequired = RequestBody.create(MediaType.parse("application/json"),
+                    String.valueOf(informationJSON));
+            underwritingUserActionRequiredViewModel.submitActionRequired(docs, underwritingActionRequired);
+
+            //new code
+        } catch (Exception e) {
+            e.printStackTrace();
+            dismissDialog();
         }
-
-        LogUtils.d(TAG, "jsonnn    " + informationJSON.toString());
-        MultipartBody.Builder buildernew = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("information", null,
-                        RequestBody.create(informationJSON.toString().getBytes(), MediaType.parse("application/json")));
-
-        for (int i = 0; i < documentsFIle.size(); i++) {
-            buildernew.addFormDataPart("documents", documentsFIle.get(i).getName(), RequestBody.create(MediaType.parse("application/octet-stream"), new File(String.valueOf(documentsFIle.get(i)))));
-        }
-
-        MultipartBody requestBody = buildernew.build();
-        showProgressDialog();
-        underwritingUserActionRequiredViewModel.submitAdditionalActionRequired(requestBody);
     }
 
     private void initObserver() {
@@ -264,6 +284,9 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             if (actionRequiredResponse != null && actionRequiredResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                                 if (actionRequiredResponse != null && actionRequiredResponse.getData() != null) {
+                                    if (actionRequiredResponse.getData().getMessage() != null) {
+                                        adminMessageTV.setText(actionRequiredResponse.getData().getMessage());
+                                    }
                                     if (actionRequiredResponse.getData().getAdditionalDocument() != null &&
                                             actionRequiredResponse.getData().getAdditionalDocument().size() != 0) {
                                         additionalRequiredDocuments(actionRequiredResponse);
@@ -316,6 +339,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             sscFileUploadLL.setTag(i);
 
             fileUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentId(), null);
+            filesToUpload.put(actionRequiredResponse.getData().getAdditionalDocument().get(i).getDocumentId(), null);
 
             sscFileUploadLL.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -426,16 +450,16 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                             LinearLayout llDecline = inf1.findViewById(R.id.declineLL);
                             LinearLayout llAccept = inf1.findViewById(R.id.acceptLL);
                             ProposalsPropertiesData propertiesData = proposalsPropertiesData.get(i);
-                           if(data.getType()!=null) {
-                               displayNameTV.setText(data.getDisplayName());
-                           }
+                            if (data.getType() != null) {
+                                displayNameTV.setText(data.getDisplayName());
+                            }
 
                             String companyname = propertiesData.getDisplayName() != null ? propertiesData.getDisplayName() : "";
 //                            if (propertiesData.getDisplayName() != null ) {
 //                                companyname = propertiesData.getDisplayName();
 //                            }
                             companyNameTV.setText(companyname);
-                            if(propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
+                            if (propertiesData.getName().equalsIgnoreCase("phoneNumber")) {
                                 companyNameOriginal.setText(Utils.formatPhoneNumber(propertiesData.getOriginalValue()));
                                 companyNameProposed.setText(Utils.formatPhoneNumber(propertiesData.getProposedValue()));
                             } else {
@@ -455,7 +479,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                 tvMessage.setText(message);
                             }
 
-                            String verificationKey = data.getDisplayName()+ "" + companyname;
+                            String verificationKey = data.getDisplayName() + "" + companyname;
                             proposalsMap.put(verificationKey, propertiesData);
                             fileUpload.put(verificationKey.trim().hashCode(), null);
 
@@ -472,7 +496,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                                     View v = (View) view.getTag();
                                     TextView tv = v.findViewById(R.id.comapny_nameTV);
                                     TextView displayNameTV = v.findViewById(R.id.display_nameTV);
-                                    String verificationKey1 = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                                    String verificationKey1 = displayNameTV.getText().toString() + "" + tv.getText().toString();
                                     if (fileUpload.containsKey(verificationKey1.trim().hashCode())) {
                                         fileUpload.replace(verificationKey1.trim().hashCode(), "true");
                                     }
@@ -538,7 +562,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
                     tvDeclinedMsg.setText(getString(R.string.Decline) + " " + Utils.getCurrentDate() + " due to: ");
                     llDecline.setVisibility(View.GONE);
 
-                    String verificationKey = displayNameTV.getText().toString()+ "" + tv.getText().toString();
+                    String verificationKey = displayNameTV.getText().toString() + "" + tv.getText().toString();
                     proposalsMap.get(verificationKey).setUserAccepted(false);
                     proposalsMap.get(verificationKey).setUserMessage(comm);
                     if (fileUpload.containsKey(verificationKey.trim().hashCode())) {
@@ -790,6 +814,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             documentsFIle.add(mediaFile);
         }
 
+        if (filesToUpload.containsKey(documentID)) {
+            filesToUpload.replace(documentID, mediaFile);
+        }
+
         if (selectedLayout != null) {
             selectedLayout.setVisibility(View.VISIBLE);
             selectedText.setVisibility(View.GONE);
@@ -814,6 +842,10 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             if (fileUpload.containsKey(documentID)) {
                 fileUpload.replace(documentID, mediaFile.getAbsolutePath());
                 documentsFIle.add(mediaFile);
+            }
+
+            if (filesToUpload.containsKey(documentID)) {
+                filesToUpload.replace(documentID, mediaFile);
             }
 
             if (selectedLayout != null) {

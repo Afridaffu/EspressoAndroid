@@ -155,7 +155,7 @@
             <View
                 android:id="@+id/dividerView"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
+                android:layout_height="1dp"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:background="@color/viewcolor"
                 android:visibility="gone"/>
@@ -170,6 +170,7 @@
                 android:id="@+id/rvTeam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_20sdp"
                 android:visibility="gone"/>
 
             <TextView
@@ -182,7 +183,7 @@
                 android:text="Team member not found"
                 android:textColor="@color/primary_black"
                 android:textSize="@dimen/_11ssp"
-                android:visibility="visible" />
+                android:visibility="gone" />
             <!--            </ScrollView>-->
         </LinearLayout>
     </androidx.cardview.widget.CardView>
