@@ -511,13 +511,13 @@
                                     android:orientation="horizontal">
 
                                     <TextView
-                                        android:layout_width="match_parent"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="1"
+                                        android:layout_marginTop="@dimen/_6sdp"
                                         android:fontFamily="@font/opensans_semibold"
                                         android:text="Account Status:"
                                         android:textColor="@color/primary_black"
-                                        android:textSize="@dimen/_12ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
@@ -529,15 +529,15 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="5dp"
+                                            android:layout_marginTop="@dimen/_6sdp"
                                             android:fontFamily="@font/opensans_semibold"
-                                            android:text=" Under Review"
+                                            android:text="Under Review"
                                             android:textColor="@color/under_review_blue"
                                             android:textSize="@dimen/_11ssp" />
 
                                         <androidx.cardview.widget.CardView
                                             android:layout_width="@dimen/_8sdp"
                                             android:layout_height="@dimen/_8sdp"
-                                            android:layout_marginStart="@dimen/_5sdp"
                                             android:layout_marginTop="@dimen/_2sdp"
                                             app:cardBackgroundColor="@color/under_review_blue"
                                             app:cardCornerRadius="@dimen/_4sdp" />
@@ -550,11 +550,11 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_7sdp"
+                                    android:layout_marginBottom="@dimen/_16sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:text="Our team is still reviewing your account. This process may take up to 3 business days."
                                     android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp"
-                                    android:layout_marginBottom="@dimen/_16sdp"/>
+                                    android:textSize="@dimen/_11ssp" />
 
 
                             </LinearLayout>
@@ -618,7 +618,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_7sdp"
                                     android:fontFamily="@font/opensans_regular"
-                                    android:text="Social Security number verification."
+                                    android:text="The coyni team requires you to upload your documents within 30 days to further verify you."
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -633,7 +633,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_semibold"
-                                        android:text="Continue"
+                                        android:text="Upload Document"
                                         android:textColor="@color/primary_color"
                                         android:textSize="@dimen/_11ssp" />
 
@@ -811,7 +811,7 @@
                                     android:text="You have no recent transactions"
                                     android:textColor="@color/light_gray"
                                     android:textSize="@dimen/_10ssp"
-                                    android:visibility="gone" />
+                                    android:visibility="visible" />
 
                             </LinearLayout>
 

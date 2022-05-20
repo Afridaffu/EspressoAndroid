@@ -1699,7 +1699,7 @@ public class Utils {
 
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+            spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();

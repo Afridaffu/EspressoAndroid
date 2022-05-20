@@ -588,7 +588,8 @@ public interface ApiService {
 
     @Multipart
     @POST("api/v2/underwriting/user/business/action-required")
-    Call<ActionRequiredSubmitResponse> submitActionRequired(@Part MultipartBody information);
+    Call<ActionRequiredSubmitResponse> submitActionRequired(@Part MultipartBody.Part[] body,
+                                                            @Part("information") RequestBody type);
 
     @GET("api/v2/transactions/admin/totalPayout")
     Call<BatchPayoutListResponse> getPayoutListData();

@@ -144,6 +144,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
+                            android:background="@drawable/txn_completed_bg"
                             android:paddingTop="@dimen/_3sdp"
                             android:paddingBottom="@dimen/_3sdp"
                             android:text=""
@@ -217,7 +218,6 @@
                                 android:layout_width="@dimen/_10sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_marginLeft="@dimen/_6sdp"
-                                android:layout_marginTop="@dimen/_2sdp"
                                 android:contentDescription="@string/reserve_id"
                                 android:src="@drawable/ic_copy_active" />
                         </LinearLayout>
@@ -261,7 +261,6 @@
                                 android:layout_width="@dimen/_10sdp"
                                 android:layout_height="@dimen/_11sdp"
                                 android:layout_marginLeft="@dimen/_6sdp"
-                                android:layout_marginTop="@dimen/_2sdp"
                                 android:src="@drawable/ic_copy_active" />
                         </LinearLayout>
                     </LinearLayout>

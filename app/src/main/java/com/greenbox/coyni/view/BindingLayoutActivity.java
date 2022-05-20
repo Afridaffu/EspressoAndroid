@@ -88,8 +88,9 @@ public class BindingLayoutActivity extends BaseActivity {
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
-                identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             }
+            identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
             List<RetUserResData> usersData;
@@ -110,10 +111,15 @@ public class BindingLayoutActivity extends BaseActivity {
                 public void onClick(View v) {
                     loginViewModel.logout();
                     dropAllTables();
+//                    Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
+//                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(i);
+//                    finish();
                     Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
-                    finish();
+                    finishAffinity();
                 }
             });
 

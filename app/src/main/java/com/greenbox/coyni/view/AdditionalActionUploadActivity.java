@@ -71,7 +71,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     private ActionRqrdResponse actionRequired;
     private int documentID;
     private LinearLayout selectedLayout = null;
-    private TextView selectedText = null,adminMsgTV;
+    private TextView selectedText = null,adminMsgTV,adminMessageTV;
     public static ArrayList<File> documentsFIle;
     private JSONObject informationJSON;
     public static File mediaFile;
@@ -105,6 +105,7 @@ public class AdditionalActionUploadActivity extends BaseActivity {
         ssnCloseLL = findViewById(R.id.ssnCloseLL);
         submitCV = findViewById(R.id.actRqrdSubmitCV);
         adminMsgTV = findViewById(R.id.adminMsgTV);
+        adminMessageTV = findViewById(R.id.adminMessageTV);
         ssnCloseLL.setOnClickListener(view -> finish());
 
         additionalDocumentRequiredLL = findViewById(R.id.ll_document_required);
@@ -415,8 +416,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     private void additionalRequiredDocuments(ActionRqrdResponse actionRqrdResponse) {
 
         additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
-        adminMsgTV.setText(getResources().getString(R.string.please_click_the_upload_button_below_to_proceed)
-                +" "+actionRqrdResponse.getData().getMessage());
+//        adminMsgTV.setText(getResources().getString(R.string.please_click_the_upload_button_below_to_proceed));
+        adminMessageTV.setText(actionRqrdResponse.getData().getMessage());
         LinearLayout.LayoutParams layoutParamss = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         for (int i = 0; i < actionRqrdResponse.getData().getAdditionalDocument().size(); i++) {
             View inf = getLayoutInflater().inflate(R.layout.additional_document_cust_item, null);
