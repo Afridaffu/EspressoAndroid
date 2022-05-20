@@ -508,7 +508,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
                             } else if (giftCardETAmount < minValue) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
-                                amountErrorTV.setText("Amount should be equal to or greater than " + minValue + " USD");
+                                amountErrorTV.setText("Amount should be equal to or greater than " + Utils.USNumberFormat(minValue) + " USD");
                             } else if (giftCardETAmount > max) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);

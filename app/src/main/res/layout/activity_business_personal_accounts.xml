@@ -74,7 +74,7 @@
                     android:id="@+id/userNameTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_14sdp"
+                    android:layout_marginStart="@dimen/_20sdp"
                     android:fontFamily="@font/opensans_semibold"
                     android:textColor="@color/primary_black"
                     android:textSize="@dimen/_14ssp"
@@ -125,11 +125,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-
-                android:layout_marginEnd="@dimen/_15sdp"
                 android:layout_marginBottom="@dimen/_7sdp"
+                android:layout_marginEnd="@dimen/_6sdp"
                 android:src="@drawable/ic_custom_tick"
-                app:tint="@color/primary_green" />
+                app:tint="@color/primary_green"
+                />
         </LinearLayout>
     </LinearLayout>
 
@@ -171,7 +171,7 @@
                     android:src="@drawable/ic_add_circle" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_15sdp"

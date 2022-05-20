@@ -253,8 +253,8 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
         if(objData.getPayoutDate()!=null && objData.getPayoutDate().equals("")) {
             String date = objData.getPayoutDate();
             if (date.contains(".")) {
-                String formatedDate = date.substring(0, date.lastIndexOf("."));
-                payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formatedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a"));
+                String formattedDate = date.substring(0, date.lastIndexOf("."));
+                payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formattedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a"));
             }
         }
 

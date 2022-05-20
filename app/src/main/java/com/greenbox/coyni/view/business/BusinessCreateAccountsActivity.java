@@ -189,7 +189,11 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         }
 
 //        setUserBalance(myApplication.getWalletResponseData());
-        setUserBalance(myApplication.getCurrentUserData().getMerchantWalletResponse());
+        if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
+            setUserBalance(myApplication.getCurrentUserData().getTokenWalletResponse());
+        else
+            setUserBalance(myApplication.getCurrentUserData().getMerchantWalletResponse());
+
 
     }
 
@@ -227,12 +231,20 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             @Override
             public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
                 LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 changeAccount(id);
             }
 
             @Override
             public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
                 LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId());
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
                 changeAccount(detailInfo.getId());
             }
 
@@ -248,7 +260,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 ImageView arrowImg = v.findViewById(R.id.arrowImg);
-                if(parent != null && parent.isGroupExpanded(groupPosition)) {
+                if (parent != null && parent.isGroupExpanded(groupPosition)) {
                     arrowImg.setImageResource(R.drawable.ic_chevron_down);
                 } else {
                     arrowImg.setImageResource(R.drawable.ic_chevron_up);
@@ -304,6 +316,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         myApplication.setLoginUserId(btResp.getData().getUserId());
                         businessIdentityVerificationViewModel.getBusinessTracker();
+                        myApplication.setAccountType(btResp.getData().getAccountType());
 
                         if (btResp.getData().getAccountType() == Utils.BUSINESS_ACCOUNT || btResp.getData().getAccountType() == Utils.SHARED_ACCOUNT) {
                             myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());

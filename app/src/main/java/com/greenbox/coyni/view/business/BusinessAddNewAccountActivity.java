@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BindingLayoutActivity;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 

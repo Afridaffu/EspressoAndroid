@@ -115,7 +115,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     float fontSize, dollarFont;
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
-    Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false,isMinimumError = false;
+    Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false, isMinimumError = false;
     Boolean isFaceLock = false, isTouchId = false;
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID;

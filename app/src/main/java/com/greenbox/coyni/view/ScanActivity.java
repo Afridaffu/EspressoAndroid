@@ -202,11 +202,14 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKe
                         ctKey.enableButton();
                     else
                         ctKey.disableButton();
+                    setAmount.setSelection(setAmount.getText().length());
+                    setAmount.setTextDirection(View.TEXT_DIRECTION_LTR);
                 } else if (editable.toString().equals(".")) {
                     setAmount.setText("");
                     ctKey.disableButton();
                 } else if (editable.length() == 0) {
                     setAmount.setHint("0.00");
+                    setAmount.setTextDirection(View.TEXT_DIRECTION_RTL);
                     ctKey.disableButton();
                     ctKey.clearData();
                     setDefaultLength();
