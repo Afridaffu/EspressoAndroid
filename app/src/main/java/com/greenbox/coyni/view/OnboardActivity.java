@@ -115,20 +115,9 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setStrReferer(refererUrl);
             }
 
-            Uri uri = getIntent().getData();
             CheckOutModel checkOutModel = new CheckOutModel();
-            if (uri != null && uri.isAbsolute() ) {
-                Set<String> queryParams = uri.getQueryParameterNames();
-                checkOutModel.setCheckOutFlag(true);
-                for (String s : queryParams) {
-                    if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
-                        checkOutModel.setCheckOutAmount( uri.getQueryParameter(s));
-                    } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
-                        checkOutModel.setCheckOutWalletId( uri.getQueryParameter(s));
-                    }
-                }
-                objMyApplication.setCheckOutModel(checkOutModel);
-            }
+            getIntentData(checkOutModel);
+
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
                     layoutOnBoarding.setVisibility(View.GONE);
@@ -139,7 +128,7 @@ public class OnboardActivity extends BaseActivity {
                     faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
                 }
             } else {
-                if (checkOutModel.isCheckOutFlag()){
+                if (checkOutModel != null && checkOutModel.isCheckOutFlag()){
                     startActivity(new Intent(OnboardActivity.this,LoginActivity.class));
                     finish();
                 }
@@ -253,6 +242,12 @@ public class OnboardActivity extends BaseActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        LogUtils.v(TAG, "OnNewIntent " + intent.getData());
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (Utils.isKeyboardVisible)
@@ -284,6 +279,23 @@ public class OnboardActivity extends BaseActivity {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void getIntentData(CheckOutModel checkOutModel) {
+        LogUtils.v(TAG, "getIntentData " + getIntent().getData());
+        Uri uri = getIntent().getData();
+        if (uri != null && uri.isAbsolute() ) {
+            Set<String> queryParams = uri.getQueryParameterNames();
+            checkOutModel.setCheckOutFlag(true);
+            for (String s : queryParams) {
+                if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
+                    checkOutModel.setCheckOutAmount( uri.getQueryParameter(s));
+                } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
+                    checkOutModel.setCheckOutWalletId( uri.getQueryParameter(s));
+                }
+            }
+            objMyApplication.setCheckOutModel(checkOutModel);
         }
     }
 

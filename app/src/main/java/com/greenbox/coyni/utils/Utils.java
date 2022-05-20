@@ -399,6 +399,8 @@ public class Utils {
     public static final int mTOS = 7;
     public static final int mAgmt = 5;
 
+    public static Class<?> launchedActivity = OnboardActivity.class;
+
     //Cards
     public static final String MASTERCARD = "MASTERCARD";
     public static final String VISA = "VISA";
