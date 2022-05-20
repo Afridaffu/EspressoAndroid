@@ -1104,8 +1104,8 @@ public class DashboardActivity extends AppCompatActivity {
                             String token = task.getResult();
 
                             // Log and toast
-//                            String msg = getString(R.string.msg_token_fmt, token);
-//                            Log.d("", msg);
+                            //String msg = getString(R.string.msg_token_fmt, token);
+                            Log.d("Token", "Token - " + token);
 //                            Toast.makeText(DashboardActivity.this, token, Toast.LENGTH_SHORT).show();
                         }
                     });

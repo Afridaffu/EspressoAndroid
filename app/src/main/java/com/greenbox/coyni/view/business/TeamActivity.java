@@ -199,6 +199,10 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
 //        if (noTeamMemberTV.getVisibility() == View.VISIBLE) {
 //            noTeamMemberTV.setVisibility(View.GONE);
 //        }
+        recyclerViewTeam.setVisibility(View.GONE);
+        dividerView.setVisibility(View.GONE);
+        noTeamMemberTV.setVisibility(View.GONE);
+        teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         teamViewModel.retrieveTeamInfo();
     }
 

@@ -400,7 +400,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                     if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
                         if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
                             tv_PayoutNoHistory.setVisibility(View.GONE);
-                            batchView.setVisibility(View.GONE);
                             mPayoutHistory.setVisibility(View.VISIBLE);
                             showData(batchPayoutListResponse.getData().getItems());
                         } else {
@@ -1151,8 +1150,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
                 j++;
             }
-            batchView.setVisibility(View.VISIBLE);
-
         } else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);

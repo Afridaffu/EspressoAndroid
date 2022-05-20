@@ -18,6 +18,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.Utils;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -38,8 +39,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             broadcaster.sendBroadcast(intent);
         }
         if (Build.VERSION.SDK_INT >= 26) {
-            notificationDialog(remoteMessage);
+            if (Utils.getStrAuth() == null || Utils.getStrAuth().equals("")) {
+                notificationDialog(remoteMessage);
+            } else {
+                Log.d("Token", "Notification Receive");
+            }
         }
+
     }
 
     @Override

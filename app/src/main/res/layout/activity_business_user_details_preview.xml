@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/boxbackgroundgray"
     android:orientation="vertical"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
     tools:context=".view.BusinessUserDetailsPreviewActivity">
@@ -14,8 +15,8 @@
         android:background="@drawable/bottomradius"
         android:orientation="horizontal"
         android:paddingStart="@dimen/_21sdp"
-        android:paddingBottom="@dimen/_12sdp"
-        android:paddingTop="@dimen/_45sdp">
+        android:paddingTop="@dimen/_45sdp"
+        android:paddingBottom="@dimen/_12sdp">
 
         <LinearLayout
             android:id="@+id/dialogCLoseLL"
@@ -33,8 +34,8 @@
             android:id="@+id/intentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/opensans_semibold"
             android:layout_marginEnd="@dimen/_50sdp"
+            android:fontFamily="@font/opensans_semibold"
             android:textAlignment="center"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
@@ -45,85 +46,86 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_11sdp"
         android:layout_marginEnd="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_11sdp"
         android:visibility="visible"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <TextView
-            android:id="@+id/titleTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary_black"
-            android:fontFamily="@font/opensans_regular"
-            android:textAlignment="center"
-            android:layout_marginTop="@dimen/_19sdp"
-            android:textSize="@dimen/_13ssp"/>
-        <TextView
-            android:id="@+id/contentTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primary_black"
-            android:fontFamily="@font/opensans_bold"
-            android:textAlignment="center"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:textSize="@dimen/_15ssp"/>
+
+            <TextView
+                android:id="@+id/titleTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_19sdp"
+                android:fontFamily="@font/opensans_regular"
+                android:textAlignment="center"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_13ssp" />
+
+            <TextView
+                android:id="@+id/contentTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_bold"
+                android:textAlignment="center"
+                android:textColor="@color/primary_black"
+                android:textSize="@dimen/_15ssp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.7dp"
-                android:layout_marginTop="@dimen/_39sdp"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_39sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@color/blue_light" />
-
 
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/changeCV"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_43sdp"
-                android:layout_marginBottom="@dimen/_64sdp"
-                android:layout_marginTop="@dimen/_45sdp"
                 android:layout_marginStart="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_45sdp"
                 android:layout_marginEnd="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_64sdp"
                 app:cardBackgroundColor="@color/primary_color"
                 app:cardCornerRadius="@dimen/_22sdp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
                     android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/edit_button"
-                    android:layout_gravity="center_vertical"
-                    />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/edit_button" />
 
 
-                <TextView
-                    android:id="@+id/tvEnableFace"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/opensans_bold"
-                    android:text="Change"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_12ssp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvEnableFace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/opensans_bold"
+                        android:gravity="center"
+                        android:text="Change"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
-
-
 
 
         </LinearLayout>

@@ -1038,6 +1038,7 @@ public class Utils {
     public static ProgressDialog showProgressDialog(Context context) {
         ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
         dialog.setIndeterminate(false);
+        dialog.setCancelable(false);
         dialog.setMessage("Please wait...");
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -1680,7 +1681,7 @@ public class Utils {
 
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+            spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();

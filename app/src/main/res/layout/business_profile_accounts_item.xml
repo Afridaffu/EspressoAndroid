@@ -58,6 +58,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_60sdp"
             android:layout_weight="0.3"
+            android:singleLine="true"
             android:fontFamily="@font/opensans_semibold"
             android:padding="@dimen/_10sdp"
             android:text=""
@@ -69,8 +70,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:tint="@color/primary_green"
+            android:layout_gravity="center"
             android:visibility="gone"
-            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_25sdp"
             android:contentDescription="@string/businessProfileAccountExpandDownArrow"
             android:src="@drawable/ic_custom_tick" />
 
@@ -78,9 +80,10 @@
             android:id="@+id/arrowImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:padding="@dimen/_2sdp"
             android:layout_marginTop="@dimen/_10ssp"
-            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_25sdp"
             android:contentDescription="@string/businessProfileAccountExpandDownArrow"
             android:src="@drawable/ic_down" />
 
