@@ -74,7 +74,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     RecyclerView rvSelPayMethods;
     public static BuyTokenPaymentMethodsActivity buyTokenPaymentMethodsActivity;
     Long mLastClickTime = 0L;
-    Dialog cvvDialog;
+    Dialog cvvDialog, extBankDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +162,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                     Utils.displayAlert("Bank integration has been cancelled", BuyTokenPaymentMethodsActivity.this, "", "");
                 } else {
+                    if (extBankDialog != null) {
+                        extBankDialog.dismiss();
+                    }
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
                 }
@@ -484,9 +487,10 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                            ControlMethod("externalBank");
-                            strCurrent = "externalBank";
-                            strOnPauseScreen = "externalBank";
+//                            ControlMethod("externalBank");
+//                            strCurrent = "externalBank";
+//                            strOnPauseScreen = "externalBank";
+                            showExternalBank();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -526,46 +530,46 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                 }
             });
 
-            lyExternalClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ControlMethod("addpayment");
-                    strCurrent = "addpayment";
-                }
-            });
-
-            cvNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                            isBank = true;
-                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
-                            i.putExtra("signon", signOnData);
-                            startActivityForResult(i, 1);
-                        } else {
-                            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-
-            tvLearnMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    try {
-                        Utils.populateLearnMore(BuyTokenPaymentMethodsActivity.this);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+//            lyExternalClose.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ControlMethod("addpayment");
+//                    strCurrent = "addpayment";
+//                }
+//            });
+//
+//            cvNext.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    try {
+//                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+//                            isBank = true;
+//                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
+//                            i.putExtra("signon", signOnData);
+//                            startActivityForResult(i, 1);
+//                        } else {
+//                            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
+//
+//            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                        return;
+//                    }
+//                    mLastClickTime = SystemClock.elapsedRealtime();
+//                    try {
+//                        Utils.populateLearnMore(BuyTokenPaymentMethodsActivity.this);
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
             numberOfAccounts();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -747,8 +751,9 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ControlMethod("externalBank");
-                    strCurrent = "externalBank";
+//                    ControlMethod("externalBank");
+//                    strCurrent = "externalBank";
+                    showExternalBank();
                 }
             });
         } catch (Exception ex) {
@@ -1048,6 +1053,78 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         try {
             Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, BuyTokenActivity.class);
             startActivity(i);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void showExternalBank() {
+        try {
+            extBankDialog = new Dialog(BuyTokenPaymentMethodsActivity.this);
+            extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
+            extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            TextView tvLearn = extBankDialog.findViewById(R.id.tvLearnMore);
+            CardView cNext = extBankDialog.findViewById(R.id.cvNext);
+            LinearLayout lyClose = extBankDialog.findViewById(R.id.lyExternalClose);
+            tvLearn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    try {
+                        Utils.populateLearnMore(BuyTokenPaymentMethodsActivity.this);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+
+            Window window = extBankDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            extBankDialog.show();
+            lyClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        extBankDialog.dismiss();
+                        if (strCurrent.equals("firstError")) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            cNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+
+                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                            isBank = true;
+                            Intent i = new Intent(BuyTokenPaymentMethodsActivity.this, WebViewActivity.class);
+                            i.putExtra("signon", signOnData);
+                            startActivityForResult(i, 1);
+                        } else {
+                            Utils.displayAlert(strSignOn, BuyTokenPaymentMethodsActivity.this, "", "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception ex) {
             ex.printStackTrace();
         }
