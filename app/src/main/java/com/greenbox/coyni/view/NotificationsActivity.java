@@ -393,7 +393,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     if (globalNotifications.size() > 0) {
                         notificationsRV.setVisibility(View.VISIBLE);
                         noDataTV.setVisibility(View.GONE);
-                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
+                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow) - 1);
                     } else {
                         notificationsRV.setVisibility(View.GONE);
                         noDataTV.setVisibility(View.VISIBLE);
@@ -546,8 +546,8 @@ public class NotificationsActivity extends AppCompatActivity {
                             statusRequest.setStatus("Completed");
                             statusRequest.setRemarks("");
                             updatedStatus = "Completed";
-                            //userRequestStatusUpdateCall(statusRequest);
-                            new FetchData(NotificationsActivity.this).execute();
+                            userRequestStatusUpdateCall(statusRequest);
+//                            new FetchData(NotificationsActivity.this).execute();
 
                         } else {
                             Utils.displayAlert(payRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", payRequestResponse.getError().getFieldErrors().get(0));
@@ -730,7 +730,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
             if (!dataItem.getRemarks().equals("")) {
                 messageLL.setVisibility(View.VISIBLE);
-                messageTV.setText("\""+dataItem.getRemarks()+"\"");
+                messageTV.setText("\"" + dataItem.getRemarks() + "\"");
                 myUserIDTV.setText(dataItem.getFromUser() + " Says:");
             } else {
                 messageLL.setVisibility(View.GONE);
