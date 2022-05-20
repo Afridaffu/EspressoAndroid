@@ -4,15 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
+import com.greenbox.coyni.utils.LogUtils;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.RangeDates;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.verticalcalendar.CalendarPicker;
 
@@ -28,35 +30,82 @@ import kotlin.jvm.functions.Function2;
 
 public class DateRangePickerDialog extends BaseDialog {
 
+    public final String TAG = getClass().getName();
     private Context context;
+    private  Date startDateD = null;
+    private  Date endDateD = null;
+    private String strFromDate = "", strToDate = "", strSelectedDate = "";
+    private RangeDates rangeDates;
+    private CalendarPicker calendarPicker;
+    private ImageView closeIV;
+    private TextView doneTV;
+    private TextView rangeDateTV;
+    public static String displayFormat = "MM-dd-yyyy";
+    private SimpleDateFormat displayFormatter;
+
 
     public DateRangePickerDialog(Context context) {
-
         super(context);
         this.context = context;
     }
 
-    public long startDateLong = 0L, endDateLong = 0L, tempStartDateLong = 0L, tempEndDateLong = 0L;
-    Date startDateD = null;
-    Date endDateD = null;
-    public String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
-    private RangeDates rangeDates;
-
+    public DateRangePickerDialog(Context context, RangeDates rangeDates) {
+        super(context);
+        this.context = context;
+        this.rangeDates = rangeDates;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_dialog);
-        int height = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.90);
-        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, height);
-        initFields();
+        try {
+            int height = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.90);
+            getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, height);
+            displayFormatter = new SimpleDateFormat(displayFormat);
+
+            initFields();
+
+            setSelectedDate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void initFields() {
+    private void setSelectedDate() {
+        calendarPicker.showDayOfWeekTitle(true);
+        calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
+        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
+        Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
+        calendarPicker.scrollToDate(endDate.getTime());
 
-        ImageView closeIV = findViewById(R.id.closeIV);
-        TextView doneTV = findViewById(R.id.doneTV);
-        TextView rangeDateTV = findViewById(R.id.rangeDateTV);
+
+
+        if(rangeDates != null) {
+            strToDate = rangeDates.getUpdatedToDate();
+            strFromDate = rangeDates.getUpdatedFromDate();
+            strSelectedDate = rangeDates.getFullDate();
+            try {
+                startDateD = displayFormatter.parse(strFromDate);
+                endDateD = displayFormatter.parse(strToDate);
+                showSelectedDate();
+                calendarPicker.setSelectionDate(startDateD, endDateD);
+            } catch (Exception e) {
+                LogUtils.e(TAG, "Date Parse exception");
+            }
+
+        }
+    }
+
+    private void initFields() {
+
+        closeIV = findViewById(R.id.closeIV);
+        doneTV = findViewById(R.id.doneTV);
+        rangeDateTV = findViewById(R.id.rangeDateTV);
+        calendarPicker = findViewById(R.id.calendar_view);
+
         closeIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,85 +117,23 @@ public class DateRangePickerDialog extends BaseDialog {
             @Override
             public void onClick(View view) {
                 try {
-                    dismiss();
-
-                    new Date(startDateLong).getYear();
-                    Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                    int mYear = c.get(Calendar.YEAR);
-                    int mMonth = c.get(Calendar.MONTH);
-                    int mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-                    String sDate = formatter.format(startDateLong);
-                    String eDate = formatter.format(endDateLong);
-
-                    strFromDate = sDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(sDate.split("-")[0])) + "";
-
-                    Log.e("myear", mYear + " " + mMonth + " " + mDay + " " + strFromDate);
-
-                    if (Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[0]))) == mDay
-                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[1]))) == (mMonth + 1)
-                            && Integer.parseInt(Utils.changeFormat(Integer.parseInt(eDate.split("-")[2]))) == mYear) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SS");
-                        String str = sdf.format(new Date());
-                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " ";
-                    } else {
-                        strToDate = eDate.split("-")[2] + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[1])) + "-" + Utils.changeFormat(Integer.parseInt(eDate.split("-")[0])) + " ";
-                    }
-
-                    Log.e("strFromDate", strFromDate);
-                    Log.e("strToDate", strToDate);
-
-                    getOnDialogClickListener().onDialogClicked("Done", strFromDate + " - " + strToDate);
                     rangeDates = new RangeDates();
-                    rangeDates.setUpdatedToDate(strToDate);
-                    rangeDates.setUpdatedFromDate(strFromDate);
+                    rangeDates.setUpdatedToDate(displayFormatter.format(endDateD));
+                    rangeDates.setUpdatedFromDate(displayFormatter.format(startDateD));
                     rangeDates.setFullDate(strSelectedDate);
                     getOnDialogClickListener().onDialogClicked(Utils.datePicker, rangeDates);
                     dismiss();
-                } catch (NumberFormatException e) {
+
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
-
-        CalendarPicker calendarPicker = findViewById(R.id.calendar_view);
-        Calendar startDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        Date backwardDate = new Date(startDate.getTime().getTime() - 31556952000L);
-        Calendar endDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-//        endDate.add(Calendar.MONTH, 12); // Add 6 months ahead from current date
-        calendarPicker.setRangeDate(backwardDate, endDate.getTime());
-        calendarPicker.showDayOfWeekTitle(true);
-        calendarPicker.setMode(CalendarPicker.SelectionMode.RANGE);
-        calendarPicker.scrollToDate(endDate.getTime());
-
-
-        try {
-            if (!strSelectedDate.equals("")) {
-                rangeDateTV.setText(strSelectedDate);
-                calendarPicker.setSelectionDate(new Date(startDateLong), new Date(endDateLong));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         calendarPicker.setOnRangeSelectedListener((date, date2, s, s2) -> {
-
-            SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
-
-            try {
-                startDateD = f.parse(s);
-                endDateD = f.parse(s2);
-                startDateLong = startDateD.getTime();
-                endDateLong = endDateD.getTime();
-                Log.e("startDate long", startDateLong + "  " + endDateLong);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
-            strSelectedDate = simpleDateFormat.format(startDateLong) + " - " + simpleDateFormat.format(endDateLong);
-            rangeDateTV.setText(strSelectedDate);
+            startDateD = date;
+            endDateD = date2;
+            showSelectedDate();
 
             return null;
         });
@@ -155,25 +142,24 @@ public class DateRangePickerDialog extends BaseDialog {
             @Override
             public Unit invoke(Date date, String s) {
                 SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
-
                 try {
                     startDateD = f.parse(s);
                     endDateD = f.parse(s);
-                    startDateLong = startDateD.getTime();
-                    endDateLong = endDateD.getTime();
-                    Log.e("startDate long", startDateLong + "  " + endDateLong);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd,yyyy");
-                strSelectedDate = simpleDateFormat.format(startDateLong) + " - " + simpleDateFormat.format(endDateLong);
-                rangeDateTV.setText(strSelectedDate);
 
                 return null;
             }
         });
 
+    }
+
+    private void showSelectedDate() {
+        String formatToDisplay = "MMM dd, yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
+        strSelectedDate = simpleDateFormat.format(startDateD) + " - " + simpleDateFormat.format(endDateD);
+        rangeDateTV.setText(strSelectedDate);
     }
 
 }

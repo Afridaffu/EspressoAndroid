@@ -509,10 +509,12 @@ public class CustomerProfileActivity extends BaseActivity {
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            qrDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            qrDialog.getWindow().setAttributes(lp);
+            qrDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             qrDialog.show();
             imgClose = qrDialog.findViewById(R.id.imgClose);
             meQrCode = qrDialog.findViewById(R.id.idIVQrcode);

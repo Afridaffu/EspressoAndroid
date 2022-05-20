@@ -38,6 +38,7 @@ import com.greenbox.coyni.model.reservemanual.ManualListResponse;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.model.transaction.TransactionListPosted;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -64,6 +65,8 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     private List<ManualItem> manualItems = new ArrayList<>();
     ArrayList<String> statusList = new ArrayList<>();
     private View view;
+    private MyApplication objMyApplication;
+
     private ReserveFilter reserveFilter = new ReserveFilter();
     private int currentPage = 0, total = 0;
     private boolean isRolling = true;
@@ -188,9 +191,9 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
             }
             if(reserveFilter.getUpdatedToDate() != null && reserveFilter.getUpdatedFromDate() != null) {
                 if (!reserveFilter.getUpdatedToDate().isEmpty() && !reserveFilter.getUpdatedFromDate().isEmpty()) {
-                    String strFromDate = Utils.formatDate(reserveFilter.getUpdatedFromDate());
+                    String strFromDate = Utils.payoutDate(reserveFilter.getUpdatedFromDate());
                     listRequest.setFromDate(strFromDate);
-                    String strToDate = Utils.formatDate(reserveFilter.getUpdatedToDate());
+                    String strToDate = Utils.payoutDate(reserveFilter.getUpdatedToDate());
                    listRequest.setToDate(strToDate);
                 }
             }
@@ -216,6 +219,7 @@ public class ReserveReleasesActivity extends BaseActivity implements TextWatcher
     }
 
     private void initFields() {
+        objMyApplication = (MyApplication) getApplicationContext();
         closeBtnIV = findViewById(R.id.closeBtnIV);
         searchET = findViewById(R.id.searchET);
         ivFilterIcon = findViewById(R.id.ivFilterIcon);
