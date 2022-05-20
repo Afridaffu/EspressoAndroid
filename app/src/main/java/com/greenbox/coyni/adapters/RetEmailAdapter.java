@@ -58,13 +58,15 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
             RetUserResData objData = listEmails.get(position);
 //            holder.tvEmail.setText(objData.getEmail().replaceAll("(?<=.{4}).(?=.*@)", "*"));
             holder.tvEmail.setText(objData.getEmail());
-            if (objData.getProfileImage() != null && !objData.getProfileImage().equals("")) {
+//            if (objData.getProfileImage() != null && !objData.getProfileImage().equals("")) {
+//
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
+//                utility.addImage(objData.getProfileImage(), holder.imgProfilePic, R.drawable.ic_profilelogo);
+//            } else {
+//                holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
+//            }
 
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
-                utility.addImage(objData.getProfileImage(), holder.imgProfilePic, R.drawable.ic_profilelogo);
-            } else {
-                holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
-            }
+            holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

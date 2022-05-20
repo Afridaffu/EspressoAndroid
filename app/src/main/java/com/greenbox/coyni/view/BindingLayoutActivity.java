@@ -255,30 +255,30 @@ public class BindingLayoutActivity extends BaseActivity {
 
     public void initObservers() {
         try {
-            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
-                @Override
-                public void onChanged(AddBusinessUserResponse identityImageResponse) {
-
-                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-
-                        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                            Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
-                            i.putExtra("ADDPERSONAL", "true");
-                            startActivity(i);
-                            finish();
-                        } else {
-                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
-                            startActivity(i);
-                            finish();
-                        }
-
-                    } else {
-
-                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BindingLayoutActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
-                    }
-                }
-            });
+//            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
+//                @Override
+//                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+//
+//                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+//
+//                        if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                            Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+//                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+//                            i.putExtra("ADDPERSONAL", "true");
+//                            startActivity(i);
+//                            finish();
+//                        } else {
+//                            Intent i = new Intent(BindingLayoutActivity.this, IdentityVerificationActivity.class);
+//                            startActivity(i);
+//                            finish();
+//                        }
+//
+//                    } else {
+//
+//                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BindingLayoutActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+//                    }
+//                }
+//            });
         } catch (Exception e) {
             e.printStackTrace();
         }

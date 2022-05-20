@@ -163,7 +163,7 @@ public class PayoutDetailsTransactionsAdapter extends BaseRecyclerViewAdapter<Re
 
     private void setItemViewData(TransactionListPosted objData, PayoutDetailsTransactionsAdapter.ItemViewHolder holder) {
 
-        holder.createdDate.setText(Utils.convertPayoutDate(objData.getCreatedAt()));
+        holder.createdDate.setText(Utils.convertPayoutDate(objData.getCreatedAt()).toLowerCase());
         //type transaction
         if (objData.getTxnTypeDn().equalsIgnoreCase(Utils.SaleOrder)) {
             holder.txnTypeDn.setText(objData.getTxnTypeDn() + " - " + objData.getSenderName());
