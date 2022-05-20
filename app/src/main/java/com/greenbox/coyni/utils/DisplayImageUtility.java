@@ -123,6 +123,12 @@ public class DisplayImageUtility {
         }
     }
 
+    public void clearCache() {
+        if(imageCache != null && imageCache.size() > 0) {
+            imageCache.evictAll();
+        }
+    }
+
     private void setData(DownloadImageResponse response) {
         if (response == null || response.getStatus() == null
                 || !response.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
@@ -186,37 +192,6 @@ public class DisplayImageUtility {
     private synchronized void getImageFromUrl(final String url) {
         LogUtils.v(TAG, "Glide load started");
         new GetImageFromUrl(url).execute();
-//        Glide.with(context)
-//                .asBitmap()
-//                .load(url)
-//                .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
-//                    @Override
-//                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-//                        String key = tempMap.remove(url);
-//                        LogUtils.v(TAG, "Glide resource ready");
-//                        imageCache.put(key, bitmap);
-//                        updateViews(key);
-//                        loadNextImage();
-//                    }
-//                });
-//        Glide.with(context)
-//                .asBitmap()
-//                .load(url)
-//                .into(new CustomTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-//                        String key = tempMap.remove(url);
-//                        LogUtils.v(TAG, "Glide resource ready");
-//                        imageCache.put(key, bitmap);
-//                        updateViews(key);
-//                        loadNextImage();
-//                    }
-//
-//                    @Override
-//                    public void onLoadCleared(@Nullable Drawable placeholder) {
-//                        LogUtils.v(TAG, "Glide onLoadCleared");
-//                    }
-//                });
     }
 
     private void getDownloadUrl(List<DownloadUrlRequest> downloadUrlRequestList) {

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_5sdp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
@@ -29,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/businessProfileAccountItemChildImage"
                 android:scaleType="fitXY"
-                android:src="@color/light_gray"
+                android:src="@drawable/acct_profile"
                 android:visibility="visible" />
 
             <TextView
@@ -64,25 +65,27 @@
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
             android:text=""
-            android:textColor="#FFA701"
+            android:layout_marginEnd="@dimen/_14sdp"
+            android:textColor="@color/orange_status"
+            android:visibility="gone"
             android:textSize="@dimen/_7ssp" />
 
         <ImageView
             android:id="@+id/tickIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tint="@color/primary_green"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:gravity="center|right"
+            android:layout_marginEnd="@dimen/_16sdp"
             android:src="@drawable/ic_custom_tick"
-            android:visibility="visible" />
+            android:visibility="visible"
+            app:tint="@color/primary_green" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
         android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_21sdp"
         android:layout_marginEnd="@dimen/_20sdp"
         android:background="#E8E8E8"/>
 
