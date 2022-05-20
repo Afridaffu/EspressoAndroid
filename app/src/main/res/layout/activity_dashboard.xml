@@ -508,6 +508,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:gravity="center"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -528,6 +529,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="5dp"
+                                            android:layout_marginTop="@dimen/_2sdp"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:text=" Under Review"
                                             android:textColor="@color/under_review_blue"
@@ -797,7 +799,7 @@
                                     android:id="@+id/txnRV"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:visibility="gone" />
+                                    android:visibility="visible" />
 
                                 <TextView
                                     android:id="@+id/noTxnTV"

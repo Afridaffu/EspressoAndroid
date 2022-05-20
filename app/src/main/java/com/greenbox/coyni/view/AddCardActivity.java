@@ -1684,10 +1684,13 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            preDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            preDialog.getWindow().setAttributes(lp);
+
+            preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             preDialog.setCancelable(false);
             preDialog.show();
             cvDone = preDialog.findViewById(R.id.cvDone);
