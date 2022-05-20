@@ -86,6 +86,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         if (filterTransactionListRequest != null) {
             isFilters = true;
             transactionType = filterTransactionListRequest.getTransactionType();
+
             if (transactionType == null) {
                 transactionType = new ArrayList<>();
             }
@@ -166,7 +167,6 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 //            isFilters = false;
             tempStrSelectedDate = "";
             storedSelectDate = "";
-
 
 
         }
@@ -518,11 +518,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 }
                 if (!strFromDate.equals("")) {
                     isFilters = true;
-                    filterTransactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
+                    filterTransactionListRequest.setUpdatedFromDate((objMyApplication.exportDate(strFromDate + " 00:00:00.000")).split("\\ ")[0] + " 00:00:00");
+                    filterTransactionListRequest.setUpdatedFromDateOperator(">=");
                 }
                 if (!strToDate.equals("")) {
                     isFilters = true;
-                    filterTransactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
+                    filterTransactionListRequest.setUpdatedToDate((objMyApplication.exportDate(strToDate + "00:00:00.000")).split("\\ ")[0] + " 23:59:59");
+                    filterTransactionListRequest.setUpdatedToDateOperator("<=");
                 }
 
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {

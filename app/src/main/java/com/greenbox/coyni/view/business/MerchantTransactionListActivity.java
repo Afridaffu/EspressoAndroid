@@ -246,7 +246,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                 if (globalPending.size() > 0 || globalPosted.size() > 0) {
                                     noTransactionTV.setVisibility(View.GONE);
                                 } else {
-//                                    noTransactionTV.setVisibility(View.VISIBLE);
+                                    noTransactionTV.setVisibility(View.VISIBLE);
                                 }
 
                                 layoutTransactionsPending.setVisibility(globalPending.size() == 0 ? View.GONE : View.VISIBLE);
@@ -257,7 +257,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                                     pendingTxt.setVisibility(View.VISIBLE);
                                     rvTransactionsPending.setLayoutManager(mLayoutManager);
                                     rvTransactionsPending.setItemAnimator(new DefaultItemAnimator());
-                                    rvTransactionsPending.setAdapter(transactionListPendingAdapter);
+//                                    rvTransactionsPending.setAdapter(transactionListPendingAdapter);
                                     if (currentPage > 0) {
                                         int myPos = globalPending.size() - transactionList.getData().getItems().getPendingTransactions().size();
                                         rvTransactionsPending.scrollToPosition(myPos);
@@ -335,14 +335,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
         dashboardViewModel.meTransactionList(transactionListRequest);
     }
 
-    private ArrayList<Integer> getDefaultTransactionTypes() {
-        ArrayList<Integer> transactionType = new ArrayList<>();
-        transactionType.add(Utils.saleOrder);
-        transactionType.add(Utils.refund);
-        transactionType.add(Utils.merchantPayout);
-        transactionType.add(Utils.monthlyServiceFee);
-        return transactionType;
-    }
+
 
     private void showTransactionDetails(TransactionListPosted selectedTransaction) {
         Intent inDetails = new Intent(MerchantTransactionListActivity.this, MerchantTransactionDetailsActivity.class);
@@ -366,9 +359,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     globalPending.clear();
                     globalPosted.clear();
                     filterTransactionList = (TransactionListRequest) value;
+
                     if (filterTransactionList.getTransactionType() == null
-                            || filterTransactionList.getTransactionType().size() <= 0) {
-                        filterTransactionList.setTransactionType(getDefaultTransactionTypes());
+                            || filterTransactionList.getTransactionType().size() == 0) {
+                        filterTransactionList.setMerchantTransactions(true);
                         filterTransactionList.setManualUpdate(true);
                     }
                     if (filterTransactionList.isFilters()) {
