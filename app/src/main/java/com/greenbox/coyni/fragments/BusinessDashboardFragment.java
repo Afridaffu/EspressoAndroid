@@ -1075,39 +1075,25 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String date = listItems.get(i).getCreatedAt();
                     if (date.contains(".")) {
                         String res = date.substring(0, date.lastIndexOf("."));
-                        nxtPayoutDatenTimeTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+                        nxtPayoutDatenTimeTV.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
                         Log.d("date format", date);
                     }
                     isOpen = true;
                 }
-//                else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
-//                    String Amount = listItems.get(i).getTotalAmount();
-//                    lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
-//
-//                    String date1 = listItems.get(i).getCreatedAt();
-//                    if (date1.contains(".")) {
-//                        String res = date1.substring(0, date1.lastIndexOf("."));
-//                        lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
-//                    } else {
-//                        Log.d("jkhj", date1);
-//                    }
-//                    isPaid = true;
-//                }
-                else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.INPROGRESS) && !isPaid) {
+                else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
                     String date1 = listItems.get(i).getCreatedAt();
                     if (date1.contains(".")) {
                         String res = date1.substring(0, date1.lastIndexOf("."));
-                        lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+                        lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
                         Log.d("jkhj", date1);
                     }
                     isPaid = true;
                 }
-
                 if (isPaid && isOpen) {
                     break;
                 } else {
@@ -1119,6 +1105,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             payoutsList.removeAllViews();
             int j = 0, paidItems = 0;
             while (j < listItems.size() && paidItems < 5) {
+                batchView.setVisibility(View.GONE);
                 View xmlView = getLayoutInflater().inflate(R.layout.batch_payouts_dashboard, null);
                 if (listItems.get(j).getStatus().equalsIgnoreCase(Utils.PAID)) {
                     TextView payoutDate = xmlView.findViewById(R.id.batchPayoutDateTV);
@@ -1126,7 +1113,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     String listDate = listItems.get(j).getCreatedAt();
                     if (listDate.contains(".")) {
                         String listD = listDate.substring(0, listDate.lastIndexOf("."));
-                        payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+                        payoutDate.setText(myApplication.convertZoneDateTime(listD, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
                     } else {
                         Log.d("listDate", listDate);
                     }

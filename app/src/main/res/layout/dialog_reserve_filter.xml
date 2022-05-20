@@ -140,7 +140,7 @@
             android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginBottom="@dimen/_7sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="@string/date"
+            android:text="@string/release_date"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_11ssp" />
 
