@@ -1,6 +1,8 @@
 package com.greenbox.coyni.view.business;
 
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -248,26 +250,34 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
                     payoutStatusTV.setTextColor(getColor(R.color.inprogress_status));
                     payoutStatusTV.setBackgroundResource(R.drawable.txn_inprogress_bg);
                     break;
+                case "paid":
+                    payoutStatusTV.setTextColor(getColor(R.color.completed_status));
+                    payoutStatusTV.setBackgroundResource(R.drawable.txn_completed_bg);
+                    break;
             }
         }
-        if(objData.getPayoutDate()!=null && objData.getPayoutDate().equals("")) {
+        if(objData.getPayoutDate()!=null && !objData.getPayoutDate().equals("")) {
             String date = objData.getPayoutDate();
             if (date.contains(".")) {
                 String formattedDate = date.substring(0, date.lastIndexOf("."));
-                payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formattedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a"));
+                payoutIDdateTimeTV.setText(objMyApplication.convertZoneDateTime(formattedDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a").toLowerCase());
             }
         }
 
         if (objData.getPayoutReferenceId() != null && !objData.getPayoutReferenceId().equals("")) {
             if (objData.getPayoutReferenceId().length() > 10) {
-                payoutRefIdTV.setText((objData.getPayoutReferenceId().substring(0, 10)));
+                SpannableString content = new SpannableString(objData.getPayoutReferenceId().substring(0, 10));
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                payoutRefIdTV.setText(content);
             } else {
                 payoutRefIdTV.setText(objData.getPayoutReferenceId());
             }
         }
         if (objData.getTokenAccount() != null && !objData.getTokenAccount().equals("")) {
             if (objData.getTokenAccount().length() > 10) {
-                payoutTokenIdTV.setText(objData.getTokenAccount().substring(0, 10));
+                SpannableString content = new SpannableString(objData.getTokenAccount().substring(0, 10));
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                payoutTokenIdTV.setText(content);
             } else {
                 payoutTokenIdTV.setText(objData.getTokenAccount());
             }
@@ -276,7 +286,9 @@ public class BusinessBatchPayoutIdDetailsActivity extends BaseActivity {
             reserveIDLL.setVisibility(View.VISIBLE);
             if (objData.getReserveWalletId().length() > 10) {
                 reserveIDLL.setVisibility(View.VISIBLE);
-                ReserveIdTV.setText(objData.getReserveWalletId().substring(0, 10));
+                SpannableString content = new SpannableString(objData.getReserveWalletId().substring(0, 10));
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                ReserveIdTV.setText(content);
             } else {
                 reserveIDLL.setVisibility(View.VISIBLE);
                 ReserveIdTV.setText(objData.getReserveWalletId());
