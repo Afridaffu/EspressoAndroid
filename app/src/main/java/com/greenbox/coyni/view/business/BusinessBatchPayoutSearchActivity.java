@@ -32,12 +32,18 @@ import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
 import com.greenbox.coyni.model.reservemanual.ReserveFilter;
 import com.greenbox.coyni.model.reservemanual.RollingSearchRequest;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class BusinessBatchPayoutSearchActivity extends BaseActivity implements TextWatcher {
 
@@ -56,6 +62,8 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     private BatchPayoutListAdapter batchPayoutListAdapter;
     private ReserveFilter batchFilter = new ReserveFilter();
     private static String applyFilter = "ApplyFilter", resetFilter = "ResetFilter";
+    private MyApplication objMyApplication;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     }
 
     private void initFields() {
+        objMyApplication = (MyApplication) getApplicationContext();
         closeBtnIV = findViewById(R.id.closeBtnIV);
         filterIconIV = findViewById(R.id.filterIconIV);
         applyFilterBtnCV = findViewById(R.id.applyFilterBtnCV);
@@ -162,33 +171,41 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
     }
 
     private void showFiltersPopup() {
-        PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
-        dialog.setOnDialogClickListener(new OnDialogClickListener() {
-            @Override
-            public void onDialogClicked(String action, Object value) {
-                if (action.equalsIgnoreCase(applyFilter)) {
-                    searchET.setText("");
-                    filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
-                    batchFilter = (ReserveFilter) value;
-                    getBatchListData();
-//                    rangeDates = (RangeDates) value;
-//                    if (rangeDates == null) {
-////                        recyclerViewPayouts.setVisibility(View.GONE);
-//                    } else {
-//                        String fromDate = Utils.formatDate(rangeDates.getUpdatedFromDate());
-//                        String toDate = Utils.formatDate(rangeDates.getUpdatedToDate());
-//                    }
-                } else if (action.equalsIgnoreCase(resetFilter)) {
-                    batchFilter = (ReserveFilter) value;
-                    filterIconIV.setImageResource(R.drawable.ic_filtericon);
-                    getBatchListData();
-                    dismissDialog();
-
-                }
-                payoutList.clear();
+        try {
+            if (batchFilter != null) {
+                PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
             }
-        });
-        dialog.show();
+                PayoutTransactionsDetailsFiltersDialog dialog = new PayoutTransactionsDetailsFiltersDialog(BusinessBatchPayoutSearchActivity.this, batchFilter);
+            dialog.setOnDialogClickListener(new OnDialogClickListener() {
+                @Override
+                public void onDialogClicked(String action, Object value) {
+                    if (action.equalsIgnoreCase(applyFilter)) {
+                        searchET.setText("");
+                        filterIconIV.setImageResource(R.drawable.ic_filter_enabled);
+                        batchFilter = (ReserveFilter) value;
+                        getBatchListData();
+    //                    rangeDates = (RangeDates) value;
+    //                    if (rangeDates == null) {
+    ////                        recyclerViewPayouts.setVisibility(View.GONE);
+    //                    } else {
+    //                        String fromDate = Utils.formatDate(rangeDates.getUpdatedFromDate());
+    //                        String toDate = Utils.formatDate(rangeDates.getUpdatedToDate());
+    //                    }
+                    } else if (action.equalsIgnoreCase(resetFilter)) {
+                        batchFilter = (ReserveFilter) value;
+                        searchET.setText("");
+                        filterIconIV.setImageResource(R.drawable.ic_filtericon);
+                        getBatchListData();
+                        dismissDialog();
+
+                    }
+                    payoutList.clear();
+                }
+            });
+            dialog.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -311,10 +328,16 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         if (batchFilter != null && batchFilter.isFilterApplied) {
             if (batchFilter.getUpdatedToDate() != null && batchFilter.getUpdatedFromDate() != null) {
                 if (!batchFilter.getUpdatedToDate().isEmpty() && !batchFilter.getUpdatedFromDate().isEmpty()) {
-                    String strFromDate = Utils.formatDate(batchFilter.getUpdatedFromDate());
-                    listRequest.setFromDate(strFromDate);
-                    String strToDate = Utils.formatDate(batchFilter.getUpdatedToDate());
-                    listRequest.setToDate(strToDate);
+
+                    String strF = batchFilter.getUpdatedFromDate();
+                    String strL = batchFilter.getUpdatedToDate();
+                    String strFromDate = Utils.payoutDate(strF);
+                    String strToDate = Utils.payoutDate(strL);
+
+                        listRequest.setFromDate(strFromDate);
+                        listRequest.setToDate(strToDate);
+
+
                 }
             }
         }
