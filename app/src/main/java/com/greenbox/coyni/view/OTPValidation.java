@@ -302,8 +302,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 //                            loginViewModel.smsotpresend(resend);
                         }
                     } else {
+                        Utils.hideKeypad(OTPValidation.this, view);
                         if (strScreen.equals("SignUp")) {
-                            Utils.hideKeypad(OTPValidation.this, view);
                             layoutEntry.setVisibility(View.GONE);
                             layoutFailure.setVisibility(View.VISIBLE);
                         } else {
@@ -623,8 +623,9 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                     Utils.displayAlert("You have exceeded maximum OTP verification attempts hence locking your account for 10 minutes. Try after 10 minutes to resend OTP.", OTPValidation.this, "Error", "");
                                 }
                             } else {
-                                if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
-                                        smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
+//                                if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio") ||
+//                                        smsValidate.getError().getErrorDescription().toLowerCase().contains("resend")) {
+                                if (smsValidate.getError().getErrorDescription().toLowerCase().contains("twilio")) {
                                     try {
                                         if (smsValidate.getError().getErrorDescription().equals("")) {
                                             Utils.displayAlert(smsValidate.getError().getFieldErrors().get(0), OTPValidation.this, "", smsValidate.getError().getFieldErrors().get(0));
