@@ -26,9 +26,12 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.BeneficialOwnersAdapter;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -43,6 +46,9 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BusinessRegistrationTrackerActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     private TextView caStartTV, dbaStartTV, boStartTV, addBankStartTV, aggrementsStartTV, caTV, caIncompleteTV, dbaTV, dbaIncompleteTV,
@@ -537,18 +543,60 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                     dismissDialog();
                     if (boResp != null) {
                         if (boResp.getStatus().toLowerCase().toString().equals("success") && boResp.getData().size() > 0) {
-                            objMyApplication.setBeneficialOwnersResponse(boResp);
-                            if (boAPICallFrom.equals("INCOMPLETE")) {
-                                Log.e("One","One");
-                                Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
-                                startActivity(intent);
-                                Log.e("Two","Two");
+
+                            BOResp finalBOResp = new BOResp();
+                            List<BOResp.BeneficialOwner> finalBOList = new ArrayList();
+                            List<BOResp.BeneficialOwner> noNameList = new ArrayList<>();
+
+                            for (int i = 0; i < boResp.getData().size(); i++) {
+                                BOResp.BeneficialOwner bo = boResp.getData().get(i);
+
+                                try {
+                                    if (bo.getFirstName().equals("") || bo.getFirstName() == null || bo.getLastName().equals("") || bo.getLastName() == null
+                                            || bo.getOwnershipParcentage() <= 0) {
+                                        noNameList.add(boResp.getData().get(i));
+                                    } else {
+                                        finalBOList.add(boResp.getData().get(i));
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    noNameList.add(boResp.getData().get(i));
+                                }
+                            }
+
+                            finalBOResp.setData(finalBOList);
+
+                            if (noNameList.size() > 0) {
+                                for (int i = 0; i < noNameList.size(); i++) {
+                                    businessIdentityVerificationViewModel.deleteBeneficialOwner(noNameList.get(i).getId());
+                                }
+                            }
+
+                            if (finalBOResp.getData().size() > 0) {
+
+                                objMyApplication.setBeneficialOwnersResponse(finalBOResp);
+                                if (boAPICallFrom.equals("INCOMPLETE")) {
+                                    Log.e("One", "One");
+                                    Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, AdditionalBeneficialOwnersActivity.class);
+                                    startActivity(intent);
+                                    Log.e("Two", "Two");
+                                } else {
+                                    boTV.setTextColor(getResources().getColor(R.color.primary_green));
+                                    boIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
+                                    boIncompleteTV.setText("In Progress");
+                                    boStartTV.setVisibility(GONE);
+                                    boInProgressIV.setVisibility(VISIBLE);
+                                }
                             } else {
-                                boTV.setTextColor(getResources().getColor(R.color.primary_green));
-                                boIncompleteTV.setTextColor(getResources().getColor(R.color.primary_green));
-                                boIncompleteTV.setText("In Progress");
-                                boStartTV.setVisibility(GONE);
-                                boInProgressIV.setVisibility(VISIBLE);
+                                if (boAPICallFrom.equals("INCOMPLETE"))
+                                    businessIdentityVerificationViewModel.postBeneficialOwnersID();
+                                if (isBOStart) {
+                                    boTV.setTextColor(getResources().getColor(R.color.primary_black));
+                                    boIncompleteTV.setTextColor(getResources().getColor(R.color.dark_grey));
+                                    boIncompleteTV.setText("Incomplete");
+                                    boStartTV.setVisibility(VISIBLE);
+                                    boInProgressIV.setVisibility(GONE);
+                                }
                             }
                         } else {
                             if (boAPICallFrom.equals("INCOMPLETE"))
@@ -790,4 +838,5 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             }
         }
     }
+
 }

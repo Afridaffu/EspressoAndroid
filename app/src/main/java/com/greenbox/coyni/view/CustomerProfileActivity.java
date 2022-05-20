@@ -95,6 +95,7 @@ public class CustomerProfileActivity extends BaseActivity {
     String authenticateType = "";
     boolean isLoggedOut = false;
     CustomerProfileViewModel customerProfileViewModel;
+    private DisplayImageUtility displayImageUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,8 @@ public class CustomerProfileActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_customer_profile);
+
+            displayImageUtility = DisplayImageUtility.getInstance(this);
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -488,6 +491,7 @@ public class CustomerProfileActivity extends BaseActivity {
         isLoggedOut = true;
         objMyApplication.setStrRetrEmail("");
         dropAllTables();
+        displayImageUtility.clearCache();
         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
@@ -554,8 +558,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     saveProfileIV.setVisibility(View.VISIBLE);
                     saveProfileTitle.setVisibility(View.GONE);
 
-                    DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                    utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+                    displayImageUtility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
                 } else {
                     saveProfileIV.setVisibility(View.GONE);
                     saveProfileTitle.setVisibility(View.VISIBLE);
@@ -584,8 +587,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (imageString != null && !imageString.trim().equals("")) {
                     imgProfile.setVisibility(View.VISIBLE);
                     userInfo.setVisibility(View.GONE);
-                    DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                    utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                    displayImageUtility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
                 } else {
                     imgProfile.setVisibility(View.GONE);
                     userInfo.setVisibility(View.VISIBLE);
@@ -1158,8 +1160,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 profileIV.setVisibility(View.VISIBLE);
 //                userProfile.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 imageTextTV.setVisibility(View.GONE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                utility.addImage(imageString, profileIV, R.drawable.ic_profile_male_user);
+                displayImageUtility.addImage(imageString, profileIV, R.drawable.ic_profile_male_user);
             } else {
                 profileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);

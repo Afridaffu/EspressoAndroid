@@ -26,6 +26,13 @@ public class ActionRequiredDataResponse {
     @Expose
     private ReseveRuleData reserveRule;
 
+    @SerializedName("message")
+    @Expose
+    private String message;
+
+    @SerializedName("note")
+    @Expose
+    private String note;
 
     public ReseveRuleData getReserveRule() {
         return reserveRule;
@@ -67,6 +74,22 @@ public class ActionRequiredDataResponse {
         this.informationChange = informationChange;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
     @Override
     public String toString() {
 
@@ -76,6 +99,8 @@ public class ActionRequiredDataResponse {
                 ", websiteChange=" + websiteChange +
                 ", informationChange=" + informationChange +
                 ", reserverule =" + reserveRule +
+                ", message =" + message +
+                ", note =" + note +
                 '}';
     }
 }

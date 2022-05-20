@@ -104,7 +104,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
     private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutAmountTV, cynTV;
-    private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV, mTvMonthlyVolume, mTvHighTickets,reserveRuleTV;
+    private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV, mTvMonthlyVolume, mTvHighTickets,reserveRuleTV,rulePeriodTV;
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
@@ -131,6 +131,8 @@ public class BusinessDashboardFragment extends BaseFragment {
     private LinearLayout mTicketsLayout;
     private TextView mIdVeriStatus;
     private UserData userData;
+    private String status = "", reserveAmount = "", timeDate = "", timeDateTemp = "", reserveRules = "", releaseDate = "";
+
 
     //Processing Volume Types
     private static final String todayValue = "Today";
@@ -168,6 +170,8 @@ public class BusinessDashboardFragment extends BaseFragment {
         mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+        businessDashboardViewModel.getRollingRuleDetails();
+
     }
 
     private Double getMerchantBalance() {
@@ -277,9 +281,9 @@ public class BusinessDashboardFragment extends BaseFragment {
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
         reserveRuleTV = mCurrentView.findViewById(R.id.reserveRuleTV);
+        rulePeriodTV = mCurrentView.findViewById(R.id.rulePeriodTV);
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
-//        businessDashboardViewModel.getRollingRuleDetails();
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -396,7 +400,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                     if (batchPayoutListResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
                         if (batchPayoutListResponse.getData() != null && batchPayoutListResponse.getData().getItems() != null) {
                             tv_PayoutNoHistory.setVisibility(View.GONE);
-                            batchView.setVisibility(View.GONE);
                             mPayoutHistory.setVisibility(View.VISIBLE);
                             showData(batchPayoutListResponse.getData().getItems());
                         } else {
@@ -567,6 +570,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
+
         businessDashboardViewModel.getMerchantActivityRespMutableLiveData().observe(getViewLifecycleOwner(), new Observer<MerchantActivityResp>() {
             @Override
             public void onChanged(MerchantActivityResp merchantActivityResp) {
@@ -587,6 +591,27 @@ public class BusinessDashboardFragment extends BaseFragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        businessDashboardViewModel.getRollingRuleResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<RollingRuleResponse>() {
+            @Override
+            public void onChanged(RollingRuleResponse ruleResponse) {
+                if (ruleResponse != null) {
+                    if (ruleResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (ruleResponse.getData() != null) {
+                            reserveRules = ruleResponse.getData().getReserveAmount().split("\\.")[0] + "% per Sale Order with a "  + ruleResponse.getData().getReservePeriod() + " day[s] ";
+
+                            if (!reserveRules.equals("") && reserveRules != null) {
+                                rulePeriodTV.setText(reserveRules);
+                            }
+
+                        }
+                    } else {
+//                            Utils.displayAlert(getString(R.string.something_went_wrong), ReserveDetailsActivity.this, "", ruleResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+
             }
         });
 
@@ -1043,6 +1068,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                         mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                         mCvBatchNow.setClickable(false);
                     } else {
+                        mCvBatchNow.setCardBackgroundColor(getResources().getColor(R.color.primary_color));
+                        mCvBatchNow.setClickable(true);
                         nextPayoutAmountTV.setText(amt);
                     }
                     String date = listItems.get(i).getCreatedAt();
@@ -1053,7 +1080,21 @@ public class BusinessDashboardFragment extends BaseFragment {
                         Log.d("date format", date);
                     }
                     isOpen = true;
-                } else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.INPROGRESS) && !isPaid) {
+                }
+//                else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.PAID) && !isPaid) {
+//                    String Amount = listItems.get(i).getTotalAmount();
+//                    lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
+//
+//                    String date1 = listItems.get(i).getCreatedAt();
+//                    if (date1.contains(".")) {
+//                        String res = date1.substring(0, date1.lastIndexOf("."));
+//                        lastPayoutDate.setText(myApplication.convertZoneDateTime(res, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+//                    } else {
+//                        Log.d("jkhj", date1);
+//                    }
+//                    isPaid = true;
+//                }
+                else if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.INPROGRESS) && !isPaid) {
                     String Amount = listItems.get(i).getTotalAmount();
                     lastPayoutAmountTV.setText(Utils.convertBigDecimalUSDC((Amount)));
 
@@ -1109,8 +1150,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
                 j++;
             }
-            batchView.setVisibility(View.VISIBLE);
-
         } else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);

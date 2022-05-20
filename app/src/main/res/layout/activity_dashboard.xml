@@ -511,9 +511,8 @@
                                     android:orientation="horizontal">
 
                                     <TextView
-                                        android:layout_width="match_parent"
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="1"
                                         android:fontFamily="@font/opensans_semibold"
                                         android:text="Account Status:"
                                         android:textColor="@color/primary_black"
@@ -550,11 +549,11 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_7sdp"
+                                    android:layout_marginBottom="@dimen/_16sdp"
                                     android:fontFamily="@font/opensans_regular"
                                     android:text="Our team is still reviewing your account. This process may take up to 3 business days."
                                     android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_11ssp"
-                                    android:layout_marginBottom="@dimen/_16sdp"/>
+                                    android:textSize="@dimen/_11ssp" />
 
 
                             </LinearLayout>
@@ -618,7 +617,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_7sdp"
                                     android:fontFamily="@font/opensans_regular"
-                                    android:text="Social Security number verification."
+                                    android:text="The coyni team requires you to upload your documents within 30 days to further verify you."
                                     android:textColor="@color/primary_black"
                                     android:textSize="@dimen/_11ssp" />
 
@@ -633,7 +632,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/opensans_semibold"
-                                        android:text="Continue"
+                                        android:text="Upload Document"
                                         android:textColor="@color/primary_color"
                                         android:textSize="@dimen/_11ssp" />
 
