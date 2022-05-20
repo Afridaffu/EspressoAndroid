@@ -28,6 +28,10 @@ import com.greenbox.coyni.view.business.PayoutDetailsTransactionList;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     private LinearLayout datePickLL;
     private TextView resetFilterTV;
@@ -39,13 +43,16 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private  String storedSelectDate = "",tempStrSelectedDate = "";
+    private  String storedSelectDate = "",tempStrSelectedDate = "",strFromdate = "",strTodate = "",strSelectedDate = "",strended = "",strupdated = "";
 
 
     private Boolean isFilters = false;
 
     public boolean isfilterdatePickET = false, isapplyEnabled = false;
-
+    private String displayFormat = "MM-dd-yyyy";
+    private SimpleDateFormat displayFormatter;
+    private java.util.Date startDateD = null;
+    private Date endDateD = null;
     private RangeDates rangeDates;
     private ReserveFilter filter;
     //    public static PayoutTransactionsDetailsFiltersDialog payoutTransactionsDetailsFiltersDialog;
@@ -61,11 +68,9 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payout_transactions_filter);
-        objMyApplication = (MyApplication) context.getApplicationContext();
-        sharedPreferences = context.getSharedPreferences("", 0);
-        mEditor = sharedPreferences.edit();
-        storedSelectDate = sharedPreferences.getString(Utils.SelectStoredDate,tempStrSelectedDate);
+        displayFormatter = new SimpleDateFormat(displayFormat);
 
+        objMyApplication = (MyApplication) context.getApplicationContext();
 
         datePickLL = findViewById(R.id.payoutDateRangePickerLL);
         datePickIV = findViewById(R.id.datePickIV);
@@ -73,8 +78,37 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         applyFilterBtnCV = findViewById(R.id.applyFilterBtnCV);
         resetFilterTV = findViewById(R.id.resetFiltersTV);
 
-        if (filter == null) {
-            filter = new ReserveFilter();
+        if (filter != null && filter.getUpdatedFromDate() != null && filter.getUpdatedToDate() != null) {
+            String strF = filter.getUpdatedFromDate();
+            String strT = filter.getUpdatedToDate();
+
+
+            String formatToDisplay = "MMM dd, yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
+            try {
+                startDateD = displayFormatter.parse(strF);
+                endDateD = displayFormatter.parse(strT);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            strupdated = simpleDateFormat.format(startDateD);
+            strended = simpleDateFormat.format(endDateD);
+
+            strSelectedDate = simpleDateFormat.format(startDateD) + "  " + simpleDateFormat.format(endDateD);
+            filterDatePickET.setText(strSelectedDate);
+            strSelectedDate = strupdated + "  " + strended;
+            if (strSelectedDate != null) {
+                filterDatePickET.setText(strSelectedDate);
+            }else {
+                filterDatePickET.setText("");
+            }
+
+            SimpleDateFormat rangeFormat = new SimpleDateFormat(DateRangePickerDialog.displayFormat);
+            rangeDates = new RangeDates();
+            rangeDates.setUpdatedFromDate(rangeFormat.format(startDateD));
+            rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
+
         }
 
         datePickLL.setOnClickListener(new View.OnClickListener() {
@@ -104,9 +138,6 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
             }
         });
 
-        if(filter.isFilterApplied) {
-            filterDatePickET.setText(storedSelectDate);
-        }
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +147,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
                     Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
                 } else {
                     if (getOnDialogClickListener() != null) {
+//                        filterDatePickET.setText(storedSelectDate);
                         getOnDialogClickListener().onDialogClicked("ApplyFilter", filter);
                         dismiss();
                     }
@@ -134,9 +166,13 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
             @Override
             public void onClick(View view) {
                 filterDatePickET.setText("");
+                filterDatePickET.clearFocus();
                 filter.isFilterApplied = false;
-                mEditor.putString(Utils.SelectStoredDate, tempStrSelectedDate);
-                mEditor.commit();
+                rangeDates.setUpdatedFromDate("");
+                rangeDates.setUpdatedToDate("");
+                strSelectedDate = "";
+                tempStrSelectedDate = "";
+
                 if (getOnDialogClickListener() != null) {
                     getOnDialogClickListener().onDialogClicked("ResetFilter", filter);
                 }
@@ -145,7 +181,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     }
 
     private void showCalendarDialog() {
-        DateRangePickerDialog dialog = new DateRangePickerDialog(context);
+        DateRangePickerDialog dialog = new DateRangePickerDialog( context,rangeDates);
         dialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
@@ -156,8 +192,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
                     filter.setUpdatedToDate(rangeDates.getUpdatedToDate());
                     tempStrSelectedDate = rangeDates.getFullDate();
                     filterDatePickET.setText(tempStrSelectedDate);
-                    mEditor.putString(Utils.SelectStoredDate,tempStrSelectedDate);
-                    mEditor.commit();
+
                 }
             }
         });

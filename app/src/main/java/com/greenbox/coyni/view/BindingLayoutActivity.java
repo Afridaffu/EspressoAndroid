@@ -88,8 +88,9 @@ public class BindingLayoutActivity extends BaseActivity {
             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 txvVerifyName.setText("Add Personal Account");
                 txvVerifyDescription.setText(" Please follow the instructions below to create personal account.");
-                identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             }
+            identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
+
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
             List<RetUserResData> usersData;

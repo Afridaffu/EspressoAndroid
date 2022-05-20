@@ -1527,10 +1527,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            preAuthDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            preAuthDialog.getWindow().setAttributes(lp);
+            preAuthDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
             preAuthDialog.show();
             layoutPClose = preAuthDialog.findViewById(R.id.layoutPClose);
             tvMessage = preAuthDialog.findViewById(R.id.tvMessage);
@@ -1684,14 +1685,14 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            preDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            preDialog.getWindow().setAttributes(lp);
             preDialog.setCancelable(false);
             preDialog.show();
             cvDone = preDialog.findViewById(R.id.cvDone);
-
+          preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
             cvDone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1735,10 +1736,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            preDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            preDialog.getWindow().setAttributes(lp);
+            preAuthDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
             preDialog.setCancelable(false);
             preDialog.show();
             cvAddBank = preDialog.findViewById(R.id.cvAddBank);
@@ -1777,10 +1779,12 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            preDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            preDialog.getWindow().setAttributes(lp);
+            preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             preDialog.show();
             cpProgress = preDialog.findViewById(R.id.cpProgress);
             cpProgress.show();
@@ -1801,10 +1805,11 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            preDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            preDialog.getWindow().setAttributes(lp);
+            preDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
             preDialog.setCancelable(false);
             preDialog.show();
             cvTryAgain = preDialog.findViewById(R.id.cvTryAgain);
