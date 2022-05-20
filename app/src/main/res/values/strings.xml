@@ -679,6 +679,7 @@
     <string name="declined_text">Application Declined</string>
     <string name="act_rqrd_description">Thank you for your interest in coyni. After reviewing your account, the coyni team requires you to upload the following documentation within 30 days to continue account verification.</string>
     <string name="default_notification_channel_id">Channel ID</string>
+    <string name="extBankMsg">coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
 
 
 </resources>

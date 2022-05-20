@@ -167,7 +167,11 @@ public class CustomerProfileActivity extends BaseActivity {
                         cardviewYourAccount.setVisibility(View.GONE);
                     }
                     tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
-                    cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        cpAccountIDTV.setText("Account ID C-" + objMyApplication.getMyProfile().getData().getId());
+                    } else {
+                        cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
+                    }
                 } catch (Resources.NotFoundException e) {
                     e.printStackTrace();
                 }
