@@ -303,6 +303,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         }
                     } else {
                         if (strScreen.equals("SignUp")) {
+                            Utils.hideKeypad(OTPValidation.this, view);
                             layoutEntry.setVisibility(View.GONE);
                             layoutFailure.setVisibility(View.VISIBLE);
                         } else {
