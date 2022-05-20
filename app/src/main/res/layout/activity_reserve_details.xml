@@ -125,12 +125,12 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
                             android:layout_weight="1"
                             android:fontFamily="@font/opensans_regular"
                             android:text="@string/status"
@@ -139,9 +139,8 @@
 
                         <TextView
                             android:id="@+id/reserveStatusTV"
-                            android:layout_width="@dimen/_68sdp"
-                            android:layout_height="@dimen/_14sdp"
-                            android:layout_marginTop="@dimen/_6sdp"
+                            android:layout_width="@dimen/_67sdp"
+                            android:layout_height="@dimen/_17sdp"
                             android:background="@drawable/fill_grn_color_smallradius"
                             android:fontFamily="@font/opensans_bold"
                             android:gravity="center"
