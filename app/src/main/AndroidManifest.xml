@@ -380,6 +380,7 @@
             android:name=".view.EnableAuthID"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />

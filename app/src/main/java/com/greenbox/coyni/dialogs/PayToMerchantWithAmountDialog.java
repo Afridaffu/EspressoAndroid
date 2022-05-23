@@ -25,7 +25,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private LinearLayout copyAddressLL;
     private String amount;
     private UserDetails userDetails;
-    private TextView payAmount, recipientAddressTV, tv_lable, tv_lable_verify,accountType, availableBalance, userName,bTypeValue;
+    private TextView payAmount, recipientAddressTV, tv_lable, tv_lable_verify, accountType, availableBalance, userName, bTypeValue;
     private String recipientAddress = "";
     private boolean screenCheck;
     Boolean isFaceLock = false, isTouchId = false;
@@ -34,9 +34,9 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private final String pay = "payTransaction";
     private double balance;
-    private  String businessTypeValue;
+    private String businessTypeValue;
 
-    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon, double balance,String bType) {
+    public PayToMerchantWithAmountDialog(Context context, String strAmount, UserDetails userDetails, boolean isShowIcon, double balance, String bType) {
         super(context);
         amount = strAmount;
         this.userDetails = userDetails;
@@ -65,7 +65,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         bindUserInfo(userDetails);
 
         if (amount != null) {
-            amount=amount.replace(",","").trim();
+            amount = amount.replace(",", "").trim();
             payAmount.setText(Utils.USNumberFormat(Double.parseDouble(amount)));
         }
         if (recipientAddress.length() > 13) {
@@ -81,11 +81,10 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
         if (userDetails.getData().getFullName() != null) {
             userName.setText("Paying " + userDetails.getData().getFullName());
         }
-        if (businessTypeValue != null){
-            if (businessTypeValue.length()>20) {
-                bTypeValue.setText(businessTypeValue.substring(0,21)+"...");
-            }
-            else {
+        if (businessTypeValue != null) {
+            if (businessTypeValue.length() > 20) {
+                bTypeValue.setText(businessTypeValue.substring(0, 21) + "...");
+            } else {
                 bTypeValue.setText(businessTypeValue);
             }
         }
@@ -149,7 +148,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 
             }
 //            requestedToUserId = userDetails.getData().getUserId();
-            if (userDetails.getData().getFullName() != null) {
+            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getFullName() != null) {
                 if (userDetails.getData().getFullName().length() > 20) {
                     tvName.setText(Utils.capitalize(userDetails.getData().getFullName()).substring(0, 20) + "...");
                 } else {
@@ -159,8 +158,10 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
 //            tvName.setText(Utils.capitalize(userDetails.getData().getFullName()));
 //            strUserName = Utils.capitalize(userDetails.getData().getFullName());
             String imageTextNew = "";
-            imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
-                    userDetails.getData().getLastName().substring(0, 1).toUpperCase();
+            if (userDetails != null && userDetails.getData() != null && userDetails.getData().getFirstName() != null && userDetails.getData().getLastName() != null) {
+                imageTextNew = userDetails.getData().getFirstName().substring(0, 1).toUpperCase() +
+                        userDetails.getData().getLastName().substring(0, 1).toUpperCase();
+            }
             userName.setText(imageTextNew);
             if (userDetails.getData().getWalletId().length() > 10) {
                 userWalletAddre.setText("Account Address " + userDetails.getData().getWalletId().substring(0, 10) + "...");
