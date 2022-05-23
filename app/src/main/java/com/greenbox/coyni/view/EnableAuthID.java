@@ -278,17 +278,22 @@ public class EnableAuthID extends AppCompatActivity {
             succesCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (enableTypeCopy.equals("TOUCH")) {
-                        faceIDRL.setVisibility(View.GONE);
-                        touchIDRL.setVisibility(View.VISIBLE);
-                        successRL.setVisibility(View.GONE);
-                        businessSuccessRL.setVisibility(View.GONE);
-                    } else {
-                        faceIDRL.setVisibility(View.VISIBLE);
-                        touchIDRL.setVisibility(View.GONE);
-                        successRL.setVisibility(View.GONE);
-                        businessSuccessRL.setVisibility(View.GONE);
+//                    if (enableTypeCopy.equals("TOUCH")) {
+//                        faceIDRL.setVisibility(View.GONE);
+//                        touchIDRL.setVisibility(View.VISIBLE);
+//                        successRL.setVisibility(View.GONE);
+//                        businessSuccessRL.setVisibility(View.GONE);
+//                    } else {
+//                        faceIDRL.setVisibility(View.VISIBLE);
+//                        touchIDRL.setVisibility(View.GONE);
+//                        successRL.setVisibility(View.GONE);
+//                        businessSuccessRL.setVisibility(View.GONE);
+//                    }
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
                     }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    launchDashboard();
                 }
             });
 
