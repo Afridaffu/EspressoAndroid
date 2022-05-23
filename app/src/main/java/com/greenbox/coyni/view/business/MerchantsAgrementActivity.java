@@ -171,7 +171,7 @@ public class MerchantsAgrementActivity extends BaseActivity {
             File file = new File(filePath);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body = MultipartBody.Part.createFormData("identityFile", file.getName(), requestFile);
-            businessDashboardViewModel.signedAgreement(body, 5);
+            businessDashboardViewModel.signedAgreement(body, Utils.mAgmt);
         } else {
             dismissDialog();
             LogUtils.v(TAG, "File path is null");

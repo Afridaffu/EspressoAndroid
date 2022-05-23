@@ -663,7 +663,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             super.onResume();
 //            if (Utils.isKeyboardVisible)
 //                Utils.hideKeypad(this);
-            if (!addBusiness || isAddBusinessCalled) {
+            if (!addBusiness || isAddBusinessCalled || addDBA) {
                 showProgressDialog();
                 businessIdentityVerificationViewModel.getBusinessTracker();
             }
