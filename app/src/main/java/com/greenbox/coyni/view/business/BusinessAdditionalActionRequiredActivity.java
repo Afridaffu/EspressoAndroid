@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
@@ -28,7 +27,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -39,13 +37,12 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.dialogs.AddCommentsDialog;
 import com.greenbox.coyni.dialogs.ApplicationApprovedDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.dialogs.ShowFullPageImageDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.underwriting.ActionRequiredResponse;
 import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
@@ -59,10 +56,8 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequiredViewModel;
-import com.journeyapps.barcodescanner.Util;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -386,6 +381,18 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
             if (actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1() != null) {
                 imgWebsite.setVisibility(View.VISIBLE);
+                imgWebsite.setTag(actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1());
+                imgWebsite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        ShowFullPageImageDialog showImgDialog = new ShowFullPageImageDialog(BusinessAdditionalActionRequiredActivity.this, (String) imgWebsite.getTag());
+                        showImgDialog.show();
+                    }
+                });
                 DisplayImageUtility.ImageHolder holder = new DisplayImageUtility.ImageHolder();
                 holder.key = actionRequiredResponse.getData().getWebsiteChange().get(i).getDocumentUrl1();
                 holder.imageView = imgWebsite;

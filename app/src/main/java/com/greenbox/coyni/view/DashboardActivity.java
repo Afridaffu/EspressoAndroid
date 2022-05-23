@@ -125,6 +125,11 @@ public class DashboardActivity extends BaseActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
         try {
             switch (requestCode) {
@@ -843,10 +848,11 @@ public class DashboardActivity extends BaseActivity {
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            dialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            dialog.getWindow().setAttributes(lp);
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
             dialog.show();
             transactionsNSV.smoothScrollTo(0, 0);
             layoutClose = dialog.findViewById(R.id.layoutClose);
@@ -872,10 +878,12 @@ public class DashboardActivity extends BaseActivity {
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            dialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            dialog.getWindow().setAttributes(lp);
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             dialog.show();
             transactionsNSV.smoothScrollTo(0, 0);
             layoutClose = dialog.findViewById(R.id.layoutClose);

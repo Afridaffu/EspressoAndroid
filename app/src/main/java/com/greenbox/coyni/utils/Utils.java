@@ -391,6 +391,8 @@ public class Utils {
     public static final String resetFilter = "resetFilter";
     public static final String datePicker = "DatePicker";
     public static final String SelectStoredDate = "SelectStoredDate";
+    public static final String selectfromdate = "selectfromdate";
+    public static final String selecttodate = "selecttodate";
 
     public static final String position = "Position";
     public static final int cPP = 1;
@@ -398,6 +400,8 @@ public class Utils {
     public static final int mPP = 8;
     public static final int mTOS = 7;
     public static final int mAgmt = 5;
+
+    public static Class<?> launchedActivity = OnboardActivity.class;
 
     //Cards
     public static final String MASTERCARD = "MASTERCARD";
@@ -793,6 +797,22 @@ public class Utils {
         return strDate;
     }
 
+    public static String payoutDate(String date) {
+        if (date.length() == 22) {
+            date = date + "0";
+        }
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("MM-dd-yyyy");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            strDate = spf.format(newDate);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
     public static boolean disabledMultiClick() {
         boolean action = false;
         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
