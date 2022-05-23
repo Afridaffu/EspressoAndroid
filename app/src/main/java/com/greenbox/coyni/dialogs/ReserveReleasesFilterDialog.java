@@ -88,7 +88,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             }
             strupdated = simpleDateFormat.format(startDateD);
             strended = simpleDateFormat.format(endDateD);
-            strSelectedDate = strupdated + "  " + strended;
+            strSelectedDate = strupdated + " - " + strended;
             if (strSelectedDate != null) {
                 dateRange.setText(strSelectedDate);
             } else {

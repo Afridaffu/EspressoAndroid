@@ -97,7 +97,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
 
             strSelectedDate = simpleDateFormat.format(startDateD) + "  " + simpleDateFormat.format(endDateD);
             filterDatePickET.setText(strSelectedDate);
-            strSelectedDate = strupdated + "  " + strended;
+            strSelectedDate = strupdated + " - " + strended;
             if (strSelectedDate != null) {
                 filterDatePickET.setText(strSelectedDate);
             }else {
