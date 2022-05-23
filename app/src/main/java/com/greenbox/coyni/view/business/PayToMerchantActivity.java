@@ -234,6 +234,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             tvCurrency = findViewById(R.id.tvCurrency);
             coyniTV = findViewById(R.id.tvCYN);
             availBal = findViewById(R.id.tvAvailableBal);
+            cKey = (CustomKeyboard) findViewById(R.id.ckb);
             imgConvert = findViewById(R.id.imageConvertIV);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
@@ -252,6 +253,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             businessIdentityVerificationViewModel.getBusinessType();
+
+            InputConnection ic = payET.onCreateInputConnection(new EditorInfo());
+            cKey.setInputConnection(ic);
+            cKey.setScreenName("payToMerch");
+            payET.setOnClickListener(v -> Utils.hideSoftKeypad(PayToMerchantActivity.this, v));
+
 
 
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
@@ -281,11 +288,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 USFormat(payET);
             }
             //enableButtons();
-            cKey = (CustomKeyboard) findViewById(R.id.ckb);
-            InputConnection ic = payET.onCreateInputConnection(new EditorInfo());
-            cKey.setInputConnection(ic);
-            cKey.setScreenName("payToMerch");
-            payET.setOnClickListener(v -> Utils.hideSoftKeypad(PayToMerchantActivity.this, v));
 
             payET.setOnFocusChangeListener((view, b) -> {
                 try {
