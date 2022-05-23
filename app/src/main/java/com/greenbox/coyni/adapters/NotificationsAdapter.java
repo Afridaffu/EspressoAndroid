@@ -466,9 +466,14 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     }
 
     public void updateList(List<NotificationsDataItems> list, int pos) {
-        notifications = list;
-//        notifyDataSetChanged();
-        notifyItemChanged(pos);
+        try {
+            Log.e("list", list.size() + "  " + pos);
+            notifications = list;
+            notifyDataSetChanged();
+//            notifyItemChanged(pos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        if (notifications.size() > 0) {
 //            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.VISIBLE);

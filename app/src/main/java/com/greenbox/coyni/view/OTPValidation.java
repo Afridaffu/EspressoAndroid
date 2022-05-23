@@ -1342,6 +1342,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //isActivityVisible = false;
+//        isActivityVisible = false;
     }
 }
