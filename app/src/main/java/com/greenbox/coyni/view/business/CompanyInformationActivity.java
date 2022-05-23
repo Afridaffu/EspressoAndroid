@@ -394,7 +394,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
+//                    setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
                     finish();
                 }
             });
@@ -664,8 +664,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         isNewCompanyFlag = true;
+                        BusinessRegistrationTrackerActivity.isAddBusinessCalled = true;
                         isApiCalled = true;
-                        setResult(RESULT_OK);
+//                        setResult(RESULT_OK);
                         if (selectedPage == 2) {
                             businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
                         } else {
@@ -793,7 +794,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (companyInfoResponse != null) {
                         if (companyInfoResponse.getStatus().toLowerCase().toString().equals("success")) {
                             isPostSuccess = true;
-                            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
+//                            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
                             finish();
                         } else {
                             isPostSuccess = false;
@@ -1712,10 +1713,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     @Override
     public void onBackPressed() {
         if (selectedPage == 0) {
-            setResult(isApiCalled ? RESULT_OK : RESULT_CANCELED);
-            finish();
-
-            //super.onBackPressed();
+            super.onBackPressed();
         } else if (selectedPage == 1) {
             close.setVisibility(VISIBLE);
             backIV.setVisibility(GONE);

@@ -7,20 +7,16 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.util.ArrayUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.model.AbstractResponse;
-import com.greenbox.coyni.model.preferences.UserPreference;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -103,15 +99,15 @@ public class CustomEncryptionHandler implements Interceptor {
                         .body(ResponseBody.create(getCustomError(), mediaType))
                         .build();
             } else {
-//                Gson gson = new Gson();
-//                AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
-//                if(resp != null && resp.getError() != null
-//                        && resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED)) {
-//                response = response.newBuilder()
-//                        .body(ResponseBody.create("", mediaType))
-//                        .build();
-//                launchLogin(MyApplication.getContext());
-//                }
+                Gson gson = new Gson();
+                AbstractResponse resp = gson.fromJson(errorResponse, AbstractResponse.class);
+                if (resp != null && resp.getError() != null
+                        && resp.getError().getErrorDescription().equalsIgnoreCase(Utils.ACCESS_TOKEN_EXPIRED)) {
+                    response = response.newBuilder()
+                            .body(ResponseBody.create("", mediaType))
+                            .build();
+                    launchLogin(MyApplication.getContext());
+                }
             }
         }
 

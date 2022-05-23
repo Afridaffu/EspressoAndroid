@@ -43,6 +43,7 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponseData;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.withdraw.WithdrawResponseData;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
@@ -591,6 +592,12 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         TextView tvCurrency = findViewById(R.id.tvCurrency);
         TextView gcProcessingTV = findViewById(R.id.gcProcessingTV);
         LinearLayout lyMessage = findViewById(R.id.lyMessage);
+
+
+        CheckOutModel checkOutModel = new CheckOutModel();
+        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+            objMyApplication.setCheckOutModel(checkOutModel);
+        }
         Double cynValue = 0.0;
         cynValue = objMyApplication.getWithdrawAmount();
 

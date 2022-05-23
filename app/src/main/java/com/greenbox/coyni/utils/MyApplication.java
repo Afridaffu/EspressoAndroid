@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -63,6 +64,7 @@ public class MyApplication extends Application {
 
     private UserData mCurrentUserData;
     private static Context context;
+    private CheckOutModel checkOutModel;
 
     @Override
     public void onCreate() {
@@ -70,6 +72,15 @@ public class MyApplication extends Application {
         context = this;
         mCurrentUserData = new UserData();
     }
+
+    public CheckOutModel getCheckOutModel() {
+        return checkOutModel;
+    }
+
+    public void setCheckOutModel(CheckOutModel checkOutModel) {
+        this.checkOutModel = checkOutModel;
+    }
+
 
     public static Context getContext() {
         return context;
@@ -95,6 +106,13 @@ public class MyApplication extends Application {
         return mCurrentUserData.getPaidOrderRequest();
     }
 
+    public String getStrToken(){
+        return mCurrentUserData.getStrToken();
+    }
+
+    public void setStrToken(String strToken){
+        mCurrentUserData.setStrToken(strToken);
+    }
     public PaidOrderResp getPaidOrderResp() {
         return mCurrentUserData.getPaidOrderResp();
     }
@@ -802,6 +820,10 @@ public class MyApplication extends Application {
 
     public void clearUserData() {
         mCurrentUserData = new UserData();
+    }
+
+    public void clearStrToken(){
+        mCurrentUserData.setStrToken("");
     }
 
 }

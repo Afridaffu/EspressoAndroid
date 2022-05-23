@@ -645,7 +645,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         if (pDialog != null) {
                             pDialog.dismiss();
                         }
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
@@ -715,7 +716,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         payTransaction();
                     }
@@ -1067,7 +1069,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
-                payViewModel.sendTokens(request);
+                payViewModel.sendTokens(request,objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -28,7 +28,7 @@
     <string name="user">User</string>
     <string name="personal">Personal</string>
     <string name="business">Business</string>
-    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. Please enter the\n information below.</string>
+    <string name="retrieveemailcontent">To help you retrieve your email, we will need your help. Please enter the information below.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="processing">Processing…</string>
