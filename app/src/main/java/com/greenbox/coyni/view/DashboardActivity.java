@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,10 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -35,14 +32,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.LatestTxnAdapter;
-import com.greenbox.coyni.dialogs.OnDialogClickListener;
-import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.bank.SignOn;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
@@ -56,11 +50,9 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.profile.TrackerResponse;
-import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
-import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
@@ -611,31 +603,6 @@ public class DashboardActivity extends BaseActivity {
                         }
 
                     }
-//                    Handler handler = new Handler();
-                    if (objMyApplication.getCheckOutModel() != null) {
-                        CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
-                        if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null) {
-                            if (objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-//                                handler.postDelayed(new Runnable() {
-//                                    public void run() {
-//                                        try {
-                                            dismissDialog();
-                                            startActivity(new Intent(DashboardActivity.this, PayToMerchantActivity.class)
-                                                    .putExtra(CheckOutConstants.WALLET_ID, checkOutModel.getCheckOutWalletId())
-                                                    .putExtra(CheckOutConstants.CheckOutAmount, checkOutModel.getCheckOutAmount()));
-//                                        } catch (Exception e) {
-//                                            e.printStackTrace();
-//                                        }
-
-//                                    }
-//                                }, 100);
-                            } else {
-                                dismissDialog();
-                                objMyApplication.setCheckOutModel(new CheckOutModel());
-                                Utils.displayAlertNew("Please use active user account to make payments", DashboardActivity.this, "Coyni");
-                            }
-                        }
-                    }
                 }
             });
         } catch (Exception e) {
@@ -852,7 +819,7 @@ public class DashboardActivity extends BaseActivity {
 //            lp.dimAmount = 0.7f;
 //            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            dialog.getWindow().setAttributes(lp);
-            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             dialog.show();
             transactionsNSV.smoothScrollTo(0, 0);
             layoutClose = dialog.findViewById(R.id.layoutClose);
@@ -882,7 +849,7 @@ public class DashboardActivity extends BaseActivity {
 //            lp.dimAmount = 0.7f;
 //            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            dialog.getWindow().setAttributes(lp);
-            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             dialog.show();
             transactionsNSV.smoothScrollTo(0, 0);

@@ -490,6 +490,7 @@ public class CustomerProfileActivity extends BaseActivity {
     private void onLogoutSuccess() {
         isLoggedOut = true;
         objMyApplication.setStrRetrEmail("");
+        objMyApplication.clearUserData();
         dropAllTables();
         displayImageUtility.clearCache();
         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
