@@ -62,7 +62,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private ImageView businessTrackerCloseIV, caInProgressIV, dbaInProgressIV, boInProgressIV, addBankInProgressIV, aggrementsInProgressIV;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private DBAInfoResp dbaInfoResponse;
-    private Boolean addBusiness = false, addDBA = false;
+    private boolean addBusiness = false, addDBA = false;
+    public static boolean isAddBusinessCalled = false;
     private String boAPICallFrom = "RESUME";
     private LoginViewModel loginViewModel;
     private CardView mReviewCv;
@@ -431,6 +432,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d("btResp", "btResp" + btResp);
                             Utils.setStrAuth(btResp.getData().getJwtToken());
+                            isAddBusinessCalled = false;
                             finish();
                         }
                     }
@@ -661,7 +663,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             super.onResume();
 //            if (Utils.isKeyboardVisible)
 //                Utils.hideKeypad(this);
-            if (!addBusiness) {
+            if (!addBusiness || isAddBusinessCalled) {
                 showProgressDialog();
                 businessIdentityVerificationViewModel.getBusinessTracker();
             }
@@ -823,19 +825,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
 //            pageOneView.setVisibility(GONE);
 //            pageTwoView.setVisibility(GONE);
             Utils.isKeyboardVisible = false;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1234) {
-            if (resultCode == RESULT_OK) {
-                isNewCompany = false;
-                showProgressDialog();
-                businessIdentityVerificationViewModel.getBusinessTracker();
-            }
         }
     }
 

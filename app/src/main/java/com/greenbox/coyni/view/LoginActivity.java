@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.register.SMSResend;
 import com.greenbox.coyni.model.register.SMSResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
@@ -72,7 +74,9 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.internal.Util;
 
@@ -111,6 +115,11 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            window.setStatusBarColor(Color.TRANSPARENT);
+
+            if(getIntent() != null && getIntent().getExtras() != null) {
+                LogUtils.v("TAG", getIntent().getExtras()+"");
+            }
+
             initialization();
             initObserver();
         } catch (Exception ex) {

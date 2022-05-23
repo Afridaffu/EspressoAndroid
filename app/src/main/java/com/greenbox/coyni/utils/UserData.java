@@ -91,6 +91,16 @@ public class UserData {
     private String selectedButTokenType = "";
     private List<Earning> earningList;
     boolean isReserveEnabled = false;
+    private String strToken;
+
+
+    public String getStrToken() {
+        return strToken;
+    }
+
+    public void setStrToken(String strToken) {
+        this.strToken = strToken;
+    }
 
     public List<Earning> getEarningList() {
         return earningList;

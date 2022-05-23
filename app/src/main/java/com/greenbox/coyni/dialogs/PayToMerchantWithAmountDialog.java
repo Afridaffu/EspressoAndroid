@@ -185,7 +185,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             copyAddressLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Utils.copyText(recipientAddress, ScanActivity.scanActivity);
+                    Utils.copyText(recipientAddress, getContext());
 //                    listener.onDialogClicked();
                 }
             });

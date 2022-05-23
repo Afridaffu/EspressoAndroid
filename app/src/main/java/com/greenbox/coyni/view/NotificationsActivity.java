@@ -484,7 +484,8 @@ public class NotificationsActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                     if (payRequestResponse != null) {
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             Utils.showCustomToast(NotificationsActivity.this, "Payment has successfully sent", R.drawable.ic_payment_successful, "");
@@ -568,7 +569,8 @@ public class NotificationsActivity extends AppCompatActivity {
                     if (biometricTokenResponse != null) {
                         if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                             if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                                Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                                Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                                objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                             }
                             notificationPayCall();
                         }
@@ -868,7 +870,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private void notificationPayCall() {
         try {
             if (Utils.checkInternet(NotificationsActivity.this)) {
-                payViewModel.sendTokens(userPayRequest);
+                payViewModel.sendTokens(userPayRequest,objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

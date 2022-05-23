@@ -42,6 +42,7 @@ import com.greenbox.coyni.model.forgotpassword.ManagePasswordRequest;
 import com.greenbox.coyni.model.forgotpassword.ManagePasswordResponse;
 import com.greenbox.coyni.model.forgotpassword.SetPassword;
 import com.greenbox.coyni.model.forgotpassword.SetPasswordResponse;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -61,6 +62,7 @@ public class CreatePasswordActivity extends BaseActivity {
     ProgressDialog dialog;
     LinearLayout passwordErrorLL, confPassErrorLL;
     private Pattern strong, medium;
+    private MyApplication myApplication;
     Boolean isPassword = false, isConfirm = false, isPwdEye = false, isCPwdEye = false, isOldPwd = true;
     //    !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
     private static final String STRONG_PATTERN =
@@ -128,6 +130,7 @@ public class CreatePasswordActivity extends BaseActivity {
             layoutIndicator = findViewById(R.id.layoutIndicator);
             tvchangepass = findViewById(R.id.tvMessageChangePass);
             tvHead = findViewById(R.id.tvHead);
+            myApplication = (MyApplication)getApplicationContext();
             tvMessage = findViewById(R.id.tvMessage);
             passwordErrorTV = findViewById(R.id.passwordErrorTV);
             confPassErrorTV = findViewById(R.id.confPassErrorTV);
@@ -636,7 +639,7 @@ public class CreatePasswordActivity extends BaseActivity {
                             ChangePasswordRequest request = new ChangePasswordRequest();
                             request.setOldPassword(getIntent().getStringExtra("oldpassword"));
                             request.setNewPassword(confirmPasswordET.getText().toString().trim());
-                            dashboardViewModel.meChangePassword(request);
+                            dashboardViewModel.meChangePassword(request,myApplication.getStrToken());
                         } else {
                             SetPassword setPassword = new SetPassword();
                             setPassword.setCode(strCode);
@@ -702,7 +705,8 @@ public class CreatePasswordActivity extends BaseActivity {
                 dialog.dismiss();
                 if (changePassword != null) {
                     if (changePassword.getStatus().equals("SUCCESS")) {
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        myApplication.clearStrToken();
                         startActivity(new Intent(CreatePasswordActivity.this, BindingLayoutActivity.class)
                                 .putExtra("screen", "ChangePassword")
                         );
