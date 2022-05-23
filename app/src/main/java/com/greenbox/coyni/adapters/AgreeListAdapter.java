@@ -40,9 +40,9 @@ public class AgreeListAdapter extends RecyclerView.Adapter<AgreeListAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int pos) {
         int docId = items.get(pos).getSignatureType();
-        if (items.get(pos).getSignatureType() == Utils.mPP || items.get(pos).getSignatureType() == Utils.cPP) {
+        if (items.get(pos).getSignatureType() == Utils.cPP) {
             holder.agreementTV.setText(context.getResources().getString(R.string.privay_policy) + " ");
-        } else if (items.get(pos).getSignatureType() == Utils.mTOS || items.get(pos).getSignatureType() == Utils.cTOS) {
+        } else if (items.get(pos).getSignatureType() == Utils.cTOS) {
             holder.agreementTV.setText(context.getResources().getString(R.string.tos) + " ");
         } else if (items.get(pos).getSignatureType() == Utils.mAgmt) {
             holder.agreementTV.setText(context.getResources().getString(R.string.merchant_s_agreement) + " ");

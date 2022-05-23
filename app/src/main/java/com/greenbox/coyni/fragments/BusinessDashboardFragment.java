@@ -1175,6 +1175,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
                 j++;
             }
+
+            if(paidItems == 0){
+                batchView.setVisibility(View.VISIBLE);
+            }
         } else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
