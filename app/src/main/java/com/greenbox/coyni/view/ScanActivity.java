@@ -18,16 +18,15 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
-import com.greenbox.coyni.model.payrequest.TransferPayRequest;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.model.transferfee.TransferFeeRequest;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
-import com.bumptech.glide.Glide;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
@@ -87,7 +86,6 @@ import com.greenbox.coyni.model.wallet.UserDetails;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
-import com.greenbox.coyni.view.business.TeamActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
@@ -102,12 +100,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKeyboardVisibilityListener {
+public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKeyboardVisibilityListener {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
     LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL, scanMeScanCodeLL;
     ConstraintLayout flashLL;
@@ -299,16 +298,18 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                 scanMeScanCodeLL.setVisibility(View.GONE);
             }
 
-            if (objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
-                String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
-//                if (strName != null && strName.length() > 22) {
-//                    tvName.setText(strName.substring(0, 22) + "...");
-//                } else {
-//                    tvName.setText(strName);
-//                }
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+                if (objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                    String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+                    //                if (strName != null && strName.length() > 22) {
+                    //                    tvName.setText(strName.substring(0, 22) + "...");
+                    //                } else {
+                    //                    tvName.setText(strName);
+                    //                }
 
-                if (strName != null) {
-                    tvName.setText(strName);
+                    if (strName != null) {
+                        tvName.setText(strName);
+                    }
                 }
             }
             bindImage();
@@ -736,7 +737,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                     if (dialog != null) {
                         dialog.dismiss();
                     }
-                    Utils.setStrToken("");
+//                    Utils.setStrToken("");
+                    objMyApplication.clearStrToken();
                     objMyApplication.setPaidOrderResp(paidOrderResp);
                     if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
                         startActivity(new Intent(ScanActivity.this, GiftCardBindingLayoutActivity.class)
@@ -787,7 +789,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
             if (biometricTokenResponse != null) {
                 if (biometricTokenResponse.getStatus().equalsIgnoreCase("success")) {
                     if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                     }
                     payTransaction();
                 }
@@ -887,8 +890,23 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
                                     } else {
                                         strScanWallet = result.toString();
                                     }
-//                                    getUserDetails(strScanWallet);
-                                    if (!strScanWallet.equals(strWallet)) {
+                                    Uri uri = null;
+                                    if (strScanWallet != null) {
+                                        uri = Uri.parse(strScanWallet);
+                                    }
+                                    if (uri != null && uri.isAbsolute() && !strScanWallet.equals(strWallet)) {
+                                        Set<String> queryParams = uri.getQueryParameterNames();
+                                        for (String s : queryParams) {
+                                            if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
+                                                strQRAmount = uri.getQueryParameter(s);
+                                            } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
+                                                strScanWallet = uri.getQueryParameter(s);
+                                            }
+                                        }
+                                        getUserDetails(strScanWallet);
+
+//
+                                    } else if (!strScanWallet.equals(strWallet)) {
                                         if (!android.util.Patterns.WEB_URL.matcher(strScanWallet).matches()) {
                                             if (!isQRScan) {
                                                 isQRScan = true;
@@ -1660,7 +1678,8 @@ public class ScanActivity extends AppCompatActivity implements TextWatcher,OnKey
             PaidOrderRequest request = new PaidOrderRequest();
             request.setTokensAmount(Double.parseDouble(strQRAmount.trim().replace(",", "").trim()));
             request.setRecipientWalletId(strScanWallet);
-            request.setRequestToken(Utils.getStrToken());
+//            request.setRequestToken(Utils.getStrToken());
+            request.setRequestToken(objMyApplication.getStrToken());
             objMyApplication.setPaidOrderRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(ScanActivity.this)) {

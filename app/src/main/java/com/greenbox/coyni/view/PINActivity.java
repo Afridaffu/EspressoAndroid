@@ -213,7 +213,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     if (validateResponse != null) {
                         if (!validateResponse.getStatus().toLowerCase().equals("error")) {
                             if (validateResponse.getData().getRequestToken() != null && !validateResponse.getData().getRequestToken().equals("")) {
-                                Utils.setStrToken(validateResponse.getData().getRequestToken());
+//                                Utils.setStrToken(validateResponse.getData().getRequestToken());
+                                objMyApplication.setStrToken(validateResponse.getData().getRequestToken());
                             }
                             if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                 businessIdentityVerificationViewModel.getBusinessTracker();
@@ -444,7 +445,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             public void onChanged(WithdrawResponse withdrawResponse) {
                 try {
                     if (withdrawResponse != null) {
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
                         objMyApplication.setWithdrawResponse(withdrawResponse);
                         if (withdrawResponse.getStatus().equalsIgnoreCase("success")) {
                             if (getIntent().getStringExtra("subtype") != null && getIntent().getStringExtra("subtype").equals("giftcard")) {
@@ -483,7 +485,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             public void onChanged(PayRequestResponse payRequestResponse) {
                 try {
                     if (payRequestResponse != null) {
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
@@ -510,7 +513,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
             public void onChanged(PaidOrderResp paidOrderResp) {
                 if (paidOrderResp != null) {
                     objMyApplication.setPaidOrderResp(paidOrderResp);
-                    Utils.setStrToken("");
+//                    Utils.setStrToken("");
+                    objMyApplication.clearStrToken();
                     if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
                         startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
                                 .putExtra("status", "Success")
@@ -623,7 +627,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     pDialog.dismiss();
                 }
                 if (buyTokenResponse != null) {
-                    Utils.setStrToken("");
+//                    Utils.setStrToken("");
+                    objMyApplication.clearStrToken();
                     objMyApplication.setBuyTokenResponse(buyTokenResponse);
                     if (buyTokenResponse.getStatus().equalsIgnoreCase("success")) {
                         startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
@@ -1150,7 +1155,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         try {
             WithdrawRequest request = objMyApplication.getWithdrawRequest();
             if (Utils.checkInternet(PINActivity.this)) {
-                buyTokenViewModel.withdrawTokens(request);
+                buyTokenViewModel.withdrawTokens(request,objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1160,7 +1165,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     private void payTransaction() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {
-                payViewModel.sendTokens(objMyApplication.getTransferPayRequest());
+                payViewModel.sendTokens(objMyApplication.getTransferPayRequest(),objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1170,7 +1175,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     private void paidTransaction() {
 
         PaidOrderRequest request = new PaidOrderRequest();
-        request.setRequestToken(Utils.getStrToken());
+//        request.setRequestToken(Utils.getStrToken());
+        request.setRequestToken(objMyApplication.getStrToken());
         request.setTokensAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
         request.setRecipientWalletId(getIntent().getStringExtra(Utils.wallet));
 
@@ -1188,7 +1194,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     private void buyToken() {
         try {
             if (Utils.checkInternet(PINActivity.this)) {
-                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
+                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest(),objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

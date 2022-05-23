@@ -105,7 +105,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                         txnSubType = Utils.sent;
                         break;
                     default:
-                        txnSubType = Utils.sent;
+                        txnSubType = null;
 
                 }
             }

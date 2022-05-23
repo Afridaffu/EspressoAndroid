@@ -318,7 +318,8 @@ public class PayToPersonalActivity extends AppCompatActivity {
             public void onChanged(PayRequestResponse payRequestResponse) {
                 try {
                     if (payRequestResponse != null) {
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PayToPersonalActivity.this, GiftCardBindingLayoutActivity.class)
@@ -345,7 +346,8 @@ public class PayToPersonalActivity extends AppCompatActivity {
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         payTransaction();
                     }
@@ -727,7 +729,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayToPersonalActivity.this)) {
-                payViewModel.sendTokens(request);
+                payViewModel.sendTokens(request,objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

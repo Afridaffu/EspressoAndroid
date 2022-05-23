@@ -150,7 +150,7 @@ public class SeekBarWithFloatingText extends RelativeLayout {
         if (earningList != null) {
             for (int position = 0; position < earningList.size(); position++) {
                 if (progress == earningList.get(position).getKey()) {
-                    tvFloatingText.setText(text + " " + earningList.get(position).getAmount() + " CYN");
+                    tvFloatingText.setText(text + " " + Utils.convertTwoDecimal(String.valueOf(earningList.get(position).getAmount())) + " CYN");
                     break;
                 } else {
                     tvFloatingText.setText(text + defaultValue);
