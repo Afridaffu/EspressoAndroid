@@ -105,22 +105,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             initialization();
             initObservers();
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount) != null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")) {
-                        String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
-                        payET.setText(Utils.convertTwoDecimal(amount));
-                        if (payValidation()) {
-                            pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-                            isPayClick = true;
-                            cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
-                            calculateFee(Utils.USNumberFormat(cynValue));
-                        }
-                    }
-                }
-            }, 100);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -277,12 +261,22 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
 
+            if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount) != null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")) {
+                String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
+                payET.setText(Utils.convertTwoDecimal(amount));
+                if (payValidation()) {
+                    pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+                    isPayClick = true;
+                    cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+                    calculateFee(Utils.USNumberFormat(cynValue));
+                }
+            }
+
 
             payET.addTextChangedListener(this);
             if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount) != null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equals("")) {
                 payET.setText(getIntent().getStringExtra(CheckOutConstants.CheckOutAmount));
                 USFormat(payET);
-                cKey.setVisibility(View.GONE);
             }
             //enableButtons();
             cKey = (CustomKeyboard) findViewById(R.id.ckb);
@@ -364,6 +358,10 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 bindUserInfo(userDetails);
                 details = userDetails;
 
+            } else {
+                if (userDetails.getError() != null && userDetails.getError().getErrorDescription() != null) {
+                    Utils.displayAlert(userDetails.getError().getErrorDescription(), this,"Oops","");
+                }
             }
         });
 
@@ -879,8 +877,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
         if (objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             dialog.setCanceledOnTouchOutside(false);
-        }
-        else {
+        } else {
             dialog.setCanceledOnTouchOutside(true);
         }
         dialog.show();
