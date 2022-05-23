@@ -1,12 +1,18 @@
 package com.greenbox.coyni.view;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.utils.CheckOutConstants;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+
+import java.util.Set;
 
 public class IntentForwardingActivity extends AppCompatActivity {
 
@@ -23,8 +29,30 @@ public class IntentForwardingActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
+        getIntentData(intent);
         intent.setClass(this, Utils.launchedActivity);
         finish();
         startActivity(intent);
+    }
+
+    private void getIntentData(Intent intent) {
+        if(intent == null) {
+            return;
+        }
+        CheckOutModel checkOutModel = new CheckOutModel();
+        Uri uri = intent.getData();
+        if (uri != null && uri.isAbsolute()) {
+            Set<String> queryParams = uri.getQueryParameterNames();
+            checkOutModel.setCheckOutFlag(true);
+            for (String s : queryParams) {
+                if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
+                    checkOutModel.setCheckOutAmount(uri.getQueryParameter(s));
+                } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
+                    checkOutModel.setCheckOutWalletId(uri.getQueryParameter(s));
+                }
+            }
+            MyApplication objMyApplication = (MyApplication) getApplicationContext();
+            objMyApplication.setCheckOutModel(checkOutModel);
+        }
     }
 }

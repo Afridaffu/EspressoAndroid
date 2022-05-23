@@ -2,8 +2,8 @@ package com.greenbox.coyni.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,52 +14,53 @@ import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
-
-import java.util.Set;
+import com.greenbox.coyni.view.business.PayToMerchantActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     public final String TAG = getClass().getName();
     private ProgressDialog dialog;
+    private MyApplication myApplication;
+    private boolean isLoginFlow = false;
+    private boolean launchedCheckoutFlow = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtils.d(TAG, getClass().getName());
         Utils.launchedActivity = getClass();
-        getIntentData(getIntent());
+        myApplication = (MyApplication) getApplicationContext();
+        //getIntentData(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         LogUtils.v(TAG, "onNewIntent called");
-        getIntentData(intent);
+        //getIntentData(intent);
+
     }
 
-    private void getIntentData(Intent intent) {
-        if(intent == null) {
-            return;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isLaunchCheckoutFlow() && !isLoginFlow && !launchedCheckoutFlow) {
+            LogUtils.v(TAG, "Launching the checkout flow");
+            launchCheckout();
         }
-        CheckOutModel checkOutModel = new CheckOutModel();
-        Uri uri = intent.getData();
-        if (uri != null && uri.isAbsolute()) {
-            Set<String> queryParams = uri.getQueryParameterNames();
-            checkOutModel.setCheckOutFlag(true);
-            for (String s : queryParams) {
-                if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
-                    checkOutModel.setCheckOutAmount(uri.getQueryParameter(s));
-                } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
-                    checkOutModel.setCheckOutWalletId(uri.getQueryParameter(s));
-                }
-            }
-            MyApplication objMyApplication = (MyApplication) getApplicationContext();
-            objMyApplication.setCheckOutModel(checkOutModel);
-        }
+    }
+
+    public void setLoginFlow(boolean isLoginFlow) {
+        this.isLoginFlow = isLoginFlow;
     }
 
     public void showProgressDialog() {
         showProgressDialog("Please wait...");
+    }
+
+    private boolean isLaunchCheckoutFlow() {
+        CheckOutModel checkOutModel = myApplication.getCheckOutModel();
+        return checkOutModel != null && checkOutModel.isCheckOutFlag();
     }
 
     public void showProgressDialog(String message) {
@@ -80,6 +81,35 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void dismissDialog() {
         if (dialog != null) {
             dialog.dismiss();
+        }
+    }
+
+    private void launchCheckout() {
+        Handler handler = new Handler();
+        if (myApplication.getCheckOutModel() != null) {
+            CheckOutModel checkOutModel = myApplication.getCheckOutModel();
+            if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null) {
+                if (myApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                    handler.postDelayed(new Runnable() {
+//                        public void run() {
+                            try {
+                                dismissDialog();
+                                launchedCheckoutFlow = true;
+                                startActivity(new Intent(BaseActivity.this, PayToMerchantActivity.class)
+                                        .putExtra(CheckOutConstants.WALLET_ID, checkOutModel.getCheckOutWalletId())
+                                        .putExtra(CheckOutConstants.CheckOutAmount, checkOutModel.getCheckOutAmount()));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+//                        }
+//                    }, 100);
+                } else {
+                    dismissDialog();
+                    myApplication.setCheckOutModel(new CheckOutModel());
+                    Utils.displayAlertNew("Please use active user account to make payments", BaseActivity.this, "coyni");
+                }
+            }
         }
     }
 
