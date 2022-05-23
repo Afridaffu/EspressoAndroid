@@ -877,7 +877,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        dialog.setCanceledOnTouchOutside(true);
+        if (objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+            dialog.setCanceledOnTouchOutside(false);
+        }
+        else {
+            dialog.setCanceledOnTouchOutside(true);
+        }
         dialog.show();
     }
 
@@ -1145,10 +1150,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-            CheckOutModel checkOutModel = new CheckOutModel();
-            objMyApplication.setCheckOutModel(checkOutModel);
+            objMyApplication.setCheckOutModel(null);
             finish();
         }
     }
