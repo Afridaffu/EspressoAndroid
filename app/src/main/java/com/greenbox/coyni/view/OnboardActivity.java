@@ -75,6 +75,7 @@ public class OnboardActivity extends BaseActivity {
             setContentView(R.layout.activity_onboard);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             onboardActivity = this;
+            setLoginFlow(true);
             dbHandler = DatabaseHandler.getInstance(OnboardActivity.this);
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
