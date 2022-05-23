@@ -104,7 +104,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 //            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            window.setStatusBarColor(Color.TRANSPARENT);
-            setLoginFlow(true);
             if (getIntent() != null && getIntent().getExtras() != null) {
                 LogUtils.v("TAG", getIntent().getExtras() + "");
             }
@@ -781,6 +780,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                     startActivity(i);
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                    objMyApplication.setIsLoggedIn(true);
                                     launchDashboard();
                                 }
                             } else {

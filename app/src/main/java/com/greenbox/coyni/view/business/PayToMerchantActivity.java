@@ -1147,8 +1147,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     public void onBackPressed() {
         super.onBackPressed();
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-            CheckOutModel checkOutModel = new CheckOutModel();
-            objMyApplication.setCheckOutModel(checkOutModel);
+             objMyApplication.setCheckOutModel(null);
             finish();
         }
     }

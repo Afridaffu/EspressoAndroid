@@ -1147,6 +1147,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         if (objMyApplication.checkForDeclinedStatus()) {
             objMyApplication.launchDeclinedActivity(this);
         } else {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDashboard(this, strScreen);
         }
     }

@@ -21,8 +21,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public final String TAG = getClass().getName();
     private ProgressDialog dialog;
     private MyApplication myApplication;
-    private boolean isLoginFlow = false;
-    private boolean launchedCheckoutFlow = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,20 +36,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         LogUtils.v(TAG, "onNewIntent called");
         //getIntentData(intent);
+        setIntent(intent);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (isLaunchCheckoutFlow() && !isLoginFlow && !launchedCheckoutFlow) {
+        if (isLaunchCheckoutFlow() && myApplication.isLoggedIn()) {
             LogUtils.v(TAG, "Launching the checkout flow");
             launchCheckout();
         }
-    }
-
-    public void setLoginFlow(boolean isLoginFlow) {
-        this.isLoginFlow = isLoginFlow;
     }
 
     public void showProgressDialog() {
@@ -85,16 +80,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void launchCheckout() {
-        Handler handler = new Handler();
         if (myApplication.getCheckOutModel() != null) {
             CheckOutModel checkOutModel = myApplication.getCheckOutModel();
             if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null) {
                 if (myApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-//                    handler.postDelayed(new Runnable() {
-//                        public void run() {
                             try {
                                 dismissDialog();
-                                launchedCheckoutFlow = true;
                                 startActivity(new Intent(BaseActivity.this, PayToMerchantActivity.class)
                                         .putExtra(CheckOutConstants.WALLET_ID, checkOutModel.getCheckOutWalletId())
                                         .putExtra(CheckOutConstants.CheckOutAmount, checkOutModel.getCheckOutAmount()));
@@ -102,8 +93,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-//                        }
-//                    }, 100);
                 } else {
                     dismissDialog();
                     myApplication.setCheckOutModel(new CheckOutModel());

@@ -554,6 +554,7 @@ public class EnableAuthID extends AppCompatActivity {
         if (objMyApplication.checkForDeclinedStatus()) {
             objMyApplication.launchDeclinedActivity(this);
         } else {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDashboard(this, strScreen);
         }
     }
