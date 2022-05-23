@@ -252,6 +252,8 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
             businessIdentityVerificationViewModel.getBusinessType();
+
+
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
                 if (Utils.checkInternet(PayToMerchantActivity.this)) {
