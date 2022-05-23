@@ -105,6 +105,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                     Utils.displayAlert("Bank integration has been cancelled", WithdrawPaymentMethodsActivity.this, "", "");
                 } else {
+                    if (extBankDialog != null) {
+                        extBankDialog.dismiss();
+                    }
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
                 }
@@ -127,8 +130,18 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 4) {
                 if (strCurrent.equals("signet")) {
-                    isSignet = true;
-                    ControlMethod("addbpayment");
+//                    isSignet = true;
+                    //ControlMethod("addbpayment");
+                    if (signetList != null && signetList.size() > 0) {
+                        isSignet = true;
+                        ControlMethod("addbpayment");
+                    } else {
+                        ControlMethod("withdrawmethod");
+                        selectWithdrawMethod();
+                        strScreen = "withdrawmethod";
+                        strCurrent = "";
+                    }
+                    getPaymentMethods();
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
@@ -181,9 +194,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             if (addPayDialog != null) {
                 addPayDialog.dismiss();
             }
-            if (extBankDialog != null) {
-                extBankDialog.dismiss();
-            }
+//            if (extBankDialog != null) {
+//                extBankDialog.dismiss();
+//            }
             if (strOnPauseScreen.equals("externalBank")) {
                 ControlMethod("externalBank");
                 strCurrent = "externalBank";
@@ -465,8 +478,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                            ControlMethod("externalBank");
-                            strCurrent = "externalBank";
+//                            ControlMethod("externalBank");
+//                            strCurrent = "externalBank";
+                            showExternalBank();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -673,8 +687,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                            ControlMethod("externalBank");
-                            strCurrent = "externalBank";
+//                            ControlMethod("externalBank");
+//                            strCurrent = "externalBank";
+                            showExternalBank();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -997,6 +1012,8 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
+                        strCurrent = "";
+                        strScreen = "";
                         startActivity(new Intent(WithdrawPaymentMethodsActivity.this, GiftCardActivity.class));
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1014,6 +1031,7 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
 //                            strCurrent = "signet";
 //                            Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddPaymentSignetActivity.class);
 //                            startActivityForResult(i, 4);
+                            strCurrent = "signet";
                             showAddPayment("signet");
                         }
                     } catch (Exception ex) {
@@ -1065,48 +1083,49 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         if (strPay.equals("bank")) {
-                            ControlMethod("externalBank");
-                            strCurrent = "externalBank";
-                            strOnPauseScreen = "externalBank";
-                            LinearLayout lyExternalClose = findViewById(R.id.lyExternalClose);
-                            TextView tvLearnMore = findViewById(R.id.tvLearnMore);
-                            cvNext = findViewById(R.id.cvNext);
-                            cvNext.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                        return;
-                                    }
-                                    mLastClickTime = SystemClock.elapsedRealtime();
-                                    if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                                        isBank = true;
-                                        Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
-                                        i.putExtra("signon", signOnData);
-                                        startActivityForResult(i, 1);
-                                    } else {
-                                        Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
-                                    }
-                                }
-                            });
-                            lyExternalClose.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    strCurrent = "";
-                                    ControlMethod("withdrawpay");
-                                    withdrawPaymentMethod("bank");
-                                    strScreen = "withdrawpay";
-                                }
-                            });
-                            tvLearnMore.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                        return;
-                                    }
-                                    mLastClickTime = SystemClock.elapsedRealtime();
-                                    Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
-                                }
-                            });
+//                            ControlMethod("externalBank");
+//                            strCurrent = "externalBank";
+//                            strOnPauseScreen = "externalBank";
+//                            LinearLayout lyExternalClose = findViewById(R.id.lyExternalClose);
+//                            TextView tvLearnMore = findViewById(R.id.tvLearnMore);
+//                            cvNext = findViewById(R.id.cvNext);
+//                            cvNext.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                                        return;
+//                                    }
+//                                    mLastClickTime = SystemClock.elapsedRealtime();
+//                                    if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+//                                        isBank = true;
+//                                        Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
+//                                        i.putExtra("signon", signOnData);
+//                                        startActivityForResult(i, 1);
+//                                    } else {
+//                                        Utils.displayAlert(strSignOn, WithdrawPaymentMethodsActivity.this, "", "");
+//                                    }
+//                                }
+//                            });
+//                            lyExternalClose.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    strCurrent = "";
+//                                    ControlMethod("withdrawpay");
+//                                    withdrawPaymentMethod("bank");
+//                                    strScreen = "withdrawpay";
+//                                }
+//                            });
+//                            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                                        return;
+//                                    }
+//                                    mLastClickTime = SystemClock.elapsedRealtime();
+//                                    Utils.populateLearnMore(WithdrawPaymentMethodsActivity.this);
+//                                }
+//                            });
+                            showExternalBank();
                         } else {
                             strCurrent = "debit";
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, AddCardActivity.class);
@@ -1511,8 +1530,9 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ControlMethod("externalBank");
-                    strCurrent = "externalBank";
+//                    ControlMethod("externalBank");
+//                    strCurrent = "externalBank";
+                    showExternalBank();
                 }
             });
         } catch (Exception ex) {
@@ -1568,11 +1588,12 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             Window window = extBankDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             extBankDialog.show();
             tvLearn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1587,7 +1608,15 @@ public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    extBankDialog.dismiss();
+                    try {
+                        extBankDialog.dismiss();
+                        if (strCurrent.equals("firstError")) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             cNext.setOnClickListener(new View.OnClickListener() {

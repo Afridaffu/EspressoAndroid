@@ -115,7 +115,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
     float fontSize, dollarFont;
     public static WithdrawTokenActivity withdrawTokenActivity;
     Long mLastClickTime = 0L, bankId, cardId;
-    Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false,isMinimumError = false;
+    Boolean isUSD = false, isCYN = false, isBank = false, isButtonClick = false, isMinimumError = false;
     Boolean isFaceLock = false, isTouchId = false;
     SQLiteDatabase mydatabase;
     Cursor dsFacePin, dsTouchID;
@@ -502,7 +502,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                     prevDialog.dismiss();
                 }
                 pDialog.dismiss();
-                Utils.setStrToken("");
+//                Utils.setStrToken("");
+                objMyApplication.clearStrToken();
                 if (withdrawResponse != null) {
                     objMyApplication.setWithdrawResponse(withdrawResponse);
                     if (withdrawResponse.getStatus().trim().toLowerCase().equals("success")) {
@@ -525,7 +526,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         buyTokenViewModel.getWithdrawFailureResponseMutableLiveData().observe(this, new Observer<APIError>() {
             @Override
             public void onChanged(APIError withdrawResponse) {
-                Utils.setStrToken("");
+//                Utils.setStrToken("");
+                objMyApplication.clearStrToken();
                 if (withdrawResponse != null) {
 //                    withdrawTokenFailure(withdrawResponse);
                     startActivity(new Intent(WithdrawTokenActivity.this, GiftCardBindingLayoutActivity.class)
@@ -609,7 +611,8 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         withdrawToken();
                     } else {
@@ -1403,7 +1406,7 @@ public class WithdrawTokenActivity extends AppCompatActivity implements TextWatc
         try {
             pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
-                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest());
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(),objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -25,14 +25,17 @@ import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MerchantTransactionsFilterDialog extends BaseDialog {
     private Boolean isFilters = false;
     private ArrayList<Integer> transactionType = new ArrayList<Integer>();
     private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
-    private String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "";
+    private String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "",strupdated = "",strended = "";
 
     private Long mLastClickTimeFilters = 0L;
     private String dateSelected = null, storedSelectDate = "";
@@ -43,8 +46,10 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private RangeDates rangeDates;
     private Activity activity;
     private DateRangePickerDialog dateRangePickerDialog;
-    private SharedPreferences mSharedPref;
-    private SharedPreferences.Editor mEditor;
+    private String displayFormat = "MM-dd-yyyy";
+    private SimpleDateFormat displayFormatter;
+    private Date startDateD = null;
+    private Date endDateD = null;
 
     public MerchantTransactionsFilterDialog(Context context, TransactionListRequest filterTransactionListRequest) {
         super(context);
@@ -57,8 +62,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.merchant_transactions_filter);
-        mSharedPref = context.getSharedPreferences("", 0);
-        mEditor = mSharedPref.edit();
+
         initFields();
 
     }
@@ -86,6 +90,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         if (filterTransactionListRequest != null) {
             isFilters = true;
             transactionType = filterTransactionListRequest.getTransactionType();
+
             if (transactionType == null) {
                 transactionType = new ArrayList<>();
             }
@@ -145,10 +150,37 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 transAmountEndET.setFilters(FilterArray);
                 transAmountEndET.setText(strEndAmount);
             }
-            storedSelectDate = mSharedPref.getString(Utils.SelectStoredDate, tempStrSelectedDate);
-            if (!storedSelectDate.equals("")) {
-                getDateFromPickerET.setText(storedSelectDate);
-            }
+
+//            if (filterTransactionListRequest != null) {
+//                String strF = filterTransactionListRequest.getUpdatedFromDate();
+//                String strT = filterTransactionListRequest.getUpdatedToDate();
+//
+//                String formatToDisplay = "MMM dd, yyyy";
+//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
+//                try {
+//                    startDateD = displayFormatter.parse(strF);
+//                    endDateD = displayFormatter.parse(strT);
+//
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                strupdated = simpleDateFormat.format(startDateD);
+//                strended = simpleDateFormat.format(endDateD);
+//                strSelectedDate = strupdated + "  " + strended;
+//                if (strSelectedDate != null) {
+//                    getDateFromPickerET.setText(strSelectedDate);
+//                } else {
+//                    getDateFromPickerET.setText("");
+//                }
+//
+//                SimpleDateFormat rangeFormat = new SimpleDateFormat(DateRangePickerDialog.displayFormat);
+//                rangeDates = new RangeDates();
+//                rangeDates.setUpdatedFromDate(rangeFormat.format(startDateD));
+//                rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
+//                //rangeDates.setFullDate(strSelectedDate);
+//            }
+
+
         } else {
             if (transactionType != null) {
                 transactionType.clear();
@@ -166,7 +198,6 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 //            isFilters = false;
             tempStrSelectedDate = "";
             storedSelectDate = "";
-
 
 
         }
@@ -216,8 +247,6 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             getDateFromPickerET.setText("");
             getOnDialogClickListener().onDialogClicked(Utils.resetFilter, null);
 
-            mEditor.putString(Utils.SelectStoredDate, tempStrSelectedDate);
-            mEditor.commit();
 
 //            dismiss();
 
@@ -518,11 +547,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 }
                 if (!strFromDate.equals("")) {
                     isFilters = true;
-                    filterTransactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
+                    filterTransactionListRequest.setUpdatedFromDate((objMyApplication.exportDate(strFromDate + " 00:00:00.000")).split("\\ ")[0] + " 00:00:00");
+                    filterTransactionListRequest.setUpdatedFromDateOperator(">=");
                 }
                 if (!strToDate.equals("")) {
                     isFilters = true;
-                    filterTransactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
+                    filterTransactionListRequest.setUpdatedToDate((objMyApplication.exportDate(strToDate + "00:00:00.000")).split("\\ ")[0] + " 23:59:59");
+                    filterTransactionListRequest.setUpdatedToDateOperator("<=");
                 }
 
                 if (!transAmountStartET.getText().toString().equals("") && !transAmountEndET.getText().toString().equals("")) {
@@ -573,7 +604,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 
     public void showCalendar() {
         // custom dialog
-        dateRangePickerDialog = new DateRangePickerDialog(context);
+        dateRangePickerDialog = new DateRangePickerDialog(context,rangeDates);
         dateRangePickerDialog.setOnDialogClickListener(new OnDialogClickListener() {
             @Override
             public void onDialogClicked(String action, Object value) {
@@ -583,8 +614,6 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                     strToDate = rangeDates.getUpdatedToDate();
                     tempStrSelectedDate = rangeDates.getFullDate();
                     getDateFromPickerET.setText(tempStrSelectedDate);
-                    mEditor.putString(Utils.SelectStoredDate, tempStrSelectedDate);
-                    mEditor.commit();
                 }
             }
         });

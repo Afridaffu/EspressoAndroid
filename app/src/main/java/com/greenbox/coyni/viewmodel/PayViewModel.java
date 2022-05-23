@@ -1,6 +1,7 @@
 package com.greenbox.coyni.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
+import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
@@ -42,9 +44,11 @@ public class PayViewModel extends AndroidViewModel {
     private MutableLiveData<PayRequestResponse> payRequestResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<UserRequestResponse> userRequestResponseMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<PaidOrderResp> paidOrderRespMutableLiveData = new MutableLiveData<>();
+    private MyApplication myApplication;
 
     public PayViewModel(@NonNull Application application) {
         super(application);
+        myApplication = (MyApplication) application;
     }
 
     public MutableLiveData<PaidOrderResp> getPaidOrderRespMutableLiveData() {
@@ -215,10 +219,10 @@ public class PayViewModel extends AndroidViewModel {
         }
     }
 
-    public void sendTokens(TransferPayRequest request) {
+    public void sendTokens(TransferPayRequest request, String token) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<PayRequestResponse> mCall = apiService.sendTokens(request, Utils.getStrToken());
+            Call<PayRequestResponse> mCall = apiService.sendTokens(request, token);
             mCall.enqueue(new Callback<PayRequestResponse>() {
                 @Override
                 public void onResponse(Call<PayRequestResponse> call, Response<PayRequestResponse> response) {
@@ -242,7 +246,8 @@ public class PayViewModel extends AndroidViewModel {
                 public void onFailure(Call<PayRequestResponse> call, Throwable t) {
                     Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                     payRequestResponseMutableLiveData.setValue(null);
-                    Utils.setStrToken("");
+//                    Utils.setStrToken("");
+                    myApplication.clearStrToken();
                 }
             });
         } catch (Exception ex) {
@@ -285,23 +290,22 @@ public class PayViewModel extends AndroidViewModel {
         }
     }
 
-    public void paidOrder(PaidOrderRequest paidOrderRequest){
+    public void paidOrder(PaidOrderRequest paidOrderRequest) {
         ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
         Call<PaidOrderResp> mCall = apiService.paidOrder(paidOrderRequest);
         mCall.enqueue(new Callback<PaidOrderResp>() {
             @Override
             public void onResponse(Call<PaidOrderResp> call, Response<PaidOrderResp> response) {
                 try {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         PaidOrderResp obj = response.body();
                         paidOrderRespMutableLiveData.setValue(obj);
-                    }
-                    else {
+                    } else {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<PaidOrderResp>(){
+                        Type type = new TypeToken<PaidOrderResp>() {
                         }.getType();
 
-                        PaidOrderResp errorResponse = gson.fromJson(response.errorBody().string(),type);
+                        PaidOrderResp errorResponse = gson.fromJson(response.errorBody().string(), type);
                         paidOrderRespMutableLiveData.setValue(errorResponse);
                     }
                 } catch (JsonSyntaxException | IOException e) {
@@ -314,7 +318,8 @@ public class PayViewModel extends AndroidViewModel {
 
                 Toast.makeText(getApplication(), "something went wrong", Toast.LENGTH_LONG).show();
                 paidOrderRespMutableLiveData.setValue(null);
-                Utils.setStrToken("");
+//                Utils.setStrToken("");
+                myApplication.clearStrToken();
             }
         });
     }

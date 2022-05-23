@@ -95,6 +95,7 @@ public class CustomerProfileActivity extends BaseActivity {
     String authenticateType = "";
     boolean isLoggedOut = false;
     CustomerProfileViewModel customerProfileViewModel;
+    private DisplayImageUtility displayImageUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,8 @@ public class CustomerProfileActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_customer_profile);
+
+            displayImageUtility = DisplayImageUtility.getInstance(this);
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -167,7 +170,11 @@ public class CustomerProfileActivity extends BaseActivity {
                         cardviewYourAccount.setVisibility(View.GONE);
                     }
                     tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
-                    cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
+                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                        cpAccountIDTV.setText("Account ID C-" + objMyApplication.getMyProfile().getData().getId());
+                    } else {
+                        cpAccountIDTV.setText("Account ID M-" + objMyApplication.getMyProfile().getData().getId());
+                    }
                 } catch (Resources.NotFoundException e) {
                     e.printStackTrace();
                 }
@@ -275,7 +282,16 @@ public class CustomerProfileActivity extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
 
                     if (Utils.checkAuthentication(CustomerProfileActivity.this)) {
-                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+//                        if (isBiometric && ((Utils.isFingerPrint(CustomerProfileActivity.this)) || (isFaceLock))) {
+//                            Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
+//                        } else {
+//                            if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
+//                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "TOUCH");
+//                            } else {
+//                                enablePopup = showFaceTouchEnabledDialog(CustomerProfileActivity.this, "FACE");
+//                            }
+//                        }
+                        if (isBiometric && (Utils.getIsFaceEnabled() || Utils.getIsTouchEnabled())) {
                             Utils.checkAuthentication(CustomerProfileActivity.this, CODE_AUTHENTICATION);
                         } else {
                             if (tvBMSetting.getText().toString().toLowerCase().contains("touch")) {
@@ -460,14 +476,12 @@ public class CustomerProfileActivity extends BaseActivity {
                     try {
                         String strEndPoint = "";
                         strEndPoint = "End Point Url - " + Utils.getStrURL_PRODUCTION();
-                        Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
+                        //Utils.displayAlert(strEndPoint, CustomerProfileActivity.this, "API Details", "");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             });
-
-            //customerProfileViewModel.meSyncAccount();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -477,6 +491,7 @@ public class CustomerProfileActivity extends BaseActivity {
         isLoggedOut = true;
         objMyApplication.setStrRetrEmail("");
         dropAllTables();
+        displayImageUtility.clearCache();
         Intent i = new Intent(CustomerProfileActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
@@ -502,10 +517,12 @@ public class CustomerProfileActivity extends BaseActivity {
             window.setGravity(Gravity.CENTER);
             window.setBackgroundDrawableResource(android.R.color.transparent);
 
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.dimAmount = 0.7f;
-            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            qrDialog.getWindow().setAttributes(lp);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.dimAmount = 0.7f;
+//            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            qrDialog.getWindow().setAttributes(lp);
+            qrDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             qrDialog.show();
             imgClose = qrDialog.findViewById(R.id.imgClose);
             meQrCode = qrDialog.findViewById(R.id.idIVQrcode);
@@ -543,8 +560,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     saveProfileIV.setVisibility(View.VISIBLE);
                     saveProfileTitle.setVisibility(View.GONE);
 
-                    DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                    utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+                    displayImageUtility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
                 } else {
                     saveProfileIV.setVisibility(View.GONE);
                     saveProfileTitle.setVisibility(View.VISIBLE);
@@ -573,8 +589,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (imageString != null && !imageString.trim().equals("")) {
                     imgProfile.setVisibility(View.VISIBLE);
                     userInfo.setVisibility(View.GONE);
-                    DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                    utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                    displayImageUtility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
                 } else {
                     imgProfile.setVisibility(View.GONE);
                     userInfo.setVisibility(View.VISIBLE);
@@ -977,7 +992,8 @@ public class CustomerProfileActivity extends BaseActivity {
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                           objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
                         startActivity(cp);
@@ -1147,8 +1163,7 @@ public class CustomerProfileActivity extends BaseActivity {
                 profileIV.setVisibility(View.VISIBLE);
 //                userProfile.setBackground(getResources().getDrawable(R.drawable.corecircle));
                 imageTextTV.setVisibility(View.GONE);
-                DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                utility.addImage(imageString, profileIV, R.drawable.ic_profile_male_user);
+                displayImageUtility.addImage(imageString, profileIV, R.drawable.ic_profile_male_user);
             } else {
                 profileIV.setVisibility(View.GONE);
                 imageTextTV.setVisibility(View.VISIBLE);

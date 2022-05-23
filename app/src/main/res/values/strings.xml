@@ -28,7 +28,7 @@
     <string name="user">User</string>
     <string name="personal">Personal</string>
     <string name="business">Business</string>
-    <string name="retrieveemailcontent">To help you retrieve your email, we will\n need your help. Please enter the\n information below.</string>
+    <string name="retrieveemailcontent">To help you retrieve your email, we will need your help. Please enter the information below.</string>
     <string name="firstName">First Name</string>
     <string name="lastName">Last Name</string>
     <string name="processing">Processing…</string>
@@ -255,7 +255,7 @@
     <string name="Ownership">Ownership %</string>
     <string name="expirydate">60</string>
     <string name="AB_owners">Additional Beneficial Owner(s)</string>
-    <string name="Beneficialownership">Beneficial ownership you have added is less\nthan 51%, you will need to add an additional</string>
+    <string name="Beneficialownership">Beneficial ownership you have added is less\nthan 51%, you will need to add an additional Beneficial Owner until the ownership is 51% or greater.</string>
     <string name="BeneficialOwneruntil">Beneficial Owner until the ownership is</string>
     <string name="percentage">\%</string>
     <string name="greater">greater.</string>
@@ -678,6 +678,8 @@
     <string name="canceled_text">Application Canceled</string>
     <string name="declined_text">Application Declined</string>
     <string name="act_rqrd_description">Thank you for your interest in coyni. After reviewing your account, the coyni team requires you to upload the following documentation within 30 days to continue account verification.</string>
+    <string name="default_notification_channel_id">Channel ID</string>
+    <string name="extBankMsg">coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
 
 
 </resources>

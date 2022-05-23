@@ -165,4 +165,8 @@ public class TransactionListRequest {
     public void setMerchantTransactions(boolean merchantTransactions) {
         isMerchantTransactions = merchantTransactions;
     }
+
+    public boolean isMerchantTransactions() {
+        return isMerchantTransactions;
+    }
 }

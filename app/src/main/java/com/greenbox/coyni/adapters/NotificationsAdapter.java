@@ -177,6 +177,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     holder.denyLL.setVisibility(View.VISIBLE);
                     holder.messageTV.setVisibility(View.VISIBLE);
                     holder.messageTV.setText(notifications.get(position).getRemarks());
+                    holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
                     Log.e("cancelled", "cancelled");
                     holder.meRequestLL.setVisibility(View.GONE);
@@ -465,9 +466,14 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     }
 
     public void updateList(List<NotificationsDataItems> list, int pos) {
-        notifications = list;
-//        notifyDataSetChanged();
-        notifyItemChanged(pos);
+        try {
+            Log.e("list", list.size() + "  " + pos);
+            notifications = list;
+            notifyDataSetChanged();
+//            notifyItemChanged(pos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        if (notifications.size() > 0) {
 //            ((NotificationsActivity) mContext).notificationsRV.setVisibility(View.VISIBLE);

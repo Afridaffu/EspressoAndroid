@@ -670,7 +670,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         buyToken();
                     } else {
@@ -1199,7 +1200,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
 //            request.setTxnSubType(strSubType);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
-                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest());
+                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest(),objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

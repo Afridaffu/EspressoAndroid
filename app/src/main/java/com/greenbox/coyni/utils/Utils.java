@@ -177,7 +177,6 @@ public class Utils {
     public static String strDesc = "abcd";
     public static String strCCode = "";
     public static String strAuth;
-    public static String strToken = "";
     public static String appVersion;
     public static String strReferer;
     public static String strURL_PRODUCTION;
@@ -300,6 +299,7 @@ public class Utils {
     public static final int inProgress = 0;
     public static final int failed = 3;
     public static final int paid = 5;
+    public static final int payoutInProgress = 4;
 
     public static final int reserveRelease = 16;
     public static final int batchNow = 19;
@@ -340,6 +340,7 @@ public class Utils {
 
     public static final String OPEN = "open";
     public static final String PAID = "paid";
+    public static final String INPROGRESS = "In Progress";
     public static final String CLOSED = "closed";
     public static final String RELEASED = "released";
     public static final String ONHOLD = "on hold";
@@ -390,6 +391,8 @@ public class Utils {
     public static final String resetFilter = "resetFilter";
     public static final String datePicker = "DatePicker";
     public static final String SelectStoredDate = "SelectStoredDate";
+    public static final String selectfromdate = "selectfromdate";
+    public static final String selecttodate = "selecttodate";
 
     public static final String position = "Position";
     public static final int cPP = 1;
@@ -397,6 +400,8 @@ public class Utils {
     public static final int mPP = 8;
     public static final int mTOS = 7;
     public static final int mAgmt = 5;
+
+    public static Class<?> launchedActivity = OnboardActivity.class;
 
     //Cards
     public static final String MASTERCARD = "MASTERCARD";
@@ -433,14 +438,6 @@ public class Utils {
 
     public static void setStrAuth(String strAuth) {
         Utils.strAuth = strAuth;
-    }
-
-    public static String getStrToken() {
-        return strToken;
-    }
-
-    public static void setStrToken(String strToken) {
-        Utils.strToken = strToken;
     }
 
     public static String getStrReferer() {
@@ -800,6 +797,22 @@ public class Utils {
         return strDate;
     }
 
+    public static String payoutDate(String date) {
+        if (date.length() == 22) {
+            date = date + "0";
+        }
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("MM-dd-yyyy");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            strDate = spf.format(newDate);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
     public static boolean disabledMultiClick() {
         boolean action = false;
         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -1036,6 +1049,7 @@ public class Utils {
     public static ProgressDialog showProgressDialog(Context context) {
         ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
         dialog.setIndeterminate(false);
+        dialog.setCancelable(false);
         dialog.setMessage("Please wait...");
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -1452,6 +1466,19 @@ public class Utils {
         return strDate;
     }
 
+    public static String dateFormat(String date) {
+        String strDate = "";
+        try {
+            SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date newDate = spf.parse(date);
+            spf = new SimpleDateFormat("yyyy-MM-dd");
+            strDate = spf.format(newDate);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return strDate;
+    }
+
     public static List<States> getStates(Context context) {
         String json = null;
         List<States> listStates = new ArrayList<>();
@@ -1665,7 +1692,7 @@ public class Utils {
 
             SimpleDateFormat spf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date newDate = spf.parse(date);
-            spf = new SimpleDateFormat("MM/dd/yyyy @ hh:mma");
+            spf = new SimpleDateFormat("MM/dd/yyyy hh:mma");
             strDate = spf.format(newDate);
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -133,15 +133,20 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!isBankSuccess) {
-            if (strCurrent.equals("addpay") || strCurrent.equals("addpayment")) {
-                getPaymentMethods();
-            } else if (strCurrent.equals("externalBank")) {
-                ControlMethod("addpayment");
-                strCurrent = "addpayment";
-            } else {
-                super.onBackPressed();
+        try {
+            if (!isBankSuccess) {
+//            if (strCurrent.equals("addpay") || strCurrent.equals("addpayment")) {
+                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0 && (strCurrent.equals("addpay") || strCurrent.equals("addpayment"))) {
+                    getPaymentMethods();
+                } else if (strCurrent.equals("externalBank")) {
+                    ControlMethod("addpayment");
+                    strCurrent = "addpayment";
+                } else {
+                    super.onBackPressed();
+                }
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

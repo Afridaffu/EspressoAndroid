@@ -645,7 +645,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                         if (pDialog != null) {
                             pDialog.dismiss();
                         }
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             startActivity(new Intent(PayRequestActivity.this, GiftCardBindingLayoutActivity.class)
@@ -715,7 +716,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 if (biometricTokenResponse != null) {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         payTransaction();
                     }
@@ -1067,7 +1069,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
-                payViewModel.sendTokens(request);
+                payViewModel.sendTokens(request,objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1237,10 +1239,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (charSequence.length() == 0) {
                         addNoteTIL.setCounterEnabled(false);
-                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
+                        //doneBtn.setCardBackgroundColor(getResources().getColor(R.color.inactive_color));
                     } else {
                         addNoteTIL.setCounterEnabled(true);
-                        doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+                        //doneBtn.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
                     }
                 }
 

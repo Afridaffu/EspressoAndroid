@@ -393,7 +393,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     if (globalNotifications.size() > 0) {
                         notificationsRV.setVisibility(View.VISIBLE);
                         noDataTV.setVisibility(View.GONE);
-                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
+                        notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow) - 1);
                     } else {
                         notificationsRV.setVisibility(View.GONE);
                         noDataTV.setVisibility(View.VISIBLE);
@@ -484,7 +484,8 @@ public class NotificationsActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                     if (payRequestResponse != null) {
-                        Utils.setStrToken("");
+//                        Utils.setStrToken("");
+                        objMyApplication.clearStrToken();
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
                             Utils.showCustomToast(NotificationsActivity.this, "Payment has successfully sent", R.drawable.ic_payment_successful, "");
@@ -546,8 +547,8 @@ public class NotificationsActivity extends AppCompatActivity {
                             statusRequest.setStatus("Completed");
                             statusRequest.setRemarks("");
                             updatedStatus = "Completed";
-                            //userRequestStatusUpdateCall(statusRequest);
-                            new FetchData(NotificationsActivity.this).execute();
+                            userRequestStatusUpdateCall(statusRequest);
+//                            new FetchData(NotificationsActivity.this).execute();
 
                         } else {
                             Utils.displayAlert(payRequestResponse.getError().getErrorDescription(), NotificationsActivity.this, "", payRequestResponse.getError().getFieldErrors().get(0));
@@ -568,7 +569,8 @@ public class NotificationsActivity extends AppCompatActivity {
                     if (biometricTokenResponse != null) {
                         if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                             if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-                                Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+//                                Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                                objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                             }
                             notificationPayCall();
                         }
@@ -730,7 +732,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
             if (!dataItem.getRemarks().equals("")) {
                 messageLL.setVisibility(View.VISIBLE);
-                messageTV.setText("\""+dataItem.getRemarks()+"\"");
+                messageTV.setText("\"" + dataItem.getRemarks() + "\"");
                 myUserIDTV.setText(dataItem.getFromUser() + " Says:");
             } else {
                 messageLL.setVisibility(View.GONE);
@@ -868,7 +870,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private void notificationPayCall() {
         try {
             if (Utils.checkInternet(NotificationsActivity.this)) {
-                payViewModel.sendTokens(userPayRequest);
+                payViewModel.sendTokens(userPayRequest,objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -89,7 +89,7 @@ public class BatchPayoutListAdapter extends BaseRecyclerViewAdapter<BatchPayoutL
             String date = objData.getCreatedAt();
             if (date.contains(".")) {
                 String resDate = date.substring(0, date.lastIndexOf("."));
-                holder.payoutDateTV.setText(objMyApplication.convertZoneDateTime(resDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma"));
+                holder.payoutDateTV.setText(objMyApplication.convertZoneDateTime(resDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mma").toLowerCase());
             } else {
             }
         }

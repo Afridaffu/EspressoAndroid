@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "15886969173",
+    "project_id": "coyni-208f1",
+    "storage_bucket": "coyni-208f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15886969173:android:04b0922a778deace3367dc",
+        "android_client_info": {
+          "package_name": "com.greenbox.coyni"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15886969173-lmlns99btp307jkb0b6l4k53df25p8kp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJhxMuHPTVJUQoM0zFikfuLq7vyUFeVfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15886969173-lmlns99btp307jkb0b6l4k53df25p8kp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
