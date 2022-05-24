@@ -11,6 +11,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.provider.MediaStore.Files;
+import android.provider.MediaStore.Files.FileColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -96,29 +98,35 @@ public class FileUtils {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                } else {
+                }
+                else {
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentUri  = MediaStore.Downloads.getContentUri("internal");
+                    }
 //                    ContentResolver cr = context.getContentResolver();
-                    contentUri = MediaStore.Files.getContentUri("internal");
+//                    contentUri = Files.getContentUri("external");
+//                    contentUri = ContentUris.withAppendedId(Files.FileColumns("external"),
+//                            getIdentForDocId(docId).id);
+//                    contentUri = MediaStore.Files.getContentUri("internal", Long.parseLong(docId));
 
 
 //                    Cursor cursor = cr.query(contentUri, null, null, null, null);
 
 //                    getFileName(context, uri);
-//                    String[] proj = {MediaStore.Files.FileColumns.DATA};
-//                    Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+//                    final String selection = "_id=?";
+//                    final String[] selectionArgs = new String[]{split[1]};
+//                    String[] proj = {FileColumns.DATA};
+//                    Cursor cursor = context.getContentResolver().query(contentUri, proj, selection, selectionArgs, null);
 //                    do {
 //                        if (cursor == null) return null;
-//                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
+//                        int column_index = cursor.getColumnIndexOrThrow(FileColumns.DATA);
 //                        cursor.moveToFirst();
 //                        Log.e("path", cursor.getString(column_index));
 //                    } while (cursor.moveToNext());
 
 
-
-
 //                    ---------------------------------------
-
 
 
 //                    try {
@@ -250,4 +258,21 @@ public class FileUtils {
         return true;
     }
 
+    private static class Ident {
+        public String type;
+        public long id;
+    }
+
+    private static Ident getIdentForDocId(String docId) {
+        final Ident ident = new Ident();
+        final int split = docId.indexOf(':');
+        if (split == -1) {
+            ident.type = docId;
+            ident.id = -1;
+        } else {
+            ident.type = docId.substring(0, split);
+            ident.id = Long.parseLong(docId.substring(split + 1));
+        }
+        return ident;
+    }
 }

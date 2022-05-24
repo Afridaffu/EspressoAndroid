@@ -88,15 +88,16 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
             llClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(ForgotPasswordActivity.this);
+//                    if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(ForgotPasswordActivity.this);
+                    onBackPressed();
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    }, 300);
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            finish();
+//                        }
+//                    }, 300);
 
                 }
             });
