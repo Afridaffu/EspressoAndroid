@@ -695,6 +695,7 @@
             android:name=".view.business.BusinessCreateAccountsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
