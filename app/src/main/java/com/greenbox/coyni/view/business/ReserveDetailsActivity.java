@@ -254,9 +254,9 @@ public class ReserveDetailsActivity extends BaseActivity {
     private void addData(DetailsResponse detailsResponse) {
         if (detailsResponse.getData().getPayoutReferenceId() != null && !detailsResponse.getData().getPayoutReferenceId().equals("")) {
             if (detailsResponse.getData().getPayoutReferenceId().length() > 14) {
-                transID.setText((detailsResponse.getData().getPayoutReferenceId().substring(0, 14) + "..."));
+                transID.setText(Html.fromHtml("<u>"+detailsResponse.getData().getPayoutReferenceId().substring(0, 14) + "..."+"</u>"));
             } else {
-                transID.setText(detailsResponse.getData().getPayoutReferenceId());
+                transID.setText(Html.fromHtml("<u>"+detailsResponse.getData().getPayoutReferenceId()+"</u>"));
             }
             releasedIDcopy.setOnClickListener(v -> Utils.copyText(detailsResponse.getData().getPayoutReferenceId(), ReserveDetailsActivity.this));
 

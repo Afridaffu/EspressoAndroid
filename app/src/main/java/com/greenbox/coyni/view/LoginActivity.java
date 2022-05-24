@@ -191,9 +191,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 
         if (Utils.isKeyboardVisible)
             Utils.hideKeypad(LoginActivity.this);
-//
-//        etEmail.setText("shivas1@ideyalabs.com");
-//        etPassword.setText("Shiva@123");
+
     }
 
     @Override

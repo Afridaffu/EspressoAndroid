@@ -35,6 +35,8 @@ import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.logout.LogoutResponse;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DatabaseHandler;
@@ -753,6 +755,23 @@ public class BusinessProfileActivity extends BaseActivity {
                 }
             }
         });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                dismissDialog();
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+                            myApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        Intent cp = new Intent(BusinessProfileActivity.this, ConfirmPasswordActivity.class);
+                        startActivity(cp);
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -834,9 +853,14 @@ public class BusinessProfileActivity extends BaseActivity {
                     coyniViewModel.saveBiometric(biometricRequest);
                 }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+
                 if (resultCode == RESULT_OK) {
-                    Intent cp = new Intent(BusinessProfileActivity.this, ConfirmPasswordActivity.class);
-                    startActivity(cp);
+                    showProgressDialog();
+                    BiometricTokenRequest request = new BiometricTokenRequest();
+                    request.setDeviceId(Utils.getDeviceID());
+                    request.setMobileToken(myApplication.getStrMobileToken());
+                    request.setActionType(Utils.changeActionType);
+                    coyniViewModel.biometricToken(request);
                 } else {
                     Intent i = new Intent(BusinessProfileActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
