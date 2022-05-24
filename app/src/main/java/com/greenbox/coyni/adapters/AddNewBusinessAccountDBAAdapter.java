@@ -77,12 +77,16 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                     holder.viewLine.setVisibility(View.VISIBLE);
                 }
             }
+            if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
+            }
 
             if (listCompany.get(position).isSelected()) {
                 holder.imvTickIcon.setVisibility(View.VISIBLE);
                 holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_green));
 //                holder.statusLL.setVisibility(View.GONE);
             } else {
+                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.light_gray));
                 holder.imvTickIcon.setVisibility(View.GONE);
 //                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
 //                if (!listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
