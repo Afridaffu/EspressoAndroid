@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.greenbox.coyni.utils.LogUtils;
+
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -32,8 +34,8 @@ public class DateRangePickerDialog extends BaseDialog {
 
     public final String TAG = getClass().getName();
     private Context context;
-    private  Date startDateD = null;
-    private  Date endDateD = null;
+    private Date startDateD = null;
+    private Date endDateD = null;
     private String strFromDate = "", strToDate = "", strSelectedDate = "";
     private RangeDates rangeDates;
     private CalendarPicker calendarPicker;
@@ -82,8 +84,7 @@ public class DateRangePickerDialog extends BaseDialog {
         calendarPicker.scrollToDate(endDate.getTime());
 
 
-
-        if(rangeDates != null) {
+        if (rangeDates != null) {
             strToDate = rangeDates.getUpdatedToDate();
             strFromDate = rangeDates.getUpdatedFromDate();
             strSelectedDate = rangeDates.getFullDate();
@@ -92,6 +93,7 @@ public class DateRangePickerDialog extends BaseDialog {
                 endDateD = displayFormatter.parse(strToDate);
                 showSelectedDate();
                 calendarPicker.setSelectionDate(startDateD, endDateD);
+                doneTV.setTextColor(context.getResources().getColor(R.color.primary_black));
             } catch (Exception e) {
                 LogUtils.e(TAG, "Date Parse exception");
             }
@@ -116,6 +118,7 @@ public class DateRangePickerDialog extends BaseDialog {
         doneTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dismiss();
                 try {
                     rangeDates = new RangeDates();
                     rangeDates.setUpdatedToDate(displayFormatter.format(endDateD));
@@ -145,6 +148,7 @@ public class DateRangePickerDialog extends BaseDialog {
                 try {
                     startDateD = f.parse(s);
                     endDateD = f.parse(s);
+                    showSelectedDate();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -160,6 +164,6 @@ public class DateRangePickerDialog extends BaseDialog {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
         strSelectedDate = simpleDateFormat.format(startDateD) + " - " + simpleDateFormat.format(endDateD);
         rangeDateTV.setText(strSelectedDate);
+        doneTV.setTextColor(context.getResources().getColor(R.color.primary_black));
     }
-
 }
