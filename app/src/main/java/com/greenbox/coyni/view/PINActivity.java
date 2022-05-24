@@ -814,7 +814,8 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 showProgressDialog();
-                loginViewModel.emailotpresend(Utils.getUserEmail(PINActivity.this));
+//                loginViewModel.emailotpresend(Utils.getUserEmail(PINActivity.this));
+                loginViewModel.emailotpresend(objMyApplication.getStrEmail());
 //                Intent i = new Intent(PINActivity.this, ForgotPasswordActivity.class);
 //                i.putExtra("screen", "ForgotPin");
 //                startActivity(i);
@@ -1146,6 +1147,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
         if (objMyApplication.checkForDeclinedStatus()) {
             objMyApplication.launchDeclinedActivity(this);
         } else {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDashboard(this, strScreen);
         }
     }

@@ -115,8 +115,7 @@ public class OnboardActivity extends BaseActivity {
                 Utils.setStrReferer(refererUrl);
             }
 
-            CheckOutModel checkOutModel = new CheckOutModel();
-            getIntentData(checkOutModel);
+            CheckOutModel checkOutModel = objMyApplication.getCheckOutModel();
 
             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(OnboardActivity.this)) {
                 if (isBiometric && ((isTouchId && Utils.isFingerPrint(OnboardActivity.this)) || (isFaceLock))) {
@@ -142,7 +141,6 @@ public class OnboardActivity extends BaseActivity {
                     finish();
                 }
             }
-
 
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
@@ -282,23 +280,6 @@ public class OnboardActivity extends BaseActivity {
         }
     }
 
-    private void getIntentData(CheckOutModel checkOutModel) {
-        LogUtils.v(TAG, "getIntentData " + getIntent().getData());
-        Uri uri = getIntent().getData();
-        if (uri != null && uri.isAbsolute() ) {
-            Set<String> queryParams = uri.getQueryParameterNames();
-            checkOutModel.setCheckOutFlag(true);
-            for (String s : queryParams) {
-                if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
-                    checkOutModel.setCheckOutAmount( uri.getQueryParameter(s));
-                } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
-                    checkOutModel.setCheckOutWalletId( uri.getQueryParameter(s));
-                }
-            }
-            objMyApplication.setCheckOutModel(checkOutModel);
-        }
-    }
-
     private void initObserver() {
         try {
             loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
@@ -328,6 +309,7 @@ public class OnboardActivity extends BaseActivity {
                                     finish();
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                    objMyApplication.setIsLoggedIn(true);
                                     if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                         businessIdentityVerificationViewModel.getBusinessTracker();
                                     } else {

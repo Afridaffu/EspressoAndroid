@@ -6,9 +6,7 @@ import static android.view.View.VISIBLE;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,15 +21,12 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -40,8 +35,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -74,13 +67,9 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import okhttp3.internal.Util;
-
-public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     TextInputLayout etlEmail, etlPassword;
     TextInputEditText etEmail, etPassword;
     CardView cvNext;
@@ -115,9 +104,8 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 //            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            window.setStatusBarColor(Color.TRANSPARENT);
-
-            if(getIntent() != null && getIntent().getExtras() != null) {
-                LogUtils.v("TAG", getIntent().getExtras()+"");
+            if (getIntent() != null && getIntent().getExtras() != null) {
+                LogUtils.v("TAG", getIntent().getExtras() + "");
             }
 
             initialization();
@@ -203,6 +191,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
 
         if (Utils.isKeyboardVisible)
             Utils.hideKeypad(LoginActivity.this);
+        
     }
 
     @Override
@@ -758,7 +747,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                     dialog.dismiss();
                     if (apiError != null) {
 //                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
-                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "",apiError.getError().getFieldErrors().get(0));
+                        Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "", apiError.getError().getFieldErrors().get(0));
                     }
                 }
             });
@@ -789,6 +778,7 @@ public class LoginActivity extends AppCompatActivity implements OnKeyboardVisibi
                                     startActivity(i);
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
+                                    objMyApplication.setIsLoggedIn(true);
                                     launchDashboard();
                                 }
                             } else {

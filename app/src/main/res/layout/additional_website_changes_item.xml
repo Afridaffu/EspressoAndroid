@@ -24,6 +24,7 @@
                 android:id="@+id/checkboxCB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="-7dp"
                 android:fontFamily="@font/opensans_regular"
                 android:textColor="@color/vlight_gray" />
 
@@ -42,7 +43,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvheading"
-                android:layout_marginTop="@dimen/_10sdp" />
+                android:layout_marginTop="@dimen/_10sdp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_case" />
 
         </RelativeLayout>
 

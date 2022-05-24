@@ -826,4 +826,11 @@ public class MyApplication extends Application {
         mCurrentUserData.setStrToken("");
     }
 
+    public void setIsLoggedIn(boolean isLoggedIn) {
+        mCurrentUserData.setIsLoggedIn(isLoggedIn);
+    }
+
+    public boolean isLoggedIn() {
+        return mCurrentUserData.isLoggedIn();
+    }
 }
