@@ -92,7 +92,7 @@ public class UserData {
     private List<Earning> earningList;
     boolean isReserveEnabled = false;
     private String strToken;
-
+    private boolean isLoggedIn = false;
 
     public String getStrToken() {
         return strToken;
@@ -669,6 +669,7 @@ public class UserData {
     public Double getTokenGBTBalance() {
         return tokenGBTBalance;
     }
+
     public boolean isReserveEnabled() {
         return isReserveEnabled;
     }
@@ -692,7 +693,16 @@ public class UserData {
     public void setReserveGBTBalance(Double reserveGBTBalance) {
         this.reserveGBTBalance = reserveGBTBalance;
     }
+
     public void setIsReserveEnabled(boolean isReserveEnabled) {
         this.isReserveEnabled = isReserveEnabled;
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setIsLoggedIn(boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
     }
 }

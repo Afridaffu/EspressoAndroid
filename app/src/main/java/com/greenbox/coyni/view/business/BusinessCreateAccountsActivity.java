@@ -98,7 +98,11 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        dashboardViewModel.getProfiles();
+        try {
+            dashboardViewModel.getProfiles();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initFields() {

@@ -65,13 +65,17 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
-            holder.txvCompanyName.setText(listCompany.get(position).getCompanyName());
-            if (position == listCompany.size() - 1) {
-                holder.viewLine.setVisibility(View.GONE);
-            } else {
-                holder.viewLine.setVisibility(View.VISIBLE);
+            if(listCompany.get(position).getCompanyName() == null) {
+                holder.txvCompanyName.setText("[DBA Name]");
             }
-
+            else {
+                holder.txvCompanyName.setText(listCompany.get(position).getCompanyName());
+                if (position == listCompany.size() - 1) {
+                    holder.viewLine.setVisibility(View.GONE);
+                } else {
+                    holder.viewLine.setVisibility(View.VISIBLE);
+                }
+            }
 
             if (listCompany.get(position).isSelected()) {
                 holder.imvTickIcon.setVisibility(View.VISIBLE);

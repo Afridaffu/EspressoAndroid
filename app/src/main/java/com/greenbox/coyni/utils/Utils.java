@@ -397,9 +397,9 @@ public class Utils {
     public static final String position = "Position";
     public static final int cPP = 1;
     public static final int cTOS = 0;
-    public static final int mPP = 8;
-    public static final int mTOS = 7;
-    public static final int mAgmt = 5;
+    public static final int mPP = 1;
+    public static final int mTOS = 0;
+    public static final int mAgmt = 2;
 
     public static Class<?> launchedActivity = OnboardActivity.class;
 

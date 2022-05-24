@@ -64,7 +64,7 @@ import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
-public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
+public class PayToMerchantActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
     EditText payET;
     Dialog cvvDialog, prevDialog;
@@ -1147,8 +1147,7 @@ public class PayToMerchantActivity extends BaseActivity implements TextWatcher {
     public void onBackPressed() {
         super.onBackPressed();
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-            CheckOutModel checkOutModel = new CheckOutModel();
-            objMyApplication.setCheckOutModel(checkOutModel);
+             objMyApplication.setCheckOutModel(null);
             finish();
         }
     }
