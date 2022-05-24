@@ -681,5 +681,10 @@
     <string name="default_notification_channel_id">Channel ID</string>
     <string name="extBankMsg">coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
 
+    <string name="no_notifications">You have no notifications</string>
+    <string name="no_requests">You have no requests</string>
+    <string name="time_zone_changed">Time zone changed successfully</string>
+
+    <string name="internal_storage">Internal storage</string>
 
 </resources>

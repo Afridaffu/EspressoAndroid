@@ -67,7 +67,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
-    private int childid;
+    private int childid = 0;
     private String SelectedDBAName = "";
     private BusinessProfileRecyclerAdapter profilesListAdapter;
     private ImageView businessPersonalProfileTickIcon;
@@ -97,7 +97,6 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
     }
 
     public void initFields() {
-
         try {
 //            Window window = getWindow();
 //            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -244,7 +243,6 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void initObservers() {
@@ -332,7 +330,7 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
                             myApplicationObj.setStrPreference("AST");
                         }
                         timeZoneET.setText(myApplicationObj.getTimezone());
-                        Utils.showCustomToast(PreferencesActivity.this, userPreference.getData().getMessage(), R.drawable.ic_custom_tick, "authid");
+                        Utils.showCustomToast(PreferencesActivity.this, getResources().getString(R.string.time_zone_changed), R.drawable.ic_custom_tick, "authid");
 
                     }
                 }
@@ -374,11 +372,11 @@ public class PreferencesActivity extends AppCompatActivity implements BusinessPr
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData,myApplicationObj.getLoginUserId(),showDBA);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, myApplicationObj.getLoginUserId(), showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onGroupClicked(int position, String accountType, Integer id,String fullname) {
+            public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
                 childid = id;
                 SelectedDBAName = fullname;
