@@ -89,7 +89,7 @@
     <string name="unable_to_get_document">Failed to get the document. Please try again</string>
     <string name="transAmountAlert">From Amount\' should not be greater than \'To Amount</string>
     <string name="email_field_alert">Please enter a valid Email</string>
-
+    <string name="please_use_active_account">Please use active user account to make payments</string>
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailing Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
