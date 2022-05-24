@@ -181,9 +181,9 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                         filterList = profilesResponse.getData();
                         for (ProfilesResponse.Profiles c : filterList) {
                             LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
-                            if (c.getDbaOwner() == null && c.getAccountType().equals(Utils.BUSINESS)) {
+                            if (c.getDbaOwner() == null
+                                    && c.getAccountType().equals(Utils.BUSINESS) && c.getDbaOwner() == null) {
                                 businessAccountList.add(c);
-                            } else {
                             }
                         }
                     }
