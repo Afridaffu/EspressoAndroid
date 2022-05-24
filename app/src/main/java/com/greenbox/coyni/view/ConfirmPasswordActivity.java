@@ -40,7 +40,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Pattern;
 
-public class ConfirmPasswordActivity extends AppCompatActivity {
+public class ConfirmPasswordActivity extends BaseActivity {
     TextInputEditText currentPassET;
     TextInputLayout currentTIL;
     CardView saveBtn;

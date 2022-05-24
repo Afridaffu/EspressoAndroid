@@ -5,8 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class PayingDBAFilterActivity extends AppCompatActivity {
+public class PayingDBAFilterActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

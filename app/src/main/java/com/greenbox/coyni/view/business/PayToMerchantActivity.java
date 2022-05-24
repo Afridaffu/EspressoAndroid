@@ -632,11 +632,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = payET.getText().toString().trim().replace("\"", "");
 
-            if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-                payET.setEnabled(false);
-                payET.setClickable(false);
-                payET.setTextColor(getColor(R.color.primary_green));
-            }
+//            if (objMyApplication.getCheckOutModel() != null ) {
+//                payET.setEnabled(false);
+//                payET.setClickable(false);
+//                payET.setTextColor(getColor(R.color.primary_green));
+//            }
 //            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
 //                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayToMerchantActivity.this, "", "");
 //                return value = false;
@@ -924,7 +924,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        if (objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             dialog.setCanceledOnTouchOutside(false);
         } else {
             dialog.setCanceledOnTouchOutside(true);
@@ -1198,7 +1198,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     public void onBackPressed() {
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             objMyApplication.setCheckOutModel(null);
-            finish();
         }
+        super.onBackPressed();
     }
 }

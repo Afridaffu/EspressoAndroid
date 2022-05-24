@@ -39,7 +39,7 @@ import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 
 import java.util.Objects;
 
-public class EditPhoneActivity extends AppCompatActivity {
+public class EditPhoneActivity extends BaseActivity {
 
     OutLineBoxPhoneUpdateET currentPhoneET, newPhoneET, b_newPhoneET;
     MyApplication myApplicationObj;
