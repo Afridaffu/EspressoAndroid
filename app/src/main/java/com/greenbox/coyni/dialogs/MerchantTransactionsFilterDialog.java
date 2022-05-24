@@ -35,7 +35,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
     private ArrayList<Integer> transactionType = new ArrayList<Integer>();
     private ArrayList<Integer> transactionSubType = new ArrayList<Integer>();
     private ArrayList<Integer> txnStatus = new ArrayList<Integer>();
-    private String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "",strupdated = "",strended = "";
+    private String strStartAmount = "", strEndAmount = "", strFromDate = "", strToDate = "", strSelectedDate = "", tempStrSelectedDate = "",strupdated = "",strended = "",strF = "",strT = "";
 
     private Long mLastClickTimeFilters = 0L;
     private String dateSelected = null, storedSelectDate = "";
@@ -151,36 +151,36 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 transAmountEndET.setText(strEndAmount);
             }
 
-//            if (filterTransactionListRequest != null) {
-//                String strF = filterTransactionListRequest.getUpdatedFromDate();
-//                String strT = filterTransactionListRequest.getUpdatedToDate();
-//
-//                String formatToDisplay = "MMM dd, yyyy";
-//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
+            if (filterTransactionListRequest != null) {
+                 strF = filterTransactionListRequest.getUpdatedFromDate();
+                 strT = filterTransactionListRequest.getUpdatedToDate();
+
+                String formatToDisplay = "MMM dd, yyyy";
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
 //                try {
-//                    startDateD = displayFormatter.parse(strF);
-//                    endDateD = displayFormatter.parse(strT);
+////                    startDateD = displayFormatter.parse(strF);
+////                    endDateD = displayFormatter.parse(strT);
 //
 //                } catch (ParseException e) {
 //                    e.printStackTrace();
 //                }
-//                strupdated = simpleDateFormat.format(startDateD);
-//                strended = simpleDateFormat.format(endDateD);
+//                strupdated = objMyApplication.convertZoneDateTime(strF,"MM:dd:yyyy","MMM dd, yyyy");
+//                strended = objMyApplication.convertZoneDateTime(strT,"MM:dd:yyyy","MMM dd, yyyy");
+
 //                strSelectedDate = strupdated + "  " + strended;
-//                if (strSelectedDate != null) {
-//                    getDateFromPickerET.setText(strSelectedDate);
-//                } else {
-//                    getDateFromPickerET.setText("");
-//                }
-//
-//                SimpleDateFormat rangeFormat = new SimpleDateFormat(DateRangePickerDialog.displayFormat);
-//                rangeDates = new RangeDates();
-//                rangeDates.setUpdatedFromDate(rangeFormat.format(startDateD));
-//                rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
-//                //rangeDates.setFullDate(strSelectedDate);
-//            }
+//                strSelectedDate = strF + " " + strT;
+                if (strSelectedDate != null) {
+                    getDateFromPickerET.setText(strSelectedDate);
+                } else {
+                    getDateFromPickerET.setText("");
+                }
 
-
+                SimpleDateFormat rangeFormat = new SimpleDateFormat(DateRangePickerDialog.displayFormat);
+                rangeDates = new RangeDates();
+                rangeDates.setUpdatedFromDate(rangeFormat.format(startDateD));
+                rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
+                //rangeDates.setFullDate(strSelectedDate);
+            }
         } else {
             if (transactionType != null) {
                 transactionType.clear();
@@ -198,8 +198,6 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
 //            isFilters = false;
             tempStrSelectedDate = "";
             storedSelectDate = "";
-
-
         }
 
         resetFiltersTV.setOnClickListener(view -> {
@@ -232,6 +230,10 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             transAmountEndET.clearFocus();
             getDateFromPickerET.clearFocus();
 
+            rangeDates = new RangeDates();
+            rangeDates.setUpdatedFromDate("");
+            rangeDates.setUpdatedToDate("");
+
             transTypeSalesOrderToken.setChecked(false);
             transTypeRefund.setChecked(false);
             transTypeMerchantPayout.setChecked(false);
@@ -246,11 +248,7 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
             transAmountEndET.setText("");
             getDateFromPickerET.setText("");
             getOnDialogClickListener().onDialogClicked(Utils.resetFilter, null);
-
-
 //            dismiss();
-
-
         });
 
         transTypeSalesOrderToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -547,12 +545,14 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 }
                 if (!strFromDate.equals("")) {
                     isFilters = true;
-                    filterTransactionListRequest.setUpdatedFromDate((objMyApplication.exportDate(strFromDate + " 00:00:00.000")).split("\\ ")[0] + " 00:00:00");
+//                    filterTransactionListRequest.setUpdatedFromDate((objMyApplication.exportDate(strFromDate + " 00:00:00.000")).split("\\ ")[0] + " 00:00:00");
+                    filterTransactionListRequest.setUpdatedFromDate(objMyApplication.exportDate(strFromDate));
                     filterTransactionListRequest.setUpdatedFromDateOperator(">=");
                 }
                 if (!strToDate.equals("")) {
                     isFilters = true;
-                    filterTransactionListRequest.setUpdatedToDate((objMyApplication.exportDate(strToDate + "00:00:00.000")).split("\\ ")[0] + " 23:59:59");
+//                    filterTransactionListRequest.setUpdatedToDate((objMyApplication.exportDate(strToDate + "00:00:00.000")).split("\\ ")[0] + " 23:59:59");
+                    filterTransactionListRequest.setUpdatedToDate(objMyApplication.exportDate(strToDate));
                     filterTransactionListRequest.setUpdatedToDateOperator("<=");
                 }
 

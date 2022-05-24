@@ -38,7 +38,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
     private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private String storedSelectDate = "", tempStrSelectedDate = "", strFromDate = "", strToDate = "", strSelectedDate = "", strupdated = "", strended = "", strupdateddate = "", strtoupdateddate = "";
+    private String storedSelectDate = "", tempStrSelectedDate = "", strFromDate = "", strToDate = "", strSelectedDate = "", strupdated = "", strended = "", strupdateddate = "", strtoupdateddate = "", strF = "", strT = "";
     private String displayFormat = "MM-dd-yyyy";
     private SimpleDateFormat displayFormatter;
     private Date startDateD = null;
@@ -73,33 +73,45 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         dateRange = findViewById(R.id.datePickET);
 
 
-        if (filter != null && filter.getUpdatedFromDate() != null && filter.getUpdatedToDate() != null) {
-            String strF = filter.getUpdatedFromDate();
-            String strT = filter.getUpdatedToDate();
+        try {
+            if (filter != null && filter.getUpdatedFromDate() != null && filter.getUpdatedToDate() != null) {
+                strF = filter.getUpdatedFromDate();
+                strT = filter.getUpdatedToDate();
 
-            String formatToDisplay = "MMM dd, yyyy";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
-            try {
-                startDateD = displayFormatter.parse(strF);
-                endDateD = displayFormatter.parse(strT);
+                String formatToDisplay = "MMM dd, yyyy";
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
+                try {
+                    startDateD = displayFormatter.parse(strF);
+                    endDateD = displayFormatter.parse(strT);
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            strupdated = simpleDateFormat.format(startDateD);
-            strended = simpleDateFormat.format(endDateD);
-            strSelectedDate = strupdated + " - " + strended;
-            if (strSelectedDate != null) {
-                dateRange.setText(strSelectedDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                strupdated = simpleDateFormat.format(startDateD);
+                strended = simpleDateFormat.format(endDateD);
+                strSelectedDate = strupdated + " - " + strended;
+                if (strSelectedDate != null) {
+                    dateRange.setText(strSelectedDate);
+                } else {
+                    dateRange.setText("");
+                }
+
+                SimpleDateFormat rangeFormat = new SimpleDateFormat(DateRangePickerDialog.displayFormat);
+                rangeDates = new RangeDates();
+                rangeDates.setUpdatedFromDate(rangeFormat.format(startDateD));
+                rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
+
+                //rangeDates.setFullDate(strSelectedDate);
             } else {
                 dateRange.setText("");
-            }
+                dateRange.clearFocus();
+                strF = "";
+                strT = "";
+                strSelectedDate = "";
 
-            SimpleDateFormat rangeFormat = new SimpleDateFormat(DateRangePickerDialog.displayFormat);
-            rangeDates = new RangeDates();
-            rangeDates.setUpdatedFromDate(rangeFormat.format(startDateD));
-            rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
-            //rangeDates.setFullDate(strSelectedDate);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -108,6 +120,12 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
             onHoldC.setChecked(filter.isOnHold());
             releasedC.setChecked(filter.isReleased());
             canceledC.setChecked(filter.isCancelled());
+        } else {
+            rangeDates = new RangeDates();
+            rangeDates.setUpdatedFromDate("");
+            rangeDates.setUpdatedToDate("");
+            dateRange.setText("");
+            dateRange.clearFocus();
         }
 
         openC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -174,6 +192,7 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
 
                 if (!filter.isFilterApplied) {
                     dismiss();
+                    dateRange.setText("");
                     //Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
                 } else {
                     if (getOnDialogClickListener() != null) {
@@ -187,21 +206,28 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
         resetFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //LogUtils.d("Dialogg", "resetFilter" + transactionStatus.size());
-                openC.setChecked(false);
-                onHoldC.setChecked(false);
-                canceledC.setChecked(false);
-                releasedC.setChecked(false);
-                storedSelectDate = "";
-                rangeDates.setUpdatedToDate("");
-                rangeDates.setUpdatedFromDate("");
-                strSelectedDate = "";
-                dateRange.setText("");
-                dateRange.clearFocus();
-                tempStrSelectedDate = "";
-                filter.isFilterApplied = false;
-                if (getOnDialogClickListener() != null) {
-                    getOnDialogClickListener().onDialogClicked("ResetFilter", filter);
+                try {
+                    //LogUtils.d("Dialogg", "resetFilter" + transactionStatus.size());
+                    openC.setChecked(false);
+                    onHoldC.setChecked(false);
+                    canceledC.setChecked(false);
+                    releasedC.setChecked(false);
+                    strSelectedDate = "";
+                    filter.isFilterApplied = false;
+                    strF = "";
+                    strT = "";
+                    dateRange.setText("");
+                    strFromDate = "";
+                    strToDate = "";
+                    tempStrSelectedDate = "";
+                    rangeDates = new RangeDates();
+                    rangeDates.setUpdatedToDate("");
+                    rangeDates.setUpdatedFromDate("");
+                    if (getOnDialogClickListener() != null) {
+                        getOnDialogClickListener().onDialogClicked("ResetFilter", filter);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -218,13 +244,12 @@ public class ReserveReleasesFilterDialog extends BaseDialog {
                     rangeDates = (RangeDates) value;
                     strFromDate = rangeDates.getUpdatedFromDate();
                     strToDate = rangeDates.getUpdatedToDate();
-                    filter.setUpdatedFromDate(rangeDates.getUpdatedFromDate());
-                    filter.setUpdatedToDate(rangeDates.getUpdatedToDate());
+                    filter.setUpdatedFromDate(strFromDate);
+                    filter.setUpdatedToDate(strToDate);
                     tempStrSelectedDate = rangeDates.getFullDate();
                     dateRange.setText(tempStrSelectedDate);
 
                 }
-
             }
         });
 
