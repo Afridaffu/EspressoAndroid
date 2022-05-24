@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNewBusinessAccountDBAAdapter.MyViewHolder> {
     private OnSelectListner listener;
-    List<ProfilesResponse.Profiles> listCompany;
+    List<BaseProfile> listCompany;
     Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -48,7 +49,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     }
 
 
-    public AddNewBusinessAccountDBAAdapter(List<ProfilesResponse.Profiles> list, Context context, OnSelectListner listener) {
+    public AddNewBusinessAccountDBAAdapter(List<BaseProfile> list, Context context, OnSelectListner listener) {
         this.mContext = context;
         this.listCompany = list;
         this.listener = listener;
@@ -158,7 +159,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     }
 
     public interface OnSelectListner {
-        void selectedItem(ProfilesResponse.Profiles item);
+        void selectedItem(BaseProfile item);
     }
 
 

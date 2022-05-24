@@ -18,7 +18,7 @@ import com.greenbox.coyni.utils.Utils;
 
 import java.util.List;
 
-public class AccountsActivity extends AppCompatActivity {
+public class AccountsActivity extends BaseActivity {
 
     TextView userShortInfoTV, userNameTV, userBalanceTV;
     ImageView imgProfile, accountsCloseIV;

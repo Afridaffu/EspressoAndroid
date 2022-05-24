@@ -309,8 +309,10 @@ public class BindingLayoutActivity extends BaseActivity {
     private void onLogoutSuccess() {
         objMyApplication.setStrRetrEmail("");
         dropAllTables();
+        overridePendingTransition(0,0);
         Intent i = new Intent(BindingLayoutActivity.this, OnboardActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
+        overridePendingTransition(0,0);
     }
 }

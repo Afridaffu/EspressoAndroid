@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class PreferencesActivity extends AppCompatActivity implements BusinessProfileRecyclerAdapter.OnSelectListner {
+public class PreferencesActivity extends BaseActivity implements BusinessProfileRecyclerAdapter.OnSelectListner {
 
     private MyApplication myApplicationObj;
     ProgressDialog dialog;

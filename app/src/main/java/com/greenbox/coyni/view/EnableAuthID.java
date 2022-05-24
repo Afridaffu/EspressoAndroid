@@ -38,7 +38,7 @@ import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
-public class EnableAuthID extends AppCompatActivity {
+public class EnableAuthID extends BaseActivity {
     CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
     TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
     RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;

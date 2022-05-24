@@ -524,22 +524,22 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
+                                        android:layout_marginTop="@dimen/_6sdp"
                                         android:orientation="horizontal">
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="5dp"
-                                            android:layout_marginTop="@dimen/_6sdp"
                                             android:fontFamily="@font/opensans_semibold"
-                                            android:text=" Under Review"
+                                            android:text="Under Review"
                                             android:textColor="@color/under_review_blue"
                                             android:textSize="@dimen/_11ssp" />
 
                                         <androidx.cardview.widget.CardView
                                             android:layout_width="@dimen/_8sdp"
                                             android:layout_height="@dimen/_8sdp"
-                                            android:layout_marginTop="@dimen/_2sdp"
+                                            android:layout_marginTop="-2dp"
                                             app:cardBackgroundColor="@color/under_review_blue"
                                             app:cardCornerRadius="@dimen/_4sdp" />
                                     </LinearLayout>

@@ -106,7 +106,7 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ScanActivity extends AppCompatActivity implements TextWatcher, OnKeyboardVisibilityListener {
+public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboardVisibilityListener {
     TextView scanMe, scanCode, scanmeSetAmountTV, savetoAlbum, userNameTV, scanMeRequestAmount;
     LinearLayout layoutHead, imageSaveAlbumLL, scanAmountLL, setAmountLL, scanMeScanCodeLL;
     ConstraintLayout flashLL;

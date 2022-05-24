@@ -936,7 +936,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
                 strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
+                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
