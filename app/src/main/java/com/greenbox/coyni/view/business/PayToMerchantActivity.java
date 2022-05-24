@@ -263,6 +263,16 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             cKey.setScreenName("payToMerch");
             payET.setOnClickListener(v -> Utils.hideSoftKeypad(PayToMerchantActivity.this, v));
             payET.addTextChangedListener(this);
+
+            if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
+                strWalletId = getIntent().getStringExtra("walletId");
+                if (Utils.checkInternet(PayToMerchantActivity.this)) {
+                    dashboardViewModel.getUserDetail(strWalletId);
+                } else {
+                    Utils.displayAlert(getString(R.string.internet), PayToMerchantActivity.this, "", "");
+                }
+            }
+
             calculateFee("10");
             transactionLimitCall();
             walletAPICall();
@@ -298,19 +308,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     }
 
     private void intents() {
-        if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
-            strWalletId = getIntent().getStringExtra("walletId");
-            if (Utils.checkInternet(PayToMerchantActivity.this)) {
-                dashboardViewModel.getUserDetail(strWalletId);
-            } else {
-                Utils.displayAlert(getString(R.string.internet), PayToMerchantActivity.this, "", "");
-            }
-        }
 
         if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount) != null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")) {
             String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
-            USFormat(payET);
             payET.setText(Utils.convertTwoDecimal(amount));
+            USFormat(payET);
             if (payValidation()) {
                 pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
                 isPayClick = true;
@@ -1038,7 +1040,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     private void payPreview() {
         try {
             value = true;
-
             showPayToMerchantWithAmountDialog(String.valueOf(cynValue), details, value, avaBal);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1080,7 +1081,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase("payTransaction")) {
-
                     if (!isAuthenticationCalled) {
                         isAuthenticationCalled = true;
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToMerchantActivity.this)) {
@@ -1108,7 +1108,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
         });
-        payToMerchantWithAmountDialog.show();
 
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             payToMerchantWithAmountDialog.setCanceledOnTouchOutside(false);
@@ -1123,7 +1122,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
         });
-
+        payToMerchantWithAmountDialog.show();
     }
 
 //        private void setFaceLock() {

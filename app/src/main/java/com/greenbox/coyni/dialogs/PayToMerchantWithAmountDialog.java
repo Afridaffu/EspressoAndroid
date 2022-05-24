@@ -78,7 +78,7 @@ public class PayToMerchantWithAmountDialog extends BaseDialog {
             availableBalance.setText("Available: " + Utils.USNumberFormat(balance) + "CYN");
         }
 
-        if (userDetails.getData().getFullName() != null) {
+        if (userDetails!= null && userDetails.getData()!= null && userDetails.getData().getFullName() != null) {
             userName.setText("Paying " + userDetails.getData().getFullName());
         }
         if (businessTypeValue != null) {
