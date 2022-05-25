@@ -144,7 +144,6 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
 
                 if (!filter.isFilterApplied) {
                     dismiss();
-                    Toast.makeText(context, "plese select fromdate and todate", Toast.LENGTH_SHORT).show();
                 } else {
                     if (getOnDialogClickListener() != null) {
 //                        filterDatePickET.setText(storedSelectDate);
