@@ -91,18 +91,18 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
         LogUtils.d("isLastChild", "isLastChild" + isLastChild);
 
-            for (int position = 0; position < profilesList.size(); position++) {
-                if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                        profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                        profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                    addDBA.setEnabled(false);
-                    addDbaText.setEnabled(false);
-                    break;
-                } else {
-                    addDBA.setEnabled(true);
-                    addDbaText.setEnabled(true);
-                }
+        for (int position = 0; position < profilesList.size(); position++) {
+            if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                addDBA.setEnabled(false);
+                addDbaText.setEnabled(false);
+                break;
+            } else {
+                addDBA.setEnabled(true);
+                addDbaText.setEnabled(true);
             }
+        }
 
         if (detailInfo.getAccountType().equals(Utils.SHARED)) {
             if (detailInfo.getCompanyName() != null) {
@@ -314,12 +314,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 //            }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
-            if (headerInfo.getCompanyName() != null && headerInfo.getCompanyName().length() > 21) {
-                heading.setText(headerInfo.getCompanyName().substring(0, 20));
+            if (headerInfo.getCompanyName() != null) {
+                if (headerInfo.getCompanyName().length() > 21) {
+                    heading.setText(headerInfo.getCompanyName().substring(0, 20));
+                } else {
+                    heading.setText(headerInfo.getCompanyName());
+                }
             } else {
-                heading.setText(headerInfo.getCompanyName());
-            }
-            if (headerInfo.getCompanyName() == null) {
                 heading.setText("[Comapany Name]");
             }
 
