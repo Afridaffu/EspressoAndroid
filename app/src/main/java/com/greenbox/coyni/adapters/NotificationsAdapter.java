@@ -175,9 +175,12 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     holder.fromRequesterLL.setVisibility(View.VISIBLE);
                     holder.payLL.setVisibility(View.VISIBLE);
                     holder.denyLL.setVisibility(View.VISIBLE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText(notifications.get(position).getRemarks());
-                    holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
+                    if(!notifications.get(position).getRemarks().trim().equals("")) {
+                        holder.messageTV.setText(notifications.get(position).getRemarks());
+                        holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                    }else
+                        holder.messageTV.setVisibility(View.GONE);
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
                     Log.e("cancelled", "cancelled");
                     holder.meRequestLL.setVisibility(View.GONE);
@@ -323,6 +326,12 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
                     holder.fromRequesterLL.setVisibility(View.GONE);
                     holder.remindLL.setVisibility(View.VISIBLE);
                     holder.cancelLL.setVisibility(View.VISIBLE);
+                    if(!notifications.get(position).getRemarks().trim().equals("")) {
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText(notifications.get(position).getRemarks());
+                        holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
+                    }else
+                        holder.messageTV.setVisibility(View.GONE);
                 } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
                     holder.meRequestLL.setVisibility(View.GONE);
                     holder.messageTV.setVisibility(View.VISIBLE);

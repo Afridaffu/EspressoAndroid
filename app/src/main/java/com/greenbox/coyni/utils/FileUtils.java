@@ -1,8 +1,5 @@
 package com.greenbox.coyni.utils;
 
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,8 +8,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.provider.MediaStore.Files;
-import android.provider.MediaStore.Files.FileColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,7 +16,6 @@ import androidx.annotation.WorkerThread;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -64,6 +58,7 @@ public class FileUtils {
     public static String getPath(final Context context, final Uri uri) {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // LocalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 Log.d("External Storage", docId);
@@ -98,11 +93,10 @@ public class FileUtils {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-                else {
+                } else {
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        contentUri  = MediaStore.Downloads.getContentUri("internal");
+                        contentUri = MediaStore.Downloads.getContentUri("internal");
                     }
 //                    ContentResolver cr = context.getContentResolver();
 //                    contentUri = Files.getContentUri("external");
@@ -258,21 +252,4 @@ public class FileUtils {
         return true;
     }
 
-    private static class Ident {
-        public String type;
-        public long id;
-    }
-
-    private static Ident getIdentForDocId(String docId) {
-        final Ident ident = new Ident();
-        final int split = docId.indexOf(':');
-        if (split == -1) {
-            ident.type = docId;
-            ident.id = -1;
-        } else {
-            ident.type = docId.substring(0, split);
-            ident.id = Long.parseLong(docId.substring(split + 1));
-        }
-        return ident;
-    }
 }
