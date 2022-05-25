@@ -97,7 +97,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     BrandsResponse brandsResponseObj;
     DatabaseHandler dbHandler;
     Brand objBrand;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0,feeInAmount = 0.0, feeInPercentage = 0.0;;
     List<Items> listAmounts = new ArrayList<>();
     String amountETString = "", amount = "", strLimit = "", strBrandDesc = "";

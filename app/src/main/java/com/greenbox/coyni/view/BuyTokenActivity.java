@@ -105,7 +105,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     CoyniViewModel coyniViewModel;
     Dialog payDialog, prevDialog, cvvDialog;
     TransactionLimitResponse objResponse;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     String strLimit = "", strBankId = "", strCardId = "", strCvv = "", strSubType = "", strSignOn = "", strToken = "";
     Double maxValue = 0.0, dget = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, usdValidation = 0.0, cynValidation = 0.0;

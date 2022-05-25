@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -52,7 +53,7 @@ public class ConfirmPasswordActivity extends BaseActivity {
     private static final String STRONG_PATTERN =
             "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*!?]).{8,})";
     LoginViewModel loginViewModel;
-    ProgressDialog dialog;
+    Dialog dialog;
     MyApplication objMyApplication;
     LinearLayout layoutPwdError;
     TextView tvPwdError;
@@ -176,16 +177,20 @@ public class ConfirmPasswordActivity extends BaseActivity {
             saveBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    if (btnEnabled) {
-                        dialog = Utils.showProgressDialog(ConfirmPasswordActivity.this);
-                        PasswordRequest passwordRequest = new PasswordRequest();
-                        passwordRequest.setUsername(objMyApplication.getStrEmail());
-                        passwordRequest.setPassword(currentPassET.getText().toString().trim());
-                        loginViewModel.authenticatePassword(passwordRequest);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (btnEnabled) {
+                            dialog = Utils.showProgressDialog(ConfirmPasswordActivity.this);
+                            PasswordRequest passwordRequest = new PasswordRequest();
+                            passwordRequest.setUsername(objMyApplication.getStrEmail());
+                            passwordRequest.setPassword(currentPassET.getText().toString().trim());
+                            loginViewModel.authenticatePassword(passwordRequest);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }

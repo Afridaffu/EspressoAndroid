@@ -108,7 +108,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     ;
     Dialog preDialog, preAuthDialog;
     CardResponseData cardResponseData;
-    ProgressDialog progressDialog;
+    Dialog progressDialog;
     public static AddCardActivity addCardActivity;
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isCvv = false, isNextEnabled = false;

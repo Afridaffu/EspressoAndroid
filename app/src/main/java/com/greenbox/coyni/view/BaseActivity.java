@@ -1,11 +1,19 @@
 package com.greenbox.coyni.view;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
@@ -15,10 +23,12 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
 
+import org.w3c.dom.Text;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     public final String TAG = getClass().getName();
-    private ProgressDialog dialog;
+    private Dialog dialog;
     private MyApplication myApplication;
 
     @Override
@@ -49,7 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog() {
-        showProgressDialog("Please wait...");
+        showProgressDialog("Loading");
     }
 
     private boolean isLaunchCheckoutFlow() {
@@ -58,16 +68,37 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog(String message) {
-        showProgressDialog(message, true);
+        showProgressDialog(message, true, this);
     }
 
-    public void showProgressDialog(String message, boolean isCanceledOnTouchOutside) {
+    public void showProgressDialog(String message, boolean isCanceledOnTouchOutside, BaseActivity baseActivity) {
         if (dialog != null && dialog.isShowing()) {
             return;
         }
-        dialog = new ProgressDialog(BaseActivity.this, R.style.MyAlertDialogStyle);
-        dialog.setIndeterminate(false);
-        dialog.setMessage(message);
+//        dialog = new ProgressDialog(BaseActivity.this, R.style.MyAlertDialogStyle);
+//        dialog.setIndeterminate(false);
+//        dialog.setMessage(message);
+//        dialog.setCanceledOnTouchOutside(isCanceledOnTouchOutside);
+//        dialog.show();
+
+
+        dialog = new Dialog(baseActivity);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.loader);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        TextView loaderMsg = dialog.findViewById(R.id.loaderText);
+        loaderMsg.setText(message);
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
         dialog.setCanceledOnTouchOutside(isCanceledOnTouchOutside);
         dialog.show();
     }
@@ -85,12 +116,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                 dismissDialog();
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                         && myApplication.getMyProfile().getData().getAccountStatus() != null) {
-                        if(myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                            launchCheckoutFlow(checkOutModel);
-                        } else {
-                            myApplication.setCheckOutModel(new CheckOutModel());
-                            Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
-                        }
+                    if (myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                        launchCheckoutFlow(checkOutModel);
+                    } else {
+                        myApplication.setCheckOutModel(new CheckOutModel());
+                        Utils.displayAlertNew(getString(R.string.please_use_active_account), BaseActivity.this, "coyni");
+                    }
                 } else if (myApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                     launchCheckoutFlow(checkOutModel);
                 } else {

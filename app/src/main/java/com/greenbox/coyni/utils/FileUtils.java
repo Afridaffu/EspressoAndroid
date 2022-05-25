@@ -95,9 +95,24 @@ public class FileUtils {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 } else {
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        contentUri = MediaStore.Downloads.getContentUri("internal");
-                    }
+                    contentUri = MediaStore.Files.getContentUri("external");
+
+                    String selection = MediaStore.MediaColumns.RELATIVE_PATH + "=?";
+
+                    String[] selectionArgs = new String[]{Environment.DIRECTORY_DOCUMENTS};
+
+//                    Cursor cursor = context.getContentResolver().query(contentUri, null, selection, selectionArgs, null);
+//
+//                    do {
+//                        if (cursor == null) return null;
+//                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
+//                        cursor.moveToFirst();
+//                        Log.e("path", cursor.getString(column_index));
+//                    } while (cursor.moveToNext());
+
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                        contentUri = MediaStore.Downloads.getContentUri("internal");
+//                    }
 //                    ContentResolver cr = context.getContentResolver();
 //                    contentUri = Files.getContentUri("external");
 //                    contentUri = ContentUris.withAppendedId(Files.FileColumns("external"),
@@ -110,14 +125,14 @@ public class FileUtils {
 //                    getFileName(context, uri);
 //                    final String selection = "_id=?";
 //                    final String[] selectionArgs = new String[]{split[1]};
-//                    String[] proj = {FileColumns.DATA};
-//                    Cursor cursor = context.getContentResolver().query(contentUri, proj, selection, selectionArgs, null);
-//                    do {
-//                        if (cursor == null) return null;
-//                        int column_index = cursor.getColumnIndexOrThrow(FileColumns.DATA);
-//                        cursor.moveToFirst();
-//                        Log.e("path", cursor.getString(column_index));
-//                    } while (cursor.moveToNext());
+                    String[] proj = {MediaStore.Files.FileColumns.DATA};
+                    Cursor cursor = context.getContentResolver().query(contentUri, proj, selection, selectionArgs, null);
+                    do {
+                        if (cursor == null) return null;
+                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
+                        cursor.moveToFirst();
+                        Log.e("path", cursor.getString(column_index));
+                    } while (cursor.moveToNext());
 
 
 //                    ---------------------------------------

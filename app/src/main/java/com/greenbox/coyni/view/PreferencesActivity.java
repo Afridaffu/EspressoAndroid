@@ -49,7 +49,7 @@ import java.util.List;
 public class PreferencesActivity extends BaseActivity implements BusinessProfileRecyclerAdapter.OnSelectListner {
 
     private MyApplication myApplicationObj;
-    ProgressDialog dialog;
+    Dialog dialog;
     private DashboardViewModel dashboardViewModel;
     private boolean isProfile = false;
     private TextInputLayout timeZoneTIL, accountTIL, currencyTIL;

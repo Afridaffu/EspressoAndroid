@@ -94,7 +94,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static final int FOR_RESULT = 235;
     boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     int requestedToUserId = 0;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomKeyboard cKey;

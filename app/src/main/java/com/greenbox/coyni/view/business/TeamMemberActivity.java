@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -44,7 +45,7 @@ public class TeamMemberActivity extends BaseActivity {
     private CardView mEditCv, mCancelCV, mRemoveCv, mResendInvitation;
     private ImageView mStatusIcon;
     private TeamViewModel teamViewModel;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private LinearLayout bpBackBtn;
 
     @Override

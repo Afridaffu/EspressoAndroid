@@ -65,7 +65,7 @@ public class DBAInfoDetails extends BaseActivity {
     private MyApplication objMyApplication;
     private List<BusinessType> responce;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-    ProgressDialog dialog;
+    Dialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
     String emailID, phone_Number, bType=" ";
@@ -637,10 +637,7 @@ public class DBAInfoDetails extends BaseActivity {
 
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
-            dialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.show();
+            dialog = Utils.showProgressDialog(this);
             dashboardViewModel.updateProfile(body);
         } catch (Exception ex) {
             ex.printStackTrace();

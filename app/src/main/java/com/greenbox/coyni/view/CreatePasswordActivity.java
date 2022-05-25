@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -59,7 +60,7 @@ public class CreatePasswordActivity extends BaseActivity {
     TextInputLayout passwordTIL, confPasswordTIL, currentPass;
     TextInputEditText passwordET, confirmPasswordET, currentPassET;
     LinearLayout layoutIndicator;
-    ProgressDialog dialog;
+    Dialog dialog;
     LinearLayout passwordErrorLL, confPassErrorLL;
     private Pattern strong, medium;
     private MyApplication myApplication;
@@ -626,10 +627,7 @@ public class CreatePasswordActivity extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
                         Utils.hideKeypad(CreatePasswordActivity.this, v);
-                        dialog = new ProgressDialog(CreatePasswordActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
+                        dialog = Utils.showProgressDialog(CreatePasswordActivity.this);
                         strNewPwd = passwordET.getText().toString().trim();
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                             ManagePasswordRequest request = new ManagePasswordRequest();

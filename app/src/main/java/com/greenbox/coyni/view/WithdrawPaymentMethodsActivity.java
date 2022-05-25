@@ -70,7 +70,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     Dialog payDialog, addPayDialog, extBankDialog;
     String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
     RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutSignet, layoutBDCard;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;

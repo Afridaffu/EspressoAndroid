@@ -539,7 +539,6 @@
                                         <androidx.cardview.widget.CardView
                                             android:layout_width="@dimen/_8sdp"
                                             android:layout_height="@dimen/_8sdp"
-                                            android:layout_marginTop="-2dp"
                                             app:cardBackgroundColor="@color/under_review_blue"
                                             app:cardCornerRadius="@dimen/_4sdp" />
                                     </LinearLayout>
@@ -1010,14 +1009,13 @@
             android:id="@+id/layoutCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_issue_card_inactive"></ImageView>
 
             <TextView
@@ -1026,7 +1024,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/opensans_regular"
                 android:gravity="center"
-                android:text="Issue\nCard"
+                android:text="Issue Card"
                 android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_8ssp"></TextView>
         </LinearLayout>
