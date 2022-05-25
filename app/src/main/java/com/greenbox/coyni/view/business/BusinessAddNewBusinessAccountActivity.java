@@ -205,13 +205,13 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 public void onChanged(ProfilesResponse profilesResponse) {
                     if (profilesResponse != null) {
                         filterList = profilesResponse.getData();
-                        for (ProfilesResponse.Profiles c : filterList) {
-                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
-                            if (c.getDbaOwner() == null
-                                    && c.getAccountType().equals(Utils.BUSINESS) && c.getDbaOwner() == null) {
-                                businessAccountList.add(c);
-                            }
-                        }
+//                        for (ProfilesResponse.Profiles c : filterList) {
+//                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
+//                            if (c.getDbaOwner() == null
+//                                    && c.getAccountType().equals(Utils.BUSINESS) && c.getDbaOwner() == null) {
+//                                businessAccountList.add(c);
+//                            }
+//                        }
                         prepareCompanyList();
 //                        for (ProfilesResponse.Profiles c : filterList) {
 //                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
