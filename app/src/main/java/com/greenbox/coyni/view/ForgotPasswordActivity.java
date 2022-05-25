@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -44,7 +45,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
     TextInputEditText etEmail;
     LoginViewModel loginViewModel;
     TextInputLayout etlEmail;
-    ProgressDialog dialog;
+    Dialog dialog;
     LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
     LinearLayout layoutMain;

@@ -5,6 +5,7 @@ import static android.view.View.GONE;
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -115,7 +116,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 //    private String tosURL = "https://crypto-resources.s3.amazonaws.com/Gen+3+V1+TOS+v6.pdf";
     private ImageView mPrivacyImg, mTermsImg, mAgreementsImg;
     private LinearLayout llPrivacy, llTerms, llMerchant;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
     private boolean isAgree = false;
     private LoginViewModel loginViewModel;
     private MyApplication objMyApplication;

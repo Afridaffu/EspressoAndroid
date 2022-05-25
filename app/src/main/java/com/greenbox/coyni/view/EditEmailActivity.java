@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -60,7 +61,7 @@ public class EditEmailActivity extends BaseActivity {
     TextView currentEmailErrorTV, newEmailErrorTV, contactUsTV, b_newEmailErrorTV;
     CardView saveEmailCV;
     Long mLastClickTime = 0L;
-    ProgressDialog dialog;
+    Dialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     LoginViewModel loginViewModel;

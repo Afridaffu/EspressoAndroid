@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -89,7 +90,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             oldEmail = "", newEmail = "", isOldEmail = "", oldPhone = "", newPhone = "", oldPhoneMasked = "", newPhoneMasked = "", isOldPhone = "";
     LinearLayout layoutEntry, layoutFailure, layoutMain;
     CardView tryAgainCV;
-    ProgressDialog dialog;
+    Dialog dialog;
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
     CardView secureNextCV;

@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +33,7 @@ public class EditEmail extends BaseActivity {
     private CardView mSave;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private LinearLayout closeLL;
-    private ProgressDialog progressDialog;
+    private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -44,7 +44,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     String strGbxTxnIdType = "";
     int txnType;
     Integer txnSubType;
-    ProgressDialog progressDialog;
+    Dialog progressDialog;
     CardView cancelTxnCV;
 
     // Control Method Types

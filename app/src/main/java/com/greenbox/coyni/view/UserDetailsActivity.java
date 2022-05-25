@@ -113,7 +113,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     public static UserDetailsActivity userDetailsActivity;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     String strFileName = "", phoneFormat = "", phoneNumber = "";
-    ProgressDialog dialog;
+    Dialog dialog;
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
     Long mLastClickTime = 0L;

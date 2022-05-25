@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -65,7 +66,7 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
     List<Contacts> mobileArray;
     MyApplication objMyApplication;
     PayViewModel payViewModel;
-    ProgressDialog dialog;
+    Dialog dialog;
     RecyclerView rvContacts, rvCoyniUsers, rvRecent;
     List<RecentUsersData> usersList;
     List<CoyniUsersData> listCoyniUsers;

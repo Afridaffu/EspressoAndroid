@@ -54,7 +54,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     private int mAccountType = Utils.PERSONAL_ACCOUNT;

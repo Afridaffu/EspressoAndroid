@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.UiAutomation;
 import android.content.ActivityNotFoundException;
@@ -107,7 +108,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 
     public static CreateAccountActivity createAccountActivity;
 
-    ProgressDialog dialog;
+    Dialog dialog;
     LoginViewModel loginViewModel;
     String phoneNumber;
 

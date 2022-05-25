@@ -59,7 +59,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     PayViewModel payViewModel;
     DashboardViewModel dashboardViewModel;
     CoyniViewModel coyniViewModel;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     Dialog prevDialog;
     DatabaseHandler dbHandler;
     Boolean isFaceLock = false, isTouchId = false, isCancel = false;

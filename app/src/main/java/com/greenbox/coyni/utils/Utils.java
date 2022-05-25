@@ -1047,7 +1047,7 @@ public class Utils {
         return isBiometric;
     }
 
-    public static ProgressDialog showProgressDialog(Context context) {
+    public static Dialog showProgressDialog(Context context) {
 
         Dialog dialog = new Dialog(context);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -1065,7 +1065,7 @@ public class Utils {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
-        return (ProgressDialog) dialog;
+        return dialog;
     }
 
     public static void populateTimeZones(Context context, EditText editText, MyApplication myApplicationObj, String from) {

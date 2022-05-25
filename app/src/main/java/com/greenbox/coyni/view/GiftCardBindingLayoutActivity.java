@@ -58,7 +58,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     CardView doneCV, cvTryAgain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     CoyniViewModel coyniViewModel;
     SQLiteDatabase mydatabase;

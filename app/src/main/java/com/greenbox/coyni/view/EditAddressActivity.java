@@ -71,7 +71,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
     TextView b_address1ErrorTV, b_cityErrorTV, b_zipcodeErrorTV;
     Long mLastClickTime = 0L;
-    ProgressDialog dialog;
+    Dialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
 
     @Override

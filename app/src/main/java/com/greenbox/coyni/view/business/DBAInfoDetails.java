@@ -65,7 +65,7 @@ public class DBAInfoDetails extends BaseActivity {
     private MyApplication objMyApplication;
     private List<BusinessType> responce;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-    ProgressDialog dialog;
+    Dialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
     String emailID, phone_Number, bType=" ";

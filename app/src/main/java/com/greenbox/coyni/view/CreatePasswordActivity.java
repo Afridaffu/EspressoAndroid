@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -59,7 +60,7 @@ public class CreatePasswordActivity extends BaseActivity {
     TextInputLayout passwordTIL, confPasswordTIL, currentPass;
     TextInputEditText passwordET, confirmPasswordET, currentPassET;
     LinearLayout layoutIndicator;
-    ProgressDialog dialog;
+    Dialog dialog;
     LinearLayout passwordErrorLL, confPassErrorLL;
     private Pattern strong, medium;
     private MyApplication myApplication;

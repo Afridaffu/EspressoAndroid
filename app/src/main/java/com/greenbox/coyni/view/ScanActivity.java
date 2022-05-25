@@ -128,7 +128,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     boolean isTorchOn = true, isQRScan = false;
     ImageView toglebtn1;
     String strWallet = "", strScanWallet = "", strQRAmount = "", strLimit = "";
-    ProgressDialog dialog;
+    Dialog dialog;
     Dialog errorDialog;
     ConstraintLayout scannerLayout;
     View scannerBar;

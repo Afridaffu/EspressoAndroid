@@ -78,7 +78,7 @@ public class NotificationsActivity extends BaseActivity {
     String selectedTab = "NOTIFICATIONS";
     public String selectedRow = "";
     public String updatedStatus = "";
-    public ProgressDialog progressDialog;
+    public Dialog progressDialog;
     public NotificationsAdapter notificationsAdapter;
 
     SQLiteDatabase mydatabase;

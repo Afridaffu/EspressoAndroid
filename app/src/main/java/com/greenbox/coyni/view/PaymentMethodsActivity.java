@@ -60,7 +60,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     SignOnData signOnData;
     Long mLastClickTime = 0L;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
