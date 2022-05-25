@@ -1,8 +1,5 @@
 package com.greenbox.coyni.utils;
 
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -19,7 +16,6 @@ import androidx.annotation.WorkerThread;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -62,6 +58,7 @@ public class FileUtils {
     public static String getPath(final Context context, final Uri uri) {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            // LocalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 Log.d("External Storage", docId);
@@ -98,27 +95,32 @@ public class FileUtils {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 } else {
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        contentUri = MediaStore.Downloads.getContentUri("internal");
+                    }
 //                    ContentResolver cr = context.getContentResolver();
-                    contentUri = MediaStore.Files.getContentUri("internal");
+//                    contentUri = Files.getContentUri("external");
+//                    contentUri = ContentUris.withAppendedId(Files.FileColumns("external"),
+//                            getIdentForDocId(docId).id);
+//                    contentUri = MediaStore.Files.getContentUri("internal", Long.parseLong(docId));
 
 
 //                    Cursor cursor = cr.query(contentUri, null, null, null, null);
 
 //                    getFileName(context, uri);
-//                    String[] proj = {MediaStore.Files.FileColumns.DATA};
-//                    Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+//                    final String selection = "_id=?";
+//                    final String[] selectionArgs = new String[]{split[1]};
+//                    String[] proj = {FileColumns.DATA};
+//                    Cursor cursor = context.getContentResolver().query(contentUri, proj, selection, selectionArgs, null);
 //                    do {
 //                        if (cursor == null) return null;
-//                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
+//                        int column_index = cursor.getColumnIndexOrThrow(FileColumns.DATA);
 //                        cursor.moveToFirst();
 //                        Log.e("path", cursor.getString(column_index));
 //                    } while (cursor.moveToNext());
 
 
-
-
 //                    ---------------------------------------
-
 
 
 //                    try {

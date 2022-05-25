@@ -87,7 +87,14 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTimeQA = SystemClock.elapsedRealtime();
-                    startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class));
+                    Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
+                    for (ProfilesResponse.Profiles profile : profilesList) {
+                        if (profile.getAccountType().equals(Utils.PERSONAL)) {
+                            inNewAccount.putExtra("PersonalAccount", "true");
+                            break;
+                        }
+                    }
+                    startActivity(inNewAccount);
                 }
             });
         } catch (Exception e) {
@@ -98,7 +105,11 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        dashboardViewModel.getProfiles();
+        try {
+            dashboardViewModel.getProfiles();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initFields() {
@@ -214,6 +225,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 //                    myApplication.setGBTBalance(walletInfo.get(i).getExchangeAmount());
 //                    }
                 }
+            }
+            else{
+                userBalanceTV.setText("0.00");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

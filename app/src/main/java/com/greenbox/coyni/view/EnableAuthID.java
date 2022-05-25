@@ -38,7 +38,7 @@ import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
-public class EnableAuthID extends AppCompatActivity {
+public class EnableAuthID extends BaseActivity {
     CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
     TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
     RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
@@ -278,17 +278,22 @@ public class EnableAuthID extends AppCompatActivity {
             succesCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (enableTypeCopy.equals("TOUCH")) {
-                        faceIDRL.setVisibility(View.GONE);
-                        touchIDRL.setVisibility(View.VISIBLE);
-                        successRL.setVisibility(View.GONE);
-                        businessSuccessRL.setVisibility(View.GONE);
-                    } else {
-                        faceIDRL.setVisibility(View.VISIBLE);
-                        touchIDRL.setVisibility(View.GONE);
-                        successRL.setVisibility(View.GONE);
-                        businessSuccessRL.setVisibility(View.GONE);
+//                    if (enableTypeCopy.equals("TOUCH")) {
+//                        faceIDRL.setVisibility(View.GONE);
+//                        touchIDRL.setVisibility(View.VISIBLE);
+//                        successRL.setVisibility(View.GONE);
+//                        businessSuccessRL.setVisibility(View.GONE);
+//                    } else {
+//                        faceIDRL.setVisibility(View.VISIBLE);
+//                        touchIDRL.setVisibility(View.GONE);
+//                        successRL.setVisibility(View.GONE);
+//                        businessSuccessRL.setVisibility(View.GONE);
+//                    }
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
                     }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    launchDashboard();
                 }
             });
 
@@ -554,6 +559,7 @@ public class EnableAuthID extends AppCompatActivity {
         if (objMyApplication.checkForDeclinedStatus()) {
             objMyApplication.launchDeclinedActivity(this);
         } else {
+            objMyApplication.setIsLoggedIn(true);
             objMyApplication.launchDashboard(this, strScreen);
         }
     }

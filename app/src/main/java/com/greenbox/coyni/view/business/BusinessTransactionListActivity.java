@@ -40,6 +40,7 @@ import com.greenbox.coyni.model.transaction.TransactionListRequest;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.text.ParseException;
@@ -54,7 +55,7 @@ import java.util.TimeZone;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
-public class BusinessTransactionListActivity extends AppCompatActivity implements TextWatcher {
+public class BusinessTransactionListActivity extends BaseActivity implements TextWatcher {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedNewAdapter transactionListPostedAdapter;
     Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;

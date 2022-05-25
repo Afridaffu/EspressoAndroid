@@ -49,7 +49,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.Objects;
 
-public class EditEmailActivity extends AppCompatActivity {
+public class EditEmailActivity extends BaseActivity {
 
     TextInputEditText currentEmailET, newEmailET, b_newEmailET;
     TextInputLayout currentEmailTIL, newEmailTIL, b_newEmailTIL;

@@ -49,6 +49,7 @@ import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
 import com.greenbox.coyni.view.WebViewActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
@@ -76,7 +77,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
     RecyclerView rvSelPayMethods;
     public static SelectPaymentMethodActivity selectPaymentMethodActivity;
     Long mLastClickTime = 0L;
-    Dialog cvvDialog;
+    Dialog cvvDialog, extBankDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,15 +124,17 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
-            if (strOnPauseScreen.equals("externalBank")) {
-                ControlMethod("externalBank");
-                strCurrent = "externalBank";
-                strOnPauseScreen = "";
-            } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
-                ControlMethod("addpayment");
-            } else if (strScreen != null && !strScreen.equals("addpay")) {
-                if (!isPayments) {
-                    getPaymentMethods();
+            if (!isBankSuccess) {
+                if (strOnPauseScreen.equals("externalBank")) {
+                    ControlMethod("externalBank");
+                    strCurrent = "externalBank";
+                    strOnPauseScreen = "";
+                } else if (strCurrent.equals("externalBank") || strCurrent.equals("debit") || strCurrent.equals("credit") || strScreen.equals("withdraw") || strScreen.equals("buytoken")) {
+                    ControlMethod("addpayment");
+                } else if (strScreen != null && !strScreen.equals("addpay")) {
+                    if (!isPayments) {
+                        getPaymentMethods();
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -146,6 +149,9 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                     Utils.displayAlert("Bank integration has been cancelled", SelectPaymentMethodActivity.this, "", "");
                 } else {
+                    if (extBankDialog != null) {
+                        extBankDialog.dismiss();
+                    }
                     dialog = Utils.showProgressDialog(this);
                     customerProfileViewModel.meSyncAccount();
                 }
@@ -210,7 +216,8 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             } else {
                 ControlMethod("addpayment");
                 if (strScreen != null && !strScreen.equals("addpay")) {
-                    strCurrent = "addpayment";
+                    //strCurrent = "addpayment";
+                    strCurrent = "notokens";
                 }
             }
             addPayment();
@@ -329,7 +336,12 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     if (isDeCredit) {
                         isDeCredit = false;
                         ControlMethod("addpayment");
-                        strCurrent = "addpayment";
+                        if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                            strCurrent = "addpayment";
+                        } else {
+                            strCurrent = "notokens";
+                        }
+//                        strCurrent = "addpayment";
                         numberOfAccounts();
                     } else if (isPayments && paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
                         isPayments = false;
@@ -340,7 +352,11 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                         isPayments = false;
                         isDeCredit = false;
                         ControlMethod("addpayment");
-                        strCurrent = "addpayment";
+                        if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
+                            strCurrent = "addpayment";
+                        } else {
+                            strCurrent = "notokens";
+                        }
                         numberOfAccounts();
                     }
                 }
@@ -446,9 +462,10 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (paymentMethodsResponse.getData().getBankCount() < paymentMethodsResponse.getData().getMaxBankAccountsAllowed()) {
-                            ControlMethod("externalBank");
-                            strCurrent = "externalBank";
-                            strOnPauseScreen = "externalBank";
+//                            ControlMethod("externalBank");
+//                            strCurrent = "externalBank";
+//                            strOnPauseScreen = "externalBank";
+                            showExternalBank();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -488,46 +505,46 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 }
             });
 
-            lyExternalClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ControlMethod("addpayment");
-                    strCurrent = "addpayment";
-                }
-            });
-
-            cvNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
-                            isBank = true;
-                            Intent i = new Intent(SelectPaymentMethodActivity.this, WebViewActivity.class);
-                            i.putExtra("signon", signOnData);
-                            startActivityForResult(i, 1);
-                        } else {
-                            Utils.displayAlert(strSignOn, SelectPaymentMethodActivity.this, "", "");
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-
-            tvLearnMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        Utils.populateLearnMore(SelectPaymentMethodActivity.this);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
+//            lyExternalClose.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ControlMethod("addpayment");
+//                    strCurrent = "addpayment";
+//                }
+//            });
+//
+//            cvNext.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    try {
+//                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+//                            isBank = true;
+//                            Intent i = new Intent(SelectPaymentMethodActivity.this, WebViewActivity.class);
+//                            i.putExtra("signon", signOnData);
+//                            startActivityForResult(i, 1);
+//                        } else {
+//                            Utils.displayAlert(strSignOn, SelectPaymentMethodActivity.this, "", "");
+//                        }
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
+//
+//            tvLearnMore.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    try {
+//                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                            return;
+//                        }
+//                        mLastClickTime = SystemClock.elapsedRealtime();
+//                        Utils.populateLearnMore(SelectPaymentMethodActivity.this);
+//                    } catch (Exception ex) {
+//                        ex.printStackTrace();
+//                    }
+//                }
+//            });
             numberOfAccounts();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -710,8 +727,9 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             cvTryAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ControlMethod("externalBank");
-                    strCurrent = "externalBank";
+//                    ControlMethod("externalBank");
+//                    strCurrent = "externalBank";
+                    showExternalBank();
                 }
             });
         } catch (Exception ex) {
@@ -1005,4 +1023,75 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
+
+    private void showExternalBank() {
+        try {
+            extBankDialog = new Dialog(SelectPaymentMethodActivity.this);
+            extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
+            extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            TextView tvLearn = extBankDialog.findViewById(R.id.tvLearnMore);
+            CardView cNext = extBankDialog.findViewById(R.id.cvNext);
+            LinearLayout lyClose = extBankDialog.findViewById(R.id.lyExternalClose);
+
+            Window window = extBankDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            extBankDialog.show();
+            tvLearn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+                    Utils.populateLearnMore(SelectPaymentMethodActivity.this);
+                }
+            });
+            lyClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        extBankDialog.dismiss();
+                        if (strCurrent.equals("firstError")) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+            cNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
+                            isBank = true;
+                            objMyApplication.setResolveUrl(true);
+                            Intent i = new Intent(SelectPaymentMethodActivity.this, WebViewActivity.class);
+                            i.putExtra("signon", signOnData);
+                            startActivityForResult(i, 1);
+                        } else {
+                            Utils.displayAlert(strSignOn, SelectPaymentMethodActivity.this, "", "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

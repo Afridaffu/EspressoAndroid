@@ -26,6 +26,7 @@ public class IntentForwardingActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
+        setIntent(intent);
     }
 
     private void handleIntent(Intent intent) {

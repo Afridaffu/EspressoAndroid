@@ -57,7 +57,7 @@ import java.util.TimeZone;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
-public class TransactionListActivity extends AppCompatActivity implements TextWatcher {
+public class TransactionListActivity extends BaseActivity implements TextWatcher {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedNewAdapter transactionListPostedAdapter;
     static Context context;

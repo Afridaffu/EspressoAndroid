@@ -310,7 +310,7 @@ public class Utils {
     //Merchant Transaction Filter Type values
 
     public static final int mRefund = 9;
-    public static final int merchantPayout = 7;
+    public static final int merchantPayout = 19;
     public static final int monthlyServiceFee = 17;
 
     public static final int mCompleted = 0;
@@ -397,9 +397,9 @@ public class Utils {
     public static final String position = "Position";
     public static final int cPP = 1;
     public static final int cTOS = 0;
-    public static final int mPP = 8;
-    public static final int mTOS = 7;
-    public static final int mAgmt = 5;
+    public static final int mPP = 1;
+    public static final int mTOS = 0;
+    public static final int mAgmt = 2;
 
     public static Class<?> launchedActivity = OnboardActivity.class;
 
@@ -2049,6 +2049,9 @@ public class Utils {
 
     public static String convertZoneLatestTxn(String date, String zoneId) {
         String strDate = "";
+        if (date != null && date.contains(".")){
+            date = date.split("\\.")[0];
+        }
         try {
             if (Build.VERSION.SDK_INT >= 26) {
                 DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
