@@ -952,15 +952,13 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             closebtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finishMethod();
-                }
+                    finish();                }
             });
 
             exitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finishMethod();
-                }
+                    finish();                }
             });
 
             btnExit.setOnClickListener(new View.OnClickListener() {

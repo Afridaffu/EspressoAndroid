@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.greenbox.coyni.BuildConfig;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.actionRqrd.ActionRqrdResponse;
 import com.greenbox.coyni.model.actionRqrd.SubmitActionRqrdResponse;
@@ -18,16 +17,10 @@ import com.greenbox.coyni.model.underwriting.ActionRequiredSubmitResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
-import com.greenbox.coyni.utils.Utils;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.UUID;
 
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -104,7 +97,7 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
 //            LogUtils.d(TAG, "submitActionRequired" + documentsImageList);
 
-            Call<ActionRequiredSubmitResponse> mCall = apiService.submitActionRequired(requestBody,underWriting);
+            Call<ActionRequiredSubmitResponse> mCall = apiService.submitActionRequired(requestBody, underWriting);
             mCall.enqueue(new Callback<ActionRequiredSubmitResponse>() {
                 @Override
                 public void onResponse(Call<ActionRequiredSubmitResponse> call, Response<ActionRequiredSubmitResponse> response) {
@@ -133,58 +126,6 @@ public class UnderwritingUserActionRequiredViewModel extends AndroidViewModel {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    public void submitAdditionalActionRequired(MultipartBody requestBody) {
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
-        Request request = new Request.Builder()
-                .url(BuildConfig.URL_PRODUCTION + "api/v2/underwriting/user/business/action-required")
-                .method("POST", requestBody)
-                .addHeader("Accept-Language", "en-us")
-                .addHeader("SkipDecryption", "true")
-                .addHeader("X-REQUESTID", UUID.randomUUID().toString())
-                .addHeader("Requested-portal", "")
-                .addHeader("Referer", Utils.getStrReferer())
-                .addHeader("Authorization", "Bearer " + Utils.getStrAuth())
-                .build();
-
-        LogUtils.d(TAG, "request" + request);
-        LogUtils.d(TAG, "upload" + requestBody.toString());
-
-        okhttp3.Call call = client.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
-                LogUtils.d(TAG, "onFailure callback -- " + e.getMessage());
-                ActionRequiredSubmitResponseMutableLiveData.postValue(null);
-            }
-
-            @Override
-            public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
-                try {
-                    if (response.isSuccessful()) {
-                        String strResponse = response.body().string();
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<ActionRequiredSubmitResponse>() {
-                        }.getType();
-                        ActionRequiredSubmitResponse res = gson.fromJson(strResponse, type);
-                        ActionRequiredSubmitResponseMutableLiveData.postValue(res);
-                        LogUtils.d(TAG, "Success callback -- " + new Gson().toJson(res).toString());
-                    } else {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<ActionRequiredSubmitResponse>() {
-                        }.getType();
-                        ActionRequiredSubmitResponse res = gson.fromJson(response.body().string(), type);
-                        ActionRequiredSubmitResponseMutableLiveData.postValue(res);
-                        LogUtils.d(TAG, "onFailure callback -- " + new Gson().toJson(res).toString());
-                    }
-                } catch (Exception e) {
-                    LogUtils.d(TAG, "onFailure callback -- " + e.getMessage());
-                    ActionRequiredSubmitResponseMutableLiveData.postValue(null);
-                }
-
-            }
-        });
     }
 
     public void getActionRequiredCustData() {

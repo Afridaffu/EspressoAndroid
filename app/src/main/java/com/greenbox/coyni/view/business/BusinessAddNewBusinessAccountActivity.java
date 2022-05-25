@@ -45,7 +45,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     private IdentityVerificationViewModel identityVerificationViewModel;
     private DashboardViewModel dashboardViewModel;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
-    private List<BaseProfile> businessAccountList = new ArrayList<>();
+    private List<BaseProfile> businessAccountList ;
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private int companyId;
     private Long mLastClickTimeQA = 0L;
@@ -64,8 +64,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
-        dashboardViewModel.getProfiles();
 
         llNewComapny.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +89,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
                 listComapny.clear();
                 displayAlert(BusinessAddNewBusinessAccountActivity.this);
-
-
             }
         });
 
@@ -108,6 +104,9 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         });
 
         initObservers();
+
+        showProgressDialog();
+        dashboardViewModel.getProfiles();
     }
 
     private void displayAlert(Context mContext) {
@@ -123,7 +122,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         RecyclerView rvCompanyList = dialog.findViewById(R.id.rv_company_list);
         CardView addDBACardView = dialog.findViewById(R.id.cvAction);
 
-        LogUtils.d(TAG, "businessAccountList" + businessAccountList.toString());
         AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, new AddNewBusinessAccountDBAAdapter.OnSelectListner() {
             @Override
             public void selectedItem(BaseProfile item) {
@@ -153,8 +151,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 if (companyId != 0) {
                     identityVerificationViewModel.getPostAddDBABusiness(companyId);
                     dialog.cancel();
-                } else {
-
                 }
             }
         });
@@ -175,6 +171,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     }
 
     private void prepareCompanyList() {
+        businessAccountList = new ArrayList<>();
         AccountsData accountsData = new AccountsData(filterList);
         ArrayList<BaseProfile> groupData = accountsData.getGroupData();
         for (BaseProfile profile : groupData) {
@@ -182,18 +179,27 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 continue;
             }
             boolean isInActiveDBAFound = false;
-            ArrayList<ProfilesResponse.Profiles> DBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profile.getId());
-            for (ProfilesResponse.Profiles dbaProfile : DBAList) {
-                if (dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                        dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                        dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                    isInActiveDBAFound = true;
-                    break;
+            ArrayList<ProfilesResponse.Profiles> dBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profile.getId());
+
+            if(dBAList == null || dBAList.size() == 0) {
+                continue;
+            }
+            if(dBAList.size() == 1 && !dBAList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                isInActiveDBAFound = true;
+            } else {
+                for (ProfilesResponse.Profiles dbaProfile : dBAList) {
+                    if (dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                            dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                            dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        isInActiveDBAFound = true;
+                        break;
+                    }
                 }
             }
-            if(!isInActiveDBAFound) {
-                businessAccountList.add(profile);
+            if(isInActiveDBAFound) {
+               profile.setAccountStatus(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus());
             }
+            businessAccountList.add(profile);
         }
 
     }
@@ -205,22 +211,17 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 public void onChanged(ProfilesResponse profilesResponse) {
                     if (profilesResponse != null) {
                         filterList = profilesResponse.getData();
-                        for (ProfilesResponse.Profiles c : filterList) {
-                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
-                            if (c.getDbaOwner() == null
-                                    && c.getAccountType().equals(Utils.BUSINESS) && c.getDbaOwner() == null) {
-                                businessAccountList.add(c);
-                            }
-                        }
-                        prepareCompanyList();
 //                        for (ProfilesResponse.Profiles c : filterList) {
 //                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
-//                            if (c.getDbaOwner() == null && c.getAccountType().equals(Utils.BUSINESS)) {
+//                            if (c.getDbaOwner() == null
+//                                    && c.getAccountType().equals(Utils.BUSINESS) && c.getDbaOwner() == null) {
 //                                businessAccountList.add(c);
-//                            } else {
 //                            }
 //                        }
+
+                        prepareCompanyList();
                     }
+                    dismissDialog();
                 }
             });
         } catch (Exception e) {
