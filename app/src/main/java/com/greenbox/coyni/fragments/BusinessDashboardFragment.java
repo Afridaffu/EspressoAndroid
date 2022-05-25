@@ -3,9 +3,12 @@ package com.greenbox.coyni.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Html;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -57,6 +60,7 @@ import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
+import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
@@ -608,10 +612,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (ruleResponse != null) {
                     if (ruleResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (ruleResponse.getData() != null) {
-                            reserveRules = ruleResponse.getData().getReserveAmount().split("\\.")[0] + "% per Sale Order with a " + ruleResponse.getData().getReservePeriod() + " day[s] ";
+                            reserveRules = "Reserve Rule: "+ruleResponse.getData().getReserveAmount().split("\\.")[0] + "% per Sale Order with a " + ruleResponse.getData().getReservePeriod() + " day[s] rolling period.";
+                            SpannableString spannableString = new SpannableString(reserveRules);
+                            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
+                            spannableString.setSpan(new CustomTypefaceSpan("",font), 14, reserveRules.length() , Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
                             if (!reserveRules.equals("") && reserveRules != null) {
-                                rulePeriodTV.setText(reserveRules);
+//                                reserveRuleTV.setText(Html.fromHtml("<b>"+reserveRules+"</b>"));
+                                reserveRuleTV.setText(spannableString);
                             }
 
                         }
