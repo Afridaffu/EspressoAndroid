@@ -339,10 +339,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 if (charSequence.length() == 6) {
                                     String strFirstName = "", strLastName = "";
                                     Utils.hideKeypad(OTPValidation.this);
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
                                     String phoneNumber = "";
                                     if (MOBILE.contains("(")) {
                                         phoneNumber = MOBILE.substring(1, 4) + MOBILE.substring(6, 9) + MOBILE.substring(10, MOBILE.length());
@@ -365,10 +361,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditEmail")) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
                                     if (isOldEmail.equals("true")) {
                                         UpdateEmailValidateRequest updateEmailValidateRequest = new UpdateEmailValidateRequest();
                                         updateEmailValidateRequest.setOldEmail(true);
@@ -386,10 +378,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditPhone")) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
                                     if (isOldPhone.equals("true")) {
                                         UpdatePhoneValidateRequest updatePhoneValidateRequest = new UpdatePhoneValidateRequest();
                                         updatePhoneValidateRequest.setCountryCode(Utils.getStrCCode());

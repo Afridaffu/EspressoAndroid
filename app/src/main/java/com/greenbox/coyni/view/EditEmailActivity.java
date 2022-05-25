@@ -201,10 +201,6 @@ public class EditEmailActivity extends BaseActivity {
 //                        }
 //                        mLastClickTime = SystemClock.elapsedRealtime();
 //
-//                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
-//                        dialog.setIndeterminate(false);
-//                        dialog.setMessage("Please wait...");
-//                        dialog.show();
 //
 //                        callSendEmailOTPAPI();
 //

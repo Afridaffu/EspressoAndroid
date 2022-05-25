@@ -1048,12 +1048,6 @@ public class Utils {
     }
 
     public static ProgressDialog showProgressDialog(Context context) {
-//        ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
-//        dialog.setIndeterminate(false);
-//        dialog.setCancelable(false);
-//        dialog.setMessage("Please wait...");
-//        dialog.setCanceledOnTouchOutside(false);
-//        dialog.show();
 
         Dialog dialog = new Dialog(context);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
