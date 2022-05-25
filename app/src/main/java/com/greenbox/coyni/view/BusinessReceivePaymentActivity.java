@@ -498,11 +498,14 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         }
     }
 
-    private Boolean validation() {
+    private boolean validation() {
         boolean value = true;
         try {
             String strPay = setAmount.getText().toString().trim().replace("\"", "");
-            if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+            if (strPay.equals("")){
+               value=false;
+            }
+            else if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", BusinessReceivePaymentActivity.this, "Oops!", "");
             } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {

@@ -51,8 +51,11 @@ public class ReserveReleasesRollingAdapter extends BaseRecyclerViewAdapter<Reser
         if (objData.getSentTo() != null && !objData.getSentTo().equals("")){
             holder.name.setText(objData.getSentTo());
         }
-        if (String.valueOf(objData.getReserveAmount()) != null && !String.valueOf(objData.getSentTo()).equals("")){
-            holder.amount.setText(Utils.convertTwoDecimal(String.valueOf(objData.getReserveAmount())));
+
+        if (objData.getReserveAmount() != null && !objData.getReserveAmount().equals("")){
+            holder.amount.setText(Utils.convertTwoDecimal(objData.getReserveAmount()));
+        }else {
+            holder.amount.setText("");
         }
         if (objData.getStatus() != null && !objData.getStatus().equals("")){
             holder.statusType.setText(objData.getStatus());
