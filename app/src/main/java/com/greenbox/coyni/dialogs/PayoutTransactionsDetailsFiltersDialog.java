@@ -43,7 +43,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
     private Long mLastClickTime = 0L, mLastClickTimeFilters = 0L;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private  String storedSelectDate = "",tempStrSelectedDate = "",strFromdate = "",strTodate = "",strSelectedDate = "",strended = "",strupdated = "";
+    private  String storedSelectDate = "",tempStrSelectedDate = "",strFromdate = "",strTodate = "",strSelectedDate = "",strended = "",strupdated = "",strF = "",strT = "";
 
 
     private Boolean isFilters = false;
@@ -79,8 +79,8 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
         resetFilterTV = findViewById(R.id.resetFiltersTV);
 
         if (filter != null && filter.getUpdatedFromDate() != null && filter.getUpdatedToDate() != null) {
-            String strF = filter.getUpdatedFromDate();
-            String strT = filter.getUpdatedToDate();
+             strF = filter.getUpdatedFromDate();
+             strT = filter.getUpdatedToDate();
 
 
             String formatToDisplay = "MMM dd, yyyy";
@@ -97,7 +97,7 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
 
             strSelectedDate = simpleDateFormat.format(startDateD) + "  " + simpleDateFormat.format(endDateD);
             filterDatePickET.setText(strSelectedDate);
-            strSelectedDate = strupdated + "  " + strended;
+            strSelectedDate = strupdated + " - " + strended;
             if (strSelectedDate != null) {
                 filterDatePickET.setText(strSelectedDate);
             }else {
@@ -110,6 +110,25 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
             rangeDates.setUpdatedToDate(rangeFormat.format(endDateD));
 
         }
+        else {
+            filterDatePickET.setText("");
+            filterDatePickET.clearFocus();
+            strF = "";
+            strT = "";
+            strSelectedDate = "";
+
+        }
+
+        if (filter.isFilterApplied) {
+
+        } else {
+            rangeDates = new RangeDates();
+            rangeDates.setUpdatedFromDate("");
+            rangeDates.setUpdatedToDate("");
+            filterDatePickET.setText("");
+            filterDatePickET.clearFocus();
+        }
+
 
         datePickLL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,10 +186,15 @@ public class PayoutTransactionsDetailsFiltersDialog extends BaseDialog {
                 filterDatePickET.setText("");
                 filterDatePickET.clearFocus();
                 filter.isFilterApplied = false;
-                rangeDates.setUpdatedFromDate("");
-                rangeDates.setUpdatedToDate("");
                 strSelectedDate = "";
                 tempStrSelectedDate = "";
+                filter.isFilterApplied = false;
+                strF = "";
+                strT = "";
+                tempStrSelectedDate = "";
+                rangeDates = new RangeDates();
+                rangeDates.setUpdatedToDate("");
+                rangeDates.setUpdatedFromDate("");
 
                 if (getOnDialogClickListener() != null) {
                     getOnDialogClickListener().onDialogClicked("ResetFilter", filter);

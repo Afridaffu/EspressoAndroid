@@ -36,7 +36,9 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.PayToMerchantWithAmountDialog;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -58,11 +60,15 @@ import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.GiftCardBindingLayoutActivity;
 import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PayToMerchantActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
@@ -70,6 +76,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     Dialog cvvDialog, prevDialog;
     private DatabaseHandler dbHandler;
     DashboardViewModel dashboardViewModel;
+    BusinessDashboardViewModel businessDashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
     CoyniViewModel coyniViewModel;
@@ -105,22 +112,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             initialization();
             initObservers();
 
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount) != null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")) {
-                        String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
-                        payET.setText(Utils.convertTwoDecimal(amount));
-                        if (payValidation()) {
-                            pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-                            isPayClick = true;
-                            cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
-                            calculateFee(Utils.USNumberFormat(cynValue));
-                        }
-                    }
-                }
-            }, 100);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -250,24 +241,29 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             tvCurrency = findViewById(R.id.tvCurrency);
             coyniTV = findViewById(R.id.tvCYN);
             availBal = findViewById(R.id.tvAvailableBal);
+            cKey = (CustomKeyboard) findViewById(R.id.ckb);
             imgConvert = findViewById(R.id.imageConvertIV);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
             payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             dbHandler = DatabaseHandler.getInstance(PayToMerchantActivity.this);
+
             fontSize = payET.getTextSize();
             dollarFont = tvCurrency.getTextSize();
-            availBal.setText(Utils.USNumberFormat(objMyApplication.getGBTBalance()));
-            avaBal = objMyApplication.getGBTBalance();
-            cynWallet = objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0);
             payET.requestFocus();
             payET.setShowSoftInputOnFocus(false);
             payToMerchantActivity = this;
             merchantType = findViewById(R.id.merchantTypeTV);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
-            paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
-            businessIdentityVerificationViewModel.getBusinessType();
+
+            InputConnection ic = payET.onCreateInputConnection(new EditorInfo());
+            cKey.setInputConnection(ic);
+            cKey.setScreenName("payToMerch");
+            payET.setOnClickListener(v -> Utils.hideSoftKeypad(PayToMerchantActivity.this, v));
+            payET.addTextChangedListener(this);
+
             if (getIntent().getStringExtra("walletId") != null && !getIntent().getStringExtra("walletId").equals("")) {
                 strWalletId = getIntent().getStringExtra("walletId");
                 if (Utils.checkInternet(PayToMerchantActivity.this)) {
@@ -277,85 +273,102 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
 
-
-            payET.addTextChangedListener(this);
-            if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount) != null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equals("")) {
-                payET.setText(getIntent().getStringExtra(CheckOutConstants.CheckOutAmount));
-                USFormat(payET);
-                cKey.setVisibility(View.GONE);
-            }
-            //enableButtons();
-            cKey = (CustomKeyboard) findViewById(R.id.ckb);
-            InputConnection ic = payET.onCreateInputConnection(new EditorInfo());
-            cKey.setInputConnection(ic);
-            cKey.setScreenName("payToMerch");
-            payET.setOnClickListener(v -> Utils.hideSoftKeypad(PayToMerchantActivity.this, v));
-
-            payET.setOnFocusChangeListener((view, b) -> {
-                try {
-                    Utils.hideSoftKeypad(PayToMerchantActivity.this, view);
-                    if (!b) {
-                        if (!payET.getText().toString().equals("")) {
-                            InputFilter[] FilterArray = new InputFilter[1];
-                            FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
-                            payET.setFilters(FilterArray);
-                            USFormat(payET);
-                        }
-                    } else {
-                        InputFilter[] FilterArray = new InputFilter[1];
-                        FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
-                        payET.setFilters(FilterArray);
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-
-            lyPayClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onBackPressed();
-                }
-            });
-
-
-            imgConvert.setOnClickListener(view -> {
-                try {
-                    if (payET.getText().toString().trim().length() > 0) {
-                        convertDecimal();
-                        if (coyniTV.getVisibility() == View.GONE) {
-                            coyniTV.setVisibility(View.VISIBLE);
-                            tvCurrency.setVisibility(View.INVISIBLE);
-                            payET.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
-                        } else {
-                            coyniTV.setVisibility(View.GONE);
-                            tvCurrency.setVisibility(View.VISIBLE);
-                            payET.setGravity(Gravity.CENTER_VERTICAL);
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-//            SetToken();
+            calculateFee("10");
+            transactionLimitCall();
+            walletAPICall();
+            onClickListeners();
             setFaceLock();
             setTouchId();
-//            enableButtons();
-            calculateFee("10");
-            if (Utils.checkInternet(PayToMerchantActivity.this)) {
-                TransactionLimitRequest obj = new TransactionLimitRequest();
-                obj.setTransactionType(Utils.saleOrder);
-                obj.setTransactionSubType(Utils.saleOrderToken);
-                pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
-                } else {
-                    buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
-                }
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void walletAPICall() {
+
+        WalletRequest walletRequest = new WalletRequest();
+        walletRequest.setWalletType(Utils.TOKEN);
+        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+    }
+
+    private void transactionLimitCall() {
+        if (Utils.checkInternet(PayToMerchantActivity.this)) {
+            TransactionLimitRequest obj = new TransactionLimitRequest();
+            obj.setTransactionType(Utils.saleOrder);
+            obj.setTransactionSubType(Utils.saleOrderToken);
+            pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+            if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                buyTokenViewModel.transactionLimits(obj, Utils.userTypeCust);
+            } else {
+                buyTokenViewModel.transactionLimits(obj, Utils.userTypeBusiness);
+            }
+        }
+    }
+
+    private void intents() {
+
+        if (getIntent().getStringExtra(CheckOutConstants.CheckOutAmount) != null && !getIntent().getStringExtra(CheckOutConstants.CheckOutAmount).equalsIgnoreCase("")) {
+            String amount = getIntent().getStringExtra(CheckOutConstants.CheckOutAmount);
+            payET.setText(Utils.convertTwoDecimal(amount));
+            USFormat(payET);
+            if (payValidation()) {
+                pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
+                isPayClick = true;
+                cynValue = Double.parseDouble(payET.getText().toString().trim().replace(",", ""));
+                calculateFee(Utils.USNumberFormat(cynValue));
+            }
+        }
+    }
+
+    private void onClickListeners() {
+        payET.setOnFocusChangeListener((view, b) -> {
+            try {
+                Utils.hideSoftKeypad(PayToMerchantActivity.this, view);
+                if (!b) {
+                    if (!payET.getText().toString().equals("")) {
+                        InputFilter[] FilterArray = new InputFilter[1];
+                        FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlendecimal)));
+                        payET.setFilters(FilterArray);
+                        USFormat(payET);
+                    }
+                } else {
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(Integer.parseInt(getString(R.string.maxlength)));
+                    payET.setFilters(FilterArray);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        lyPayClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+
+        imgConvert.setOnClickListener(view -> {
+            try {
+                if (payET.getText().toString().trim().length() > 0) {
+                    convertDecimal();
+                    if (coyniTV.getVisibility() == View.GONE) {
+                        coyniTV.setVisibility(View.VISIBLE);
+                        tvCurrency.setVisibility(View.INVISIBLE);
+                        payET.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+                    } else {
+                        coyniTV.setVisibility(View.GONE);
+                        tvCurrency.setVisibility(View.VISIBLE);
+                        payET.setGravity(Gravity.CENTER_VERTICAL);
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     private void initObservers() {
@@ -363,7 +376,13 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (userDetails != null && userDetails.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                 bindUserInfo(userDetails);
                 details = userDetails;
+                paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
+                businessIdentityVerificationViewModel.getBusinessType();
 
+            } else {
+                if (userDetails.getError() != null && userDetails.getError().getErrorDescription() != null) {
+                    Utils.displayAlert(userDetails.getError().getErrorDescription(), this, "Oops", "");
+                }
             }
         });
 
@@ -371,7 +390,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             if (pDialog != null) {
                 pDialog.dismiss();
             }
-            if (transactionLimitResponse != null) {
+            if (transactionLimitResponse != null && transactionLimitResponse.getData() != null) {
                 objResponse = transactionLimitResponse;
                 setDailyWeekLimit(objResponse.getData());
             }
@@ -525,6 +544,36 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
         } catch (Exception e) {
             e.printStackTrace();
         }
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
+            @Override
+            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                if (businessWalletResponse != null) {
+                    try {
+                        if (businessWalletResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                            if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null) {
+                                List<WalletInfo> walletData = businessWalletResponse.getData().getWalletNames();
+                                if (walletData.get(0).getWalletId()!= null) {
+                                    avaBal = walletData.get(0).getAvailabilityToUse();
+                                    availBal.setText(Utils.USNumberFormat(avaBal));
+                                    cynWallet = walletData.get(0);
+
+                                    intents();
+                                }
+                            }
+                        }
+                        else {
+                            try {
+                                Utils.displayAlert(businessWalletResponse.getError().getErrorDescription(),PayToMerchantActivity.this,"Oops","");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -585,11 +634,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = payET.getText().toString().trim().replace("\"", "");
 
-            if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-                payET.setEnabled(false);
-                payET.setClickable(false);
-                payET.setTextColor(getColor(R.color.primary_green));
-            }
+//            if (objMyApplication.getCheckOutModel() != null ) {
+//                payET.setEnabled(false);
+//                payET.setClickable(false);
+//                payET.setTextColor(getColor(R.color.primary_green));
+//            }
 //            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
 //                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayToMerchantActivity.this, "", "");
 //                return value = false;
@@ -877,7 +926,11 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
 
-        dialog.setCanceledOnTouchOutside(true);
+        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+            dialog.setCanceledOnTouchOutside(false);
+        } else {
+            dialog.setCanceledOnTouchOutside(true);
+        }
         dialog.show();
     }
 
@@ -987,7 +1040,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     private void payPreview() {
         try {
             value = true;
-
             showPayToMerchantWithAmountDialog(String.valueOf(cynValue), details, value, avaBal);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1029,7 +1081,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase("payTransaction")) {
-
                     if (!isAuthenticationCalled) {
                         isAuthenticationCalled = true;
                         if ((isFaceLock || isTouchId) && Utils.checkAuthentication(PayToMerchantActivity.this)) {
@@ -1057,7 +1108,6 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
         });
-        payToMerchantWithAmountDialog.show();
 
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             payToMerchantWithAmountDialog.setCanceledOnTouchOutside(false);
@@ -1072,7 +1122,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                 }
             }
         });
-
+        payToMerchantWithAmountDialog.show();
     }
 
 //        private void setFaceLock() {
@@ -1145,10 +1195,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-             objMyApplication.setCheckOutModel(null);
-            finish();
+            objMyApplication.setCheckOutModel(null);
         }
+        super.onBackPressed();
     }
 }

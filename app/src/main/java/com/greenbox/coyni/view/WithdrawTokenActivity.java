@@ -89,7 +89,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WithdrawTokenActivity extends AppCompatActivity implements TextWatcher {
+public class WithdrawTokenActivity extends BaseActivity implements TextWatcher {
     MyApplication objMyApplication;
     PaymentsList selectedCard, prevSelectedCard;
     ImageView imgBankIcon, imgArrow, imgConvert;

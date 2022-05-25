@@ -85,11 +85,13 @@
             android:name=".view.business.RefundTransactionSuccessActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.MerchantTransactionDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.PayToMerchantActivity"
@@ -100,28 +102,33 @@
             android:name=".view.business.BusinessTransactionListActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AddNewTeamMemberActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.business.PayingDBAFilterActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AdditionalInformationRequiredActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.EditEmail"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BenificialOwnerDetails"
@@ -132,17 +139,20 @@
             android:name=".view.business.ChangeEmail"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.EditTeamMember"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.business.TeamMemberActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
@@ -154,6 +164,7 @@
             android:name=".view.business.DBAInfoDetails"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.VerificationFailedActivity"
@@ -164,22 +175,26 @@
             android:name=".view.business.CompanyInfoDetails"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.TeamActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".view.business.FeesActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BusinessProfileActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.AddPaymentSignetActivity"
@@ -191,6 +206,7 @@
             android:name=".view.business.TransactionsFilterActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.BankAccoutAddedSuccessfullyActivity"
@@ -214,6 +230,7 @@
             android:name=".view.AddRecipientActivity"
             android:configChanges="uiMode"
             android:exported="false"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -226,6 +243,7 @@
             android:name=".view.GiftCardDetails"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -233,30 +251,35 @@
             android:name=".view.GiftCardActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.NotificationsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.WithdrawTokenActivity"
             android:configChanges="uiMode"
             android:exported="false"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.WithdrawPaymentMethodsActivity"
             android:configChanges="uiMode"
             android:exported="false"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AccountsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -269,12 +292,14 @@
             android:name=".view.TransactionDetailsActivity"
             android:configChanges="uiMode"
             android:exported="false"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.EditCardActivity"
             android:configChanges="uiMode"
             android:exported="false"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -295,12 +320,14 @@
             android:name=".view.TransactionListActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AddCardActivity"
             android:configChanges="uiMode"
             android:exported="false"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -320,12 +347,14 @@
             android:name=".view.PreferencesActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.ScanActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
@@ -338,6 +367,7 @@
             android:name=".view.ConfirmPasswordActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -352,6 +382,7 @@
             android:name=".view.UserDetailsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -359,6 +390,7 @@
             android:name=".view.EditPhoneActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -366,6 +398,7 @@
             android:name=".view.EditAddressActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -373,6 +406,7 @@
             android:name=".view.EditEmailActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
@@ -380,6 +414,7 @@
             android:name=".view.EnableAuthID"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateAlwaysHidden" />
@@ -387,12 +422,14 @@
             android:name=".view.CustomerProfileActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.AccountLimitsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -465,6 +502,7 @@
             android:name=".view.DashboardActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -478,6 +516,7 @@
             android:name=".view.AgreementsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -511,6 +550,7 @@
             android:name=".view.business.CompanyInformationActivity"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -583,12 +623,14 @@
             android:name=".view.business.ReserveDetailsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.ReserveReleasesActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -613,6 +655,7 @@
             android:name=".view.BusinessUserDetailsPreviewActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -625,18 +668,21 @@
             android:name=".view.BusinessReceivePaymentActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.MerchantTransactionListActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.RefundTransactionActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -649,6 +695,7 @@
             android:name=".view.business.BusinessCreateAccountsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
@@ -692,12 +739,14 @@
             android:name=".view.business.BusinessBatchPayoutIdDetailsActivity"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".view.business.PayoutDetailsTransactionList"
             android:configChanges="uiMode"
             android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
 

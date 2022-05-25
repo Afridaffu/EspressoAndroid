@@ -594,9 +594,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         LinearLayout lyMessage = findViewById(R.id.lyMessage);
 
 
-        CheckOutModel checkOutModel = new CheckOutModel();
         if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-            objMyApplication.setCheckOutModel(checkOutModel);
+            objMyApplication.setCheckOutModel(null);
         }
         Double cynValue = 0.0;
         cynValue = objMyApplication.getWithdrawAmount();
