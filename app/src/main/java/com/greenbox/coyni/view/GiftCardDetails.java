@@ -84,7 +84,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilityListener {
     TextInputEditText firstNameET, lastNameET, emailET, amountET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, amountTIL;
     public LinearLayout emailErrorLL, firstNameErrorLL, lastNameErrorLL, giftCardDetailsLL, amountErrorLL;

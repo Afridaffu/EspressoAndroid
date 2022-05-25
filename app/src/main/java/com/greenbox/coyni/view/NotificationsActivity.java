@@ -62,7 +62,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class NotificationsActivity extends AppCompatActivity {
+public class NotificationsActivity extends BaseActivity {
     public NotificationsViewModel notificationsViewModel;
     CoyniViewModel coyniViewModel;
     public List<NotificationsDataItems> globalNotifications = new ArrayList<>();

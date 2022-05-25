@@ -39,7 +39,7 @@ import com.greenbox.coyni.viewmodel.GiftCardsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiftCardActivity extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class GiftCardActivity extends BaseActivity implements OnKeyboardVisibilityListener {
 
     ExpandableHeightRecyclerView brandsGV;
     LinearLayout brandsLL, gcBackbtn, clearTextLL;

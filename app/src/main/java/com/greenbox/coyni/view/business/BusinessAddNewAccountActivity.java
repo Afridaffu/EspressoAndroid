@@ -12,8 +12,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.installations.Utils;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.view.BindingLayoutActivity;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 
@@ -35,7 +36,7 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.business_onboarding_open_new_account);
 
-        // personalAccountSize = getIntent().getStringExtra("PersonalAccountSize");
+         personalAccountSize = getIntent().getStringExtra("PersonalAccountSize");
 
         llBusinessAccount = findViewById(R.id.businessAccontLL);
         llPersonalAccount = findViewById(R.id.personalAccontLL);
@@ -43,19 +44,20 @@ public class BusinessAddNewAccountActivity extends AppCompatActivity {
         tvPersonalProfileName = findViewById(R.id.tv_personal_profile_name);
         imageViewClose = findViewById(R.id.imv_close);
 
-//        if (getIntent().getStringExtra("PersonalAccount") != null && !getIntent().getStringExtra("PersonalAccount").equals("")) {
-//            LogUtils.d("PersonalAccount","PersonalAccount"+getIntent().getStringExtra("PersonalAccount"));
-//            personalAccountAvailable = getIntent().getStringExtra("PersonalAccount");
-//            if(personalAccountAvailable.equalsIgnoreCase("true")){
-//                ivPersonalProfileIcon.setBackgroundResource(R.drawable.ic_user_inactive);
-//                tvPersonalProfileName.setTextColor(getResources().getColor(R.color.trans_black));
-//
-//            } else {
-//                ivPersonalProfileIcon.setBackgroundResource(R.drawable.ic_user);
-//                tvPersonalProfileName.setTextColor(getResources().getColor(R.color.primary_black));
-//
-//            }
-//        }
+        if (getIntent().getStringExtra("PersonalAccount") != null && !getIntent().getStringExtra("PersonalAccount").equals("")) {
+            LogUtils.d("PersonalAccount","PersonalAccount"+getIntent().getStringExtra("PersonalAccount"));
+            personalAccountAvailable = getIntent().getStringExtra("PersonalAccount");
+            if(personalAccountAvailable.equalsIgnoreCase("true")){
+                llPersonalAccount.setEnabled(false);
+                ivPersonalProfileIcon.setImageResource(R.drawable.inactive_personal);
+                tvPersonalProfileName.setTextColor(getResources().getColor(R.color.trans_black));
+            } else {
+                llPersonalAccount.setEnabled(true);
+                ivPersonalProfileIcon.setImageResource(R.drawable.ic_user);
+                tvPersonalProfileName.setTextColor(getResources().getColor(R.color.primary_black));
+
+            }
+        }
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
 
