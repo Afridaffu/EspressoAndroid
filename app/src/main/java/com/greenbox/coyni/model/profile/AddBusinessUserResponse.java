@@ -49,12 +49,113 @@ public class AddBusinessUserResponse {
         private boolean isPaymentModeAdded;
         private boolean isPersonIdentified;
         private boolean isAgreementSigned;
+        private boolean isReserveEnabled;
+        private boolean paymentAdded;
+        private boolean passwordExpired;
+        private boolean coyniPin;
+
+        public boolean isReserveEnabled() {
+            return isReserveEnabled;
+        }
+
+        public void setReserveEnabled(boolean reserveEnabled) {
+            isReserveEnabled = reserveEnabled;
+        }
+
+        public boolean isPaymentAdded() {
+            return paymentAdded;
+        }
+
+        public void setPaymentAdded(boolean paymentAdded) {
+            this.paymentAdded = paymentAdded;
+        }
+
+        public boolean isPasswordExpired() {
+            return passwordExpired;
+        }
+
+        public void setPasswordExpired(boolean passwordExpired) {
+            this.passwordExpired = passwordExpired;
+        }
+
+        public boolean isCoyniPin() {
+            return coyniPin;
+        }
+
+        public void setCoyniPin(boolean coyniPin) {
+            this.coyniPin = coyniPin;
+        }
+
+        public boolean isOldSessionExist() {
+            return oldSessionExist;
+        }
+
+        public void setOldSessionExist(boolean oldSessionExist) {
+            this.oldSessionExist = oldSessionExist;
+        }
+
+        public int getBusinessUserId() {
+            return businessUserId;
+        }
+
+        public void setBusinessUserId(int businessUserId) {
+            this.businessUserId = businessUserId;
+        }
+
+        public int getUpdatedAgreementId() {
+            return updatedAgreementId;
+        }
+
+        public void setUpdatedAgreementId(int updatedAgreementId) {
+            this.updatedAgreementId = updatedAgreementId;
+        }
+
+        public String getStateList() {
+            return stateList;
+        }
+
+        public void setStateList(String stateList) {
+            this.stateList = stateList;
+        }
+
+        public String getAuthorities() {
+            return authorities;
+        }
+
+        public void setAuthorities(String authorities) {
+            this.authorities = authorities;
+        }
+
+        public String getDbaName() {
+            return dbaName;
+        }
+
+        public void setDbaName(String dbaName) {
+            this.dbaName = dbaName;
+        }
+
+        public String getRequestToken() {
+            return requestToken;
+        }
+
+        public void setRequestToken(String requestToken) {
+            this.requestToken = requestToken;
+        }
+
+        private boolean oldSessionExist;
 
         private int accountType;
         private int userId;
         private int dbaOwnerId;
         private String jwtToken;
         private String accountStatus;
+        private int businessUserId;
+        private int updatedAgreementId;
+
+        private String stateList;
+        private String authorities;
+        private String dbaName;
+        private String requestToken;
 
         public int getUserId() {
             return userId;
