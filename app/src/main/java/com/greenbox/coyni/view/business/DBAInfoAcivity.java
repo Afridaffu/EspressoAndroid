@@ -49,7 +49,6 @@ import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
-import com.greenbox.coyni.model.DBAInfo.BusinessType;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
