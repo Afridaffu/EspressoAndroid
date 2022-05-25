@@ -84,7 +84,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisibilityListener {
+public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilityListener {
     TextInputEditText firstNameET, lastNameET, emailET, amountET;
     TextInputLayout firstNameTIL, lastNameTIL, emailTIL, amountTIL;
     public LinearLayout emailErrorLL, firstNameErrorLL, lastNameErrorLL, giftCardDetailsLL, amountErrorLL;
@@ -1106,7 +1106,7 @@ public class GiftCardDetails extends AppCompatActivity implements OnKeyboardVisi
             totalTV.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(total.toString()))) + " CYN");
             subTotalTV.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(amountET.getText().toString()))) + " CYN");
             giftCardAmountTV.setText(Utils.USNumberFormat(Double.parseDouble(Utils.convertBigDecimalUSDC(amountET.getText().toString()))));
-            giftCardTypeTV.setText(brandsResponseObj.getData().getBrands().get(0).getItems().get(0).getRewardName());
+            giftCardTypeTV.setText(brandsResponseObj.getData().getBrands().get(0).getBrandName());
             recipientMailTV.setText(emailET.getText().toString());
 
             isAuthenticationCalled = false;

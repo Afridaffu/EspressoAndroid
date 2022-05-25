@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.AddNewBusinessAccountDBAAdapter;
+import com.greenbox.coyni.model.AccountsData;
+import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.preferences.ProfilesResponse;
 import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.utils.LogUtils;
@@ -43,7 +45,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     private IdentityVerificationViewModel identityVerificationViewModel;
     private DashboardViewModel dashboardViewModel;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
-    private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
+    private List<BaseProfile> businessAccountList ;
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private int companyId;
     private Long mLastClickTimeQA = 0L;
@@ -62,8 +64,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
 
         identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
-        dashboardViewModel.getProfiles();
 
         llNewComapny.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +89,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 mLastClickTimeQA = SystemClock.elapsedRealtime();
                 listComapny.clear();
                 displayAlert(BusinessAddNewBusinessAccountActivity.this);
-
-
             }
         });
 
@@ -106,6 +104,9 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         });
 
         initObservers();
+
+        showProgressDialog();
+        dashboardViewModel.getProfiles();
     }
 
     private void displayAlert(Context mContext) {
@@ -121,10 +122,9 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         RecyclerView rvCompanyList = dialog.findViewById(R.id.rv_company_list);
         CardView addDBACardView = dialog.findViewById(R.id.cvAction);
 
-        LogUtils.d(TAG, "businessAccountList" + businessAccountList.toString());
         AddNewBusinessAccountDBAAdapter addNewBusinessAccountDBAAdapter = new AddNewBusinessAccountDBAAdapter(businessAccountList, mContext, new AddNewBusinessAccountDBAAdapter.OnSelectListner() {
             @Override
-            public void selectedItem(ProfilesResponse.Profiles item) {
+            public void selectedItem(BaseProfile item) {
                 LogUtils.d(TAG, "ProfilesResponse.Profiles  " + item.toString());
                 addDBACardView.setEnabled(true);
                 addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
@@ -151,8 +151,6 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 if (companyId != 0) {
                     identityVerificationViewModel.getPostAddDBABusiness(companyId);
                     dialog.cancel();
-                } else {
-
                 }
             }
         });
@@ -172,6 +170,32 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         dialog.show();
     }
 
+    private void prepareCompanyList() {
+        businessAccountList = new ArrayList<>();
+        AccountsData accountsData = new AccountsData(filterList);
+        ArrayList<BaseProfile> groupData = accountsData.getGroupData();
+        for (BaseProfile profile : groupData) {
+            if(profile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)) {
+                continue;
+            }
+            boolean isInActiveDBAFound = false;
+            ArrayList<ProfilesResponse.Profiles> DBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profile.getId());
+            for (ProfilesResponse.Profiles dbaProfile : DBAList) {
+                if (dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                        dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                        dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                    isInActiveDBAFound = true;
+                    break;
+                }
+            }
+            if(!isInActiveDBAFound) {
+               profile.setAccountStatus(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus());
+            }
+            businessAccountList.add(profile);
+        }
+
+    }
+
     public void initObservers() {
         try {
             dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
@@ -179,14 +203,9 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 public void onChanged(ProfilesResponse profilesResponse) {
                     if (profilesResponse != null) {
                         filterList = profilesResponse.getData();
-                        for (ProfilesResponse.Profiles c : filterList) {
-                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
-                            if (c.getDbaOwner() == null && c.getAccountType().equals(Utils.BUSINESS)) {
-                                businessAccountList.add(c);
-                            } else {
-                            }
-                        }
+                        prepareCompanyList();
                     }
+                    dismissDialog();
                 }
             });
         } catch (Exception e) {

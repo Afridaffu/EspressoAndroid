@@ -54,7 +54,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WithdrawPaymentMethodsActivity extends AppCompatActivity {
+public class WithdrawPaymentMethodsActivity extends BaseActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;

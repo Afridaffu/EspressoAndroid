@@ -105,7 +105,8 @@
                             android:fontFamily="@font/opensans_bold"
                             android:textColor="@color/primary_black"
                             android:textSize="@dimen/_12ssp"
-                            tools:text="19.999" />
+                            tools:text="0.00"
+                            android:text="0.00"/>
 
                         <TextView
                             android:layout_width="wrap_content"

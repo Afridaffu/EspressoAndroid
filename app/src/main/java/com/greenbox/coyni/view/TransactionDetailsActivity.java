@@ -38,7 +38,7 @@ import org.w3c.dom.Text;
 
 import okhttp3.internal.Util;
 
-public class TransactionDetailsActivity extends AppCompatActivity {
+public class TransactionDetailsActivity extends BaseActivity {
     DashboardViewModel dashboardViewModel;
     MyApplication objMyApplication;
     String strGbxTxnIdType = "";

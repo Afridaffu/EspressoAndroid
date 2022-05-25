@@ -42,6 +42,7 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
+import com.greenbox.coyni.model.BatchNow.BatchNowSlideRequest;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
@@ -67,6 +68,7 @@ import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
+import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
@@ -840,45 +842,46 @@ public class BusinessDashboardFragment extends BaseFragment {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    businessDashboardViewModel.batchNowSlideData((String) value);
-//                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
-////                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
-////                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
-////                        }
-//                    } else {
+//                    businessDashboardViewModel.batchNowSlideData((String) value);
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
+//                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
+//                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
+//                        }
+                    } else {
+                        launchPinActivity(batchId);
 //                        businessDashboardViewModel.batchNowSlideData((String) value);
 //                        Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
-//                    }
+                    }
                 }
             }
         });
         batchNowDialog.show();
     }
 
-//    private void launchPinActivity(String batchNow) {
-//        batchId = batchNow;
-//        Intent inPin = new Intent(getActivity(), PINActivity.class);
-//        inPin.putExtra("TYPE", "ENTER");
-//        inPin.putExtra("screen", "BatchNow");
-//        pinActivityResultLauncher.launch(inPin);
-//    }
-//
+    private void launchPinActivity(String batchNow) {
+        batchId = batchNow;
+        Intent inPin = new Intent(getActivity(), PINActivity.class);
+        inPin.putExtra("TYPE", "ENTER");
+        inPin.putExtra("screen", "BatchNow");
+        pinActivityResultLauncher.launch(inPin);
+    }
+
 //    private void batchAPI(String batchId) {
 //     BatchNowSlideRequest req = new BatchNowSlideRequest();
 //        req.setBatchId(batchId);
 //        businessDashboardViewModel.batchNowSlideData(req.getBatchId());
 //    }
 
-//    ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            result -> {
-//                if (result.getResultCode() == Activity.RESULT_OK) {
-//                    //Call API Here
-//                    LogUtils.v(TAG, "RESULT_OK" + result);
-//                    businessDashboardViewModel.batchNowSlideData(batchId);
-//                     Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
-//                }
-//            });
+    ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    //Call API Here
+                    LogUtils.v(TAG, "RESULT_OK" + result);
+                    businessDashboardViewModel.batchNowSlideData(batchId);
+                     Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+                }
+            });
 
     public void setToken() {
         strToken = dbHandler.getPermanentToken();
@@ -932,7 +935,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         processingVolumeDialog.show();
     }
 
-
     private void getProcessingVolume(String action) {
         mTvProcessingVolume.setText(action);
         switch (action) {
@@ -942,7 +944,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
                 strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
+                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
@@ -993,8 +995,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                             if (rangeDates != null) {
                                 String fromDate = rangeDates.getUpdatedFromDate() + midTime;
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
-                                strFromDate = myApplication.convertZoneDateTime(fromDate, dateAndTime, date) + startTime;
-                                strToDate = myApplication.convertZoneDateTime(toDate, dateAndTime, date) + endTime;
+                                strFromDate = myApplication.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date) + startTime;
+                                strToDate = myApplication.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date) + endTime;
 
                                 businessActivityAPICall(strFromDate, strToDate);
 //                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
@@ -1022,7 +1024,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.merchantActivity(request);
 
     }
-
 
     private void showCancelApplicationDialog() {
         DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.cancel_application),
@@ -1066,11 +1067,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
-        int i = 0;
-        boolean isOpen = false, isPaid = false;
-        if (listItems != null && listItems.size() > 0 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isPaid) {
+        if (listItems != null && listItems.size() > 0) {
             batchNoTransaction.setVisibility(View.GONE);
             Collections.sort(listItems, Collections.reverseOrder());
+            int i = 0;
+            boolean isOpen = false, isPaid = false;
             while (i < listItems.size()) {
                 if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
 
@@ -1154,7 +1155,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             if(paidItems == 0){
                 batchView.setVisibility(View.VISIBLE);
             }
-        } else {
+        }
+        else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
             mPayoutHistory.setVisibility(View.GONE);

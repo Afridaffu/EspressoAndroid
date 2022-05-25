@@ -746,8 +746,8 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         } else if (myApplicationObj.getTempTimezoneID() == 5) {
                             myApplicationObj.setStrPreference("AST");
                         }
-                        // timeZoneET.setText(myApplicationObj.getTimezone());
-                        Utils.showCustomToast(UserDetailsActivity.this, userPreference.getData().getMessage(), R.drawable.ic_custom_tick, "authid");
+//                        Utils.showCustomToast(UserDetailsActivity.this, userPreference.getData().getMessage(), R.drawable.ic_custom_tick, "authid");
+                        Utils.showCustomToast(UserDetailsActivity.this, getResources().getString(R.string.time_zone_changed), R.drawable.ic_custom_tick, "authid");
 
                     }
                 }
