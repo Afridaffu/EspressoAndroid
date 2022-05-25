@@ -305,12 +305,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
-            } else {
-                personalText.setVisibility(View.VISIBLE);
-                profileImage.setVisibility(View.GONE);
-                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
-                personalText.setText(userName);
             }
+//            else {
+//                personalText.setVisibility(View.VISIBLE);
+//                profileImage.setVisibility(View.GONE);
+//                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
+//                personalText.setText(userName);
+//            }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
             if (headerInfo.getCompanyName() != null && headerInfo.getCompanyName().length() > 21) {
