@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             android:padding="@dimen/_2sdp"
-            android:layout_marginTop="@dimen/_10ssp"
+            android:layout_gravity="center"
             android:layout_marginEnd="@dimen/_25sdp"
             android:contentDescription="@string/businessProfileAccountExpandDownArrow"
             android:src="@drawable/ic_down" />
