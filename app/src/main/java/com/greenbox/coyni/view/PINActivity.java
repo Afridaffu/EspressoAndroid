@@ -578,7 +578,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                                     launchDashboard();
                                                 } else {
                                                     if (!isDontRemind) {
-                                                        if (Utils.checkBiometric(PINActivity.this)) {
+                                                        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()){
+                                                            launchDashboard();
+                                                        }
+                                                        else if (Utils.checkBiometric(PINActivity.this)) {
                                                             if (Utils.checkAuthentication(PINActivity.this)) {
                                                                 if (Utils.isFingerPrint(PINActivity.this)) {
                                                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)

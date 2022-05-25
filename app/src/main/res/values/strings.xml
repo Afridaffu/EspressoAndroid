@@ -686,5 +686,6 @@
     <string name="time_zone_changed">Time zone changed successfully</string>
 
     <string name="internal_storage">Internal storage</string>
+    <string name="pay">Pay</string>
 
 </resources>

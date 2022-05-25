@@ -987,8 +987,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                             if (rangeDates != null) {
                                 String fromDate = rangeDates.getUpdatedFromDate() + midTime;
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
-                                strFromDate = myApplication.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date) + startTime;
-                                strToDate = myApplication.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date) + endTime;
+                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date,"UTC") + startTime;
+                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date,"UTC") + endTime;
 
                                 businessActivityAPICall(strFromDate, strToDate);
 //                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
