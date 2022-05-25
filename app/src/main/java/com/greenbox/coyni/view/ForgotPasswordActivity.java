@@ -212,10 +212,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                                 layoutEmailError.setVisibility(GONE);
                                 etEmail.clearFocus();
-                                dialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
-                                dialog.setIndeterminate(false);
-                                dialog.setMessage("Please wait...");
-                                dialog.show();
+                                dialog = Utils.showProgressDialog(ForgotPasswordActivity.this);
                                 loginViewModel.emailotpresend(etEmail.getText().toString().trim());
                             } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

@@ -131,8 +131,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_create_account);
-            if(getIntent()!= null){
-                accountType =  getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
+            if (getIntent() != null) {
+                accountType = getIntent().getIntExtra(Utils.ACCOUNT_TYPE, Utils.PERSONAL_ACCOUNT);
             }
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -270,13 +270,10 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
 
-                    if(Utils.isKeyboardVisible)
+                    if (Utils.isKeyboardVisible)
                         Utils.hideKeypad(CreateAccountActivity.this);
-                    
-                    dialog = new ProgressDialog(CreateAccountActivity.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.show();
+
+                    dialog = Utils.showProgressDialog(CreateAccountActivity.this);
                     phoneNumber = phoneNumberET.getText().toString().substring(1, 4) + phoneNumberET.getText().toString().substring(6, 9) + phoneNumberET.getText().toString().substring(10, phoneNumberET.getText().length());
 
                     callRegisterAPI();
@@ -451,7 +448,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                 if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
                     if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         DownloadDocumentData data = downloadDocumentResponse.getData();
-                        if(data != null ) {
+                        if (data != null) {
                             if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
                                 launchDocumentUrl(data.getDownloadUrl());
                             } else {
@@ -519,8 +516,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                         isFirstName = false;
                     }
 
-                    if (firstNameET.getText().toString().contains("  ")){
-                        firstNameET.setText(firstNameET.getText().toString().replace("  "," "));
+                    if (firstNameET.getText().toString().contains("  ")) {
+                        firstNameET.setText(firstNameET.getText().toString().replace("  ", " "));
                         firstNameET.setSelection(firstNameET.getText().length());
                     }
 
@@ -586,8 +583,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 //                        isLastName = false;
 //                    }
 
-                    if (lastNameET.getText().toString().contains("  ")){
-                        lastNameET.setText(lastNameET.getText().toString().replace("  "," "));
+                    if (lastNameET.getText().toString().contains("  ")) {
+                        lastNameET.setText(lastNameET.getText().toString().replace("  ", " "));
                         lastNameET.setSelection(lastNameET.getText().length());
                     }
                     enableOrDisableNext();
@@ -1208,65 +1205,65 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     }
 
     public void setSpannableText() {
-            SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(CreateAccountActivity.this);
+        SpannableString ss = new SpannableString("By clicking this box, I acknowledge I have read and agree to the Terms of Service & Privacy Policy ");
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(CreateAccountActivity.this);
 
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    showProgressDialog();
-                    if(accountType == Utils.BUSINESS_ACCOUNT){
-                        dashboardViewModel.getDocumentUrl(Utils.mTOS);
-                    }else {
-                        dashboardViewModel.getDocumentUrl(Utils.cTOS);
-                    }
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
                 }
-
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(true);
+                mLastClickTime = SystemClock.elapsedRealtime();
+                showProgressDialog();
+                if (accountType == Utils.BUSINESS_ACCOUNT) {
+                    dashboardViewModel.getDocumentUrl(Utils.mTOS);
+                } else {
+                    dashboardViewModel.getDocumentUrl(Utils.cTOS);
                 }
-            };
+            }
 
-            ClickableSpan clickableSpan2 = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    if (Utils.isKeyboardVisible)
-                        Utils.hideKeypad(CreateAccountActivity.this);
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
 
-                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                        return;
-                    }
-                    mLastClickTime = SystemClock.elapsedRealtime();
-                    showProgressDialog();
-                    if(accountType == Utils.BUSINESS_ACCOUNT){
-                        dashboardViewModel.getDocumentUrl(Utils.mPP);
-                    }else {
-                        dashboardViewModel.getDocumentUrl(Utils.cPP);
-                    }
+        ClickableSpan clickableSpan2 = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(CreateAccountActivity.this);
+
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
                 }
-
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(true);
+                mLastClickTime = SystemClock.elapsedRealtime();
+                showProgressDialog();
+                if (accountType == Utils.BUSINESS_ACCOUNT) {
+                    dashboardViewModel.getDocumentUrl(Utils.mPP);
+                } else {
+                    dashboardViewModel.getDocumentUrl(Utils.cPP);
                 }
-            };
+            }
 
-            ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
 
-            spannableText.setText(ss);
-            spannableText.setMovementMethod(LinkMovementMethod.getInstance());
-            spannableText.setHighlightColor(Color.TRANSPARENT);
+        ss.setSpan(clickableSpan, 65, 81, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(clickableSpan2, 84, 98, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 65, 81, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(getColor(R.color.primary_green)), 84, 98, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        spannableText.setText(ss);
+        spannableText.setMovementMethod(LinkMovementMethod.getInstance());
+        spannableText.setHighlightColor(Color.TRANSPARENT);
     }
 
 //    public void setSpannableText() {

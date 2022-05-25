@@ -626,10 +626,7 @@ public class CreatePasswordActivity extends BaseActivity {
                     mLastClickTime = SystemClock.elapsedRealtime();
                     try {
                         Utils.hideKeypad(CreatePasswordActivity.this, v);
-                        dialog = new ProgressDialog(CreatePasswordActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
+                        dialog = Utils.showProgressDialog(CreatePasswordActivity.this);
                         strNewPwd = passwordET.getText().toString().trim();
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equals("loginExpiry")) {
                             ManagePasswordRequest request = new ManagePasswordRequest();

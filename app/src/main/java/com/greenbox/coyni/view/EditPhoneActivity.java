@@ -126,10 +126,7 @@ public class EditPhoneActivity extends BaseActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
 
-                        dialog = new ProgressDialog(EditPhoneActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
+                        dialog = Utils.showProgressDialog(EditPhoneActivity.this);
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangePhone")) {
                             try {
                                 ContactInfoRequest contactInfoRequest = new ContactInfoRequest();

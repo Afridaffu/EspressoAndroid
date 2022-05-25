@@ -102,6 +102,7 @@
     <color name="idve_complete">#daeced</color>
     <color name="cyn_color">#cccccc</color>
     <color name="profile_gray">#f0f4f5</color>
+    <color name="loader_color">#0F6764</color>
 
 
 </resources>

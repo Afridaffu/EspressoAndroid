@@ -152,10 +152,7 @@ public class EditEmailActivity extends BaseActivity {
 
 
 
-                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
+                        dialog = Utils.showProgressDialog(EditEmailActivity.this);
 
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")) {
                             callChangeDbaEmailAPI();

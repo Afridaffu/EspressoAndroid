@@ -181,4 +181,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     //End
 
+    implementation "com.airbnb.android:lottie:3.4.0"
 }

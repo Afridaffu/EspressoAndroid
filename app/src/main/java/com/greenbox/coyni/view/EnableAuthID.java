@@ -47,7 +47,6 @@ public class EnableAuthID extends BaseActivity {
     DatabaseHandler dbHandler;
     ImageView succesCloseIV;
     CoyniViewModel coyniViewModel;
-    ProgressDialog dialog;
     Long mLastClickTime = 0L;
     LinearLayout layoutNotnow, layoutNotnowFace;
     MyApplication objMyApplication;
@@ -346,7 +345,7 @@ public class EnableAuthID extends BaseActivity {
             @Override
             public void onChanged(BiometricResponse biometricResponse) {
                 try {
-                    dialog.dismiss();
+                    dismissDialog();
                     if (biometricResponse != null) {
                         Log.e("bio resp", new Gson().toJson(biometricResponse));
                         saveToken(biometricResponse.getData().getToken());
@@ -431,10 +430,7 @@ public class EnableAuthID extends BaseActivity {
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE) {
                 FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                 if (fingerprintManager.hasEnrolledFingerprints()) {
-                    dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.show();
+                    showProgressDialog();
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(true);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -442,10 +438,7 @@ public class EnableAuthID extends BaseActivity {
                 }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
-                    dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.show();
+                    dismissDialog();
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(true);
                     biometricRequest.setDeviceId(Utils.getDeviceID());

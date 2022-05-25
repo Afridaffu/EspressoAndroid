@@ -244,10 +244,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     if (resendCounter < 4) {
                         Utils.hideKeypad(OTPValidation.this, view);
                         if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin") || strScreen.equals("EditEmail"))) || (OTP_TYPE.equals("EMAIL"))) {
-                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
+                            dialog = Utils.showProgressDialog(OTPValidation.this);
                             if (strScreen.equals("EditEmail")) {
                                 if (isOldEmail.equals("true")) {
                                     UpdateResendRequest updateResendRequest = new UpdateResendRequest();
@@ -269,19 +266,13 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             }
 
                         } else if (OTP_TYPE.equals("MOBILE")) {
-                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
+                            dialog = Utils.showProgressDialog(this);
                             SMSResend resend = new SMSResend();
                             resend.setCountryCode(Utils.getStrCCode());
                             resend.setPhoneNumber(MOBILE);
                             loginViewModel.smsotpresend(resend);
                         } else if (strScreen.equals("EditPhone")) {
-                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
+                            dialog = Utils.showProgressDialog(this);
 //                            SMSResend resend = new SMSResend();
 //                            resend.setCountryCode(Utils.getStrCCode());
                             if (isOldPhone.equals("true")) {

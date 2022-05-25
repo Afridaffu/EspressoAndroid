@@ -929,10 +929,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
-            dialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.show();
+            dialog = Utils.showProgressDialog(UserDetailsActivity.this);
             dashboardViewModel.updateProfile(body);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -968,10 +965,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             if (strFileName != null && !strFileName.trim().equals("")) {
                 length = strFileName.split("/").length;
                 filename = strFileName.split("/")[length - 1];
-                dialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-                dialog.setIndeterminate(false);
-                dialog.setMessage("Please wait...");
-                dialog.show();
+                dialog = Utils.showProgressDialog(this);
                 Log.e("filename", "" + filename);
                 dashboardViewModel.removeImage(filename);
             }

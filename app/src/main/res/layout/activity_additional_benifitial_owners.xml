@@ -96,10 +96,10 @@
                 android:id="@+id/beneficialOwnersRV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:scrollbars="none"
+                android:layout_marginBottom="@dimen/_21sdp"
                 android:nestedScrollingEnabled="false"
-                android:layout_marginBottom="@dimen/_21sdp"/>
+                android:scrollbars="none"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/notFoundTV"
@@ -122,8 +122,8 @@
                 android:fontFamily="@font/opensans_regular"
                 android:text="@string/beneficialnreach"
                 android:textColor="@color/primary_black"
-                android:visibility="gone"
-                android:textSize="@dimen/_11ssp" />
+                android:textSize="@dimen/_11ssp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/addNewBOLL"
@@ -172,7 +172,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
 
 
     </androidx.core.widget.NestedScrollView>

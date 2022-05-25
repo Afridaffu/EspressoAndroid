@@ -1,43 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/reprocessingLL"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:gravity="center">
 
 
     <ImageView
         android:id="@+id/sucess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_gravity="center"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/_143sdp"
         android:src="@drawable/ic_processing"
-        />
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/retreive_loader" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/processing"
-        android:textSize="@dimen/_16ssp"
         android:layout_marginTop="@dimen/_29sdp"
-        android:textColor="@color/black"
-        android:gravity="center"
         android:fontFamily="@font/opensans_bold"
-        />
+        android:gravity="center"
+        android:text="@string/processing"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/processingcontent"
-        android:textSize="@dimen/_12ssp"
-        android:fontFamily="@font/opensans_regular"
-        android:textColor="@color/primary_black"
-        android:textAlignment="center"
-        android:layout_marginTop="32dp"
         android:layout_marginLeft="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginRight="32dp"
-        />
+        android:fontFamily="@font/opensans_regular"
+        android:text="@string/processingcontent"
+        android:textAlignment="center"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/_12ssp" />
 
 
 </LinearLayout>
