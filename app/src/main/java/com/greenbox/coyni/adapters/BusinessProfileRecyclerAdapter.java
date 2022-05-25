@@ -90,17 +90,21 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         TextView addDbaText = view.findViewById(R.id.addDbaText);
 
         LogUtils.d("isLastChild", "isLastChild" + isLastChild);
-
-        for (int position = 0; position < profilesList.size(); position++) {
-            if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                addDBA.setEnabled(false);
-                addDbaText.setEnabled(false);
-                break;
-            } else {
-                addDBA.setEnabled(true);
-                addDbaText.setEnabled(true);
+        if(profilesList.size() == 1 && !profilesList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+            addDBA.setEnabled(false);
+            addDbaText.setEnabled(false);
+        } else {
+            for (int position = 0; position < profilesList.size(); position++) {
+                if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                        profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                        profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                    addDBA.setEnabled(false);
+                    addDbaText.setEnabled(false);
+                    break;
+                } else {
+                    addDBA.setEnabled(true);
+                    addDbaText.setEnabled(true);
+                }
             }
         }
 

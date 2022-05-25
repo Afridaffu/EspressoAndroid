@@ -58,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgressDialog(String message) {
-        showProgressDialog(message, false);
+        showProgressDialog(message, true);
     }
 
     public void showProgressDialog(String message, boolean isCanceledOnTouchOutside) {

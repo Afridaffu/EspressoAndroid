@@ -179,16 +179,24 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 continue;
             }
             boolean isInActiveDBAFound = false;
-            ArrayList<ProfilesResponse.Profiles> DBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profile.getId());
-            for (ProfilesResponse.Profiles dbaProfile : DBAList) {
-                if (dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                        dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                        dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                    isInActiveDBAFound = true;
-                    break;
+            ArrayList<ProfilesResponse.Profiles> dBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profile.getId());
+
+            if(dBAList == null || dBAList.size() == 0) {
+                continue;
+            }
+            if(dBAList.size() == 1 && !dBAList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                isInActiveDBAFound = true;
+            } else {
+                for (ProfilesResponse.Profiles dbaProfile : dBAList) {
+                    if (dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                            dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                            dbaProfile.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                        isInActiveDBAFound = true;
+                        break;
+                    }
                 }
             }
-            if(!isInActiveDBAFound) {
+            if(isInActiveDBAFound) {
                profile.setAccountStatus(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus());
             }
             businessAccountList.add(profile);
