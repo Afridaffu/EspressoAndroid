@@ -356,7 +356,9 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.applyFilter)) {
+                    dismissDialog();
                     globalPending.clear();
+//                    isFilters = false;
                     globalPosted.clear();
                     filterTransactionList = (TransactionListRequest) value;
 
@@ -366,6 +368,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         filterTransactionList.setManualUpdate(true);
                     }
                     if (filterTransactionList.isFilters()) {
+                        isFilters = false;
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
                     } else {
                         filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
@@ -373,7 +376,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                     getTransactions(filterTransactionList);
                 } else if (action.equals("Date_SELECTED")) {
                     LogUtils.v(TAG, "Date Selected " + value);
-                    filterIV.setImageResource(R.drawable.ic_filter_enabled);
+//                    filterIV.setImageResource(R.drawable.ic_filter_enabled);
                 } else if (action.equals(Utils.resetFilter)) {
                     filterTransactionList = null;
                     loadData();

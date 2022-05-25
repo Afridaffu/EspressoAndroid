@@ -40,8 +40,8 @@
                     <ImageView
                         android:layout_width="@dimen/_15sdp"
                         android:layout_height="@dimen/_15sdp"
-                        android:src="@drawable/ic_x"
                         android:layout_marginRight="@dimen/_10sdp"
+                        android:src="@drawable/ic_x"
                         app:tint="@color/white" />
 
                 </LinearLayout>
