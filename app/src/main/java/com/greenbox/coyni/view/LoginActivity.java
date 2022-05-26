@@ -245,10 +245,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 
             etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-            if (!etlEmail.isFocusable() && !etlPassword.isFocusable()){
-                Utils.hideKeypad(getApplicationContext());
-            }
-
             if ((getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel"))) {
                 layoutClose.setVisibility(GONE);
             } else {
