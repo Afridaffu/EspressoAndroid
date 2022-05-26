@@ -50,7 +50,7 @@ public class CompanyInfoDetails extends BaseActivity {
         mBusinessEntity = (TextView) findViewById(R.id.business_entity);
         emailLL = (LinearLayout) findViewById(R.id.emailLL);
         phoneLL = (LinearLayout) findViewById(R.id.phoneLL);
-        myApplication = (MyApplication)getApplicationContext();
+        myApplication = (MyApplication) getApplicationContext();
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
 
         closeLL.setOnClickListener(new View.OnClickListener() {
@@ -109,11 +109,13 @@ public class CompanyInfoDetails extends BaseActivity {
                             try {
                                 CompanyInfoResp.Data cir = companyInfoResp.getData();
                                 myApplication.setCompanyInfoResp(companyInfoResp);
-                                if (cir.getName() != null && !cir.getName().equals("")) {
-                                    if ( cir.getName().length() > 20) {
-                                        nameTX.setText(cir.getName().substring(0, 20) + "...");
+                                String str = cir.getName();
+//                                fullname = cir.getName().substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+                                if (str != null && !str.equals("")) {
+                                    if (str.length() > 20) {
+                                        nameTX.setText(Utils.getCapsSentences(str).substring(0, 20) + "...");
                                     } else {
-                                        nameTX.setText(cir.getName());
+                                        nameTX.setText(Utils.getCapsSentences(str));
                                     }
                                 }
                                 if (cir.getBusinessEntity() != null && !cir.getBusinessEntity().equals("")) {
