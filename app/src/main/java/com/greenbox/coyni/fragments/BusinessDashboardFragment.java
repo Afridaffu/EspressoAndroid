@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -34,7 +33,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.BatchPayoutListAdapter;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.DateRangePickerDialog;
@@ -42,7 +40,6 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
-import com.greenbox.coyni.model.BatchNow.BatchNowSlideRequest;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.RollingListRequest;
@@ -114,17 +111,10 @@ public class BusinessDashboardFragment extends BaseFragment {
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
-    private BatchPayoutListAdapter batchPayoutListAdapter;
     private RecyclerView recyclerViewPayouts;
-    private List<BatchPayoutListItems> listItems;
     private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV,
             lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV, disable_reserve_list;
     private LinearLayout reserveReleaseListLL, reserveDetailsLL;
-    private BatchNowRequest batchNowRequest = null;
-    private String openAmount = "", sent = "", availbal = "";
-    private int dbaID = 0, currentTimeInHours = 0;
-    private String currentTimeHoursText = "";
-    private String merchantBalance;
     private SeekBarWithFloatingText mSbTodayVolume;
     private Long mLastClickTime = 0L;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -137,7 +127,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private LinearLayout mTicketsLayout;
     private TextView mIdVeriStatus;
     private UserData userData;
-    private String status = "", reserveAmount = "", timeDate = "", timeDateTemp = "", reserveRules = "", releaseDate = "";
+    private String reserveRules = "";
 
 
     //Processing Volume Types
@@ -310,7 +300,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             ((BusinessDashboardActivity) getActivity()).launchBuyTokens();
         });
-
 
         mLlProcessingVolume.setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -612,10 +601,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (ruleResponse != null) {
                     if (ruleResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (ruleResponse.getData() != null) {
-                            reserveRules = "Reserve Rule: "+ruleResponse.getData().getReserveAmount().split("\\.")[0] + "% per Sale Order with a " + ruleResponse.getData().getReservePeriod() + " day[s] rolling period.";
+                            reserveRules = "Reserve Rule: " + ruleResponse.getData().getReserveAmount().split("\\.")[0] + "% per Sale Order with a " + ruleResponse.getData().getReservePeriod() + " day[s] rolling period.";
                             SpannableString spannableString = new SpannableString(reserveRules);
                             Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
-                            spannableString.setSpan(new CustomTypefaceSpan("",font), 14, reserveRules.length() , Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                            spannableString.setSpan(new CustomTypefaceSpan("", font), 14, reserveRules.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
                             if (!reserveRules.equals("") && reserveRules != null) {
 //                                reserveRuleTV.setText(Html.fromHtml("<b>"+reserveRules+"</b>"));
@@ -879,7 +868,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     //Call API Here
                     LogUtils.v(TAG, "RESULT_OK" + result);
                     businessDashboardViewModel.batchNowSlideData(batchId);
-                     Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+                    Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                 }
             });
 
@@ -1152,11 +1141,10 @@ public class BusinessDashboardFragment extends BaseFragment {
                 j++;
             }
 
-            if(paidItems == 0){
+            if (paidItems == 0) {
                 batchView.setVisibility(View.VISIBLE);
             }
-        }
-        else {
+        } else {
             batchNoTransaction.setVisibility(View.VISIBLE);
             batchView.setVisibility(View.VISIBLE);
             mPayoutHistory.setVisibility(View.GONE);

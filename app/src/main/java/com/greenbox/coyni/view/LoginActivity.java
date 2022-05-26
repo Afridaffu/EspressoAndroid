@@ -3,8 +3,6 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -21,7 +19,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -107,7 +104,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             if (getIntent() != null && getIntent().getExtras() != null) {
                 LogUtils.v("TAG", getIntent().getExtras() + "");
             }
-
             initialization();
             initObserver();
         } catch (Exception ex) {
@@ -248,6 +244,10 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
 
             etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+            if (!etlEmail.isFocusable() && !etlPassword.isFocusable()){
+                Utils.hideKeypad(getApplicationContext());
+            }
 
             if ((getIntent().getStringExtra("auth") != null && getIntent().getStringExtra("auth").equals("cancel"))) {
                 layoutClose.setVisibility(GONE);
