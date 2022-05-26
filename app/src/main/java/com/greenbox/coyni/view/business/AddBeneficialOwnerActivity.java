@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -332,6 +333,10 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public void onClick(View view) {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
                         confirmationAlert();
                     } else {
