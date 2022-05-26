@@ -65,7 +65,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             RegUsersResponseData objData = listUsers.get(position);
-
             String strPhContact = "", strEcoSysName = "";
             if (objData.getUserName() != null && !objData.getUserName().equals("")) {
                 if (objData.getUserName().length() > 24) {
@@ -90,7 +89,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.tvWalletAddress.setText("@" + Utils.capitalize(strEcoSysName));
                 holder.tvWalletAddress.setVisibility(View.VISIBLE);
                 holder.imgInvite.setVisibility(View.GONE);
-//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
                 holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strEcoSysName));
@@ -101,20 +99,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
                 holder.tvWalletAddress.setVisibility(View.GONE);
                 holder.imgInvite.setVisibility(View.VISIBLE);
-//                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact));
                 holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact.substring(0, 1).toUpperCase()));
             }
 
             if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
                 holder.imgUser.setVisibility(View.VISIBLE);
                 holder.tvNameHead.setVisibility(View.GONE);
-//                if (objData.getImage().contains("https://")) {
-//
-//                    DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
-//                    utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
-//                } else {
-//                    holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
-//                }
                 if (objData.getImage().startsWith("content:")) {
                     holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(objData.getImage().trim()));
                 } else {
@@ -159,6 +149,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                             i.putExtra("walletId", objData.getWalletAddress());
                             i.putExtra("name", objData.getUserName());
                             i.putExtra("phone", objData.getPhoneNumber());
+                            i.putExtra("image", objData.getImage());
                             mContext.startActivity(i);
                         } else {
 //                            Utils.displayAlert("You can only invite this contact.", ((AddRecipientActivity) mContext), "", "");
@@ -182,7 +173,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
         listUsers = list;
         notifyDataSetChanged();
     }
-
 }
 
 
