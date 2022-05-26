@@ -61,7 +61,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu;
     private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile;
-    private String userName = "";
+    private String userName = "", firstName = "", lastName = "";
 
     private enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
 
@@ -435,11 +435,12 @@ public class BusinessDashboardActivity extends BaseActivity {
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                 && objMyApplication.getMyProfile().getData().getFirstName() != null &&
                 objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-            String firstName = objMyApplication.getMyProfile().getData().getFirstName();
+
+            firstName = objMyApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();
             userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
             if (objMyApplication.getMyProfile().getData().getLastName() != null) {
-                String lastName = objMyApplication.getMyProfile().getData().getLastName();
+                lastName = objMyApplication.getMyProfile().getData().getLastName();
 //                iconText = iconText + lastName.substring(0, 1).toUpperCase();
                 userName = userName + " ";
                 userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
@@ -447,9 +448,17 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvUserName.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
             } else {
-                mTvUserName.setText("Hi! " + userName);
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+            }
+            if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
+                char first = firstName.charAt(0);
+                char last = lastName.charAt(0);
+                String imageName = String.valueOf(first).toUpperCase() + String.valueOf(last).toUpperCase();
+                mTvUserIconText.setText(imageName);
+                mTvUserIconText.setVisibility(View.VISIBLE);
+                mIvUserIcon.setVisibility(View.GONE);
             }
         } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
             if (objMyApplication.getMyProfile().getData().getDbaName() != null) {
@@ -457,42 +466,42 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
             userName = objMyApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
             } else if (userName != null) {
-                mTvUserName.setText("Hi! " + userName);
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+            }
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    && objMyApplication.getMyProfile().getData().getImage() != null) {
+                mTvUserIconText.setVisibility(View.GONE);
+                mIvUserIcon.setVisibility(View.VISIBLE);
+
+                String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
+            } else {
+                mIvUserIcon.setVisibility(View.VISIBLE);
             }
         }
-        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                && objMyApplication.getMyProfile().getData().getImage() != null) {
-            mTvUserIconText.setVisibility(View.GONE);
-            mIvUserIcon.setVisibility(View.VISIBLE);
 
-            String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
-            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-            utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
-        } else {
-//            mTvUserIconText.setVisibility(View.VISIBLE);
-            mIvUserIcon.setVisibility(View.VISIBLE);
-//            mTvUserIconText.setText(iconText);
-        }
 
         mTvUserName.setOnClickListener(view -> {
             if (mTvUserName.getText().toString().contains("...")) {
                 if (userName.length() == 21 || userName.length() > 21) {
-                    mTvUserName.setText("Hi! " + userName.substring(0, 20));
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20));
                 } else {
-                    mTvUserName.setText("Hi! " + userName);
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
                 }
             } else {
                 if (userName.length() == 21) {
-                    mTvUserName.setText("Hi! " + userName.substring(0, 20) + "...");
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20) + "...");
                 } else if (userName.length() > 22) {
-                    mTvUserName.setText("Hi! " + userName.substring(0, 22) + "...");
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 22) + "...");
                 } else {
-                    mTvUserName.setText("Hi! " + userName);
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
                 }
             }
         });
+
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {
@@ -544,3 +553,4 @@ public class BusinessDashboardActivity extends BaseActivity {
         }
     }
 }
+

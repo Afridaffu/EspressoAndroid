@@ -1732,6 +1732,20 @@ public class Utils {
         }
         return strDate;
     }
+    public static String getCapsSentences(String Name) {
+        String[] splits = Name.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < splits.length; i++) {
+            String eachWord = splits[i];
+            if (i > 0 && eachWord.length() > 0) {
+                sb.append(" ");
+            }
+            String cap = eachWord.substring(0, 1).toUpperCase()
+                    + eachWord.substring(1);
+            sb.append(cap);
+        }
+        return sb.toString();
+    }
 
     public static void setSpannableText(String text, Context context, TextView spannableTV, int end) {
 

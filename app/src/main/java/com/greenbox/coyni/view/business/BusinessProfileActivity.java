@@ -88,7 +88,7 @@ public class BusinessProfileActivity extends BaseActivity {
     private Long mLastClickTime = 0L;
     private TextView tvVersion;
     private ScrollView profileSV;
-    private String fullname = "";
+    private String fullname = "",firstName = "",lastName = "";
     private LoginViewModel loginViewModel;
     private DisplayImageUtility displayImageUtility;
 
@@ -343,17 +343,17 @@ public class BusinessProfileActivity extends BaseActivity {
             userFullname.setOnClickListener(view -> {
                 if (userFullname.getText().toString().contains("...")) {
                     if (fullname.length() == 21 || fullname.length() > 21) {
-                        userFullname.setText(fullname.substring(0, 20));
+                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 20));
                     } else {
-                        userFullname.setText(fullname);
+                        userFullname.setText(Utils.getCapsSentences(fullname));
                     }
                 } else {
                     if (fullname.length() == 21) {
-                        userFullname.setText(fullname.substring(0, 20) + "...");
+                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 20) + "...");
                     } else if (fullname.length() > 22) {
-                        userFullname.setText(fullname.substring(0, 22) + "...");
+                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + "...");
                     } else {
-                        userFullname.setText(fullname);
+                        userFullname.setText(Utils.getCapsSentences(fullname));
                     }
                 }
             });
@@ -483,11 +483,11 @@ public class BusinessProfileActivity extends BaseActivity {
                     if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                             && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
                             && myApplication.getMyProfile().getData().getFirstName() != null) {
-                        String firstName = myApplication.getMyProfile().getData().getFirstName();
+                         firstName = myApplication.getMyProfile().getData().getFirstName();
                         // iconText = firstName.substring(0, 1).toUpperCase();
                         fullname = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
                         if (myApplication.getMyProfile().getData().getLastName() != null) {
-                            String lastName = myApplication.getMyProfile().getData().getLastName();
+                             lastName = myApplication.getMyProfile().getData().getLastName();
                             //iconText = iconText + lastName.substring(0, 1).toUpperCase();
                             fullname = fullname + " ";
                             fullname = fullname + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
@@ -496,9 +496,9 @@ public class BusinessProfileActivity extends BaseActivity {
                         fullname = Utils.capitalize(myApplication.getMyProfile().getData().getDbaName());
                     }
                     if (fullname.length() > 22) {
-                        userFullname.setText(fullname.substring(0, 22) + " ");
+                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + " ");
                     } else {
-                        userFullname.setText(fullname);
+                        userFullname.setText(Utils.getCapsSentences(fullname));
                     }
 
                 } catch (Resources.NotFoundException e) {
@@ -692,15 +692,14 @@ public class BusinessProfileActivity extends BaseActivity {
                                         fullname = fullname + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
                                     }
                                 } else if (profile.getData().getDbaName() != null) {
-                                    fullname = Utils.capitalize(profile.getData().getDbaName());
+                                    fullname = profile.getData().getDbaName();
+                                    if (fullname != null && fullname.length() > 22) {
+                                        userFullname.setText(Utils.getCapsSentences(fullname).substring(0, 22) + " ");
+                                    } else {
+                                        userFullname.setText(Utils.getCapsSentences(fullname));
+                                    }
                                 }
 //                                userFullname.setText(fullname);
-
-                                if (userFullname != null && userFullname.length() > 22) {
-                                    userFullname.setText(fullname.substring(0, 22) + " ");
-                                } else {
-                                    userFullname.setText(fullname);
-                                }
                             } catch (Resources.NotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -824,7 +823,15 @@ public class BusinessProfileActivity extends BaseActivity {
                 profileImage.setImageResource(R.drawable.ic_profile_male_user);
                 displayImageUtility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
             } else {
-                profileImage.setVisibility(View.VISIBLE);
+                if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
+                    char first = firstName.charAt(0);
+                    char last = lastName.charAt(0);
+                    String imageName = String.valueOf(first).toUpperCase() + String.valueOf(last).toUpperCase();
+                    profileText.setText(imageName);
+                    profileText.setVisibility(View.VISIBLE);
+                } else {
+                    profileImage.setVisibility(View.VISIBLE);
+                }
 //                profileText.setVisibility(View.VISIBLE);
             }
 
