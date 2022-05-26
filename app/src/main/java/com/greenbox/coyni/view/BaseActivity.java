@@ -135,7 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void launchCheckoutFlow(CheckOutModel checkOutModel) {
         try {
             dismissDialog();
-            startActivity(new Intent(BaseActivity.this, PayToMerchantActivity.class)
+            startActivity(new Intent(BaseActivity.this, CheckOutPaymentActivity.class)
                     .putExtra(CheckOutConstants.WALLET_ID, checkOutModel.getCheckOutWalletId())
                     .putExtra(CheckOutConstants.CheckOutAmount, checkOutModel.getCheckOutAmount()));
         } catch (Exception e) {
