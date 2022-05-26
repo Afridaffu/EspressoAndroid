@@ -139,6 +139,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     private void changeAccount(int childID) {
+        showProgressDialog();
         loginViewModel.postChangeAccount(childID);
     }
 
@@ -313,6 +314,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     public void addDBA(int companyId) {
         LogUtils.d(TAG, "addDBA" + companyId);
         if (companyId != 0) {
+            showProgressDialog();
             identityVerificationViewModel.getPostAddDBABusiness(companyId);
         } else {
 
@@ -324,6 +326,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
+                dismissDialog();
                 if (profilesResponse != null) {
                     profilesList = profilesResponse.getData();
                     setProfilesAdapter();
@@ -334,6 +337,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
             @Override
             public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+                dismissDialog();
                 if (businessTrackerResponse != null) {
                     if (businessTrackerResponse.getStatus().toLowerCase().equals("success")) {
                         myApplication.setBusinessTrackerResponse(businessTrackerResponse);
@@ -345,6 +349,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
+                dismissDialog();
                 if (btResp != null) {
                     if (btResp.getStatus().toLowerCase().equals("success")) {
 
@@ -385,25 +390,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
-                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra(Utils.ADD_BUSINESS, true)
-                                .putExtra(Utils.ADD_DBA, true));
-                    } else {
-                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
-                @Override
-                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                    dismissDialog();
                     LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
