@@ -57,7 +57,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends BaseActivity {
-    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
+    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType;
     private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
@@ -65,7 +65,7 @@ public class DBAInfoDetails extends BaseActivity {
     private MyApplication objMyApplication;
     private List<BusinessType> responce;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-    ProgressDialog dialog;
+    Dialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
     String emailID, phone_Number, bType=" ";
@@ -97,7 +97,7 @@ public class DBAInfoDetails extends BaseActivity {
             phoneNumberTV = findViewById(R.id.phoneNumberTV);
             addressTV = findViewById(R.id.addressTV);
             businessType = findViewById(R.id.businessTypeTV);
-            dba_imageTextTV = findViewById(R.id.dba_imageTextTV);
+//            dba_imageTextTV = findViewById(R.id.dba_imageTextTV);
             dba_userProfileIV = findViewById(R.id.dba_userProfileIV);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -463,12 +463,6 @@ public class DBAInfoDetails extends BaseActivity {
                         if (imageResponse.getStatus().toLowerCase().equals("success")) {
 
                             try {
-                                dba_userProfileIV.setVisibility(View.GONE);
-                                dba_imageTextTV.setVisibility(View.VISIBLE);
-                                String imageTextNew = "";
-                                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-                                dba_imageTextTV.setText(imageTextNew);
                                 dashboardViewModel.meProfile();
                                 Utils.showCustomToast(DBAInfoDetails.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                             } catch (Exception e) {
@@ -565,8 +559,8 @@ public class DBAInfoDetails extends BaseActivity {
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     if (resultCode == RESULT_OK) {
                         Uri resultUri = result.getUri();
-                        dba_userProfileIV.setVisibility(View.VISIBLE);
-                        dba_imageTextTV.setVisibility(View.GONE);
+//                        dba_userProfileIV.setVisibility(View.VISIBLE);
+//                        dba_imageTextTV.setVisibility(View.GONE);
                         dba_userProfileIV.setImageURI(resultUri);
                         uploadImage();
 
@@ -616,10 +610,7 @@ public class DBAInfoDetails extends BaseActivity {
 
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
-            dialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.show();
+            dialog = Utils.showProgressDialog(this);
             dashboardViewModel.updateProfile(body);
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -109,18 +109,19 @@
                                     android:contentDescription="@string/profile_image"
                                     android:src="@drawable/acct_profile"
                                     android:scaleType="fitXY"
-                                    android:visibility="gone" />
-
-                                <TextView
-                                    android:id="@+id/dba_imageTextTV"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:fontFamily="@font/opensans_bold"
-                                    android:text=""
-                                    android:textColor="@color/primary_black"
-                                    android:textSize="@dimen/_20sdp"
+                                    android:src="@drawable/ic_case"
                                     android:visibility="visible" />
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/dba_imageTextTV"-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:fontFamily="@font/opensans_bold"-->
+<!--                                    android:text=""-->
+<!--                                    android:textColor="@color/primary_black"-->
+<!--                                    android:textSize="@dimen/_20sdp"-->
+<!--                                    android:visibility="visible" />-->
                             </androidx.cardview.widget.CardView>
 
 

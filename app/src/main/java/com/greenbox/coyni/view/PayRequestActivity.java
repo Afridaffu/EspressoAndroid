@@ -97,7 +97,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
     boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     int requestedToUserId = 0;
     PaymentMethodsResponse paymentMethodsResponse;
     PayRequestCustomKeyboard cKey;

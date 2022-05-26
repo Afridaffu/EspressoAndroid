@@ -1,5 +1,6 @@
 package com.greenbox.coyni.adapters;
 
+import static android.content.ContentValues.TAG;
 import static com.microblink.blinkcard.MicroblinkSDK.getApplicationContext;
 
 import android.annotation.SuppressLint;
@@ -67,7 +68,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             if(listCompany.get(position).getCompanyName() == null) {
-                holder.txvCompanyName.setText("[DBA Name]");
+                holder.txvCompanyName.setText("[Company Name]");
             }
             else {
                 holder.txvCompanyName.setText(listCompany.get(position).getCompanyName());
@@ -77,17 +78,18 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
                     holder.viewLine.setVisibility(View.VISIBLE);
                 }
             }
-            if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
-                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
-            }
 
             if (listCompany.get(position).isSelected()) {
                 holder.imvTickIcon.setVisibility(View.VISIBLE);
                 holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_green));
-//                holder.statusLL.setVisibility(View.GONE);
+            } else if(listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
+                holder.imvTickIcon.setVisibility(View.GONE);
             } else {
                 holder.txvCompanyName.setTextColor(mContext.getColor(R.color.light_gray));
                 holder.imvTickIcon.setVisibility(View.GONE);
+            }
+
 //                holder.txvCompanyName.setTextColor(mContext.getColor(R.color.primary_black));
 //                if (!listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
 //
@@ -107,7 +109,6 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 //                    holder.statusLL.setVisibility(View.GONE);
 //                }
 
-            }
             if (listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
                     listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
                     listCompany.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
@@ -155,12 +156,14 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
 
     @Override
     public int getItemCount() {
+        if(listCompany == null) {
+            return 0;
+        }
         return listCompany.size();
     }
 
     public interface OnSelectListner {
         void selectedItem(BaseProfile item);
     }
-
-
+    
 }

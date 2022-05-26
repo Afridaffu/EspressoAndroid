@@ -54,7 +54,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     private int mAccountType = Utils.PERSONAL_ACCOUNT;
@@ -578,7 +578,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                                     launchDashboard();
                                                 } else {
                                                     if (!isDontRemind) {
-                                                        if (Utils.checkBiometric(PINActivity.this)) {
+                                                        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()){
+                                                            launchDashboard();
+                                                        }
+                                                        else if (Utils.checkBiometric(PINActivity.this)) {
                                                             if (Utils.checkAuthentication(PINActivity.this)) {
                                                                 if (Utils.isFingerPrint(PINActivity.this)) {
                                                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)

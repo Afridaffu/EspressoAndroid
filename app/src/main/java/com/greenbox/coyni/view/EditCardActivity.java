@@ -64,7 +64,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
     MaskEditText etExpiry;
     PaymentMethodsViewModel paymentMethodsViewModel;
     CardView cvSave, cvRemove;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     ConstraintLayout clStates;
     LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack, expiryErrorLL;
     TextView address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;

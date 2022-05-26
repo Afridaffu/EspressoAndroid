@@ -112,7 +112,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 
     public static IdentityVerificationActivity identityVerificationActivity;
     private IdentityVerificationViewModel identityVerificationViewModel;
-    ProgressDialog dialog;
+    Dialog dialog;
     private LinearLayout address1ErrorLL, address2ErrorLL, cityErrorLL, zipcodeErrorLL;
     private TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
     private MyApplication myApplicationObj;
@@ -955,15 +955,13 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             closebtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finishMethod();
-                }
+                    finish();                }
             });
 
             exitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finishMethod();
-                }
+                    finish();                }
             });
 
             btnExit.setOnClickListener(new View.OnClickListener() {

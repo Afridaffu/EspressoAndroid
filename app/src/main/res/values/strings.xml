@@ -296,7 +296,7 @@
     <string name="dashboard"> Dashboard</string>
     <string name="profile"> Profile</string>
     <string name="quick_menu">Quick Menu</string>
-    <string name="reserverole">Reserve Rule:</string>
+    <string name="reserverole">Reserve Rule: <b>[%] per Sale Order with a 90 day rolling period.</b></string>
     <string name="rollingperiod">rolling period.</string>
     <string name="reserverule"> [%] per Sale Order with a 90 day</string>
     <string name="a_u_pay"> Your active batch is set to automatically pay</string>
@@ -686,5 +686,6 @@
     <string name="time_zone_changed">Time zone changed successfully</string>
 
     <string name="internal_storage">Internal storage</string>
+    <string name="pay">Pay</string>
 
 </resources>

@@ -848,10 +848,6 @@ public class BusinessProfileActivity extends BaseActivity {
 //                enablePopup.dismiss();
 //            }
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE) {
-//                dialog = new ProgressDialog(CustomerProfileActivity.this, R.style.MyAlertDialogStyle);
-//                dialog.setIndeterminate(false);
-//                dialog.setMessage("Please wait...");
-//                dialog.show();
                 FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                 if (fingerprintManager.hasEnrolledFingerprints()) {
                     BiometricRequest biometricRequest = new BiometricRequest();

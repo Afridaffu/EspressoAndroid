@@ -58,7 +58,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     String strSignOn = "", strCurrent = "";
     SignOnData signOnData;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     RecyclerView rvPaymentMethods;
     LinearLayout lyBPayClose, lyExternalClose, lyPayBack;
     TextView tvBankError, tvSignetError, tvDCardError, tvLearnMore, tvBankCount, tvSignetCount, tvDCardCount;

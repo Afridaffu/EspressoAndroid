@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -76,7 +77,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     LinearLayout layoutEmailError, layoutPwdError;
     TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
     String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "";
-    ProgressDialog dialog;
     LoginViewModel loginViewModel;
     Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
     ImageView loginBGIV, endIconIV, coyniLogoIV;
@@ -129,9 +129,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     protected void onResume() {
         super.onResume();
 
-        if (dialog != null) {
-            dialog.dismiss();
-        }
+        dismissDialog();
         isPwdEye = false;
         try {
             if (!isExpiry) {
@@ -680,7 +678,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                 @Override
                 public void onChanged(LoginResponse login) {
                     try {
-                        dialog.dismiss();
+                        dismissDialog();
                         if (login != null) {
                             if (!login.getStatus().toLowerCase().equals("error")) {
                                 Utils.setStrAuth(login.getData().getJwtToken());
@@ -744,7 +742,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             loginViewModel.getApiErrorMutableLiveData().observe(this, new Observer<APIError>() {
                 @Override
                 public void onChanged(APIError apiError) {
-                    dialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
 //                        Utils.emailPasswordIncorrectDialog("", LoginActivity.this, "");
                         Utils.displayAlert(apiError.getError().getErrorDescription(), LoginActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -755,7 +753,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             loginViewModel.getBiometricResponseMutableLiveData().observe(this, new Observer<LoginResponse>() {
                 @Override
                 public void onChanged(LoginResponse loginResponse) {
-                    dialog.dismiss();
+                    dismissDialog();
                     try {
                         if (loginResponse != null) {
                             if (!loginResponse.getStatus().toLowerCase().equals("error")) {
@@ -804,9 +802,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             loginViewModel.getSmsresendMutableLiveData().observe(this, new Observer<SMSResponse>() {
                 @Override
                 public void onChanged(SMSResponse smsResponse) {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+                    dismissDialog();
                     if (smsResponse != null) {
                         if (smsResponse.getStatus().toLowerCase().toString().equals("success")) {
                             Intent i = new Intent(LoginActivity.this, OTPValidation.class);
@@ -857,11 +853,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 
     private void login() {
         try {
-            dialog = new ProgressDialog(LoginActivity.this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.getWindow().setGravity(Gravity.CENTER);
-            dialog.show();
+            showProgressDialog();
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setEmail(strEmail);
             loginRequest.setPassword(strPwd);
@@ -873,11 +865,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
 
     private void biometricLogin() {
         try {
-            dialog = new ProgressDialog(LoginActivity.this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.getWindow().setGravity(Gravity.CENTER);
-            dialog.show();
+            showProgressDialog();
             BiometricLoginRequest request = new BiometricLoginRequest();
             request.setDeviceId(Utils.getDeviceID());
             request.setEnableBiometic(true);

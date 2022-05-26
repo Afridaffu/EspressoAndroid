@@ -78,7 +78,7 @@ public class NotificationsActivity extends BaseActivity {
     String selectedTab = "NOTIFICATIONS";
     public String selectedRow = "";
     public String updatedStatus = "";
-    public ProgressDialog progressDialog;
+    public Dialog progressDialog;
     public NotificationsAdapter notificationsAdapter;
 
     SQLiteDatabase mydatabase;
@@ -129,11 +129,7 @@ public class NotificationsActivity extends BaseActivity {
         payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         try {
-            progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-            progressDialog.setIndeterminate(false);
-            progressDialog.setMessage("Please wait...");
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
+            progressDialog = Utils.showProgressDialog(NotificationsActivity.this);
 
             notificationsViewModel.getNotifications();
             notificationsViewModel.getSentNotifications();

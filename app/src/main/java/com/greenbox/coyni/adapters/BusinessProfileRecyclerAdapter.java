@@ -90,17 +90,21 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         TextView addDbaText = view.findViewById(R.id.addDbaText);
 
         LogUtils.d("isLastChild", "isLastChild" + isLastChild);
-
-        for (int position = 0; position < profilesList.size(); position++) {
-            if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
-                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
-                    profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
-                addDBA.setEnabled(false);
-                addDbaText.setEnabled(false);
-                break;
-            } else {
-                addDBA.setEnabled(true);
-                addDbaText.setEnabled(true);
+        if(profilesList.size() == 1 && !profilesList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+            addDBA.setEnabled(false);
+            addDbaText.setEnabled(false);
+        } else {
+            for (int position = 0; position < profilesList.size(); position++) {
+                if (profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                        profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                        profilesList.get(position).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                    addDBA.setEnabled(false);
+                    addDbaText.setEnabled(false);
+                    break;
+                } else {
+                    addDBA.setEnabled(true);
+                    addDbaText.setEnabled(true);
+                }
             }
         }
 
@@ -156,10 +160,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             addDBA.setVisibility(View.GONE);
         }
 
-        if(selectedID == detailInfo.getId()) {
+        if (selectedID == detailInfo.getId()) {
             imvTickIcon.setVisibility(View.VISIBLE);
+            childItem.setTextColor(context.getColor(R.color.primary_color));
             if (!detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ) {
+                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
@@ -169,13 +174,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_completed_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.active_green));
-                }
-                else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.under_review_blue));
-                } else if(detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
@@ -185,8 +189,9 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
             }
         } else {
             imvTickIcon.setVisibility(View.GONE);
+            childItem.setTextColor(context.getColor(R.color.primary_black));
             if (!detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ) {
+                if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_failed_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
@@ -196,13 +201,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_completed_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.active_green));
-                }
-                else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setBackground(context.getDrawable(R.drawable.txn_inprogress_bg));
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.under_review_blue));
-                } else if(detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
@@ -305,20 +309,22 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
-            } else {
-                personalText.setVisibility(View.VISIBLE);
-                profileImage.setVisibility(View.GONE);
-                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
-                personalText.setText(userName);
             }
+//            else {
+//                personalText.setVisibility(View.VISIBLE);
+//                profileImage.setVisibility(View.GONE);
+//                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
+//                personalText.setText(userName);
+//            }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
-            if (headerInfo.getCompanyName() != null && headerInfo.getCompanyName().length() > 21) {
-                heading.setText(headerInfo.getCompanyName().substring(0, 20));
+            if (headerInfo.getCompanyName() != null) {
+                if (headerInfo.getCompanyName().length() > 21) {
+                    heading.setText(headerInfo.getCompanyName().substring(0, 20));
+                } else {
+                    heading.setText(headerInfo.getCompanyName());
+                }
             } else {
-                heading.setText(headerInfo.getCompanyName());
-            }
-            if(headerInfo.getCompanyName() == null) {
                 heading.setText("[Comapany Name]");
             }
 

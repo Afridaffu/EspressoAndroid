@@ -77,6 +77,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
@@ -1046,12 +1047,23 @@ public class Utils {
         return isBiometric;
     }
 
-    public static ProgressDialog showProgressDialog(Context context) {
-        ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
-        dialog.setIndeterminate(false);
-        dialog.setCancelable(false);
-        dialog.setMessage("Please wait...");
-        dialog.setCanceledOnTouchOutside(false);
+    public static Dialog showProgressDialog(Context context) {
+
+        Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.loader);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
         return dialog;
     }

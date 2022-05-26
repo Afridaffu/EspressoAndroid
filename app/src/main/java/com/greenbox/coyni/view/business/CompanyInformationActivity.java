@@ -61,6 +61,7 @@ import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.SwipeDirection;
+import com.greenbox.coyni.utils.UriPathUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
 import com.greenbox.coyni.utils.outline_et.SSNOutlineBoxNumberEditText;

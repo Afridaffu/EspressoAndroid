@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -60,7 +61,7 @@ public class EditEmailActivity extends BaseActivity {
     TextView currentEmailErrorTV, newEmailErrorTV, contactUsTV, b_newEmailErrorTV;
     CardView saveEmailCV;
     Long mLastClickTime = 0L;
-    ProgressDialog dialog;
+    Dialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     LoginViewModel loginViewModel;
@@ -152,10 +153,7 @@ public class EditEmailActivity extends BaseActivity {
 
 
 
-                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
+                        dialog = Utils.showProgressDialog(EditEmailActivity.this);
 
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")) {
                             callChangeDbaEmailAPI();
@@ -204,10 +202,6 @@ public class EditEmailActivity extends BaseActivity {
 //                        }
 //                        mLastClickTime = SystemClock.elapsedRealtime();
 //
-//                        dialog = new ProgressDialog(EditEmailActivity.this, R.style.MyAlertDialogStyle);
-//                        dialog.setIndeterminate(false);
-//                        dialog.setMessage("Please wait...");
-//                        dialog.show();
 //
 //                        callSendEmailOTPAPI();
 //
