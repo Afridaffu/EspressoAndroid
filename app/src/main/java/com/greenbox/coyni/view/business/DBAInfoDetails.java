@@ -57,7 +57,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends BaseActivity {
-    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType;
+    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType,dba_imageTextTV;
     private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
@@ -491,7 +491,7 @@ public class DBAInfoDetails extends BaseActivity {
         try {
             if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                     && objMyApplication.getMyProfile().getData().getImage() != null) {
-                dba_imageTextTV.setVisibility(View.GONE);
+//                dba_imageTextTV.setVisibility(View.GONE);
                 dba_userProfileIV.setVisibility(View.VISIBLE);
 
                 String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();

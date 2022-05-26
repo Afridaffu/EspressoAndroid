@@ -107,9 +107,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:contentDescription="@string/profile_image"
-                                    android:src="@drawable/acct_profile"
                                     android:scaleType="fitXY"
-                                    android:src="@drawable/ic_case"
+                                    android:src="@drawable/acct_profile"
                                     android:visibility="visible" />
 
 <!--                                <TextView-->
