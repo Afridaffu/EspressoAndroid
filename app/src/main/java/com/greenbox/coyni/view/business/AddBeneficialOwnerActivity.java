@@ -1906,16 +1906,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
-
-    private void disable() {
-        ssnET.setFrom("ADD_BO", this);
-        ssnET.setEnabled(false);
-    }
-
-    private void enable() {
-        ssnET.setFrom("ADD_BO", this);
-        ssnET.setEnabled(true);
-    }
 }
 
 
