@@ -1728,7 +1728,7 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
                 preAuthDialog.dismiss();
             }
             CardView cvAddBank;
-            preDialog = new Dialog(AddCardActivity.this, R.style.DialogTheme);
+            preDialog = new Dialog(AddCardActivity.this);
             preDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             preDialog.setContentView(R.layout.preauthfailed);
             Window window = preDialog.getWindow();

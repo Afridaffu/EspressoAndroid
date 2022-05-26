@@ -141,6 +141,7 @@ public class LatestTxnAdapter extends RecyclerView.Adapter<LatestTxnAdapter.MyVi
                         i.putExtra("gbxTxnIdType", objData.getGbxTransactionId());
                         i.putExtra("txnType", objData.getTxnTypeDn());
                         i.putExtra("txnSubType", objData.getTxnSubTypeDn());
+                        i.putExtra("txnId",objData.getTransactionId());
                         mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();

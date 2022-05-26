@@ -273,13 +273,13 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if (charSequence.length() > 30) {
+        if (charSequence.length() > 10) {
             payoutList.clear();
             payoutAPI(charSequence.toString());
             dismissDialog();
             cynTV.setVisibility(View.VISIBLE);
             noPayoutTransactions.setVisibility(View.GONE);
-        } else if (charSequence.length() > 0 && charSequence.length() < 30) {
+        } else if (charSequence.length() > 0 && charSequence.length() < 10) {
             noPayoutTransactions.setVisibility(View.VISIBLE);
             cynTV.setVisibility(View.GONE);
             recyclerViewPayouts.setVisibility(View.GONE);

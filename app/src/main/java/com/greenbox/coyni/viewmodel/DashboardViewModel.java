@@ -16,6 +16,7 @@ import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
+import com.greenbox.coyni.model.activtity_log.ActivityLogResp;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
@@ -69,6 +70,7 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<RefundDataResponce> refundProcessMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<DownloadImageResponse> downloadUrlResponse = new MutableLiveData<>();
     private MutableLiveData<DownloadDocumentResponse> downloadDocumentResponse = new MutableLiveData<>();
+    private MutableLiveData<ActivityLogResp> activityLogRespMutableLiveData = new MutableLiveData<>();
 
     public MutableLiveData<LatestTxnResponse> getGetUserLatestTxns() {
         return getUserLatestTxns;
@@ -77,6 +79,10 @@ public class DashboardViewModel extends AndroidViewModel {
     private MutableLiveData<TransactionList> transactionListMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<CancelBuyTokenResponse> cancelBuyTokenResponseMutableLiveData = new MutableLiveData<>();
 
+
+    public MutableLiveData<ActivityLogResp> getActivityLogRespMutableLiveData() {
+        return activityLogRespMutableLiveData;
+    }
 
     public MutableLiveData<TransactionList> getTransactionListMutableLiveData() {
         return transactionListMutableLiveData;
@@ -900,6 +906,37 @@ public class DashboardViewModel extends AndroidViewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void getActivityLog(String txnId,String userType){
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<ActivityLogResp> call = apiService.activityLog(txnId,userType);
+        call.enqueue(new Callback<ActivityLogResp>() {
+            @Override
+            public void onResponse(Call<ActivityLogResp> call, Response<ActivityLogResp> response) {
+                if (response.isSuccessful()){
+                    ActivityLogResp resp= response.body();
+                    activityLogRespMutableLiveData.setValue(resp);
+                }
+                else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<ActivityLogResp>() {
+                    }.getType();
+                    ActivityLogResp errorResponse = null;
+                    try {
+                        errorResponse = gson.fromJson(response.errorBody().string(), type);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    activityLogRespMutableLiveData.setValue(errorResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ActivityLogResp> call, Throwable t) {
+                    activityLogRespMutableLiveData.setValue(null);
+            }
+        });
     }
 
 

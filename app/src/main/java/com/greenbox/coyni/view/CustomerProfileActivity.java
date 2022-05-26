@@ -510,7 +510,7 @@ public class CustomerProfileActivity extends BaseActivity {
             LinearLayout saveToAlbumLL;
 
 
-            qrDialog = new Dialog(CustomerProfileActivity.this, R.style.DialogTheme);
+            qrDialog = new Dialog(CustomerProfileActivity.this);
             qrDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             qrDialog.setContentView(R.layout.profileqrcode);
             Window window = qrDialog.getWindow();
