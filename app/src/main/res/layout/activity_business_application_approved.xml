@@ -26,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_34sdp"
+                    android:layout_marginTop="@dimen/_36sdp"
                     android:layout_marginBottom="@dimen/_14sdp"
                     android:src="@drawable/group_18294" />
 
@@ -83,6 +83,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/_2sdp"
+                        android:paddingBottom="@dimen/_2sdp"
                         android:background="@color/at_gray"
                         android:orientation="vertical">
 
@@ -90,7 +92,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_9sdp"
                             android:paddingTop="@dimen/_7sdp"
                             android:paddingEnd="@dimen/_11sdp">
 
@@ -129,7 +131,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_9sdp"
                             android:paddingTop="@dimen/_7sdp"
                             android:paddingBottom="@dimen/_9sdp">
 
@@ -176,6 +178,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/_2sdp"
+                        android:paddingBottom="@dimen/_2sdp"
                         android:background="@color/at_gray"
                         android:orientation="vertical">
 
@@ -183,7 +187,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_9sdp"
                             android:paddingTop="@dimen/_7sdp">
 
                             <TextView
@@ -201,6 +205,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/opensans_bold"
                                 android:singleLine="true"
+                                android:layout_marginEnd="@dimen/_1sdp"
                                 android:text=""
                                 android:textColor="@color/primary_color"
                                 android:textSize="@dimen/_12ssp"
@@ -213,7 +218,7 @@
                             android:layout_height="wrap_content"
                             android:background="@color/at_gray"
                             android:orientation="horizontal"
-                            android:paddingStart="@dimen/_11sdp"
+                            android:paddingStart="@dimen/_9sdp"
                             android:paddingTop="@dimen/_7sdp"
                             android:paddingBottom="@dimen/_9sdp">
 
