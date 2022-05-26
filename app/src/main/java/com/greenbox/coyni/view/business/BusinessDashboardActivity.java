@@ -433,12 +433,12 @@ public class BusinessDashboardActivity extends BaseActivity {
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
         String iconText = "";
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                && objMyApplication.getMyProfile().getData().getFirstName() != null &&
-                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-
-            firstName = objMyApplication.getMyProfile().getData().getFirstName();
+              &&  objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            if (objMyApplication.getMyProfile().getData().getFirstName() != null) {
+                firstName = objMyApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();
-            userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+            }
             if (objMyApplication.getMyProfile().getData().getLastName() != null) {
                 lastName = objMyApplication.getMyProfile().getData().getLastName();
 //                iconText = iconText + lastName.substring(0, 1).toUpperCase();
@@ -470,16 +470,16 @@ public class BusinessDashboardActivity extends BaseActivity {
             } else if (userName != null) {
                 mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
             }
+            mIvUserIcon.setVisibility(View.VISIBLE);
             if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
                     && objMyApplication.getMyProfile().getData().getImage() != null) {
                 mTvUserIconText.setVisibility(View.GONE);
-                mIvUserIcon.setVisibility(View.VISIBLE);
 
                 String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
             } else {
-                mIvUserIcon.setVisibility(View.VISIBLE);
+                mIvUserIcon.setImageResource(R.drawable.acct_profile);
             }
         }
 

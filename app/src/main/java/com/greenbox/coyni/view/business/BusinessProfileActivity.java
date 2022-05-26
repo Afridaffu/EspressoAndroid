@@ -68,7 +68,7 @@ public class BusinessProfileActivity extends BaseActivity {
             businessResetPin, preferencesLL, beneficialOwnersLL;
     private ConstraintLayout userProfileCL;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    static String strToken = "";
+    static String strToken = "",userName;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private final int CODE_AUTHENTICATION_VERIFICATION = 251, CODE_AUTHENTICATION = 512;
     private final int CODE_AUTHENTICATION_VERIFICATION_RESET_PIN = 252;
@@ -799,41 +799,53 @@ public class BusinessProfileActivity extends BaseActivity {
 
     private void bindImage(String imageString) {
         try {
-            profileImage.setVisibility(View.VISIBLE);
-//            profileText.setVisibility(View.VISIBLE);
-            String imageTextNew = "";
-            if (myApplication.getMyProfile().getData() != null && myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                if (myApplication.getMyProfile().getData().getFirstName() != null && !myApplication.getMyProfile().getData().getFirstName().equals("")) {
-                    imageTextNew = myApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase();
+            if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null &&
+                    myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                if (myApplication.getMyProfile().getData().getLastName() != null) {
+                    firstName = myApplication.getMyProfile().getData().getFirstName();
+//            iconText = firstName.substring(0, 1).toUpperCase();
+                    userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
                 }
-                if (myApplication.getMyProfile().getData().getLastName() != null && !myApplication.getMyProfile().getData().getLastName().equals("")) {
-                    imageTextNew = imageTextNew + myApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                if (myApplication.getMyProfile().getData().getLastName() != null) {
+                    lastName = myApplication.getMyProfile().getData().getLastName();
+//                iconText = iconText + lastName.substring(0, 1).toUpperCase();
+                    userName = userName + " ";
+                    userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
                 }
-            } else if (myApplication.getMyProfile().getData() != null && myApplication.getMyProfile().getData().getDbaName() != null
-                    && !myApplication.getMyProfile().getData().getDbaName().equals("")) {
-                imageTextNew = myApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
-            }
+                userFullname.setText(getResources().getString(R.string.dba_name, userName));
 
-            profileText.setText(imageTextNew);
-
-            if (imageString != null && !imageString.trim().equals("")) {
-                profileImage.setVisibility(View.VISIBLE);
-//                userProfileCL.setBackground(getResources().getDrawable(R.drawable.corecircle));
-                profileText.setVisibility(View.GONE);
-                profileImage.setImageResource(R.drawable.ic_profile_male_user);
-                displayImageUtility.addImage(imageString, profileImage, R.drawable.ic_profile_male_user);
-            } else {
+                if (userName != null && userName.length() > 18) {
+                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                } else {
+                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName));
+                }
                 if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                     char first = firstName.charAt(0);
                     char last = lastName.charAt(0);
                     String imageName = String.valueOf(first).toUpperCase() + String.valueOf(last).toUpperCase();
                     profileText.setText(imageName);
                     profileText.setVisibility(View.VISIBLE);
-                } else {
-                    profileImage.setVisibility(View.VISIBLE);
+                    profileImage.setVisibility(View.GONE);
                 }
-//                profileText.setVisibility(View.VISIBLE);
+            } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
+                userName = myApplication.getMyProfile().getData().getDbaName();
+                if (userName != null && userName.length() > 18) {
+                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                } else if (userName != null) {
+                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName));
+                }
+                profileImage.setVisibility(View.VISIBLE);
+                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                        && myApplication.getMyProfile().getData().getImage() != null) {
+                    profileText.setVisibility(View.GONE);
+                    String imageUrl = myApplication.getMyProfile().getData().getImage().trim();
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageUrl, profileImage, R.drawable.acct_profile);
+                } else {
+                    profileImage.setImageResource(R.drawable.acct_profile);
+                }
             }
+
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -143,45 +143,13 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     private void showUserData() {
-        String iconText = "";
-//        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-//                && myApplication.getMyProfile().getData().getFirstName() != null) {
-//            String firstName = myApplication.getMyProfile().getData().getFirstName();
-//            iconText = firstName.substring(0, 1).toUpperCase();
-//            userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
-//            if (myApplication.getMyProfile().getData().getLastName() != null) {
-//                String lastName = myApplication.getMyProfile().getData().getLastName();
-//                iconText = iconText + lastName.substring(0, 1).toUpperCase();
-//                userName = userName + " ";
-//                userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
-//            }
-//
-//            userNameTV.setText(getResources().getString(R.string.dba_name, userName));
-//
-//            if (userName != null && userName.length() > 20) {
-//                userNameTV.setText(userName.substring(0, 20));
-//            } else {
-//                userNameTV.setText(userName);
-//            }
-//            if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
-//                if (myApplication.getMyProfile().getData().getDbaName() != null) {
-////                    iconText = myApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
-//                }
-//                userName = myApplication.getMyProfile().getData().getDbaName();
-//                if (userName != null && userName.length() > 21) {
-//                    userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
-//                } else if (userName != null) {
-//                    userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
-//                }
-//            }
-
-        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
-                && myApplication.getMyProfile().getData().getFirstName() != null &&
+        if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null &&
                 myApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-
-            firstName = myApplication.getMyProfile().getData().getFirstName();
+            if (myApplication.getMyProfile().getData().getFirstName() != null) {
+                firstName = myApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();
-            userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+            }
             if (myApplication.getMyProfile().getData().getLastName() != null) {
                 lastName = myApplication.getMyProfile().getData().getLastName();
 //                iconText = iconText + lastName.substring(0, 1).toUpperCase();
@@ -204,25 +172,21 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 imgProfile.setVisibility(View.GONE);
             }
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
-            if (myApplication.getMyProfile().getData().getDbaName() != null) {
-//                iconText = myApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
-            }
             userName = myApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 18) {
                 userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + " ");
             } else if (userName != null) {
                 userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
             }
+            imgProfile.setVisibility(View.VISIBLE);
             if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                     && myApplication.getMyProfile().getData().getImage() != null) {
                 userShortInfoTV.setVisibility(View.GONE);
-                imgProfile.setVisibility(View.VISIBLE);
-
                 String imageUrl = myApplication.getMyProfile().getData().getImage().trim();
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageUrl, imgProfile, R.drawable.acct_profile);
             } else {
-                imgProfile.setVisibility(View.VISIBLE);
+                imgProfile.setImageResource(R.drawable.acct_profile);
             }
         }
 
