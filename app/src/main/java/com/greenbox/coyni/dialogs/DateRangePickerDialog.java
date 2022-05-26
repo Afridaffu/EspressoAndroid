@@ -164,6 +164,6 @@ public class DateRangePickerDialog extends BaseDialog {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
         strSelectedDate = simpleDateFormat.format(startDateD) + " - " + simpleDateFormat.format(endDateD);
         rangeDateTV.setText(strSelectedDate);
-        doneTV.setTextColor(context.getResources().getColor(R.color.primary_black));
+//        doneTV.setTextColor(context.getResources().getColor(R.color.primary_black));
     }
 }

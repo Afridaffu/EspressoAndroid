@@ -76,8 +76,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private ImageView keyBack;
     EditText payRequestET, addNoteET;
     Dialog cvvDialog, prevDialog;
-    SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID;
     DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
@@ -90,7 +88,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     float fontSize, dollarFont;
     WalletInfo cynWallet;
     Boolean isFaceLock = false, isTouchId = false;
-    String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "", strToken = "";
+    String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "", strToken = "", strCImage = "";
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     Long mLastClickTime = 0L;
@@ -473,10 +471,13 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 USFormat(payRequestET);
                 payRequestET.setEnabled(false);
             } else {
-                //enableButtons();
                 cKey = (PayRequestCustomKeyboard) findViewById(R.id.payReqCK);
                 InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
                 cKey.setInputConnection(ic);
+            }
+
+            if (getIntent().getStringExtra("image") != null && !getIntent().getStringExtra("image").equals("")) {
+                strCImage = getIntent().getStringExtra("image");
             }
 
             payRequestET.setAccessibilityDelegate(new View.AccessibilityDelegate() {
@@ -798,13 +799,24 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //            }
             userName.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
-            if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
+//            if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
+//                userProfile.setVisibility(View.VISIBLE);
+//                userName.setVisibility(View.GONE);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+//                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+//            } else {
+//                userProfile.setVisibility(View.GONE);
+//                userName.setVisibility(View.VISIBLE);
+//            }
+            if (strCImage.startsWith("content:")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
-
+                userProfile.setImageBitmap(objMyApplication.convertImageURIToBitMap(strCImage));
+            } else if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
+                userProfile.setVisibility(View.VISIBLE);
+                userName.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
-
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);
@@ -819,34 +831,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = payRequestET.getText().toString().trim().replace("\"", "");
-//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
-//                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayRequestActivity.this, "", "");
-//                return value = false;
-//            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
-//                if (strLimit.equals("daily")) {
-//                    tvError.setText("Amount entered exceeds your daily limit");
-//                } else if (strLimit.equals("week")) {
-//                    tvError.setText("Amount entered exceeds your weekly limit");
-//                }
-//                tvError.setVisibility(View.VISIBLE);
-//                lyBalance.setVisibility(View.GONE);
-//                return value = false;
-//            } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-//                Utils.displayAlert("Amount entered exceeds available balance", PayRequestActivity.this, "", "");
-//                return value = false;
-//            } else if (cynValue > avaBal) {
-//                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-//                return value = false;
-//            }
-//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() == 0) {
-//                objMyApplication.setStrScreen("payRequest");
-//                Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                i.putExtra("screen", "payRequest");
-//                startActivity(i);
-//                value = false;
-//            } else
             if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
                 value = false;
@@ -854,22 +838,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             }
-//            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-//                Utils.displayAlert("Amount entered exceeds available balance", PayRequestActivity.this, "", "");
-//                value = false;
-//            }
-
-//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-//                                    isPayClick = true;
-//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-//                                    calculateFee(Utils.USNumberFormat(cynValue));
-//                                } else {
-//                                    objMyApplication.setStrScreen("payRequest");
-//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                                    i.putExtra("screen", "payRequest");
-//                                    startActivity(i);
-//                                }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -894,10 +862,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");
             }
-//            else if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
-//                value = false;
-//                Utils.displayAlert("You can only Pay", PayRequestActivity.this, "Oops!", "");
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1069,7 +1033,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
-                payViewModel.sendTokens(request,objMyApplication.getStrToken());
+                payViewModel.sendTokens(request, objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
