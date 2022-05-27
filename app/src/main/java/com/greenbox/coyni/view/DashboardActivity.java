@@ -922,6 +922,15 @@ public class DashboardActivity extends BaseActivity {
 
     public void bindImage() {
         try {
+
+            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                cvHeaderRL.setVisibility(View.VISIBLE);
+                cvSmallHeaderRL.setVisibility(View.GONE);
+            } else {
+                cvHeaderRL.setVisibility(View.GONE);
+                cvSmallHeaderRL.setVisibility(View.VISIBLE);
+            }
+
             imgProfile.setVisibility(View.GONE);
             tvUserInfo.setVisibility(View.VISIBLE);
 
@@ -940,15 +949,6 @@ public class DashboardActivity extends BaseActivity {
                 tvUserInfo.setVisibility(View.GONE);
                 imgProfileSmall.setVisibility(View.VISIBLE);
                 tvUserInfoSmall.setVisibility(View.GONE);
-
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(imgProfile);
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(imgProfileSmall);
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
