@@ -141,6 +141,12 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
 
+                    if (position == 0) {
+                        ssnET.clearFocus();
+                    } else if (position == 1) {
+                        if (!Utils.isKeyboardVisible)
+                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
+                    }
                 }
 
                 @Override
@@ -406,8 +412,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         }
                         enableORdiableSubmit();
 
-                        if (mailAddr1.getText().toString().contains("  ")){
-                            mailAddr1.setText(mailAddr1.getText().toString().replace("  "," "));
+                        if (mailAddr1.getText().toString().contains("  ")) {
+                            mailAddr1.setText(mailAddr1.getText().toString().replace("  ", " "));
                             mailAddr1.setSelection(mailAddr1.getText().length());
                         }
                     } catch (Resources.NotFoundException e) {
@@ -459,8 +465,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
 //                }
                         enableORdiableSubmit();
 
-                        if (mailAddr2.getText().toString().contains("  ")){
-                            mailAddr2.setText(mailAddr2.getText().toString().replace("  "," "));
+                        if (mailAddr2.getText().toString().contains("  ")) {
+                            mailAddr2.setText(mailAddr2.getText().toString().replace("  ", " "));
                             mailAddr2.setSelection(mailAddr2.getText().length());
                         }
 
@@ -512,8 +518,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         }
                         enableORdiableSubmit();
 
-                        if (cityET.getText().toString().contains("  ")){
-                            cityET.setText(cityET.getText().toString().replace("  "," "));
+                        if (cityET.getText().toString().contains("  ")) {
+                            cityET.setText(cityET.getText().toString().replace("  ", " "));
                             cityET.setSelection(cityET.getText().length());
                         }
                     } catch (Resources.NotFoundException e) {
@@ -952,13 +958,15 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             closebtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();                }
+                    finish();
+                }
             });
 
             exitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();                }
+                    finish();
+                }
             });
 
             btnExit.setOnClickListener(new View.OnClickListener() {

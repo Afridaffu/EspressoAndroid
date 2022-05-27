@@ -73,7 +73,7 @@ public class OnboardActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             onboardActivity = this;
             dbHandler = DatabaseHandler.getInstance(OnboardActivity.this);
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
@@ -313,9 +313,10 @@ public class OnboardActivity extends BaseActivity {
                                     if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                         businessIdentityVerificationViewModel.getBusinessTracker();
                                     } else {
-                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(i);
+//                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
+//                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                        startActivity(i);
+                                        launchDashboard();
                                     }
 //                                    Intent i = null;
 //                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
