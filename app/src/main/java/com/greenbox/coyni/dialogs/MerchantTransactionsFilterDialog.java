@@ -520,8 +520,12 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
                 filterTransactionListRequest = new TransactionListRequest();
-//                isFilters = false;
+                isFilters = false;
                 transAmountStartET.clearFocus();
                 transAmountEndET.clearFocus();
 

@@ -417,7 +417,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (businessWalletResponse != null) {
                         objMyApplication.setWalletResponseData(businessWalletResponse.getData());
 
-                        if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
 //
                             objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
                                     businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
