@@ -17,11 +17,14 @@ import com.greenbox.coyni.utils.Utils;
 
 import java.util.List;
 
-public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.MyViewHolder>{
+public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.MyViewHolder> {
 
     ActivityLogResp respList;
     Context mContext;
     MyApplication myApplication;
+    private static final String dateAndTime = "yyyy-MM-dd HH:mm:ss";
+    private static final String requiredFormat = "MM/dd/yyyy h:mma";
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,23 +36,26 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
     public ActivityLogAdapter(ActivityLogResp list, Context context) {
         this.mContext = context;
         this.respList = list;
-        myApplication= (MyApplication) mContext.getApplicationContext();
+        myApplication = (MyApplication) mContext.getApplicationContext();
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.createdTime.setText(myApplication.convertZoneLatestTxn(respList.getData().get(position).getCreatedAt()));
+        holder.createdTime.setText(myApplication.convertZoneDateTime(respList.getData().get(position).getCreatedAt(),dateAndTime,requiredFormat).toLowerCase());
         holder.messageTv.setText(respList.getData().get(position).getMessage());
     }
 
     @Override
     public int getItemCount() {
+        if (respList == null || respList.getData() == null) {
+            return 0;
+        }
         return respList.getData().size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView createdTime,messageTv,type;
+        private TextView createdTime, messageTv, type;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
