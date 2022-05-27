@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -22,11 +23,14 @@ import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -301,7 +305,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             layoutEntry.setVisibility(View.VISIBLE);
                             layoutFailure.setVisibility(View.GONE);
-                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again", OTPValidation.this, "", "");
+                            displayAlertNew("Looks like we are having an issue with your OTP request, please retry again", OTPValidation.this, "", strScreen);
                         }
 
                     }
@@ -727,9 +731,15 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     } else {
                         try {
                             if (smsResponse.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                if (!strScreen.equals("retEmail"))
+                                    Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                else
+                                    displayAlertNew(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", strScreen);
                             } else {
-                                Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                if (!strScreen.equals("retEmail"))
+                                    Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                else
+                                    displayAlertNew(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", strScreen);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -1022,9 +1032,9 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             try {
                                 if (emailResponse.getError().getErrorDescription().equals("")) {
-                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                    displayAlertNew(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", strScreen);
                                 } else {
-                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                    displayAlertNew(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", strScreen);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1324,4 +1334,65 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
         super.onDestroy();
 //        isActivityVisible = false;
     }
+
+    public static void displayAlertNew(String msg, final Context context, String headerText, String screen) {
+        // custom dialog
+        Dialog displayAlertDialog = new Dialog(context);
+        displayAlertDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        displayAlertDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        displayAlertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = displayAlertDialog.findViewById(R.id.tvHead);
+        TextView message = displayAlertDialog.findViewById(R.id.tvMessage);
+        CardView actionCV = displayAlertDialog.findViewById(R.id.cvAction);
+        TextView actionText = displayAlertDialog.findViewById(R.id.tvAction);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayAlertDialog.dismiss();
+                try {
+                    if (screen.equals("EditEmail")) {
+                        EditEmailActivity.editEmailActivity.finish();
+                        Activity activity = (Activity) context;
+                        activity.finish();
+                    } else if (screen.equals("EditPhone")) {
+                        EditPhoneActivity.editPhoneActivity.finish();
+                        Activity activity = (Activity) context;
+                        activity.finish();
+                    } else if (screen.equals("ForgotPwd") || screen.equals("retEmail")) {
+                        Activity activity = (Activity) context;
+                        activity.finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        message.setText(msg);
+        Window window = displayAlertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        displayAlertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        displayAlertDialog.setCanceledOnTouchOutside(true);
+        displayAlertDialog.show();
+    }
+
 }
