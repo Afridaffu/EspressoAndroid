@@ -16,6 +16,7 @@ import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
 import com.greenbox.coyni.view.BuyTokenActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.ScanActivity;
+import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.view.WithdrawTokenActivity;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
 import com.greenbox.coyni.view.business.RefundTransactionActivity;
@@ -99,7 +100,6 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                         case "cvv":
                             BuyTokenPaymentMethodsActivity bpm = (BuyTokenPaymentMethodsActivity) activityContext;
                             bpm.okClick();
-//                            BuyTokenPaymentMethodsActivity.buyTokenPaymentMethodsActivity.okClick();
                             break;
                         case "buy":
                             BuyTokenActivity.buyTokenActivity.buyTokenClick();
@@ -121,6 +121,10 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                             break;
                         case "refundables":
                             RefundTransactionActivity.refundTransactionActivity.setRefundAmountClick();
+                            break;
+                        case "notoken":
+                            WithdrawPaymentMethodsActivity wpm = (WithdrawPaymentMethodsActivity) activityContext;
+                            wpm.okClick();
                             break;
                     }
 
