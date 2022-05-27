@@ -512,7 +512,7 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:theme="@style/ThemeFullSCreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.AgreementsActivity"
