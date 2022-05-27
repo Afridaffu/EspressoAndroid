@@ -153,23 +153,28 @@ public class CustomerProfileActivity extends BaseActivity {
 
             if (objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
                 try {
-                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Active")) {
+                    tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
+                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                         tvACStatus.setTextColor(getResources().getColor(R.color.active_green));
                         statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.active_green));
-                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                         tvACStatus.setTextColor(getResources().getColor(R.color.orange));
                         statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.orange));
-                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                         tvACStatus.setTextColor(getResources().getColor(R.color.under_review_blue));
                         statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.under_review_blue));
-                    } else {
+                    } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                            objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus())) {
+                        tvACStatus.setTextColor(getResources().getColor(R.color.error_red));
+                        statusDotCV.setCardBackgroundColor(getResources().getColor(R.color.error_red));
+                        tvACStatus.setText(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus());
                     }
-                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                    if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                         cardviewYourAccount.setVisibility(View.VISIBLE);
                     } else {
                         cardviewYourAccount.setVisibility(View.GONE);
                     }
-                    tvACStatus.setText(objMyApplication.getMyProfile().getData().getAccountStatus());
+
                     if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                         cpAccountIDTV.setText("Account ID C-" + objMyApplication.getMyProfile().getData().getId());
                     } else {
@@ -522,7 +527,7 @@ public class CustomerProfileActivity extends BaseActivity {
 //            lp.dimAmount = 0.7f;
 //            lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            qrDialog.getWindow().setAttributes(lp);
-            qrDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,  WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            qrDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             qrDialog.show();
             imgClose = qrDialog.findViewById(R.id.imgClose);
@@ -994,7 +999,7 @@ public class CustomerProfileActivity extends BaseActivity {
                     if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
                         if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
 //                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
-                           objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
                         }
                         Intent cp = new Intent(CustomerProfileActivity.this, ConfirmPasswordActivity.class);
                         startActivity(cp);

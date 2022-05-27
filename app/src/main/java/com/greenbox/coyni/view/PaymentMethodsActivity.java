@@ -185,6 +185,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 //            if (extBankDialog != null) {
 //                extBankDialog.dismiss();
 //            }
+            if (dialog != null) {
+                dialog.dismiss();
+            }
             if (!isBankSuccess) {
                 if (strCurrent.equals("firstError")) {
                     displayError();
