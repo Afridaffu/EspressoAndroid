@@ -190,6 +190,37 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 imgProfile.setImageResource(R.drawable.acct_profile);
             }
         }
+        if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
+                if (myApplication.getMyProfile().getData().getFirstName() != null) {
+                    firstName = myApplication.getMyProfile().getData().getFirstName();
+                    userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                }
+                if (myApplication.getMyProfile().getData().getLastName() != null) {
+                    lastName = myApplication.getMyProfile().getData().getLastName();
+                    userName = userName + " ";
+                    userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                }
+                if (userName != null && userName.length() > 21) {
+                    userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
+                } else {
+                    userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
+                }
+                imgProfile.setVisibility(View.VISIBLE);
+                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                        && myApplication.getMyProfile().getData().getImage() != null) {
+                    userShortInfoTV.setVisibility(View.GONE);
+                    String imageUrl = myApplication.getMyProfile().getData().getImage().trim();
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageUrl, imgProfile, R.drawable.acct_profile);
+                } else {
+                    userShortInfoTV.setVisibility(View.VISIBLE);
+                    imgProfile.setVisibility(View.GONE);
+                    String userName = firstName.substring(0, 1).toUpperCase() + lastName.substring(0,1).toUpperCase();
+                    userShortInfoTV.setText(userName);
+                }
+            }
+        }
 
 
         userNameTV.setOnClickListener(new View.OnClickListener() {
@@ -203,9 +234,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                     }
                 } else {
                     if (userName.length() == 18) {
-                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 17)  + "...");
+                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 17) + "...");
                     } else if (userName.length() > 18) {
-                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18)  + "...");
+                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + "...");
                     } else {
                         userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
                     }
