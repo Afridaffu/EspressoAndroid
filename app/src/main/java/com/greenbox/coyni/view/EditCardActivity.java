@@ -270,6 +270,9 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (Utils.isKeyboardVisible){
+                            Utils.hideKeypad(EditCardActivity.this);
+                        }
                         if (!selectedCard.getExpired()) {
                             Intent i = new Intent();
                             i.putExtra("screen", "editcard");

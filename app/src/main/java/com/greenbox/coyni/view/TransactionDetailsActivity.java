@@ -56,7 +56,7 @@ public class TransactionDetailsActivity extends BaseActivity {
     String txnId = "";
     Dialog progressDialog;
     CardView cancelTxnCV;
-    TextView successadd, purchaseTime;
+    TextView successadd, purchaseTime, activity_log_tv;
     RecyclerView recyclerView;
 
 
@@ -310,7 +310,6 @@ public class TransactionDetailsActivity extends BaseActivity {
         dashboardViewModel.getActivityLogRespMutableLiveData().observe(this, new Observer<ActivityLogResp>() {
             @Override
             public void onChanged(ActivityLogResp activityLogResp) {
-                dismissDialog();
                 if (activityLogResp != null) {
                     if (activityLogResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (activityLogResp.getData().size()>0) {
@@ -319,6 +318,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setItemAnimator(new DefaultItemAnimator());
                             recyclerView.setAdapter(activityListAdater);
+                            activity_log_tv.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -707,7 +707,7 @@ public class TransactionDetailsActivity extends BaseActivity {
         ImageView refIdIV, depositIDIV, cardBrandIV;
         LinearLayout depositID, referenceID;
         CardView card_view_activity_log;
-        TextView activity_log_tv;
+//        TextView activity_log_tv;
 
         headerTV = findViewById(R.id.headTV);
         amount = findViewById(R.id.tvAmount);
@@ -749,13 +749,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setTextColor(getResources().getColor(R.color.completed_status));
                     status.setBackgroundResource(R.drawable.txn_completed_bg);
                     card_view_activity_log.setVisibility(View.VISIBLE);
-                    activity_log_tv.setVisibility(View.VISIBLE);
-                    if (Utils.checkInternet(TransactionDetailsActivity.this)) {
-                        if (txnId != null && !txnId.equals("")) {
-                            showProgressDialog();
-                            dashboardViewModel.getActivityLog(txnId, "c");
-                        }
-                    }
+                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                     status.setTextColor(getResources().getColor(R.color.inprogress_status));
@@ -905,12 +899,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                     status.setBackgroundResource(R.drawable.txn_completed_bg);
                     heading_activity.setVisibility(View.VISIBLE);
                     activityLog.setVisibility(View.VISIBLE);
-                    if (Utils.checkInternet(TransactionDetailsActivity.this)) {
-                        if (txnId != null && !txnId.equals("")) {
-                            showProgressDialog();
-                            dashboardViewModel.getActivityLog(txnId, "c");
-                        }
-                    }
+                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                     status.setTextColor(getResources().getColor(R.color.inprogress_status));
@@ -1336,13 +1325,6 @@ public class TransactionDetailsActivity extends BaseActivity {
         withBankCloseLL = findViewById(R.id.withbankCloseLL);
         cvCancelWB = findViewById(R.id.cvCancelWB);
 
-        if (Utils.checkInternet(TransactionDetailsActivity.this)) {
-            if (txnId != null && !txnId.equals("")) {
-                showProgressDialog();
-                dashboardViewModel.getActivityLog(txnId, "c");
-            }
-        }
-
 
         if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
             withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
@@ -1370,6 +1352,7 @@ public class TransactionDetailsActivity extends BaseActivity {
                 case Utils.transCompleted:
                     withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
                     withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                 case Utils.transInProgress:
@@ -2199,6 +2182,17 @@ public class TransactionDetailsActivity extends BaseActivity {
             dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void getActivityLogAPICall(){
+
+        if (Utils.checkInternet(TransactionDetailsActivity.this)) {
+            if (txnId != null && !txnId.equals("")) {
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    dashboardViewModel.getActivityLog(txnId, "c");
+                }
+            }
         }
     }
 
