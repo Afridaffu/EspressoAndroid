@@ -115,7 +115,7 @@ public class TransactionListPosted extends ListItem implements Serializable, Com
         this.walletBalance = walletBalance;
     }
 
-    public Object getTransactionId() {
+    public String getTransactionId() {
         return transactionId;
     }
 

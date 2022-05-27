@@ -154,6 +154,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
+            if(dialog!=null)
+                dialog.dismiss();
             if (!isBankSuccess) {
                 if (strCurrent.equals("firstError")) {
                     displayError();

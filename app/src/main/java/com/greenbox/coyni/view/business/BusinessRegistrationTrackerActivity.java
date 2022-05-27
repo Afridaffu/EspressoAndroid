@@ -211,6 +211,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 @Override
                 public void onClick(View view) {
                     if (addBusiness) {
+                        showProgressDialog();
                         loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                     } else {
                         Intent dashboardIntent = new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class);
@@ -403,6 +404,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 public void onChanged(BusinessTrackerResponse btResp) {
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
+                            isNewCompany = false;
                             objMyApplication.setBusinessTrackerResponse(btResp);
                             businessTrackerResponse = btResp;
                             businessIdentityVerificationViewModel.getCompanyInfo();
@@ -428,6 +430,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse btResp) {
+                    dismissDialog();
                     if (btResp != null) {
                         if (btResp.getStatus().toLowerCase().toString().equals("success")) {
                             LogUtils.d("btResp", "btResp" + btResp);

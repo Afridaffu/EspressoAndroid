@@ -106,13 +106,14 @@ public class MyApplication extends Application {
         return mCurrentUserData.getPaidOrderRequest();
     }
 
-    public String getStrToken(){
+    public String getStrToken() {
         return mCurrentUserData.getStrToken();
     }
 
-    public void setStrToken(String strToken){
+    public void setStrToken(String strToken) {
         mCurrentUserData.setStrToken(strToken);
     }
+
     public PaidOrderResp getPaidOrderResp() {
         return mCurrentUserData.getPaidOrderResp();
     }
@@ -649,7 +650,7 @@ public class MyApplication extends Application {
 //    }
 
     public void setWalletResponseData(WalletResponseData walletResponseData) {
-        if(walletResponseData.getWalletNames().size() > 0) {
+        if (walletResponseData.getWalletNames().size() > 0) {
             if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.TOKEN_STR)) {
                 mCurrentUserData.setTokenWalletResponse(walletResponseData);
             } else if (walletResponseData.getWalletNames().get(0).getWalletType().equals(Utils.MERCHANT_STR)) {
@@ -697,17 +698,22 @@ public class MyApplication extends Application {
     }
 
     public boolean checkForDeclinedStatus() {
-        if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            LoginResponse loginResponse = getLoginResponse();
-            if (loginResponse != null && loginResponse.getStatus() != null
-                    && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)
-                    && loginResponse.getData() != null
-                    && loginResponse.getData().getAccountStatus() != null) {
+
+        LoginResponse loginResponse = getLoginResponse();
+        if (loginResponse != null && loginResponse.getStatus() != null
+                && loginResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)
+                && loginResponse.getData() != null
+                && loginResponse.getData().getAccountStatus() != null) {
+            if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
                 return loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus());
+            } else if (getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                return loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus()) ||
+                        loginResponse.getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus());
             }
         }
         return false;
     }
+
     public void launchDashboard(Context context, String fromScreen) {
         try {
             Intent dashboardIntent = new Intent(context, DashboardActivity.class);
@@ -822,7 +828,7 @@ public class MyApplication extends Application {
         mCurrentUserData = new UserData();
     }
 
-    public void clearStrToken(){
+    public void clearStrToken() {
         mCurrentUserData.setStrToken("");
     }
 
