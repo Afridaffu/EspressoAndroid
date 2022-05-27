@@ -67,6 +67,7 @@ public class EditEmailActivity extends BaseActivity {
     LoginViewModel loginViewModel;
     LinearLayout b_editEmailCloseLL;
     private String currentEmail;
+    public static EditEmailActivity editEmailActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class EditEmailActivity extends BaseActivity {
 
     public void initFields() {
         try {
+            editEmailActivity = this;
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
@@ -152,7 +154,6 @@ public class EditEmailActivity extends BaseActivity {
                         mLastClickTime = SystemClock.elapsedRealtime();
 
 
-
                         dialog = Utils.showProgressDialog(EditEmailActivity.this);
 
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangeEmail")) {
@@ -166,15 +167,14 @@ public class EditEmailActivity extends BaseActivity {
                                 phNoWithCountryCode.setPhoneNumber(myApplicationObj.getCompanyInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
                                 contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
                                 contactInfoRequest.setId(myApplicationObj.getCompanyInfoResp().getData().getId());
-                                if (getIntent().getStringExtra("currentEmail") != null && !getIntent().getStringExtra("currentEmail").equals("")){
+                                if (getIntent().getStringExtra("currentEmail") != null && !getIntent().getStringExtra("currentEmail").equals("")) {
                                     currentEmail = getIntent().getStringExtra("currentEmail");
-                                    if (currentEmail.equalsIgnoreCase(b_newEmailET.getText().toString())){
+                                    if (currentEmail.equalsIgnoreCase(b_newEmailET.getText().toString())) {
                                         dialog.dismiss();
 //                    b_newEmailErrorLL.setVisibility(VISIBLE);
 //                    b_newEmailErrorTV.setText("Please enter a new email ");
-                                        Utils.displayAlertNew("Please enter a new email ",EditEmailActivity.this,"coyni");
-                                    }
-                                    else {
+                                        Utils.displayAlertNew("Please enter a new email ", EditEmailActivity.this, "coyni");
+                                    } else {
                                         b_newEmailErrorTV.setText("");
                                         b_newEmailErrorLL.setVisibility(GONE);
                                         businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);
@@ -379,6 +379,7 @@ public class EditEmailActivity extends BaseActivity {
                                     .putExtra("OTP_TYPE", "OTP")
                                     .putExtra("IS_OLD_EMAIL", "true")
                                     .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
+                                    .putExtra("EMAIL", currentEmailET.getText().toString().trim())
                                     .putExtra("NEW_EMAIL", b_newEmailET.getText().toString().trim())
                             );
                         }
@@ -388,6 +389,7 @@ public class EditEmailActivity extends BaseActivity {
                                     .putExtra("OTP_TYPE", "OTP")
                                     .putExtra("IS_OLD_EMAIL", "true")
                                     .putExtra("OLD_EMAIL", currentEmailET.getText().toString().trim())
+                                    .putExtra("EMAIL", currentEmailET.getText().toString().trim())
                                     .putExtra("NEW_EMAIL", b_newEmailET.getText().toString().trim()));
                         }
                     } else {
@@ -533,15 +535,14 @@ public class EditEmailActivity extends BaseActivity {
             phNoWithCountryCode.setCountryCode(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getCountryCode());
             phNoWithCountryCode.setPhoneNumber(myApplicationObj.getDbaInfoResp().getData().getPhoneNumberDto().getPhoneNumber());
             contactInfoRequest.setPhoneNumberDto(phNoWithCountryCode);
-            if (getIntent().getStringExtra("currentEmail") != null && !getIntent().getStringExtra("currentEmail").equals("")){
+            if (getIntent().getStringExtra("currentEmail") != null && !getIntent().getStringExtra("currentEmail").equals("")) {
                 currentEmail = getIntent().getStringExtra("currentEmail");
-                if (currentEmail.equalsIgnoreCase(b_newEmailET.getText().toString())){
+                if (currentEmail.equalsIgnoreCase(b_newEmailET.getText().toString())) {
                     dialog.dismiss();
 //                    b_newEmailErrorLL.setVisibility(VISIBLE);
 //                    b_newEmailErrorTV.setText("Please enter a new email ");
-                    Utils.displayAlertNew("Please enter a new email ",EditEmailActivity.this,"coyni");
-                }
-                else {
+                    Utils.displayAlertNew("Please enter a new email ", EditEmailActivity.this, "coyni");
+                } else {
                     b_newEmailErrorTV.setText("");
                     b_newEmailErrorLL.setVisibility(GONE);
                     businessIdentityVerificationViewModel.updateCompanyInfo(contactInfoRequest);

@@ -71,7 +71,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:scaleType="fitXY"
-                                android:src="@drawable/ic_profile_male_user"
+                                android:src="@drawable/ic_profile"
                                 android:visibility="gone" />
 
                             <TextView
