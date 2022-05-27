@@ -382,7 +382,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.UserDetailsActivity"
             android:configChanges="uiMode"
@@ -512,8 +512,8 @@
             android:configChanges="uiMode"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/ThemeFullSCreen"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.AgreementsActivity"
             android:configChanges="uiMode"

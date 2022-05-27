@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -122,12 +123,10 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_add_benificial_owner);
-
         initFields();
         initObservers();
         textWatchers();
         focusWatchers();
-
     }
 
     @Override
@@ -279,7 +278,15 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                fnameET.clearFocus();
+                lnameET.clearFocus();
                 ssnET.clearFocus();
+                ownershipET.clearFocus();
+
+                fnameET.setEnabled(false);
+                lnameET.setEnabled(false);
+                ssnET.setEnabled(false);
+                ownershipET.setEnabled(false);
 //                setToDate(dobET);
                 setToDateWheelPicker(dobET);
             }
@@ -294,7 +301,15 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                fnameET.clearFocus();
+                lnameET.clearFocus();
                 ssnET.clearFocus();
+                ownershipET.clearFocus();
+
+                fnameET.setEnabled(false);
+                lnameET.setEnabled(false);
+                ssnET.setEnabled(false);
+                ownershipET.setEnabled(false);
 //                setToDate(dobET);
                 setToDateWheelPicker(dobET);
             }
@@ -304,7 +319,15 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
+                    fnameET.clearFocus();
+                    lnameET.clearFocus();
                     ssnET.clearFocus();
+                    ownershipET.clearFocus();
+
+                    fnameET.setEnabled(false);
+                    lnameET.setEnabled(false);
+                    ssnET.setEnabled(false);
+                    ownershipET.setEnabled(false);
 //                    setToDate(dobET);
                     setToDateWheelPicker(dobET);
                 }
@@ -332,6 +355,10 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             @Override
             public void onClick(View view) {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     if (fromScreen != null && !fromScreen.equals("EDIT_BO")) {
                         confirmationAlert();
                     } else {
@@ -751,8 +778,13 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 @Override
                 public void run() {
                     picker.show(getWindow());
+                    fnameET.setEnabled(true);
+                    lnameET.setEnabled(true);
+                    ssnET.setEnabled(true);
+                    ownershipET.setEnabled(true);
                 }
-            }, 500);
+
+            }, 600);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -772,7 +804,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     fnameLL.setVisibility(GONE);
 //                    fnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     if (!fnameET.hasFocus())
-                    Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(fnametil, getResources().getColor(R.color.primary_black));
 //                    String str = fnameET.getText().toString();
 //                    if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                        fnameET.setText(fnameET.getText().toString().replaceAll(" ", ""));
@@ -782,8 +814,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isfname = false;
                 }
 
-                if (fnameET.getText().toString().contains("  ")){
-                    fnameET.setText(fnameET.getText().toString().replace("  "," "));
+                if (fnameET.getText().toString().contains("  ")) {
+                    fnameET.setText(fnameET.getText().toString().replace("  ", " "));
                     fnameET.setSelection(fnameET.getText().length());
                 }
 
@@ -825,7 +857,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     lnameLL.setVisibility(GONE);
 //                    lnametil.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     if (!lnameET.hasFocus())
-                    Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(lnametil, getResources().getColor(R.color.primary_black));
 //                        String str = lnameET.getText().toString();
 //                        if (str.length() > 0 && str.substring(0).equals(" ") || (str.length() > 0 && str.contains(" "))) {
 //                            lnameET.setText(lnameET.getText().toString().replaceAll(" ", ""));
@@ -836,8 +868,8 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                 }
 
 
-                if (lnameET.getText().toString().contains("  ")){
-                    lnameET.setText(lnameET.getText().toString().replace("  "," "));
+                if (lnameET.getText().toString().contains("  ")) {
+                    lnameET.setText(lnameET.getText().toString().replace("  ", " "));
                     lnameET.setSelection(lnameET.getText().length());
                 }
 
@@ -986,7 +1018,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     address1ErrorLL.setVisibility(GONE);
 //                    address1TIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     if (!address1ET.hasFocus())
-                    Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(address1TIL, getResources().getColor(R.color.primary_black));
                 } else {
 //                    address1ErrorLL.setVisibility(VISIBLE);
 //                    address1ErrorTV.setText("Field Required");
@@ -1026,7 +1058,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() > 0) {
                     if (!address2ET.hasFocus())
-                    Utils.setUpperHintColor(address2TIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(address2TIL, getResources().getColor(R.color.primary_black));
                 }
                 enableOrDisableSave();
             }
@@ -1062,7 +1094,7 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
                     isCity = true;
 //                    cityTIL.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                     if (!cityET.hasFocus())
-                    Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
+                        Utils.setUpperHintColor(cityTIL, getResources().getColor(R.color.primary_black));
                     cityErrorLL.setVisibility(GONE);
                 } else {
 //                    cityErrorLL.setVisibility(VISIBLE);
@@ -1874,7 +1906,6 @@ public class AddBeneficialOwnerActivity extends BaseActivity implements OnKeyboa
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
-
 }
 
 

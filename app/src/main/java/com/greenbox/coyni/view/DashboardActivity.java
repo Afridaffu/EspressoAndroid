@@ -103,7 +103,6 @@ public class DashboardActivity extends BaseActivity {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
@@ -833,7 +832,7 @@ public class DashboardActivity extends BaseActivity {
     private void cryptoAssets() {
         try {
             LinearLayout layoutClose;
-            dialog = new Dialog(DashboardActivity.this, R.style.DialogTheme);
+            dialog = new Dialog(DashboardActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.activity_crypto_assets_cmng_sn);
             Window window = dialog.getWindow();
@@ -863,7 +862,7 @@ public class DashboardActivity extends BaseActivity {
     private void issueCards() {
         try {
             LinearLayout layoutClose;
-            dialog = new Dialog(DashboardActivity.this, R.style.DialogTheme);
+            dialog = new Dialog(DashboardActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.activity_issuing_card_cmng_sn);
             Window window = dialog.getWindow();

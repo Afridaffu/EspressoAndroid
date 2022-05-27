@@ -37,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:fontFamily="@font/opensans_semibold"
             android:text="Done"
-            android:textColor="@color/et_bg_gray"
+            android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />
 
     </RelativeLayout>
