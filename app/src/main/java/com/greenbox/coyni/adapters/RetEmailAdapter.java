@@ -21,6 +21,7 @@ import com.greenbox.coyni.view.EditAddressActivity;
 import com.greenbox.coyni.view.LoginActivity;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyViewHolder> {
     List<RetUserResData> listEmails;
@@ -28,13 +29,14 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
     MyApplication objMyApplication;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvEmail;
+        public TextView tvEmail, profileTitle;
         public ImageView imgProfilePic;
 
         public MyViewHolder(View view) {
             super(view);
             tvEmail = (TextView) view.findViewById(R.id.tvEmail);
-            imgProfilePic = (ImageView) view.findViewById(R.id.imgProfilePic);
+            profileTitle = (TextView) view.findViewById(R.id.profileTitle);
+//            imgProfilePic = (ImageView) view.findViewById(R.id.imgProfilePic);
         }
     }
 
@@ -66,7 +68,9 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
 //                holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
 //            }
 
-            holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
+//            holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
+            String text = objData.getFirstName().substring(0, 1).toUpperCase() + objData.getLastName().substring(0, 1).toUpperCase();
+            holder.profileTitle.setText(text);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

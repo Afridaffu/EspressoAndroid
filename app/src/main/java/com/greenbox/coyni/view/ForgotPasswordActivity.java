@@ -201,6 +201,8 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(ForgotPasswordActivity.this);
                         if (isSaveEnabled) {
                             if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

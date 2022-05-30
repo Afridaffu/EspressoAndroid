@@ -92,7 +92,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     private Vibrator vibrator;
     String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "",
             oldEmail = "", newEmail = "", isOldEmail = "", oldPhone = "", newPhone = "", oldPhoneMasked = "", newPhoneMasked = "", isOldPhone = "";
-    LinearLayout layoutEntry, layoutFailure, layoutMain;
+    LinearLayout layoutEntry, layoutFailure, layoutMain, contactUsLL;
     CardView tryAgainCV;
     Dialog dialog;
     LoginViewModel loginViewModel;
@@ -143,6 +143,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             layoutEntry = findViewById(R.id.layoutEntry);
             layoutFailure = findViewById(R.id.layoutFailure);
             layoutMain = findViewById(R.id.layoutMain);
+            contactUsLL = findViewById(R.id.contactUsLL);
             tryAgainCV = findViewById(R.id.tryAgainCV);
             secureAccountRL = findViewById(R.id.secureAccountRL);
             secureNextCV = findViewById(R.id.secureNextCV);
@@ -213,9 +214,11 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         newEmail = getIntent().getStringExtra("NEW_EMAIL");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldEmail.equals("true")) {
+                            contactUsLL.setVisibility(View.VISIBLE);
                             headerTV.setText("Please Verify your Current Email");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + oldEmail);
                         } else {
+                            contactUsLL.setVisibility(View.GONE);
                             headerTV.setText("Please Verify New Email");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + newEmail);
 //                            loginViewModel.emailotpresend(newEmail);
@@ -227,12 +230,15 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         newPhone = getIntent().getStringExtra("NEW_PHONE");
                         oldPhoneMasked = getIntent().getStringExtra("OLD_PHONE_MASKED");
                         newPhoneMasked = getIntent().getStringExtra("NEW_PHONE_MASKED");
+                        contactUsLL.setVisibility(View.VISIBLE);
 
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldPhone.equals("true")) {
+                            contactUsLL.setVisibility(View.VISIBLE);
                             headerTV.setText("Please Verify your Current Phone Number");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + oldPhoneMasked);
                         } else {
+                            contactUsLL.setVisibility(View.GONE);
                             headerTV.setText("Please Verify your New Phone Number");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + newPhoneMasked);
 //                            loginViewModel.emailotpresend(newEmail);

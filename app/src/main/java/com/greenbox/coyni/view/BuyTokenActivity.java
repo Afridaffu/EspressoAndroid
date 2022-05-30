@@ -495,6 +495,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         objResponse = transactionLimitResponse;
                         setDailyWeekLimit(transactionLimitResponse.getData());
                         if (etAmount.getText().toString().trim().length() > 0) {
+                            if (tvCYN.getVisibility() == View.VISIBLE) {
+                                isCYN = true;
+                                isUSD = false;
+                                convertCYNValue();
+                            } else {
+                                isCYN = false;
+                                isUSD = true;
+                                convertUSDValue();
+                            }
                             if (validation()) {
                                 ctKey.enableButton();
                             } else {
@@ -1097,7 +1106,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isUSD) {
                 isUSD = false;
                 usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                cynValue = ((usdValue - feeInAmount) * 100) / (100 + feeInPercentage);
                 cynValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
             }
         } catch (Exception ex) {
@@ -1110,7 +1118,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isCYN) {
                 isCYN = false;
                 cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                usdValue = (cynValue + (cynValue * (feeInPercentage / 100))) + feeInAmount;
                 usdValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
             }
         } catch (Exception ex) {
