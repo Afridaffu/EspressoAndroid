@@ -369,14 +369,14 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onRefresh() {
                     try {
-                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
-                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+//                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
+//                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
                             dashboardViewModel.getLatestTxns();
                             WalletRequest walletRequest = new WalletRequest();
                             walletRequest.setWalletType(Utils.TOKEN);
                             walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                             businessDashboardViewModel.meMerchantWallet(walletRequest);
-//                            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                             transactionsNSV.smoothScrollTo(0, 0);
                         } else {
                             latestTxnRefresh.setRefreshing(false);
@@ -499,7 +499,7 @@ public class DashboardActivity extends BaseActivity {
                         tvUserName.setText(getString(R.string.hi_text) + strName);
                         tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                     }
-                    bindImage();
+//                    bindImage();
                     Utils.setUserEmail(DashboardActivity.this, profile.getData().getEmail());
                 }
                 new FetchData(DashboardActivity.this).execute();
@@ -535,7 +535,7 @@ public class DashboardActivity extends BaseActivity {
                             additionalActionCV.setVisibility(View.GONE);
                             buyTokensCV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.GONE);
-                            dashboardViewModel.getLatestTxns();
+//                            dashboardViewModel.getLatestTxns();
                         } else {
                             welcomeCoyniCV.setVisibility(View.VISIBLE);
                             underReviewCV.setVisibility(View.GONE);
@@ -544,6 +544,7 @@ public class DashboardActivity extends BaseActivity {
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
                         }
+                        dashboardViewModel.getLatestTxns();
                     } else {
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                             cvHeaderRL.setVisibility(View.GONE);
@@ -581,6 +582,7 @@ public class DashboardActivity extends BaseActivity {
                             buyTokensCV.setVisibility(View.GONE);
                         }
                     }
+                    bindImage();
                 }
 
             }
@@ -604,8 +606,7 @@ public class DashboardActivity extends BaseActivity {
                         if (latestTxnResponse.getData().size() == 0) {
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
-                            buyTokensCV.setVisibility(View.VISIBLE);
-
+//                            buyTokensCV.setVisibility(View.VISIBLE);
                         } else if (latestTxnResponse.getData().size() > 4) {
                             buyTokensCV.setVisibility(View.GONE);
                             txnRV.setVisibility(View.VISIBLE);
@@ -626,6 +627,17 @@ public class DashboardActivity extends BaseActivity {
                             txnRV.setLayoutManager(mLayoutManager);
                             txnRV.setItemAnimator(new DefaultItemAnimator());
                             txnRV.setAdapter(latestTxnAdapter);
+                        }
+                        if (objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            if (latestTxnResponse.getData().size() == 0) {
+                                buyTokensCV.setVisibility(View.VISIBLE);
+                            } else {
+                                buyTokensCV.setVisibility(View.GONE);
+                            }
+                        } else {
+                            welcomeCoyniCV.setVisibility(View.VISIBLE);
+                            buyTokensCV.setVisibility(View.GONE);
                         }
 
                     }
@@ -901,12 +913,10 @@ public class DashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
-//                dashboardViewModel.meWallet();
                 WalletRequest walletRequest = new WalletRequest();
                 walletRequest.setWalletType(Utils.TOKEN);
                 walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                 businessDashboardViewModel.meMerchantWallet(walletRequest);
-//                businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                 notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -924,13 +934,13 @@ public class DashboardActivity extends BaseActivity {
     public void bindImage() {
         try {
 
-            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                cvHeaderRL.setVisibility(View.VISIBLE);
-                cvSmallHeaderRL.setVisibility(View.GONE);
-            } else {
-                cvHeaderRL.setVisibility(View.GONE);
-                cvSmallHeaderRL.setVisibility(View.VISIBLE);
-            }
+//            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                cvHeaderRL.setVisibility(View.VISIBLE);
+//                cvSmallHeaderRL.setVisibility(View.GONE);
+//            } else {
+//                cvHeaderRL.setVisibility(View.GONE);
+//                cvSmallHeaderRL.setVisibility(View.VISIBLE);
+//            }
 
             imgProfile.setVisibility(View.GONE);
             tvUserInfo.setVisibility(View.VISIBLE);

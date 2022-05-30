@@ -20,7 +20,9 @@
             android:layout_height="@dimen/_34sdp"
             android:layout_centerVertical="true"
             app:cardBackgroundColor="@color/primary_green"
-            app:cardCornerRadius="@dimen/_17sdp">
+            app:cardCornerRadius="@dimen/_17sdp"
+            app:cardPreventCornerOverlap="false"
+            app:cardElevation="0dp">
 
             <TextView
                 android:id="@+id/tvNameHead"

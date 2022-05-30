@@ -80,18 +80,18 @@ public class OnboardActivity extends BaseActivity {
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
             getVersionName();
-            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
-                if (Utils.isFingerPrint(OnboardActivity.this)) {
-                    Utils.setIsTouchEnabled(true);
-                    Utils.setIsFaceEnabled(false);
-                } else {
-                    Utils.setIsTouchEnabled(false);
-                    Utils.setIsFaceEnabled(true);
-                }
-            } else {
-                Utils.setIsTouchEnabled(false);
-                Utils.setIsFaceEnabled(false);
-            }
+//            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
+//                if (Utils.isFingerPrint(OnboardActivity.this)) {
+//                    Utils.setIsTouchEnabled(true);
+//                    Utils.setIsFaceEnabled(false);
+//                } else {
+//                    Utils.setIsTouchEnabled(false);
+//                    Utils.setIsFaceEnabled(true);
+//                }
+//            } else {
+//                Utils.setIsTouchEnabled(false);
+//                Utils.setIsFaceEnabled(false);
+//            }
 
             setDB();
             setToken();
@@ -127,11 +127,10 @@ public class OnboardActivity extends BaseActivity {
                     faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
                 }
             } else {
-                if (checkOutModel != null && checkOutModel.isCheckOutFlag()){
-                    startActivity(new Intent(OnboardActivity.this,LoginActivity.class));
+                if (checkOutModel != null && checkOutModel.isCheckOutFlag()) {
+                    startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
                     finish();
-                }
-                else if (strFirstUser.equals("")) {
+                } else if (strFirstUser.equals("")) {
                     layoutOnBoarding.setVisibility(View.VISIBLE);
                     layoutAuth.setVisibility(View.GONE);
                 } else {
@@ -248,8 +247,24 @@ public class OnboardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Utils.isKeyboardVisible)
-            Utils.hideKeypad(OnboardActivity.this);
+        try {
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(OnboardActivity.this);
+            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
+                if (Utils.isFingerPrint(OnboardActivity.this)) {
+                    Utils.setIsTouchEnabled(true);
+                    Utils.setIsFaceEnabled(false);
+                } else {
+                    Utils.setIsTouchEnabled(false);
+                    Utils.setIsFaceEnabled(true);
+                }
+            } else {
+                Utils.setIsTouchEnabled(false);
+                Utils.setIsFaceEnabled(false);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
