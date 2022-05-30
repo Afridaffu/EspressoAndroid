@@ -16,6 +16,7 @@ import com.greenbox.coyni.model.States;
 import com.greenbox.coyni.model.retrieveemail.RetUserResData;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BindingLayoutActivity;
 import com.greenbox.coyni.view.EditAddressActivity;
 import com.greenbox.coyni.view.LoginActivity;
@@ -30,11 +31,13 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvEmail;
         public ImageView imgProfilePic;
+        public TextView b_image_textTV;
 
         public MyViewHolder(View view) {
             super(view);
             tvEmail = (TextView) view.findViewById(R.id.tvEmail);
-            imgProfilePic = (ImageView) view.findViewById(R.id.imgProfilePic);
+//            imgProfilePic = (ImageView) view.findViewById(R.id.imgProfilePic);
+            b_image_textTV = (TextView) view.findViewById(R.id.b_imageTextTV);
         }
     }
 
@@ -65,8 +68,21 @@ public class RetEmailAdapter extends RecyclerView.Adapter<RetEmailAdapter.MyView
 //            } else {
 //                holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
 //            }
+            String firstName = "", lastName = "";
+            if (objData.getFirstName() != null && !objData.getFirstName().equals("")) {
+                firstName = objData.getFirstName();
+            }
+            if (objData.getLastName() != null && !objData.getLastName().equals("")) {
+                lastName = objData.getLastName();
+            }
+            char first = firstName.charAt(0);
+            char last = lastName.charAt(0);
+//            char last = lastName.charAt(0);
 
-            holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
+
+            String imageName = String.valueOf(first).toUpperCase() + String.valueOf(last).toUpperCase();
+            holder.b_image_textTV.setText(imageName);
+//            holder.imgProfilePic.setBackgroundResource(R.drawable.ic_profilelogo);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
