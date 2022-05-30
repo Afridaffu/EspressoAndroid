@@ -59,7 +59,7 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
         try {
             RecentUsersData objData = listUsers.get(position);
 
-            String strPhContact = "", strEcoSysName = "", strName = "";
+            String strPhContact = "", strEcoSysName = "", strName = "", strImagePath = "";
             if (objData.getUserName() != null && !objData.getUserName().equals("")) {
                 if (objData.getUserName().length() > 24) {
                     strEcoSysName = objData.getUserName().substring(0, 24) + "...";
@@ -71,18 +71,15 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
             }
             if (objMyApplication.getObjPhContacts().containsKey(objData.getPhoneNumber().replace("(1)", ""))) {
                 strName = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getFirstName() + " " + objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getLastName();
-//                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
-//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
-//                } else {
-//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
-//                }
                 if (strName.length() > 24) {
                     strPhContact = strName.substring(0, 24) + "...";
                 } else {
                     strPhContact = strName;
                 }
+                strImagePath = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getImagePath();
             } else {
                 strPhContact = "";
+                strImagePath = "";
             }
             if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
@@ -104,6 +101,15 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                 holder.tvNameHead.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                 utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
+            } else if (strImagePath != null && !strImagePath.equals("")) {
+                if (strImagePath.startsWith("content:")) {
+                    holder.imgUser.setVisibility(View.VISIBLE);
+                    holder.tvNameHead.setVisibility(View.GONE);
+                    holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(strImagePath.trim()));
+                } else {
+                    holder.imgUser.setVisibility(View.GONE);
+                    holder.tvNameHead.setVisibility(View.VISIBLE);
+                }
             } else {
                 holder.imgUser.setVisibility(View.GONE);
                 holder.tvNameHead.setVisibility(View.VISIBLE);
@@ -117,11 +123,21 @@ public class RecentUsersAdapter extends RecyclerView.Adapter<RecentUsersAdapter.
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-
+                        String imgPath = "";
+                        if (objMyApplication.getObjPhContacts().containsKey(objData.getPhoneNumber().replace("(1)", ""))) {
+                            imgPath = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getImagePath();
+                        }
                         Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletAddress());
                         i.putExtra("name", objData.getUserName());
                         i.putExtra("phone", objData.getPhoneNumber());
+                        if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
+                            i.putExtra("image", objData.getImage());
+                        } else if (imgPath != null && !imgPath.equals("")) {
+                            i.putExtra("image", imgPath);
+                        } else {
+                            i.putExtra("image", "");
+                        }
                         mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();
