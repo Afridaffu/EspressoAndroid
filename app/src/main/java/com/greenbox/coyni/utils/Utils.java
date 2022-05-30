@@ -324,6 +324,7 @@ public class Utils {
     public static final float slidePercentage = 0.3f;
 
     public static boolean isKeyboardVisible = false;
+    public static boolean isSettingsBtnClicked = false;
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
@@ -780,6 +781,64 @@ public class Utils {
         }
 
     }
+    public static void showDialogPermission(final Context context, String header,String description) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_permission);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        window.setAttributes(wlp);
+
+        TextView notNowBtn,settingsBtn,headerText,descriptionText;
+
+        notNowBtn = dialog.findViewById(R.id.not_now_tv);
+        settingsBtn = dialog.findViewById(R.id.settings_tv);
+        headerText = dialog.findViewById(R.id.headerTextTV);
+        descriptionText = dialog.findViewById(R.id.descriptonTV);
+
+        if (header != null){
+            headerText.setText(header);
+        }
+        if (description != null){
+            descriptionText.setText(description);
+        }
+
+        notNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                isSettingsBtnClicked = true;
+                context.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.fromParts("package", context.getPackageName(), null)));
+            }
+        });
+
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+
+
+    }
+
 
     public static String formatDate(String date) {
         if (date.length() == 22) {
