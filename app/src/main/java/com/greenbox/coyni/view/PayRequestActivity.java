@@ -805,15 +805,15 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //                userProfile.setVisibility(View.GONE);
 //                userName.setVisibility(View.VISIBLE);
 //            }
-            if (strCImage.startsWith("content:")) {
-                userProfile.setVisibility(View.VISIBLE);
-                userName.setVisibility(View.GONE);
-                userProfile.setImageBitmap(objMyApplication.convertImageURIToBitMap(strCImage));
-            } else if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
+            if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+            } else if (strCImage.startsWith("content:")) {
+                userProfile.setVisibility(View.VISIBLE);
+                userName.setVisibility(View.GONE);
+                userProfile.setImageBitmap(objMyApplication.convertImageURIToBitMap(strCImage));
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);
@@ -840,7 +840,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
                 value = false;
-            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 tvError.setText("Amount entered exceeds transaction limit.");
                 tvError.setVisibility(View.VISIBLE);
                 lyBalance.setVisibility(View.GONE);
@@ -858,10 +859,11 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
-                value = false;
-            } else if (cynValue > avaBal) {
+//            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
+//                value = false;
+//            } else
+            if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             }

@@ -124,10 +124,27 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     @Override
     protected void onResume() {
         super.onResume();
-
         dismissDialog();
         isPwdEye = false;
         try {
+            if (Utils.checkBiometric(LoginActivity.this) && Utils.checkAuthentication(LoginActivity.this)) {
+                if (Utils.isFingerPrint(LoginActivity.this)) {
+                    Utils.setIsTouchEnabled(true);
+                    Utils.setIsFaceEnabled(false);
+                } else {
+                    Utils.setIsTouchEnabled(false);
+                    Utils.setIsFaceEnabled(true);
+                }
+            } else {
+                Utils.setIsTouchEnabled(false);
+                Utils.setIsFaceEnabled(false);
+            }
+            enableIcon();
+            setDB();
+            setToken();
+            setFaceLock();
+            setTouchId();
+            setRemember();
             if (!isExpiry) {
                 String value = dbHandler.getTableRemember();
 
@@ -182,10 +199,8 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
             etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
         }
-
         if (Utils.isKeyboardVisible)
             Utils.hideKeypad(LoginActivity.this);
-
     }
 
     @Override
@@ -576,27 +591,13 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                 }
             });
 
-//            etEmail.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                    if (actionId == EditorInfo.IME_ACTION_NEXT) {
-////                        etEmail.clearFocus();
-//                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-//                        etPassword.requestFocus();
-//                        if(!Utils.isKeyboardVisible)
-//                            Utils.shwForcedKeypad(LoginActivity.this);
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//            });
-            enableIcon();
-
-            setDB();
-            setToken();
-            setFaceLock();
-            setTouchId();
-            setRemember();
+//            enableIcon();
+//
+//            setDB();
+//            setToken();
+//            setFaceLock();
+//            setTouchId();
+//            setRemember();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
