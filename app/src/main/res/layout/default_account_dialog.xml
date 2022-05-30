@@ -11,6 +11,7 @@
         android:layout_height="2dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/_13sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
         android:background="@drawable/shape_green_round_rect" />
 
     <LinearLayout
@@ -117,7 +118,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_27sdp"
         android:gravity="center"
-        app:cardBackgroundColor="@color/primary_green"
+        app:cardBackgroundColor="@color/light_primary_color"
         app:cardCornerRadius="@dimen/_22sdp"
         app:cardElevation="0dp">
 
