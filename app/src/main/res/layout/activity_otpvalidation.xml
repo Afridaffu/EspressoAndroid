@@ -7,21 +7,23 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="@dimen/_20sdp"
+    android:paddingHorizontal="@dimen/_20sdp"
+    android:paddingBottom="@dimen/_20sdp"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.OTPValidation">
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:fitsSystemWindows="true">-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:id="@+id/layoutEntry"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_above="@+id/contactUsLL">
 
             <ImageView
                 android:id="@+id/otpValidationCloseIV"
@@ -113,6 +115,7 @@
 
 
         <LinearLayout
+            android:id="@+id/contactUsLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -140,7 +143,7 @@
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
-<!--    </RelativeLayout>-->
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/layoutFailure"
