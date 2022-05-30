@@ -144,12 +144,6 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
 
-                    if (position == 0) {
-                        ssnET.clearFocus();
-                    } else if (position == 1) {
-                        if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
-                    }
                 }
 
                 @Override
@@ -159,6 +153,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         closebtn.setVisibility(View.VISIBLE);
                         viewLeft.setBackgroundResource(R.drawable.button_background);
                         viewRight.setBackgroundResource(R.drawable.button_background1);
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(IdentityVerificationActivity.this);
                     } else if (position == 1) {
                         viewLeft.setBackgroundResource(R.drawable.button_background1);
                         viewRight.setBackgroundResource(R.drawable.button_background);

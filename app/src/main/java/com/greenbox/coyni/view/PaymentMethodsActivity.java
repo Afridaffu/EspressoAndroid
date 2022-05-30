@@ -113,7 +113,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     if (extBankDialog != null) {
                         extBankDialog.dismiss();
                     }
-                    dialog = Utils.showProgressDialog(this);
+                    dialog = Utils.showProgressDialog(PaymentMethodsActivity.this);
                     customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 2) {
