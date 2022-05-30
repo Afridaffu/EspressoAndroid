@@ -291,6 +291,7 @@ public class EditPhoneActivity extends BaseActivity {
                                 .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
                                 .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
                                 .putExtra("OLD_PHONE", currentPhoneNumber)
+                                .putExtra("MOBILE", currentPhoneNumber)
                                 .putExtra("NEW_PHONE", newPhoneNumber));
                     } else {
                         Utils.hideSoftKeyboard(EditPhoneActivity.this);
