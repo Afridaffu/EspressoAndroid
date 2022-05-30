@@ -500,6 +500,7 @@ public class DashboardActivity extends BaseActivity {
                         tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                     }
                     bindImage();
+                    Utils.setUserEmail(DashboardActivity.this, profile.getData().getEmail());
                 }
                 new FetchData(DashboardActivity.this).execute();
             }

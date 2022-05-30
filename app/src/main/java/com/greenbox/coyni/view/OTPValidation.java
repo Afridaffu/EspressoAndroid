@@ -154,7 +154,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
             objMyApplication = (MyApplication) getApplicationContext();
-            objMyApplication.setStrEmail(EMAIL);
+            if (EMAIL != null && !EMAIL.equals(""))
+                objMyApplication.setStrEmail(EMAIL);
             if (strScreen != null && !strScreen.equals("")) {
                 switch (strScreen) {
                     case "ForgotPwd":
@@ -302,6 +303,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         if (strScreen.equals("SignUp")) {
                             layoutEntry.setVisibility(View.GONE);
                             layoutFailure.setVisibility(View.VISIBLE);
+                            isBackEnabled = false;
                         } else {
                             layoutEntry.setVisibility(View.VISIBLE);
                             layoutFailure.setVisibility(View.GONE);
@@ -875,6 +877,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                         .putExtra("OTP_TYPE", "OTP")
                                                         .putExtra("IS_OLD_EMAIL", "false")
                                                         .putExtra("OLD_EMAIL", oldEmail)
+                                                        .putExtra("EMAIL", oldEmail)
                                                         .putExtra("NEW_EMAIL", newEmail));
                                                 finish();
                                             } else {
@@ -895,6 +898,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                             .putExtra("OTP_TYPE", "OTP")
                                             .putExtra("IS_OLD_EMAIL", "false")
                                             .putExtra("OLD_EMAIL", oldEmail)
+                                            .putExtra("EMAIL", oldEmail)
                                             .putExtra("NEW_EMAIL", newEmail));
                                     finish();
                                 } else {
