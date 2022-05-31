@@ -37,6 +37,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
     Long mLastClickTime = 0L;
+    NotificationsAdapter.MyViewHolder myHolder ;
 
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
         this.notifications = list;
@@ -50,7 +51,8 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.notifications_item, parent, false);
 
-        return new NotificationsAdapter.MyViewHolder(itemView);
+        myHolder = new NotificationsAdapter.MyViewHolder(itemView);
+        return myHolder;
     }
 
     @Override
@@ -506,4 +508,15 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         return R.id.swipeLayout;
     }
 
+    public void enableOrDisable(boolean isEnabled){
+        myHolder.cancelLL.setClickable(isEnabled);
+        myHolder.payLL.setClickable(isEnabled);
+        myHolder.denyLL.setClickable(isEnabled);
+        myHolder.remindLL.setClickable(isEnabled);
+
+        myHolder.cancelLL.setEnabled(isEnabled);
+        myHolder.payLL.setEnabled(isEnabled);
+        myHolder.denyLL.setEnabled(isEnabled);
+        myHolder.remindLL.setEnabled(isEnabled);
+    }
 }

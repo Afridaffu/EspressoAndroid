@@ -990,6 +990,7 @@ public class NotificationsActivity extends BaseActivity {
 
     public void removeItemFromList(String selectedTab, String status) {
         try {
+            notificationsAdapter.enableOrDisable(false);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -1059,15 +1060,12 @@ public class NotificationsActivity extends BaseActivity {
                         }
 
                     }
-
+                    notificationsAdapter.enableOrDisable(true);
                 }
-            }, 4000);
+            }, 3000);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void reuseRemoveList() {
-
-    }
 }
