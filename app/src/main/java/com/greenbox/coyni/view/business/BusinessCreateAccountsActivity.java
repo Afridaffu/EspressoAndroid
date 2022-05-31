@@ -87,14 +87,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTimeQA = SystemClock.elapsedRealtime();
-                    Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
-                    for (ProfilesResponse.Profiles profile : profilesList) {
-                        if (profile.getAccountType().equals(Utils.PERSONAL)) {
-                            inNewAccount.putExtra("PersonalAccount", "true");
-                            break;
-                        }
-                    }
-                    startActivity(inNewAccount);
+                    openNewAccount();
                 }
             });
         } catch (Exception e) {
@@ -321,8 +314,13 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
-                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
-                addDBA(id);
+//                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+//                addDBA(id);
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                openNewAccount();
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
@@ -491,5 +489,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         params.height = height;
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public void openNewAccount(){
+        Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
+        for (ProfilesResponse.Profiles profile : profilesList) {
+            if (profile.getAccountType().equals(Utils.PERSONAL)) {
+                inNewAccount.putExtra("PersonalAccount", "true");
+                break;
+            }
+        }
+        startActivity(inNewAccount);
     }
 }

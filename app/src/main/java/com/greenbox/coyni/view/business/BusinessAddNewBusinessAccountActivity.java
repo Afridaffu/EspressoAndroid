@@ -129,6 +129,10 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 addDBACardView.setEnabled(true);
                 addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
                 companyId = item.getId();
+                if (companyId != 0) {
+                    addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
+                    addDBACardView.setEnabled(true);
+                }
             }
         });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);

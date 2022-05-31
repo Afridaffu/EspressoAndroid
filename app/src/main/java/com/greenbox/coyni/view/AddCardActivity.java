@@ -105,7 +105,6 @@ public class AddCardActivity extends BaseActivity implements OnKeyboardVisibilit
     MaskEditText etExpiry;
     ConstraintLayout clStates;
     Long mLastClickTime = 0L, mLastClickTimeDialog = 0L;
-    ;
     Dialog preDialog, preAuthDialog;
     CardResponseData cardResponseData;
     Dialog progressDialog;

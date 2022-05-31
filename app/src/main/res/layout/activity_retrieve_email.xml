@@ -48,7 +48,8 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/reCardViewNextBtn"
                 android:overScrollMode="never"
                 android:scrollbars="none">
 
@@ -222,31 +223,31 @@
                             android:textSize="@dimen/_10ssp" />
                     </LinearLayout>
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/reCardViewNextBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_44sdp"
-                        android:layout_marginTop="@dimen/_50sdp"
-                        app:cardBackgroundColor="@color/inactive_color"
-                        app:cardCornerRadius="@dimen/_22sdp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/opensans_bold"
-                            android:text="@string/next"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_12ssp" />
-
-                    </androidx.cardview.widget.CardView>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_28sdp" />
 
                 </LinearLayout>
             </ScrollView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/reCardViewNextBtn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_44sdp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/_28sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                app:cardBackgroundColor="@color/inactive_color"
+                app:cardCornerRadius="@dimen/_22sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/opensans_bold"
+                    android:text="@string/next"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12ssp" />
+
+            </androidx.cardview.widget.CardView>
+
 
         </RelativeLayout>
     </LinearLayout>
