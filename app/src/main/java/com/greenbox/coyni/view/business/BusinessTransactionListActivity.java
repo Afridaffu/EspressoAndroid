@@ -1295,6 +1295,8 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 if (transactionType.size() > 0) {
                     isFilters = true;
                     transactionListRequest.setTransactionType(transactionType);
+                } else {
+                    transactionListRequest.setTransactionType(getDefaultTransactionTypes());
                 }
                 if (transactionSubType.size() > 0) {
                     isFilters = true;

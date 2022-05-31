@@ -689,5 +689,7 @@
 
     <string name="internal_storage">Internal storage</string>
     <string name="pay">Pay</string>
+    <string name="allow_access_header">Allow Access to your Camera</string>
+    <string name="camera_permission_desc">You are not allowing to access the Camera. Please go to Settings and enable the Camera permission.</string>
 
 </resources>

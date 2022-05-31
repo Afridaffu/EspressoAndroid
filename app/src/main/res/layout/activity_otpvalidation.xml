@@ -13,17 +13,17 @@
     tools:context=".view.OTPValidation">
 
     <RelativeLayout
+        android:id="@+id/layoutEntry"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <LinearLayout
-            android:id="@+id/layoutEntry"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/contactUsLL"
             android:orientation="vertical"
-            android:visibility="visible"
-            android:layout_above="@+id/contactUsLL">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/otpValidationCloseIV"
@@ -119,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center"
             android:visibility="gone">
 

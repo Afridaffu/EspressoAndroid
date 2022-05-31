@@ -412,6 +412,7 @@
         <LinearLayout
             android:id="@+id/Business_AccountLimitsLL"
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/_11sdp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -420,8 +421,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_11sdp"
-                android:layout_marginTop="@dimen/_11sdp"
                 app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="@dimen/_5sdp"
                 app:cardCornerRadius="@dimen/_10sdp">
 
                 <LinearLayout

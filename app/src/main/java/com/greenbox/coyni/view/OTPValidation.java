@@ -92,7 +92,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     private Vibrator vibrator;
     String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "",
             oldEmail = "", newEmail = "", isOldEmail = "", oldPhone = "", newPhone = "", oldPhoneMasked = "", newPhoneMasked = "", isOldPhone = "";
-    LinearLayout layoutEntry, layoutFailure, layoutMain, contactUsLL;
+    LinearLayout  layoutFailure, layoutMain, contactUsLL;
+    RelativeLayout layoutEntry;
     CardView tryAgainCV;
     Dialog dialog;
     LoginViewModel loginViewModel;
