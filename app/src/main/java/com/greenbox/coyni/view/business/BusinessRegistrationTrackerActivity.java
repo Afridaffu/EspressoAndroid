@@ -99,6 +99,12 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 dbaID = getIntent().getIntExtra("dbaId", 0);
             }
 
+            if (addDBA) {
+                caCompleteLL.setVisibility(GONE);
+            } else {
+                caCompleteLL.setVisibility(VISIBLE);
+            }
+
             dashboardTV.setOnClickListener(view -> {
                 startActivity(new Intent(BusinessRegistrationTrackerActivity.this, BusinessDashboardActivity.class));
             });
