@@ -385,7 +385,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountType());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getAccountStatus());
                         LogUtils.d(TAG, "btResp" + btResp.getData().getDbaOwnerId());
-
+                        myApplication.clearUserData();
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         myApplication.setLoginUserId(btResp.getData().getUserId());
                         businessIdentityVerificationViewModel.getBusinessTracker();

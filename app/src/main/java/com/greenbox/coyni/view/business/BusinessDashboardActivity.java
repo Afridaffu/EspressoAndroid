@@ -93,21 +93,22 @@ public class BusinessDashboardActivity extends BaseActivity {
         try {
             mDashboardViewModel.meProfile();
 
-
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.MERCHANT);
-            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.RESERVE);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getWalletData() {
+        WalletRequest walletRequest = new WalletRequest();
+        walletRequest.setWalletType(Utils.MERCHANT);
+        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.TOKEN);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.RESERVE);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
     }
 
     public void onDashboardTabSelected(View view) {
@@ -386,6 +387,10 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
                         objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+//                       if(profile.getData()!=null && profile.getData().getAccountStatus()!=null
+//                               && profile.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+//                           getWalletData();
+//                       }
                         enableDisableTabView();
                         if (mCurrentFragment != null) {
                             mCurrentFragment.updateData();
@@ -410,30 +415,30 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
-            @Override
-            public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                try {
-                    if (businessWalletResponse != null) {
-                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-
-                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+//        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
+//            @Override
+//            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+//                try {
+//                    if (businessWalletResponse != null) {
+//                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
 //
-                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
-                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+////
+//                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
+//                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
         String iconText = "";
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-              &&  objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
             if (objMyApplication.getMyProfile().getData().getFirstName() != null) {
                 firstName = objMyApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();

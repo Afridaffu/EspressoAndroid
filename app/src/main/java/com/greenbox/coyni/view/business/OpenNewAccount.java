@@ -13,8 +13,10 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class OpenNewAccount extends AppCompatActivity {
+public class OpenNewAccount extends BaseActivity {
     LinearLayout newdbaLL,newcomapnyLL;
     ImageView closeback;
     Dialog entity;
@@ -46,6 +48,7 @@ public class OpenNewAccount extends AppCompatActivity {
         newdbaLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    showProgressDialog();
                     dbaPopup();
 
                 }

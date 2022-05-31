@@ -53,6 +53,8 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityData;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.profile.Profile;
@@ -129,7 +131,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     private UserData userData;
     private String reserveRules = "";
 
-
     //Processing Volume Types
     private static final String todayValue = "Today";
     private static final String yesterdayValue = "Yesterday";
@@ -167,6 +168,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         businessDashboardViewModel.getRollingRuleDetails();
+
 
     }
 
@@ -620,6 +622,30 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
+            @Override
+            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                try {
+                    if (businessWalletResponse != null) {
+                        myApplication.setWalletResponseData(businessWalletResponse.getData());
+                        Double merchantBalance = getMerchantBalance();
+                        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
+                        if (merchantBalance != null && merchantBalance == 0.00) {
+                            businessIdentityVerificationViewModel.getDBAInfo();
+                        } else {
+                            monthlyVolumeViewLl.setVisibility(View.GONE);
+                        }
+                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+//
+                            myApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
+                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     private void showData(List<BatchPayoutListItems> items) {
@@ -744,7 +770,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setMonthlyVolumeData() {
-        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+//        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getCompanyName() != null) {
             mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, myApplication.getMyProfile().getData().getCompanyName()));
@@ -756,19 +782,26 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
+    private void getWalletData(){
+        WalletRequest walletRequest = new WalletRequest();
+        walletRequest.setWalletType(Utils.MERCHANT);
+        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.TOKEN);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.RESERVE);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+    }
+
     private void setBusinessData() {
+        getWalletData();
         cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
         batchReq();
         getProcessingVolume(todayValue);
         if (myApplication.isReserveEnabled()) {
             reserveReq();
-        }
-        Double merchantBalance = getMerchantBalance();
-        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
-        if (merchantBalance != null && merchantBalance == 0.00) {
-            businessIdentityVerificationViewModel.getDBAInfo();
-        } else {
-            monthlyVolumeViewLl.setVisibility(View.GONE);
         }
 //        mSbTodayVolume.setEnabled(true);
 //        mSbTodayVolume.setProgressWithText(0,userData);
@@ -827,6 +860,8 @@ public class BusinessDashboardFragment extends BaseFragment {
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.Swiped)) {
+
+                    batchId = (String) value;
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
@@ -839,7 +874,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                     } else {
                         launchPinActivity(batchId);
 //                        businessDashboardViewModel.batchNowSlideData((String) value);
-//                        Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                     }
                 }
             }
@@ -868,7 +902,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                     //Call API Here
                     LogUtils.v(TAG, "RESULT_OK" + result);
                     businessDashboardViewModel.batchNowSlideData(batchId);
-                    Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+                    //Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
                 }
             });
 
