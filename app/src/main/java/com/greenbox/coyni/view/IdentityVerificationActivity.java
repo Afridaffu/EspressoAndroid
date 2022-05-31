@@ -71,6 +71,7 @@ import com.greenbox.coyni.model.profile.TrackerResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.DBAInfoDetails;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.IdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
@@ -1219,7 +1220,8 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", IdentityVerificationActivity.this, "", "");
+//                        Utils.displayAlert("Requires Access to Camera.", IdentityVerificationActivity.this, "", "");
+                        Utils.showDialogPermission(IdentityVerificationActivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

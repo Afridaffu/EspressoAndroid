@@ -43,6 +43,7 @@
         android:label="@string/app_name"
         android:protectionLevel="signature"
         android:requestLegacyExternalStorage="true"
+        android:preserveLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"

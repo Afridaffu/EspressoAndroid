@@ -42,6 +42,7 @@ import com.greenbox.coyni.utils.FileUtils;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.DBAInfoDetails;
 import com.greenbox.coyni.viewmodel.UnderwritingUserActionRequiredViewModel;
 
 import org.json.JSONArray;
@@ -224,7 +225,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", AdditionalActionUploadActivity.this, "", "");
+//                        Utils.displayAlert("Requires Access to Camera.", AdditionalActionUploadActivity.this, "", "");
+                        Utils.showDialogPermission(AdditionalActionUploadActivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
