@@ -12,17 +12,23 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -33,6 +39,7 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.login.LoginResponse;
 import com.greenbox.coyni.model.login.PasswordRequest;
 import com.greenbox.coyni.utils.MyApplication;
@@ -41,7 +48,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Pattern;
 
-public class ConfirmPasswordActivity extends BaseActivity {
+public class ConfirmPasswordActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     TextInputEditText currentPassET;
     TextInputLayout currentTIL;
     CardView saveBtn;
@@ -78,6 +85,8 @@ public class ConfirmPasswordActivity extends BaseActivity {
             tvPwdError = findViewById(R.id.tvPwdError);
             strong = Pattern.compile(STRONG_PATTERN);
 
+            setKeyboardVisibilityListener(this);
+
             currentTIL.setEndIconOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -104,6 +113,8 @@ public class ConfirmPasswordActivity extends BaseActivity {
             backBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(Utils.isKeyboardVisible)
+                        Utils.hideKeypad(ConfirmPasswordActivity.this);
                     finish();
                 }
             });
@@ -256,5 +267,41 @@ public class ConfirmPasswordActivity extends BaseActivity {
 
     private void clearField() {
         currentPassET.setText("");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
     }
 }

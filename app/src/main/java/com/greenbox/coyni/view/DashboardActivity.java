@@ -499,7 +499,7 @@ public class DashboardActivity extends BaseActivity {
                         tvUserName.setText(getString(R.string.hi_text) + strName);
                         tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                     }
-                    bindImage();
+//                    bindImage();
                     Utils.setUserEmail(DashboardActivity.this, profile.getData().getEmail());
                 }
                 new FetchData(DashboardActivity.this).execute();
@@ -582,6 +582,7 @@ public class DashboardActivity extends BaseActivity {
                             buyTokensCV.setVisibility(View.GONE);
                         }
                     }
+                    bindImage();
                 }
 
             }
@@ -933,13 +934,13 @@ public class DashboardActivity extends BaseActivity {
     public void bindImage() {
         try {
 
-            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
-                cvHeaderRL.setVisibility(View.VISIBLE);
-                cvSmallHeaderRL.setVisibility(View.GONE);
-            } else {
-                cvHeaderRL.setVisibility(View.GONE);
-                cvSmallHeaderRL.setVisibility(View.VISIBLE);
-            }
+//            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                cvHeaderRL.setVisibility(View.VISIBLE);
+//                cvSmallHeaderRL.setVisibility(View.GONE);
+//            } else {
+//                cvHeaderRL.setVisibility(View.GONE);
+//                cvSmallHeaderRL.setVisibility(View.VISIBLE);
+//            }
 
             imgProfile.setVisibility(View.GONE);
             tvUserInfo.setVisibility(View.VISIBLE);

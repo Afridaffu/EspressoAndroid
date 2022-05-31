@@ -61,7 +61,8 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:cardBackgroundColor="@color/white">
 
 
                             <ImageView
@@ -87,7 +88,6 @@
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
                     <TextView
                         android:id="@+id/tvUserNameSmall"
@@ -154,7 +154,6 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
-
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="@dimen/_29sdp"
@@ -506,7 +505,6 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -518,31 +516,47 @@
                                         android:textColor="@color/primary_black"
                                         android:textSize="@dimen/_11ssp" />
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
+                                    <!--                                    <LinearLayout-->
+                                    <!--                                        android:layout_width="match_parent"-->
+                                    <!--                                        android:layout_height="wrap_content"-->
+                                    <!--                                        android:layout_weight="1"-->
+                                    <!--                                        android:layout_marginTop="@dimen/_6sdp"-->
+                                    <!--                                        android:orientation="horizontal">-->
+
+                                    <!--                                        <TextView-->
+                                    <!--                                            android:layout_width="wrap_content"-->
+                                    <!--                                            android:layout_height="wrap_content"-->
+                                    <!--                                            android:layout_marginStart="5dp"-->
+                                    <!--                                            android:fontFamily="@font/opensans_semibold"-->
+                                    <!--                                            android:text="Under Review"-->
+                                    <!--                                            android:textColor="@color/under_review_blue"-->
+                                    <!--                                            android:textSize="@dimen/_11ssp" />-->
+
+                                    <!--                                        <androidx.cardview.widget.CardView-->
+                                    <!--                                            android:layout_width="@dimen/_8sdp"-->
+                                    <!--                                            android:layout_height="@dimen/_8sdp"-->
+                                    <!--                                            app:cardBackgroundColor="@color/under_review_blue"-->
+                                    <!--                                            app:cardCornerRadius="@dimen/_4sdp" />-->
+                                    <!--                                    </LinearLayout>-->
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_weight="1"
+                                        android:layout_marginStart="5dp"
                                         android:layout_marginTop="@dimen/_6sdp"
-                                        android:orientation="horizontal">
+                                        android:fontFamily="@font/opensans_semibold"
+                                        android:text="Under Review"
+                                        android:textColor="@color/under_review_blue"
+                                        android:textSize="@dimen/_11ssp" />
 
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="5dp"
-                                            android:fontFamily="@font/opensans_semibold"
-                                            android:text="Under Review"
-                                            android:textColor="@color/under_review_blue"
-                                            android:textSize="@dimen/_11ssp" />
-
-                                        <androidx.cardview.widget.CardView
-                                            android:layout_width="@dimen/_8sdp"
-                                            android:layout_height="@dimen/_8sdp"
-                                            app:cardBackgroundColor="@color/under_review_blue"
-                                            app:cardCornerRadius="@dimen/_4sdp" />
-                                    </LinearLayout>
+                                    <androidx.cardview.widget.CardView
+                                        android:layout_width="@dimen/_8sdp"
+                                        android:layout_height="@dimen/_8sdp"
+                                        android:layout_marginTop="@dimen/_2sdp"
+                                        app:cardBackgroundColor="@color/under_review_blue"
+                                        app:cardCornerRadius="@dimen/_4sdp" />
 
                                 </LinearLayout>
-
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -937,15 +951,15 @@
         android:id="@+id/ll_identity_verification_failed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical"
-        android:visibility="gone"
         android:layout_above="@+id/layoutMenu"
         android:layout_below="@+id/cvHeader"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_14sdp"
         android:layout_marginRight="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_12sdp">
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

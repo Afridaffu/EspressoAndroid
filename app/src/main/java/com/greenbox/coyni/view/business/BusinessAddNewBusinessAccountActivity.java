@@ -45,7 +45,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     private IdentityVerificationViewModel identityVerificationViewModel;
     private DashboardViewModel dashboardViewModel;
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
-    private List<BaseProfile> businessAccountList ;
+    private List<BaseProfile> businessAccountList;
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
     private BaseProfile selectedProfile = null;
     private Long mLastClickTimeQA = 0L;
@@ -129,7 +129,10 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 addDBACardView.setEnabled(true);
                 addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
                 selectedProfile = item;
-
+                if (selectedProfile != null) {
+                    addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
+                    addDBACardView.setEnabled(true);
+                }
             }
         });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
@@ -181,17 +184,17 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         AccountsData accountsData = new AccountsData(filterList);
         ArrayList<BaseProfile> groupData = accountsData.getGroupData();
         for (BaseProfile profile : groupData) {
-            if(profile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)) {
+            if (profile.getAccountType().equalsIgnoreCase(Utils.PERSONAL)) {
                 continue;
             }
             boolean isInActiveDBAFound = false;
             ArrayList<ProfilesResponse.Profiles> dBAList = (ArrayList<ProfilesResponse.Profiles>) accountsData.getData().get(profile.getId());
 
-            if(dBAList == null || dBAList.size() == 0) {
+            if (dBAList == null || dBAList.size() == 0) {
                 continue;
             }
             profile.setDbaCount(dBAList.size());
-            if(dBAList.size() == 1 && !dBAList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+            if (dBAList.size() == 1 && !dBAList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isInActiveDBAFound = true;
             } else {
                 for (ProfilesResponse.Profiles dbaProfile : dBAList) {
@@ -203,8 +206,8 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                     }
                 }
             }
-            if(isInActiveDBAFound) {
-               profile.setAccountStatus(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus());
+            if (isInActiveDBAFound) {
+                profile.setAccountStatus(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus());
             }
             businessAccountList.add(profile);
         }
