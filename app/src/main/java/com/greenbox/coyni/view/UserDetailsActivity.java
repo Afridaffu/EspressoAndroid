@@ -40,6 +40,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -126,8 +127,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     TextView business_imageTextTV, business_userNameTV, business_emailIdTV, business_userPhneNoTV, business_userAddreTV;
     LinearLayout business_emailLL, business_PhoneNumLL, business_AddreLL;
 
-    static SQLiteDatabase mydatabase;
-    static Cursor dsPermanentToken, dsFacePin, dsTouchID;
     static String strToken = "";
     static String strDeviceID = "";
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -137,13 +136,14 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private CustomerProfileViewModel customerProfileViewModel;
     private int accountTypeId;
-    private int childid;
+    //private int childid;
     private String SelectedDBAName;
     private BusinessProfileRecyclerAdapter profilesListAdapter;
     private ImageView businessPersonalProfileTickIcon;
     private String preferenceName;
     private String childName;
     private ProfilesResponse globalProfileResp;
+    private CardView doneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +156,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             initFields();
             initObservers();
+            showProgressDialog();
             dashboardViewModel.mePreferences();
 
         } catch (Exception e) {
@@ -480,57 +481,63 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
 
             business_defaultaccountET.setOnClickListener(view -> {
-
                 try {
                     final Dialog dialog = new Dialog(UserDetailsActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.default_account_dialog);
                     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
                     DisplayMetrics mertics = getApplicationContext().getResources().getDisplayMetrics();
 //                    int width = mertics.widthPixels;
 
-                    CardView doneButton = dialog.findViewById(R.id.default_DoneBtn);
+                    doneButton = dialog.findViewById(R.id.default_DoneBtn);
                     profilesListView = dialog.findViewById(R.id.business_profile_accounts_expandable_list);
                     mIvUserIcon = dialog.findViewById(R.id.profile_img);
                     mTvUserIconText = dialog.findViewById(R.id.b_imageTextTV);
                     businessPersonalProfileAccount = dialog.findViewById(R.id.profileLL);
                     businessPersonalProfileTickIcon = dialog.findViewById(R.id.tickIcon);
                     defualtAccountDialogPersonalNameTV = dialog.findViewById(R.id.defualt_account_dialog_personal_name);
-
                     Window window = dialog.getWindow();
                     window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, (int) (mertics.heightPixels * 0.75));
-
                     WindowManager.LayoutParams wlp = window.getAttributes();
-
                     wlp.gravity = Gravity.BOTTOM;
                     wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                     window.setAttributes(wlp);
-
                     LogUtils.d("TAG", "subSet" + subSet);
                     setProfilesAdapter();
-
                     dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
-
+                    doneButton.setEnabled(false);
+                    profilesListView.setAdapter(profilesListAdapter);
+                    setInitialListViewHeight(profilesListView);
+                    profilesListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                        @Override
+                        public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                            ImageView arrowImg = v.findViewById(R.id.arrowImg);
+                            if (parent != null && parent.isGroupExpanded(groupPosition)) {
+                                arrowImg.setImageResource(R.drawable.ic_chevron_down);
+                            } else {
+                                arrowImg.setImageResource(R.drawable.ic_chevron_up);
+                            }
+                            setListViewHeight(parent, groupPosition);
+                            return false;
+                        }
+                    });
 
                     doneButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
-                            LogUtils.d("profilesss", "childid" + childid);
+                            //LogUtils.d("profilesss", "childid" + childid);
                             UserPreferenceModel userPreferenceModel = new UserPreferenceModel();
                             userPreferenceModel.setLocalCurrency(0);
                             userPreferenceModel.setTimezone(myApplicationObj.getTempTimezoneID());
-                            userPreferenceModel.setPreferredAccount(childid);
+                            userPreferenceModel.setPreferredAccount(accountTypeId);
                             customerProfileViewModel.updatePreferences(userPreferenceModel);
                             dialog.dismiss();
 
                         }
                     });
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -542,32 +549,98 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         }
     }
 
+    private void setInitialListViewHeight(ExpandableListView listView) {
+        ExpandableListAdapter listAdapter = listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += groupItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10)
+            height = 200;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+    private void setListViewHeight(ExpandableListView listView, int group) {
+        ExpandableListAdapter listAdapter = listView.getExpandableListAdapter();
+        int totalHeight = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
+                View.MeasureSpec.EXACTLY);
+        for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+            View groupItem = listAdapter.getGroupView(i, false, null, listView);
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+            totalHeight += groupItem.getMeasuredHeight();
+
+            if (((listView.isGroupExpanded(i)) && (i != group))
+                    || ((!listView.isGroupExpanded(i)) && (i == group))) {
+                for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
+                    View listItem = listAdapter.getChildView(i, j, false, null,
+                            listView);
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
+                    totalHeight += listItem.getMeasuredHeight();
+
+                }
+            }
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10)
+            height = 200;
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+
     private void setProfilesAdapter() {
 
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, myApplicationObj.getLoginUserId(), showDBA);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, accountTypeId, showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id + "fullname" + fullname);
-                childid = id;
+                accountTypeId = id;
                 SelectedDBAName = fullname;
             }
 
             @Override
             public void onChildClicked(ProfilesResponse.Profiles detailInfo) {
                 LogUtils.v("PreferencesActivity", "account type " + detailInfo + "    id: " + detailInfo.getId() + "detailInfo" + detailInfo.getDbaName());
-                childid = detailInfo.getId();
-                SelectedDBAName = detailInfo.getDbaName();
+                //childid = detailInfo.getId();
+
+                if (accountTypeId != detailInfo.getId()) {
+                    doneButton.setEnabled(true);
+                    doneButton.setCardBackgroundColor(getColor(R.color.primary_color));
+                    accountTypeId = detailInfo.getId();
+                    SelectedDBAName = detailInfo.getDbaName();
+                } else {
+                    doneButton.setEnabled(false);
+                    doneButton.setCardBackgroundColor(getColor(R.color.light_primary_color));
+                }
+
             }
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
                 LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id);
-                childid = id;
+                accountTypeId = id;
 
             }
         });
@@ -666,6 +739,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             @Override
             public void onChanged(Profile profile) {
                 try {
+                    dismissDialog();
                     if (profile != null) {
                         myApplicationObj.setMyProfile(profile);
                         if (myApplicationObj.getMyProfile().getData().getFirstName() != null) {
@@ -729,8 +803,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                         LogUtils.d(TAG, "userPreference" + userPreference);
                         if (SelectedDBAName.equals(""))
                             business_defaultaccountET.setText("");
+                        else if (SelectedDBAName.length() > 20)
+                            business_defaultaccountET.setText((SelectedDBAName).substring(0, 20));
                         else
                             business_defaultaccountET.setText(SelectedDBAName);
+
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -765,6 +842,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     for (ProfilesResponse.Profiles c : filterList) {
                         if (c.getId() == accountTypeId) {
                             SelectedDBAName = c.getDbaName();
+
                             business_defaultaccountET.setText(c.getDbaName());
                         }
                     }
