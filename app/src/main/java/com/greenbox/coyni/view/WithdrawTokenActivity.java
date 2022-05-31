@@ -88,6 +88,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class WithdrawTokenActivity extends BaseActivity implements TextWatcher {
     MyApplication objMyApplication;
@@ -799,12 +800,31 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher {
                     daily = Double.parseDouble(objLimit.getDailyAccountLimit());
                 }
                 strCurrency = " " + getString(R.string.currency);
-                if ((week == 0 || week < 0) && daily > 0) {
+//                if ((week == 0 || week < 0) && daily > 0) {
+//                    strLimit = "daily";
+//                    maxValue = daily;
+//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                } else if ((daily == 0 || daily < 0) && week > 0) {
+//                    strLimit = "week";
+//                    maxValue = week;
+//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
+//                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+//                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
+//                    strLimit = "unlimited";
+//                } else {
+//                    strLimit = "daily";
+//                    maxValue = daily;
+//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                }
+                if (objLimit.getLimitType().toLowerCase().equals("daily")) {
                     strLimit = "daily";
                     maxValue = daily;
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
                     tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
-                } else if ((daily == 0 || daily < 0) && week > 0) {
+                } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
                     strLimit = "week";
                     maxValue = week;
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
@@ -813,10 +833,8 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher {
                     tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
                     strLimit = "unlimited";
                 } else {
-                    strLimit = "daily";
-                    maxValue = daily;
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
-                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                    strLimit = "";
+                    tvLimit.setVisibility(View.GONE);
                 }
             } else {
                 tvLimit.setVisibility(View.GONE);
@@ -955,14 +973,29 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher {
             } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
                 value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
-                if (strLimit.equals("daily")) {
-                    tvError.setText("Amount entered exceeds your daily limit");
-                } else if (strLimit.equals("week")) {
-                    tvError.setText("Amount entered exceeds your weekly limit");
+//                if (strLimit.equals("daily")) {
+//                    tvError.setText("Amount entered exceeds your daily limit");
+//                } else if (strLimit.equals("week")) {
+//                    tvError.setText("Amount entered exceeds your weekly limit");
+//                }
+//                tvError.setVisibility(View.VISIBLE);
+//                lyBalance.setVisibility(View.GONE);
+//                value = false;
+                if (!objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("per transaction")) {
+                    if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("daily")) {
+                        tvError.setText("Amount entered exceeds your daily limit");
+                    } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("weekly")) {
+                        tvError.setText("Amount entered exceeds your weekly limit");
+                    }
+                    tvError.setVisibility(View.VISIBLE);
+                    lyBalance.setVisibility(View.GONE);
+                    isMinimumError = false;
+                    value = false;
+                } else {
+                    tvError.setVisibility(View.GONE);
+                    lyBalance.setVisibility(View.VISIBLE);
+                    value = true;
                 }
-                tvError.setVisibility(View.VISIBLE);
-                lyBalance.setVisibility(View.GONE);
-                value = false;
             } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
                 tvError.setText("Amount entered exceeds available balance");
                 tvError.setVisibility(View.VISIBLE);
@@ -1406,7 +1439,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher {
         try {
             pDialog = Utils.showProgressDialog(WithdrawTokenActivity.this);
             if (Utils.checkInternet(WithdrawTokenActivity.this)) {
-                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(),objMyApplication.getStrToken());
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(), objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
