@@ -153,7 +153,11 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (companyId != 0) {
-                    identityVerificationViewModel.getPostAddDBABusiness(companyId);
+//                    identityVerificationViewModel.getPostAddDBABusiness(companyId);
+                    startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
+                            .putExtra(Utils.ADD_BUSINESS, true)
+                            .putExtra(Utils.ADD_DBA, true)
+                            .putExtra("comanyId",companyId));
                     dialog.cancel();
                 }
             }
@@ -251,24 +255,24 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        try {
-            identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
-                @Override
-                public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d(TAG, "identityImageResponse " + identityImageResponse);
-                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                        startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra(Utils.ADD_BUSINESS, true)
-                                .putExtra(Utils.ADD_DBA, true));
-                    } else {
-                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+//                @Override
+//                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+//                    LogUtils.d(TAG, "identityImageResponse " + identityImageResponse);
+//                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+//                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+//                        startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
+//                                .putExtra(Utils.ADD_BUSINESS, true)
+//                                .putExtra(Utils.ADD_DBA, true));
+//                    } else {
+//                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+//                    }
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

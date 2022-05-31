@@ -97,6 +97,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     Long mLastClickTime = 0L,mLastClickTimeAddr = 0L;
     MyApplication objMyApplication;
     public ScrollView dbaBasicSL, addressSL;
+    private boolean addDBAClick = false;
 
     //Address
     TextInputLayout companyaddresstil, companyaddress2til, citytil, statetil, zipcodetil, countryTIL;

@@ -64,6 +64,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
     private DBAInfoResp dbaInfoResponse;
     private boolean addBusiness = false, addDBA = false;
     public static boolean isAddBusinessCalled = false;
+    public static boolean isAddDbaCalled = false;
     private String boAPICallFrom = "RESUME";
     private LoginViewModel loginViewModel;
     private CardView mReviewCv;
@@ -267,6 +268,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                                 Intent intent = new Intent(BusinessRegistrationTrackerActivity.this, DBAInfoAcivity.class);
                                 intent.putExtra("FROM", "TRACKER");
                                 intent.putExtra("TYPE", "EXIST");
+                                intent.putExtra("addDba",addDBA);
                                 startActivity(intent);
                             }
                         }
@@ -666,7 +668,7 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
             super.onResume();
 //            if (Utils.isKeyboardVisible)
 //                Utils.hideKeypad(this);
-            if (!addBusiness || isAddBusinessCalled || addDBA) {
+            if (!addBusiness || isAddBusinessCalled) {
                 showProgressDialog();
                 businessIdentityVerificationViewModel.getBusinessTracker();
             }
