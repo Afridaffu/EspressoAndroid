@@ -1589,6 +1589,7 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
             ex.printStackTrace();
         }
     }
+
     private ArrayList<Integer> getDefaultTransactionTypes() {
         ArrayList<Integer> transactionType = new ArrayList<>();
         transactionType.add(Utils.payRequest);

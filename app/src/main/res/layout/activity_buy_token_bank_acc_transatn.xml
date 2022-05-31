@@ -552,7 +552,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:layout_marginRight="@dimen/_11sdp"
                     android:layout_marginBottom="@dimen/_20sdp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:cardCornerRadius="@dimen/_10sdp">
 
                     <LinearLayout
