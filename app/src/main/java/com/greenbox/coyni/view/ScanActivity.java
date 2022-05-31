@@ -627,7 +627,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                     try {
 //                        startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
 //                                Uri.fromParts("package", getPackageName(), null)));
-                        Utils.showDialogPermission(ScanActivity.this,"Allow Access to your Camera","You are not allowing to access the\n Camera. If you want to Scan, please go\n to Settings and enable the Camera\n permission");
+                        Utils.showDialogPermission(ScanActivity.this,"Allow Access to your Camera","You are not allowing to access the Camera. If you want to Scan, please go to Settings and enable the Camera permission.");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

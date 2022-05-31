@@ -69,14 +69,10 @@ public class VerificationFailedActivity extends BaseActivity {
                         SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
                         spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvName.setText(spannableName);
-
-                        String legalName = getString(R.string.legal_name_name, data.getEmail());
-                        SpannableStringBuilder spannableLegalName = new SpannableStringBuilder(legalName);
-                        spannableLegalName.setSpan(new CustomTypefaceSpan("", font), 11, legalName.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-                        mTvLegalName.setText(spannableLegalName);
                     }
 
                     mTvDbaName.setVisibility(View.GONE);
+                    mTvLegalName.setVisibility(View.GONE);
                 }
             }
         }
