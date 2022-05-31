@@ -352,15 +352,21 @@ public class CustomerProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
-                        } else {
-                            Utils.showCustomToast(CustomerProfileActivity.this, "Please complete your Identity Verification process.", 0, "");
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
                         }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+
+//                        if (!objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+//                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+//                                return;
+//                            }
+//                            mLastClickTime = SystemClock.elapsedRealtime();
+//                            startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
+//                        } else {
+//                            Utils.showCustomToast(CustomerProfileActivity.this, "Please complete your Identity Verification process.", 0, "");
+//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -370,13 +376,12 @@ public class CustomerProfileActivity extends BaseActivity {
             cpPaymentMethodsLL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
                     try {
-                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                             startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
                         } else {
                             Utils.showCustomToast(CustomerProfileActivity.this, "Please complete your Identity Verification process.", 0, "");

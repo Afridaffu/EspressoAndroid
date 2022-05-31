@@ -65,7 +65,7 @@ public class VerificationFailedActivity extends BaseActivity {
                 } else if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
                     if (data.getEmail() != null && !data.getEmail().equals("")) {
 
-                        String name = getString(R.string.dear_name, data.getEmail());
+                        String name = getString(R.string.dear_name, data.getFirstName()+" "+data.getLastName());
                         SpannableStringBuilder spannableName = new SpannableStringBuilder(name);
                         spannableName.setSpan(new CustomTypefaceSpan("", font), 5, name.length(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                         mTvName.setText(spannableName);
