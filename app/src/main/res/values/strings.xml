@@ -685,6 +685,7 @@
     <string name="no_notifications">You have no notifications</string>
     <string name="no_requests">You have no requests</string>
     <string name="time_zone_changed">Time zone changed successfully</string>
+    <string name="default_account_changed">"Default account changed successfully"</string>
 
     <string name="internal_storage">Internal storage</string>
     <string name="pay">Pay</string>
