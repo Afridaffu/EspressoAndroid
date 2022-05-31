@@ -47,7 +47,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<BaseProfile> businessAccountList ;
     private List<ProfilesResponse.Profiles> personalAccountList = new ArrayList<>();
-    private int companyId;
+    private BaseProfile selectedProfile = null;
     private Long mLastClickTimeQA = 0L;
 
     @Override
@@ -128,16 +128,16 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 LogUtils.d(TAG, "ProfilesResponse.Profiles  " + item.toString());
                 addDBACardView.setEnabled(true);
                 addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
-                companyId = item.getId();
+                selectedProfile = item;
+
             }
         });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         rvCompanyList.setLayoutManager(mLayoutManager);
         rvCompanyList.setItemAnimator(new DefaultItemAnimator());
         rvCompanyList.setAdapter(addNewBusinessAccountDBAAdapter);
-        LogUtils.d(TAG, "eeee" + companyId);
 
-        if (companyId != 0) {
+        if (selectedProfile != null) {
             addDBACardView.setCardBackgroundColor(getColor(R.color.primary_green));
             addDBACardView.setEnabled(true);
         } else {
@@ -148,10 +148,16 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         addDBACardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (companyId != 0) {
-                    identityVerificationViewModel.getPostAddDBABusiness(companyId);
-                    dialog.cancel();
-                }
+//                if (companyId != 0) {
+//                    identityVerificationViewModel.getPostAddDBABusiness(companyId);
+//                    dialog.cancel();
+//                }
+                Intent inAddDba = new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class);
+                inAddDba.putExtra(Utils.ADD_BUSINESS, true);
+                inAddDba.putExtra(Utils.ADD_DBA, true);
+                inAddDba.putExtra(Utils.IS_FIRST_DBA, selectedProfile.getDbaCount() > 1);
+                startActivity(inAddDba);
+
             }
         });
 
@@ -184,6 +190,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
             if(dBAList == null || dBAList.size() == 0) {
                 continue;
             }
+            profile.setDbaCount(dBAList.size());
             if(dBAList.size() == 1 && !dBAList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 isInActiveDBAFound = true;
             } else {
@@ -211,38 +218,11 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 public void onChanged(ProfilesResponse profilesResponse) {
                     if (profilesResponse != null) {
                         filterList = profilesResponse.getData();
-//                        for (ProfilesResponse.Profiles c : filterList) {
-//                            LogUtils.d(TAG, "getProfileRespMutableLiveData" + c.getDbaOwner());
-//                            if (c.getDbaOwner() == null
-//                                    && c.getAccountType().equals(Utils.BUSINESS) && c.getDbaOwner() == null) {
-//                                businessAccountList.add(c);
-//                            }
-//                        }
-
                         prepareCompanyList();
                     }
                     dismissDialog();
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-//            identityVerificationViewModel.getBusinessAddCustomer().observe(this, new Observer<AddBusinessUserResponse>() {
-//                @Override
-//                public void onChanged(AddBusinessUserResponse identityImageResponse) {
-//                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-//                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-//                        startActivity(new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class)
-//                                .putExtra(Utils.ADD_BUSINESS, true)
-//                                .putExtra(Utils.ADD_DBA, false));
-//
-//                    } else {
-//                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessAddNewBusinessAccountActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
-//                    }
-//                }
-//            });
         } catch (Exception e) {
             e.printStackTrace();
         }

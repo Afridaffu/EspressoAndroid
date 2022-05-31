@@ -355,6 +355,7 @@ public class Utils {
 
     public static final String ADD_BUSINESS = "ADDBUSINESS";
     public static final String ADD_DBA = "ADDDBA";
+    public static final String IS_FIRST_DBA = "is_first_dba";
     public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
 
     public static final int boTargetPercentage = 51;
