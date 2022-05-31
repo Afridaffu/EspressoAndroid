@@ -24,7 +24,7 @@
     <string name="additional_documents">Additional Documents </string>
     <string name="uploaded_articles">Uploaded Articles of Incorporation</string>
     <string name="previous">Previous</string>
-    <string name="chpwdmsg">Looks like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
+    <string name="chpwdmsg">Looks like it’s time to update your password. For security purposes, we need you to update your old password.</string>
     <string name="user">User</string>
     <string name="personal">Personal</string>
     <string name="business">Business</string>
@@ -366,6 +366,7 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
+    <string name="interest_in_coyni_customer_application">Thank you for your interest in customer processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name: %1$s</string>
     <string name="verification_dba_name">DBA: %1$s</string>
     <string name="we_thank_for_interest">Again, we thank you for your interest and wish you the best of luck.</string>
@@ -687,5 +688,7 @@
 
     <string name="internal_storage">Internal storage</string>
     <string name="pay">Pay</string>
+    <string name="allow_access_header">Allow Access to your Camera</string>
+    <string name="camera_permission_desc">You are not allowing to access the Camera. Please go to Settings and enable the Camera permission.</string>
 
 </resources>

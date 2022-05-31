@@ -54,6 +54,7 @@
                 android:textSize="@dimen/_11ssp" />
 
             <TextView
+                android:id="@+id/descTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"

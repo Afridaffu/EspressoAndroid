@@ -83,7 +83,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     DatabaseHandler dbHandler;
     LinearLayout lyPayClose, lyBalance, payRequestLL, addNoteClickLL;
     ImageView imgProfile, imgConvert;
-    TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV;
+    TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV, tvError;
     TransactionLimitResponse objResponse;
     float fontSize, dollarFont;
     WalletInfo cynWallet;
@@ -181,7 +181,12 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 
                     }
 
-                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
+//                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
+//                        disableButtons(false);
+//                    } else {
+//                        disableButtons(true);
+//                    }
+                    if (validation()) {
                         disableButtons(false);
                     } else {
                         disableButtons(true);
@@ -197,7 +202,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lp.setMargins(0, 0, 0, 0);
                     payRequestET.setLayoutParams(lp);
-                    LogUtils.d(TAG, "lengthhh zeroo");
+                    LogUtils.d(TAG, "lengthhh zero");
                     LinearLayout.LayoutParams lpImageConvert = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lpImageConvert.setMargins(15, 38, 0, 0);
                     imgConvert.setLayoutParams(lpImageConvert);
@@ -206,6 +211,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     cynValidation = 0.0;
                     disableButtons(true);
                     cKey.clearData();
+                    tvError.setVisibility(View.GONE);
+                    lyBalance.setVisibility(View.VISIBLE);
                 } else {
                     payRequestET.setText("");
                     LogUtils.d(TAG, "lengthhh zeroo");
@@ -339,17 +346,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 pDialog = Utils.showProgressDialog(PayRequestActivity.this);
                                 cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
                                 calculateFee(Utils.USNumberFormat(cynValue));
-//                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-//                                    isPayClick = true;
-//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-//                                    calculateFee(Utils.USNumberFormat(cynValue));
-//                                } else {
-//                                    objMyApplication.setStrScreen("payRequest");
-//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                                    i.putExtra("screen", "payRequest");
-//                                    startActivity(i);
-//                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -432,6 +428,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             tvName = findViewById(R.id.tvName);
             accAddress = findViewById(R.id.accAddress);
             tvCurrency = findViewById(R.id.tvCurrency);
+            tvError = findViewById(R.id.tvError);
             coyniTV = findViewById(R.id.coyniTV);
             availBal = findViewById(R.id.availBal);
             requestTV = findViewById(R.id.tvRequest);
@@ -808,15 +805,15 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //                userProfile.setVisibility(View.GONE);
 //                userName.setVisibility(View.VISIBLE);
 //            }
-            if (strCImage.startsWith("content:")) {
-                userProfile.setVisibility(View.VISIBLE);
-                userName.setVisibility(View.GONE);
-                userProfile.setImageBitmap(objMyApplication.convertImageURIToBitMap(strCImage));
-            } else if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
+            if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+            } else if (strCImage.startsWith("content:")) {
+                userProfile.setVisibility(View.VISIBLE);
+                userName.setVisibility(View.GONE);
+                userProfile.setImageBitmap(objMyApplication.convertImageURIToBitMap(strCImage));
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);
@@ -828,13 +825,45 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    private Boolean validation() {
+        Boolean value = true;
+        try {
+            String strPay = payRequestET.getText().toString().trim().replace("\"", "");
+            if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+                //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
+                tvError.setText("Amount should be greater than zero.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+            } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit()))) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                tvError.setText("Amount entered exceeds transaction limit.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+            } else {
+                tvError.setVisibility(View.GONE);
+                lyBalance.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
-                value = false;
-            } else if (cynValue > avaBal) {
+//            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
+//                value = false;
+//            } else
+            if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             }

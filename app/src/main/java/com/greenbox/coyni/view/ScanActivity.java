@@ -141,6 +141,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     TextView tvSaveUserName, saveProfileTitle, saveSetAmount;
     ImageView savedImageView;
     CircleImageView saveProfileIV;
+    private LinearLayout mDenyAccessScreen;
+    private CardView goToSettings;
 
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     boolean isAuthenticationCalled = false;
@@ -231,12 +233,14 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             closeBtnScanCode = findViewById(R.id.closeBtnSC);
             closeBtnScanMe = findViewById(R.id.imgCloseSM);
             scanCode = findViewById(R.id.scanCodeTV);
+            mDenyAccessScreen = findViewById(R.id.deny_camera_access);
             scanMe = findViewById(R.id.scanMeTV);
             setKeyboardVisibilityListener(ScanActivity.this);
             toglebtn1 = findViewById(R.id.toglebtn);
             tvWalletAddress = findViewById(R.id.tvWalletAddress);
             mycodeScannerView = findViewById(R.id.scanner_view);
             scannerLayout = findViewById(R.id.scannerLayout);
+            goToSettings = findViewById(R.id.clickToGoSettings);
             scannerBar = findViewById(R.id.lineView);
             flashLL = findViewById(R.id.flashBtnRL);
             idIVQrcode = findViewById(R.id.idIVQrcode);
@@ -342,6 +346,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 StartScanner();
             }
 
+
             scanMe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -383,20 +388,36 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                         if (ContextCompat.checkSelfPermission(ScanActivity.this,
                                 Manifest.permission.CAMERA)
                                 == PackageManager.PERMISSION_GRANTED) {
+                            mycodeScannerView.setVisibility(View.VISIBLE);
+                            scannerLayout.setVisibility(View.VISIBLE);
+                            flashLL.setVisibility(View.VISIBLE);
+                            closeBtnScanCode.setVisibility(View.VISIBLE);
+                            closeBtnScanMe.setVisibility(View.GONE);
+                            mDenyAccessScreen.setVisibility(View.GONE);
+                            layoutHead.setVisibility(View.GONE);
                             mcodeScanner.startPreview();
+                        }
+                        else {
+                            mycodeScannerView.setVisibility(View.GONE);
+                            mDenyAccessScreen.setVisibility(View.VISIBLE);
+                            flashLL.setVisibility(View.GONE);
+                            scannerLayout.setVisibility(View.GONE);
+                            layoutHead.setVisibility(View.VISIBLE);
+                            closeBtnScanMe.setVisibility(View.VISIBLE);
+                            closeBtnScanCode.setVisibility(View.GONE);
                         }
                         scanCode.setTextColor(getResources().getColor(R.color.white));
                         scanCode.setBackgroundResource(R.drawable.bg_core_colorfill);
                         scanMe.setBackgroundColor(getResources().getColor(R.color.white));
                         scanMe.setTextColor(getResources().getColor(R.color.primary_black));
                         scanMeSV.setVisibility(View.GONE);
-                        layoutHead.setVisibility(View.GONE);
-                        closeBtnScanMe.setVisibility(View.GONE);
+//                        layoutHead.setVisibility(View.GONE);
+//                        closeBtnScanMe.setVisibility(View.GONE);
                         //ScanCode Visible
-                        mycodeScannerView.setVisibility(View.VISIBLE);
-                        scannerLayout.setVisibility(View.VISIBLE);
-                        flashLL.setVisibility(View.VISIBLE);
-                        closeBtnScanCode.setVisibility(View.VISIBLE);
+//                        mycodeScannerView.setVisibility(View.VISIBLE);
+//                        scannerLayout.setVisibility(View.VISIBLE);
+//                        flashLL.setVisibility(View.VISIBLE);
+//                        closeBtnScanCode.setVisibility(View.VISIBLE);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -525,7 +546,9 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 @Override
                 public void onClick(View view) {
                     try {
-                        mcodeScanner.setFlashEnabled(false);
+                        if (mcodeScanner!= null) {
+                            mcodeScanner.setFlashEnabled(false);
+                        }
                         finish();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -592,6 +615,19 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                             startActivityForResult(photoPickerIntent, 101);
 
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            goToSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+//                        startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+//                                Uri.fromParts("package", getPackageName(), null)));
+                        Utils.showDialogPermission(ScanActivity.this,"Allow Access to your Camera","You are not allowing to access the Camera. If you want to Scan, please go to Settings and enable the Camera permission.");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -984,7 +1020,13 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                         });
 
                     } else {
-                        Toast.makeText(this, "Permistion Denied", Toast.LENGTH_SHORT).show();
+                        mycodeScannerView.setVisibility(View.GONE);
+                        mDenyAccessScreen.setVisibility(View.VISIBLE);
+                        flashLL.setVisibility(View.GONE);
+                        scannerLayout.setVisibility(View.GONE);
+                        layoutHead.setVisibility(View.VISIBLE);
+                        closeBtnScanMe.setVisibility(View.VISIBLE);
+                        closeBtnScanCode.setVisibility(View.GONE);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1009,6 +1051,16 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         try {
             super.onResume();
             isQRScan = false;
+
+            if (Utils.isSettingsBtnClicked && ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                StartScanner();
+                mycodeScannerView.setVisibility(View.VISIBLE);
+                mDenyAccessScreen.setVisibility(View.GONE);
+                layoutHead.setVisibility(View.GONE);
+                closeBtnScanMe.setVisibility(View.GONE);
+                closeBtnScanCode.setVisibility(View.VISIBLE);
+
+            }
             if (!isAlbumClicked) {
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA)
@@ -1022,7 +1074,6 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
             } else {
                 isAlbumClicked = false;
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();

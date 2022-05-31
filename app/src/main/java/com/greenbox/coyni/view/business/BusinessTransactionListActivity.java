@@ -1267,7 +1267,10 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
                 pendingTxt.setVisibility(View.GONE);
                 layoutTransactionspending.setVisibility(View.GONE);
                 layoutTransactionsposted.setVisibility(View.GONE);
@@ -1292,6 +1295,8 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                 if (transactionType.size() > 0) {
                     isFilters = true;
                     transactionListRequest.setTransactionType(transactionType);
+                } else {
+                    transactionListRequest.setTransactionType(getDefaultTransactionTypes());
                 }
                 if (transactionSubType.size() > 0) {
                     isFilters = true;

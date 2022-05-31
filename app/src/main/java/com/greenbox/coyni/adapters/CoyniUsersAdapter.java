@@ -2,6 +2,7 @@ package com.greenbox.coyni.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
     List<CoyniUsersData> listUsers;
     Context mContext;
     MyApplication objMyApplication;
+    Long mLastClickTime = 0L;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvNameHead, tvUserName, tvWalletAddress;
@@ -56,31 +58,7 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             CoyniUsersData objData = listUsers.get(position);
-//            if (objData.getFullName() != null && !objData.getFullName().equals("")) {
-//                if (objData.getFullName().contains(" ")) {
-//                    if (!objData.getFullName().split(" ")[0].equals("")) {
-//                        if (objData.getFullName().split(" ").length > 2) {
-//                            if (!objData.getFullName().split(" ")[1].equals("")) {
-//                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
-//                            } else {
-//                                holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[2].substring(0, 1).toUpperCase());
-//                            }
-//                        } else {
-//                            holder.tvNameHead.setText(objData.getFullName().split(" ")[0].substring(0, 1).toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
-//                        }
-//                    } else {
-//                        holder.tvNameHead.setText(objData.getFullName().split(" ")[0].toUpperCase() + objData.getFullName().split(" ")[1].substring(0, 1).toUpperCase());
-//                    }
-//                } else {
-//                    holder.tvNameHead.setText(objData.getFullName().substring(0, 1).toUpperCase());
-//                }
-//                holder.tvUserName.setText(Utils.capitalize(objData.getFullName()));
-//                if (objData.getWalletId().length() > Integer.parseInt(mContext.getString(R.string.waddress_length))) {
-//                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId().substring(0, Integer.parseInt(mContext.getString(R.string.waddress_length))) + "...");
-//                } else {
-//                    holder.tvWalletAddress.setText("Account Address " + objData.getWalletId());
-//                }
-            String strPhContact = "", strEcoSysName = "", strName = "";
+            String strPhContact = "", strEcoSysName = "", strName = "", strImagePath = "";
             if (objData.getFullName() != null && !objData.getFullName().equals("")) {
                 if (objData.getFullName().length() > 24) {
                     strEcoSysName = objData.getFullName().substring(0, 24) + "...";
@@ -92,18 +70,15 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
             }
             if (objMyApplication.getObjPhContacts().containsKey(objData.getPhoneNumber().replace("(1)", ""))) {
                 strName = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getFirstName() + " " + objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getLastName();
-//                if (objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().length() > 24) {
-//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName().substring(0, 24) + "...";
-//                } else {
-//                    strPhContact = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getUserName();
-//                }
                 if (strName.length() > 24) {
                     strPhContact = strName.substring(0, 24) + "...";
                 } else {
                     strPhContact = strName;
                 }
+                strImagePath = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getImagePath();
             } else {
                 strPhContact = "";
+                strImagePath = "";
             }
             if (!strPhContact.equals("") && !strEcoSysName.equals("")) {
                 holder.tvUserName.setText(Utils.capitalize(strPhContact));
@@ -124,23 +99,45 @@ public class CoyniUsersAdapter extends RecyclerView.Adapter<CoyniUsersAdapter.My
             if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
                 holder.imgUser.setVisibility(View.VISIBLE);
                 holder.tvNameHead.setVisibility(View.GONE);
-
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(mContext);
                 utility.addImage(objData.getImage(), holder.imgUser, R.drawable.ic_profilelogo);
+            } else if (strImagePath != null && !strImagePath.equals("")) {
+                if (strImagePath.startsWith("content:")) {
+                    holder.imgUser.setVisibility(View.VISIBLE);
+                    holder.tvNameHead.setVisibility(View.GONE);
+                    holder.imgUser.setImageBitmap(objMyApplication.convertImageURIToBitMap(strImagePath.trim()));
+                } else {
+                    holder.imgUser.setVisibility(View.GONE);
+                    holder.tvNameHead.setVisibility(View.VISIBLE);
+                }
             } else {
                 holder.imgUser.setVisibility(View.GONE);
                 holder.tvNameHead.setVisibility(View.VISIBLE);
             }
-//            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        String imgPath = "";
+                        if (objMyApplication.getObjPhContacts().containsKey(objData.getPhoneNumber().replace("(1)", ""))) {
+                            imgPath = objMyApplication.getObjPhContacts().get(objData.getPhoneNumber().replace("(1)", "")).getImagePath();
+                        }
                         Intent i = new Intent(mContext, PayRequestActivity.class);
                         i.putExtra("walletId", objData.getWalletId());
                         i.putExtra("name", objData.getFullName());
                         i.putExtra("phone", objData.getPhoneNumber());
+                        if (objData.getImage() != null && !objData.getImage().trim().equals("")) {
+                            i.putExtra("image", objData.getImage());
+                        } else if (imgPath != null && !imgPath.equals("")) {
+                            i.putExtra("image", imgPath);
+                        } else {
+                            i.putExtra("image", "");
+                        }
                         mContext.startActivity(i);
                     } catch (Exception ex) {
                         ex.printStackTrace();

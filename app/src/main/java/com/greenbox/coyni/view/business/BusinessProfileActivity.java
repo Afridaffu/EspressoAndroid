@@ -815,9 +815,9 @@ public class BusinessProfileActivity extends BaseActivity {
                 userFullname.setText(getResources().getString(R.string.dba_name, userName));
 
                 if (userName != null && userName.length() > 18) {
-                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 18) + " ");
                 } else {
-                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName));
+                    userFullname.setText( Utils.getCapsSentences(userName));
                 }
                 if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                     char first = firstName.charAt(0);
@@ -830,9 +830,9 @@ public class BusinessProfileActivity extends BaseActivity {
             } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
                 userName = myApplication.getMyProfile().getData().getDbaName();
                 if (userName != null && userName.length() > 18) {
-                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                    userFullname.setText( Utils.getCapsSentences(userName).substring(0, 18) + " ");
                 } else if (userName != null) {
-                    userFullname.setText("Hi! " + Utils.getCapsSentences(userName));
+                    userFullname.setText(Utils.getCapsSentences(userName));
                 }
                 profileImage.setVisibility(View.VISIBLE);
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null

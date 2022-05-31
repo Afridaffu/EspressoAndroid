@@ -85,6 +85,8 @@ import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
+import java.util.Locale;
+
 
 public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
     MyApplication objMyApplication;
@@ -333,9 +335,9 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 strCvv = getIntent().getStringExtra("cvv");
             }
             bindPayMethod(selectedCard);
-            if (getIntent().getStringExtra("cvv") == null && getIntent().getStringExtra("notoken") != null && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                displayCVV(selectedCard);
-            }
+//            if (getIntent().getStringExtra("cvv") == null && getIntent().getStringExtra("notoken") != null && objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+//                displayCVV(selectedCard);
+//            }
             setFaceLock();
             setTouchId();
             etAmount.addTextChangedListener(this);
@@ -495,6 +497,15 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                         objResponse = transactionLimitResponse;
                         setDailyWeekLimit(transactionLimitResponse.getData());
                         if (etAmount.getText().toString().trim().length() > 0) {
+                            if (tvCYN.getVisibility() == View.VISIBLE) {
+                                isCYN = true;
+                                isUSD = false;
+                                convertCYNValue();
+                            } else {
+                                isCYN = false;
+                                isUSD = true;
+                                convertUSDValue();
+                            }
                             if (validation()) {
                                 ctKey.enableButton();
                             } else {
@@ -842,12 +853,31 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     daily = Double.parseDouble(objLimit.getDailyAccountLimit());
                 }
                 strCurrency = " " + getString(R.string.currency);
-                if ((week == 0 || week < 0) && daily > 0) {
+//                if ((week == 0 || week < 0) && daily > 0) {
+//                    strLimit = "daily";
+//                    maxValue = daily;
+//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                } else if ((daily == 0 || daily < 0) && week > 0) {
+//                    strLimit = "week";
+//                    maxValue = week;
+//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
+//                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+//                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
+//                    strLimit = "unlimited";
+//                } else {
+//                    strLimit = "daily";
+//                    maxValue = daily;
+//                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
+//                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+//                }
+                if (objLimit.getLimitType().toLowerCase().equals("daily")) {
                     strLimit = "daily";
                     maxValue = daily;
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
                     tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
-                } else if ((daily == 0 || daily < 0) && week > 0) {
+                } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
                     strLimit = "week";
                     maxValue = week;
                     strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
@@ -856,10 +886,8 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                     tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
                     strLimit = "unlimited";
                 } else {
-                    strLimit = "daily";
-                    maxValue = daily;
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
-                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+                    strLimit = "";
+                    tvLimit.setVisibility(View.GONE);
                 }
             } else {
                 tvLimit.setVisibility(View.GONE);
@@ -926,14 +954,27 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
                 tvError.setVisibility(View.VISIBLE);
                 return value = false;
             } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
-                if (strLimit.equals("daily")) {
-                    tvError.setText("Amount entered exceeds your daily limit");
-                } else if (strLimit.equals("week")) {
-                    tvError.setText("Amount entered exceeds your weekly limit");
+//                if (strLimit.equals("daily")) {
+//                    tvError.setText("Amount entered exceeds your daily limit");
+//                } else if (strLimit.equals("week")) {
+//                    tvError.setText("Amount entered exceeds your weekly limit");
+//                }
+//                tvError.setVisibility(View.VISIBLE);
+//                isMinimumError = false;
+//                return value = false;
+                if (!objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("per transaction")) {
+                    if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("daily")) {
+                        tvError.setText("Amount entered exceeds your daily limit");
+                    } else if (objResponse.getData().getLimitType().toLowerCase(Locale.ROOT).equals("weekly")) {
+                        tvError.setText("Amount entered exceeds your weekly limit");
+                    }
+                    tvError.setVisibility(View.VISIBLE);
+                    isMinimumError = false;
+                    value = false;
+                } else {
+                    tvError.setVisibility(View.GONE);
+                    value = true;
                 }
-                tvError.setVisibility(View.VISIBLE);
-                isMinimumError = false;
-                return value = false;
             } else {
                 isMinimumError = false;
                 tvError.setVisibility(View.INVISIBLE);
@@ -1097,7 +1138,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isUSD) {
                 isUSD = false;
                 usdValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                cynValue = ((usdValue - feeInAmount) * 100) / (100 + feeInPercentage);
                 cynValue = usdValue * (1 - (feeInPercentage / 100)) - feeInAmount;
             }
         } catch (Exception ex) {
@@ -1110,7 +1150,6 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
             if (isCYN) {
                 isCYN = false;
                 cynValue = Double.parseDouble(etAmount.getText().toString().trim().replace(",", ""));
-//                usdValue = (cynValue + (cynValue * (feeInPercentage / 100))) + feeInAmount;
                 usdValue = (cynValue + feeInAmount) / (1 - (feeInPercentage / 100));
             }
         } catch (Exception ex) {
@@ -1200,7 +1239,7 @@ public class BuyTokenActivity extends AppCompatActivity implements TextWatcher {
 //            request.setTokens(Utils.convertBigDecimalUSDC(String.valueOf(total)));
 //            request.setTxnSubType(strSubType);
             if (Utils.checkInternet(BuyTokenActivity.this)) {
-                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest(),objMyApplication.getStrToken());
+                buyTokenViewModel.buyTokens(objMyApplication.getBuyRequest(), objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

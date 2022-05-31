@@ -87,14 +87,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTimeQA = SystemClock.elapsedRealtime();
-                    Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
-                    for (ProfilesResponse.Profiles profile : profilesList) {
-                        if (profile.getAccountType().equals(Utils.PERSONAL)) {
-                            inNewAccount.putExtra("PersonalAccount", "true");
-                            break;
-                        }
-                    }
-                    startActivity(inNewAccount);
+                    openNewAccount();
                 }
             });
         } catch (Exception e) {
@@ -139,6 +132,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     }
 
     private void changeAccount(int childID) {
+        showProgressDialog();
         loginViewModel.postChangeAccount(childID);
     }
 
@@ -159,9 +153,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             userNameTV.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 18) {
-                userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18) + " ");
             } else {
-                userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
+                userNameTV.setText(Utils.getCapsSentences(userName));
             }
             if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
                 char first = firstName.charAt(0);
@@ -174,9 +168,9 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         } else if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
             userName = myApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 18) {
-                userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18) + " ");
+                userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18) + " ");
             } else if (userName != null) {
-                userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
+                userNameTV.setText(Utils.getCapsSentences(userName));
             }
             imgProfile.setVisibility(View.VISIBLE);
             if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
@@ -189,6 +183,37 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                 imgProfile.setImageResource(R.drawable.acct_profile);
             }
         }
+        if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null) {
+                if (myApplication.getMyProfile().getData().getFirstName() != null) {
+                    firstName = myApplication.getMyProfile().getData().getFirstName();
+                    userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                }
+                if (myApplication.getMyProfile().getData().getLastName() != null) {
+                    lastName = myApplication.getMyProfile().getData().getLastName();
+                    userName = userName + " ";
+                    userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
+                }
+                if (userName != null && userName.length() > 21) {
+                    userNameTV.setText( Utils.getCapsSentences(userName).substring(0, 21) + " ");
+                } else {
+                    userNameTV.setText(Utils.getCapsSentences(userName));
+                }
+                imgProfile.setVisibility(View.VISIBLE);
+                if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
+                        && myApplication.getMyProfile().getData().getImage() != null) {
+                    userShortInfoTV.setVisibility(View.GONE);
+                    String imageUrl = myApplication.getMyProfile().getData().getImage().trim();
+                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                    utility.addImage(imageUrl, imgProfile, R.drawable.ic_profile);
+                } else {
+                    userShortInfoTV.setVisibility(View.VISIBLE);
+                    imgProfile.setVisibility(View.GONE);
+                    String userName = firstName.substring(0, 1).toUpperCase() + lastName.substring(0,1).toUpperCase();
+                    userShortInfoTV.setText(userName);
+                }
+            }
+        }
 
 
         userNameTV.setOnClickListener(new View.OnClickListener() {
@@ -196,17 +221,17 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             public void onClick(View view) {
                 if (userNameTV.getText().toString().contains("...")) {
                     if (userName.length() == 18 || userName.length() > 18) {
-                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18));
+                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18));
                     } else {
-                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
+                        userNameTV.setText(Utils.getCapsSentences(userName));
                     }
                 } else {
                     if (userName.length() == 18) {
-                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 17)  + "...");
+                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 17) + "...");
                     } else if (userName.length() > 18) {
-                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 18)  + "...");
+                        userNameTV.setText(Utils.getCapsSentences(userName).substring(0, 18) + "...");
                     } else {
-                        userNameTV.setText("Hi! " + Utils.getCapsSentences(userName));
+                        userNameTV.setText(Utils.getCapsSentences(userName));
                     }
                 }
             }
@@ -289,8 +314,13 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
 
             @Override
             public void onAddDbaClicked(String accountType, Integer id) {
-                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
-                addDBA(id);
+//                LogUtils.v(TAG, "account type " + accountType + "    id: " + id);
+//                addDBA(id);
+                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 2000) {
+                    return;
+                }
+                mLastClickTimeQA = SystemClock.elapsedRealtime();
+                openNewAccount();
             }
         });
         profilesListView.setAdapter(profilesListAdapter);
@@ -313,6 +343,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     public void addDBA(int companyId) {
         LogUtils.d(TAG, "addDBA" + companyId);
         if (companyId != 0) {
+            showProgressDialog();
             identityVerificationViewModel.getPostAddDBABusiness(companyId);
         } else {
 
@@ -324,6 +355,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         dashboardViewModel.getProfileRespMutableLiveData().observe(this, new Observer<ProfilesResponse>() {
             @Override
             public void onChanged(ProfilesResponse profilesResponse) {
+                dismissDialog();
                 if (profilesResponse != null) {
                     profilesList = profilesResponse.getData();
                     setProfilesAdapter();
@@ -334,6 +366,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
             @Override
             public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
+                dismissDialog();
                 if (businessTrackerResponse != null) {
                     if (businessTrackerResponse.getStatus().toLowerCase().equals("success")) {
                         myApplication.setBusinessTrackerResponse(businessTrackerResponse);
@@ -345,6 +378,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
+                dismissDialog();
                 if (btResp != null) {
                     if (btResp.getStatus().toLowerCase().equals("success")) {
 
@@ -385,25 +419,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
                 @Override
                 public void onChanged(AddBusinessUserResponse identityImageResponse) {
-                    LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
-                    if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
-                        Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
-                        startActivity(new Intent(BusinessCreateAccountsActivity.this, BusinessRegistrationTrackerActivity.class)
-                                .putExtra(Utils.ADD_BUSINESS, true)
-                                .putExtra(Utils.ADD_DBA, true));
-                    } else {
-                        Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), BusinessCreateAccountsActivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
-                @Override
-                public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                    dismissDialog();
                     LogUtils.d(TAG, "AddBusinessUserResponse " + identityImageResponse);
                     if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
@@ -473,5 +489,16 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
         params.height = height;
         listView.setLayoutParams(params);
         listView.requestLayout();
+    }
+
+    public void openNewAccount(){
+        Intent inNewAccount = new Intent(BusinessCreateAccountsActivity.this, BusinessAddNewAccountActivity.class);
+        for (ProfilesResponse.Profiles profile : profilesList) {
+            if (profile.getAccountType().equals(Utils.PERSONAL)) {
+                inNewAccount.putExtra("PersonalAccount", "true");
+                break;
+            }
+        }
+        startActivity(inNewAccount);
     }
 }

@@ -136,6 +136,9 @@ public class CustomEncryptionHandler implements Interceptor {
         Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
         String strOldBody = buffer.readUtf8();
+        if(strOldBody.equals("")) {
+            strOldBody = "{}";
+        }
         String strNewBody = null;
         String base64Str = java.util.Base64.getEncoder().encodeToString(strOldBody.getBytes());
         String finalStr = appendDateTime(base64Str) + "." + randomRequestId;

@@ -368,7 +368,7 @@
                             android:digits="0123456789"
                             android:imeOptions="actionDone"
                             android:autofillHints="AUTOFILL_HINT_SMS_OTP"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:maxLength="3"
                             android:paddingVertical="@dimen/_12sdp"
                             android:singleLine="true"

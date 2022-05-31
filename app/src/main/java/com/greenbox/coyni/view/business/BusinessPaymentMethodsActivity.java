@@ -39,6 +39,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.AddCardActivity;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BuyTokenPaymentMethodsActivity;
 import com.greenbox.coyni.view.EditCardActivity;
 import com.greenbox.coyni.view.PaymentMethodsActivity;
@@ -50,7 +51,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.List;
 
-public class BusinessPaymentMethodsActivity extends AppCompatActivity {
+public class BusinessPaymentMethodsActivity extends BaseActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
     BusinessDashboardViewModel businessDashboardViewModel;
@@ -90,7 +91,8 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                             if (objMyApplication.getStrFiservError() != null && objMyApplication.getStrFiservError().toLowerCase().equals("cancel")) {
                                 Utils.displayAlert("Bank integration has been cancelled", BusinessPaymentMethodsActivity.this, "", "");
                             } else {
-                                dialog = Utils.showProgressDialog(this);
+//                                dialog = Utils.showProgressDialog(BusinessPaymentMethodsActivity.this);
+                                showProgressDialog();
                                 customerProfileViewModel.meSyncAccount();
                             }
                         }
@@ -141,7 +143,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
                 } else if (strCurrent.equals("externalBank")) {
                     ControlMethod("addpayment");
                     strCurrent = "addpayment";
-                } else {
+                } else if (!strCurrent.equals("firstError")) {
                     super.onBackPressed();
                 }
             }
@@ -154,6 +156,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         try {
+//                dismissDialog();
             if (!isBankSuccess) {
                 if (strCurrent.equals("firstError")) {
                     displayError();
@@ -209,9 +212,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(SignOn signOn) {
                 try {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+                       dismissDialog();
                     if (signOn != null) {
                         if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
                             objMyApplication.setSignOnData(signOn.getData());
@@ -243,7 +244,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(APIError apiError) {
                 try {
-                    dialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             objMyApplication.setResolveUrl(true);
@@ -275,7 +276,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(SyncAccount syncAccount) {
                 try {
-                    dialog.dismiss();
+                    dismissDialog();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
                             businessDashboardViewModel.meBusinessPaymentMethods();
@@ -291,9 +292,7 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
         businessDashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+            dismissDialog();
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
@@ -613,8 +612,10 @@ public class BusinessPaymentMethodsActivity extends AppCompatActivity {
     private void getPaymentMethods() {
         try {
             isPayments = true;
-            dialog = Utils.showProgressDialog(this);
+//            dialog = Utils.showProgressDialog(BusinessPaymentMethodsActivity.this);
+            showProgressDialog();
             businessDashboardViewModel.meBusinessPaymentMethods();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

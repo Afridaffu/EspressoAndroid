@@ -21,16 +21,21 @@ import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.adapters.SelectedPaymentMethodsAdapter;
 import com.greenbox.coyni.model.APIError;
@@ -45,6 +50,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.utils.ExpandableHeightRecyclerView;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.business.AddPaymentSignetActivity;
 import com.greenbox.coyni.view.business.SelectPaymentMethodActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -70,7 +76,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     Dialog payDialog, addPayDialog, extBankDialog;
     String strSignOn = "", strCurrent = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
-    Dialog dialog, pDialog;
+    Dialog dialog, pDialog, cvvDialog;
     LinearLayout lyAPayClose, lyExternalClose, lyBPayClose;
     RelativeLayout layoutDCard, lyAddExternal, layoutCCard, lyAddBank, layoutSignet, layoutBDCard;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
@@ -81,6 +87,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
     TextView tvErrorHead, tvErrorMessage;
     TextView tvBankHead, tvBankCount, tvBankMsg, tvBBankError, tvSignetHead, tvSignetCount, tvSignetMsg, tvSignetError;
     ImageView imgBBankIcon, imgBBankArrow, imgSignetLogo, imgSignetArrow;
+    TextInputEditText etCVV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1455,9 +1462,10 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WithdrawTokenActivity.class);
                 startActivity(i);
             } else {
-                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
-                i.putExtra("notoken", strscreen);
-                startActivity(i);
+//                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
+//                i.putExtra("notoken", strscreen);
+//                startActivity(i);
+                displayCVV();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1573,7 +1581,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 
     private void showExternalBank() {
         try {
-            extBankDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
+            extBankDialog = new Dialog(WithdrawPaymentMethodsActivity.this,R.style.DialogTheme);
             extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
             extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -1594,6 +1602,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 //            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            window.setAttributes(wlp);
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            extBankDialog.setCancelable(false);
+
             extBankDialog.show();
             tvLearn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1629,7 +1639,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
-                            objMyApplication.setResolveUrl(true);
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
@@ -1690,11 +1699,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             Window window = addPayDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+            addPayDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            addPayDialog.setCancelable(false);
             addPayDialog.show();
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1729,6 +1740,97 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                 }
             });
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void displayCVV() {
+        try {
+            cvvDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
+            cvvDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+            cvvDialog.setContentView(R.layout.cvvlayout);
+            cvvDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            DisplayMetrics mertics = getResources().getDisplayMetrics();
+            int width = mertics.widthPixels;
+
+            etCVV = (TextInputEditText) cvvDialog.findViewById(R.id.etCVV);
+            CustomKeyboard ctKey;
+            ctKey = cvvDialog.findViewById(R.id.ckb);
+            ctKey.setKeyAction("OK", this);
+            ctKey.setScreenName("notoken");
+            InputConnection ic = etCVV.onCreateInputConnection(new EditorInfo());
+            ctKey.setInputConnection(ic);
+            etCVV.setShowSoftInputOnFocus(false);
+            etCVV.requestFocus();
+
+            etCVV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, v);
+                }
+            });
+            etCVV.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    Utils.hideSoftKeypad(WithdrawPaymentMethodsActivity.this, view);
+                }
+            });
+            etCVV.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable.length() > 2) {
+                        ctKey.enableButton();
+                    } else {
+                        ctKey.disableButton();
+                    }
+                }
+            });
+
+            Window window = cvvDialog.getWindow();
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wlp = window.getAttributes();
+
+            wlp.gravity = Gravity.BOTTOM;
+            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+            window.setAttributes(wlp);
+
+            cvvDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+            cvvDialog.setCanceledOnTouchOutside(true);
+            cvvDialog.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void okClick() {
+        try {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            etCVV = (TextInputEditText) cvvDialog.findViewById(R.id.etCVV);
+            if (!etCVV.getText().toString().trim().equals("")) {
+                cvvDialog.dismiss();
+                Intent i = new Intent(WithdrawPaymentMethodsActivity.this, BuyTokenActivity.class);
+                i.putExtra("cvv", etCVV.getText().toString().trim());
+                startActivity(i);
+            } else {
+                Utils.displayAlert("Please enter CVV", WithdrawPaymentMethodsActivity.this, "", "");
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

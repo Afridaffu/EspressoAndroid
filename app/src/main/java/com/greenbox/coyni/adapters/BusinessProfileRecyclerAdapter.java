@@ -1,6 +1,9 @@
 package com.greenbox.coyni.adapters;
 
+import static android.service.controls.ControlsProviderService.TAG;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,8 @@ import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.ScanActivity;
+import com.greenbox.coyni.view.business.BusinessAddNewAccountActivity;
+import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -134,10 +139,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 childItem.setText("");
             }
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
-            if (detailInfo.getDbaName() != null) {
-                childItem.setText(detailInfo.getDbaName());
+            childItem.setText("[Dba Name]");
+            if (detailInfo.getDbaName() != null && detailInfo.getDbaName().length()>20) {
+                childItem.setText(detailInfo.getDbaName().substring(0,20));
             } else {
-                childItem.setText("[DBA Name]");
+                childItem.setText(detailInfo.getDbaName());
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
@@ -159,10 +165,11 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         } else {
             addDBA.setVisibility(View.GONE);
         }
-
+        LogUtils.d(TAG,detailInfo.getId() + " selected id " + selectedID);
         if (selectedID == detailInfo.getId()) {
             imvTickIcon.setVisibility(View.VISIBLE);
             childItem.setTextColor(context.getColor(R.color.primary_color));
+
             if (!detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                 if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
@@ -310,12 +317,12 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
             }
-//            else {
-//                personalText.setVisibility(View.VISIBLE);
-//                profileImage.setVisibility(View.GONE);
-//                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
-//                personalText.setText(userName);
-//            }
+            else {
+                personalText.setVisibility(View.VISIBLE);
+                profileImage.setVisibility(View.GONE);
+                String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
+                personalText.setText(userName);
+            }
         } else if (headerInfo.getAccountType().equals(Utils.BUSINESS)) {
             arrowImg.setVisibility(View.VISIBLE);
             if (headerInfo.getCompanyName() != null) {
@@ -339,6 +346,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 profileImage.setVisibility(View.VISIBLE);
                 profileImage.setImageResource(R.drawable.ic_case);
             }
+
         }
 
         if (headerInfo.getAccountType().equals(Utils.PERSONAL)) {

@@ -11,7 +11,6 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".view.IdentityVerificationActivity">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -158,8 +157,9 @@
                                     <LinearLayout
                                         android:id="@+id/fileSelectedLL"
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="match_parent"
                                         android:orientation="horizontal"
+                                        android:gravity="center"
                                         android:visibility="visible">
 
                                         <TextView
@@ -167,9 +167,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginStart="@dimen/_17sdp"
-                                            android:layout_marginTop="@dimen/_20sdp"
                                             android:layout_marginEnd="5dp"
-                                            android:layout_marginBottom="@dimen/_18sdp"
                                             android:layout_weight="1"
                                             android:fontFamily="@font/opensans_semibold"
                                             android:lineSpacingExtra="@dimen/_6sdp"
@@ -183,7 +181,6 @@
                                             android:id="@+id/idveriUpIdSuccessImg"
                                             android:layout_width="@dimen/_15sdp"
                                             android:layout_height="@dimen/_15sdp"
-                                            android:layout_gravity="center"
                                             android:layout_marginEnd="@dimen/_15sdp"
                                             android:src="@drawable/ic_complete"
                                             android:visibility="visible" />

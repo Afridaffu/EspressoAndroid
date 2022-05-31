@@ -73,25 +73,25 @@ public class OnboardActivity extends BaseActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_onboard);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             onboardActivity = this;
             dbHandler = DatabaseHandler.getInstance(OnboardActivity.this);
             layoutOnBoarding = findViewById(R.id.layoutOnBoarding);
             layoutAuth = findViewById(R.id.layoutAuth);
             objMyApplication = (MyApplication) getApplicationContext();
             getVersionName();
-            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
-                if (Utils.isFingerPrint(OnboardActivity.this)) {
-                    Utils.setIsTouchEnabled(true);
-                    Utils.setIsFaceEnabled(false);
-                } else {
-                    Utils.setIsTouchEnabled(false);
-                    Utils.setIsFaceEnabled(true);
-                }
-            } else {
-                Utils.setIsTouchEnabled(false);
-                Utils.setIsFaceEnabled(false);
-            }
+//            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
+//                if (Utils.isFingerPrint(OnboardActivity.this)) {
+//                    Utils.setIsTouchEnabled(true);
+//                    Utils.setIsFaceEnabled(false);
+//                } else {
+//                    Utils.setIsTouchEnabled(false);
+//                    Utils.setIsFaceEnabled(true);
+//                }
+//            } else {
+//                Utils.setIsTouchEnabled(false);
+//                Utils.setIsFaceEnabled(false);
+//            }
 
             setDB();
             setToken();
@@ -127,11 +127,10 @@ public class OnboardActivity extends BaseActivity {
                     faceIdDisable_bottomSheet.show(getSupportFragmentManager(), faceIdDisable_bottomSheet.getTag());
                 }
             } else {
-                if (checkOutModel != null && checkOutModel.isCheckOutFlag()){
-                    startActivity(new Intent(OnboardActivity.this,LoginActivity.class));
+                if (checkOutModel != null && checkOutModel.isCheckOutFlag()) {
+                    startActivity(new Intent(OnboardActivity.this, LoginActivity.class));
                     finish();
-                }
-                else if (strFirstUser.equals("")) {
+                } else if (strFirstUser.equals("")) {
                     layoutOnBoarding.setVisibility(View.VISIBLE);
                     layoutAuth.setVisibility(View.GONE);
                 } else {
@@ -248,8 +247,24 @@ public class OnboardActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Utils.isKeyboardVisible)
-            Utils.hideKeypad(OnboardActivity.this);
+        try {
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(OnboardActivity.this);
+            if (Utils.checkBiometric(OnboardActivity.this) && Utils.checkAuthentication(OnboardActivity.this)) {
+                if (Utils.isFingerPrint(OnboardActivity.this)) {
+                    Utils.setIsTouchEnabled(true);
+                    Utils.setIsFaceEnabled(false);
+                } else {
+                    Utils.setIsTouchEnabled(false);
+                    Utils.setIsFaceEnabled(true);
+                }
+            } else {
+                Utils.setIsTouchEnabled(false);
+                Utils.setIsFaceEnabled(false);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -295,6 +310,7 @@ public class OnboardActivity extends BaseActivity {
                                 objMyApplication.setLoginUserId(loginResponse.getData().getUserId());
                                 objMyApplication.setLoginResponse(loginResponse);
                                 Utils.setUserEmail(OnboardActivity.this, loginResponse.getData().getEmail());
+                                objMyApplication.setStrEmail(loginResponse.getData().getEmail());
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
@@ -313,9 +329,10 @@ public class OnboardActivity extends BaseActivity {
                                     if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
                                         businessIdentityVerificationViewModel.getBusinessTracker();
                                     } else {
-                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(i);
+//                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
+//                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                        startActivity(i);
+                                        launchDashboard();
                                     }
 //                                    Intent i = null;
 //                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)

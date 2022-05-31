@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
@@ -16,10 +18,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -36,6 +42,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
@@ -51,7 +58,7 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 import java.util.regex.Pattern;
 
-public class CreatePasswordActivity extends BaseActivity {
+public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVisibilityListener {
     ImageView imgClose;
     CardView cvSave, cvLogin;
     RelativeLayout layoutNewPassword;
@@ -110,6 +117,7 @@ public class CreatePasswordActivity extends BaseActivity {
 
     private void initialization() {
         try {
+            setKeyboardVisibilityListener(CreatePasswordActivity.this);
             imgClose = findViewById(R.id.imgClose);
             cvSave = findViewById(R.id.cvSave);
             cvLogin = findViewById(R.id.cvLogin);
@@ -131,7 +139,7 @@ public class CreatePasswordActivity extends BaseActivity {
             layoutIndicator = findViewById(R.id.layoutIndicator);
             tvchangepass = findViewById(R.id.tvMessageChangePass);
             tvHead = findViewById(R.id.tvHead);
-            myApplication = (MyApplication)getApplicationContext();
+            myApplication = (MyApplication) getApplicationContext();
             tvMessage = findViewById(R.id.tvMessage);
             passwordErrorTV = findViewById(R.id.passwordErrorTV);
             confPassErrorTV = findViewById(R.id.confPassErrorTV);
@@ -173,12 +181,14 @@ public class CreatePasswordActivity extends BaseActivity {
                 public void onClick(View v) {
                     try {
                         if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
+                            if (Utils.isKeyboardVisible)
+                                Utils.hideKeypad(CreatePasswordActivity.this);
                             Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
                             loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(loginIntent);
                         } else {
                             onBackPressed();
-    //                        finish();
+                            //                        finish();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -492,8 +502,7 @@ public class CreatePasswordActivity extends BaseActivity {
                                 if (strong.matcher(passwordET.getText().toString().trim()).matches()) {
                                     passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
                                     Utils.setUpperHintColor(passwordTIL, getColor(R.color.primary_black));
-                                }
-                                else {
+                                } else {
 //                                    passwordTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(CreatePasswordActivity.this));
 //                                    Utils.setUpperHintColor(passwordTIL, getColor(R.color.error_red));
                                 }
@@ -637,7 +646,7 @@ public class CreatePasswordActivity extends BaseActivity {
                             ChangePasswordRequest request = new ChangePasswordRequest();
                             request.setOldPassword(getIntent().getStringExtra("oldpassword"));
                             request.setNewPassword(confirmPasswordET.getText().toString().trim());
-                            dashboardViewModel.meChangePassword(request,myApplication.getStrToken());
+                            dashboardViewModel.meChangePassword(request, myApplication.getStrToken());
                         } else {
                             SetPassword setPassword = new SetPassword();
                             setPassword.setCode(strCode);
@@ -749,7 +758,7 @@ public class CreatePasswordActivity extends BaseActivity {
     public void onBackPressed() {
         try {
             if (!isSuccessLayout) {
-    //            super.onBackPressed();
+                //            super.onBackPressed();
                 if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
                     Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
                     loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -774,5 +783,37 @@ public class CreatePasswordActivity extends BaseActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+
+    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+        final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private boolean alreadyOpen;
+            private final int defaultKeyboardHeightDP = 100;
+            private final int EstimatedKeyboardDP = defaultKeyboardHeightDP + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 48 : 0);
+            private final Rect rect = new Rect();
+
+            @Override
+            public void onGlobalLayout() {
+                int estimatedKeyboardHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, EstimatedKeyboardDP, parentView.getResources().getDisplayMetrics());
+                parentView.getWindowVisibleDisplayFrame(rect);
+                int heightDiff = parentView.getRootView().getHeight() - (rect.bottom - rect.top);
+                boolean isShown = heightDiff >= estimatedKeyboardHeight;
+
+                if (isShown == alreadyOpen) {
+                    Log.i("Keyboard state", "Ignoring global layout change...");
+                    return;
+                }
+                alreadyOpen = isShown;
+                onKeyboardVisibilityListener.onVisibilityChanged(isShown);
+            }
+        });
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean visible) {
+        Utils.isKeyboardVisible = visible;
+        Log.e("keyboard", Utils.isKeyboardVisible + "");
+    }
 
 }
