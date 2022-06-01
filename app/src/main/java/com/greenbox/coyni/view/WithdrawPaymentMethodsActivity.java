@@ -1581,7 +1581,7 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 
     private void showExternalBank() {
         try {
-            extBankDialog = new Dialog(WithdrawPaymentMethodsActivity.this);
+            extBankDialog = new Dialog(WithdrawPaymentMethodsActivity.this,R.style.DialogTheme);
             extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
             extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -1602,6 +1602,8 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
 //            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 //            window.setAttributes(wlp);
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            extBankDialog.setCancelable(false);
+
             extBankDialog.show();
             tvLearn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1637,7 +1639,6 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
-                            objMyApplication.setResolveUrl(true);
                             Intent i = new Intent(WithdrawPaymentMethodsActivity.this, WebViewActivity.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
@@ -1698,11 +1699,13 @@ public class WithdrawPaymentMethodsActivity extends BaseActivity {
             Window window = addPayDialog.getWindow();
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-            WindowManager.LayoutParams wlp = window.getAttributes();
-
-            wlp.gravity = Gravity.BOTTOM;
-            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            window.setAttributes(wlp);
+//            WindowManager.LayoutParams wlp = window.getAttributes();
+//
+//            wlp.gravity = Gravity.BOTTOM;
+//            wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//            window.setAttributes(wlp);
+            addPayDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            addPayDialog.setCancelable(false);
             addPayDialog.show();
             lyClose.setOnClickListener(new View.OnClickListener() {
                 @Override

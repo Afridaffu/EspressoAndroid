@@ -104,9 +104,15 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
         });
 
         initObservers();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         showProgressDialog();
+        companyId=0;
         dashboardViewModel.getProfiles();
+
     }
 
     private void displayAlert(Context mContext) {

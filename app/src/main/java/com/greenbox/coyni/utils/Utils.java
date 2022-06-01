@@ -540,7 +540,7 @@ public class Utils {
                         Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager.isAcceptingText()) {
             inputMethodManager.hideSoftInputFromWindow(
-                    activity.getCurrentFocus().getWindowToken(),0);
+                    activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
 
@@ -785,7 +785,8 @@ public class Utils {
         }
 
     }
-    public static void showDialogPermission(final Context context, String header,String description) {
+
+    public static void showDialogPermission(final Context context, String header, String description) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -804,17 +805,17 @@ public class Utils {
         wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         window.setAttributes(wlp);
 
-        TextView notNowBtn,settingsBtn,headerText,descriptionText;
+        TextView notNowBtn, settingsBtn, headerText, descriptionText;
 
         notNowBtn = dialog.findViewById(R.id.not_now_tv);
         settingsBtn = dialog.findViewById(R.id.settings_tv);
         headerText = dialog.findViewById(R.id.headerTextTV);
         descriptionText = dialog.findViewById(R.id.descriptonTV);
 
-        if (header != null){
+        if (header != null) {
             headerText.setText(header);
         }
-        if (description != null){
+        if (description != null) {
             descriptionText.setText(description);
         }
 
@@ -831,7 +832,7 @@ public class Utils {
                 dialog.dismiss();
                 isSettingsBtnClicked = true;
                 context.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                Uri.fromParts("package", context.getPackageName(), null)));
+                        Uri.fromParts("package", context.getPackageName(), null)));
             }
         });
 
@@ -877,6 +878,7 @@ public class Utils {
         }
         return strDate;
     }
+
     public static boolean disabledMultiClick() {
         boolean action = false;
         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -1807,6 +1809,7 @@ public class Utils {
         }
         return strDate;
     }
+
     public static String getCapsSentences(String Name) {
         String[] splits = Name.split(" ");
         StringBuilder sb = new StringBuilder();
@@ -2138,7 +2141,7 @@ public class Utils {
 
     public static String convertZoneLatestTxn(String date, String zoneId) {
         String strDate = "";
-        if (date != null && date.contains(".")){
+        if (date != null && date.contains(".")) {
             date = date.split("\\.")[0];
         }
         try {
@@ -2379,10 +2382,10 @@ public class Utils {
         return timeAgo;
     }
 
-    private String capitizeString(String name){
-        String captilizedString="";
-        if(!name.trim().equals("")){
-            captilizedString = name.substring(0,1).toUpperCase() + name.substring(1);
+    private String capitizeString(String name) {
+        String captilizedString = "";
+        if (!name.trim().equals("")) {
+            captilizedString = name.substring(0, 1).toUpperCase() + name.substring(1);
         }
         return captilizedString;
     }

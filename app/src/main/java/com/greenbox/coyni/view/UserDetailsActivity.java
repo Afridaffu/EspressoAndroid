@@ -615,9 +615,16 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onGroupClicked(int position, String accountType, Integer id, String fullname) {
-                LogUtils.v("PreferencesActivity", "account type " + accountType + "    id: " + id + "fullname" + fullname);
-                accountTypeId = id;
-                SelectedDBAName = fullname;
+                LogUtils.v("PreferencesActivity", "account type: " + accountType + "  id: " + id + " fullname " + fullname);
+                if (accountTypeId != id) {
+                    doneButton.setEnabled(true);
+                    doneButton.setCardBackgroundColor(getColor(R.color.primary_color));
+                    accountTypeId = id;
+                    SelectedDBAName = fullname;
+                } else {
+                    doneButton.setEnabled(false);
+                    doneButton.setCardBackgroundColor(getColor(R.color.light_primary_color));
+                }
             }
 
             @Override
@@ -824,7 +831,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                             myApplicationObj.setStrPreference("AST");
                         }
 //                        Utils.showCustomToast(UserDetailsActivity.this, userPreference.getData().getMessage(), R.drawable.ic_custom_tick, "authid");
-                        Utils.showCustomToast(UserDetailsActivity.this, getResources().getString(R.string.time_zone_changed), R.drawable.ic_custom_tick, "authid");
+                        Utils.showCustomToast(UserDetailsActivity.this, getResources().getString(R.string.default_account_changed), R.drawable.ic_custom_tick, "authid");
 
                     }
                 }

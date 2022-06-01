@@ -1768,7 +1768,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", DBAInfoAcivity.this, "", "");
+//                        Utils.displayAlert("Requires Access to Camera.", DBAInfoAcivity.this, "", "");
+                        Utils.showDialogPermission(DBAInfoAcivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

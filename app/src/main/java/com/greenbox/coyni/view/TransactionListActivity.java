@@ -1255,7 +1255,10 @@ public class TransactionListActivity extends BaseActivity implements TextWatcher
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
                 pendingTxt.setVisibility(View.GONE);
                 layoutTransactionspending.setVisibility(View.GONE);
                 layoutTransactionsposted.setVisibility(View.GONE);

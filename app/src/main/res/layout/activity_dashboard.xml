@@ -553,6 +553,7 @@
                                         android:layout_width="@dimen/_8sdp"
                                         android:layout_height="@dimen/_8sdp"
                                         android:layout_marginTop="@dimen/_2sdp"
+                                        android:layout_marginEnd="@dimen/_5sdp"
                                         app:cardBackgroundColor="@color/under_review_blue"
                                         app:cardCornerRadius="@dimen/_4sdp" />
 
@@ -1128,7 +1129,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_profile"></ImageView>
+                android:src="@drawable/ic_dashboard_profile"></ImageView>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -1077,7 +1077,6 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
-                            objMyApplication.setResolveUrl(true);
                             Intent i = new Intent(SelectPaymentMethodActivity.this, WebViewActivity.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);
