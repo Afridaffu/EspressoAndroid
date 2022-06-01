@@ -68,7 +68,7 @@ public class AddNewBusinessAccountDBAAdapter extends RecyclerView.Adapter<AddNew
     public void onBindViewHolder(MyViewHolder holder, int position) {
         try {
             if(listCompany.get(position).getCompanyName() == null) {
-                holder.txvCompanyName.setText("[Company Name]");
+                holder.txvCompanyName.setText("[DBA Name]");
             }
             else {
                 holder.txvCompanyName.setText(listCompany.get(position).getCompanyName());
