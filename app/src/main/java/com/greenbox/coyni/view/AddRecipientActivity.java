@@ -433,7 +433,12 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
                     String strName = getFLName(id);
                     if (strName.contains(";")) {
                         objContact.setFirstName(strName.split(";")[0]);
-                        objContact.setLastName(strName.split(";")[1]);
+                        try {
+                            objContact.setLastName(strName.split(";")[1]);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            objContact.setLastName("");
+                        }
                     } else {
                         objContact.setFirstName(strName);
                         objContact.setLastName("");

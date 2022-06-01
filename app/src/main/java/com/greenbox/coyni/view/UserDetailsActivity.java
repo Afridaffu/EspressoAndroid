@@ -73,6 +73,7 @@ import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -1068,7 +1069,9 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "", "");
-                    displayAlertNew("Requires Access to Camera.", UserDetailsActivity.this, "");
+//                    displayAlertNew("Requires Access to Camera.", UserDetailsActivity.this, "");
+
+                    Utils.showDialogPermission(UserDetailsActivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                 } else if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

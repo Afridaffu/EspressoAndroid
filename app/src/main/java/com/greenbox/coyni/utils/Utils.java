@@ -798,7 +798,7 @@ public class Utils {
         WindowManager.LayoutParams wlp = window.getAttributes();
 
         wlp.gravity = Gravity.CENTER;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
         TextView notNowBtn, settingsBtn, headerText, descriptionText;

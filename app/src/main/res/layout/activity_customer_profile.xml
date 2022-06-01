@@ -436,7 +436,7 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/opensans_semibold"
                                     android:text="@string/setting_payment"
-                                    android:textColor="@color/primary_black"
+                                    android:textColor="@drawable/text_enable_disable"
                                     android:textSize="@dimen/_12ssp" />
 
                                 <ImageView
