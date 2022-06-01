@@ -365,7 +365,7 @@ public class CustomerProfileActivity extends BaseActivity {
 //                            mLastClickTime = SystemClock.elapsedRealtime();
 //                            startActivity(new Intent(CustomerProfileActivity.this, UserDetailsActivity.class));
 //                        } else {
-//                            Utils.showCustomToast(CustomerProfileActivity.this, "Please complete your Identity Verification process.", 0, "");
+//                            Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
 //                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -383,8 +383,10 @@ public class CustomerProfileActivity extends BaseActivity {
                     try {
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                             startActivity(new Intent(CustomerProfileActivity.this, PaymentMethodsActivity.class));
-                        } else {
-                            Utils.showCustomToast(CustomerProfileActivity.this, "Please complete your Identity Verification process.", 0, "");
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                            Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -492,6 +494,8 @@ public class CustomerProfileActivity extends BaseActivity {
                     }
                 }
             });
+
+            enableDisableSettings();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1358,5 +1362,28 @@ public class CustomerProfileActivity extends BaseActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void disableLayout(LinearLayout layout, boolean isEnable) {
+        if (layout == null) {
+            return;
+        }
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            child.setEnabled(isEnable);
+        }
+        layout.setEnabled(isEnable);
+    }
+
+    private void enableDisableSettings() {
+        boolean isEnable = false;
+        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+            String accountStatus = objMyApplication.getMyProfile().getData().getAccountStatus();
+            if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                isEnable = true;
+            }
+        }
+        disableLayout(cpPaymentMethodsLL, isEnable);
     }
 }

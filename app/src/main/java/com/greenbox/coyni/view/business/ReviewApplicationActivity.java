@@ -6,7 +6,6 @@ import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,7 +20,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -49,7 +47,6 @@ import com.greenbox.coyni.adapters.BenificialOwnersRecyclerAdapter;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
-import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.bank.BankDeleteResponseData;
@@ -137,6 +134,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private CompanyInfo cir;
     Long mLastClickTimeQA = 0L;
     Long mLastClickTime = 0L;
+    private String selectedAgreement = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -703,6 +701,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     }
                                     mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
+                                    selectedAgreement = getString(R.string.gbx_pp);
                                     dashboardViewModel.getDocumentUrl(Utils.mPP);
                                 }
                             });
@@ -714,6 +713,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     }
                                     mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
+                                    selectedAgreement = getString(R.string.gbx_tos);
                                     dashboardViewModel.getDocumentUrl(Utils.mTOS);
                                 }
                             });
@@ -726,6 +726,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                                     }
                                     mLastClickTimeQA = SystemClock.elapsedRealtime();
                                     showProgressDialog();
+                                    selectedAgreement = getString(R.string.gbx_merchant);
                                     dashboardViewModel.getDocumentUrl(Utils.mAgmt);
 
                                 }
@@ -1003,6 +1004,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 showProgressDialog();
+                selectedAgreement = getString(R.string.gbx_tos);
                 dashboardViewModel.getDocumentUrl(Utils.mTOS);
             }
 
@@ -1022,6 +1024,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 showProgressDialog();
+                selectedAgreement = getString(R.string.gbx_pp);
                 dashboardViewModel.getDocumentUrl(Utils.mPP);
 
             }
@@ -1045,9 +1048,14 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     }
 
     private void launchDocumentUrl(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse(url);
-        intent.setDataAndType(uri, "application/pdf");
-        startActivity(intent);
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        Uri uri = Uri.parse(url);
+//        intent.setDataAndType(uri, "application/pdf");
+//        startActivity(intent);
+
+        startActivity(new Intent(ReviewApplicationActivity.this, PDFWebViewActivity.class)
+                .putExtra("URL", url)
+                .putExtra("NAME", selectedAgreement));
+
     }
 }
