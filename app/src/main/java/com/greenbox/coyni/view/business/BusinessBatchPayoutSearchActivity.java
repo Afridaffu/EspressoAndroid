@@ -135,8 +135,10 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                             batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
                             dismissDialog();
                             noMorePayoutTransactions.setVisibility(View.GONE);
+
                         } else {
                             noMorePayoutTransactions.setVisibility(View.VISIBLE);
+                            noPayoutTransactions.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
