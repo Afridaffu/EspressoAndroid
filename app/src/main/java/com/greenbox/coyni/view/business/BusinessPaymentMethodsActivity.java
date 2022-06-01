@@ -212,7 +212,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
             @Override
             public void onChanged(SignOn signOn) {
                 try {
-                       dismissDialog();
+                    dismissDialog();
                     if (signOn != null) {
                         if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
                             objMyApplication.setSignOnData(signOn.getData());
@@ -292,7 +292,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
         businessDashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-            dismissDialog();
+                dismissDialog();
                 if (payMethodsResponse != null) {
                     objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
                     paymentMethodsResponse = payMethodsResponse;
@@ -319,7 +319,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
             @Override
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
-                pDialog.dismiss();
+                dismissDialog();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
 //                    Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
                     Utils.showCustomToast(BusinessPaymentMethodsActivity.this, bankDeleteResponseData.getData(), R.drawable.ic_custom_tick, "");
@@ -331,7 +331,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
             @Override
             public void onChanged(CardDeleteResponse cardDeleteResponse) {
-                pDialog.dismiss();
+                dismissDialog();
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(BusinessPaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
@@ -343,7 +343,7 @@ public class BusinessPaymentMethodsActivity extends BaseActivity {
             @Override
             public void onChanged(APIError apiError) {
                 try {
-                    pDialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), BusinessPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));

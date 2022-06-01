@@ -688,7 +688,6 @@
                             android:layout_weight="1"
                             android:autofillHints="AUTOFILL_HINT_SMS_OTP"
                             android:background="@android:color/transparent"
-                            android:digits="0123456789."
                             android:fontFamily="@font/opensans_semibold"
                             android:hint="(CYN)"
                             android:imeOptions="actionDone"
