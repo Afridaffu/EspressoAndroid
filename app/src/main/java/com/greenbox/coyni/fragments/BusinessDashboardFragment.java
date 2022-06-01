@@ -632,6 +632,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
             inTracker.putExtra(Utils.ADD_BUSINESS, true);
             inTracker.putExtra(Utils.ADD_DBA, true);
+            inTracker.putExtra(Utils.BOOLEAN,true);
             startActivity(inTracker);
         } else {
             Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);

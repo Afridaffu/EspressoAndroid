@@ -158,7 +158,8 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 Intent inAddDba = new Intent(BusinessAddNewBusinessAccountActivity.this, BusinessRegistrationTrackerActivity.class);
                 inAddDba.putExtra(Utils.ADD_BUSINESS, true);
                 inAddDba.putExtra(Utils.ADD_DBA, true);
-                inAddDba.putExtra(Utils.IS_FIRST_DBA, selectedProfile.getDbaCount() <= 1);
+                inAddDba.putExtra(Utils.NEW_DBA, true);
+                inAddDba.putExtra(Utils.COMPANY_ID, selectedProfile.getId());
                 startActivity(inAddDba);
 
             }

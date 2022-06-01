@@ -119,6 +119,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public static final String COMPANY_ID = "companyId";
+    public static final String BOOLEAN = "Boolean";
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
     public static final String TOKEN = "0", MERCHANT = "1", RESERVE = "2";
@@ -355,8 +357,9 @@ public class Utils {
     public static final String MonthlyServiceFee = "Monthly Service Fee";
 
     public static final String ADD_BUSINESS = "ADDBUSINESS";
-    public static final String ADD_DBA = "ADDDBA";
+    public static final String ADD_DBA = "ADD_DBA";
     public static final String IS_FIRST_DBA = "is_first_dba";
+    public static final String NEW_DBA = "NEW DBA";
     public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
 
     public static final int boTargetPercentage = 51;
