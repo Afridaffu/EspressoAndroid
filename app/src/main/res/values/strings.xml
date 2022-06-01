@@ -126,7 +126,7 @@
     <string name="iv_success_content">Thank you for verifying your identification and trusting us as your token account platform. Lastly, add a payment method to your account profile.</string>
 
     <string name="iv_failed">Identity Verification Canceled</string>
-    <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please \ncontact coyni customer support if you need further assistance.</string>
+    <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
     <string name="iv_failedcontentextention"> If you need any help please</string>
     <string name="contactus"><u>Contact Us</u></string>
 
