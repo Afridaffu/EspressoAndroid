@@ -21,23 +21,21 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.UnderReviewErrorMsgDialog;
+import com.greenbox.coyni.fragments.ActionRequiredFragment;
 import com.greenbox.coyni.fragments.BaseFragment;
 import com.greenbox.coyni.fragments.BusinessAccountFragment;
 import com.greenbox.coyni.fragments.BusinessDashboardFragment;
+import com.greenbox.coyni.fragments.GetStartedFragment;
+import com.greenbox.coyni.fragments.UnderReviewFragment;
+import com.greenbox.coyni.fragments.VerificationFailedFragment;
 import com.greenbox.coyni.model.bank.SignOn;
-import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
-import com.greenbox.coyni.model.businesswallet.WalletInfo;
-import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
-import com.greenbox.coyni.model.profile.DownloadImageResponse;
-import com.greenbox.coyni.model.profile.DownloadUrlRequest;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
@@ -50,8 +48,6 @@ import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
-
-import java.util.List;
 
 //Business dashboard activity created
 public class BusinessDashboardActivity extends BaseActivity {
@@ -80,7 +76,7 @@ public class BusinessDashboardActivity extends BaseActivity {
             initialization();
             initObserver();
             enableDisableTabView();
-            pushFragment(new BusinessDashboardFragment());
+            //pushFragment(new BusinessDashboardFragment());
             firebaseToken();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -91,24 +87,12 @@ public class BusinessDashboardActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
+            removeFragment();
+            showProgressDialog();
             mDashboardViewModel.meProfile();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void getWalletData() {
-        WalletRequest walletRequest = new WalletRequest();
-        walletRequest.setWalletType(Utils.MERCHANT);
-        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.TOKEN);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.RESERVE);
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
     }
 
     public void onDashboardTabSelected(View view) {
@@ -121,7 +105,8 @@ public class BusinessDashboardActivity extends BaseActivity {
                 selectedTab = Tabs.DASHBOARD;
                 setSelectedTab(true, false, false, false);
                 LogUtils.d(TAG, "onDashboardTabSelected");
-                pushFragment(new BusinessDashboardFragment());
+                //pushFragment(new BusinessDashboardFragment());
+                checkLoadFragment(objMyApplication.getMyProfile());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -139,7 +124,6 @@ public class BusinessDashboardActivity extends BaseActivity {
         } else {
             try {
                 if (selectedTab != Tabs.ACCOUNT) {
-
                     selectedTab = Tabs.ACCOUNT;
                     setSelectedTab(false, true, false, false);
                     LogUtils.d(TAG, "onAccountTabSelected");
@@ -302,6 +286,15 @@ public class BusinessDashboardActivity extends BaseActivity {
         transaction.commit();
     }
 
+    private void removeFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (mCurrentFragment != null) {
+            transaction.remove(mCurrentFragment);
+            transaction.commit();
+            mCurrentFragment = null;
+        }
+    }
+
     private void initialization() {
         try {
             mIvDashboard = findViewById(R.id.iv_dashboard_icon);
@@ -317,21 +310,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-
-//            WalletRequest walletRequest = new WalletRequest();
-//            walletRequest.setWalletType(Utils.MERCHANT);
-//            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-//            businessDashboardViewModel.meMerchantWallet(walletRequest);
-//
-//            walletRequest.setWalletType(Utils.TOKEN);
-//            businessDashboardViewModel.meMerchantWallet(walletRequest);
-//
-//            walletRequest.setWalletType(Utils.RESERVE);
-//            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-//            businessDashboardViewModel.meMerchantWallet(Utils.MERCHANT);
-//            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
-//            businessDashboardViewModel.meMerchantWallet(Utils.RESERVE);
 
             new FetchData(BusinessDashboardActivity.this).execute();
         } catch (Exception ex) {
@@ -384,17 +362,12 @@ public class BusinessDashboardActivity extends BaseActivity {
             @Override
             public void onChanged(Profile profile) {
                 try {
+                    dismissDialog();
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
                         objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
-//                       if(profile.getData()!=null && profile.getData().getAccountStatus()!=null
-//                               && profile.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
-//                           getWalletData();
-//                       }
                         enableDisableTabView();
-                        if (mCurrentFragment != null) {
-                            mCurrentFragment.updateData();
-                        }
+                        checkLoadFragment(profile);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -414,25 +387,29 @@ public class BusinessDashboardActivity extends BaseActivity {
                 }
             }
         });
+    }
 
-//        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
-//            @Override
-//            public void onChanged(BusinessWalletResponse businessWalletResponse) {
-//                try {
-//                    if (businessWalletResponse != null) {
-//                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-//
-//                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-////
-//                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
-//                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
-//                        }
-//                    }
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//        });
+    private void checkLoadFragment(Profile profile) {
+        if (profile == null || profile.getData() == null || profile.getData().getAccountStatus() == null) {
+            return;
+        }
+        String accountStatus = profile.getData().getAccountStatus();
+        if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            pushFragment(new GetStartedFragment());
+        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
+            pushFragment(new UnderReviewFragment());
+        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
+                || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
+            pushFragment(new ActionRequiredFragment());
+        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())
+                || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.TERMINATED.getStatus())) {
+            pushFragment(new VerificationFailedFragment());
+        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+            pushFragment(new VerificationFailedFragment());
+        } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+            pushFragment(new BusinessDashboardFragment());
+        }
+
     }
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
@@ -519,7 +496,6 @@ public class BusinessDashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 businessDashboardViewModel.meBusinessPaymentMethods();
-                //mDashboardViewModel.getLatestTxns();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
