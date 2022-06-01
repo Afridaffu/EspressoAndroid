@@ -220,6 +220,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
+                    statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
                 }
             } else {
