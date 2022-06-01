@@ -11,8 +11,9 @@ import android.widget.TextView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.BaseActivity;
 
-public class RefundTransactionSuccessActivity extends AppCompatActivity {
+public class RefundTransactionSuccessActivity extends BaseActivity {
 
     private TextView tvrAmount,tvrReferenceID,tvrMessage;
     private CardView cvrDone;

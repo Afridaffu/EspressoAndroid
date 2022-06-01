@@ -54,7 +54,7 @@ public class AddPaymentSignetActivity extends AppCompatActivity implements OnKey
     ConstraintLayout clStates;
     BusinessDashboardViewModel businessDashboardViewModel;
     Long mLastClickTime = 0L;
-    ProgressDialog progressDialog;
+    Dialog progressDialog;
     Dialog preDialog;
     Boolean isName, isWallet, isAddress1 = false, isCity = false, isState = false, isZipcode = false, isAddEnabled = false;
     TextView nameErrorTV, walletErrorTV, address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;

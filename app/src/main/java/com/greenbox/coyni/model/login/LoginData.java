@@ -26,6 +26,8 @@ public class LoginData {
     private boolean oldSessionExist;
     private boolean isProfileVerified;
     private boolean isPersonIdentified;
+    private String firstName;
+    private String lastName;
 
     public int getDbaOwnerId() {
         return dbaOwnerId;
@@ -225,6 +227,22 @@ public class LoginData {
 
     public void setPersonIdentified(boolean personIdentified) {
         isPersonIdentified = personIdentified;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
 

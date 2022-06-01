@@ -76,8 +76,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     private ImageView keyBack;
     EditText payRequestET, addNoteET;
     Dialog cvvDialog, prevDialog;
-    SQLiteDatabase mydatabase;
-    Cursor dsFacePin, dsTouchID;
     DashboardViewModel dashboardViewModel;
     BuyTokenViewModel buyTokenViewModel;
     PayViewModel payViewModel;
@@ -85,19 +83,19 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
     DatabaseHandler dbHandler;
     LinearLayout lyPayClose, lyBalance, payRequestLL, addNoteClickLL;
     ImageView imgProfile, imgConvert;
-    TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV;
+    TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV, tvError;
     TransactionLimitResponse objResponse;
     float fontSize, dollarFont;
     WalletInfo cynWallet;
     Boolean isFaceLock = false, isTouchId = false;
-    String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "", strToken = "";
+    String strAmount = "", strWalletId = "", strLimit = "", strUserName = "", recipientAddress = "", strToken = "", strCImage = "";
     Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     Long mLastClickTime = 0L;
     private static int CODE_AUTHENTICATION_VERIFICATION = 251;
     private static int FOR_RESULT = 235;
     boolean isAuthenticationCalled = false, isPayClickable = false, isReqClickable = false, isPayClick = false;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     int requestedToUserId = 0;
     PaymentMethodsResponse paymentMethodsResponse;
     PayRequestCustomKeyboard cKey;
@@ -183,7 +181,12 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 
                     }
 
-                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
+//                    if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
+//                        disableButtons(false);
+//                    } else {
+//                        disableButtons(true);
+//                    }
+                    if (validation()) {
                         disableButtons(false);
                     } else {
                         disableButtons(true);
@@ -199,7 +202,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lp.setMargins(0, 0, 0, 0);
                     payRequestET.setLayoutParams(lp);
-                    LogUtils.d(TAG, "lengthhh zeroo");
+                    LogUtils.d(TAG, "lengthhh zero");
                     LinearLayout.LayoutParams lpImageConvert = new LinearLayout.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                     lpImageConvert.setMargins(15, 38, 0, 0);
                     imgConvert.setLayoutParams(lpImageConvert);
@@ -208,6 +211,8 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                     cynValidation = 0.0;
                     disableButtons(true);
                     cKey.clearData();
+                    tvError.setVisibility(View.GONE);
+                    lyBalance.setVisibility(View.VISIBLE);
                 } else {
                     payRequestET.setText("");
                     LogUtils.d(TAG, "lengthhh zeroo");
@@ -341,17 +346,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                                 pDialog = Utils.showProgressDialog(PayRequestActivity.this);
                                 cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
                                 calculateFee(Utils.USNumberFormat(cynValue));
-//                                if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-//                                    isPayClick = true;
-//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-//                                    calculateFee(Utils.USNumberFormat(cynValue));
-//                                } else {
-//                                    objMyApplication.setStrScreen("payRequest");
-//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                                    i.putExtra("screen", "payRequest");
-//                                    startActivity(i);
-//                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -434,6 +428,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             tvName = findViewById(R.id.tvName);
             accAddress = findViewById(R.id.accAddress);
             tvCurrency = findViewById(R.id.tvCurrency);
+            tvError = findViewById(R.id.tvError);
             coyniTV = findViewById(R.id.coyniTV);
             availBal = findViewById(R.id.availBal);
             requestTV = findViewById(R.id.tvRequest);
@@ -473,10 +468,13 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 USFormat(payRequestET);
                 payRequestET.setEnabled(false);
             } else {
-                //enableButtons();
                 cKey = (PayRequestCustomKeyboard) findViewById(R.id.payReqCK);
                 InputConnection ic = payRequestET.onCreateInputConnection(new EditorInfo());
                 cKey.setInputConnection(ic);
+            }
+
+            if (getIntent().getStringExtra("image") != null && !getIntent().getStringExtra("image").equals("")) {
+                strCImage = getIntent().getStringExtra("image");
             }
 
             payRequestET.setAccessibilityDelegate(new View.AccessibilityDelegate() {
@@ -798,13 +796,24 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 //            }
             userName.setVisibility(View.VISIBLE);
             userProfile.setVisibility(View.GONE);
+//            if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
+//                userProfile.setVisibility(View.VISIBLE);
+//                userName.setVisibility(View.GONE);
+//                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+//                utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
+//            } else {
+//                userProfile.setVisibility(View.GONE);
+//                userName.setVisibility(View.VISIBLE);
+//            }
             if (userDetails.getData().getImage() != null && !userDetails.getData().getImage().trim().equals("")) {
                 userProfile.setVisibility(View.VISIBLE);
                 userName.setVisibility(View.GONE);
-
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(userDetails.getData().getImage(), userProfile, R.drawable.ic_profilelogo);
-
+            } else if (strCImage.startsWith("content:")) {
+                userProfile.setVisibility(View.VISIBLE);
+                userName.setVisibility(View.GONE);
+                userProfile.setImageBitmap(objMyApplication.convertImageURIToBitMap(strCImage));
             } else {
                 userProfile.setVisibility(View.GONE);
                 userName.setVisibility(View.VISIBLE);
@@ -816,60 +825,48 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    private Boolean validation() {
+        Boolean value = true;
+        try {
+            String strPay = payRequestET.getText().toString().trim().replace("\"", "");
+            if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+                //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
+                tvError.setText("Amount should be greater than zero.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+            } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit()))) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                tvError.setText("Amount entered exceeds transaction limit.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+            } else {
+                tvError.setVisibility(View.GONE);
+                lyBalance.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
-            String strPay = payRequestET.getText().toString().trim().replace("\"", "");
-//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
-//                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayRequestActivity.this, "", "");
-//                return value = false;
-//            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
-//                if (strLimit.equals("daily")) {
-//                    tvError.setText("Amount entered exceeds your daily limit");
-//                } else if (strLimit.equals("week")) {
-//                    tvError.setText("Amount entered exceeds your weekly limit");
-//                }
-//                tvError.setVisibility(View.VISIBLE);
-//                lyBalance.setVisibility(View.GONE);
-//                return value = false;
-//            } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-//                Utils.displayAlert("Amount entered exceeds available balance", PayRequestActivity.this, "", "");
-//                return value = false;
-//            } else if (cynValue > avaBal) {
-//                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-//                return value = false;
-//            }
-//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() == 0) {
-//                objMyApplication.setStrScreen("payRequest");
-//                Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                i.putExtra("screen", "payRequest");
-//                startActivity(i);
+//            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
 //                value = false;
 //            } else
-            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-                Utils.displayAlert("Amount entered exceeds transaction limit.", PayRequestActivity.this, "Oops!", "");
-                value = false;
-            } else if (cynValue > avaBal) {
+            if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
             }
-//            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-//                Utils.displayAlert("Amount entered exceeds available balance", PayRequestActivity.this, "", "");
-//                value = false;
-//            }
-
-//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-//                                    isPayClick = true;
-//                                    pDialog = Utils.showProgressDialog(PayRequestActivity.this);
-//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-//                                    calculateFee(Utils.USNumberFormat(cynValue));
-//                                } else {
-//                                    objMyApplication.setStrScreen("payRequest");
-//                                    Intent i = new Intent(PayRequestActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                                    i.putExtra("screen", "payRequest");
-//                                    startActivity(i);
-//                                }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -894,10 +891,6 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", PayRequestActivity.this, "Oops!", "");
             }
-//            else if (getIntent().getStringExtra("amount") != null && !getIntent().getStringExtra("amount").equals("")) {
-//                value = false;
-//                Utils.displayAlert("You can only Pay", PayRequestActivity.this, "Oops!", "");
-//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1069,7 +1062,7 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayRequestActivity.this)) {
-                payViewModel.sendTokens(request,objMyApplication.getStrToken());
+                payViewModel.sendTokens(request, objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

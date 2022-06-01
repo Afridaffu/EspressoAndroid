@@ -54,7 +54,7 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
     String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
     TextView tvHead, tvForgot;
     CoyniViewModel coyniViewModel;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
     MyApplication objMyApplication;
     private int mAccountType = Utils.PERSONAL_ACCOUNT;
@@ -363,10 +363,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                     public void run() {
                                         try {
 //                                            launchDashboard();
-//                                            dbHandler.clearAllTables();
-//                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
+                                            dbHandler.clearAllTables();
+                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
                                             objMyApplication.setStrRetrEmail("");
-                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
+//                                            Intent i = new Intent(PINActivity.this, LoginActivity.class);
                                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(i);
                                         } catch (Exception ex) {
@@ -578,7 +578,10 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                                                     launchDashboard();
                                                 } else {
                                                     if (!isDontRemind) {
-                                                        if (Utils.checkBiometric(PINActivity.this)) {
+                                                        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()){
+                                                            launchDashboard();
+                                                        }
+                                                        else if (Utils.checkBiometric(PINActivity.this)) {
                                                             if (Utils.checkAuthentication(PINActivity.this)) {
                                                                 if (Utils.isFingerPrint(PINActivity.this)) {
                                                                     startActivity(new Intent(PINActivity.this, EnableAuthID.class)

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -65,7 +66,7 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
     List<Contacts> mobileArray;
     MyApplication objMyApplication;
     PayViewModel payViewModel;
-    ProgressDialog dialog;
+    Dialog dialog;
     RecyclerView rvContacts, rvCoyniUsers, rvRecent;
     List<RecentUsersData> usersList;
     List<CoyniUsersData> listCoyniUsers;
@@ -577,14 +578,20 @@ public class AddRecipientActivity extends BaseActivity implements OnKeyboardVisi
             contactsList = new ArrayList<>();
             List<RegUsersResponseData> wWAList = new ArrayList<>();
             List<RegUsersResponseData> nWAList = new ArrayList<>();
+            String strUserPh = "";
+            if (objMyApplication.getMyProfile().getData().getPhoneNumber() != null && !objMyApplication.getMyProfile().getData().getPhoneNumber().equals("")) {
+                strUserPh = objMyApplication.getMyProfile().getData().getPhoneNumber().split(" ")[1];
+            } else {
+                strUserPh = "";
+            }
             if (contacts != null && contacts.size() > 0) {
                 for (int i = 0; i < contacts.size(); i++) {
-                    if (contacts.get(i).getWalletAddress() != null && !contacts.get(i).getWalletAddress().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId())) {
-//                        contactsList.add(contacts.get(i));
-                        wWAList.add(contacts.get(i));
-                    } else if (contacts.get(i).getWalletAddress() == null) {
-//                        contactsList.add(contacts.get(i));
-                        nWAList.add(contacts.get(i));
+                    if (!strUserPh.equals(contacts.get(i).getPhoneNumber())) {
+                        if (contacts.get(i).getWalletAddress() != null && !contacts.get(i).getWalletAddress().equals(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getWalletId())) {
+                            wWAList.add(contacts.get(i));
+                        } else if (contacts.get(i).getWalletAddress() == null) {
+                            nWAList.add(contacts.get(i));
+                        }
                     }
                 }
 

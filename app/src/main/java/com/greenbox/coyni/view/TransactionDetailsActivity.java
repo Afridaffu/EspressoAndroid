@@ -3,7 +3,11 @@ package com.greenbox.coyni.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -29,7 +33,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.adapters.ActivityLogAdapter;
+import com.greenbox.coyni.adapters.AddNewBusinessAccountDBAAdapter;
+import com.greenbox.coyni.model.activtity_log.ActivityLogResp;
+import com.greenbox.coyni.model.preferences.BaseProfile;
 import com.greenbox.coyni.model.transaction.TransactionData;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
@@ -38,14 +47,18 @@ import org.w3c.dom.Text;
 
 import okhttp3.internal.Util;
 
-public class TransactionDetailsActivity extends AppCompatActivity {
+public class TransactionDetailsActivity extends BaseActivity {
     DashboardViewModel dashboardViewModel;
     MyApplication objMyApplication;
     String strGbxTxnIdType = "";
     int txnType;
     Integer txnSubType;
-    ProgressDialog progressDialog;
+    String txnId = "";
+    Dialog progressDialog;
     CardView cancelTxnCV;
+    TextView successadd, purchaseTime, activity_log_tv;
+    RecyclerView recyclerView;
+
 
     // Control Method Types
     private static final String PAY_REQUEST = "PayRequest";
@@ -86,6 +99,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private static final String instant_pay = "instant pay";
     private static final String token = "token";
 
+    private String message, createdAt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -104,6 +119,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     private void initialization() {
         try {
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+            recyclerView = findViewById(R.id.recycler_view);
             objMyApplication = (MyApplication) getApplicationContext();
             if (getIntent().getStringExtra(Utils.gbxTxnIdType) != null && !getIntent().getStringExtra(Utils.gbxTxnIdType).equals("")) {
                 strGbxTxnIdType = getIntent().getStringExtra(Utils.gbxTxnIdType);
@@ -175,6 +191,10 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                         txnSubType = null;
                         break;
                 }
+            }
+
+            if (getIntent().getStringExtra("txnId") != null && !getIntent().getStringExtra("txnId").equals("")) {
+                txnId = getIntent().getStringExtra("txnId");
             }
 
             if (Utils.checkInternet(TransactionDetailsActivity.this)) {
@@ -284,6 +304,24 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
+            }
+        });
+
+        dashboardViewModel.getActivityLogRespMutableLiveData().observe(this, new Observer<ActivityLogResp>() {
+            @Override
+            public void onChanged(ActivityLogResp activityLogResp) {
+                if (activityLogResp != null) {
+                    if (activityLogResp.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (activityLogResp.getData().size()>0) {
+                            ActivityLogAdapter activityListAdater = new ActivityLogAdapter(activityLogResp, TransactionDetailsActivity.this);
+                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(TransactionDetailsActivity.this);
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            recyclerView.setAdapter(activityListAdater);
+                            activity_log_tv.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
             }
         });
     }
@@ -663,11 +701,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
     }
 
     private void buyTokenCreditDebit(TransactionData objData) {
-        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmountTV, successadd, chargeback;
+        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmountTV;
         TextView refid, name, descriptorName, cardNumber, expiryDate, depositIDTV;
         LinearLayout lyPRClose;
         ImageView refIdIV, depositIDIV, cardBrandIV;
         LinearLayout depositID, referenceID;
+        CardView card_view_activity_log;
+//        TextView activity_log_tv;
 
         headerTV = findViewById(R.id.headTV);
         amount = findViewById(R.id.tvAmount);
@@ -682,10 +722,12 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         refid = findViewById(R.id.referenceIDTV);
         descriptorName = findViewById(R.id.descriNameTV);
         name = findViewById(R.id.cardHoldernameTV);
+        purchaseTime = findViewById(R.id.purchaseTime);
         cardNumber = findViewById(R.id.cardnumTV);
+        card_view_activity_log = findViewById(R.id.cv_activity_log);
+        activity_log_tv = findViewById(R.id.activity_log_tv);
         expiryDate = findViewById(R.id.expdateTV);
-        successadd = findViewById(R.id.successadd);
-        chargeback = findViewById(R.id.chargeback);
+        successadd = findViewById(R.id.message_tv);
         depositIDTV = findViewById(R.id.depositid);
         lyPRClose = findViewById(R.id.previous);
         cardBrandIV = findViewById(R.id.cardBrandIV);
@@ -706,6 +748,8 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 case Utils.transCompleted:
                     status.setTextColor(getResources().getColor(R.color.completed_status));
                     status.setBackgroundResource(R.drawable.txn_completed_bg);
+                    card_view_activity_log.setVisibility(View.VISIBLE);
+                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                     status.setTextColor(getResources().getColor(R.color.inprogress_status));
@@ -802,13 +846,16 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         }
 
         lyPRClose.setOnClickListener(view -> onBackPressed());
+
+
     }
 
     private void buyTokenBankAccount(TransactionData objData) {
-        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmount, successAdd, chargeback;
+        TextView headerTV, amount, status, datetime, fee, total, balance, purchaseAmount, messageTv, chargeback, heading_activity;
         TextView refId, name, accountAddress, descriptorName, depositIDTV, bankAccNumTV, bankNameTV, nameOnAccTV;
         LinearLayout lyPRClose, btBankReference, btBankDepositID, descriptorLL;
         ImageView previousBtn, depositIDIV;
+        CardView activityLog;
 
         headerTV = findViewById(R.id.btbankheaderTV);
         amount = findViewById(R.id.btbankamountTV);
@@ -827,7 +874,13 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         bankNameTV = findViewById(R.id.btbanknameTV);
         nameOnAccTV = findViewById(R.id.btbanknameACTV);
         cancelTxnCV = findViewById(R.id.cancelTxnCV);
+        purchaseTime = findViewById(R.id.purchaseTime);
         descriptorLL = findViewById(R.id.descriptorLL);
+
+        successadd = findViewById(R.id.message_tv);
+        activityLog = findViewById(R.id.cv_activity_log);
+        heading_activity = findViewById(R.id.tv_activity_log);
+
 
         if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
             headerTV.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
@@ -844,6 +897,9 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 case Utils.transCompleted:
                     status.setTextColor(getResources().getColor(R.color.completed_status));
                     status.setBackgroundResource(R.drawable.txn_completed_bg);
+                    heading_activity.setVisibility(View.VISIBLE);
+                    activityLog.setVisibility(View.VISIBLE);
+                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                     status.setTextColor(getResources().getColor(R.color.inprogress_status));
@@ -948,7 +1004,6 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
 
     }
 
@@ -1177,8 +1232,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             if (objData.getAccountBalance() != null) {
                 withAccountBal.setText(Utils.convertTwoDecimal(objData.getAccountBalance().replace("CYN", "").trim()) + " CYN");
             }
-        }
-        else {
+        } else {
             findViewById(R.id.account_balance_ll).setVisibility(View.GONE);
         }
 
@@ -1271,6 +1325,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
         withBankCloseLL = findViewById(R.id.withbankCloseLL);
         cvCancelWB = findViewById(R.id.cvCancelWB);
 
+
         if (objData.getTransactionType() != null && objData.getTransactionSubtype() != null) {
             withBankHeader.setText(objData.getTransactionType() + " - " + objData.getTransactionSubtype());
         }
@@ -1297,6 +1352,7 @@ public class TransactionDetailsActivity extends AppCompatActivity {
                 case Utils.transCompleted:
                     withBankStatus.setTextColor(getResources().getColor(R.color.completed_status));
                     withBankStatus.setBackgroundResource(R.drawable.txn_completed_bg);
+                    getActivityLogAPICall();
                     break;
                 case Utils.transinprogress:
                 case Utils.transInProgress:
@@ -2126,6 +2182,17 @@ public class TransactionDetailsActivity extends AppCompatActivity {
             dialog.show();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void getActivityLogAPICall(){
+
+        if (Utils.checkInternet(TransactionDetailsActivity.this)) {
+            if (txnId != null && !txnId.equals("")) {
+                if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+                    dashboardViewModel.getActivityLog(txnId, "c");
+                }
+            }
         }
     }
 

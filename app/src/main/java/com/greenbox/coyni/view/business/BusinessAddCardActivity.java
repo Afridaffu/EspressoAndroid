@@ -102,7 +102,7 @@ public class BusinessAddCardActivity extends AppCompatActivity {
     Long mLastClickTime = 0L;
     Dialog preDialog, preAuthDialog;
     CardResponseData cardResponseData;
-    ProgressDialog progressDialog;
+    Dialog progressDialog;
     public static BusinessAddCardActivity businessaddCardActivity;
     CardTypeResponse objCard;
     Boolean isName = false, isExpiry = false, isNextEnabled = false;

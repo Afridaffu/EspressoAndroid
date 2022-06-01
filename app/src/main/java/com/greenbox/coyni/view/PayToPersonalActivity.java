@@ -59,7 +59,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
     PayViewModel payViewModel;
     DashboardViewModel dashboardViewModel;
     CoyniViewModel coyniViewModel;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     Dialog prevDialog;
     DatabaseHandler dbHandler;
     Boolean isFaceLock = false, isTouchId = false, isCancel = false;
@@ -606,7 +606,10 @@ public class PayToPersonalActivity extends AppCompatActivity {
     private Boolean payValidation() {
         Boolean value = true;
         try {
-            if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            if (cynValue < Double.parseDouble(objResponse.getData().getMinimumLimit())) {
+                displayAlertNew("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN", PayToPersonalActivity.this, "Oops!");
+                value = false;
+            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 displayAlertNew("Amount entered exceeds transaction limit.", PayToPersonalActivity.this, "Oops!");
                 value = false;
             } else if (cynValue > avaBal) {
@@ -717,6 +720,12 @@ public class PayToPersonalActivity extends AppCompatActivity {
 
         displayAlertDialog.setCanceledOnTouchOutside(true);
         displayAlertDialog.show();
+        displayAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                changeSlideState();
+            }
+        });
     }
 
     private void payTransaction() {
@@ -729,7 +738,7 @@ public class PayToPersonalActivity extends AppCompatActivity {
             objMyApplication.setTransferPayRequest(request);
             objMyApplication.setWithdrawAmount(cynValue);
             if (Utils.checkInternet(PayToPersonalActivity.this)) {
-                payViewModel.sendTokens(request,objMyApplication.getStrToken());
+                payViewModel.sendTokens(request, objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();

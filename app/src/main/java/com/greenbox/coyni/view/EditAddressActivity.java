@@ -71,7 +71,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
     TextView address1ErrorTV, address2ErrorTV, cityErrorTV, zipcodeErrorTV;
     TextView b_address1ErrorTV, b_cityErrorTV, b_zipcodeErrorTV;
     Long mLastClickTime = 0L;
-    ProgressDialog dialog;
+    Dialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
 
     @Override
@@ -207,10 +207,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    dialog = new ProgressDialog(EditAddressActivity.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.show();
+                    dialog = Utils.showProgressDialog(EditAddressActivity.this);
                     Utils.tempStateName = "";
                     updateAddress();
                 }
@@ -221,10 +218,7 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    dialog = new ProgressDialog(EditAddressActivity.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.show();
+                    dialog = Utils.showProgressDialog(EditAddressActivity.this);
                     Utils.tempStateName = "";
                     b_updateAddress();
                 }
@@ -465,8 +459,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
 //                }
                 enableOrDisableSave();
 
-                if (address2ET.getText().toString().contains("  ")){
-                    address2ET.setText(address2ET.getText().toString().replace("  "," "));
+                if (address2ET.getText().toString().contains("  ")) {
+                    address2ET.setText(address2ET.getText().toString().replace("  ", " "));
                     address2ET.setSelection(address2ET.getText().length());
                 }
             }
@@ -510,8 +504,8 @@ public class EditAddressActivity extends BaseActivity implements OnKeyboardVisib
                 }
                 enableOrDisableSave();
 
-                if (cityET.getText().toString().contains("  ")){
-                    cityET.setText(cityET.getText().toString().replace("  "," "));
+                if (cityET.getText().toString().contains("  ")) {
+                    cityET.setText(cityET.getText().toString().replace("  ", " "));
                     cityET.setSelection(cityET.getText().length());
                 }
             }

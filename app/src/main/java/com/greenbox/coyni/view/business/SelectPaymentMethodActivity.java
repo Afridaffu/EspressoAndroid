@@ -67,7 +67,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
     RelativeLayout layoutDCard, lyExternal, layoutSignet;
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     TextView tvBankError, tvDCardError, tvSignetError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvSignetCount, tvSignetMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvSignetHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgSignetLogo, imgSignetArrow, imgLogo;
@@ -1077,7 +1077,6 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                         mLastClickTime = SystemClock.elapsedRealtime();
                         if (strSignOn.equals("") && signOnData != null && signOnData.getUrl() != null) {
                             isBank = true;
-                            objMyApplication.setResolveUrl(true);
                             Intent i = new Intent(SelectPaymentMethodActivity.this, WebViewActivity.class);
                             i.putExtra("signon", signOnData);
                             startActivityForResult(i, 1);

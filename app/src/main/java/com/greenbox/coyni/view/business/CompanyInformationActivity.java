@@ -42,7 +42,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -131,6 +130,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     View globalView;
     private boolean isApiCalled = false;
     private boolean isNewCompanyFlag = false;
+    private boolean isNew = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,8 +160,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
             identityVerificationViewModel = new ViewModelProvider(this).get(IdentityVerificationViewModel.class);
             from = getIntent().getStringExtra("FROM");
 
-
-            if (!getIntent().getBooleanExtra("isNew", false)) {
+            isNew = getIntent().getBooleanExtra("isNew", false);
+            if (!isNew) {
                 showProgressDialog();
                 businessIdentityVerificationViewModel.getCompanyInfo();
             }
@@ -424,7 +424,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isBasicNextEnabled) {
 //                    companyInfoAPICall(prepareRequest());
-                    if (getIntent().getBooleanExtra("isNew", false)) {
+                    if (isNew) {
                         identityVerificationViewModel.getAddBusinessUser();
                     } else {
                         companyInfoAPICall(prepareRequest());
@@ -438,7 +438,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                 }
                 mLastClickTimeAddr = SystemClock.elapsedRealtime();
                 if (isAddressNextEnabled) {
-                    if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
+                    if (isNew && !isNewCompanyFlag) {
                         identityVerificationViewModel.getAddBusinessUser();
                     } else {
                         companyInfoAPICall(prepareRequest());
@@ -486,7 +486,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     }
                     mLastClickTimeDocs = SystemClock.elapsedRealtime();
                     if (isDocsDoneEnabled) {
-                        if (getIntent().getBooleanExtra("isNew", false) && !isNewCompanyFlag) {
+                        if (isNew && !isNewCompanyFlag) {
                             identityVerificationViewModel.getAddBusinessUser();
                         } else {
                             businessIdentityVerificationViewModel.postCompanyInfo(prepareRequest());
@@ -664,6 +664,7 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
                     if (identityImageResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                         isNewCompanyFlag = true;
+                        isNew = false;
                         BusinessRegistrationTrackerActivity.isAddBusinessCalled = true;
                         isApiCalled = true;
 //                        setResult(RESULT_OK);
@@ -1698,13 +1699,9 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
     protected void onDestroy() {
         try {
             super.onDestroy();
-//            if(isBasicNextEnabled && isAddressNextEnabled && isDocsDoneEnabled){
-//                businessIdentityVerificationViewModel.postCompanyInfo(companyInfoRequest);
-//            }else{
-//
-//            }
-            if (!isPostSuccess)
+            if (!isPostSuccess && !isNew) {
                 companyInfoAPICall(prepareRequest());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1774,7 +1771,8 @@ public class CompanyInformationActivity extends BaseActivity implements OnKeyboa
 
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", CompanyInformationActivity.this, "", "");
+//                        Utils.displayAlert("Requires Access to Camera.", CompanyInformationActivity.this, "", "");
+                        Utils.showDialogPermission(CompanyInformationActivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

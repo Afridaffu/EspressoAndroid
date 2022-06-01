@@ -37,6 +37,7 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
     MyApplication objMyApplication;
     List<NotificationsDataItems> notifications;
     Long mLastClickTime = 0L;
+    NotificationsAdapter.MyViewHolder myHolder ;
 
     public NotificationsAdapter(List<NotificationsDataItems> list, Context context) {
         this.notifications = list;
@@ -50,379 +51,388 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.notifications_item, parent, false);
 
-        return new NotificationsAdapter.MyViewHolder(itemView);
+        myHolder = new NotificationsAdapter.MyViewHolder(itemView);
+        return myHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull NotificationsAdapter.MyViewHolder holder, int position) {
-        try {
-
+            try {
 //            holder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
 //            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
 //            holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
 //            holder.tvNotifDate.setPadding(40, 30, 0, 0);
 //            holder.swipeLayout.close();
 
-            if (notifications.get(position).getType().equals("Notification")) {
-                holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
-                holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
-                holder.tvNotifDate.setPadding(40, 30, 0, 0);
-                holder.swipeLayout.setLeftSwipeEnabled(true);
-                holder.swipeLayout.setRightSwipeEnabled(true);
-                holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
-
-                holder.fromRequesterLL.setVisibility(View.GONE);
-                holder.meRequestLL.setVisibility(View.GONE);
-
-                holder.messageTV.setVisibility(View.VISIBLE);
-
-                holder.subject.setText(notifications.get(position).getMsgSubject());
-                holder.messageTV.setText(notifications.get(position).getMsgContent());
-                if (notifications.get(position).isRead()) {
-                    holder.readStatusCV.setVisibility(View.GONE);
-                    holder.readStatusTV.setText("UNREAD");
-                } else {
-                    holder.readStatusTV.setText("READ");
-                    holder.readStatusCV.setVisibility(View.VISIBLE);
-                }
-
-                holder.readStatusLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                            List<Integer> list = new ArrayList<>();
-                            list.add(notifications.get(position).getId());
-
-                            if (notifications.get(position).isRead()) {
-                                ((NotificationsActivity) mContext).markUnReadAPICall(list);
-                            } else {
-                                ((NotificationsActivity) mContext).markReadAPICall(list);
-                            }
-                            mItemManger.closeAllItems();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                holder.deleteLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                            List<Integer> list = new ArrayList<>();
-                            list.add(notifications.get(position).getId());
-
-                            ((NotificationsActivity) mContext).deleteNotificationCall(list);
-                            mItemManger.closeAllItems();
-//                            holder.swipeLayout.close(true);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
-                    @Override
-                    public void onStartOpen(SwipeLayout layout) {
-                        mItemManger.closeAllExcept(layout);
-                    }
-
-                    @Override
-                    public void onOpen(SwipeLayout layout) {
-
-                    }
-
-                    @Override
-                    public void onStartClose(SwipeLayout layout) {
-                    }
-
-                    @Override
-                    public void onClose(SwipeLayout layout) {
-                    }
-
-                    @Override
-                    public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
-                    }
-
-                    @Override
-                    public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
-                    }
-                });
-            } else if (notifications.get(position).getType().equals("Received")) {
-
-                Log.e("Status", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
-                holder.swipeLayout.setLeftSwipeEnabled(false);
-                holder.swipeLayout.setRightSwipeEnabled(false);
-                holder.messageTV.setVisibility(View.GONE);
-                holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
-
-                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
-                    holder.meRequestLL.setVisibility(View.GONE);
-                    holder.fromRequesterLL.setVisibility(View.VISIBLE);
-                    holder.payLL.setVisibility(View.VISIBLE);
-                    holder.denyLL.setVisibility(View.VISIBLE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText(notifications.get(position).getRemarks());
+                if (notifications.get(position).getType().equals("Notification")) {
+                    holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, holder.swipeLayout.findViewById(R.id.deleteLL));
+                    holder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, holder.swipeLayout.findViewById(R.id.readStatusLL));
+                    holder.tvNotifDate.setPadding(40, 30, 0, 0);
+                    holder.swipeLayout.setLeftSwipeEnabled(true);
+                    holder.swipeLayout.setRightSwipeEnabled(true);
                     holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
-                    Log.e("cancelled", "cancelled");
-                    holder.meRequestLL.setVisibility(View.GONE);
+
                     holder.fromRequesterLL.setVisibility(View.GONE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText(notifications.get(position).getFromUser() + " cancelled this request");
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Remind")) {
                     holder.meRequestLL.setVisibility(View.GONE);
-                    holder.fromRequesterLL.setVisibility(View.VISIBLE);
+
                     holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText(notifications.get(position).getFromUser() + " sent you a reminder");
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
-                        && notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
-                        .getWalletNames().get(0).getWalletId())) {
-                    holder.meRequestLL.setVisibility(View.GONE);
-                    holder.fromRequesterLL.setVisibility(View.GONE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText(notifications.get(position).getFromUser() + " declined this request");
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
-                        && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
-                        .getWalletNames().get(0).getWalletId())) {
-                    holder.meRequestLL.setVisibility(View.GONE);
-                    holder.fromRequesterLL.setVisibility(View.GONE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText("You declined this request");
-                }
 
-                holder.subject.setText(notifications.get(position).getContent());
-                holder.readStatusCV.setVisibility(View.GONE);
-
-                holder.denyLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                            return;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
-                        ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
-                        Log.e("denyLL", "denyLL");
-                        ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                        StatusRequest statusRequest = new StatusRequest();
-                        statusRequest.setId(notifications.get(position).getId());
-                        statusRequest.setStatus("Declined");
-                        statusRequest.setRemarks("");
-                        ((NotificationsActivity) mContext).updatedStatus = "Declined";
-
-                        ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                    holder.subject.setText(notifications.get(position).getMsgSubject());
+                    holder.messageTV.setText(notifications.get(position).getMsgContent());
+                    if (notifications.get(position).isRead()) {
+                        holder.readStatusCV.setVisibility(View.GONE);
+                        holder.readStatusTV.setText("UNREAD");
+                    } else {
+                        holder.readStatusTV.setText("READ");
+                        holder.readStatusCV.setVisibility(View.VISIBLE);
                     }
-                });
 
-                holder.payLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            Log.e("payLL", "payLL");
-
-                            if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount()) {
+                    holder.readStatusLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
                                 ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                                TransferPayRequest request = new TransferPayRequest();
-                                request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
-                                request.setRemarks(notifications.get(position).getRemarks());
-                                request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
+                                List<Integer> list = new ArrayList<>();
+                                list.add(notifications.get(position).getId());
 
-                                ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
-                            } else {
-                                Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
+                                if (notifications.get(position).isRead()) {
+                                    ((NotificationsActivity) mContext).markUnReadAPICall(list);
+                                } else {
+                                    ((NotificationsActivity) mContext).markReadAPICall(list);
+                                }
+                                mItemManger.closeAllItems();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
 
-                holder.cancelLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
+                    holder.deleteLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                                List<Integer> list = new ArrayList<>();
+                                list.add(notifications.get(position).getId());
+
+                                ((NotificationsActivity) mContext).deleteNotificationCall(list);
+                                mItemManger.closeAllItems();
+//                            holder.swipeLayout.close(true);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    holder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                        @Override
+                        public void onStartOpen(SwipeLayout layout) {
+                            mItemManger.closeAllExcept(layout);
+                        }
+
+                        @Override
+                        public void onOpen(SwipeLayout layout) {
+
+                        }
+
+                        @Override
+                        public void onStartClose(SwipeLayout layout) {
+                        }
+
+                        @Override
+                        public void onClose(SwipeLayout layout) {
+                        }
+
+                        @Override
+                        public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+                        }
+
+                        @Override
+                        public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+                        }
+                    });
+                } else if (notifications.get(position).getType().equals("Received")) {
+
+                    Log.e("Status", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
+                    holder.swipeLayout.setLeftSwipeEnabled(false);
+                    holder.swipeLayout.setRightSwipeEnabled(false);
+                    holder.messageTV.setVisibility(View.GONE);
+                    holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
+
+                    if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                        holder.payLL.setVisibility(View.VISIBLE);
+                        holder.denyLL.setVisibility(View.VISIBLE);
+                        if (!notifications.get(position).getRemarks().trim().equals("")) {
+                            holder.messageTV.setText(notifications.get(position).getRemarks());
+                            holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
+                            holder.messageTV.setVisibility(View.VISIBLE);
+                        } else
+                            holder.messageTV.setVisibility(View.GONE);
+                    } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
+                        Log.e("cancelled", "cancelled");
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.fromRequesterLL.setVisibility(View.GONE);
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText(notifications.get(position).getFromUser() + " cancelled this request");
+                    } else if (notifications.get(position).getStatus().equalsIgnoreCase("Remind")) {
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.fromRequesterLL.setVisibility(View.VISIBLE);
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText(notifications.get(position).getFromUser() + " sent you a reminder");
+                    } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
+                            && notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
+                            .getWalletNames().get(0).getWalletId())) {
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.fromRequesterLL.setVisibility(View.GONE);
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText(notifications.get(position).getFromUser() + " declined this request");
+                    } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")
+                            && !notifications.get(position).getRequesterWalletId().equalsIgnoreCase(objMyApplication.getCurrentUserData().getTokenWalletResponse()
+                            .getWalletNames().get(0).getWalletId())) {
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.fromRequesterLL.setVisibility(View.GONE);
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText("You declined this request");
+                    }
+
+                    holder.subject.setText(notifications.get(position).getContent());
+                    holder.readStatusCV.setVisibility(View.GONE);
+
+                    holder.denyLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-                            Log.e("cancelLL", "cancelLL");
                             ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+                            Log.e("denyLL", "denyLL");
                             ((NotificationsActivity) mContext).selectedRow = position + "";
 
                             StatusRequest statusRequest = new StatusRequest();
                             statusRequest.setId(notifications.get(position).getId());
-                            statusRequest.setStatus("Cancelled");
+                            statusRequest.setStatus("Declined");
                             statusRequest.setRemarks("");
-                            ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
+                            ((NotificationsActivity) mContext).updatedStatus = "Declined";
 
                             ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
 
-                holder.remindLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
+                    holder.payLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                Log.e("payLL", "payLL");
+
+                                if (notifications.get(position).getAmount() <= objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount()) {
+                                    ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                                    TransferPayRequest request = new TransferPayRequest();
+                                    request.setTokens(Utils.convertTwoDecimal(notifications.get(position).getAmount().toString()));
+                                    request.setRemarks(notifications.get(position).getRemarks());
+                                    request.setRecipientWalletId(notifications.get(position).getRequesterWalletId());
+
+                                    ((NotificationsActivity) mContext).showPayRequestPreview(notifications.get(position), request);
+                                } else {
+                                    Utils.displayAlert("Amount exceeds available balance\nAvailable: " + objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + " CYN", (Activity) mContext, "", "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            Log.e("remindLL", "remindLL");
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                            StatusRequest statusRequest = new StatusRequest();
-                            statusRequest.setId(notifications.get(position).getId());
-                            statusRequest.setStatus("Remind");
-                            statusRequest.setRemarks("");
-                            ((NotificationsActivity) mContext).updatedStatus = "Remind";
-
-                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
+                    });
+
+                    holder.cancelLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                Log.e("cancelLL", "cancelLL");
+                                ((NotificationsActivity) mContext).progressDialog = Utils.showProgressDialog(mContext);
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                                StatusRequest statusRequest = new StatusRequest();
+                                statusRequest.setId(notifications.get(position).getId());
+                                statusRequest.setStatus("Cancelled");
+                                statusRequest.setRemarks("");
+                                ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
+
+                                ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    holder.remindLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                Log.e("remindLL", "remindLL");
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                                StatusRequest statusRequest = new StatusRequest();
+                                statusRequest.setId(notifications.get(position).getId());
+                                statusRequest.setStatus("Remind");
+                                statusRequest.setRemarks("");
+                                ((NotificationsActivity) mContext).updatedStatus = "Remind";
+
+                                ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                } else {
+                    Log.e("Status Sent ", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
+                    holder.swipeLayout.setLeftSwipeEnabled(false);
+                    holder.swipeLayout.setRightSwipeEnabled(false);
+
+                    holder.subject.setText(notifications.get(position).getContent());
+                    holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
+                    holder.messageTV.setVisibility(View.GONE);
+                    holder.readStatusCV.setVisibility(View.GONE);
+
+                    holder.fromRequesterLL.setVisibility(View.GONE);
+
+                    if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
+                        holder.meRequestLL.setVisibility(View.VISIBLE);
+                        holder.fromRequesterLL.setVisibility(View.GONE);
+                        holder.remindLL.setVisibility(View.VISIBLE);
+                        holder.cancelLL.setVisibility(View.VISIBLE);
+                        if (!notifications.get(position).getRemarks().trim().equals("")) {
+                            holder.messageTV.setVisibility(View.VISIBLE);
+                            holder.messageTV.setText(notifications.get(position).getRemarks());
+                            holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.dark_grey));
+                        } else
+                            holder.messageTV.setVisibility(View.GONE);
+                    } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText("You cancelled this request");
+                    } else if (notifications.get(position).getStatus().equalsIgnoreCase("Remind")) {
+                        holder.meRequestLL.setVisibility(View.VISIBLE);
+                        holder.remindLL.setVisibility(View.INVISIBLE);
+                        holder.remindLL.setClickable(false);
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText("You sent a reminder to " + notifications.get(position).getToUser());
+                    } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")) {
+                        holder.meRequestLL.setVisibility(View.GONE);
+                        holder.fromRequesterLL.setVisibility(View.GONE);
+                        holder.messageTV.setVisibility(View.VISIBLE);
+                        holder.messageTV.setText("You declined this request");
                     }
-                });
 
-            } else {
-                Log.e("Status Sent ", notifications.get(position).getContent() + "  " + notifications.get(position).getStatus());
-                holder.swipeLayout.setLeftSwipeEnabled(false);
-                holder.swipeLayout.setRightSwipeEnabled(false);
+                    holder.cancelLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                Log.e("cancelLL", "cancelLL");
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
 
-                holder.subject.setText(notifications.get(position).getContent());
-                holder.messageTV.setTextColor(mContext.getResources().getColor(R.color.primary_green));
-                holder.messageTV.setVisibility(View.GONE);
-                holder.readStatusCV.setVisibility(View.GONE);
+                                StatusRequest statusRequest = new StatusRequest();
+                                statusRequest.setId(notifications.get(position).getId());
+                                statusRequest.setStatus("Cancelled");
+                                statusRequest.setRemarks("");
+                                ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
 
-                holder.fromRequesterLL.setVisibility(View.GONE);
+                                ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
 
-                if (notifications.get(position).getStatus().equalsIgnoreCase("Requested")) {
-                    holder.meRequestLL.setVisibility(View.VISIBLE);
-                    holder.fromRequesterLL.setVisibility(View.GONE);
-                    holder.remindLL.setVisibility(View.VISIBLE);
-                    holder.cancelLL.setVisibility(View.VISIBLE);
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Cancelled")) {
-                    holder.meRequestLL.setVisibility(View.GONE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText("You cancelled this request");
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Remind")) {
-                    holder.meRequestLL.setVisibility(View.VISIBLE);
-                    holder.remindLL.setVisibility(View.INVISIBLE);
-                    holder.remindLL.setClickable(false);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText("You sent a reminder to " + notifications.get(position).getToUser());
-                } else if (notifications.get(position).getStatus().equalsIgnoreCase("Declined")) {
-                    holder.meRequestLL.setVisibility(View.GONE);
-                    holder.fromRequesterLL.setVisibility(View.GONE);
-                    holder.messageTV.setVisibility(View.VISIBLE);
-                    holder.messageTV.setText("You declined this request");
+                    holder.remindLL.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            try {
+                                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                                    return;
+                                }
+                                mLastClickTime = SystemClock.elapsedRealtime();
+                                Log.e("remindLL", "remindLL");
+                                ((NotificationsActivity) mContext).selectedRow = position + "";
+
+                                StatusRequest statusRequest = new StatusRequest();
+                                statusRequest.setId(notifications.get(position).getId());
+                                statusRequest.setStatus("Remind");
+                                statusRequest.setRemarks("");
+                                ((NotificationsActivity) mContext).updatedStatus = "Remind";
+
+                                ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
 
-                holder.cancelLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            Log.e("cancelLL", "cancelLL");
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
+                holder.timeTV.setText(notifications.get(position).getTimeAgo());
 
-                            StatusRequest statusRequest = new StatusRequest();
-                            statusRequest.setId(notifications.get(position).getId());
-                            statusRequest.setStatus("Cancelled");
-                            statusRequest.setRemarks("");
-                            ((NotificationsActivity) mContext).updatedStatus = "Cancelled";
-
-                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                holder.remindLL.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
-                            Log.e("remindLL", "remindLL");
-                            ((NotificationsActivity) mContext).selectedRow = position + "";
-
-                            StatusRequest statusRequest = new StatusRequest();
-                            statusRequest.setId(notifications.get(position).getId());
-                            statusRequest.setStatus("Remind");
-                            statusRequest.setRemarks("");
-                            ((NotificationsActivity) mContext).updatedStatus = "Remind";
-
-                            ((NotificationsActivity) mContext).userRequestStatusUpdateCall(statusRequest);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-
-            holder.timeTV.setText(notifications.get(position).getTimeAgo());
-
-            if (position == 0) {
-                if (notifications.get(position).getIsToday() == 0) {
-                    holder.tvNotifDate.setVisibility(View.VISIBLE);
-                    holder.tvNotifDate.setText("Past");
-
-                } else if (notifications.get(position).getIsToday() == 1) {
-                    holder.tvNotifDate.setVisibility(View.VISIBLE);
-                    holder.tvNotifDate.setText("Today");
-                } else {
-                    holder.tvNotifDate.setVisibility(View.GONE);
-                }
-            } else {
-                if (notifications.get(position - 1).getIsToday() == notifications.get(position).getIsToday()) {
-                    holder.tvNotifDate.setVisibility(View.GONE);
-                } else {
+                if (position == 0) {
                     if (notifications.get(position).getIsToday() == 0) {
                         holder.tvNotifDate.setVisibility(View.VISIBLE);
                         holder.tvNotifDate.setText("Past");
+
                     } else if (notifications.get(position).getIsToday() == 1) {
                         holder.tvNotifDate.setVisibility(View.VISIBLE);
                         holder.tvNotifDate.setText("Today");
                     } else {
                         holder.tvNotifDate.setVisibility(View.GONE);
                     }
+                } else {
+                    if (notifications.get(position - 1).getIsToday() == notifications.get(position).getIsToday()) {
+                        holder.tvNotifDate.setVisibility(View.GONE);
+                    } else {
+                        if (notifications.get(position).getIsToday() == 0) {
+                            holder.tvNotifDate.setVisibility(View.VISIBLE);
+                            holder.tvNotifDate.setText("Past");
+                        } else if (notifications.get(position).getIsToday() == 1) {
+                            holder.tvNotifDate.setVisibility(View.VISIBLE);
+                            holder.tvNotifDate.setText("Today");
+                        } else {
+                            holder.tvNotifDate.setVisibility(View.GONE);
+                        }
+                    }
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        mItemManger.bind(holder.itemView, position);
+            mItemManger.bind(holder.itemView, position);
     }
 
     @Override
@@ -498,4 +508,15 @@ public class NotificationsAdapter extends RecyclerSwipeAdapter<NotificationsAdap
         return R.id.swipeLayout;
     }
 
+    public void enableOrDisable(boolean isEnabled){
+        myHolder.cancelLL.setClickable(isEnabled);
+        myHolder.payLL.setClickable(isEnabled);
+        myHolder.denyLL.setClickable(isEnabled);
+        myHolder.remindLL.setClickable(isEnabled);
+
+        myHolder.cancelLL.setEnabled(isEnabled);
+        myHolder.payLL.setEnabled(isEnabled);
+        myHolder.denyLL.setEnabled(isEnabled);
+        myHolder.remindLL.setEnabled(isEnabled);
+    }
 }

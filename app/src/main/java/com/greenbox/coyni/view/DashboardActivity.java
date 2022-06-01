@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -70,14 +71,15 @@ import java.util.List;
 public class DashboardActivity extends BaseActivity {
     public static final int REQUEST_READ_CONTACTS = 79;
     LinearLayout layoutProfile, layoutCrypto, layoutCard, layoutMainMenu;
-    LinearLayout scanQr, viewMoreLL, notificationsSmallLL;
+    LinearLayout scanQr, viewMoreLL, notificationsSmallLL, ll_identity_verification_failed;
     RelativeLayout notificationsLL;
     DashboardViewModel dashboardViewModel;
     BusinessDashboardViewModel businessDashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
     public NotificationsViewModel notificationsViewModel;
-    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV, welcomeCoyniTV, buyTokenWelcomeCoyniTV;
+    TextView tvUserName, tvUserNameSmall, tvUserInfoSmall, tvUserInfo, noTxnTV, tvBalance, countTV,
+            welcomeCoyniTV, buyTokenWelcomeCoyniTV, contactUSTV, idVeriStatus;
     MyApplication objMyApplication;
     Dialog dialog;
     RelativeLayout cvHeaderRL, cvSmallHeaderRL, statusCardsRL;
@@ -101,7 +103,6 @@ public class DashboardActivity extends BaseActivity {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
             setContentView(R.layout.activity_dashboard);
             initialization();
             initObserver();
@@ -147,9 +148,13 @@ public class DashboardActivity extends BaseActivity {
             cvHeaderRL = findViewById(R.id.cvHeaderRL);
             cvSmallHeaderRL = findViewById(R.id.cvSmallHeaderRL);
             getStartedCV = findViewById(R.id.getStartedCV);
+            ll_identity_verification_failed = findViewById(R.id.ll_identity_verification_failed);
             transactionsNSV = findViewById(R.id.transactionsNSV);
             imgProfileSmall = findViewById(R.id.imgProfileSmall);
             imgProfile = findViewById(R.id.imgProfile);
+            contactUSTV = findViewById(R.id.contactUSTV);
+            idVeriStatus = findViewById(R.id.idVeriStatus);
+            idVeriStatus.setText(getString(R.string.declined_text));
 
 
             newUserGetStartedCV = findViewById(R.id.newUserGetStartedCV);
@@ -364,14 +369,14 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onRefresh() {
                     try {
-                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
-                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+//                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
+//                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
                             dashboardViewModel.getLatestTxns();
                             WalletRequest walletRequest = new WalletRequest();
                             walletRequest.setWalletType(Utils.TOKEN);
                             walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                             businessDashboardViewModel.meMerchantWallet(walletRequest);
-//                            businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                             transactionsNSV.smoothScrollTo(0, 0);
                         } else {
                             latestTxnRefresh.setRefreshing(false);
@@ -452,6 +457,18 @@ public class DashboardActivity extends BaseActivity {
                 }
             });
 
+            contactUSTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(Utils.mondayURL));
+                        startActivity(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -482,7 +499,8 @@ public class DashboardActivity extends BaseActivity {
                         tvUserName.setText(getString(R.string.hi_text) + strName);
                         tvUserNameSmall.setText(getString(R.string.hi_text) + strName);
                     }
-                    bindImage();
+//                    bindImage();
+                    Utils.setUserEmail(DashboardActivity.this, profile.getData().getEmail());
                 }
                 new FetchData(DashboardActivity.this).execute();
             }
@@ -517,7 +535,7 @@ public class DashboardActivity extends BaseActivity {
                             additionalActionCV.setVisibility(View.GONE);
                             buyTokensCV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.GONE);
-                            dashboardViewModel.getLatestTxns();
+//                            dashboardViewModel.getLatestTxns();
                         } else {
                             welcomeCoyniCV.setVisibility(View.VISIBLE);
                             underReviewCV.setVisibility(View.GONE);
@@ -526,13 +544,22 @@ public class DashboardActivity extends BaseActivity {
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
                         }
+                        dashboardViewModel.getLatestTxns();
                     } else {
-                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Unverified")) {
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                             cvHeaderRL.setVisibility(View.GONE);
                             cvSmallHeaderRL.setVisibility(View.VISIBLE);
                             getStartedCV.setVisibility(View.VISIBLE);
                             transactionsNSV.setVisibility(View.GONE);
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Under Review")) {
+                            ll_identity_verification_failed.setVisibility(View.GONE);
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+                            cvHeaderRL.setVisibility(View.GONE);
+                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
+                            getStartedCV.setVisibility(View.GONE);
+                            transactionsNSV.setVisibility(View.GONE);
+                            ll_identity_verification_failed.setVisibility(View.VISIBLE);
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);
                             getStartedCV.setVisibility(View.GONE);
@@ -543,7 +570,7 @@ public class DashboardActivity extends BaseActivity {
                             additionalActionCV.setVisibility(View.GONE);
                             buyTokensCV.setVisibility(View.GONE);
 
-                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals("Action Required")) {
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);
                             getStartedCV.setVisibility(View.GONE);
@@ -555,6 +582,7 @@ public class DashboardActivity extends BaseActivity {
                             buyTokensCV.setVisibility(View.GONE);
                         }
                     }
+                    bindImage();
                 }
 
             }
@@ -578,8 +606,7 @@ public class DashboardActivity extends BaseActivity {
                         if (latestTxnResponse.getData().size() == 0) {
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
-                            buyTokensCV.setVisibility(View.VISIBLE);
-
+//                            buyTokensCV.setVisibility(View.VISIBLE);
                         } else if (latestTxnResponse.getData().size() > 4) {
                             buyTokensCV.setVisibility(View.GONE);
                             txnRV.setVisibility(View.VISIBLE);
@@ -600,6 +627,17 @@ public class DashboardActivity extends BaseActivity {
                             txnRV.setLayoutManager(mLayoutManager);
                             txnRV.setItemAnimator(new DefaultItemAnimator());
                             txnRV.setAdapter(latestTxnAdapter);
+                        }
+                        if (objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
+                            welcomeCoyniCV.setVisibility(View.GONE);
+                            if (latestTxnResponse.getData().size() == 0) {
+                                buyTokensCV.setVisibility(View.VISIBLE);
+                            } else {
+                                buyTokensCV.setVisibility(View.GONE);
+                            }
+                        } else {
+                            welcomeCoyniCV.setVisibility(View.VISIBLE);
+                            buyTokensCV.setVisibility(View.GONE);
                         }
 
                     }
@@ -807,7 +845,7 @@ public class DashboardActivity extends BaseActivity {
     private void cryptoAssets() {
         try {
             LinearLayout layoutClose;
-            dialog = new Dialog(DashboardActivity.this, R.style.DialogTheme);
+            dialog = new Dialog(DashboardActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.activity_crypto_assets_cmng_sn);
             Window window = dialog.getWindow();
@@ -837,7 +875,7 @@ public class DashboardActivity extends BaseActivity {
     private void issueCards() {
         try {
             LinearLayout layoutClose;
-            dialog = new Dialog(DashboardActivity.this, R.style.DialogTheme);
+            dialog = new Dialog(DashboardActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.activity_issuing_card_cmng_sn);
             Window window = dialog.getWindow();
@@ -875,12 +913,10 @@ public class DashboardActivity extends BaseActivity {
             try {
                 customerProfileViewModel.meSignOn();
                 dashboardViewModel.mePaymentMethods();
-//                dashboardViewModel.meWallet();
                 WalletRequest walletRequest = new WalletRequest();
                 walletRequest.setWalletType(Utils.TOKEN);
                 walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                 businessDashboardViewModel.meMerchantWallet(walletRequest);
-//                businessDashboardViewModel.meMerchantWallet(Utils.TOKEN);
                 notificationsViewModel.getNotifications();
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -897,6 +933,15 @@ public class DashboardActivity extends BaseActivity {
 
     public void bindImage() {
         try {
+
+//            if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+//                cvHeaderRL.setVisibility(View.VISIBLE);
+//                cvSmallHeaderRL.setVisibility(View.GONE);
+//            } else {
+//                cvHeaderRL.setVisibility(View.GONE);
+//                cvSmallHeaderRL.setVisibility(View.VISIBLE);
+//            }
+
             imgProfile.setVisibility(View.GONE);
             tvUserInfo.setVisibility(View.VISIBLE);
 
@@ -915,15 +960,6 @@ public class DashboardActivity extends BaseActivity {
                 tvUserInfo.setVisibility(View.GONE);
                 imgProfileSmall.setVisibility(View.VISIBLE);
                 tvUserInfoSmall.setVisibility(View.GONE);
-
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(imgProfile);
-//                Glide.with(this)
-//                        .load(imageString)
-//                        .placeholder(R.drawable.ic_profile_male_user)
-//                        .into(imgProfileSmall);
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
                 utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);

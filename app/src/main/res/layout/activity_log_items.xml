@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_17sdp"
+        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginRight="@dimen/_11sdp"
+        >
+
+        <View
+            android:layout_width="@dimen/_4sdp"
+            android:layout_height="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@drawable/dot_view_" />
+        <TextView
+            android:id="@+id/purchase_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Purchase"
+            android:textSize="@dimen/_11ssp"
+            android:fontFamily="@font/opensans_semibold"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/_6sdp"
+            />
+        <TextView
+            android:id="@+id/purchaseTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6/23/2021 7:43pm"
+            android:textSize="@dimen/_10ssp"
+            android:fontFamily="@font/opensans_regular"
+            android:textColor="@color/primary_black"
+            android:layout_marginLeft="@dimen/_7sdp"
+            android:gravity="right"
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/message_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Successfully added [xxx.xx CYN] to token account"
+        android:textSize="@dimen/_10ssp"
+        android:fontFamily="@font/opensans_regular"
+        android:textColor="@color/primary_black"
+        android:layout_marginLeft="@dimen/_11sdp"
+        android:layout_marginRight="@dimen/_11sdp"
+        android:layout_gravity="right"
+        android:layout_marginBottom="@dimen/_16sdp"
+        />
+
+</LinearLayout>

@@ -47,7 +47,6 @@ import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import org.json.JSONObject;
 
 
-
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -71,7 +70,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
     private BusinessDashboardViewModel dashboardViewModel;
     TextView tvWalletAddress, tvName;
     ImageView toggleBtn1;
-    String strWallet = "";
+    String strWallet = "", strName = "", savedStrName = "";
 
     float fontSize;
     CustomKeyboard ctKey;
@@ -92,7 +91,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
 
         initialization();
         listeners();
-
 
 
     }
@@ -154,7 +152,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             toggleBtn1 = findViewById(R.id.toglebtn);
             tvWalletAddress = findViewById(R.id.b_tvWalletAddress);
 
-            idIVQrcode =  findViewById(R.id.b_idIVQrcode);
+            idIVQrcode = findViewById(R.id.b_idIVQrcode);
             savedImageView = findViewById(R.id.savedImageIV);
             tvName = findViewById(R.id.tvName);
             businessreceivePaymentActivity = this;
@@ -179,7 +177,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             saveProfileTitle = findViewById(R.id.saveprofileTitle);
             saveSetAmount = findViewById(R.id.tvsaveSetAmount);
 
-
             findViewById(R.id.receivePaymentLL).setOnClickListener(view -> {
                 try {
                     finish();
@@ -187,15 +184,20 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                     e.printStackTrace();
                 }
             });
-
-            String strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                    && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+            } else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
+                strName = Utils.capitalize(objMyApplication.getMyProfile().getData().getDbaName());
+            }
             if (strName.length() > 22) {
                 tvName.setText(strName.substring(0, 22) + "...");
             } else {
                 tvName.setText(strName);
             }
             bindImage();
-            String savedStrName = Utils.capitalize(objMyApplication.getMyProfile().getData().getFirstName() + " " + objMyApplication.getMyProfile().getData().getLastName());
+            savedStrName = strName;
 
             if (savedStrName.length() > 22) {
                 tvSaveUserName.setText(savedStrName.substring(0, 22) + "...");
@@ -267,7 +269,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                         setAmountDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                         setAmountDialog.setContentView(R.layout.fragment_set_limit);
                         setAmountDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                        ctKey =  setAmountDialog.findViewById(R.id.customKeyBoard);
+                        ctKey = setAmountDialog.findViewById(R.id.customKeyBoard);
                         setAmount = setAmountDialog.findViewById(R.id.setAmountET);
                         InputConnection ic = setAmount.onCreateInputConnection(new EditorInfo());
                         ctKey.setInputConnection(ic);
@@ -309,7 +311,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 }
             });
 
-
             saveToAlbum.setOnClickListener(view -> {
                 try {
                     if (ContextCompat.checkSelfPermission(BusinessReceivePaymentActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -327,7 +328,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             e.printStackTrace();
         }
     }
-
 
     private void saveToGallery() {
         try {
@@ -351,7 +351,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             ex.printStackTrace();
         }
     }
-
 
     @Override
     protected void onResume() {
@@ -377,7 +376,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
     }
 
 
-
     private void generateQRCode(String wallet) {
         try {
             WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -389,13 +387,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             // is to be displayed in QR Code.
             Point point = new Point();
             display.getSize(point);
-
-
-
-
-
-
-
 
             qrgEncoder = new QRGEncoder(wallet, null, QRGContents.Type.TEXT, 600);
             bitmap = Bitmap.createBitmap(qrgEncoder.encodeAsBitmap(), 50, 50, 500, 500);
@@ -418,21 +409,38 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             userNameTV.setVisibility(View.VISIBLE);
             String imageString = objMyApplication.getMyProfile().getData().getImage();
             String imageTextNew = "";
-            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                    && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            }
+//            else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
+//                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
+//            }
             userNameTV.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
                 imgProfile.setVisibility(View.VISIBLE);
                 userNameTV.setVisibility(View.GONE);
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
-                utility.addImage(imageString, imgProfile, R.drawable.ic_profile_male_user);
+                utility.addImage(imageString, imgProfile, R.drawable.acct_profile);
+            } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                imgProfile.setVisibility(View.VISIBLE);
+                imgProfile.setImageResource(R.drawable.acct_profile);
             } else {
                 imgProfile.setVisibility(View.GONE);
                 userNameTV.setVisibility(View.VISIBLE);
                 String imageText = "";
-                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                        && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                        && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                }
+//                else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
+//                    imageText = imageText + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
+//                }
                 userNameTV.setText(imageText);
             }
 
@@ -447,8 +455,15 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             saveProfileTitle.setVisibility(View.VISIBLE);
             String imageString = objMyApplication.getMyProfile().getData().getImage();
             String imageTextNew = "";
-            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                    && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+            }
+//            else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
+//                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
+//            }
             saveProfileTitle.setText(imageTextNew);
 
             if (imageString != null && !imageString.trim().equals("")) {
@@ -457,12 +472,23 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
                 utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
+            }else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+                imgProfile.setVisibility(View.VISIBLE);
+                imgProfile.setImageResource(R.drawable.acct_profile);
             } else {
                 saveProfileIV.setVisibility(View.GONE);
                 saveProfileTitle.setVisibility(View.VISIBLE);
                 String imageText = "";
-                imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                        && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())
+                        && objMyApplication.getMyProfile().getData().getFirstName() != null && objMyApplication.getMyProfile().getData().getLastName() != null) {
+                    imageText = imageText + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
+                            objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
+                }
+//                else if (objMyApplication.getMyProfile().getData() != null && objMyApplication.getMyProfile().getData().getDbaName() != null) {
+//                    imageText = imageText + objMyApplication.getMyProfile().getData().getDbaName().substring(0, 1).toUpperCase();
+//                }
+                
                 saveProfileTitle.setText(imageText);
             }
 
@@ -471,7 +497,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         }
 
     }
-
 
 
     public void setAmountClick() {
@@ -498,11 +523,13 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
         }
     }
 
-    private Boolean validation() {
+    private boolean validation() {
         boolean value = true;
         try {
             String strPay = setAmount.getText().toString().trim().replace("\"", "");
-            if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
+            if (strPay.equals("")) {
+                value = false;
+            } else if ((Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(getString(R.string.payrequestMaxAmt)))) {
                 value = false;
                 Utils.displayAlert("You can request up to " + Utils.USNumberFormat(Double.parseDouble(getString(R.string.payrequestMaxAmt))) + " CYN", BusinessReceivePaymentActivity.this, "Oops!", "");
             } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
@@ -560,8 +587,6 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             ex.printStackTrace();
         }
     }
-
-
 
 
     @Override

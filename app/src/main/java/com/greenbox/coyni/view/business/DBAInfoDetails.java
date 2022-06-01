@@ -57,7 +57,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class DBAInfoDetails extends BaseActivity {
-    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType, dba_imageTextTV;
+    private TextView nameTV, emailTV, webSiteTV, phoneNumberTV, addressTV, businessType,dba_imageTextTV;
     private LinearLayout closeLL, webLL;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     DashboardViewModel dashboardViewModel;
@@ -65,7 +65,7 @@ public class DBAInfoDetails extends BaseActivity {
     private MyApplication objMyApplication;
     private List<BusinessType> responce;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-    ProgressDialog dialog;
+    Dialog dialog;
     Long mLastClickTime = 0L;
     private LinearLayout editEmail, editPhone;
     String emailID, phone_Number, bType=" ";
@@ -97,7 +97,7 @@ public class DBAInfoDetails extends BaseActivity {
             phoneNumberTV = findViewById(R.id.phoneNumberTV);
             addressTV = findViewById(R.id.addressTV);
             businessType = findViewById(R.id.businessTypeTV);
-            dba_imageTextTV = findViewById(R.id.dba_imageTextTV);
+//            dba_imageTextTV = findViewById(R.id.dba_imageTextTV);
             dba_userProfileIV = findViewById(R.id.dba_userProfileIV);
             objMyApplication = (MyApplication) getApplicationContext();
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -167,21 +167,23 @@ public class DBAInfoDetails extends BaseActivity {
         try {
             DBAInfoResp dbaInfoResp = objMyApplication.getDbaInfoResp();
             if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
-                if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 20) {
-                    nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
+                String name =  dbaInfoResp.getData().getName();
+                if (name != null && name.length() > 20) {
+                    nameTV.setText(Utils.getCapsSentences(name).substring(0, 20) + "...");
                 } else {
-                    nameTV.setText(dbaInfoResp.getData().getName());
+                    nameTV.setText(Utils.getCapsSentences(name));
                 }
                 nameTV.setOnClickListener(view -> {
 
                     try {
                         if (nameTV.getText().toString().contains("...") && dbaInfoResp.getData().getName().length() >= 21) {
+
                             nameTV.setText(objMyApplication.getDbaInfoResp().getData().getName());
 
-                        } else if (dbaInfoResp.getData().getName().length() >= 21) {
-                            nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
+                        } else if (name.length() >= 21) {
+                            nameTV.setText(Utils.getCapsSentences(name).substring(0, 20) + "...");
                         } else {
-                            nameTV.setText(dbaInfoResp.getData().getName());
+                            nameTV.setText(Utils.getCapsSentences(name));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -335,10 +337,11 @@ public class DBAInfoDetails extends BaseActivity {
                         if (dbaInfoResp.getStatus().equalsIgnoreCase("SUCCESS")) {
 
                             objMyApplication.setDbaInfoResp(dbaInfoResp);
-                            if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 20) {
-                                nameTV.setText(dbaInfoResp.getData().getName().substring(0, 20) + "...");
-                            } else if (dbaInfoResp.getData().getName() != null) {
-                                nameTV.setText(dbaInfoResp.getData().getName());
+                            String str = dbaInfoResp.getData().getName();
+                            if (str != null && str.length() > 20) {
+                                nameTV.setText(Utils.getCapsSentences(str).substring(0, 20) + "...");
+                            } else if (str != null) {
+                                nameTV.setText(Utils.getCapsSentences(str));
                             }
                             if (dbaInfoResp.getData().getEmail() != null) {
                                 emailTV.setText(dbaInfoResp.getData().getEmail());
@@ -460,12 +463,6 @@ public class DBAInfoDetails extends BaseActivity {
                         if (imageResponse.getStatus().toLowerCase().equals("success")) {
 
                             try {
-                                dba_userProfileIV.setVisibility(View.GONE);
-                                dba_imageTextTV.setVisibility(View.VISIBLE);
-                                String imageTextNew = "";
-                                imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                                        objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-                                dba_imageTextTV.setText(imageTextNew);
                                 dashboardViewModel.meProfile();
                                 Utils.showCustomToast(DBAInfoDetails.this, imageResponse.getData().getMessage(), R.drawable.ic_custom_tick, "");
                             } catch (Exception e) {
@@ -490,52 +487,23 @@ public class DBAInfoDetails extends BaseActivity {
     }
 
     private void bindImage(String imageString, DBAInfoResp dbaInfoResp) {
+
         try {
-            dba_userProfileIV.setVisibility(View.GONE);
-            dba_imageTextTV.setVisibility(View.VISIBLE);
-//            business_userProfileIV.setVisibility(View.GONE);
-//            business_imageTextTV.setVisibility(View.VISIBLE);
-            String imageTextNew = "";
-            imageTextNew = imageTextNew + objMyApplication.getMyProfile().getData().getFirstName().substring(0, 1).toUpperCase() +
-                    objMyApplication.getMyProfile().getData().getLastName().substring(0, 1).toUpperCase();
-            dba_imageTextTV.setText(imageTextNew);
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    && objMyApplication.getMyProfile().getData().getImage() != null) {
+//                dba_imageTextTV.setVisibility(View.GONE);
+                dba_userProfileIV.setVisibility(View.VISIBLE);
 
-            if (imageString != null && !imageString.trim().equals("")) {
-                try {
-
-                    dba_userProfileIV.setVisibility(View.VISIBLE);
-                    dba_imageTextTV.setVisibility(View.GONE);
-
-                    DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-                    utility.addImage(imageString.trim(), dba_userProfileIV, R.drawable.acct_profile);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+                String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageUrl, dba_userProfileIV, R.drawable.acct_profile);
             } else {
-                dba_userProfileIV.setVisibility(View.GONE);
-                dba_imageTextTV.setVisibility(View.VISIBLE);
-
-                String imageText = "";
-                try {
-                    if (dbaInfoResp.getData().getName() != null && dbaInfoResp.getData().getName().length() > 0) {
-                        if (dbaInfoResp.getData().getName().length() > 1) {
-                            imageText = imageText + dbaInfoResp.getData().getName().substring(0, 1).toUpperCase() +
-                                    dbaInfoResp.getData().getName().split(" ")[1].substring(0, 1).toUpperCase();
-                        } else {
-                            imageText = dbaInfoResp.getData().getName().toUpperCase();
-                        }
-                    }
-                    dba_imageTextTV.setText(imageText);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                dba_userProfileIV.setVisibility(View.VISIBLE);
             }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
 
@@ -591,8 +559,8 @@ public class DBAInfoDetails extends BaseActivity {
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     if (resultCode == RESULT_OK) {
                         Uri resultUri = result.getUri();
-                        dba_userProfileIV.setVisibility(View.VISIBLE);
-                        dba_imageTextTV.setVisibility(View.GONE);
+//                        dba_userProfileIV.setVisibility(View.VISIBLE);
+//                        dba_imageTextTV.setVisibility(View.GONE);
                         dba_userProfileIV.setImageURI(resultUri);
                         uploadImage();
 
@@ -642,10 +610,7 @@ public class DBAInfoDetails extends BaseActivity {
 
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 //            MultipartBody.Part body = MultipartBody.Part.createFormData("image", userId + "_profile" + extention, requestFile);
-            dialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-            dialog.setIndeterminate(false);
-            dialog.setMessage("Please wait...");
-            dialog.show();
+            dialog = Utils.showProgressDialog(this);
             dashboardViewModel.updateProfile(body);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -707,7 +672,8 @@ public class DBAInfoDetails extends BaseActivity {
 
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", DBAInfoDetails.this, "", "");
+//                        Utils.displayAlert("Requires Access to Camera.", DBAInfoDetails.this, "", "");
+                        Utils.showDialogPermission(DBAInfoDetails.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

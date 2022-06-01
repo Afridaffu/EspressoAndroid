@@ -38,7 +38,7 @@ import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
-public class EnableAuthID extends AppCompatActivity {
+public class EnableAuthID extends BaseActivity {
     CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
     TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
     RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
@@ -47,7 +47,6 @@ public class EnableAuthID extends AppCompatActivity {
     DatabaseHandler dbHandler;
     ImageView succesCloseIV;
     CoyniViewModel coyniViewModel;
-    ProgressDialog dialog;
     Long mLastClickTime = 0L;
     LinearLayout layoutNotnow, layoutNotnowFace;
     MyApplication objMyApplication;
@@ -346,7 +345,7 @@ public class EnableAuthID extends AppCompatActivity {
             @Override
             public void onChanged(BiometricResponse biometricResponse) {
                 try {
-                    dialog.dismiss();
+                    dismissDialog();
                     if (biometricResponse != null) {
                         Log.e("bio resp", new Gson().toJson(biometricResponse));
                         saveToken(biometricResponse.getData().getToken());
@@ -431,10 +430,7 @@ public class EnableAuthID extends AppCompatActivity {
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE) {
                 FingerprintManager fingerprintManager = (FingerprintManager) getSystemService(Context.FINGERPRINT_SERVICE);
                 if (fingerprintManager.hasEnrolledFingerprints()) {
-                    dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.show();
+                    showProgressDialog();
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(true);
                     biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -442,10 +438,7 @@ public class EnableAuthID extends AppCompatActivity {
                 }
             } else if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
                 if (resultCode == RESULT_OK) {
-                    dialog = new ProgressDialog(EnableAuthID.this, R.style.MyAlertDialogStyle);
-                    dialog.setIndeterminate(false);
-                    dialog.setMessage("Please wait...");
-                    dialog.show();
+                    dismissDialog();
                     BiometricRequest biometricRequest = new BiometricRequest();
                     biometricRequest.setBiometricEnabled(true);
                     biometricRequest.setDeviceId(Utils.getDeviceID());

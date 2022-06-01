@@ -61,7 +61,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private Tabs selectedTab = Tabs.DASHBOARD;
     private ImageView mIvDashboard, mIvAccount, mIvTransactions, mIvProfile, mIvMenu;
     private TextView mTvDashboard, mTvAccount, mTvTransactions, mTvProfile;
-    private String userName = "";
+    private String userName = "", firstName = "", lastName = "";
 
     private enum Tabs {DASHBOARD, ACCOUNT, TRANSACTIONS, PROFILE}
 
@@ -93,21 +93,22 @@ public class BusinessDashboardActivity extends BaseActivity {
         try {
             mDashboardViewModel.meProfile();
 
-
-            WalletRequest walletRequest = new WalletRequest();
-            walletRequest.setWalletType(Utils.MERCHANT);
-            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.TOKEN);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-            walletRequest.setWalletType(Utils.RESERVE);
-            businessDashboardViewModel.meMerchantWallet(walletRequest);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getWalletData() {
+        WalletRequest walletRequest = new WalletRequest();
+        walletRequest.setWalletType(Utils.MERCHANT);
+        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.TOKEN);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.RESERVE);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
     }
 
     public void onDashboardTabSelected(View view) {
@@ -386,6 +387,10 @@ public class BusinessDashboardActivity extends BaseActivity {
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
                         objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+//                       if(profile.getData()!=null && profile.getData().getAccountStatus()!=null
+//                               && profile.getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())){
+//                           getWalletData();
+//                       }
                         enableDisableTabView();
                         if (mCurrentFragment != null) {
                             mCurrentFragment.updateData();
@@ -410,36 +415,37 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
         });
 
-        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
-            @Override
-            public void onChanged(BusinessWalletResponse businessWalletResponse) {
-                try {
-                    if (businessWalletResponse != null) {
-                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
-
-                        if (businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+//        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
+//            @Override
+//            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+//                try {
+//                    if (businessWalletResponse != null) {
+//                        objMyApplication.setWalletResponseData(businessWalletResponse.getData());
 //
-                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
-                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+//                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+////
+//                            objMyApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
+//                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     public void showUserData(ImageView mIvUserIcon, TextView mTvUserName, TextView mTvUserIconText) {
         String iconText = "";
         if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                && objMyApplication.getMyProfile().getData().getFirstName() != null &&
-                objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-            String firstName = objMyApplication.getMyProfile().getData().getFirstName();
+                && objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
+            if (objMyApplication.getMyProfile().getData().getFirstName() != null) {
+                firstName = objMyApplication.getMyProfile().getData().getFirstName();
 //            iconText = firstName.substring(0, 1).toUpperCase();
-            userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+                userName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+            }
             if (objMyApplication.getMyProfile().getData().getLastName() != null) {
-                String lastName = objMyApplication.getMyProfile().getData().getLastName();
+                lastName = objMyApplication.getMyProfile().getData().getLastName();
 //                iconText = iconText + lastName.substring(0, 1).toUpperCase();
                 userName = userName + " ";
                 userName = userName + lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
@@ -447,9 +453,17 @@ public class BusinessDashboardActivity extends BaseActivity {
             mTvUserName.setText(getResources().getString(R.string.dba_name, userName));
 
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
             } else {
-                mTvUserName.setText("Hi! " + userName);
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+            }
+            if (firstName != null && !firstName.equals("") && lastName != null && !lastName.equals("")) {
+                char first = firstName.charAt(0);
+                char last = lastName.charAt(0);
+                String imageName = String.valueOf(first).toUpperCase() + String.valueOf(last).toUpperCase();
+                mTvUserIconText.setText(imageName);
+                mTvUserIconText.setVisibility(View.VISIBLE);
+                mIvUserIcon.setVisibility(View.GONE);
             }
         } else if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
             if (objMyApplication.getMyProfile().getData().getDbaName() != null) {
@@ -457,42 +471,42 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
             userName = objMyApplication.getMyProfile().getData().getDbaName();
             if (userName != null && userName.length() > 21) {
-                mTvUserName.setText("Hi! " + userName.substring(0, 21) + " ");
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 21) + " ");
             } else if (userName != null) {
-                mTvUserName.setText("Hi! " + userName);
+                mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
+            }
+            mIvUserIcon.setVisibility(View.VISIBLE);
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                    && objMyApplication.getMyProfile().getData().getImage() != null) {
+                mTvUserIconText.setVisibility(View.GONE);
+
+                String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
+                DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
+                utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
+            } else {
+                mIvUserIcon.setImageResource(R.drawable.acct_profile);
             }
         }
-        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
-                && objMyApplication.getMyProfile().getData().getImage() != null) {
-            mTvUserIconText.setVisibility(View.GONE);
-            mIvUserIcon.setVisibility(View.VISIBLE);
 
-            String imageUrl = objMyApplication.getMyProfile().getData().getImage().trim();
-            DisplayImageUtility utility = DisplayImageUtility.getInstance(getApplicationContext());
-            utility.addImage(imageUrl, mIvUserIcon, R.drawable.acct_profile);
-        } else {
-//            mTvUserIconText.setVisibility(View.VISIBLE);
-            mIvUserIcon.setVisibility(View.VISIBLE);
-//            mTvUserIconText.setText(iconText);
-        }
 
         mTvUserName.setOnClickListener(view -> {
             if (mTvUserName.getText().toString().contains("...")) {
                 if (userName.length() == 21 || userName.length() > 21) {
-                    mTvUserName.setText("Hi! " + userName.substring(0, 20));
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20));
                 } else {
-                    mTvUserName.setText("Hi! " + userName);
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
                 }
             } else {
                 if (userName.length() == 21) {
-                    mTvUserName.setText("Hi! " + userName.substring(0, 20) + "...");
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 20) + "...");
                 } else if (userName.length() > 22) {
-                    mTvUserName.setText("Hi! " + userName.substring(0, 22) + "...");
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName).substring(0, 22) + "...");
                 } else {
-                    mTvUserName.setText("Hi! " + userName);
+                    mTvUserName.setText("Hi! " + Utils.getCapsSentences(userName));
                 }
             }
         });
+
     }
 
     public class FetchData extends AsyncTask<Void, Void, Boolean> {
@@ -544,3 +558,4 @@ public class BusinessDashboardActivity extends BaseActivity {
         }
     }
 }
+

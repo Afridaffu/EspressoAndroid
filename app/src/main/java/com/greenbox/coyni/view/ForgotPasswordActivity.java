@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -44,7 +45,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
     TextInputEditText etEmail;
     LoginViewModel loginViewModel;
     TextInputLayout etlEmail;
-    ProgressDialog dialog;
+    Dialog dialog;
     LinearLayout layoutEmailError, llClose;
     TextView tvEmailError, tvMessage, tvHead;
     LinearLayout layoutMain;
@@ -200,6 +201,8 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(ForgotPasswordActivity.this);
                         if (isSaveEnabled) {
                             if (etEmail.getText().toString().trim().length() > 5 && !Utils.isValidEmail(etEmail.getText().toString().trim())) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));
@@ -212,10 +215,7 @@ public class ForgotPasswordActivity extends BaseActivity implements OnKeyboardVi
                                 Utils.setUpperHintColor(etlEmail, getColor(R.color.primary_black));
                                 layoutEmailError.setVisibility(GONE);
                                 etEmail.clearFocus();
-                                dialog = new ProgressDialog(ForgotPasswordActivity.this, R.style.MyAlertDialogStyle);
-                                dialog.setIndeterminate(false);
-                                dialog.setMessage("Please wait...");
-                                dialog.show();
+                                dialog = Utils.showProgressDialog(ForgotPasswordActivity.this);
                                 loginViewModel.emailotpresend(etEmail.getText().toString().trim());
                             } else if (etEmail.getText().toString().trim().length() > 0 && etEmail.getText().toString().trim().length() <= 5) {
                                 etlEmail.setBoxStrokeColorStateList(Utils.getErrorColorState(getApplicationContext()));

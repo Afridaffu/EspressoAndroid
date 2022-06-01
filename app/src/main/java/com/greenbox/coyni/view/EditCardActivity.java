@@ -64,7 +64,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
     MaskEditText etExpiry;
     PaymentMethodsViewModel paymentMethodsViewModel;
     CardView cvSave, cvRemove;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     ConstraintLayout clStates;
     LinearLayout address1ErrorLL, cityErrorLL, stateErrorLL, zipErrorLL, layoutBack, expiryErrorLL;
     TextView address1ErrorTV, cityErrorTV, stateErrorTV, zipErrorTV;
@@ -270,6 +270,9 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 @Override
                 public void onClick(View view) {
                     try {
+                        if (Utils.isKeyboardVisible){
+                            Utils.hideKeypad(EditCardActivity.this);
+                        }
                         if (!selectedCard.getExpired()) {
                             Intent i = new Intent();
                             i.putExtra("screen", "editcard");

@@ -3,9 +3,11 @@ package com.greenbox.coyni.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -31,7 +33,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.BatchPayoutListAdapter;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
 import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.DateRangePickerDialog;
@@ -52,10 +53,13 @@ import com.greenbox.coyni.model.business_activity.BusinessActivityData;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
 import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
+import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
 import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
+import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
@@ -63,6 +67,7 @@ import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
+import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
 import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
@@ -108,17 +113,10 @@ public class BusinessDashboardFragment extends BaseFragment {
     private CardView mCvBatchNow, mCvGetStarted;
     private Long mLastClickTimeQA = 0L;
     private DashboardViewModel mDashboardViewModel;
-    private BatchPayoutListAdapter batchPayoutListAdapter;
     private RecyclerView recyclerViewPayouts;
-    private List<BatchPayoutListItems> listItems;
     private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV,
             lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV, disable_reserve_list;
     private LinearLayout reserveReleaseListLL, reserveDetailsLL;
-    private BatchNowRequest batchNowRequest = null;
-    private String openAmount = "", sent = "", availbal = "";
-    private int dbaID = 0, currentTimeInHours = 0;
-    private String currentTimeHoursText = "";
-    private String merchantBalance;
     private SeekBarWithFloatingText mSbTodayVolume;
     private Long mLastClickTime = 0L;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -131,8 +129,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private LinearLayout mTicketsLayout;
     private TextView mIdVeriStatus;
     private UserData userData;
-    private String status = "", reserveAmount = "", timeDate = "", timeDateTemp = "", reserveRules = "", releaseDate = "";
-
+    private String reserveRules = "";
 
     //Processing Volume Types
     private static final String todayValue = "Today";
@@ -171,6 +168,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         businessDashboardViewModel.getRollingRuleDetails();
+
 
     }
 
@@ -304,7 +302,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             mLastClickTimeQA = SystemClock.elapsedRealtime();
             ((BusinessDashboardActivity) getActivity()).launchBuyTokens();
         });
-
 
         mLlProcessingVolume.setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -606,10 +603,14 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (ruleResponse != null) {
                     if (ruleResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                         if (ruleResponse.getData() != null) {
-                            reserveRules = ruleResponse.getData().getReserveAmount().split("\\.")[0] + "% per Sale Order with a " + ruleResponse.getData().getReservePeriod() + " day[s] ";
+                            reserveRules = "Reserve Rule: " + ruleResponse.getData().getReserveAmount().split("\\.")[0] + "% per Sale Order with a " + ruleResponse.getData().getReservePeriod() + " day[s] rolling period.";
+                            SpannableString spannableString = new SpannableString(reserveRules);
+                            Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "font/opensans_bold.ttf");
+                            spannableString.setSpan(new CustomTypefaceSpan("", font), 14, reserveRules.length(), Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
                             if (!reserveRules.equals("") && reserveRules != null) {
-                                rulePeriodTV.setText(reserveRules);
+//                                reserveRuleTV.setText(Html.fromHtml("<b>"+reserveRules+"</b>"));
+                                reserveRuleTV.setText(spannableString);
                             }
 
                         }
@@ -621,6 +622,30 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
         });
 
+        businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
+            @Override
+            public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                try {
+                    if (businessWalletResponse != null) {
+                        myApplication.setWalletResponseData(businessWalletResponse.getData());
+                        Double merchantBalance = getMerchantBalance();
+                        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
+                        if (merchantBalance != null && merchantBalance == 0.00) {
+                            businessIdentityVerificationViewModel.getDBAInfo();
+                        } else {
+                            monthlyVolumeViewLl.setVisibility(View.GONE);
+                        }
+                        if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
+//
+                            myApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
+                                    businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 
     private void showData(List<BatchPayoutListItems> items) {
@@ -745,7 +770,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setMonthlyVolumeData() {
-        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+//        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getCompanyName() != null) {
             mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, myApplication.getMyProfile().getData().getCompanyName()));
@@ -757,19 +782,26 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
+    private void getWalletData(){
+        WalletRequest walletRequest = new WalletRequest();
+        walletRequest.setWalletType(Utils.MERCHANT);
+        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.TOKEN);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.RESERVE);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+    }
+
     private void setBusinessData() {
+        getWalletData();
         cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
         batchReq();
         getProcessingVolume(todayValue);
         if (myApplication.isReserveEnabled()) {
             reserveReq();
-        }
-        Double merchantBalance = getMerchantBalance();
-        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
-        if (merchantBalance != null && merchantBalance == 0.00) {
-            businessIdentityVerificationViewModel.getDBAInfo();
-        } else {
-            monthlyVolumeViewLl.setVisibility(View.GONE);
         }
 //        mSbTodayVolume.setEnabled(true);
 //        mSbTodayVolume.setProgressWithText(0,userData);
@@ -828,49 +860,51 @@ public class BusinessDashboardFragment extends BaseFragment {
             @Override
             public void onDialogClicked(String action, Object value) {
                 if (action.equalsIgnoreCase(Utils.Swiped)) {
+
+                    batchId = (String) value;
                     if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    businessDashboardViewModel.batchNowSlideData((String) value);
-//                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
-////                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
-////                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
-////                        }
-//                    } else {
+//                    businessDashboardViewModel.batchNowSlideData((String) value);
+                    if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
+//                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
+//                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
+//                        }
+                    } else {
+                        launchPinActivity(batchId);
 //                        businessDashboardViewModel.batchNowSlideData((String) value);
-//                        Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
-//                    }
+                    }
                 }
             }
         });
         batchNowDialog.show();
     }
 
-//    private void launchPinActivity(String batchNow) {
-//        batchId = batchNow;
-//        Intent inPin = new Intent(getActivity(), PINActivity.class);
-//        inPin.putExtra("TYPE", "ENTER");
-//        inPin.putExtra("screen", "BatchNow");
-//        pinActivityResultLauncher.launch(inPin);
-//    }
-//
+    private void launchPinActivity(String batchNow) {
+        batchId = batchNow;
+        Intent inPin = new Intent(getActivity(), PINActivity.class);
+        inPin.putExtra("TYPE", "ENTER");
+        inPin.putExtra("screen", "BatchNow");
+        pinActivityResultLauncher.launch(inPin);
+    }
+
 //    private void batchAPI(String batchId) {
 //     BatchNowSlideRequest req = new BatchNowSlideRequest();
 //        req.setBatchId(batchId);
 //        businessDashboardViewModel.batchNowSlideData(req.getBatchId());
 //    }
 
-//    ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            result -> {
-//                if (result.getResultCode() == Activity.RESULT_OK) {
-//                    //Call API Here
-//                    LogUtils.v(TAG, "RESULT_OK" + result);
-//                    businessDashboardViewModel.batchNowSlideData(batchId);
-//                     Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
-//                }
-//            });
+    ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    //Call API Here
+                    LogUtils.v(TAG, "RESULT_OK" + result);
+                    businessDashboardViewModel.batchNowSlideData(batchId);
+                    //Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+                }
+            });
 
     public void setToken() {
         strToken = dbHandler.getPermanentToken();
@@ -924,7 +958,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         processingVolumeDialog.show();
     }
 
-
     private void getProcessingVolume(String action) {
         mTvProcessingVolume.setText(action);
         switch (action) {
@@ -934,7 +967,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 mSbTodayVolume.setVisibility(View.VISIBLE);
                 saleOrdersText.setVisibility(View.VISIBLE);
                 strFromDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + startTime;
-                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, dateAndTime);
+                strToDate = myApplication.convertZoneDateTime(getCurrentTimeString(), dateAndTime, date) + endTime;
                 businessActivityAPICall(strFromDate, strToDate);
                 commissionActivityCall(strFromDate, strToDate);
             }
@@ -985,8 +1018,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                             if (rangeDates != null) {
                                 String fromDate = rangeDates.getUpdatedFromDate() + midTime;
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
-                                strFromDate = myApplication.convertZoneDateTime(fromDate, dateAndTime, date) + startTime;
-                                strToDate = myApplication.convertZoneDateTime(toDate, dateAndTime, date) + endTime;
+                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date,"UTC") + startTime;
+                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date,"UTC") + endTime;
 
                                 businessActivityAPICall(strFromDate, strToDate);
 //                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
@@ -1014,7 +1047,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.merchantActivity(request);
 
     }
-
 
     private void showCancelApplicationDialog() {
         DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.cancel_application),
@@ -1058,11 +1090,11 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showBatchPayouts(List<BatchPayoutListItems> listItems) {
-        int i = 0;
-        boolean isOpen = false, isPaid = false;
-        if (listItems != null && listItems.size() > 0 && listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isPaid) {
+        if (listItems != null && listItems.size() > 0) {
             batchNoTransaction.setVisibility(View.GONE);
             Collections.sort(listItems, Collections.reverseOrder());
+            int i = 0;
+            boolean isOpen = false, isPaid = false;
             while (i < listItems.size()) {
                 if (listItems.get(i).getStatus().equalsIgnoreCase(Utils.OPEN) && !isOpen) {
 
@@ -1143,7 +1175,7 @@ public class BusinessDashboardFragment extends BaseFragment {
                 j++;
             }
 
-            if(paidItems == 0){
+            if (paidItems == 0) {
                 batchView.setVisibility(View.VISIBLE);
             }
         } else {

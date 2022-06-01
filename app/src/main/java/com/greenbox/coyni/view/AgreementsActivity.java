@@ -22,6 +22,7 @@ import com.greenbox.coyni.adapters.PastAgreeListAdapter;
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsData;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
 import com.greenbox.coyni.model.Item;
 import com.greenbox.coyni.model.profile.DownloadDocumentData;
 import com.greenbox.coyni.model.profile.DownloadDocumentResponse;
@@ -33,6 +34,8 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -127,6 +130,29 @@ public class AgreementsActivity extends BaseActivity {
             }
         }
 
+        ArrayList<Integer> sortTODisplay = new ArrayList<>();
+        if(objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            sortTODisplay.add(Utils.cPP);
+            sortTODisplay.add(Utils.cTOS);
+        } else {
+            sortTODisplay.add(Utils.mPP);
+            sortTODisplay.add(Utils.mTOS);
+            sortTODisplay.add(Utils.mAgmt);
+        }
+        Collections.sort(activeItems, new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                int o1Index = sortTODisplay.indexOf(o1.getSignatureType());
+                int o2Index = sortTODisplay.indexOf(o2.getSignatureType());
+                if(o1Index > o2Index) {
+                    return 1;
+                } else if(o1Index < o2Index) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
         adapter = new AgreeListAdapter(AgreementsActivity.this, activeItems, listener);
         recyclerView.setAdapter(adapter);
 

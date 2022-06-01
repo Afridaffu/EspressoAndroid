@@ -18,6 +18,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,11 +39,7 @@ import com.greenbox.coyni.model.notification.StatusRequest;
 import com.greenbox.coyni.model.notification.UnReadDelResponse;
 import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.payrequest.TransferPayRequest;
-import com.greenbox.coyni.model.userrequest.UserRequest;
 import com.greenbox.coyni.model.userrequest.UserRequestResponse;
-import com.greenbox.coyni.model.withdraw.GiftCardWithDrawInfo;
-import com.greenbox.coyni.model.withdraw.RecipientDetail;
-import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
@@ -50,9 +47,6 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
-import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -66,10 +60,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class NotificationsActivity extends AppCompatActivity {
+public class NotificationsActivity extends BaseActivity {
     public NotificationsViewModel notificationsViewModel;
     CoyniViewModel coyniViewModel;
     public List<NotificationsDataItems> globalNotifications = new ArrayList<>();
@@ -85,7 +78,7 @@ public class NotificationsActivity extends AppCompatActivity {
     String selectedTab = "NOTIFICATIONS";
     public String selectedRow = "";
     public String updatedStatus = "";
-    public ProgressDialog progressDialog;
+    public Dialog progressDialog;
     public NotificationsAdapter notificationsAdapter;
 
     SQLiteDatabase mydatabase;
@@ -136,11 +129,7 @@ public class NotificationsActivity extends AppCompatActivity {
         payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         try {
-            progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
-            progressDialog.setIndeterminate(false);
-            progressDialog.setMessage("Please wait...");
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
+            progressDialog = Utils.showProgressDialog(NotificationsActivity.this);
 
             notificationsViewModel.getNotifications();
             notificationsViewModel.getSentNotifications();
@@ -180,7 +169,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     } else {
                         notificationsRV.setVisibility(View.GONE);
                         noDataTV.setVisibility(View.VISIBLE);
-                        noDataTV.setText("You have no notifications");
+                        noDataTV.setText(getString(R.string.no_notifications));
                     }
                     selectedTab = "NOTIFICATIONS";
                 }
@@ -215,7 +204,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     } else {
                         notificationsRV.setVisibility(View.GONE);
                         noDataTV.setVisibility(View.VISIBLE);
-                        noDataTV.setText("You have no requests");
+                        noDataTV.setText(getString(R.string.no_requests));
                     }
                     selectedTab = "REQUESTS";
                 }
@@ -283,7 +272,7 @@ public class NotificationsActivity extends AppCompatActivity {
                         } else {
                             notificationsRV.setVisibility(View.GONE);
                             noDataTV.setVisibility(View.VISIBLE);
-                            noDataTV.setText("You have no notifications");
+                            noDataTV.setText(getString(R.string.no_notifications));
                         }
                     } else {
 
@@ -303,7 +292,7 @@ public class NotificationsActivity extends AppCompatActivity {
                             } else {
                                 notificationsRV.setVisibility(View.GONE);
                                 noDataTV.setVisibility(View.VISIBLE);
-                                noDataTV.setText("You have no notifications");
+                                noDataTV.setText(getString(R.string.no_notifications));
                             }
                         } else {
                             Utils.displayAlert(notifications.getError().getErrorDescription(), NotificationsActivity.this, "",
@@ -353,6 +342,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     } else {
                         notificationsRV.setVisibility(View.GONE);
                         noDataTV.setVisibility(View.VISIBLE);
+                        noDataTV.setText(getString(R.string.no_notifications));
                     }
                 } else {
                     Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
@@ -375,6 +365,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     } else {
                         notificationsRV.setVisibility(View.GONE);
                         noDataTV.setVisibility(View.VISIBLE);
+                        noDataTV.setText(getString(R.string.no_notifications));
                     }
                 } else {
                     Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
@@ -397,6 +388,7 @@ public class NotificationsActivity extends AppCompatActivity {
                     } else {
                         notificationsRV.setVisibility(View.GONE);
                         noDataTV.setVisibility(View.VISIBLE);
+                        noDataTV.setText(getString(R.string.no_notifications));
                     }
                 } else {
                     Utils.displayAlert(unReadDelResponse.getError().getErrorDescription(), NotificationsActivity.this, "", unReadDelResponse.getError().getFieldErrors().get(0));
@@ -423,6 +415,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                     } else {
                                         notificationsRV.setVisibility(View.GONE);
                                         noDataTV.setVisibility(View.VISIBLE);
+                                        noDataTV.setText(getString(R.string.no_notifications));
                                     }
                                     if (updatedStatus.equals("Declined")) {
                                         for (int i = 0; i < globalRequests.size(); i++) {
@@ -431,8 +424,10 @@ public class NotificationsActivity extends AppCompatActivity {
                                                 break;
                                             }
                                         }
+                                        removeItemFromList(selectedTab, updatedStatus);
+                                    } else if (updatedStatus.equals("Cancelled")) {
+                                        removeItemFromList(selectedTab, updatedStatus);
                                     }
-
 
                                 }
                             } else {
@@ -445,6 +440,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                     } else {
                                         notificationsRV.setVisibility(View.GONE);
                                         noDataTV.setVisibility(View.VISIBLE);
+                                        noDataTV.setText(getString(R.string.no_requests));
                                     }
                                     if (updatedStatus.equals("Declined")) {
                                         for (int i = 0; i < globalNotifications.size(); i++) {
@@ -453,16 +449,10 @@ public class NotificationsActivity extends AppCompatActivity {
                                                 break;
                                             }
                                         }
+                                        removeItemFromList(selectedTab, updatedStatus);
+                                    } else if (updatedStatus.equals("Cancelled")) {
+                                        removeItemFromList(selectedTab, updatedStatus);
                                     }
-
-//                                    if (updatedStatus.equals("Cancelled")) {
-//                                        for (int i = 0; i < globalNotifications.size(); i++) {
-//                                            if (globalNotifications.get(i).getId() == globalRequests.get(Integer.parseInt(selectedRow)).getId()) {
-//                                                globalNotifications.get(i).setStatus(updatedStatus);
-//                                                break;
-//                                            }
-//                                        }
-//                                    }
 
                                 }
                             }
@@ -515,6 +505,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                 } else {
                                     notificationsRV.setVisibility(View.GONE);
                                     noDataTV.setVisibility(View.VISIBLE);
+                                    noDataTV.setText(getString(R.string.no_notifications));
                                 }
 
                             } else {
@@ -541,6 +532,7 @@ public class NotificationsActivity extends AppCompatActivity {
                                 } else {
                                     notificationsRV.setVisibility(View.GONE);
                                     noDataTV.setVisibility(View.VISIBLE);
+                                    noDataTV.setText(getString(R.string.no_requests));
                                 }
                             }
 
@@ -870,7 +862,7 @@ public class NotificationsActivity extends AppCompatActivity {
     private void notificationPayCall() {
         try {
             if (Utils.checkInternet(NotificationsActivity.this)) {
-                payViewModel.sendTokens(userPayRequest,objMyApplication.getStrToken());
+                payViewModel.sendTokens(userPayRequest, objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -993,6 +985,86 @@ public class NotificationsActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean list) {
             super.onPostExecute(list);
 
+        }
+    }
+
+    public void removeItemFromList(String selectedTab, String status) {
+        try {
+            notificationsAdapter.enableOrDisable(false);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (selectedTab.equals("NOTIFICATIONS")) {
+                        int notificationID = globalNotifications.get(Integer.parseInt(selectedRow)).getId();
+                        globalNotifications.remove(Integer.parseInt(selectedRow));
+                        if (globalNotifications.size() > 0) {
+                            notificationsRV.setVisibility(View.VISIBLE);
+                            noDataTV.setVisibility(View.GONE);
+                            notificationsAdapter.updateList(globalNotifications, Integer.parseInt(selectedRow));
+                        } else {
+                            notificationsRV.setVisibility(View.GONE);
+                            noDataTV.setVisibility(View.VISIBLE);
+                            noDataTV.setText(getString(R.string.no_notifications));
+                        }
+
+                        if (status.equals("Declined")) {
+                            for (int i = 0; i < globalRequests.size(); i++) {
+                                if (notificationID == globalRequests.get(i).getId()) {
+                                    globalRequests.remove(i);
+                                    break;
+                                }
+                            }
+                            for (int i = 0; i < globalReceivedNotifications.size(); i++) {
+                                if (notificationID == globalReceivedNotifications.get(i).getId()) {
+                                    globalReceivedNotifications.remove(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                    } else {
+                        int notificationID = globalRequests.get(Integer.parseInt(selectedRow)).getId();
+
+                        globalRequests.remove(Integer.parseInt(selectedRow));
+                        if (globalRequests.size() > 0) {
+                            notificationsRV.setVisibility(View.VISIBLE);
+                            noDataTV.setVisibility(View.GONE);
+                            notificationsAdapter.updateList(globalRequests, Integer.parseInt(selectedRow));
+                        } else {
+                            notificationsRV.setVisibility(View.GONE);
+                            noDataTV.setVisibility(View.VISIBLE);
+                            noDataTV.setText(getString(R.string.no_requests));
+                        }
+
+                        if (status.equals("Declined")) {
+                            for (int i = 0; i < globalNotifications.size(); i++) {
+                                if (notificationID == globalNotifications.get(i).getId()) {
+                                    globalNotifications.remove(i);
+                                    break;
+                                }
+                            }
+
+                            for (int i = 0; i < globalReceivedNotifications.size(); i++) {
+                                if (notificationID == globalReceivedNotifications.get(i).getId()) {
+                                    globalReceivedNotifications.remove(i);
+                                    break;
+                                }
+                            }
+                        } else {
+                            for (int i = 0; i < globalSentNotifications.size(); i++) {
+                                if (notificationID == globalSentNotifications.get(i).getId()) {
+                                    globalSentNotifications.remove(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+                    notificationsAdapter.enableOrDisable(true);
+                }
+            }, 3000);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -24,7 +24,7 @@
     <string name="additional_documents">Additional Documents </string>
     <string name="uploaded_articles">Uploaded Articles of Incorporation</string>
     <string name="previous">Previous</string>
-    <string name="chpwdmsg">Looks like it’s time to update your password. For security purposes, we need you to to update your old password.</string>
+    <string name="chpwdmsg">Looks like it’s time to update your password. For security purposes, we need you to update your old password.</string>
     <string name="user">User</string>
     <string name="personal">Personal</string>
     <string name="business">Business</string>
@@ -89,7 +89,7 @@
     <string name="unable_to_get_document">Failed to get the document. Please try again</string>
     <string name="transAmountAlert">From Amount\' should not be greater than \'To Amount</string>
     <string name="email_field_alert">Please enter a valid Email</string>
-
+    <string name="please_use_active_account">Please use active user account to make payments</string>
     <string name="identity">Identity Verification</string>
     <string name="MaillingAddress">Mailing Address</string>
     <string name="mailingaddress1">Mailing Address Line 1</string>
@@ -296,7 +296,7 @@
     <string name="dashboard"> Dashboard</string>
     <string name="profile"> Profile</string>
     <string name="quick_menu">Quick Menu</string>
-    <string name="reserverole">Reserve Rule:</string>
+    <string name="reserverole">Reserve Rule: <b>[%] per Sale Order with a 90 day rolling period.</b></string>
     <string name="rollingperiod">rolling period.</string>
     <string name="reserverule"> [%] per Sale Order with a 90 day</string>
     <string name="a_u_pay"> Your active batch is set to automatically pay</string>
@@ -366,6 +366,7 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="interest_in_coyni_merchant_application">Thank you for your interest in merchant processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
+    <string name="interest_in_coyni_customer_application">Thank you for your interest in customer processing through coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="legal_name_name">Legal Name: %1$s</string>
     <string name="verification_dba_name">DBA: %1$s</string>
     <string name="we_thank_for_interest">Again, we thank you for your interest and wish you the best of luck.</string>
@@ -681,5 +682,14 @@
     <string name="default_notification_channel_id">Channel ID</string>
     <string name="extBankMsg">coyni uses Fiserv to verify bank account \ninformation. Fiserv may also check you \nbalance(s) to ensure that you have enough \nfunds to cover requested transactions. By \nclicking below you agree to link your bank \naccount.</string>
 
+    <string name="no_notifications">You have no notifications</string>
+    <string name="no_requests">You have no requests</string>
+    <string name="time_zone_changed">Time zone changed successfully</string>
+    <string name="default_account_changed">"Default account changed successfully"</string>
+
+    <string name="internal_storage">Internal storage</string>
+    <string name="pay">Pay</string>
+    <string name="allow_access_header">Allow Access to your Camera</string>
+    <string name="camera_permission_desc">You are not allowing to access the Camera. Please go to Settings and enable the Camera permission.</string>
 
 </resources>

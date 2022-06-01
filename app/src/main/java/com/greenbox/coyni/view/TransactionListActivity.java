@@ -57,7 +57,7 @@ import java.util.TimeZone;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
-public class TransactionListActivity extends AppCompatActivity implements TextWatcher {
+public class TransactionListActivity extends BaseActivity implements TextWatcher {
     TransactionListPendingAdapter transactionListPendingAdapter;
     TransactionListPostedNewAdapter transactionListPostedAdapter;
     static Context context;
@@ -1255,7 +1255,10 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
         applyFilterBtnCV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (SystemClock.elapsedRealtime() - mLastClickTimeFilters < 2000) {
+                    return;
+                }
+                mLastClickTimeFilters = SystemClock.elapsedRealtime();
                 pendingTxt.setVisibility(View.GONE);
                 layoutTransactionspending.setVisibility(View.GONE);
                 layoutTransactionsposted.setVisibility(View.GONE);
@@ -1589,6 +1592,7 @@ public class TransactionListActivity extends AppCompatActivity implements TextWa
             ex.printStackTrace();
         }
     }
+
     private ArrayList<Integer> getDefaultTransactionTypes() {
         ArrayList<Integer> transactionType = new ArrayList<>();
         transactionType.add(Utils.payRequest);

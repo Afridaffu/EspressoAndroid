@@ -77,6 +77,7 @@ import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentsList;
 import com.greenbox.coyni.model.users.TimeZoneModel;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
+import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.EnableAuthID;
 import com.greenbox.coyni.view.LoginActivity;
 import com.greenbox.coyni.view.OnboardActivity;
@@ -310,7 +311,7 @@ public class Utils {
     //Merchant Transaction Filter Type values
 
     public static final int mRefund = 9;
-    public static final int merchantPayout = 7;
+    public static final int merchantPayout = 19;
     public static final int monthlyServiceFee = 17;
 
     public static final int mCompleted = 0;
@@ -323,6 +324,7 @@ public class Utils {
     public static final float slidePercentage = 0.3f;
 
     public static boolean isKeyboardVisible = false;
+    public static boolean isSettingsBtnClicked = false;
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
@@ -534,7 +536,7 @@ public class Utils {
                         Activity.INPUT_METHOD_SERVICE);
         if (inputMethodManager.isAcceptingText()) {
             inputMethodManager.hideSoftInputFromWindow(
-                    activity.getCurrentFocus().getWindowToken(),0);
+                    activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
 
@@ -780,6 +782,65 @@ public class Utils {
 
     }
 
+    public static void showDialogPermission(final Context context, String header, String description) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_permission);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        window.setAttributes(wlp);
+
+        TextView notNowBtn, settingsBtn, headerText, descriptionText;
+
+        notNowBtn = dialog.findViewById(R.id.not_now_tv);
+        settingsBtn = dialog.findViewById(R.id.settings_tv);
+        headerText = dialog.findViewById(R.id.headerTextTV);
+        descriptionText = dialog.findViewById(R.id.descriptonTV);
+
+        if (header != null) {
+            headerText.setText(header);
+        }
+        if (description != null) {
+            descriptionText.setText(description);
+        }
+
+        notNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                isSettingsBtnClicked = true;
+                context.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.getPackageName(), null)));
+            }
+        });
+
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+
+
+    }
+
+
     public static String formatDate(String date) {
         if (date.length() == 22) {
             date = date + "0";
@@ -813,6 +874,7 @@ public class Utils {
         }
         return strDate;
     }
+
     public static boolean disabledMultiClick() {
         boolean action = false;
         if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
@@ -1046,12 +1108,23 @@ public class Utils {
         return isBiometric;
     }
 
-    public static ProgressDialog showProgressDialog(Context context) {
-        ProgressDialog dialog = new ProgressDialog(context, R.style.MyAlertDialogStyle);
-        dialog.setIndeterminate(false);
-        dialog.setCancelable(false);
-        dialog.setMessage("Please wait...");
-        dialog.setCanceledOnTouchOutside(false);
+    public static Dialog showProgressDialog(Context context) {
+
+        Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.loader);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
         return dialog;
     }
@@ -1733,6 +1806,21 @@ public class Utils {
         return strDate;
     }
 
+    public static String getCapsSentences(String Name) {
+        String[] splits = Name.split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < splits.length; i++) {
+            String eachWord = splits[i];
+            if (i > 0 && eachWord.length() > 0) {
+                sb.append(" ");
+            }
+            String cap = eachWord.substring(0, 1).toUpperCase()
+                    + eachWord.substring(1);
+            sb.append(cap);
+        }
+        return sb.toString();
+    }
+
     public static void setSpannableText(String text, Context context, TextView spannableTV, int end) {
 
         SpannableString ss = new SpannableString(text);
@@ -2049,6 +2137,9 @@ public class Utils {
 
     public static String convertZoneLatestTxn(String date, String zoneId) {
         String strDate = "";
+        if (date != null && date.contains(".")) {
+            date = date.split("\\.")[0];
+        }
         try {
             if (Build.VERSION.SDK_INT >= 26) {
                 DateTimeFormatter dtf = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd HH:mm:ss")
@@ -2287,10 +2378,10 @@ public class Utils {
         return timeAgo;
     }
 
-    private String capitizeString(String name){
-        String captilizedString="";
-        if(!name.trim().equals("")){
-            captilizedString = name.substring(0,1).toUpperCase() + name.substring(1);
+    private String capitizeString(String name) {
+        String captilizedString = "";
+        if (!name.trim().equals("")) {
+            captilizedString = name.substring(0, 1).toUpperCase() + name.substring(1);
         }
         return captilizedString;
     }

@@ -58,7 +58,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     CardView doneCV, cvTryAgain;
     MyApplication objMyApplication;
     Long mLastClickTime = 0L;
-    ProgressDialog pDialog;
+    Dialog pDialog;
     int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     CoyniViewModel coyniViewModel;
     SQLiteDatabase mydatabase;
@@ -93,7 +93,6 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             ex.printStackTrace();
         }
     }
-
 
 
     private void saveFace(String value) {
@@ -251,11 +250,11 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void failedPaidTransaction() {
-        if (objMyApplication.getPaidOrderResp() != null){
+        if (objMyApplication.getPaidOrderResp() != null) {
             tvMessage.setText(
                     "The transaction failed due to error code:\n" +
-                    objMyApplication.getPaidOrderResp().getError().getErrorCode() + " - " +
-                    objMyApplication.getPaidOrderResp().getError().getErrorDescription() + ". Please try again.");
+                            objMyApplication.getPaidOrderResp().getError().getErrorCode() + " - " +
+                            objMyApplication.getPaidOrderResp().getError().getErrorDescription() + ". Please try again.");
         }
 
 
@@ -594,9 +593,8 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         LinearLayout lyMessage = findViewById(R.id.lyMessage);
 
 
-        CheckOutModel checkOutModel = new CheckOutModel();
-        if (objMyApplication.getCheckOutModel()!= null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-            objMyApplication.setCheckOutModel(checkOutModel);
+        if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
+            objMyApplication.setCheckOutModel(null);
         }
         Double cynValue = 0.0;
         cynValue = objMyApplication.getWithdrawAmount();
@@ -780,10 +778,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                                     BIOMETRIC_STRONG);
                             startActivityForResult(enrollIntent, TOUCH_ID_ENABLE_REQUEST_CODE);
                         } else {
-                            pDialog = new ProgressDialog(GiftCardBindingLayoutActivity.this, R.style.MyAlertDialogStyle);
-                            pDialog.setIndeterminate(false);
-                            pDialog.setMessage("Please wait...");
-                            pDialog.show();
+                            pDialog = Utils.showProgressDialog(GiftCardBindingLayoutActivity.this);
                             BiometricRequest biometricRequest = new BiometricRequest();
                             biometricRequest.setBiometricEnabled(true);
                             biometricRequest.setDeviceId(Utils.getDeviceID());
@@ -819,10 +814,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
             if (requestCode == TOUCH_ID_ENABLE_REQUEST_CODE && resultCode == RESULT_OK) {
 
-                pDialog = new ProgressDialog(GiftCardBindingLayoutActivity.this, R.style.MyAlertDialogStyle);
-                pDialog.setIndeterminate(false);
-                pDialog.setMessage("Please wait...");
-                pDialog.show();
+                pDialog = Utils.showProgressDialog(GiftCardBindingLayoutActivity.this);
                 BiometricRequest biometricRequest = new BiometricRequest();
                 biometricRequest.setBiometricEnabled(true);
                 biometricRequest.setDeviceId(Utils.getDeviceID());

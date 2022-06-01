@@ -1,5 +1,7 @@
 package com.greenbox.coyni.view;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -21,11 +23,14 @@ import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -87,9 +92,10 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     private Vibrator vibrator;
     String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "",
             oldEmail = "", newEmail = "", isOldEmail = "", oldPhone = "", newPhone = "", oldPhoneMasked = "", newPhoneMasked = "", isOldPhone = "";
-    LinearLayout layoutEntry, layoutFailure, layoutMain;
+    LinearLayout  layoutFailure, layoutMain, contactUsLL;
+    RelativeLayout layoutEntry;
     CardView tryAgainCV;
-    ProgressDialog dialog;
+    Dialog dialog;
     LoginViewModel loginViewModel;
     RelativeLayout secureAccountRL;
     CardView secureNextCV;
@@ -138,6 +144,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             layoutEntry = findViewById(R.id.layoutEntry);
             layoutFailure = findViewById(R.id.layoutFailure);
             layoutMain = findViewById(R.id.layoutMain);
+            contactUsLL = findViewById(R.id.contactUsLL);
             tryAgainCV = findViewById(R.id.tryAgainCV);
             secureAccountRL = findViewById(R.id.secureAccountRL);
             secureNextCV = findViewById(R.id.secureNextCV);
@@ -149,7 +156,8 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
             resendTV.setPaintFlags(resendTV.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             otpPV.setAnimationEnable(true);
             objMyApplication = (MyApplication) getApplicationContext();
-            objMyApplication.setStrEmail(EMAIL);
+            if (EMAIL != null && !EMAIL.equals(""))
+                objMyApplication.setStrEmail(EMAIL);
             if (strScreen != null && !strScreen.equals("")) {
                 switch (strScreen) {
                     case "ForgotPwd":
@@ -207,9 +215,11 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         newEmail = getIntent().getStringExtra("NEW_EMAIL");
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldEmail.equals("true")) {
+                            contactUsLL.setVisibility(View.VISIBLE);
                             headerTV.setText("Please Verify your Current Email");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + oldEmail);
                         } else {
+                            contactUsLL.setVisibility(View.GONE);
                             headerTV.setText("Please Verify New Email");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered email address: " + newEmail);
 //                            loginViewModel.emailotpresend(newEmail);
@@ -221,12 +231,15 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         newPhone = getIntent().getStringExtra("NEW_PHONE");
                         oldPhoneMasked = getIntent().getStringExtra("OLD_PHONE_MASKED");
                         newPhoneMasked = getIntent().getStringExtra("NEW_PHONE_MASKED");
+                        contactUsLL.setVisibility(View.VISIBLE);
 
                         otpValidationCloseIV.setImageResource(R.drawable.ic_back);
                         if (isOldPhone.equals("true")) {
+                            contactUsLL.setVisibility(View.VISIBLE);
                             headerTV.setText("Please Verify your Current Phone Number");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + oldPhoneMasked);
                         } else {
+                            contactUsLL.setVisibility(View.GONE);
                             headerTV.setText("Please Verify your New Phone Number");
                             subHeaderTV.setText("We have sent you a 6-digit code to the registered phone number " + newPhoneMasked);
 //                            loginViewModel.emailotpresend(newEmail);
@@ -244,10 +257,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     if (resendCounter < 4) {
                         Utils.hideKeypad(OTPValidation.this, view);
                         if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin") || strScreen.equals("EditEmail"))) || (OTP_TYPE.equals("EMAIL"))) {
-                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
+                            dialog = Utils.showProgressDialog(OTPValidation.this);
                             if (strScreen.equals("EditEmail")) {
                                 if (isOldEmail.equals("true")) {
                                     UpdateResendRequest updateResendRequest = new UpdateResendRequest();
@@ -269,19 +279,13 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             }
 
                         } else if (OTP_TYPE.equals("MOBILE")) {
-                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
+                            dialog = Utils.showProgressDialog(this);
                             SMSResend resend = new SMSResend();
                             resend.setCountryCode(Utils.getStrCCode());
                             resend.setPhoneNumber(MOBILE);
                             loginViewModel.smsotpresend(resend);
                         } else if (strScreen.equals("EditPhone")) {
-                            dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-                            dialog.setIndeterminate(false);
-                            dialog.setMessage("Please wait...");
-                            dialog.show();
+                            dialog = Utils.showProgressDialog(this);
 //                            SMSResend resend = new SMSResend();
 //                            resend.setCountryCode(Utils.getStrCCode());
                             if (isOldPhone.equals("true")) {
@@ -306,10 +310,11 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         if (strScreen.equals("SignUp")) {
                             layoutEntry.setVisibility(View.GONE);
                             layoutFailure.setVisibility(View.VISIBLE);
+                            isBackEnabled = false;
                         } else {
                             layoutEntry.setVisibility(View.VISIBLE);
                             layoutFailure.setVisibility(View.GONE);
-                            Utils.displayAlert("Looks like we are having an issue with your OTP request, please retry again", OTPValidation.this, "", "");
+                            displayAlertNew("Looks like we are having an issue with your OTP request, please retry again", OTPValidation.this, "", strScreen);
                         }
 
                     }
@@ -348,10 +353,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 if (charSequence.length() == 6) {
                                     String strFirstName = "", strLastName = "";
                                     Utils.hideKeypad(OTPValidation.this);
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
                                     String phoneNumber = "";
                                     if (MOBILE.contains("(")) {
                                         phoneNumber = MOBILE.substring(1, 4) + MOBILE.substring(6, 9) + MOBILE.substring(10, MOBILE.length());
@@ -374,10 +375,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditEmail")) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
                                     if (isOldEmail.equals("true")) {
                                         UpdateEmailValidateRequest updateEmailValidateRequest = new UpdateEmailValidateRequest();
                                         updateEmailValidateRequest.setOldEmail(true);
@@ -395,10 +392,6 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                             } else if (strScreen != null && !strScreen.equals("") && strScreen.equals("EditPhone")) {
                                 if (charSequence.length() == 6) {
                                     Utils.hideKeypad(OTPValidation.this);
-//                                    dialog = new ProgressDialog(OTPValidation.this, R.style.MyAlertDialogStyle);
-//                                    dialog.setIndeterminate(false);
-//                                    dialog.setMessage("Please wait...");
-//                                    dialog.show();
                                     if (isOldPhone.equals("true")) {
                                         UpdatePhoneValidateRequest updatePhoneValidateRequest = new UpdatePhoneValidateRequest();
                                         updatePhoneValidateRequest.setCountryCode(Utils.getStrCCode());
@@ -747,9 +740,15 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                     } else {
                         try {
                             if (smsResponse.getError().getErrorDescription().equals("")) {
-                                Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                if (!strScreen.equals("retEmail"))
+                                    Utils.displayAlert(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                else
+                                    displayAlertNew(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", strScreen);
                             } else {
-                                Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                if (!strScreen.equals("retEmail"))
+                                    Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                else
+                                    displayAlertNew(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", strScreen);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -885,6 +884,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                                         .putExtra("OTP_TYPE", "OTP")
                                                         .putExtra("IS_OLD_EMAIL", "false")
                                                         .putExtra("OLD_EMAIL", oldEmail)
+                                                        .putExtra("EMAIL", oldEmail)
                                                         .putExtra("NEW_EMAIL", newEmail));
                                                 finish();
                                             } else {
@@ -905,6 +905,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                             .putExtra("OTP_TYPE", "OTP")
                                             .putExtra("IS_OLD_EMAIL", "false")
                                             .putExtra("OLD_EMAIL", oldEmail)
+                                            .putExtra("EMAIL", oldEmail)
                                             .putExtra("NEW_EMAIL", newEmail));
                                     finish();
                                 } else {
@@ -1042,9 +1043,9 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         } else {
                             try {
                                 if (emailResponse.getError().getErrorDescription().equals("")) {
-                                    Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                    displayAlertNew(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", strScreen);
                                 } else {
-                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                    displayAlertNew(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", strScreen);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1344,4 +1345,65 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
         super.onDestroy();
 //        isActivityVisible = false;
     }
+
+    public static void displayAlertNew(String msg, final Context context, String headerText, String screen) {
+        // custom dialog
+        Dialog displayAlertDialog = new Dialog(context);
+        displayAlertDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        displayAlertDialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        displayAlertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = displayAlertDialog.findViewById(R.id.tvHead);
+        TextView message = displayAlertDialog.findViewById(R.id.tvMessage);
+        CardView actionCV = displayAlertDialog.findViewById(R.id.cvAction);
+        TextView actionText = displayAlertDialog.findViewById(R.id.tvAction);
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayAlertDialog.dismiss();
+                try {
+                    if (screen.equals("EditEmail")) {
+                        EditEmailActivity.editEmailActivity.finish();
+                        Activity activity = (Activity) context;
+                        activity.finish();
+                    } else if (screen.equals("EditPhone")) {
+                        EditPhoneActivity.editPhoneActivity.finish();
+                        Activity activity = (Activity) context;
+                        activity.finish();
+                    } else if (screen.equals("ForgotPwd") || screen.equals("retEmail")) {
+                        Activity activity = (Activity) context;
+                        activity.finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        message.setText(msg);
+        Window window = displayAlertDialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        displayAlertDialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        displayAlertDialog.setCanceledOnTouchOutside(true);
+        displayAlertDialog.show();
+    }
+
 }

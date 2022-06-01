@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -47,7 +49,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentMethodsActivity extends AppCompatActivity {
+public class PaymentMethodsActivity extends BaseActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
     LinearLayout lyAPayClose, lyExternalClose, lyPayBack;
@@ -60,7 +62,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     CustomerProfileViewModel customerProfileViewModel;
     DashboardViewModel dashboardViewModel;
     PaymentMethodsViewModel paymentMethodsViewModel;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     SignOnData signOnData;
     Long mLastClickTime = 0L;
     Boolean isBank = false, isPayments = false, isDeCredit = false, isBankSuccess = false;
@@ -113,7 +115,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     if (extBankDialog != null) {
                         extBankDialog.dismiss();
                     }
-                    dialog = Utils.showProgressDialog(this);
+                    //dialog = Utils.showProgressDialog(PaymentMethodsActivity.this);
+                    showProgressDialog();
                     customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 2) {
@@ -185,6 +188,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 //            if (extBankDialog != null) {
 //                extBankDialog.dismiss();
 //            }
+//            if (dialog != null) {
+//                dialog.dismiss();
+//            }
             if (!isBankSuccess) {
                 if (strCurrent.equals("firstError")) {
                     displayError();
@@ -209,9 +215,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(SignOn signOn) {
                 try {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+//                    if (dialog != null) {
+//                        dialog.dismiss();
+//                    }
+                    dismissDialog();
                     if (signOn != null) {
                         if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
                             objMyApplication.setSignOnData(signOn.getData());
@@ -243,7 +250,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(APIError apiError) {
                 try {
-                    dialog.dismiss();
+//                    dialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             objMyApplication.setResolveUrl(true);
@@ -275,7 +283,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(SyncAccount syncAccount) {
                 try {
-                    dialog.dismiss();
+//                    dialog.dismiss();
+                    dismissDialog();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
                             dashboardViewModel.mePaymentMethods();
@@ -295,9 +304,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+//                if (dialog != null) {
+//                    dialog.dismiss();
+//                }
+                dismissDialog();
                 if (payMethodsResponse != null) {
 //                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
 //                    paymentMethodsResponse = payMethodsResponse;
@@ -1003,6 +1013,22 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+
+            extBankDialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                @Override
+                public boolean onKey(DialogInterface arg0, int keyCode,
+                                     KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        extBankDialog.dismiss();
+                        if (strCurrent.equals("firstError")) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                        }
+                    }
+                    return true;
                 }
             });
         } catch (Exception ex) {

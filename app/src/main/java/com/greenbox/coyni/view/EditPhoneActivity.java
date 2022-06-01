@@ -2,6 +2,7 @@ package com.greenbox.coyni.view;
 
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -39,7 +40,7 @@ import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
 
 import java.util.Objects;
 
-public class EditPhoneActivity extends AppCompatActivity {
+public class EditPhoneActivity extends BaseActivity {
 
     OutLineBoxPhoneUpdateET currentPhoneET, newPhoneET, b_newPhoneET;
     MyApplication myApplicationObj;
@@ -49,7 +50,7 @@ public class EditPhoneActivity extends AppCompatActivity {
     public TextView currentPhoneErrorTV, newPhoneErrorTV, b_newPhoneErrorTV;
     public CardView savePhoneCV;
     Long mLastClickTime = 0L;
-    ProgressDialog dialog;
+    Dialog dialog;
     CustomerProfileViewModel customerProfileViewModel;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     public static EditPhoneActivity editPhoneActivity;
@@ -126,10 +127,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
 
-                        dialog = new ProgressDialog(EditPhoneActivity.this, R.style.MyAlertDialogStyle);
-                        dialog.setIndeterminate(false);
-                        dialog.setMessage("Please wait...");
-                        dialog.show();
+                        dialog = Utils.showProgressDialog(EditPhoneActivity.this);
                         if (getIntent().getStringExtra("screen") != null && getIntent().getStringExtra("screen").equalsIgnoreCase("DBAChangePhone")) {
                             try {
                                 ContactInfoRequest contactInfoRequest = new ContactInfoRequest();
@@ -293,6 +291,7 @@ public class EditPhoneActivity extends AppCompatActivity {
                                 .putExtra("OLD_PHONE_MASKED", currentPhoneET.getText().toString().trim())
                                 .putExtra("NEW_PHONE_MASKED", b_newPhoneET.getText().toString().trim())
                                 .putExtra("OLD_PHONE", currentPhoneNumber)
+                                .putExtra("MOBILE", currentPhoneNumber)
                                 .putExtra("NEW_PHONE", newPhoneNumber));
                     } else {
                         Utils.hideSoftKeyboard(EditPhoneActivity.this);

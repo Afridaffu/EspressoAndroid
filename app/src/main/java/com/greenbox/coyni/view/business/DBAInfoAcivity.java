@@ -49,7 +49,6 @@ import com.greenbox.coyni.custom_camera.CameraActivity;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.intro_slider.AutoScrollViewPager;
 import com.greenbox.coyni.model.CompanyInfo.CompanyInfoResp;
-import com.greenbox.coyni.model.DBAInfo.BusinessType;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoRequest;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
@@ -348,7 +347,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
             });
 
-            closeIV.setOnClickListener(v -> finish());
+            closeIV.setOnClickListener(v -> onBackPressed());
 
             backIV.setOnClickListener(v -> {
                 closeIV.setVisibility(VISIBLE);
@@ -1618,58 +1617,65 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             //Basic
 //            if (isNextEnabled) {
-            PhNoWithCountryCode phone = new PhNoWithCountryCode();
-            phone.setCountryCode(Utils.strCCode);
-            String phoneNumber = dbaPhoneOET.getText().toString().substring(1, 4) + dbaPhoneOET.getText().toString().substring(6, 9) + dbaPhoneOET.getText().toString().substring(10, dbaPhoneOET.getText().length());
-            phone.setPhoneNumber(phoneNumber.trim());
-            //Phone
-            if (phone.getCountryCode() != null && phone.getPhoneNumber().length() == 10)
-                dbaInfoRequest.setPhoneNumberDto(phone);
-            //Name
-            if (dbanameET.getText().toString().trim().length() > 0)
-                dbaInfoRequest.setName(dbanameET.getText().toString().trim());
-            //Email
-            if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))
-                dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());
-            //Business Type
-            if (!selectedBTKey.equals(""))
-                dbaInfoRequest.setBusinessType(selectedBTKey.trim());
-            //IdentificationID
-            if (identificationType != 0)
-                dbaInfoRequest.setIdentificationType(identificationType);
-            //Avg ticket
-            if (avgTicketOET.getText().trim().length() > 0)
-                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
-            //high ticket
-            if (highTicketOET.getText().trim().length() > 0)
-                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(highTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
-            //MPV
-            if (mpvOET.getText().trim().length() > 0)
-                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(mpvOET.getText().trim().replace(",", "")).split("\\.")[0]));
-            dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
-            dbaInfoRequest.setTimeZone(objMyApplication.getTimezoneID());
-            //Website
-            if (isValidUrl(websiteOET.getText().trim()))
-                dbaInfoRequest.setWebsite(websiteOET.getText().trim());
+            if (dbaPhoneOET.getText() != null && dbaPhoneOET.getText().length() >=10) {
 
-            dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
+                PhNoWithCountryCode phone = new PhNoWithCountryCode();
+                phone.setCountryCode(Utils.strCCode);
+                String phoneNumber = dbaPhoneOET.getText().toString().substring(1, 4) + dbaPhoneOET.getText().toString().substring(6, 9) + dbaPhoneOET.getText().toString().substring(10, dbaPhoneOET.getText().length());
+                phone.setPhoneNumber(phoneNumber.trim());
+                //Phone
+                if (phone.getCountryCode() != null && phone.getPhoneNumber().length() == 10)
+                    dbaInfoRequest.setPhoneNumberDto(phone);
+            }
+            else {
+                dbaInfoRequest.setPhoneNumberDto(null);
+            }
+                //Name
+                if (dbanameET.getText().toString().trim().length() > 0)
+                    dbaInfoRequest.setName(dbanameET.getText().toString().trim());
+                //Email
+                if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))
+                    dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());
+                //Business Type
+                if (!selectedBTKey.equals(""))
+                    dbaInfoRequest.setBusinessType(selectedBTKey.trim());
+                //IdentificationID
+                if (identificationType != 0)
+                    dbaInfoRequest.setIdentificationType(identificationType);
+                //Avg ticket
+                if (avgTicketOET.getText().trim().length() > 0)
+                    dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                //high ticket
+                if (highTicketOET.getText().trim().length() > 0)
+                    dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(highTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                //MPV
+                if (mpvOET.getText().trim().length() > 0)
+                    dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(mpvOET.getText().trim().replace(",", "")).split("\\.")[0]));
+                dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
+                dbaInfoRequest.setTimeZone(objMyApplication.getTimezoneID());
+                //Website
+                if (isValidUrl(websiteOET.getText().trim()))
+                    dbaInfoRequest.setWebsite(websiteOET.getText().trim());
+
+                dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
 //            }
 
-            //Address
+                //Address
 //            if (isAddressNextEnabled) {
-            if (companyaddressET.getText().toString().trim().length() > 0)
-                dbaInfoRequest.setAddressLine1(companyaddressET.getText().toString().trim());
-            if (companyaddress2ET.getText().toString().trim().length() > 0)
-                dbaInfoRequest.setAddressLine2(companyaddress2ET.getText().toString().trim());
-            if (cityET.getText().toString().trim().length() > 0)
-                dbaInfoRequest.setCity(cityET.getText().toString().trim());
-            if (stateET.getText().toString().trim().length() > 0)
-                dbaInfoRequest.setState(stateET.getText().toString().trim());
-            if (zipcodeET.getText().toString().trim().length() >= 5)
-                dbaInfoRequest.setZipCode(zipcodeET.getText().toString().trim());
-            dbaInfoRequest.setCountry("us");
+                if (companyaddressET.getText().toString().trim().length() > 0)
+                    dbaInfoRequest.setAddressLine1(companyaddressET.getText().toString().trim());
+                if (companyaddress2ET.getText().toString().trim().length() > 0)
+                    dbaInfoRequest.setAddressLine2(companyaddress2ET.getText().toString().trim());
+                if (cityET.getText().toString().trim().length() > 0)
+                    dbaInfoRequest.setCity(cityET.getText().toString().trim());
+                if (stateET.getText().toString().trim().length() > 0)
+                    dbaInfoRequest.setState(stateET.getText().toString().trim());
+                if (zipcodeET.getText().toString().trim().length() >= 5)
+                    dbaInfoRequest.setZipCode(zipcodeET.getText().toString().trim());
+                dbaInfoRequest.setCountry("us");
 //            }
-        } catch (Exception e) {
+            }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -1716,7 +1722,8 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 case REQUEST_ID_MULTIPLE_PERMISSIONS:
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        Utils.displayAlert("Requires Access to Camera.", DBAInfoAcivity.this, "", "");
+//                        Utils.displayAlert("Requires Access to Camera.", DBAInfoAcivity.this, "", "");
+                        Utils.showDialogPermission(DBAInfoAcivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                     } else if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

@@ -146,6 +146,7 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
                                 monthlyServiceFeeMerchant(transactionDetails);
                                 break;
                             case Utils.merchantPayouttxntype:
+                            case Utils.businessPayouttxntype:
                                 controlMethod(Utils.merchantpayoutCM);
                                 merchantPayout(transactionDetails);
                                 break;
@@ -512,8 +513,8 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             referencecopyLL = findViewById(R.id.copuRefIDLL);
             payoutcopyll = findViewById(R.id.copyPayoutIDLL);
 
-            if (objData.getData().getTransactionType() != null && objData.getData().getTransactionSubtype() != null) {
-                mPayoutheadertv.setText(objData.getData().getTransactionType() + " - " + objData.getData().getTransactionSubtype());
+            if (objData.getData().getTransactionType() != null ) {
+                mPayoutheadertv.setText(objData.getData().getTransactionType());
             }
             if (objData.getData().getStatus() != null) {
                 merchantstatustv.setText(objData.getData().getStatus());
@@ -561,12 +562,12 @@ public class MerchantTransactionDetailsActivity extends BaseActivity {
             if (objData.getData().getCreatedDate() != null) {
                 merchantdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getCreatedDate()));
             }
-            if (objData.getData().getPayoutDate() != null) {
-                merchantPIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getPayoutDate()));
+            if (objData.getData().getPayoutUpdatedDate() != null) {
+                merchantPIdatetv.setText(objMyApplication.convertZoneLatestTxn(objData.getData().getPayoutUpdatedDate()));
             }
 
-            if (objData.getData().getGrossAmount() != null) {
-                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getGrossAmount().replace("CYN", "").trim()));
+            if (objData.getData().getAmountSent() != null) {
+                merchantamounttv.setText(Utils.convertTwoDecimal(objData.getData().getAmountSent().replace("CYN", "").trim()));
             }
             if (objData.getData().getTotalAmount() != null) {
                 mPItotalamounttv.setText(Utils.convertTwoDecimal(objData.getData().getTotalAmount().replace("CYN", "").trim()));

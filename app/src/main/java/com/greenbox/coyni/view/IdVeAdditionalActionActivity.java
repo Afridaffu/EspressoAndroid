@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -43,7 +44,7 @@ public class IdVeAdditionalActionActivity extends AppCompatActivity {
     public TextView ssnErrorTV;
     IdentityVerificationViewModel identityVerificationViewModel;
     GetIdentityResponse IDVEResponse;
-    ProgressDialog dialog;
+    Dialog dialog;
     private Long mLastClickTime = 0L;
 
     SSNBOEditText ssnET;

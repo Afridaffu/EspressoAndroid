@@ -571,6 +571,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/activity_log_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Activity Log"
@@ -583,6 +584,7 @@
 
                 />
             <androidx.cardview.widget.CardView
+                android:id="@+id/cv_activity_log"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="@dimen/_10sdp"
@@ -597,131 +599,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     >
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/_17sdp"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        >
-
-                        <View
-                            android:layout_width="@dimen/_4sdp"
-                            android:layout_height="@dimen/_4sdp"
-                            android:layout_marginTop="@dimen/_6sdp"
-                            android:background="@drawable/dot_view_" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Purchase"
-                            android:textSize="@dimen/_11ssp"
-                            android:fontFamily="@font/opensans_semibold"
-                            android:textColor="@color/black"
-                            android:layout_marginLeft="@dimen/_6sdp"
-                            />
-                        <TextView
-                            android:id="@+id/purchaseTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="6/23/2021 7:43pm"
-                            android:textSize="@dimen/_10ssp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:textColor="@color/primary_black"
-                            android:layout_marginLeft="@dimen/_7sdp"
-                            android:gravity="right"
-                            />
-                    </LinearLayout>
-                    <TextView
-                        android:id="@+id/successadd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Successfully added [xxx.xx CYN] to token account"
-                        android:textSize="@dimen/_10ssp"
-                        android:fontFamily="@font/opensans_regular"
-                        android:textColor="@color/primary_black"
-                        android:layout_marginLeft="@dimen/_11sdp"
-                        android:layout_marginRight="@dimen/_11sdp"
-                        android:layout_gravity="right"
-                        android:layout_marginBottom="@dimen/_16sdp"
-                        />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            >
-
-                            <View
-                                android:layout_width="@dimen/_4sdp"
-                                android:layout_height="@dimen/_4sdp"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:background="@drawable/dot_view_" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Chargeback"
-                                android:textSize="@dimen/_11ssp"
-                                android:fontFamily="@font/opensans_semibold"
-                                android:textColor="@color/black"
-                                android:layout_marginLeft="@dimen/_6sdp"
-                                />
-                            <TextView
-                                android:id="@+id/chargebackTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="6/23/2021 7:43pm"
-                                android:textSize="@dimen/_10ssp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:textColor="@color/primary_black"
-                                android:layout_marginLeft="@dimen/_7sdp"
-                                android:gravity="right"
-                                />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:layout_marginRight="@dimen/_11sdp"
-                            >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chargeback case [case ID] created "
-                            android:textSize="@dimen/_10ssp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:textColor="@color/primary_black"
-                            android:gravity="right"
-                            />
-                            <TextView
-                                android:id="@+id/chargeback"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/reference_id_hyper"
-                                android:textSize="@dimen/_10ssp"
-                                android:fontFamily="@font/opensans_regular"
-                                android:textColor="@color/primary_color"
-                                android:gravity="right"
-                                />
-                        </LinearLayout>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_11sdp"
-                            android:text="@string/chargeback_transaction"
-                            android:textSize="@dimen/_10ssp"
-                            android:fontFamily="@font/opensans_regular"
-                            android:textColor="@color/primary_color"
-                            android:gravity="right"
-                            android:layout_marginBottom="@dimen/_21sdp"
-                            />
-                    </LinearLayout>
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
             </LinearLayout>

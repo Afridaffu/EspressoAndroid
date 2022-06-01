@@ -64,7 +64,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     RelativeLayout layoutDCard, lyExternal, layoutCCard;
     String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "";
     SignOnData signOnData;
-    ProgressDialog dialog, pDialog;
+    Dialog dialog, pDialog;
     TextView tvBankError, tvDCardError, tvCCardError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvCCardHead, tvCCardMsg;
     TextView tvErrorMessage, tvLearnMore, tvExtBHead, tvDCHead, tvCCHead, tvErrorHead, tvMessage;
     ImageView imgBankArrow, imgBankIcon, imgDCardLogo, imgDCardArrow, imgCCardLogo, imgCCardArrow, imgLogo;
