@@ -427,6 +427,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 utility.addImage(imageString, imgProfile, R.drawable.acct_profile);
             } else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                 imgProfile.setVisibility(View.VISIBLE);
+                userNameTV.setVisibility(View.GONE);
                 imgProfile.setImageResource(R.drawable.acct_profile);
             } else {
                 imgProfile.setVisibility(View.GONE);
@@ -473,8 +474,9 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(this);
                 utility.addImage(imageString, saveProfileIV, R.drawable.ic_profile_male_user);
             }else if (!objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
-                imgProfile.setVisibility(View.VISIBLE);
-                imgProfile.setImageResource(R.drawable.acct_profile);
+                saveProfileIV.setVisibility(View.VISIBLE);
+                saveProfileTitle.setVisibility(View.GONE);
+                saveProfileIV.setImageResource(R.drawable.acct_profile);
             } else {
                 saveProfileIV.setVisibility(View.GONE);
                 saveProfileTitle.setVisibility(View.VISIBLE);
