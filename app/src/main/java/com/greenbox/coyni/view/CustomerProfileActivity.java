@@ -214,7 +214,17 @@ public class CustomerProfileActivity extends BaseActivity {
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    displayQRCode();
+                    try {
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                            displayQRCode();
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                            Utils.showCustomToast(CustomerProfileActivity.this, getString(R.string.complete_idve), 0, "");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
