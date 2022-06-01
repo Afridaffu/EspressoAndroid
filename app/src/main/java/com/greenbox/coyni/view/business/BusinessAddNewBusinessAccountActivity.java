@@ -110,7 +110,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         showProgressDialog();
-        companyId=0;
+//        companyId=0;
         dashboardViewModel.getProfiles();
 
     }
