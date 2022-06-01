@@ -109,33 +109,31 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().length() > 0) {
                     clearTextLL.setVisibility(View.VISIBLE);
-                } else {
-                    clearTextLL.setVisibility(View.GONE);
-                }
-                String search_key = charSequence.toString();
-                rvTeamList = new ArrayList<>();
-                if (originalTeamList.size() > 0) {
-                    for (int iteration = 0; iteration < originalTeamList.size(); iteration++) {
-                        String fullName = originalTeamList.get(iteration).getFirstName() + " " + originalTeamList.get(iteration).getLastName();
-                        if (fullName.toLowerCase().contains(search_key.toLowerCase())) {
-                            rvTeamList.add(originalTeamList.get(iteration));
+
+                    String search_key = charSequence.toString();
+                    rvTeamList = new ArrayList<>();
+                    if (originalTeamList.size() > 0) {
+                        for (int iteration = 0; iteration < originalTeamList.size(); iteration++) {
+                            String fullName = originalTeamList.get(iteration).getFirstName() + " " + originalTeamList.get(iteration).getLastName();
+                            if (fullName.toLowerCase().contains(search_key.toLowerCase())) {
+                                rvTeamList.add(originalTeamList.get(iteration));
+                            }
                         }
                     }
-                }
 
 //                teamsCV.getLayoutParams().height= ViewGroup.LayoutParams.MATCH_PARENT;
 
-                if (rvTeamList.size() > 0) {
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
-                    teamAdapter = new TeamAdapter(TeamActivity.this, rvTeamList, memberClickListener);
-                    recyclerViewTeam.setLayoutManager(layoutManager);
-                    recyclerViewTeam.setAdapter(teamAdapter);
-                    recyclerViewTeam.setVisibility(View.VISIBLE);
-                    dividerView.setVisibility(View.VISIBLE);
-                    noTeamMemberTV.setVisibility(View.GONE);
-                    teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    if (rvTeamList.size() > 0) {
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
+                        teamAdapter = new TeamAdapter(TeamActivity.this, rvTeamList, memberClickListener);
+                        recyclerViewTeam.setLayoutManager(layoutManager);
+                        recyclerViewTeam.setAdapter(teamAdapter);
+                        recyclerViewTeam.setVisibility(View.VISIBLE);
+                        dividerView.setVisibility(View.VISIBLE);
+                        noTeamMemberTV.setVisibility(View.GONE);
+                        teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-                }
+                    }
 //                else if (originalTeamList.size() > 0) {
 //                    rvTeamList = originalTeamList;
 //                    LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
@@ -146,16 +144,21 @@ public class TeamActivity extends BaseActivity implements OnKeyboardVisibilityLi
 //                    dividerView.setVisibility(View.VISIBLE);
 //                    noTeamMemberTV.setVisibility(View.GONE);
 //                }
-                else {
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
-                    teamAdapter = new TeamAdapter(TeamActivity.this, null, memberClickListener);
-                    recyclerViewTeam.setLayoutManager(layoutManager);
-                    recyclerViewTeam.setAdapter(teamAdapter);
-                    recyclerViewTeam.setVisibility(View.GONE);
-                    dividerView.setVisibility(View.VISIBLE);
-                    noTeamMemberTV.setVisibility(View.VISIBLE);
-                    teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    else {
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(TeamActivity.this);
+                        teamAdapter = new TeamAdapter(TeamActivity.this, null, memberClickListener);
+                        recyclerViewTeam.setLayoutManager(layoutManager);
+                        recyclerViewTeam.setAdapter(teamAdapter);
+                        recyclerViewTeam.setVisibility(View.GONE);
+                        dividerView.setVisibility(View.VISIBLE);
+                        noTeamMemberTV.setVisibility(View.VISIBLE);
+                        teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
 
+                    }
+                } else if (charSequence.toString().length() == 0) {
+                    clearTextLL.setVisibility(View.GONE);
+                    noTeamMemberTV.setVisibility(View.GONE);
+                    teamsCV.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 }
             }
 
