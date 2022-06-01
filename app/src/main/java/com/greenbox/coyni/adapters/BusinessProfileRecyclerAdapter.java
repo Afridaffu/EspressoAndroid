@@ -95,7 +95,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         TextView addDbaText = view.findViewById(R.id.addDbaText);
 
         LogUtils.d("isLastChild", "isLastChild" + isLastChild);
-        if(profilesList.size() == 1 && !profilesList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+        if (profilesList.size() == 1 && !profilesList.get(0).getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
             addDBA.setEnabled(false);
             addDbaText.setEnabled(false);
         } else {
@@ -139,11 +139,13 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 childItem.setText("");
             }
         } else if (detailInfo.getAccountType().equals(Utils.BUSINESS)) {
-            childItem.setText("[Dba Name]");
-            if (detailInfo.getDbaName() != null && detailInfo.getDbaName().length()>20) {
-                childItem.setText(detailInfo.getDbaName().substring(0,20));
+            if (detailInfo.getDbaName() != null) {
+                if (detailInfo.getDbaName().length() > 20) {
+                    childItem.setText(detailInfo.getDbaName().substring(0, 20));
+                } else
+                    childItem.setText(detailInfo.getDbaName());
             } else {
-                childItem.setText(detailInfo.getDbaName());
+                childItem.setText("[Dba Name]");
             }
             if (detailInfo.getImage() != null && !detailInfo.getImage().trim().equals("")) {
                 profileImage.setVisibility(View.VISIBLE);
@@ -165,7 +167,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         } else {
             addDBA.setVisibility(View.GONE);
         }
-        LogUtils.d(TAG,detailInfo.getId() + " selected id " + selectedID);
+        LogUtils.v(TAG, detailInfo.getId() + " selected id " + selectedID);
+
         if (selectedID == detailInfo.getId()) {
             imvTickIcon.setVisibility(View.VISIBLE);
             childItem.setTextColor(context.getColor(R.color.primary_color));
@@ -189,6 +192,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
+                    statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
                 }
             } else {
@@ -216,6 +220,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 } else if (detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) || detailInfo.getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
                     statusTV.setVisibility(View.VISIBLE);
                     statusTV.setText(detailInfo.getAccountStatus());
+                    statusTV.setBackground(context.getDrawable(R.drawable.txn_pending_bg));
                     statusTV.setTextColor(context.getColor(R.color.orange_status));
                 }
             } else {
@@ -273,7 +278,8 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isLastChild, View view, ViewGroup parent) {
+    public View getGroupView(int groupPosition, boolean isLastChild, View view, ViewGroup
+            parent) {
 
         BaseProfile headerInfo = (BaseProfile) getGroup(groupPosition);
         if (view == null) {
@@ -288,7 +294,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
         ImageView tickIcon = view.findViewById(R.id.tickIcon);
         LinearLayout groupView = view.findViewById(R.id.ll_group_view);
 
-        LogUtils.d("BusinessProfileRecyclerAdapter", "isselectedId" + selectedID);
+        LogUtils.v(TAG, "isselectedId" + selectedID);
 
         if (headerInfo.getAccountType().equals(Utils.SHARED)) {
             arrowImg.setVisibility(View.VISIBLE);
@@ -304,11 +310,14 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                 arrowImg.setVisibility(View.GONE);
                 tickIcon.setVisibility(View.GONE);
             }
-            heading.setText("[Personal]");
-            if (headerInfo.getFullName() != null && headerInfo.getFullName().length() > 21) {
-                heading.setText(headerInfo.getFullName().substring(0, 20));
+            if (headerInfo.getFullName() != null) {
+                if (headerInfo.getFullName().length() > 21) {
+                    heading.setText(headerInfo.getFullName().substring(0, 20));
+                } else {
+                    heading.setText(headerInfo.getFullName());
+                }
             } else {
-                heading.setText(headerInfo.getFullName());
+                heading.setText("[Personal]");
             }
             if (headerInfo.getImage() != null && !headerInfo.getImage().trim().equals("")) {
                 personalText.setVisibility(View.GONE);
@@ -316,8 +325,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
 
                 DisplayImageUtility utility = DisplayImageUtility.getInstance(context);
                 utility.addImage(headerInfo.getImage(), profileImage, R.drawable.ic_case);
-            }
-            else {
+            } else {
                 personalText.setVisibility(View.VISIBLE);
                 profileImage.setVisibility(View.GONE);
                 String userName = headerInfo.getFullName().substring(0, 1).toUpperCase();
@@ -332,7 +340,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     heading.setText(headerInfo.getCompanyName());
                 }
             } else {
-                heading.setText("[Comapany Name]");
+                heading.setText("[Company Name]");
             }
 
             if (headerInfo.getImage() != null) {

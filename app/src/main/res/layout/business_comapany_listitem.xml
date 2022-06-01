@@ -14,20 +14,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10ssp"
-        android:layout_marginBottom="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_14sdp"
         android:orientation="horizontal">
 
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="@dimen/_33sdp"-->
+<!--            android:layout_margin="@dimen/_2sdp"-->
+<!--            android:layout_height="@dimen/_33sdp"-->
+<!--            app:cardCornerRadius="@dimen/_16sdp">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/profileImage"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:src="@drawable/profile" />-->
+<!--        </androidx.cardview.widget.CardView>-->
         <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/_33sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/white"
             android:layout_margin="@dimen/_2sdp"
-            android:layout_height="@dimen/_33sdp"
-            app:cardCornerRadius="@dimen/_16sdp">
+            app:cardCornerRadius="@dimen/_18sdp">
 
             <ImageView
                 android:id="@+id/profileImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/profile" />
+                android:contentDescription="@string/businessProfileAccountItemChildImage"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_case"
+                android:visibility="visible" />
+
         </androidx.cardview.widget.CardView>
 
 
