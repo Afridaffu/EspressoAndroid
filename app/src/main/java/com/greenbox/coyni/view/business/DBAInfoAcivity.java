@@ -102,7 +102,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     public ScrollView dbaBasicSL, addressSL;
     private boolean addDBAClick = false;
     private boolean isAddDBA = false;
-    private boolean isAddDBAAPICalled = true;
+    private boolean isAddDBAAPICalled = false;
     private int companyID = 0;
 
     //Address
@@ -287,6 +287,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
 
             if (getIntent().getBooleanExtra(Utils.NEW_DBA, false)) {
                 isAddDBA = getIntent().getBooleanExtra(Utils.NEW_DBA, false);
+            }
+            else {
+                isAddDBAAPICalled = true;
             }
 
             if (getIntent().getIntExtra(Utils.COMPANY_ID, 0) > 0) {
@@ -712,7 +715,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
                     Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
                     BusinessRegistrationTrackerActivity.isAddDbaCalled = true;
-                    isAddDBAAPICalled = false;
+                    isAddDBAAPICalled = true;
                     isAddDBA = false;
                     if (selectedPage == 1) {
                         businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());

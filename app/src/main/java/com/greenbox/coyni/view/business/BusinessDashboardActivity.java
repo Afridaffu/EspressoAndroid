@@ -101,7 +101,7 @@ public class BusinessDashboardActivity extends BaseActivity {
     private void getWalletData() {
         WalletRequest walletRequest = new WalletRequest();
         walletRequest.setWalletType(Utils.MERCHANT);
-        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
         businessDashboardViewModel.meMerchantWallet(walletRequest);
 
         walletRequest.setWalletType(Utils.TOKEN);

@@ -786,7 +786,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void getWalletData(){
         WalletRequest walletRequest = new WalletRequest();
         walletRequest.setWalletType(Utils.MERCHANT);
-        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
+//        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
         businessDashboardViewModel.meMerchantWallet(walletRequest);
 
         walletRequest.setWalletType(Utils.TOKEN);

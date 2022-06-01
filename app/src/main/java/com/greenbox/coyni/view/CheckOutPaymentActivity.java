@@ -147,7 +147,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
         WalletRequest walletRequest = new WalletRequest();
         walletRequest.setWalletType(Utils.TOKEN);
-        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
+//        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
 
         if (Utils.checkInternet(CheckOutPaymentActivity.this)) {
             businessDashboardViewModel.meMerchantWallet(walletRequest);

@@ -358,7 +358,7 @@ public class BusinessReceivePaymentActivity extends BaseActivity implements Text
             super.onResume();
             WalletRequest walletRequest = new WalletRequest();
             walletRequest.setWalletType(Utils.MERCHANT);
-            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
             dashboardViewModel.meMerchantWallet(walletRequest);
 
         } catch (Exception e) {

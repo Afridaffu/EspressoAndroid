@@ -375,7 +375,7 @@ public class DashboardActivity extends BaseActivity {
                             dashboardViewModel.getLatestTxns();
                             WalletRequest walletRequest = new WalletRequest();
                             walletRequest.setWalletType(Utils.TOKEN);
-                            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//                            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                             businessDashboardViewModel.meMerchantWallet(walletRequest);
                             transactionsNSV.smoothScrollTo(0, 0);
                         } else {
@@ -915,7 +915,7 @@ public class DashboardActivity extends BaseActivity {
                 dashboardViewModel.mePaymentMethods();
                 WalletRequest walletRequest = new WalletRequest();
                 walletRequest.setWalletType(Utils.TOKEN);
-                walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//                walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                 businessDashboardViewModel.meMerchantWallet(walletRequest);
                 notificationsViewModel.getNotifications();
             } catch (Exception ex) {
