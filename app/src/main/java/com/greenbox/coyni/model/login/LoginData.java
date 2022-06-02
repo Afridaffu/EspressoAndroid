@@ -28,6 +28,33 @@ public class LoginData {
     private boolean isPersonIdentified;
     private String firstName;
     private String lastName;
+    private String requestToken;
+    private int businessUserId;
+    private String authorities;
+
+    public String getRequestToken() {
+        return requestToken;
+    }
+
+    public void setRequestToken(String requestToken) {
+        this.requestToken = requestToken;
+    }
+
+    public int getBusinessUserId() {
+        return businessUserId;
+    }
+
+    public void setBusinessUserId(int businessUserId) {
+        this.businessUserId = businessUserId;
+    }
+
+    public String getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(String authorities) {
+        this.authorities = authorities;
+    }
 
     public int getDbaOwnerId() {
         return dbaOwnerId;
