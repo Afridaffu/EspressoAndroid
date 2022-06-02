@@ -16,6 +16,7 @@
             android:id="@+id/sscFileUploadLL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_marginBottom="@dimen/_14sdp"
             android:background="@drawable/bg_white_color_light_border"
             android:orientation="horizontal"
