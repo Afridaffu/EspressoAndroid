@@ -38,6 +38,16 @@ public class BatchPayoutListItems implements Serializable, Comparable<BatchPayou
 
     private String processType;
 
+    private String updatedAt;
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public String getProcessType() {
         return processType;
     }
