@@ -96,10 +96,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.MyView
                 holder.imgInvite.setVisibility(View.GONE);
                 holder.tvNameHead.setText(objMyApplication.setNameHead(strEcoSysName));
             } else if (!strPhContact.equals("") && strEcoSysName.equals("")) {
-                holder.tvUserName.setText(Utils.capitalize(strPhContact));
+                holder.tvUserName.setText(Utils.capitalize(strPhContact.replace("null","")));
                 holder.tvWalletAddress.setVisibility(View.GONE);
                 holder.imgInvite.setVisibility(View.VISIBLE);
-                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact.substring(0, 1).toUpperCase()));
+                holder.tvNameHead.setText(objMyApplication.setNameHead(strPhContact.replace("null","")));
             }
 
             if (objData.getImage() != null && !objData.getImage().trim().equals("")) {

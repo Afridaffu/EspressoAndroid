@@ -31,6 +31,7 @@ import com.greenbox.coyni.model.profile.DownloadImageResponse;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.PDFWebViewActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class AgreementsActivity extends BaseActivity {
     MyApplication objMyApplication;
     TextView pastTV, activeTV;
     int i = 0;
+    private String selectedAgreement = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +133,7 @@ public class AgreementsActivity extends BaseActivity {
         }
 
         ArrayList<Integer> sortTODisplay = new ArrayList<>();
-        if(objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+        if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
             sortTODisplay.add(Utils.cPP);
             sortTODisplay.add(Utils.cTOS);
         } else {
@@ -144,9 +146,9 @@ public class AgreementsActivity extends BaseActivity {
             public int compare(Item o1, Item o2) {
                 int o1Index = sortTODisplay.indexOf(o1.getSignatureType());
                 int o2Index = sortTODisplay.indexOf(o2.getSignatureType());
-                if(o1Index > o2Index) {
+                if (o1Index > o2Index) {
                     return 1;
-                } else if(o1Index < o2Index) {
+                } else if (o1Index < o2Index) {
                     return -1;
                 } else {
                     return 0;
@@ -211,7 +213,7 @@ public class AgreementsActivity extends BaseActivity {
                     if (downloadDocumentResponse != null && downloadDocumentResponse.getStatus() != null) {
                         if (downloadDocumentResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
                             DownloadDocumentData data = downloadDocumentResponse.getData();
-                            if(data != null ) {
+                            if (data != null) {
                                 if (data.getDownloadUrl() != null && !data.getDownloadUrl().equals("")) {
                                     launchDocumentUrl(data.getDownloadUrl());
                                 } else {
@@ -231,16 +233,25 @@ public class AgreementsActivity extends BaseActivity {
     }
 
     private void launchDocumentUrl(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse(url);
-        intent.setDataAndType(uri, "application/pdf");
-        startActivity(intent);
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        Uri uri = Uri.parse(url);
+//        intent.setDataAndType(uri, "application/pdf");
+//        startActivity(intent);
+        startActivity(new Intent(AgreementsActivity.this, PDFWebViewActivity.class)
+                .putExtra("URL", url)
+                .putExtra("NAME", selectedAgreement));
     }
 
     private void setOnClickListener() {
         try {
             listener = (view, doc) -> {
                 showProgressDialog();
+                if (doc == Utils.cTOS)
+                    selectedAgreement = getString(R.string.gbx_tos);
+                else if (doc == Utils.cPP)
+                    selectedAgreement = getString(R.string.gbx_pp);
+                else if (doc == Utils.mAgmt)
+                    selectedAgreement = getString(R.string.gbx_merchant);
                 dashboardViewModel.getDocumentUrl(doc);
             };
         } catch (Exception ex) {
