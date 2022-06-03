@@ -2,6 +2,7 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchNow.BatchNowPaymentRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
@@ -631,8 +632,8 @@ public interface ApiService {
     @POST("api/v2/node/refund/process")
     Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
 
-    @POST("api/v2/transactions/merchant-payout/{batchId}")
-    Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
+    @POST("api/v2/transactions/merchant-payout")
+    Call<BatchNowResponse> getSlideBatchNow(@Body BatchNowPaymentRequest request);
 
     @POST("api/v2/transactions/admin/reserve/summary")
     Call<ReserveListResponse> getReserveListItems();
