@@ -606,11 +606,18 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
 
         TextView tv_mv = reserveRule.findViewById(R.id.tvMonthlyVolume);
         TextView tv_ht = reserveRule.findViewById(R.id.tvhighticket);
+        TextView note = reserveRule.findViewById(R.id.noteTV);
         TextView tv_reserveAmount = reserveRule.findViewById(R.id.tvreserveAMountTransaction);
         TextView tv_reservePeriod = reserveRule.findViewById(R.id.tvreservePeriod);
         CardView cardAccept = reserveRule.findViewById(R.id.cardAccept);
         TextView tvcardDeclined = reserveRule.findViewById(R.id.cardDeclined);
 
+        if(actionRequiredResponse.getData().getNote()!=null){
+            note.setText(actionRequiredResponse.getData().getNote());
+        }
+        else{
+            note.setText(R.string.thank_you_for_your_interest_in_coyni_after_ncarefully_reviewing_the_coyni_team_made_ndecision_to_approve_your_application_with);
+        }
         if (actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume().contains("CYN")) {
             tv_mv.setText(Utils.convertTwoDecimal(actionRequiredResponse.getData().getReserveRule().getMonthlyProcessingVolume()));
         } else {

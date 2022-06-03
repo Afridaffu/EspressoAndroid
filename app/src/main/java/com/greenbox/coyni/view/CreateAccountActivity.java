@@ -69,6 +69,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Singleton;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.OutLineBoxPhoneNumberEditText;
+import com.greenbox.coyni.view.business.PDFWebViewActivity;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
@@ -126,6 +127,8 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
     CheckBox agreeCB;
 
     MyApplication objMyApplication;
+
+    String selectedAgreement = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1199,10 +1202,14 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
 //        return encoded;
 //    }
     private void launchDocumentUrl(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = Uri.parse(url);
-        intent.setDataAndType(uri, "application/pdf");
-        startActivity(intent);
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        Uri uri = Uri.parse(url);
+//        intent.setDataAndType(uri, "application/pdf");
+//        startActivity(intent);
+        Log.e("URl", url);
+        startActivity(new Intent(CreateAccountActivity.this, PDFWebViewActivity.class)
+                .putExtra("URL", url)
+                .putExtra("NAME", selectedAgreement));
     }
 
     public void setSpannableText() {
@@ -1217,6 +1224,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                selectedAgreement = getString(R.string.gbx_tos);
                 showProgressDialog();
                 if (accountType == Utils.BUSINESS_ACCOUNT) {
                     dashboardViewModel.getDocumentUrl(Utils.mTOS);
@@ -1242,6 +1250,7 @@ public class CreateAccountActivity extends BaseActivity implements OnKeyboardVis
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                selectedAgreement = getString(R.string.gbx_pp);
                 showProgressDialog();
                 if (accountType == Utils.BUSINESS_ACCOUNT) {
                     dashboardViewModel.getDocumentUrl(Utils.mPP);

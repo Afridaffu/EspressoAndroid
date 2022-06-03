@@ -340,7 +340,7 @@ public class BusinessProfileRecyclerAdapter extends BaseExpandableListAdapter {
                     heading.setText(headerInfo.getCompanyName());
                 }
             } else {
-                heading.setText("[Comapany Name]");
+                heading.setText("[Company Name]");
             }
 
             if (headerInfo.getImage() != null) {

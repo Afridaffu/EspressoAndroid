@@ -99,6 +99,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         try {
+            showProgressDialog();
             dashboardViewModel.getProfiles();
         } catch (Exception e) {
             e.printStackTrace();

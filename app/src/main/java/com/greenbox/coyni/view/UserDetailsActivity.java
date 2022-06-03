@@ -73,6 +73,7 @@ import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.AddBeneficialOwnerActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessProfileActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -135,7 +136,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private LinkedHashMap<String, BusinessAccountsListInfo> mainSet = new LinkedHashMap<String, BusinessAccountsListInfo>();
     private ArrayList<BusinessAccountsListInfo> subSet = new ArrayList<BusinessAccountsListInfo>();
     private CustomerProfileViewModel customerProfileViewModel;
-    private int accountTypeId;
+    private int accountTypeId, selectedId = 0;
     //private int childid;
     private String SelectedDBAName;
     private BusinessProfileRecyclerAdapter profilesListAdapter;
@@ -610,7 +611,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, accountTypeId, showDBA);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(UserDetailsActivity.this, accountsData, selectedId, showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -701,7 +702,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
         dashboardViewModel.getPreferenceMutableLiveData().observe(this, new Observer<Preferences>() {
             @Override
             public void onChanged(Preferences preferences) {
-
                 try {
                     if (preferences != null) {
                         myApplicationObj.setTimezoneID(preferences.getData().getTimeZone());
@@ -734,6 +734,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                     dashboardViewModel.getProfiles();
                     if (preferences.getData().getPreferredAccount() != null && !preferences.getData().getPreferredAccount().trim().equals("")) {
                         accountTypeId = Integer.parseInt(preferences.getData().getPreferredAccount());
+                        selectedId = accountTypeId;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -803,18 +804,18 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
             @Override
             public void onChanged(UserPreference userPreference) {
                 if (userPreference != null) {
-
                     if (!userPreference.getStatus().toLowerCase().equals("success")) {
                         Utils.displayAlert(userPreference.getError().getErrorDescription(), UserDetailsActivity.this, "", userPreference.getError().getFieldErrors().get(0));
                     } else {
                         LogUtils.d(TAG, "userPreference" + userPreference);
-                        if (SelectedDBAName.equals(""))
-                            business_defaultaccountET.setText("");
+                        if (SelectedDBAName == null || SelectedDBAName.equals(""))
+                            business_defaultaccountET.setText("[DBA Name]");
                         else if (SelectedDBAName.length() > 20)
                             business_defaultaccountET.setText((SelectedDBAName).substring(0, 20));
                         else
                             business_defaultaccountET.setText(SelectedDBAName);
 
+                        selectedId = accountTypeId;
                         myApplicationObj.setTimezoneID(myApplicationObj.getTempTimezoneID());
                         myApplicationObj.setTimezone(myApplicationObj.getTempTimezone());
                         if (myApplicationObj.getTempTimezoneID() == 0) {
@@ -1068,7 +1069,9 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //                    Utils.displayAlert("Requires Access to Camera.", UserDetailsActivity.this, "", "");
-                    displayAlertNew("Requires Access to Camera.", UserDetailsActivity.this, "");
+//                    displayAlertNew("Requires Access to Camera.", UserDetailsActivity.this, "");
+
+                    Utils.showDialogPermission(UserDetailsActivity.this, getString(R.string.allow_access_header), getString(R.string.camera_permission_desc));
 
                 } else if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

@@ -205,14 +205,16 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     try {
-                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
-                            if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
-                                return;
-                            }
-                            mLastClickTime = SystemClock.elapsedRealtime();
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
                             showQuickAction(DashboardActivity.this);
-                        } else {
-                            Utils.showCustomToast(DashboardActivity.this, "Please complete your Identity Verification process.", 0, "");
+                        } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus()) ||
+                                objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())) {
+                            Utils.showCustomToast(DashboardActivity.this, getString(R.string.complete_idve), 0, "");
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

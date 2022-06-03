@@ -328,6 +328,8 @@ public class Utils {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
+    public static final String ACTION_TYPE = "action_type";
+    public static final String TRANSACTION_TOKEN = "Transaction_token";
     public static final String ACCOUNT_TYPE = "account_type";
     public static final String changeActionType = "CHANGE";
     public static final String withdrawActionType = "WITHDRAW";
@@ -800,7 +802,7 @@ public class Utils {
         WindowManager.LayoutParams wlp = window.getAttributes();
 
         wlp.gravity = Gravity.CENTER;
-        wlp.flags &= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 
         TextView notNowBtn, settingsBtn, headerText, descriptionText;
