@@ -491,6 +491,7 @@
     <string name="merchant_payout">Merchant Payout</string>
     <string name="withdrawn">Withdrawn</string>
     <string name="monthly_service_fee">Monthly Service Fee</string>
+    <string name="enter_your_pin">Enter your PIN</string>
     <string name="enter_the_amount">Enter the amount</string>
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>

@@ -19,7 +19,6 @@ import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 
@@ -49,7 +48,7 @@ public class GetStartedFragment extends BaseFragment {
                 return;
             }
             mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startTracker();
+            ((BusinessDashboardActivity) getActivity()).startTracker(myApplication.getDbaOwnerId());
         });
 
         mIvNotifications.setOnClickListener(new View.OnClickListener() {
@@ -64,11 +63,7 @@ public class GetStartedFragment extends BaseFragment {
         });
 
         mUserIconRelativeLayout.setOnClickListener(view -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+            ((BusinessDashboardActivity) getActivity()).launchSwitchAccountPage();
         });
     }
 
@@ -80,20 +75,6 @@ public class GetStartedFragment extends BaseFragment {
         mTvUserIconText = mCurrentView.findViewById(R.id.tv_user_icon_text);
         mIvNotifications = mCurrentView.findViewById(R.id.iv_notifications);
         mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
-    }
-
-    private void startTracker() {
-        LogUtils.d(TAG, "tracker iddddd" + myApplication.getDbaOwnerId());
-        if (myApplication.getDbaOwnerId() != 0) {
-            Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
-            inTracker.putExtra(Utils.ADD_BUSINESS, true);
-            inTracker.putExtra(Utils.ADD_DBA, true);
-            startActivity(inTracker);
-        } else {
-            Intent inTracker = new Intent(getActivity(), BusinessRegistrationTrackerActivity.class);
-            startActivity(inTracker);
-        }
-
     }
 
 }

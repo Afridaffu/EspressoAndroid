@@ -147,8 +147,6 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-
     }
 
     private void initFields() {
