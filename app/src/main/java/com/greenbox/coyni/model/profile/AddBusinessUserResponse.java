@@ -43,6 +43,7 @@ public class AddBusinessUserResponse {
 
     public class TrackerData{
 
+
         private boolean isProfileVerified;
         private boolean isAuthyRegistered;
         private boolean isAddressAvailable;
@@ -156,6 +157,106 @@ public class AddBusinessUserResponse {
         private String authorities;
         private String dbaName;
         private String requestToken;
+
+        private String email;
+        private String phoneNumber;
+        private int passwordFailedAttempts;
+        private String message;
+        private String kycStatus;
+        private boolean riskFlag;
+        private boolean biometricEnabled;
+        private String companyName;
+        private String firstName;
+        private String lastName;
+        private String agreementsSigned;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPhoneNumber() {
+            return phoneNumber;
+        }
+
+        public void setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+        }
+
+        public int getPasswordFailedAttempts() {
+            return passwordFailedAttempts;
+        }
+
+        public void setPasswordFailedAttempts(int passwordFailedAttempts) {
+            this.passwordFailedAttempts = passwordFailedAttempts;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public String getKycStatus() {
+            return kycStatus;
+        }
+
+        public void setKycStatus(String kycStatus) {
+            this.kycStatus = kycStatus;
+        }
+
+        public boolean isRiskFlag() {
+            return riskFlag;
+        }
+
+        public void setRiskFlag(boolean riskFlag) {
+            this.riskFlag = riskFlag;
+        }
+
+        public boolean isBiometricEnabled() {
+            return biometricEnabled;
+        }
+
+        public void setBiometricEnabled(boolean biometricEnabled) {
+            this.biometricEnabled = biometricEnabled;
+        }
+
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getAgreementsSigned() {
+            return agreementsSigned;
+        }
+
+        public void setAgreementsSigned(String agreementsSigned) {
+            this.agreementsSigned = agreementsSigned;
+        }
 
         public int getUserId() {
             return userId;
