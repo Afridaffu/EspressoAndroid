@@ -23,13 +23,17 @@ import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
+import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.DisplayImageUtility;
@@ -49,7 +53,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private BuyTokenViewModel buyTokenViewModel;
     private CheckOutViewModel checkOutViewModel;
     private MyApplication myApplication;
-    private TextView mTokenBalance,mUserName,errorText;
+    private TextView mTokenBalance, mUserName, errorText;
     private LinearLayout lyBalance;
     private EditText mAmount;
     private double availableBalance;
@@ -59,7 +63,6 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private TextView tv_lable;
     private CardView im_lock_;
     private Dialog pDialog;
-    private EditText payET;
     private boolean isAuthenticationCalled = false, isFaceLock = false, isTouchId = false;
     private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
     private String requestToken;
@@ -67,7 +70,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private LinearLayout closeButton;
     private String actionTypeYes = "YES";
     private String actionTypeNo = "No";
-    private double transactionLimit = 0.0,minimumLimit = 0.0,userAmount = 0.0;
+    private double transactionLimit = 0.0, minimumLimit = 0.0, userAmount = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +91,6 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         dbHandler = DatabaseHandler.getInstance(CheckOutPaymentActivity.this);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         mTokenBalance = findViewById(R.id.available_token_balance_tv);
-        payET = findViewById(R.id.merchantAmountET);
         lyBalance = findViewById(R.id.available_balance_tv);
         mUserName = findViewById(R.id.checkout_user_name_tv);
         mAmount = findViewById(R.id.checkout_amount);
@@ -139,8 +141,11 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         motionLayout.setTransition(R.id.middle, R.id.end);
                         motionLayout.transitionToState(motionLayout.getEndState());
                         slideToConfirm.setInteractionEnabled(false);
-                        tv_lable.setText("Verifying");
+//                        if (myApplication.getCheckOutModel().isCheckOutFlag()){
+//                            myApplication.setCheckOutModel(null);
+//                        }
                         if (!isAuthenticationCalled) {
+                            tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
                                 if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
@@ -149,18 +154,21 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 //                                payTransaction();
                                     startActivity(new Intent(CheckOutPaymentActivity.this, PINActivity.class)
                                             .putExtra("TYPE", "ENTER")
-                                            .putExtra("screen", "Paid")
+                                            .putExtra("screen", CheckOutConstants.CheckOut)
 //                                            .putExtra(Utils.wallet, recipientAddress)
-                                            .putExtra(Utils.amount, payET.getText().toString().replace(",", "").trim()));
+                                            .putExtra(Utils.amount, mAmount.getText().toString().replace(",", "").trim()));
 
                                 }
                             } else {
 //                            payTransaction();
+//                                if (myApplication.getCheckOutModel()!= null && myApplication.getCheckOutModel().isCheckOutFlag()){
+//                                    myApplication.setCheckOutModel(null);
+//                                }
                                 startActivity(new Intent(CheckOutPaymentActivity.this, PINActivity.class)
                                         .putExtra("TYPE", "ENTER")
-                                        .putExtra("screen", "Paid")
+                                        .putExtra("screen", CheckOutConstants.CheckOut)
 //                                        .putExtra(Utils.wallet, recipientAddress)
-                                        .putExtra(Utils.amount, payET.getText().toString().replace(",", "").trim()));
+                                        .putExtra(Utils.amount, mAmount.getText().toString().replace(",", "").trim()));
                             }
                         }
                     }
@@ -217,15 +225,17 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             @Override
             public void onChanged(OrderInfoResponse orderInfoResponse) {
                 if (orderInfoResponse != null) {
-                    if (orderInfoResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)){
-                        if (orderInfoResponse.getData()!= null && orderInfoResponse.getData().isCheckoutUser()){
-                            if (orderInfoResponse.getData().getMerchantLogo()!= null){
+                    if (orderInfoResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (orderInfoResponse.getData() != null && orderInfoResponse.getData().isCheckoutUser()) {
+                            if (orderInfoResponse.getData().getMerchantLogo() != null) {
                                 initUserData(orderInfoResponse);
                                 TransactionLimitAPICall();
 
                             }
 
                         }
+                    } else {
+                        Utils.displayAlertNew(orderInfoResponse.getError().getErrorDescription(), CheckOutPaymentActivity.this, "Coyni");
                     }
                 }
             }
@@ -233,22 +243,72 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
             @Override
             public void onChanged(TransactionLimitResponse transactionLimitResponse) {
-                if (transactionLimitResponse!= null){
-                    if (transactionLimitResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)){
-                        if (transactionLimitResponse.getData()!= null) {
-                            if(transactionLimitResponse.getData().getTransactionLimit()!= null && transactionLimitResponse.getData().getMinimumLimit()!=null){
+                if (transactionLimitResponse != null) {
+                    if (transactionLimitResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        if (transactionLimitResponse.getData() != null) {
+                            if (transactionLimitResponse.getData().getTransactionLimit() != null && transactionLimitResponse.getData().getMinimumLimit() != null) {
                                 transactionLimit = Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit());
                                 minimumLimit = Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit());
                             }
                             validation(transactionLimitResponse);
                         }
-                    }
-                    else {
-                        Utils.displayAlert(transactionLimitResponse.getError().getErrorDescription(),CheckOutPaymentActivity.this,"Oops",transactionLimitResponse.getError().getFieldErrors().get(0));
+                    } else {
+                        Utils.displayAlert(transactionLimitResponse.getError().getErrorDescription(), CheckOutPaymentActivity.this, "Oops", transactionLimitResponse.getError().getFieldErrors().get(0));
                     }
                 }
             }
         });
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            myApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        checkOutPayAPICall();
+                    }
+                }
+            }
+        });
+
+        checkOutViewModel.getOrderPayResponseMutableLiveData().observe(this, new Observer<OrderPayResponse>() {
+            @Override
+            public void onChanged(OrderPayResponse orderPayResponse) {
+                if (orderPayResponse != null) {
+                    myApplication.setOrderPayResponse(orderPayResponse);
+//                    Utils.setStrToken("");
+                    myApplication.clearStrToken();
+                    if (orderPayResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                        startActivity(new Intent(CheckOutPaymentActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "Success")
+                                .putExtra("subtype", CheckOutConstants.CheckOut));
+
+                    } else {
+                        startActivity(new Intent(CheckOutPaymentActivity.this, GiftCardBindingLayoutActivity.class)
+                                .putExtra("status", "Failed")
+                                .putExtra("subtype", CheckOutConstants.CheckOut));
+                    }
+                    finish();
+                } else {
+                    Utils.displayAlert("something went wrong", CheckOutPaymentActivity.this, "", "");
+                }
+            }
+        });
+
+    }
+
+    private void checkOutPayAPICall() {
+        if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+            OrderPayRequest request = new OrderPayRequest();
+                request.setAmount(mAmount.getText().toString().replace(",","").trim());
+            request.setEncryptedToken(myApplication.getCheckOutModel().getEncryptedToken());
+            myApplication.setWithdrawAmount(Double.parseDouble(mAmount.getText().toString().replace(",","").trim()));
+            if (request.getAmount() != null && request.getEncryptedToken() != null) {
+                checkOutViewModel.orderPay(request);
+            }
+        }
     }
 
     private void validation(TransactionLimitResponse transactionLimitResponse) {
@@ -290,23 +350,21 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         request.setTransactionType(Utils.saleOrder);
         request.setTransactionSubType(Utils.token);
         if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-            buyTokenViewModel.transactionLimits(request,Utils.userTypeCust);
-        }
-        else {
-            buyTokenViewModel.transactionLimits(request,Utils.userTypeBusiness);
+            buyTokenViewModel.transactionLimits(request, Utils.userTypeCust);
+        } else {
+            buyTokenViewModel.transactionLimits(request, Utils.userTypeBusiness);
         }
     }
 
     private void initUserData(OrderInfoResponse orderInfoResponse) {
         DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
         utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
-        if (orderInfoResponse.getData().getMerchantName()!= null){
+        if (orderInfoResponse.getData().getMerchantName() != null) {
             mUserName.setText(orderInfoResponse.getData().getMerchantName());
-        }
-        else {
+        } else {
             mUserName.setText(R.string.dba_name_text);
         }
-        if (orderInfoResponse.getData().getAmount()!= null ){
+        if (orderInfoResponse.getData().getAmount() != null) {
             mAmount.setText(Utils.convertTwoDecimal(orderInfoResponse.getData().getAmount()));
             userAmount = Double.parseDouble(orderInfoResponse.getData().getAmount());
         }
@@ -362,8 +420,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         myApplication.setCheckOutModel(null);
                     }
                     CheckOutPaymentActivity.super.onBackPressed();
-                }
-                else if (action.equalsIgnoreCase(getString(R.string.no))){
+                } else if (action.equalsIgnoreCase(getString(R.string.no))) {
                     customConfirmationDialog.dismiss();
                 }
             }
@@ -429,9 +486,8 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                 try {
                     startActivity(new Intent(CheckOutPaymentActivity.this, PINActivity.class)
                             .putExtra("TYPE", "ENTER")
-                            .putExtra("screen", "Paid")
-//                            .putExtra(Utils.wallet, recipientAddress)
-                            .putExtra(Utils.amount, payET.getText().toString().replace(",", "").trim()));
+                            .putExtra("screen", CheckOutConstants.CheckOut)
+                            .putExtra(Utils.amount, mAmount.getText().toString().replace(",", "").trim()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

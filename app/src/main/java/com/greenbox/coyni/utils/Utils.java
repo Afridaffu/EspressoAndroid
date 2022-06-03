@@ -322,6 +322,7 @@ public class Utils {
     public static final String SELECTED_MERCHANT_TRANSACTION_TXN_TYPE = "Selected_Merchant_transaction_txn_type";
     public static final String SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE = "Selected_Merchant_transaction_txn_sub_type";
     public static final float slidePercentage = 0.3f;
+    public static final float slidePercentagehalf = 0.5f;
 
     public static boolean isKeyboardVisible = false;
     public static boolean isSettingsBtnClicked = false;

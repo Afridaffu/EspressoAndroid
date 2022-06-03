@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
 import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 
@@ -22,6 +24,7 @@ import retrofit2.Response;
 public class CheckOutViewModel extends AndroidViewModel {
 
    private MutableLiveData<OrderInfoResponse> orderInfoResponseMutableLiveData = new MutableLiveData<>();
+   private MutableLiveData<OrderPayResponse> orderPayResponseMutableLiveData = new MutableLiveData<>();
 
     public CheckOutViewModel(@NonNull Application application) {
         super(application);
@@ -33,6 +36,14 @@ public class CheckOutViewModel extends AndroidViewModel {
 
     public void setOrderInfoResponseMutableLiveData(MutableLiveData<OrderInfoResponse> orderInfoResponseMutableLiveData) {
         this.orderInfoResponseMutableLiveData = orderInfoResponseMutableLiveData;
+    }
+
+    public MutableLiveData<OrderPayResponse> getOrderPayResponseMutableLiveData() {
+        return orderPayResponseMutableLiveData;
+    }
+
+    public void setOrderPayResponseMutableLiveData(MutableLiveData<OrderPayResponse> orderPayResponseMutableLiveData) {
+        this.orderPayResponseMutableLiveData = orderPayResponseMutableLiveData;
     }
 
     public void getOrderInfo(OrderInfoRequest request) {
@@ -61,4 +72,33 @@ public class CheckOutViewModel extends AndroidViewModel {
             }
         });
     }
+
+
+    public void orderPay(OrderPayRequest request) {
+        ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
+        Call<OrderPayResponse> mCall = apiService.orderPay(request);
+        mCall.enqueue(new Callback<OrderPayResponse>() {
+            @Override
+            public void onResponse(Call<OrderPayResponse> call, Response<OrderPayResponse> response) {
+                if (response.isSuccessful()) {
+                    OrderPayResponse orderPayResponse = response.body();
+                    orderPayResponseMutableLiveData.setValue(orderPayResponse);
+                } else {
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<OrderPayResponse>() {
+                    }.getType();
+                    OrderPayResponse errorResponse = gson.fromJson(response.errorBody().charStream(),type);
+                    if (errorResponse!= null){
+                        orderPayResponseMutableLiveData.setValue(errorResponse);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OrderPayResponse> call, Throwable t) {
+                orderPayResponseMutableLiveData.setValue(null);
+            }
+        });
+    }
+
 }
