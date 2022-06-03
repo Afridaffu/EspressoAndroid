@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.login;
 
+import org.json.JSONArray;
+
 public class LoginData {
     private int userId;
     private String email;
@@ -30,7 +32,7 @@ public class LoginData {
     private String lastName;
     private String requestToken;
     private int businessUserId;
-    private String authorities;
+    private Object[] authorities;
 
     public String getRequestToken() {
         return requestToken;
@@ -48,11 +50,11 @@ public class LoginData {
         this.businessUserId = businessUserId;
     }
 
-    public String getAuthorities() {
+    public Object[] getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(String authorities) {
+    public void setAuthorities(Object[] authorities) {
         this.authorities = authorities;
     }
 

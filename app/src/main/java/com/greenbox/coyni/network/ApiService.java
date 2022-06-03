@@ -632,7 +632,7 @@ public interface ApiService {
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
 
     @POST("api/v2/node/refund/process")
-    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
+    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest request);
 
     @POST("api/v2/transactions/merchant-payout/{batchId}")
     Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
