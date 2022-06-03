@@ -6,6 +6,16 @@ public class RefundReferenceRequest {
     private String refundReason;
     private Double refundAmount;
     private Integer walletType;
+    private String requestToken;
+
+
+    public String getRequestToken() {
+        return requestToken;
+    }
+
+    public void setRequestToken(String requestToken) {
+        this.requestToken = requestToken;
+    }
 
     public String getGbxTransactionId() {
         return gbxTransactionId;

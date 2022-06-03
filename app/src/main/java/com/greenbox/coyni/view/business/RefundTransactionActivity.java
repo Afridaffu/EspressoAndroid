@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -45,6 +46,7 @@ import com.greenbox.coyni.dialogs.RefundInsufficientMerchnatDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
+import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
 import com.greenbox.coyni.model.transaction.RefundReferenceRequest;
 import com.greenbox.coyni.model.transaction.TransactionData;
@@ -57,6 +59,7 @@ import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.PayRequestActivity;
+import com.greenbox.coyni.view.ValidatePinActivity;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
@@ -72,7 +75,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private CustomKeyboard cKey;
     private Long mLastClickTime = 0L, bankId, cardId;
     private float fontSize, dollarFont;
-    private  String refundid;
+    private String token, biorefund;
     private String strToken = "";
     private DashboardViewModel dashboardViewModel;
     private Dialog pDialog, cvvDialog, refundDialog, insuffDialog, insuffTokenDialog;
@@ -91,6 +94,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private static final String ACTION = "RefundPreviewDialog";
     private static final String ACTIONN = "insuffintmerchantbalancedialog ";
     private CoyniViewModel coyniViewModel;
+    private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
 
 
     @Override
@@ -103,7 +107,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             setContentView(R.layout.activity_refund_transaction);
             transactionData = (TransactionData) getIntent().getSerializableExtra(Utils.SELECTED_MERCHANT_TRANSACTION);
             gbxid = getIntent().getStringExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID);
-
+            dbHandler = DatabaseHandler.getInstance(RefundTransactionActivity.this);
             initialization();
             initobservers();
             refundBackIV.setOnClickListener(new View.OnClickListener() {
@@ -130,10 +134,12 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         fullamounttv = findViewById(R.id.FullamountTV);
         halfamounttv = findViewById(R.id.halfamountTV);
         refundTransactionActivity = this;
-
+        setFaceLock();
+        setTouchId();
 
         objMyApplication = (MyApplication) getApplicationContext();
         dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         refundET.requestFocus();
         refundET.setSelection(refundET.getText().length());
         refundET.setShowSoftInputOnFocus(false);
@@ -260,13 +266,36 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    try {
+                        showProgressDialog();
+                        BiometricTokenRequest request = new BiometricTokenRequest();
+                        request.setDeviceId(Utils.getDeviceID());
+                        request.setMobileToken(objMyApplication.getStrMobileToken());
+                        request.setActionType(Utils.refundActionType);
+                        coyniViewModel.biometricToken(request);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+                case RESULT_CANCELED:
+                    launchPinActivity();
+                    break;
+            }
+        }
+    }
 
     private void refundAPI(RefundReferenceRequest refundrefrequest) {
         dashboardViewModel.refundDetails(refundrefrequest);
     }
 
     private void refundProcessAPI(RefundReferenceRequest request) {
-        dashboardViewModel.refundprocessDetails(request, objMyApplication.getStrToken());
+        dashboardViewModel.refundprocessDetails(request);
     }
 
 
@@ -285,7 +314,6 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         return refundrefrequest;
     }
-
     public RefundReferenceRequest refundTransaction() {
         RefundReferenceRequest request = new RefundReferenceRequest();
         try {
@@ -293,10 +321,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             request.setRemarks(refundreason);
             request.setGbxTransactionId(gbxid);
             request.setWalletType(wallettype);
-
-
-
-
+            request.setRequestToken(token);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -346,15 +371,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             }
 
         });
-        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
-            @Override
-            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
-                if (biometricTokenResponse != null) {
-                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
-                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
-//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
-                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
-                        }
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, biometricTokenResponse -> {
+            if (biometricTokenResponse != null) {
+                if (biometricTokenResponse.getStatus().equalsIgnoreCase("success")) {
+                    if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+//                        Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        token = biometricTokenResponse.getData().getRequestToken();
+                        showProgressDialog();
                         refundProcessAPI(refundTransaction());
                     }
                 }
@@ -369,6 +392,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                     if (refundDataResponce != null) {
                         if (refundDataResponce.getData() != null) {
                             if (refundDataResponce.getData().getReferenceId() != null && !refundDataResponce.getData().getReferenceId().equals("")) {
+                                dismissDialog();
                                 Intent i = new Intent(RefundTransactionActivity.this, RefundTransactionSuccessActivity.class);
                                 i.putExtra(Utils.amount, refundET.getText().toString());
                                 i.putExtra(Utils.gbxTransID, refundDataResponce.getData().getReferenceId());
@@ -440,7 +464,6 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onDialogClicked(String action, Object value) {
                     if (action.equalsIgnoreCase(ACTIONN)) {
                         Intent i = new Intent(RefundTransactionActivity.this, SelectPaymentMethodActivity.class);
-//                        i.putExtra("screen", "refund");
                         startActivity(i);
                     }
                 }
@@ -537,16 +560,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                             isRefundProcessCalled = true;
 
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(RefundTransactionActivity.this)) {
-//                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
-//                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
-//                        }
+                                if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(RefundTransactionActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(RefundTransactionActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                }
                             } else {
-                                launchPinActivity(refundid);
-//                        businessDashboardViewModel.batchNowSlideData((String) value);
+                                launchPinActivity();
                             }
-//                            refundProcessAPI(refundTransaction());
-                            //tv_lable.setText(Utils.Verifying);
-//                            finish();
+
                         }
 
                     }
@@ -581,19 +601,20 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         }
     }
 
-    private void launchPinActivity(String refund) {
-        refundid = refund;
-        Intent refundPin = new Intent(RefundTransactionActivity.this, PINActivity.class);
-        refundPin.putExtra("TYPE", "ENTER");
-        refundPin.putExtra("screen", "Refund");
+    private void launchPinActivity() {
+        Intent refundPin = new Intent(RefundTransactionActivity.this, ValidatePinActivity.class);
+        refundPin.putExtra(Utils.ACTION_TYPE, Utils.refundActionType);
         pinActivityResultLauncher.launch(refundPin);
     }
+
     ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     //Call API Here
                     LogUtils.v(TAG, "RESULT_OK" + result);
+                    token = result.getData().getStringExtra(Utils.TRANSACTION_TOKEN);
+                    showProgressDialog();
                     refundProcessAPI(refundTransaction());
                 }
             });
@@ -883,7 +904,8 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         }
     }
 
-    private void setKeyboardVisibilityListener(final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
+    private void setKeyboardVisibilityListener(
+            final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
         final View parentView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
         parentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 

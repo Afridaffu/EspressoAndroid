@@ -628,8 +628,8 @@ public interface ApiService {
     @POST("api/v2/node/refund/verify")
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
 
-    @POST("api/v2/node/refund/process/{requestToken}")
-    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest request,@Path("requestToken") String requestToken);
+    @POST("api/v2/node/refund/process")
+    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest request);
 
     @POST("api/v2/transactions/merchant-payout/{batchId}")
     Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
