@@ -39,8 +39,6 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
 
-import okhttp3.internal.Util;
-
 public class BusinessAccountFragment extends BaseFragment {
 
     private LinearLayout viewMoreLL;
@@ -116,15 +114,9 @@ public class BusinessAccountFragment extends BaseFragment {
             startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
         });
 
-
         initObservers();
         showUserData();
         return currentView;
-    }
-
-    @Override
-    public void updateData() {
-        showUserData();
     }
 
     private void showUserData() {
