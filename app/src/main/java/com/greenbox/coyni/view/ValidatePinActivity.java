@@ -3,6 +3,7 @@ package com.greenbox.coyni.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -17,9 +18,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.coynipin.ValidateRequest;
 import com.greenbox.coyni.model.coynipin.ValidateResponse;
+import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
 public class ValidatePinActivity extends BaseActivity implements View.OnClickListener {
     private View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
@@ -31,6 +34,8 @@ public class ValidatePinActivity extends BaseActivity implements View.OnClickLis
     private MyApplication objMyApplication;
     private String actionType;
     private CoyniViewModel coyniViewModel;
+    private Long mLastClickTime = 0L;
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,9 +126,18 @@ public class ValidatePinActivity extends BaseActivity implements View.OnClickLis
                 onBackPressed();
                 break;
             case R.id.tvForgot:
-                showForgotPasswordFlow();
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                showForgotPinFlow();
                 break;
         }
+    }
+
+    private void showForgotPinFlow() {
+        showProgressDialog();
+        loginViewModel.emailotpresend(objMyApplication.getStrEmail());
     }
 
     private void passNumberClear(String number_list) {
@@ -209,18 +223,8 @@ public class ValidatePinActivity extends BaseActivity implements View.OnClickLis
             tvForgotPin.setOnClickListener(this);
 
             coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void showForgotPasswordFlow() {
-        try {
-            Intent i = new Intent(ValidatePinActivity.this, ForgotPasswordActivity.class);
-            i.putExtra("email", objMyApplication.getStrEmail());
-            i.putExtra("screen", "ForgotPin");
-            startActivity(i);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -269,6 +273,33 @@ public class ValidatePinActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initObserver() {
+
+        try {
+            loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
+                @Override
+                public void onChanged(EmailResendResponse emailResponse) {
+                    dismissDialog();
+                    if (emailResponse != null) {
+                        if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
+                            Intent i = new Intent(ValidatePinActivity.this, OTPValidation.class);
+                            i.putExtra("OTP_TYPE", "EMAIL");
+                            i.putExtra("EMAIL", Utils.getUserEmail(ValidatePinActivity.this));
+                            i.putExtra("screen", "ForgotPin");
+                            startActivity(i);
+                        } else {
+                            String message = getString(R.string.something_went_wrong);
+                            if (emailResponse.getError().getFieldErrors().size() > 0) {
+                                message = emailResponse.getError().getFieldErrors().get(0);
+                            }
+                            Utils.displayAlert(emailResponse.getError().getErrorDescription(), ValidatePinActivity.this, "", message);
+                        }
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         coyniViewModel.getValidateResponseMutableLiveData().observe(this, new Observer<ValidateResponse>() {
             @Override

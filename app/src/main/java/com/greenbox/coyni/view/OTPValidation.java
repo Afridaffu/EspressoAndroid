@@ -92,7 +92,7 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
     private Vibrator vibrator;
     String OTP_TYPE = "", MOBILE = "", EMAIL = "", strScreen = "", maskedPhone = "",
             oldEmail = "", newEmail = "", isOldEmail = "", oldPhone = "", newPhone = "", oldPhoneMasked = "", newPhoneMasked = "", isOldPhone = "";
-    LinearLayout  layoutFailure, layoutMain, contactUsLL;
+    LinearLayout layoutFailure, layoutMain, contactUsLL;
     RelativeLayout layoutEntry;
     CardView tryAgainCV;
     Dialog dialog;
@@ -254,70 +254,70 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                         return;
                     }
                     mLastClickTime = SystemClock.elapsedRealtime();
-                    if (resendCounter < 4) {
-                        Utils.hideKeypad(OTPValidation.this, view);
-                        if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin") || strScreen.equals("EditEmail"))) || (OTP_TYPE.equals("EMAIL"))) {
-                            dialog = Utils.showProgressDialog(OTPValidation.this);
-                            if (strScreen.equals("EditEmail")) {
-                                if (isOldEmail.equals("true")) {
-                                    UpdateResendRequest updateResendRequest = new UpdateResendRequest();
-                                    updateResendRequest.setEmail(true);
-                                    updateResendRequest.setNew(false);
-                                    updateResendRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
-                                    loginViewModel.updateOtpResend(updateResendRequest);
+//                    if (resendCounter < 4) {
+                    Utils.hideKeypad(OTPValidation.this, view);
+                    if ((strScreen != null && !strScreen.equals("") && (strScreen.equals("ForgotPwd") || strScreen.equals("ForgotPin") || strScreen.equals("EditEmail"))) || (OTP_TYPE.equals("EMAIL"))) {
+                        dialog = Utils.showProgressDialog(OTPValidation.this);
+                        if (strScreen.equals("EditEmail")) {
+                            if (isOldEmail.equals("true")) {
+                                UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                                updateResendRequest.setEmail(true);
+                                updateResendRequest.setNew(false);
+                                updateResendRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
+                                loginViewModel.updateOtpResend(updateResendRequest);
 //                                    loginViewModel.emailotpresend(oldEmail);
-                                } else {
-//                                    loginViewModel.emailotpresend(newEmail);
-                                    UpdateResendRequest updateResendRequest = new UpdateResendRequest();
-                                    updateResendRequest.setEmail(true);
-                                    updateResendRequest.setNew(true);
-                                    updateResendRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
-                                    loginViewModel.updateOtpResend(updateResendRequest);
-                                }
                             } else {
-                                loginViewModel.emailotpresend(EMAIL.trim());
+//                                    loginViewModel.emailotpresend(newEmail);
+                                UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                                updateResendRequest.setEmail(true);
+                                updateResendRequest.setNew(true);
+                                updateResendRequest.setTrackerId(objMyApplication.getUpdateEmailResponse().getData().getTrackerId());
+                                loginViewModel.updateOtpResend(updateResendRequest);
                             }
+                        } else {
+                            loginViewModel.emailotpresend(EMAIL.trim());
+                        }
 
-                        } else if (OTP_TYPE.equals("MOBILE")) {
-                            dialog = Utils.showProgressDialog(this);
-                            SMSResend resend = new SMSResend();
-                            resend.setCountryCode(Utils.getStrCCode());
-                            resend.setPhoneNumber(MOBILE);
-                            loginViewModel.smsotpresend(resend);
-                        } else if (strScreen.equals("EditPhone")) {
-                            dialog = Utils.showProgressDialog(this);
+                    } else if (OTP_TYPE.equals("MOBILE")) {
+                        dialog = Utils.showProgressDialog(this);
+                        SMSResend resend = new SMSResend();
+                        resend.setCountryCode(Utils.getStrCCode());
+                        resend.setPhoneNumber(MOBILE);
+                        loginViewModel.smsotpresend(resend);
+                    } else if (strScreen.equals("EditPhone")) {
+                        dialog = Utils.showProgressDialog(this);
 //                            SMSResend resend = new SMSResend();
 //                            resend.setCountryCode(Utils.getStrCCode());
-                            if (isOldPhone.equals("true")) {
-                                UpdateResendRequest updateResendRequest = new UpdateResendRequest();
-                                updateResendRequest.setEmail(false);
-                                updateResendRequest.setNew(false);
-                                updateResendRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
-                                loginViewModel.updateOtpResend(updateResendRequest);
+                        if (isOldPhone.equals("true")) {
+                            UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                            updateResendRequest.setEmail(false);
+                            updateResendRequest.setNew(false);
+                            updateResendRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
+                            loginViewModel.updateOtpResend(updateResendRequest);
 //                                resend.setPhoneNumber(oldPhone);
-                            } else {
-                                UpdateResendRequest updateResendRequest = new UpdateResendRequest();
-                                updateResendRequest.setEmail(false);
-                                updateResendRequest.setNew(true);
-                                updateResendRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
-                                loginViewModel.updateOtpResend(updateResendRequest);
-//                                resend.setPhoneNumber(newPhone);
-                            }
-//                            loginViewModel.smsotpresend(resend);
-                        }
-                    } else {
-                        Utils.hideKeypad(OTPValidation.this, view);
-                        if (strScreen.equals("SignUp")) {
-                            layoutEntry.setVisibility(View.GONE);
-                            layoutFailure.setVisibility(View.VISIBLE);
-                            isBackEnabled = false;
                         } else {
-                            layoutEntry.setVisibility(View.VISIBLE);
-                            layoutFailure.setVisibility(View.GONE);
-                            displayAlertNew("Looks like we are having an issue with your OTP request, please retry again", OTPValidation.this, "", strScreen);
+                            UpdateResendRequest updateResendRequest = new UpdateResendRequest();
+                            updateResendRequest.setEmail(false);
+                            updateResendRequest.setNew(true);
+                            updateResendRequest.setTrackerId(objMyApplication.getUpdatePhoneResponse().getData().getTrackerId());
+                            loginViewModel.updateOtpResend(updateResendRequest);
+//                                resend.setPhoneNumber(newPhone);
                         }
-
+//                            loginViewModel.smsotpresend(resend);
                     }
+//                    } else {
+//                        Utils.hideKeypad(OTPValidation.this, view);
+//                        if (strScreen.equals("SignUp")) {
+//                            layoutEntry.setVisibility(View.GONE);
+//                            layoutFailure.setVisibility(View.VISIBLE);
+//                            isBackEnabled = false;
+//                        } else {
+//                            layoutEntry.setVisibility(View.VISIBLE);
+//                            layoutFailure.setVisibility(View.GONE);
+//                            displayAlertNew("Looks like we are having an issue with your OTP request, please retry again", OTPValidation.this, "", strScreen);
+//                        }
+//
+//                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -745,10 +745,17 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 else
                                     displayAlertNew(smsResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", strScreen);
                             } else {
-                                if (!strScreen.equals("retEmail"))
-                                    Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
-                                else
-                                    displayAlertNew(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", strScreen);
+                                if (!strScreen.equals("retEmail")) {
+                                    if (smsResponse.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                        showAlert(smsResponse.getError().getErrorDescription());
+                                    } else
+                                        Utils.displayAlert(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", smsResponse.getError().getFieldErrors().get(0));
+                                } else {
+                                    if (smsResponse.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                        showAlert(smsResponse.getError().getErrorDescription());
+                                    } else
+                                        displayAlertNew(smsResponse.getError().getErrorDescription(), OTPValidation.this, "", strScreen);
+                                }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -775,7 +782,11 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
                                 if (emailResponse.getError().getErrorDescription().equals("")) {
                                     Utils.displayAlert(emailResponse.getError().getFieldErrors().get(0), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
                                 } else {
-                                    Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                    if (emailResponse.getError().getErrorDescription().equals(getString(R.string.otp_retry_error))) {
+                                        showAlert(emailResponse.getError().getErrorDescription());
+                                    } else {
+                                        Utils.displayAlert(emailResponse.getError().getErrorDescription(), OTPValidation.this, "", emailResponse.getError().getFieldErrors().get(0));
+                                    }
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -1404,6 +1415,16 @@ public class OTPValidation extends AppCompatActivity implements OnKeyboardVisibi
 
         displayAlertDialog.setCanceledOnTouchOutside(true);
         displayAlertDialog.show();
+    }
+
+    public void showAlert(String message) {
+        if (strScreen.equals("SignUp")) {
+            layoutEntry.setVisibility(View.GONE);
+            layoutFailure.setVisibility(View.VISIBLE);
+            isBackEnabled = false;
+        } else {
+            Utils.displayAlert(message, OTPValidation.this, "", "");
+        }
     }
 
 }

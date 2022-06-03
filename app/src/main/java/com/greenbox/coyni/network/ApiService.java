@@ -331,7 +331,10 @@ public interface ApiService {
     @DELETE("api/v2/banks/me")
     Call<BankDeleteResponseData> deleteBank(@Query("accountId") Integer accountId);
 
-    @POST("api/v2/user/authenticate")
+//    @POST("api/v2/user/authenticate")
+//    Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
+
+    @POST("api/v2/user/verify")
     Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
 
     @Multipart
@@ -630,7 +633,7 @@ public interface ApiService {
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
 
     @POST("api/v2/node/refund/process")
-    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
+    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest request);
 
     @POST("api/v2/transactions/merchant-payout")
     Call<BatchNowResponse> getSlideBatchNow(@Body BatchNowPaymentRequest request);
