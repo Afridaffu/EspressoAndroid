@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:layout_marginHorizontal="@dimen/_21sdp">
 
 
         <LinearLayout
@@ -28,7 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_6sdp"
-                android:src="@drawable/ic_upload" />
+                android:src="@drawable/ic_upload"
+                android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/sscuploadFileTV"
