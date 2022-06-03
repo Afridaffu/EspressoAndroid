@@ -1358,13 +1358,14 @@ public class BusinessTransactionListActivity extends BaseActivity implements Tex
                         noMoreTransactionTV.setVisibility(View.GONE);
                         dialog.dismiss();
                     }
-                } else {
+                }
+                else {
                     transactionsAPI(transactionListRequest);
                     objMyApplication.initializeTransactionSearch();
                     objMyApplication.setTransactionListSearch(transactionListRequest);
                     noMoreTransactionTV.setVisibility(View.GONE);
                     dialog.dismiss();
-
+//
                 }
 
             }

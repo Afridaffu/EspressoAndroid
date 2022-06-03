@@ -2,17 +2,11 @@ package com.greenbox.coyni.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -30,11 +23,9 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.dialogs.BatchNowDialog;
-import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
 import com.greenbox.coyni.dialogs.DateRangePickerDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
@@ -47,17 +38,14 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListData;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListItems;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
-import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.RangeDates;
 import com.greenbox.coyni.model.business_activity.BusinessActivityData;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
-import com.greenbox.coyni.model.business_id_verification.CancelApplicationResponse;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityRequest;
 import com.greenbox.coyni.model.merchant_activity.MerchantActivityResp;
-import com.greenbox.coyni.model.profile.Profile;
 import com.greenbox.coyni.model.reserverule.RollingRuleResponse;
 import com.greenbox.coyni.utils.CustomTypefaceSpan;
 import com.greenbox.coyni.utils.DatabaseHandler;
@@ -69,7 +57,6 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.PINActivity;
 import com.greenbox.coyni.view.business.ApplicationCancelledActivity;
-import com.greenbox.coyni.view.business.BusinessAdditionalActionRequiredActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
@@ -78,7 +65,6 @@ import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
-import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -95,28 +81,22 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView tv_PayoutNoHistory, batchNoTransaction, nextReleaseNATV,
             lastReleaseNATV, releaseNoTransaction;
     private MyApplication myApplication;
+    private CardView cvReserveView;
     private ImageView mIvUserIcon;
-    private CardView mIvUserIconCV, cvReserveView;
-    private TextView mTvUserName, mTvUserIconText, mTvReserveList, mPayoutHistory, payoutTimeTV,
+    private TextView mTvUserName, mTvUserIconText;
+    private TextView mTvReserveList, mPayoutHistory,
             nextPayoutAmountTV, lastPayoutAmountTV, nxtPayoutDatenTimeTV;
-    private LinearLayout mLlIdentityVerificationReview, mLlBusinessDashboardView,
-            mLlIdentityAdditionDataRequired, mLlIdentityVerificationFailedView,
-            mLlBuyTokensFirstTimeView, mLlProcessingVolume, mLlGetStartedView,
-            payoutsXmlLL, payoutsLayoutLL, monthlyVolumeViewLl;
-    private TextView mTvIdentityReviewCancelMessage, mTvProcessingVolume, mTvContactUs;
+    private LinearLayout mLlBuyTokensFirstTimeView, mLlProcessingVolume, monthlyVolumeViewLl;
+    private TextView mTvProcessingVolume;
     private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    private CardView mCvAdditionalDataContinue;
     private BusinessDashboardViewModel businessDashboardViewModel;
     private RelativeLayout mUserIconRelativeLayout, notificationsRL;
-    private TextView mTvOfficiallyVerified, mTvMerchantTransactions, batchPayoutDateTV, payoutAmountTV, cynTV;
+    private TextView mTvOfficiallyVerified, mTvMerchantTransactions;
     private TextView lastPayoutDate, mTvReserveBalance, merchantBalanceTV, mTvMonthlyVolume, mTvHighTickets, reserveRuleTV, rulePeriodTV;
-    private CardView mCvBatchNow, mCvGetStarted;
+    private CardView mCvBatchNow;
     private Long mLastClickTimeQA = 0L;
-    private DashboardViewModel mDashboardViewModel;
-    private RecyclerView recyclerViewPayouts;
-    private TextView nextReleaseTV, nextReleaseAmountTV, nextReleaseDateTV, lastReleaseTV,
-            lastReleaseAmountTV, lastReleaseDateTV, reserveListDateTV, reserveListAmountTV, sentToDescriptionTV, disable_reserve_list;
-    private LinearLayout reserveReleaseListLL, reserveDetailsLL;
+    private TextView nextReleaseAmountTV, nextReleaseDateTV,
+            lastReleaseAmountTV, lastReleaseDateTV, disable_reserve_list;
     private SeekBarWithFloatingText mSbTodayVolume;
     private Long mLastClickTime = 0L;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
@@ -127,7 +107,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     private TextView mGrossAmount, mTransactions, mRefunds, mProcessingFees, mMISCFees, mNetAmount,
             saleOrdersText, mAverageTicket, mHighestTicket, mDateHighestTicket;
     private LinearLayout mTicketsLayout;
-    private TextView mIdVeriStatus;
     private UserData userData;
     private String reserveRules = "";
 
@@ -150,8 +129,6 @@ public class BusinessDashboardFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCurrentView = inflater.inflate(R.layout.fragment_business_dashboard, container, false);
         initFields();
-
-        hideAllStatusViews();
         return mCurrentView;
     }
 
@@ -161,15 +138,13 @@ public class BusinessDashboardFragment extends BaseFragment {
         LogUtils.v(TAG, "onViewCreated");
         initViewModels();
         initObservers();
+        setBusinessData();
     }
 
     private void initViewModels() {
-        mDashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         businessIdentityVerificationViewModel = new ViewModelProvider(this).get(BusinessIdentityVerificationViewModel.class);
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
         businessDashboardViewModel.getRollingRuleDetails();
-
-
     }
 
     private Double getMerchantBalance() {
@@ -183,75 +158,36 @@ public class BusinessDashboardFragment extends BaseFragment {
         return amt;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        hideAllStatusViews();
-        ((BusinessDashboardActivity) getActivity()).showProgressDialog();
-        mDashboardViewModel.meProfile();
-    }
-
-    @Override
-    public void updateData() {
-
-    }
-
     private void initFields() {
         mUserIconRelativeLayout = mCurrentView.findViewById(R.id.rl_user_icon_layout);
         myApplication = (MyApplication) getActivity().getApplicationContext();
         userData = myApplication.getCurrentUserData();
-        mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
-        mIvUserIconCV = mCurrentView.findViewById(R.id.iv_user_icon_CV);
-        mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
-        mTvUserIconText = mCurrentView.findViewById(R.id.tv_user_icon_text);
-        mCvAdditionalDataContinue = mCurrentView.findViewById(R.id.cv_additional_data_continue);
-        mLlBusinessDashboardView = mCurrentView.findViewById(R.id.ll_business_dashboard_view);
-        mLlIdentityAdditionDataRequired = mCurrentView.findViewById(R.id.ll_identity_additional_data);
-        mLlIdentityVerificationReview = mCurrentView.findViewById(R.id.ll_identity_verification_review);
-        mLlIdentityVerificationFailedView = mCurrentView.findViewById(R.id.ll_identity_verification_failed);
         mLlBuyTokensFirstTimeView = mCurrentView.findViewById(R.id.ll_buy_tokens_first_time);
-        mLlGetStartedView = mCurrentView.findViewById(R.id.ll_get_started_view);
-        mTvIdentityReviewCancelMessage = mCurrentView.findViewById(R.id.tv_identity_review_cancel_text);
         notificationsRL = mCurrentView.findViewById(R.id.notificationsRL);
         mTvOfficiallyVerified = mCurrentView.findViewById(R.id.tv_officially_verified);
         mLlProcessingVolume = mCurrentView.findViewById(R.id.ll_processing_volume);
         mTvProcessingVolume = mCurrentView.findViewById(R.id.tv_processing_volume);
         mTvMerchantTransactions = mCurrentView.findViewById(R.id.tv_merchant_transactions);
         mCvBatchNow = mCurrentView.findViewById(R.id.cv_batch_now);
-        mCvGetStarted = mCurrentView.findViewById(R.id.cv_app_get_started);
-        mTvContactUs = mCurrentView.findViewById(R.id.contactUSTV);
         mTvReserveList = mCurrentView.findViewById(R.id.tv_reserve_list);
+        mIvUserIcon = mCurrentView.findViewById(R.id.iv_user_icon);
+        mTvUserName = mCurrentView.findViewById(R.id.tv_user_name);
+        mTvUserIconText = mCurrentView.findViewById(R.id.tv_user_icon_text);
         mPayoutHistory = mCurrentView.findViewById(R.id.tv_PayoutFullHistory);
         merchantBalanceTV = mCurrentView.findViewById(R.id.merchant_balance_tv);
         mTvReserveBalance = mCurrentView.findViewById(R.id.tv_reserve_balance);
         mSbTodayVolume = mCurrentView.findViewById(R.id.sb_today_volume);
-        payoutTimeTV = mCurrentView.findViewById(R.id.payoutTimeTV);
         nextPayoutAmountTV = mCurrentView.findViewById(R.id.nextPayoutAmountTV);
         lastPayoutAmountTV = mCurrentView.findViewById(R.id.lastPayoutAmountTV);
         nxtPayoutDatenTimeTV = mCurrentView.findViewById(R.id.nxtPayoutDatenTimeTV);
-        recyclerViewPayouts = mCurrentView.findViewById(R.id.payoutRecyclerView);
-        payoutsXmlLL = mCurrentView.findViewById((R.id.payoutsXmlLL));
-        payoutsLayoutLL = mCurrentView.findViewById((R.id.payoutsLayoutLL));
-        batchPayoutDateTV = mCurrentView.findViewById(R.id.batchPayoutDateTV);
-        payoutAmountTV = mCurrentView.findViewById(R.id.payoutAmountTV);
-        cynTV = mCurrentView.findViewById(R.id.cynTV);
         lastPayoutDate = mCurrentView.findViewById(R.id.lastPayoutDate);
-        sentToDescriptionTV = mCurrentView.findViewById(R.id.sentToDescriptionTV);
         cvReserveView = mCurrentView.findViewById(R.id.cv_reserve_view);
         mTvMonthlyVolume = mCurrentView.findViewById(R.id.tv_monthly_volume);
         mTvHighTickets = mCurrentView.findViewById(R.id.tv_high_tickets);
-        nextReleaseTV = mCurrentView.findViewById(R.id.nextReleaseTV);
         nextReleaseAmountTV = mCurrentView.findViewById(R.id.nextReleaseAmountTV);
         nextReleaseDateTV = mCurrentView.findViewById(R.id.nextReleaseDateTV);
-        lastReleaseTV = mCurrentView.findViewById(R.id.lastReleaseTV);
         lastReleaseAmountTV = mCurrentView.findViewById(R.id.lastReleaseAmountTV);
         lastReleaseDateTV = mCurrentView.findViewById(R.id.lastReleaseDateTV);
-        reserveListDateTV = mCurrentView.findViewById(R.id.reserveListDateTV);
-        reserveListAmountTV = mCurrentView.findViewById(R.id.reserveListAmountTV);
-        reserveListDateTV = mCurrentView.findViewById(R.id.reserveListDateTV);
-        reserveReleaseListLL = mCurrentView.findViewById(R.id.reserveReleaseListLL);
-        reserveDetailsLL = mCurrentView.findViewById(R.id.reserveDetailsLL);
-        mIdVeriStatus = mCurrentView.findViewById(R.id.idVeriStatus);
         monthlyVolumeViewLl = mCurrentView.findViewById(R.id.tv_monthly_volume_view);
         dbHandler = DatabaseHandler.getInstance(getActivity());
 
@@ -281,7 +217,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         reserveRuleTV = mCurrentView.findViewById(R.id.reserveRuleTV);
         rulePeriodTV = mCurrentView.findViewById(R.id.rulePeriodTV);
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
-
 
         if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
             ((BusinessDashboardActivity) getActivity()).showProgressDialog("connecting...");
@@ -319,14 +254,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
         });
 
-        mCvAdditionalDataContinue.setOnClickListener(view -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(getActivity(), BusinessAdditionalActionRequiredActivity.class));
-        });
-
         mTvMerchantTransactions.setOnClickListener(v -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
                 return;
@@ -344,55 +271,9 @@ public class BusinessDashboardFragment extends BaseFragment {
             initiateBatchNow();
         });
 
-        mCvGetStarted.setOnClickListener(v -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startTracker();
-        });
-
     }
 
     private void initObservers() {
-        businessDashboardViewModel.getCancelApplicationResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<CancelApplicationResponse>() {
-            @Override
-            public void onChanged(CancelApplicationResponse cancelApplicationResponse) {
-                ((BusinessDashboardActivity) getActivity()).dismissDialog();
-                if (cancelApplicationResponse != null) {
-                    if (cancelApplicationResponse.getStatus() != null
-                            && cancelApplicationResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        launchApplicationCancelledScreen();
-                    } else {
-                        String msg = getString(R.string.something_went_wrong);
-                        if (cancelApplicationResponse.getError() != null
-                                && cancelApplicationResponse.getError().getErrorDescription() != null
-                                && !cancelApplicationResponse.getError().getErrorDescription().trim().equals("")) {
-                            msg = cancelApplicationResponse.getError().getErrorDescription();
-                        }
-                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    String msg = getString(R.string.something_went_wrong);
-                    Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        mDashboardViewModel.getProfileMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Profile>() {
-            @Override
-            public void onChanged(Profile profile) {
-                ((BusinessDashboardActivity) getActivity()).dismissDialog();
-                try {
-                    if (profile != null) {
-                        myApplication.setMyProfile(profile);
-                        showUserData();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         businessDashboardViewModel.getRollingListResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BatchPayoutListResponse>() {
             @Override
@@ -696,7 +577,7 @@ public class BusinessDashboardFragment extends BaseFragment {
             if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                 showGetStartedView();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
-                showIdentityVerificationReview();
+//                showIdentityVerificationReview();
             } else if (accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTION_REQUIRED.getStatus())
                     || accountStatus.equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ADDITIONAL_INFO_REQUIRED.getStatus())) {
                 showAdditionalActionView();
@@ -714,62 +595,61 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void showIdentityVerificationFailed(String accountStatus) {
-        mLlIdentityVerificationReview.setVisibility(View.GONE);
-        mLlBusinessDashboardView.setVisibility(View.GONE);
-        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
-        mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
-        mLlGetStartedView.setVisibility(View.GONE);
-
-        if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-            mIdVeriStatus.setText(R.string.declined_text);
-        } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
-            mIdVeriStatus.setText(R.string.canceled_text);
-        }
-
-        mTvContactUs.setOnClickListener(v -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(Utils.mondayURL));
-            startActivity(i);
-        });
+//        mLlIdentityVerificationReview.setVisibility(View.GONE);
+//        mLlBusinessDashboardView.setVisibility(View.GONE);
+//        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
+//        mLlIdentityVerificationFailedView.setVisibility(View.VISIBLE);
+//        mLlGetStartedView.setVisibility(View.GONE);
+//
+//        if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
+//            mIdVeriStatus.setText(R.string.declined_text);
+//        } else if (accountStatus.equals(Utils.BUSINESS_ACCOUNT_STATUS.REGISTRATION_CANCELED.getStatus())) {
+//            mIdVeriStatus.setText(R.string.canceled_text);
+//        }
+//
+//        mTvContactUs.setOnClickListener(v -> {
+//            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+//                return;
+//            }
+//            mLastClickTimeQA = SystemClock.elapsedRealtime();
+//            Intent i = new Intent(Intent.ACTION_VIEW);
+//            i.setData(Uri.parse(Utils.mondayURL));
+//            startActivity(i);
+//        });
     }
 
     private void hideAllStatusViews() {
-        mLlIdentityVerificationReview.setVisibility(View.GONE);
-        mLlBusinessDashboardView.setVisibility(View.GONE);
-        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
-        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
-        mLlGetStartedView.setVisibility(View.GONE);
+//        mLlIdentityVerificationReview.setVisibility(View.GONE);
+//        mLlBusinessDashboardView.setVisibility(View.GONE);
+//        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
+//        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+//        mLlGetStartedView.setVisibility(View.GONE);
     }
 
     private void showBusinessDashboardView() {
-        mLlIdentityVerificationReview.setVisibility(View.GONE);
-        mLlBusinessDashboardView.setVisibility(View.VISIBLE);
-        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
-        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
-        mLlGetStartedView.setVisibility(View.GONE);
+//        mLlIdentityVerificationReview.setVisibility(View.GONE);
+//        mLlBusinessDashboardView.setVisibility(View.VISIBLE);
+//        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
+//        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+//        mLlGetStartedView.setVisibility(View.GONE);
         setBusinessData();
     }
 
     private void showAdditionalActionView() {
-        mLlIdentityVerificationReview.setVisibility(View.GONE);
-        mLlBusinessDashboardView.setVisibility(View.GONE);
-        mLlIdentityAdditionDataRequired.setVisibility(View.VISIBLE);
-        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
-        mLlGetStartedView.setVisibility(View.GONE);
+//        mLlIdentityVerificationReview.setVisibility(View.GONE);
+//        mLlBusinessDashboardView.setVisibility(View.GONE);
+//        mLlIdentityAdditionDataRequired.setVisibility(View.VISIBLE);
+//        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+//        mLlGetStartedView.setVisibility(View.GONE);
     }
 
     private void showGetStartedView() {
-        mLlIdentityVerificationReview.setVisibility(View.GONE);
-        mLlBusinessDashboardView.setVisibility(View.GONE);
-        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
-        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
-        mLlGetStartedView.setVisibility(View.VISIBLE);
+//        mLlIdentityVerificationReview.setVisibility(View.GONE);
+//        mLlBusinessDashboardView.setVisibility(View.GONE);
+//        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
+//        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
+//        mLlGetStartedView.setVisibility(View.VISIBLE);
     }
-
     private void setMonthlyVolumeData() {
 //        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
@@ -783,7 +663,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         }
     }
 
-    private void getWalletData(){
+    private void getWalletData() {
         WalletRequest walletRequest = new WalletRequest();
         walletRequest.setWalletType(Utils.MERCHANT);
 //        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
@@ -797,6 +677,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setBusinessData() {
+        ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
         getWalletData();
         cvReserveView.setVisibility(myApplication.isReserveEnabled() ? View.VISIBLE : View.GONE);
         batchReq();
@@ -820,39 +701,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), BusinessBatchPayoutSearchActivity.class));
             }
         });
-    }
-
-
-    private void showIdentityVerificationReview() {
-        mLlIdentityVerificationReview.setVisibility(View.VISIBLE);
-        mLlBusinessDashboardView.setVisibility(View.GONE);
-        mLlIdentityAdditionDataRequired.setVisibility(View.GONE);
-        mLlIdentityVerificationFailedView.setVisibility(View.GONE);
-        mLlGetStartedView.setVisibility(View.GONE);
-        String message = getString(R.string.identity_review_cancel_message);
-        message += " ";
-        SpannableString spannableString = new SpannableString(message);
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                    return;
-                }
-                mLastClickTimeQA = SystemClock.elapsedRealtime();
-                showCancelApplicationDialog();
-            }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(true);
-            }
-        };
-        spannableString.setSpan(clickableSpan, message.length() - 11, message.length() - 1,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mTvIdentityReviewCancelMessage.setText(spannableString);
-        mTvIdentityReviewCancelMessage.setMovementMethod(LinkMovementMethod.getInstance());
-        mTvIdentityReviewCancelMessage.setHighlightColor(Color.TRANSPARENT);
     }
 
     private void showBatchNowDialog(BatchPayoutListItems batchNow) {
@@ -1019,8 +867,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                             if (rangeDates != null) {
                                 String fromDate = rangeDates.getUpdatedFromDate() + midTime;
                                 String toDate = rangeDates.getUpdatedToDate().trim() + midTime;
-                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date,"UTC") + startTime;
-                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date,"UTC") + endTime;
+                                strFromDate = Utils.convertZoneDateTime(fromDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + startTime;
+                                strToDate = Utils.convertZoneDateTime(toDate, "MM-dd-yyyy HH:mm:ss", date, "UTC") + endTime;
 
                                 businessActivityAPICall(strFromDate, strToDate);
 //                                Toast.makeText(getActivity(), strFromDate + strToDate, Toast.LENGTH_LONG).show();
@@ -1039,7 +887,6 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     private void commissionActivityCall(String strFromDate, String strToDate) {
         MerchantActivityRequest request = new MerchantActivityRequest();
-//        request.setDuration(value.toUpperCase());
         request.setStartDate(strFromDate);
         request.setEndDate(strToDate);
 
@@ -1047,25 +894,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             request.setUserId("" + myApplication.getMyProfile().getData().getId());
         businessDashboardViewModel.merchantActivity(request);
 
-    }
-
-    private void showCancelApplicationDialog() {
-        DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.cancel_application),
-                getString(R.string.cancel_application_message), getString(R.string.yes),
-                getString(R.string.no));
-        CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
-                (getActivity(), dialogAttributes);
-
-        customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
-            @Override
-            public void onDialogClicked(String action, Object value) {
-                if (action.equalsIgnoreCase(getString(R.string.yes))) {
-                    ((BusinessDashboardActivity) getActivity()).showProgressDialog();
-                    businessDashboardViewModel.cancelMerchantApplication();
-                }
-            }
-        });
-        customConfirmationDialog.show();
     }
 
     private void initiateBatchNow() {
@@ -1339,7 +1167,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);
         return dateFormat.format(Calendar.getInstance().getTime());
     }
-
 
     private String getPreviousMonthFirstDate() {
         DateFormat dateFormat = new SimpleDateFormat(dateAndTime);

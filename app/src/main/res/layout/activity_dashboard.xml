@@ -955,10 +955,6 @@
         android:layout_above="@+id/layoutMenu"
         android:layout_below="@+id/cvHeader"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/_11sdp"
-        android:layout_marginTop="@dimen/_14sdp"
-        android:layout_marginRight="@dimen/_11sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -968,6 +964,7 @@
             android:layout_margin="@dimen/_10sdp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/_10sdp">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -1000,9 +997,8 @@
                     android:id="@+id/failedcontent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_21sdp"
+                    android:layout_marginHorizontal="@dimen/_18sdp"
                     android:layout_marginTop="@dimen/_18sdp"
-                    android:layout_marginEnd="@dimen/_21sdp"
                     android:fontFamily="@font/opensans_regular"
                     android:text="@string/iv_verification_failed_content"
                     android:textAlignment="center"

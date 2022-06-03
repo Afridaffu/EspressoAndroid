@@ -135,8 +135,10 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                             batchPayoutListData.setPageSize(String.valueOf(Utils.pageSize));
                             dismissDialog();
                             noMorePayoutTransactions.setVisibility(View.GONE);
+
                         } else {
                             noMorePayoutTransactions.setVisibility(View.VISIBLE);
+                            noPayoutTransactions.setVisibility(View.GONE);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -232,7 +234,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
                                         showBatchPayoutDetails(batchPayoutListItem);
 
                                     }
-
                                 });
                                 if (payoutList.size() > 0) {
                                     recyclerViewPayouts.setAdapter(batchPayoutListAdapter);
@@ -277,7 +278,6 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
             payoutList.clear();
             payoutAPI(charSequence.toString());
             dismissDialog();
-            cynTV.setVisibility(View.VISIBLE);
             noPayoutTransactions.setVisibility(View.GONE);
         } else if (charSequence.length() > 0 && charSequence.length() < 10) {
             noPayoutTransactions.setVisibility(View.VISIBLE);
@@ -286,6 +286,7 @@ public class BusinessBatchPayoutSearchActivity extends BaseActivity implements T
         } else if (charSequence.toString().trim().length() == 0) {
             payoutList.clear();
             noPayoutTransactions.setVisibility(View.GONE);
+            noMorePayoutTransactions.setVisibility(View.GONE);
             recyclerViewPayouts.setVisibility(View.VISIBLE);
 //            businessDashboardViewModel.getPayoutListData(li);
             getBatchListData();
