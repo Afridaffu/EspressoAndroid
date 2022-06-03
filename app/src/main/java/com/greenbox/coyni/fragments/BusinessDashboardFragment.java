@@ -556,7 +556,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setMonthlyVolumeData() {
-//        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getCompanyName() != null) {
             mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, myApplication.getMyProfile().getData().getCompanyName()));
