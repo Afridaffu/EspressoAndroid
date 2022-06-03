@@ -335,6 +335,8 @@ public class Utils {
     public static final String sendActionType = "SEND";
     public static final String pinActionType = "COYNIPIN";
     public static final String paidActionType = "PAIDORDER";
+    public static final String refundActionType = "REFUND";
+    public static final String batchnowActionType = "MERCHANT_PAYOUT";
 
     public static final String MERCHANT_TRANSACTION_PARTIAL_REFUND = "Partial Refund";
     public static final String MERCHANT_TRANSACTION_COMPLETED = "Completed";

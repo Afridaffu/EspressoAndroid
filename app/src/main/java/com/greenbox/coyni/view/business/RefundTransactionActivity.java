@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.lifecycle.Observer;
@@ -40,34 +43,43 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.RefundInsufficeintTokenDialog;
 import com.greenbox.coyni.dialogs.RefundInsufficientMerchnatDialog;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.transaction.RefundDataResponce;
 import com.greenbox.coyni.model.transaction.RefundReferenceRequest;
 import com.greenbox.coyni.model.transaction.TransactionData;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
+import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.keyboards.CustomKeyboard;
 import com.greenbox.coyni.view.BaseActivity;
+import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.PayRequestActivity;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
-public class RefundTransactionActivity extends BaseActivity implements TextWatcher,OnKeyboardVisibilityListener {
+public class RefundTransactionActivity extends BaseActivity implements TextWatcher, OnKeyboardVisibilityListener {
     MyApplication objMyApplication;
     private ImageView refundBackIV;
     private TextView etremarksTV, fullamounttv, halfamounttv;
     public EditText refundET, addNoteET;
     private TextView refundcurrencyTV, tvcynTV;
     private LinearLayout remarksll;
+    private DatabaseHandler dbHandler;
     private CardView fullamount, halfamount;
     private CustomKeyboard cKey;
     private Long mLastClickTime = 0L, bankId, cardId;
     private float fontSize, dollarFont;
+    private  String refundid;
+    private String strToken = "";
     private DashboardViewModel dashboardViewModel;
     private Dialog pDialog, cvvDialog, refundDialog, insuffDialog, insuffTokenDialog;
     private Double maxValue = 0.0, pfee = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
     private Double usdValue = 0.0, cynValue = 0.0, total = 0.0, cynValidation = 0.0, avaBal = 0.0;
     private boolean isamount = false, isremarks = false, isrefundClick = false;
-
+    Boolean isFaceLock = false, isTouchId = false;
     public boolean isfullamount = false, ishalfamount = false, isrefundClickable = false;
     public static RefundTransactionActivity refundTransactionActivity;
     private TransactionData transactionData;
@@ -78,6 +90,8 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     private int enteramout, textamount;
     private static final String ACTION = "RefundPreviewDialog";
     private static final String ACTIONN = "insuffintmerchantbalancedialog ";
+    private CoyniViewModel coyniViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,8 +265,8 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
         dashboardViewModel.refundDetails(refundrefrequest);
     }
 
-    private void refundProcessAPI(RefundReferenceRequest refundrefrequest) {
-        dashboardViewModel.refundprocessDetails(refundrefrequest);
+    private void refundProcessAPI(RefundReferenceRequest request) {
+        dashboardViewModel.refundprocessDetails(request, objMyApplication.getStrToken());
     }
 
 
@@ -265,7 +279,6 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             refundrefrequest.setAmount(Double.parseDouble(refundamount));
             refundrefrequest.setRemarks(refundreason);
             refundrefrequest.setGbxTransactionId(gbxid);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -280,6 +293,9 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             request.setRemarks(refundreason);
             request.setGbxTransactionId(gbxid);
             request.setWalletType(wallettype);
+
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -329,6 +345,20 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 }
             }
 
+        });
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(this, new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            objMyApplication.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                        }
+                        refundProcessAPI(refundTransaction());
+                    }
+                }
+            }
         });
 
         dashboardViewModel.getRefundProcessMutableLiveData().observe(this, new Observer<RefundDataResponce>() {
@@ -505,7 +535,16 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                             refundDialog.dismiss();
                             tv_lable.setText(Utils.Verifying);
                             isRefundProcessCalled = true;
-                            refundProcessAPI(refundTransaction());
+
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(RefundTransactionActivity.this)) {
+//                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
+//                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
+//                        }
+                            } else {
+                                launchPinActivity(refundid);
+//                        businessDashboardViewModel.batchNowSlideData((String) value);
+                            }
+//                            refundProcessAPI(refundTransaction());
                             //tv_lable.setText(Utils.Verifying);
 //                            finish();
                         }
@@ -541,6 +580,23 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             ex.printStackTrace();
         }
     }
+
+    private void launchPinActivity(String refund) {
+        refundid = refund;
+        Intent refundPin = new Intent(RefundTransactionActivity.this, PINActivity.class);
+        refundPin.putExtra("TYPE", "ENTER");
+        refundPin.putExtra("screen", "Refund");
+        pinActivityResultLauncher.launch(refundPin);
+    }
+    ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    //Call API Here
+                    LogUtils.v(TAG, "RESULT_OK" + result);
+                    refundProcessAPI(refundTransaction());
+                }
+            });
 
 
     private void changeTextSize(String editable) {
@@ -736,7 +792,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                 public void onClick(View view) {
                     try {
                         etremarksTV.setText(addNoteET.getText().toString().trim());
-                        if(Utils.isKeyboardVisible)
+                        if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(RefundTransactionActivity.this);
                         cvvDialog.dismiss();
                         enableRefund();
@@ -801,8 +857,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             cvvDialog.show();
             addNoteET.requestFocus();
             Utils.shwForcedKeypad(RefundTransactionActivity.this);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         cvvDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -857,5 +912,43 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     @Override
     public void onVisibilityChanged(boolean visible) {
         Utils.isKeyboardVisible = visible;
+    }
+
+    public void setToken() {
+        strToken = dbHandler.getPermanentToken();
+    }
+
+    private void setFaceLock() {
+        try {
+            isFaceLock = false;
+            String value = dbHandler.getFacePinLock();
+            if (value != null && value.equals("true")) {
+                isFaceLock = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isFaceLock = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void setTouchId() {
+        try {
+            isTouchId = false;
+            String value = dbHandler.getThumbPinLock();
+            if (value != null && value.equals("true")) {
+                isTouchId = true;
+                objMyApplication.setLocalBiometric(true);
+            } else {
+                isTouchId = false;
+                objMyApplication.setLocalBiometric(false);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

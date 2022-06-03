@@ -873,10 +873,10 @@ public class DashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void refundprocessDetails(RefundReferenceRequest refundrefrequest) {
+    public void refundprocessDetails(RefundReferenceRequest request,String token) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<RefundDataResponce> call = apiService.getRefundProcess(refundrefrequest);
+            Call<RefundDataResponce> call = apiService.getRefundProcess(request,token);
             call.enqueue(new Callback<RefundDataResponce>() {
                 @Override
                 public void onResponse(Call<RefundDataResponce> call, Response<RefundDataResponce> r) {
