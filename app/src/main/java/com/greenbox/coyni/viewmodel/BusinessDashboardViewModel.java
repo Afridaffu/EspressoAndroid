@@ -11,6 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.BatchNow.BatchNowPaymentRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
@@ -41,6 +43,7 @@ import com.greenbox.coyni.model.signet.SignetResponse;
 import com.greenbox.coyni.network.ApiService;
 import com.greenbox.coyni.network.AuthApiClient;
 import com.greenbox.coyni.utils.LogUtils;
+import com.greenbox.coyni.utils.Utils;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -664,9 +667,9 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
         }
     }
 
-    public void batchNowSlideData(String batchId) {
+    public void batchNowSlideData(BatchNowPaymentRequest request) {
         ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-        Call<BatchNowResponse> call = apiService.getSlideBatchNow(batchId);
+        Call<BatchNowResponse> call = apiService.getSlideBatchNow(request);
         call.enqueue(new Callback<BatchNowResponse>() {
             @Override
             public void onResponse(Call<BatchNowResponse> call, Response<BatchNowResponse> response) {
@@ -674,9 +677,8 @@ public class BusinessDashboardViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     BatchNowResponse obj = response.body();
                     batchNowSlideResponseMutableLiveData.setValue(obj);
-
+                    //Utils.showCustomToast(getApplication(), "Successfully_Closed_Batch ", R.drawable.ic_custom_tick, "Batch");
                     Log.e("Success", new Gson().toJson(obj));
-
                 } else {
                     Gson gson = new Gson();
                     Type type = new TypeToken<BatchNowResponse>() {
