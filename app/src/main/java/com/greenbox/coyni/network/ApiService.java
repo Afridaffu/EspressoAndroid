@@ -58,6 +58,8 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
 import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
+import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
+import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -662,5 +664,8 @@ public interface ApiService {
 
     @POST("api/v2/logs/transaction")
     Call<ActivityLogResp> activityLog(@Query("txnId") String txnId, @Query("userType") String userType);
+
+    @POST("api/v2/checkout/order-info")
+    Call<OrderInfoResponse> getOrderInfoDetails(@Body OrderInfoRequest request);
 }
 

@@ -9,27 +9,49 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.dialogs.CheckOutDialog;
+import com.greenbox.coyni.dialogs.CustomConfirmationDialog;
+import com.greenbox.coyni.dialogs.OnDialogClickListener;
+import com.greenbox.coyni.model.DialogAttributes;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
+import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
+import com.greenbox.coyni.model.transactionlimit.TransactionLimitResponse;
 import com.greenbox.coyni.utils.CustomeTextView.AnimatedGradientTextView;
 import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.PayToMerchantActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
+import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
+import com.greenbox.coyni.viewmodel.CheckOutViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class CheckOutPaymentActivity extends AppCompatActivity {
 
     private BusinessDashboardViewModel businessDashboardViewModel;
+    private BuyTokenViewModel buyTokenViewModel;
+    private CheckOutViewModel checkOutViewModel;
     private MyApplication myApplication;
-    private TextView mTokenBalance;
+    private TextView mTokenBalance,mUserName,errorText;
+    private LinearLayout lyBalance;
+    private EditText mAmount;
     private double availableBalance;
     private MotionLayout slideToConfirm;
     private CoyniViewModel coyniViewModel;
@@ -38,8 +60,14 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private CardView im_lock_;
     private Dialog pDialog;
     private EditText payET;
-    private boolean isAuthenticationCalled = false,isFaceLock = false,isTouchId = false;
+    private boolean isAuthenticationCalled = false, isFaceLock = false, isTouchId = false;
     private static final int CODE_AUTHENTICATION_VERIFICATION = 251;
+    private String requestToken;
+    private ImageView merchantImage;
+    private LinearLayout closeButton;
+    private String actionTypeYes = "YES";
+    private String actionTypeNo = "No";
+    private double transactionLimit = 0.0,minimumLimit = 0.0,userAmount = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +82,47 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
     private void initFields() {
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
+        checkOutViewModel = new ViewModelProvider(this).get(CheckOutViewModel.class);
+        buyTokenViewModel = new ViewModelProvider(this).get(BuyTokenViewModel.class);
         myApplication = (MyApplication) getApplicationContext();
         dbHandler = DatabaseHandler.getInstance(CheckOutPaymentActivity.this);
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
         mTokenBalance = findViewById(R.id.available_token_balance_tv);
         payET = findViewById(R.id.merchantAmountET);
+        lyBalance = findViewById(R.id.available_balance_tv);
+        mUserName = findViewById(R.id.checkout_user_name_tv);
+        mAmount = findViewById(R.id.checkout_amount);
+        errorText = findViewById(R.id.error_tv);
+        merchantImage = findViewById(R.id.merchant_profile_iv);
         slideToConfirm = findViewById(R.id.slide_to_confirm_ml);
+        closeButton = findViewById(R.id.payToMerchantClose);
         tv_lable = findViewById(R.id.tv_lable);
         im_lock_ = findViewById(R.id.im_lock_);
+        if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+            if (myApplication.getCheckOutModel().getEncryptedToken() != null && !myApplication.getCheckOutModel().getEncryptedToken().equals("")) {
+                requestToken = myApplication.getCheckOutModel().getEncryptedToken();
+                orderInfoAPICall(requestToken);
+            }
+        }
         setFaceLock();
         setTouchId();
     }
 
+    private void orderInfoAPICall(String requestToken) {
+        OrderInfoRequest request = new OrderInfoRequest();
+        request.setEncryptedToken(requestToken);
+        checkOutViewModel.getOrderInfo(request);
+    }
+
 
     private void listeners() {
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         slideToConfirm.setTransitionListener(new MotionLayout.TransitionListener() {
             @Override
@@ -125,6 +180,23 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             }
         });
 
+        mAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
     }
 
     private void initObservers() {
@@ -141,6 +213,103 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                 }
             }
         });
+        checkOutViewModel.getOrderInfoResponseMutableLiveData().observe(this, new Observer<OrderInfoResponse>() {
+            @Override
+            public void onChanged(OrderInfoResponse orderInfoResponse) {
+                if (orderInfoResponse != null) {
+                    if (orderInfoResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)){
+                        if (orderInfoResponse.getData()!= null && orderInfoResponse.getData().isCheckoutUser()){
+                            if (orderInfoResponse.getData().getMerchantLogo()!= null){
+                                initUserData(orderInfoResponse);
+                                TransactionLimitAPICall();
+
+                            }
+
+                        }
+                    }
+                }
+            }
+        });
+        buyTokenViewModel.getTransactionLimitResponseMutableLiveData().observe(this, new Observer<TransactionLimitResponse>() {
+            @Override
+            public void onChanged(TransactionLimitResponse transactionLimitResponse) {
+                if (transactionLimitResponse!= null){
+                    if (transactionLimitResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)){
+                        if (transactionLimitResponse.getData()!= null) {
+                            if(transactionLimitResponse.getData().getTransactionLimit()!= null && transactionLimitResponse.getData().getMinimumLimit()!=null){
+                                transactionLimit = Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit());
+                                minimumLimit = Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit());
+                            }
+                            validation(transactionLimitResponse);
+                        }
+                    }
+                    else {
+                        Utils.displayAlert(transactionLimitResponse.getError().getErrorDescription(),CheckOutPaymentActivity.this,"Oops",transactionLimitResponse.getError().getFieldErrors().get(0));
+                    }
+                }
+            }
+        });
+    }
+
+    private void validation(TransactionLimitResponse transactionLimitResponse) {
+
+        try {
+            String strPay = mAmount.getText().toString().trim().replace("\"", "");
+            if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+                //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
+                errorText.setText("Amount should be greater than zero.");
+                errorText.setVisibility(View.VISIBLE);
+                slideToConfirm.setInteractionEnabled(false);
+                lyBalance.setVisibility(View.GONE);
+            } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit()))) {
+                errorText.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit())) + " CYN");
+                errorText.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                slideToConfirm.setInteractionEnabled(false);
+//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit())) {
+                errorText.setText("Amount entered exceeds transaction limit.");
+                errorText.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                slideToConfirm.setInteractionEnabled(false);
+            } else {
+                errorText.setVisibility(View.GONE);
+                lyBalance.setVisibility(View.VISIBLE);
+                slideToConfirm.setInteractionEnabled(true);
+                slideToConfirm.setBackground(getDrawable(R.drawable.shape_round_rectable_green));
+                tv_lable.setTextColor(getColor(R.color.white));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    private void TransactionLimitAPICall() {
+        TransactionLimitRequest request = new TransactionLimitRequest();
+        request.setTransactionType(Utils.saleOrder);
+        request.setTransactionSubType(Utils.token);
+        if (myApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            buyTokenViewModel.transactionLimits(request,Utils.userTypeCust);
+        }
+        else {
+            buyTokenViewModel.transactionLimits(request,Utils.userTypeBusiness);
+        }
+    }
+
+    private void initUserData(OrderInfoResponse orderInfoResponse) {
+        DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
+        utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
+        if (orderInfoResponse.getData().getMerchantName()!= null){
+            mUserName.setText(orderInfoResponse.getData().getMerchantName());
+        }
+        else {
+            mUserName.setText(R.string.dba_name_text);
+        }
+        if (orderInfoResponse.getData().getAmount()!= null ){
+            mAmount.setText(Utils.convertTwoDecimal(orderInfoResponse.getData().getAmount()));
+            userAmount = Double.parseDouble(orderInfoResponse.getData().getAmount());
+        }
     }
 
     private void walletAPICall() {
@@ -158,10 +327,48 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (myApplication.getCheckOutModel()!= null && myApplication.getCheckOutModel().isCheckOutFlag()){
-            myApplication.setCheckOutModel(null);
-        }
-        super.onBackPressed();
+        getAlertDialog();
+    }
+
+    private void getAlertDialog() {
+//        CheckOutDialog checkOutDialog = new CheckOutDialog(this);
+//        checkOutDialog.setOnDialogClickListener(new OnDialogClickListener() {
+//            @Override
+//            public void onDialogClicked(String action, Object value) {
+//                if (action.equalsIgnoreCase(actionTypeYes)){
+//                    if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+//                        myApplication.setCheckOutModel(null);
+//                    }
+//                    CheckOutPaymentActivity.super.onBackPressed();
+//                }else if (action.equalsIgnoreCase(actionTypeNo)){
+//                    checkOutDialog.dismiss();
+//                }
+//            }
+//        });
+//
+//        checkOutDialog.show();
+
+        DialogAttributes dialogAttributes = new DialogAttributes(getString(R.string.alert),
+                getString(R.string.checkout_cancel_message), getString(R.string.yes),
+                getString(R.string.no));
+        CustomConfirmationDialog customConfirmationDialog = new CustomConfirmationDialog
+                (this, dialogAttributes);
+
+        customConfirmationDialog.setOnDialogClickListener(new OnDialogClickListener() {
+            @Override
+            public void onDialogClicked(String action, Object value) {
+                if (action.equalsIgnoreCase(getString(R.string.yes))) {
+                    if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+                        myApplication.setCheckOutModel(null);
+                    }
+                    CheckOutPaymentActivity.super.onBackPressed();
+                }
+                else if (action.equalsIgnoreCase(getString(R.string.no))){
+                    customConfirmationDialog.dismiss();
+                }
+            }
+        });
+        customConfirmationDialog.show();
     }
 
 
