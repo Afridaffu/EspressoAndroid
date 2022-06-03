@@ -225,6 +225,9 @@ public class BusinessDashboardFragment extends BaseFragment {
 
         coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
 
+        isBiometric = Utils.getIsBiometric();
+        setFaceLock();
+        setTouchId();
 
         if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
             ((BusinessDashboardActivity) getActivity()).showProgressDialog("connecting...");
@@ -620,7 +623,7 @@ public class BusinessDashboardFragment extends BaseFragment {
 //                    businessDashboardViewModel.batchNowSlideData((String) value);
                     if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
                         if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
-                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
+                            Utils.checkAuthentication(BusinessDashboardFragment.this, CODE_AUTHENTICATION_VERIFICATION);
                         }
                     } else {
                         launchPinActivity();
