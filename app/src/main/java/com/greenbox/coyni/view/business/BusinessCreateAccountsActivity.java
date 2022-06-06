@@ -364,18 +364,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
             }
         });
 
-        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-            @Override
-            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
-                dismissDialog();
-                if (businessTrackerResponse != null) {
-                    if (businessTrackerResponse.getStatus().toLowerCase().equals("success")) {
-                        myApplication.setBusinessTrackerResponse(businessTrackerResponse);
-                    }
-                }
-            }
-        });
-
         loginViewModel.postChangeAccountResponse().observe(this, new Observer<AddBusinessUserResponse>() {
             @Override
             public void onChanged(AddBusinessUserResponse btResp) {
@@ -390,7 +378,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         myApplication.setLoginUserId(btResp.getData().getUserId());
                         myApplication.setStrEmail(btResp.getData().getEmail());
-//                        businessIdentityVerificationViewModel.getBusinessTracker();
                         myApplication.setAccountType(btResp.getData().getAccountType());
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
 
@@ -401,7 +388,6 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                             startActivity(intent);
                         } else {
                             myApplication.setDbaOwnerId(btResp.getData().getDbaOwnerId());
-                            Log.e(TAG, new Gson().toJson(myApplication.getBusinessTrackerResponse()));
                             Intent intent = new Intent(BusinessCreateAccountsActivity.this, DashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

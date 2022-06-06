@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,7 +25,7 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-public class ValidatePinActivity extends BaseActivity implements View.OnClickListener {
+public class ValidatePinActivity extends AppCompatActivity implements View.OnClickListener {
     private View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
     private TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
     private ImageView backActionIV, imgBack;
@@ -136,7 +137,6 @@ public class ValidatePinActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void showForgotPinFlow() {
-        showProgressDialog();
         loginViewModel.emailotpresend(objMyApplication.getStrEmail());
     }
 
@@ -278,7 +278,6 @@ public class ValidatePinActivity extends BaseActivity implements View.OnClickLis
             loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
                 @Override
                 public void onChanged(EmailResendResponse emailResponse) {
-                    dismissDialog();
                     if (emailResponse != null) {
                         if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
                             Intent i = new Intent(ValidatePinActivity.this, OTPValidation.class);

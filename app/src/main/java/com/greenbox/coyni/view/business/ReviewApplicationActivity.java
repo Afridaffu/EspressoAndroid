@@ -804,10 +804,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         if (addBusiness) {
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                         } else {
-                            if (objMyApplication.getBusinessTrackerResponse() != null
-                                    && objMyApplication.getBusinessTrackerResponse().getData() != null) {
-                                objMyApplication.getBusinessTrackerResponse().getData().setProfileVerified(true);
-                            }
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
