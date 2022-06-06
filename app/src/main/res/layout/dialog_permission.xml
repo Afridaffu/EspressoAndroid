@@ -2,27 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/_30sdp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/_220sdp"
-        android:layout_height="@dimen/_150sdp"
-        android:layout_margin="@dimen/_1sdp"
-        app:cardCornerRadius="@dimen/_10sdp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_10sdp"
+        android:layout_margin="@dimen/_1sdp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/topll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_above="@id/bottomLL"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/_10sdp">
 
                 <TextView
                     android:id="@+id/headerTextTV"
@@ -55,7 +58,6 @@
                 android:id="@+id/bottomLL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:orientation="horizontal">
 
                 <TextView
@@ -89,7 +91,7 @@
                     android:textColor="@color/primary_green"
                     android:textSize="@dimen/_12ssp" />
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

@@ -144,7 +144,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     Log.e("onPageScrolled", "onPageScrolled " + position);
-
+                    ssnET.clearFocus();
                 }
 
                 @Override
@@ -154,6 +154,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         closebtn.setVisibility(View.VISIBLE);
                         viewLeft.setBackgroundResource(R.drawable.button_background);
                         viewRight.setBackgroundResource(R.drawable.button_background1);
+                        ssnET.clearFocus();
                         if (Utils.isKeyboardVisible)
                             Utils.hideKeypad(IdentityVerificationActivity.this);
                     } else if (position == 1) {
@@ -163,7 +164,7 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                         closebtn.setVisibility(GONE);
                         mailAddr1.requestFocus();
                         if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(IdentityVerificationActivity.this);
+                            Utils.shwForcedKeypadWithHandler(IdentityVerificationActivity.this);
                     }
                 }
 
@@ -949,9 +950,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
                     closebtn.setVisibility(View.VISIBLE);
                     viewLeft.setBackgroundResource(R.drawable.button_background);
                     viewRight.setBackgroundResource(R.drawable.button_background1);
-                    if (Utils.isKeyboardVisible) {
-                        Utils.hideKeypad(IdentityVerificationActivity.this);
-                    }
+//                    if (Utils.isKeyboardVisible) {
+//                        Utils.hideKeypad(IdentityVerificationActivity.this);
+//                    }
                 }
             });
 
