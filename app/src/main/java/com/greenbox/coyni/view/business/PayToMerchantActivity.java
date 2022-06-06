@@ -82,7 +82,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
     CoyniViewModel coyniViewModel;
     LinearLayout lyPayClose, lyBalance;
     ImageView imgProfile, imgConvert;
-    TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV;
+    TextView profileTitle, tvName, accAddress, tvCurrency, coyniTV, availBal, requestTV, payTV, addNoteTV,tvError;
     TransactionLimitResponse objResponse;
     float fontSize, dollarFont;
     WalletInfo cynWallet;
@@ -153,6 +153,12 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
                     if (Double.parseDouble(editable.toString().replace(",", "")) > 0) {
                         disableButtons(false);
                     } else {
+                        disableButtons(true);
+                    }
+                    if (validation()){
+                        disableButtons(false);
+                    }
+                    else {
                         disableButtons(true);
                     }
                     //payRequestET.setSelection(payRequestET.getText().length());
@@ -240,7 +246,9 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
             lyPayClose = findViewById(R.id.payToMerchantClose);
             tvCurrency = findViewById(R.id.tvCurrency);
             coyniTV = findViewById(R.id.tvCYN);
+            tvError = findViewById(R.id.tvError);
             availBal = findViewById(R.id.tvAvailableBal);
+            lyBalance = findViewById(R.id.lybalance);
             cKey = (CustomKeyboard) findViewById(R.id.ckb);
             imgConvert = findViewById(R.id.imageConvertIV);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -631,45 +639,10 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private boolean payValidation() {
         try {
-            //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = payET.getText().toString().trim().replace("\"", "");
 
-//            if (objMyApplication.getCheckOutModel() != null ) {
-//                payET.setEnabled(false);
-//                payET.setClickable(false);
-//                payET.setTextColor(getColor(R.color.primary_green));
-//            }
-//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
-//                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayToMerchantActivity.this, "", "");
-//                return value = false;
-//            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
-//                if (strLimit.equals("daily")) {
-//                    tvError.setText("Amount entered exceeds your daily limit");
-//                } else if (strLimit.equals("week")) {
-//                    tvError.setText("Amount entered exceeds your weekly limit");
-//                }
-//                tvError.setVisibility(View.VISIBLE);
-//                lyBalance.setVisibility(View.GONE);
-//                return value = false;
-//            } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-//                Utils.displayAlert("Amount entered exceeds available balance", PayToMerchantActivity.this, "", "");
-//                return value = false;
-//            } else if (cynValue > avaBal) {
-//                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-//                return value = false;
-//            }
-//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() == 0) {
-//                objMyApplication.setStrScreen("payRequest");
-//                Intent i = new Intent(PayToMerchantActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                i.putExtra("screen", "payRequest");
-//                startActivity(i);
-//                value = false;
-//            } else
             if (cynValue > avaBal) {
                 displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-                value = false;
-            } else if (objResponse != null && objResponse.getData() != null && objResponse.getData().getTransactionLimit() != null && cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-                Utils.displayAlert("Amount entered exceeds transaction limit.", PayToMerchantActivity.this, "Oops!", "");
                 value = false;
             } else {
                 value = true;
@@ -690,6 +663,41 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 //                                    i.putExtra("screen", "payRequest");
 //                                    startActivity(i);
 //                                }
+//            else if (objResponse != null && objResponse.getData() != null && objResponse.getData().getTransactionLimit() != null && cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+//                Utils.displayAlert("Amount entered exceeds transaction limit.", PayToMerchantActivity.this, "Oops!", "");
+//                value = false;
+//            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return value;
+    }
+
+    private boolean validation() {
+        boolean value = true;
+        try {
+            String strPay = payET.getText().toString().trim().replace("\"", "");
+            if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+                //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
+                tvError.setText("Amount should be greater than zero.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+            } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(objResponse.getData().getMinimumLimit()))) {
+                tvError.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit())) + " CYN");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                tvError.setText("Amount entered exceeds transaction limit.");
+                tvError.setVisibility(View.VISIBLE);
+                lyBalance.setVisibility(View.GONE);
+                value = false;
+            } else {
+                tvError.setVisibility(View.GONE);
+                lyBalance.setVisibility(View.VISIBLE);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -854,27 +862,19 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
-            if (objLimit != null && objLimit.getTokenLimitFlag()) {
-                Double week = 0.0, daily = 0.0;
-                if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("unlimited")) {
-                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().equalsIgnoreCase("NA") && !objLimit.getTransactionLimit().equalsIgnoreCase("unlimited")) {
+                    maxValue = Double.parseDouble(objLimit.getTransactionLimit());
                 }
-                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
-                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
-                }
-                if ((week == 0 || week < 0) && daily > 0) {
-                    strLimit = "daily";
-                    maxValue = daily;
-                } else if ((daily == 0 || daily < 0) && week > 0) {
-                    strLimit = "week";
-                    maxValue = week;
-                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-                    strLimit = "unlimited";
-                } else {
-                    strLimit = "daily";
-                    maxValue = daily;
-                }
-            }
+                if (maxValue > 0) {
+                    if (objLimit.getLimitType().equalsIgnoreCase("daily")) {
+                        strLimit = "daily";
+                    } else if (objLimit.getLimitType().equalsIgnoreCase("weekly")) {
+                        strLimit = "week";
+                    } else if (objLimit.getLimitType().equalsIgnoreCase("unlimited")) {
+                        strLimit = "unlimited";
+                    } else {
+                        strLimit = "daily";
+                    } }
 
         } catch (Exception ex) {
             ex.printStackTrace();

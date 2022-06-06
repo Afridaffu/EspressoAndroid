@@ -1743,59 +1743,23 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     }
 
     private Boolean payValidation() {
-        Boolean value = true;
+        boolean value = false;
         try {
-            //cynValidation = Double.parseDouble(objResponse.getData().getMinimumLimit());
             String strPay = strQRAmount.toString().trim().replace("\"", "");
-//            if ((Double.parseDouble(strPay.replace(",", "")) < cynValidation)) {
-//                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(cynValidation) + " CYN", PayToMerchantActivity.this, "", "");
-//                return value = false;
-//            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
-//                if (strLimit.equals("daily")) {
-//                    tvError.setText("Amount entered exceeds your daily limit");
-//                } else if (strLimit.equals("week")) {
-//                    tvError.setText("Amount entered exceeds your weekly limit");
-//                }
-//                tvError.setVisibility(View.VISIBLE);
-//                lyBalance.setVisibility(View.GONE);
-//                return value = false;
-//            } else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-//                Utils.displayAlert("Amount entered exceeds available balance", PayToMerchantActivity.this, "", "");
-//                return value = false;
-//            } else if (cynValue > avaBal) {
-//                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
-//                return value = false;
-//            }
-//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() == 0) {
-//                objMyApplication.setStrScreen("payRequest");
-//                Intent i = new Intent(PayToMerchantActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                i.putExtra("screen", "payRequest");
-//                startActivity(i);
-//                value = false;
-//            } else
             if (cynValue > avaBal) {
                 displayAlertNew("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
                 value = false;
+            }
+            else if (cynValue < Double.parseDouble(objResponse.getData().getMinimumLimit())){
+                Utils.displayAlert("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(objResponse.getData().getMinimumLimit()))+ " CYN", ScanActivity.this, "Oops!", "");
+
             } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
                 Utils.displayAlert("Amount entered exceeds transaction limit.", ScanActivity.this, "Oops!", "");
                 value = false;
             }
-//            else if (Double.parseDouble(strPay.replace(",", "")) > avaBal) {
-//                Utils.displayAlert("Amount entered exceeds available balance", PayToMerchantActivity.this, "", "");
-//                value = false;
-//            }
-
-//            if (paymentMethodsResponse.getData().getData() != null && paymentMethodsResponse.getData().getData().size() > 0) {
-//                                    isPayClick = true;
-//                                    pDialog = Utils.showProgressDialog(PayToMerchantActivity.this);
-//                                    cynValue = Double.parseDouble(payRequestET.getText().toString().trim().replace(",", ""));
-//                                    calculateFee(Utils.USNumberFormat(cynValue));
-//                                } else {
-//                                    objMyApplication.setStrScreen("payRequest");
-//                                    Intent i = new Intent(PayToMerchantActivity.this, BuyTokenPaymentMethodsActivity.class);
-//                                    i.putExtra("screen", "payRequest");
-//                                    startActivity(i);
-//                                }
+            else {
+                value = true;
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1804,27 +1768,23 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
 
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
-            if (objLimit != null && objLimit.getTokenLimitFlag()) {
-                Double week = 0.0, daily = 0.0;
-                if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getWeeklyAccountLimit().equalsIgnoreCase("unlimited")) {
-                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().equalsIgnoreCase("NA") && !objLimit.getTransactionLimit().equalsIgnoreCase("unlimited")) {
+                    maxValue = Double.parseDouble(objLimit.getWeeklyAccountLimit());
                 }
-                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
-                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
+//                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
+//                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
+//                }
+                if (maxValue > 0) {
+                    if (objLimit.getLimitType().equalsIgnoreCase("daily")) {
+                        strLimit = "daily";
+                    } else if (objLimit.getLimitType().equalsIgnoreCase("weekly")) {
+                        strLimit = "week";
+                    } else if (objLimit.getLimitType().equalsIgnoreCase("unlimited")) {
+                        strLimit = "unlimited";
+                    } else {
+                        strLimit = "daily";
+                    }
                 }
-                if ((week == 0 || week < 0) && daily > 0) {
-                    strLimit = "daily";
-                    maxValue = daily;
-                } else if ((daily == 0 || daily < 0) && week > 0) {
-                    strLimit = "week";
-                    maxValue = week;
-                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-                    strLimit = "unlimited";
-                } else {
-                    strLimit = "daily";
-                    maxValue = daily;
-                }
-            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
