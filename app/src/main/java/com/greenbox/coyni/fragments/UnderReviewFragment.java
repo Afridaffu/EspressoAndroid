@@ -73,13 +73,6 @@ public class UnderReviewFragment extends BaseFragment {
         businessDashboardViewModel = new ViewModelProvider(this).get(BusinessDashboardViewModel.class);
     }
 
-    private void launchApplicationCancelledScreen() {
-        Intent inCancelledApplication = new Intent(getActivity(), ApplicationCancelledActivity.class);
-        inCancelledApplication.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(inCancelledApplication);
-        //activityResultLauncher.launch(inCancelledApplication);
-    }
-
     private void showData() {
         ((BusinessDashboardActivity) getActivity()).showUserData(mIvUserIcon, mTvUserName, mTvUserIconText);
 
@@ -120,11 +113,7 @@ public class UnderReviewFragment extends BaseFragment {
         });
 
         mUserIconRelativeLayout.setOnClickListener(view -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+            ((BusinessDashboardActivity) getActivity()).launchSwitchAccountPage();
         });
 
     }
@@ -156,7 +145,7 @@ public class UnderReviewFragment extends BaseFragment {
                 if (cancelApplicationResponse != null) {
                     if (cancelApplicationResponse.getStatus() != null
                             && cancelApplicationResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        launchApplicationCancelledScreen();
+                        ((BusinessDashboardActivity) getActivity()).launchApplicationCancelledScreen();
                     } else {
                         String msg = getString(R.string.something_went_wrong);
                         if (cancelApplicationResponse.getError() != null

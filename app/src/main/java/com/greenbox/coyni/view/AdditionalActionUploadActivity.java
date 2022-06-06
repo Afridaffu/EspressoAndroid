@@ -68,25 +68,16 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     private static final int ACTIVITY_CHOOSE_FILE = 3;
     private static final int PICK_IMAGE_REQUEST = 4;
     private Long mLastClickTime = 0L;
-    //    private HashMap<Integer, String> fileUpload;
-    private ActionRqrdResponse actionRequired;
     private int documentID;
     private LinearLayout selectedLayout = null;
-    private TextView selectedText = null,adminMsgTV,adminMessageTV;
+    private TextView selectedText = null,adminMessageTV;
     public static ArrayList<File> documentsFIle;
-    private JSONObject informationJSON;
     public static File mediaFile;
-    private boolean reservedRuleAccepted = false;
-    private boolean reservedRule = false;
-    private ImageView imvCLose;
-    private HashMap<String, ProposalsPropertiesData> proposalsMap;
-    private LinearLayout additionReservedLL, llApprovedReserved, llHeading, llBottomView, additionalDocumentRequiredLL,
-            websiteRevisionRequiredLL, informationRevisionLL;
+    private LinearLayout additionalDocumentRequiredLL;
     private HashMap<Integer, File> filesToUpload;
     public static AdditionalActionUploadActivity additionalActionUploadActivity;
     public boolean isSubmitEnabled = false;
     public CardView submitCV;
-    private MyApplication objMyApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +90,11 @@ public class AdditionalActionUploadActivity extends BaseActivity {
 
     private void initFields() {
 
-        objMyApplication = (MyApplication) getApplicationContext();
         additionalActionUploadActivity = this;
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         ssnCloseLL = findViewById(R.id.ssnCloseLL);
         submitCV = findViewById(R.id.actRqrdSubmitCV);
-        adminMsgTV = findViewById(R.id.adminMsgTV);
         adminMessageTV = findViewById(R.id.adminMessageTV);
         ssnCloseLL.setOnClickListener(view -> finish());
 
@@ -139,8 +128,8 @@ public class AdditionalActionUploadActivity extends BaseActivity {
                         public void onChanged(ActionRqrdResponse actionRqrdResponse) {
                             dismissDialog();
                             try {
-                                actionRequired = actionRqrdResponse;
                                 if (actionRqrdResponse != null && actionRqrdResponse.getStatus().equalsIgnoreCase("SUCCESS")) {
+
 
                                     if (actionRqrdResponse != null && actionRqrdResponse.getData() != null) {
                                         if (actionRqrdResponse.getData().getAdditionalDocument() != null &&
@@ -416,6 +405,12 @@ public class AdditionalActionUploadActivity extends BaseActivity {
     }
 
     private void additionalRequiredDocuments(ActionRqrdResponse actionRqrdResponse) {
+
+        additionalDocumentRequiredLL.removeAllViews();
+//        for (int i = 0; i < additionalDocumentRequiredLL.getChildCount(); i++) {
+//            View child = additionalDocumentRequiredLL.getChildAt(i);
+//            additionalDocumentRequiredLL.removeAllViews();
+//        }
 
         additionalDocumentRequiredLL.setVisibility(View.VISIBLE);
 //        adminMsgTV.setText(getResources().getString(R.string.please_click_the_upload_button_below_to_proceed));

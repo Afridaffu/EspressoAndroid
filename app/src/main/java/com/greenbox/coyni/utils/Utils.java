@@ -58,6 +58,7 @@ import android.widget.Toast;
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -324,12 +325,15 @@ public class Utils {
     public static final String SELECTED_MERCHANT_TRANSACTION_TXN_TYPE = "Selected_Merchant_transaction_txn_type";
     public static final String SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE = "Selected_Merchant_transaction_txn_sub_type";
     public static final float slidePercentage = 0.3f;
+    public static final float slidePercentagehalf = 0.5f;
 
     public static boolean isKeyboardVisible = false;
     public static boolean isSettingsBtnClicked = false;
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
+    public static final String ACTION_TYPE = "action_type";
+    public static final String TRANSACTION_TOKEN = "Transaction_token";
     public static final String ACCOUNT_TYPE = "account_type";
     public static final String changeActionType = "CHANGE";
     public static final String withdrawActionType = "WITHDRAW";
@@ -337,6 +341,8 @@ public class Utils {
     public static final String sendActionType = "SEND";
     public static final String pinActionType = "COYNIPIN";
     public static final String paidActionType = "PAIDORDER";
+    public static final String refundActionType = "REFUND";
+    public static final String batchnowActionType = "MERCHANT_PAYOUT";
 
     public static final String MERCHANT_TRANSACTION_PARTIAL_REFUND = "Partial Refund";
     public static final String MERCHANT_TRANSACTION_COMPLETED = "Completed";
@@ -693,6 +699,21 @@ public class Utils {
         return strValue;
     }
 
+    public static void checkAuthentication(Fragment fragment, int CODE_AUTHENTICATION_VERIFICATION) {
+        try {
+            KeyguardManager km = (KeyguardManager) fragment.getContext().getSystemService(KEYGUARD_SERVICE);
+            if (km.isKeyguardSecure()) {
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    Intent i = km.createConfirmDeviceCredentialIntent("Authentication required", "password");
+                    fragment.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
+                }
+            } else
+                displayAlert("You enabled the Security permission in coyni App. Please enable the Security settings in device for making the transactions.", fragment.getActivity(), "", "");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static void checkAuthentication(Activity context, int CODE_AUTHENTICATION_VERIFICATION) {
         try {
             KeyguardManager km = (KeyguardManager) context.getSystemService(KEYGUARD_SERVICE);
@@ -811,6 +832,66 @@ public class Utils {
         settingsBtn = dialog.findViewById(R.id.settings_tv);
         headerText = dialog.findViewById(R.id.headerTextTV);
         descriptionText = dialog.findViewById(R.id.descriptonTV);
+
+        if (header != null) {
+            headerText.setText(header);
+        }
+        if (description != null) {
+            descriptionText.setText(description);
+        }
+
+        notNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                isSettingsBtnClicked = true;
+                context.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.getPackageName(), null)));
+            }
+        });
+
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+
+
+    }
+    public static void showDialogCheckOut(final Context context, String header, String description) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_permission);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        TextView notNowBtn, settingsBtn, headerText, descriptionText;
+
+        notNowBtn = dialog.findViewById(R.id.not_now_tv);
+        settingsBtn = dialog.findViewById(R.id.settings_tv);
+        headerText = dialog.findViewById(R.id.headerTextTV);
+        descriptionText = dialog.findViewById(R.id.descriptonTV);
+
+        settingsBtn.setText("Yes");
+        notNowBtn.setText("No");
 
         if (header != null) {
             headerText.setText(header);

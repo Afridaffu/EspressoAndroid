@@ -926,23 +926,24 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                     } else {
                                         strScanWallet = result.toString();
                                     }
-                                    Uri uri = null;
-                                    if (strScanWallet != null) {
-                                        uri = Uri.parse(strScanWallet);
-                                    }
-                                    if (uri != null && uri.isAbsolute() && !strScanWallet.equals(strWallet)) {
-                                        Set<String> queryParams = uri.getQueryParameterNames();
-                                        for (String s : queryParams) {
-                                            if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
-                                                strQRAmount = uri.getQueryParameter(s);
-                                            } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
-                                                strScanWallet = uri.getQueryParameter(s);
-                                            }
-                                        }
-                                        getUserDetails(strScanWallet);
-
+//                                    Uri uri = null;
+//                                    if (strScanWallet != null) {
+//                                        uri = Uri.parse(strScanWallet);
+//                                    }
+//                                    if (uri != null && uri.isAbsolute() && !strScanWallet.equals(strWallet)) {
+//                                        Set<String> queryParams = uri.getQueryParameterNames();
+//                                        for (String s : queryParams) {
+//                                            if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
+//                                                strQRAmount = uri.getQueryParameter(s);
+//                                            } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
+//                                                strScanWallet = uri.getQueryParameter(s);
+//                                            }
+//                                        }
+//                                        getUserDetails(strScanWallet);
 //
-                                    } else if (!strScanWallet.equals(strWallet)) {
+////
+//                                    } else
+                                        if (!strScanWallet.equals(strWallet)) {
                                         if (!android.util.Patterns.WEB_URL.matcher(strScanWallet).matches()) {
                                             if (!isQRScan) {
                                                 isQRScan = true;

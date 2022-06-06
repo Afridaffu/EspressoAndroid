@@ -2,6 +2,7 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchNow.BatchNowPaymentRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
@@ -58,6 +59,10 @@ import com.greenbox.coyni.model.cards.CardTypeRequest;
 import com.greenbox.coyni.model.cards.CardTypeResponse;
 import com.greenbox.coyni.model.cards.business.BusinessCardRequest;
 import com.greenbox.coyni.model.cards.business.BusinessCardResponse;
+import com.greenbox.coyni.model.check_out_transactions.OrderInfoRequest;
+import com.greenbox.coyni.model.check_out_transactions.OrderInfoResponse;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -330,7 +335,10 @@ public interface ApiService {
     @DELETE("api/v2/banks/me")
     Call<BankDeleteResponseData> deleteBank(@Query("accountId") Integer accountId);
 
-    @POST("api/v2/user/authenticate")
+//    @POST("api/v2/user/authenticate")
+//    Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
+
+    @POST("api/v2/user/verify")
     Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
 
     @Multipart
@@ -629,10 +637,10 @@ public interface ApiService {
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
 
     @POST("api/v2/node/refund/process")
-    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
+    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest request);
 
-    @POST("api/v2/transactions/merchant-payout/{batchId}")
-    Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
+    @POST("api/v2/transactions/merchant-payout")
+    Call<BatchNowResponse> getSlideBatchNow(@Body BatchNowPaymentRequest request);
 
     @POST("api/v2/transactions/admin/reserve/summary")
     Call<ReserveListResponse> getReserveListItems();
@@ -662,5 +670,11 @@ public interface ApiService {
 
     @POST("api/v2/logs/transaction")
     Call<ActivityLogResp> activityLog(@Query("txnId") String txnId, @Query("userType") String userType);
+
+    @POST("api/v2/checkout/order-info")
+    Call<OrderInfoResponse> getOrderInfoDetails(@Body OrderInfoRequest request);
+
+    @POST("api/v2/checkout/pay")
+    Call<OrderPayResponse> orderPay(@Body OrderPayRequest request);
 }
 

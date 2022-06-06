@@ -107,11 +107,7 @@ public class BusinessAccountFragment extends BaseFragment {
         });
 
         mUserIconRelativeLayout.setOnClickListener(view -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+            ((BusinessDashboardActivity) getActivity()).launchSwitchAccountPage();
         });
 
         initObservers();

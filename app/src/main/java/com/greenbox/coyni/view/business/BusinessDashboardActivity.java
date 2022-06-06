@@ -1,5 +1,6 @@
 package com.greenbox.coyni.view.business;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentTransaction;
@@ -77,6 +80,9 @@ public class BusinessDashboardActivity extends BaseActivity {
             initialization();
             initObserver();
             enableDisableTabView();
+            removeFragment();
+            showProgressDialog();
+            mDashboardViewModel.meProfile();
             //pushFragment(new BusinessDashboardFragment());
             firebaseToken();
         } catch (Exception ex) {
@@ -84,17 +90,17 @@ public class BusinessDashboardActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            removeFragment();
-            showProgressDialog();
-            mDashboardViewModel.meProfile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        try {
+//            removeFragment();
+//            showProgressDialog();
+//            mDashboardViewModel.meProfile();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void getWalletData() {
         WalletRequest walletRequest = new WalletRequest();
@@ -175,7 +181,8 @@ public class BusinessDashboardActivity extends BaseActivity {
             }
 
             mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(BusinessDashboardActivity.this, BusinessProfileActivity.class));
+            Intent in = new Intent(BusinessDashboardActivity.this, BusinessProfileActivity.class);
+            activityResultLauncher.launch(in);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -343,6 +350,45 @@ public class BusinessDashboardActivity extends BaseActivity {
         setEnabledTabs();
     }
 
+    public void launchApplicationCancelledScreen() {
+        Intent inCancelledApplication = new Intent(BusinessDashboardActivity.this, ApplicationCancelledActivity.class);
+        inCancelledApplication.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activityResultLauncher.launch(inCancelledApplication);
+    }
+
+    public void launchSwitchAccountPage() {
+        if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
+            return;
+        }
+        mLastClickTimeQA = SystemClock.elapsedRealtime();
+        Intent in = new Intent(BusinessDashboardActivity.this, BusinessCreateAccountsActivity.class);
+        startActivity(in);
+    }
+
+    public void startTracker(int dbaOwnerId) {
+        Intent inTracker = new Intent(BusinessDashboardActivity.this, BusinessRegistrationTrackerActivity.class);
+        if (dbaOwnerId != 0) {
+            inTracker.putExtra(Utils.ADD_BUSINESS, true);
+            inTracker.putExtra(Utils.ADD_DBA, true);
+        }
+        startActivity(inTracker);
+    }
+
+    public void launchAdditionalActionPage() {
+        Intent in = new Intent(BusinessDashboardActivity.this, BusinessAdditionalActionRequiredActivity.class);
+        activityResultLauncher.launch(in);
+    }
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    removeFragment();
+                    showProgressDialog();
+                    mDashboardViewModel.meProfile();
+                }
+            });
+
     private void initObserver() {
         businessDashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
@@ -478,7 +524,6 @@ public class BusinessDashboardActivity extends BaseActivity {
                 mIvUserIcon.setImageResource(R.drawable.acct_profile);
             }
         }
-
 
         mTvUserName.setOnClickListener(view -> {
             if (mTvUserName.getText().toString().contains("...")) {

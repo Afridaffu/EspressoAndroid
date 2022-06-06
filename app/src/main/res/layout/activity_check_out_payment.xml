@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/backgrndbtmcornrs"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/_21sdp"
             android:paddingTop="@dimen/_40sdp"
             android:paddingRight="@dimen/_21sdp"
             android:paddingBottom="@dimen/_11sdp">
@@ -26,9 +25,10 @@
 
             <LinearLayout
                 android:id="@+id/payToMerchantClose"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:gravity="center_vertical"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_9sdp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -42,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
+                android:layout_marginStart="@dimen/_21sdp"
                 android:fontFamily="@font/opensans_bold"
                 android:text="@string/pay_to_merchant"
                 android:textColor="@color/black"
@@ -72,11 +73,13 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/userProfileIV"
+                        android:id="@+id/merchant_profile_iv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/businessProfileAccountItemChildImage"
                         android:scaleType="fitXY"
+                        android:background="@color/primary_green"
+                        android:src="@drawable/ic_case"
                         android:visibility="visible" />
 
                     <TextView
@@ -98,7 +101,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/merchantyNameTV"
+                        android:id="@+id/checkout_user_name_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/opensans_semibold"
@@ -180,7 +183,7 @@
                                 android:orientation="horizontal">
 
                                 <EditText
-                                    android:id="@+id/merchantAmountET"
+                                    android:id="@+id/checkout_amount"
                                     android:layout_width="wrap_content"
                                     android:layout_height="@dimen/_72sdp"
                                     android:background="@color/white"
@@ -222,7 +225,7 @@
                         </RelativeLayout>
 
                         <TextView
-                            android:id="@+id/tvError"
+                            android:id="@+id/error_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
@@ -235,7 +238,7 @@
                             android:visibility="gone" />
 
                         <LinearLayout
-                            android:id="@+id/lybalance"
+                            android:id="@+id/available_balance_tv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"

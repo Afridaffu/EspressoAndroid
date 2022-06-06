@@ -204,6 +204,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
         }
         if (Utils.isKeyboardVisible)
             Utils.hideKeypad(LoginActivity.this);
+
     }
 
     @Override
@@ -509,11 +510,19 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-                        hideAndClearFocus();
-                        Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                        i.putExtra("screen", "ForgotPwd");
-                        i.putExtra("email", etEmail.getText().toString().trim());
-                        startActivity(i);
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                hideAndClearFocus();
+                                Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                                i.putExtra("screen", "ForgotPwd");
+                                i.putExtra("email", etEmail.getText().toString().trim());
+                                startActivity(i);
+                            }
+
+                        }, 1000);
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -545,8 +554,8 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             return;
                         }
                         mLastClickTime = SystemClock.elapsedRealtime();
-//                        if (Utils.isKeyboardVisible)
-//                            Utils.hideKeypad(LoginActivity.this);
+                        if (Utils.isKeyboardVisible)
+                            Utils.hideKeypad(LoginActivity.this);
                         hideAndClearFocus();
                         if (Utils.checkInternet(LoginActivity.this)) {
                             strEmail = etEmail.getText().toString().trim().toLowerCase();
@@ -1048,10 +1057,20 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     }
 
     public void hideAndClearFocus() {
-        etEmail.clearFocus();
-        etPassword.clearFocus();
-        if (Utils.isKeyboardVisible)
-            Utils.hideKeypad(LoginActivity.this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                etlEmail.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
+
+                etEmail.clearFocus();
+                etPassword.clearFocus();
+                if (Utils.isKeyboardVisible)
+                    Utils.hideKeypad(LoginActivity.this);
+            }
+
+        }, 500);
+
     }
 
     private void clearEmailControl() {
