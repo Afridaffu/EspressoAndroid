@@ -792,7 +792,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher {
             tvLimit.setVisibility(View.VISIBLE);
             String strCurrency = "", strAmount = "";
             if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
-                maxValue = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                maxValue = Double.parseDouble(objLimit.getTransactionLimit());
             }
             strCurrency = " " + getString(R.string.currency);
 //                if ((week == 0 || week < 0) && daily > 0) {

@@ -17,6 +17,7 @@ import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.DBAInfo.BusinessTypeResp;
 import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
+import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.model.paidorder.PaidOrderRequest;
 import com.greenbox.coyni.model.transactionlimit.LimitResponseData;
 import com.greenbox.coyni.model.transactionlimit.TransactionLimitRequest;
@@ -926,23 +927,39 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                                     } else {
                                         strScanWallet = result.toString();
                                     }
-//                                    Uri uri = null;
-//                                    if (strScanWallet != null) {
-//                                        uri = Uri.parse(strScanWallet);
-//                                    }
-//                                    if (uri != null && uri.isAbsolute() && !strScanWallet.equals(strWallet)) {
-//                                        Set<String> queryParams = uri.getQueryParameterNames();
-//                                        for (String s : queryParams) {
-//                                            if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
-//                                                strQRAmount = uri.getQueryParameter(s);
-//                                            } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
-//                                                strScanWallet = uri.getQueryParameter(s);
-//                                            }
-//                                        }
-//                                        getUserDetails(strScanWallet);
+                                    String requestToken = "";
+                                    Uri uri = null;
+                                    if (strScanWallet != null) {
+                                        uri = Uri.parse(strScanWallet);
+                                    }
+                                    if (uri != null && uri.isAbsolute()) {
+                                        Set<String> queryParams = uri.getQueryParameterNames();
+                                        CheckOutModel checkOutModel = new CheckOutModel();
+                                        for (String s : queryParams) {
+                                            if (s.equalsIgnoreCase(CheckOutConstants.REQUEST_TOKEN)) {
+                                                 requestToken= uri.getQueryParameter(s);
+                                            }
+                                            checkOutModel.setCheckOutFlag(true);
+                                            checkOutModel.setEncryptedToken(requestToken);
+                                            objMyApplication.setCheckOutModel(checkOutModel);
+                                        }
+                                        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null
+                                                && objMyApplication.getMyProfile().getData().getAccountStatus() != null) {
+                                            if (objMyApplication.getMyProfile().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                                                launchCheckoutFlow(checkOutModel);
+                                            } else {
+                                                objMyApplication.setCheckOutModel(new CheckOutModel());
+                                                Utils.displayAlertNew(getString(R.string.please_use_active_account), ScanActivity.this, "coyni");
+                                            }
+                                        } else if (objMyApplication.getLoginResponse().getData().getAccountStatus().equalsIgnoreCase(Utils.BUSINESS_ACCOUNT_STATUS.ACTIVE.getStatus())) {
+                                            launchCheckoutFlow(checkOutModel);
+                                        } else {
+                                            objMyApplication.setCheckOutModel(new CheckOutModel());
+                                            Utils.displayAlertNew(getString(R.string.please_use_active_account), ScanActivity.this, "coyni");
+                                        }
+
 //
-////
-//                                    } else
+                                    } else
                                         if (!strScanWallet.equals(strWallet)) {
                                         if (!android.util.Patterns.WEB_URL.matcher(strScanWallet).matches()) {
                                             if (!isQRScan) {
@@ -1821,5 +1838,13 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     @Override
     public void onVisibilityChanged(boolean visible) {
         Utils.isKeyboardVisible = visible;
+    }
+    private void launchCheckoutFlow(CheckOutModel checkOutModel) {
+        try {
+            dismissDialog();
+            startActivity(new Intent(ScanActivity.this, CheckOutPaymentActivity.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
