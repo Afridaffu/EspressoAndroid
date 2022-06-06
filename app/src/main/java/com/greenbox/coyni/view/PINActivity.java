@@ -216,9 +216,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
 //                                Utils.setStrToken(validateResponse.getData().getRequestToken());
                                 objMyApplication.setStrToken(validateResponse.getData().getRequestToken());
                             }
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                businessIdentityVerificationViewModel.getBusinessTracker();
-                            }
+//                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                                businessIdentityVerificationViewModel.getBusinessTracker();
+//                            }
                             shakeAnimateUpDown();//new
 
                             new Handler().postDelayed(new Runnable() {
@@ -553,9 +553,9 @@ public class PINActivity extends BaseActivity implements View.OnClickListener {
                     if (stepUpResponse != null) {
                         if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                businessIdentityVerificationViewModel.getBusinessTracker();
-                            }
+//                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                                businessIdentityVerificationViewModel.getBusinessTracker();
+//                            }
                             shakeAnimateUpDown();//new
 
                             new Handler().postDelayed(new Runnable() {

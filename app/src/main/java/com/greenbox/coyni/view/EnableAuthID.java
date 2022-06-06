@@ -542,7 +542,7 @@ public class EnableAuthID extends BaseActivity {
             successRL.setVisibility(View.VISIBLE);
             businessSuccessRL.setVisibility(View.GONE);
         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            businessIdentityVerificationViewModel.getBusinessTracker();
+            //businessIdentityVerificationViewModel.getBusinessTracker();
             successRL.setVisibility(View.GONE);
             businessSuccessRL.setVisibility(View.VISIBLE);
         }

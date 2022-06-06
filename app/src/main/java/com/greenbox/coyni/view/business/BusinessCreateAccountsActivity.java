@@ -390,7 +390,7 @@ public class BusinessCreateAccountsActivity extends BaseActivity {
                         Utils.setStrAuth(btResp.getData().getJwtToken());
                         myApplication.setLoginUserId(btResp.getData().getUserId());
                         myApplication.setStrEmail(btResp.getData().getEmail());
-                        businessIdentityVerificationViewModel.getBusinessTracker();
+//                        businessIdentityVerificationViewModel.getBusinessTracker();
                         myApplication.setAccountType(btResp.getData().getAccountType());
                         myApplication.setIsReserveEnabled(btResp.getData().isReserveEnabled());
 

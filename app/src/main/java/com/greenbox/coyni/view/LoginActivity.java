@@ -774,8 +774,8 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
-                                    businessIdentityVerificationViewModel.getBusinessTracker();
+//                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
+//                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (loginResponse.getData().getPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
