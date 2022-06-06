@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -120,6 +121,14 @@ public class MyApplication extends Application {
 
     public void setPaidOrderResp(PaidOrderResp paidOrderResp) {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
+    }
+
+    public void setOrderPayResponse(OrderPayResponse orderPayResponse){
+        mCurrentUserData.setOrderPayResponse(orderPayResponse);
+    }
+
+    public OrderPayResponse getOrderPayResponse(){
+        return mCurrentUserData.getOrderPayResponse();
     }
 
 //    public Double getMerchantBalance() {
