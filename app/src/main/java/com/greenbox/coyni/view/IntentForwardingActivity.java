@@ -46,10 +46,8 @@ public class IntentForwardingActivity extends AppCompatActivity {
             Set<String> queryParams = uri.getQueryParameterNames();
             checkOutModel.setCheckOutFlag(true);
             for (String s : queryParams) {
-                if (s.equalsIgnoreCase(CheckOutConstants.AMOUNT)) {
-                    checkOutModel.setCheckOutAmount(uri.getQueryParameter(s));
-                } else if (s.equalsIgnoreCase(CheckOutConstants.WALLET)) {
-                    checkOutModel.setCheckOutWalletId(uri.getQueryParameter(s));
+                if (s.equalsIgnoreCase(CheckOutConstants.REQUEST_TOKEN)) {
+                    checkOutModel.setEncryptedToken(uri.getQueryParameter(s));
                 }
             }
             MyApplication objMyApplication = (MyApplication) getApplicationContext();

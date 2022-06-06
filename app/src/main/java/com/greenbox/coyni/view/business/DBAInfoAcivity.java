@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -55,8 +56,10 @@ import com.greenbox.coyni.model.DBAInfo.DBAInfoResp;
 import com.greenbox.coyni.model.DBAInfo.DBAInfoUpdateResp;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
+import com.greenbox.coyni.model.profile.AddBusinessUserResponse;
 import com.greenbox.coyni.model.register.PhNoWithCountryCode;
 import com.greenbox.coyni.utils.FileUtils;
+import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.utils.outline_et.CompanyOutLineBoxPhoneNumberEditText;
@@ -94,9 +97,13 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             isWebsite = false, isMPV = false, isHighTkt = false, isAvgTkt = false, isDBAFiling = false, isTimeZone = false, isNextEnabled = false, isIDVESelected = false;
     ConstraintLayout businessTypeCL, timeZoneCL, stateCL;
     public View viewBarLeft, viewBarRight, pageOneView, pageTwoView;
-    Long mLastClickTime = 0L,mLastClickTimeAddr = 0L;
+    Long mLastClickTime = 0L, mLastClickTimeAddr = 0L;
     MyApplication objMyApplication;
     public ScrollView dbaBasicSL, addressSL;
+    private boolean addDBAClick = false;
+    private boolean isAddDBA = false;
+    private boolean isAddDBAAPICalled = false;
+    private int companyID = 0;
 
     //Address
     TextInputLayout companyaddresstil, companyaddress2til, citytil, statetil, zipcodetil, countryTIL;
@@ -153,7 +160,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
     protected void onDestroy() {
         try {
             super.onDestroy();
-            if (!isPostSuccess)
+            if (!isPostSuccess && !isAddDBA)
                 dbaInfoAPICall(prepareRequest());
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,6 +180,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initFields() {
 
         try {
@@ -276,6 +284,18 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
             statedropdownIV = findViewById(R.id.stateimageIV);
 
             addressNextCV = findViewById(R.id.addressNextCV);
+
+            if (getIntent().getBooleanExtra(Utils.NEW_DBA, false)) {
+                isAddDBA = getIntent().getBooleanExtra(Utils.NEW_DBA, false);
+            }
+            else {
+                isAddDBAAPICalled = true;
+            }
+
+            if (getIntent().getIntExtra(Utils.COMPANY_ID, 0) > 0) {
+                companyID = getIntent().getIntExtra(Utils.COMPANY_ID, 0);
+            }
+
 
             dbaPager = new DBAPager();
             viewPager = findViewById(R.id.view_pager);
@@ -440,7 +460,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 if (isNextEnabled) {
-                    dbaInfoAPICall(prepareRequest());
+                    if (isAddDBA) {
+                        identityVerificationViewModel.getPostAddDBABusiness(companyID);
+                    } else {
+                        dbaInfoAPICall(prepareRequest());
+                    }
                 }
             });
 
@@ -450,7 +474,11 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 }
                 mLastClickTimeAddr = SystemClock.elapsedRealtime();
                 if (isAddressNextEnabled) {
-                    businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
+                    if (isAddDBAAPICalled) {
+                        businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
+                    } else {
+                        identityVerificationViewModel.getPostAddDBABusiness(companyID);
+                    }
                 }
             });
 
@@ -532,7 +560,9 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                         if (businessTypeResp.getStatus().toLowerCase().toString().equals("success")) {
                             btResponse = businessTypeResp;
                             objMyApplication.setBusinessTypeResp(businessTypeResp);
-                            businessIdentityVerificationViewModel.getDBAInfo();
+                            if (!isAddDBA || BusinessRegistrationTrackerActivity.isAddDbaCalled) {
+                                businessIdentityVerificationViewModel.getDBAInfo();
+                            }
 //                            loadCompanyInfo();
                         }
                     }
@@ -678,6 +708,27 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         } catch (Exception e) {
             e.printStackTrace();
         }
+        identityVerificationViewModel.getBusinessAddDBAResponse().observe(this, new Observer<AddBusinessUserResponse>() {
+            @Override
+            public void onChanged(AddBusinessUserResponse identityImageResponse) {
+                LogUtils.d(TAG, "identityImageResponse " + identityImageResponse);
+                if (identityImageResponse.getStatus().equalsIgnoreCase("success")) {
+                    Utils.setStrAuth(identityImageResponse.getData().getJwtToken());
+                    BusinessRegistrationTrackerActivity.isAddDbaCalled = true;
+                    isAddDBAAPICalled = true;
+                    isAddDBA = false;
+                    if (selectedPage == 1) {
+                        businessIdentityVerificationViewModel.postDBAInfo(prepareRequest());
+                    } else {
+                        dbaInfoAPICall(prepareRequest());
+                    }
+
+                } else {
+                    Utils.displayAlert(identityImageResponse.getError().getErrorDescription(), DBAInfoAcivity.this, "", identityImageResponse.getError().getFieldErrors().get(0));
+                }
+            }
+        });
+
     }
 
     private void focusWatchers() {
@@ -1617,7 +1668,7 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
         try {
             //Basic
 //            if (isNextEnabled) {
-            if (dbaPhoneOET.getText() != null && dbaPhoneOET.getText().length() >=10) {
+            if (dbaPhoneOET.getText() != null && dbaPhoneOET.getText().length() >= 10) {
 
                 PhNoWithCountryCode phone = new PhNoWithCountryCode();
                 phone.setCountryCode(Utils.strCCode);
@@ -1626,56 +1677,54 @@ public class DBAInfoAcivity extends BaseActivity implements OnKeyboardVisibility
                 //Phone
                 if (phone.getCountryCode() != null && phone.getPhoneNumber().length() == 10)
                     dbaInfoRequest.setPhoneNumberDto(phone);
-            }
-            else {
+            } else {
                 dbaInfoRequest.setPhoneNumberDto(null);
             }
-                //Name
-                if (dbanameET.getText().toString().trim().length() > 0)
-                    dbaInfoRequest.setName(dbanameET.getText().toString().trim());
-                //Email
-                if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))
-                    dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());
-                //Business Type
-                if (!selectedBTKey.equals(""))
-                    dbaInfoRequest.setBusinessType(selectedBTKey.trim());
-                //IdentificationID
-                if (identificationType != 0)
-                    dbaInfoRequest.setIdentificationType(identificationType);
-                //Avg ticket
-                if (avgTicketOET.getText().trim().length() > 0)
-                    dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
-                //high ticket
-                if (highTicketOET.getText().trim().length() > 0)
-                    dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(highTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
-                //MPV
-                if (mpvOET.getText().trim().length() > 0)
-                    dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(mpvOET.getText().trim().replace(",", "")).split("\\.")[0]));
-                dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
-                dbaInfoRequest.setTimeZone(objMyApplication.getTimezoneID());
-                //Website
-                if (isValidUrl(websiteOET.getText().trim()))
-                    dbaInfoRequest.setWebsite(websiteOET.getText().trim());
+            //Name
+            if (dbanameET.getText().toString().trim().length() > 0)
+                dbaInfoRequest.setName(dbanameET.getText().toString().trim());
+            //Email
+            if (Utils.isValidEmail(dbaemailET.getText().toString().trim()))
+                dbaInfoRequest.setEmail(dbaemailET.getText().toString().trim());
+            //Business Type
+            if (!selectedBTKey.equals(""))
+                dbaInfoRequest.setBusinessType(selectedBTKey.trim());
+            //IdentificationID
+            if (identificationType != 0)
+                dbaInfoRequest.setIdentificationType(identificationType);
+            //Avg ticket
+            if (avgTicketOET.getText().trim().length() > 0)
+                dbaInfoRequest.setAverageTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(avgTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+            //high ticket
+            if (highTicketOET.getText().trim().length() > 0)
+                dbaInfoRequest.setHighTicket(Integer.parseInt(Utils.convertBigDecimalUSDC(highTicketOET.getText().trim().replace(",", "")).split("\\.")[0]));
+            //MPV
+            if (mpvOET.getText().trim().length() > 0)
+                dbaInfoRequest.setMonthlyProcessingVolume(Integer.parseInt(Utils.convertBigDecimalUSDC(mpvOET.getText().trim().replace(",", "")).split("\\.")[0]));
+            dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
+            dbaInfoRequest.setTimeZone(objMyApplication.getTimezoneID());
+            //Website
+            if (isValidUrl(websiteOET.getText().trim()))
+                dbaInfoRequest.setWebsite(websiteOET.getText().trim());
 
-                dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
+            dbaInfoRequest.setCopyCompanyInfo(isCopyCompanyInfo);
 //            }
 
-                //Address
+            //Address
 //            if (isAddressNextEnabled) {
-                if (companyaddressET.getText().toString().trim().length() > 0)
-                    dbaInfoRequest.setAddressLine1(companyaddressET.getText().toString().trim());
-                if (companyaddress2ET.getText().toString().trim().length() > 0)
-                    dbaInfoRequest.setAddressLine2(companyaddress2ET.getText().toString().trim());
-                if (cityET.getText().toString().trim().length() > 0)
-                    dbaInfoRequest.setCity(cityET.getText().toString().trim());
-                if (stateET.getText().toString().trim().length() > 0)
-                    dbaInfoRequest.setState(stateET.getText().toString().trim());
-                if (zipcodeET.getText().toString().trim().length() >= 5)
-                    dbaInfoRequest.setZipCode(zipcodeET.getText().toString().trim());
-                dbaInfoRequest.setCountry("us");
+            if (companyaddressET.getText().toString().trim().length() > 0)
+                dbaInfoRequest.setAddressLine1(companyaddressET.getText().toString().trim());
+            if (companyaddress2ET.getText().toString().trim().length() > 0)
+                dbaInfoRequest.setAddressLine2(companyaddress2ET.getText().toString().trim());
+            if (cityET.getText().toString().trim().length() > 0)
+                dbaInfoRequest.setCity(cityET.getText().toString().trim());
+            if (stateET.getText().toString().trim().length() > 0)
+                dbaInfoRequest.setState(stateET.getText().toString().trim());
+            if (zipcodeET.getText().toString().trim().length() >= 5)
+                dbaInfoRequest.setZipCode(zipcodeET.getText().toString().trim());
+            dbaInfoRequest.setCountry("us");
 //            }
-            }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

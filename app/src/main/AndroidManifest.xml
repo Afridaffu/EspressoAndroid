@@ -50,7 +50,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".view.CheckOutPaymentActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.OnboardActivity"
             android:configChanges="uiMode"

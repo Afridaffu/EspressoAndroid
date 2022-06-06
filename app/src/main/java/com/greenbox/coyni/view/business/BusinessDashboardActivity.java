@@ -37,6 +37,7 @@ import com.greenbox.coyni.fragments.GetStartedFragment;
 import com.greenbox.coyni.fragments.UnderReviewFragment;
 import com.greenbox.coyni.fragments.VerificationFailedFragment;
 import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -100,6 +101,19 @@ public class BusinessDashboardActivity extends BaseActivity {
 //            e.printStackTrace();
 //        }
 //    }
+
+    private void getWalletData() {
+        WalletRequest walletRequest = new WalletRequest();
+        walletRequest.setWalletType(Utils.MERCHANT);
+//        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.TOKEN);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.RESERVE);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+    }
 
     public void onDashboardTabSelected(View view) {
         try {

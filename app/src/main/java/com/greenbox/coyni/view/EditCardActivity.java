@@ -298,6 +298,9 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
+                            if (Utils.isKeyboardVisible){
+                                Utils.hideKeypad(EditCardActivity.this);
+                            }
                             CardEditRequest request = new CardEditRequest();
                             request.setAddressLine1(etAddress1.getText().toString().trim());
                             request.setAddressLine2(etAddress2.getText().toString().trim());
