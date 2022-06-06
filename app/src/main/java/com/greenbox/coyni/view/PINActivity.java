@@ -2,7 +2,6 @@ package com.greenbox.coyni.view;
 
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,10 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
-import com.greenbox.coyni.model.check_out_transactions.OrderPayRequest;
-import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.model.coynipin.PINRegisterResponse;
 import com.greenbox.coyni.model.coynipin.RegisterRequest;
 import com.greenbox.coyni.model.coynipin.StepUpResponse;
@@ -41,7 +37,6 @@ import com.greenbox.coyni.model.payrequest.PayRequestResponse;
 import com.greenbox.coyni.model.register.EmailResendResponse;
 import com.greenbox.coyni.model.withdraw.WithdrawRequest;
 import com.greenbox.coyni.model.withdraw.WithdrawResponse;
-import com.greenbox.coyni.utils.CheckOutConstants;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -53,26 +48,26 @@ import com.greenbox.coyni.viewmodel.LoginViewModel;
 import com.greenbox.coyni.viewmodel.PayViewModel;
 
 public class PINActivity extends AppCompatActivity implements View.OnClickListener {
-    View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
-    TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
-    ImageView backActionIV, imgBack;
-    String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
-    TextView tvHead, tvForgot;
-    CoyniViewModel coyniViewModel;
-    Dialog pDialog;
-    LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
-    MyApplication objMyApplication;
+    private View chooseCircleOne, chooseCircleTwo, chooseCircleThree, chooseCircleFour, chooseCircleFive, chooseCircleSix;
+    private TextView keyZeroTV, keyOneTV, keyTwoTV, keyThreeTV, keyFourTV, keyFiveTV, keySixTV, keySevenTV, keyEightTV, keyNineTV;
+    private ImageView backActionIV, imgBack;
+    private String passcode = "", strChoose = "", strConfirm = "", TYPE, strScreen = "";
+    private TextView tvHead, tvForgot;
+    private CoyniViewModel coyniViewModel;
+    private Dialog pDialog;
+    private LinearLayout circleOneLL, circleTwoLL, circleThreeLL, circleFourLL, circleFiveLL, circleSixLL, pinLL;
+    private MyApplication objMyApplication;
     private int mAccountType = Utils.PERSONAL_ACCOUNT;
-    Boolean isDontRemind = false;
-    String resetPINValue = "ENTER";
-    BuyTokenViewModel buyTokenViewModel;
-    PayViewModel payViewModel;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    CheckOutViewModel checkOutViewModel;
-    Dialog prevDialog;
+    private Boolean isDontRemind = false;
+    private String resetPINValue = "ENTER";
+    private BuyTokenViewModel buyTokenViewModel;
+    private PayViewModel payViewModel;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private CheckOutViewModel checkOutViewModel;
+    private Dialog prevDialog;
     private DatabaseHandler dbHandler;
-    LoginViewModel loginViewModel;
-    Long mLastClickTime = 0L;
+    private LoginViewModel loginViewModel;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,8 +183,7 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     || getIntent().getStringExtra("screen").equals("Notifications")
                     || getIntent().getStringExtra("screen").equals("Buy")
                     || getIntent().getStringExtra("screen").equals("Paid")
-                    || getIntent().getStringExtra("screen").equals("ChangePassword")
-                    || getIntent().getStringExtra("screen").equals(CheckOutConstants.CheckOut)) {
+                    || getIntent().getStringExtra("screen").equals("ChangePassword")) {
                 imgBack.setImageResource(R.drawable.ic_close);
             } else {
                 imgBack.setImageResource(R.drawable.ic_back);
@@ -223,9 +217,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                             if (validateResponse.getData().getRequestToken() != null && !validateResponse.getData().getRequestToken().equals("")) {
 //                                Utils.setStrToken(validateResponse.getData().getRequestToken());
                                 objMyApplication.setStrToken(validateResponse.getData().getRequestToken());
-                            }
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                businessIdentityVerificationViewModel.getBusinessTracker();
                             }
                             shakeAnimateUpDown();//new
 
@@ -336,9 +327,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                                 setResult(RESULT_OK, in);
                                                 finish();
                                                 break;
-                                            case CheckOutConstants.CheckOut:
-                                                checkOutPayAPICall();
-                                                break;
                                         }
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
@@ -393,21 +381,9 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-//                                        try {
-//                                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-//                                                finish();
-//                                            } else {
-//                                                launchDashboard();
-//                                            }
-//                                        } catch (Exception ex) {
-//                                            ex.printStackTrace();
-//                                        }
-
                                         try {
                                             objMyApplication.setStrRetrEmail("");
-//                                            dbHandler.clearAllTables();
                                             Intent i = new Intent(PINActivity.this, LoginActivity.class);
-//                                            Intent i = new Intent(PINActivity.this, OnboardActivity.class);
                                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(i);
                                         } catch (Exception ex) {
@@ -496,7 +472,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             public void onChanged(PayRequestResponse payRequestResponse) {
                 try {
                     if (payRequestResponse != null) {
-//                        Utils.setStrToken("");
                         objMyApplication.clearStrToken();
                         objMyApplication.setPayRequestResponse(payRequestResponse);
                         if (payRequestResponse.getStatus().toLowerCase().equals("success")) {
@@ -524,7 +499,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             public void onChanged(PaidOrderResp paidOrderResp) {
                 if (paidOrderResp != null) {
                     objMyApplication.setPaidOrderResp(paidOrderResp);
-//                    Utils.setStrToken("");
                     objMyApplication.clearStrToken();
                     if (paidOrderResp.getStatus().equalsIgnoreCase("success")) {
                         startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
@@ -543,45 +517,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        checkOutViewModel.getOrderPayResponseMutableLiveData().observe(this, new Observer<OrderPayResponse>() {
-            @Override
-            public void onChanged(OrderPayResponse orderPayResponse) {
-                if (orderPayResponse != null) {
-                    objMyApplication.setOrderPayResponse(orderPayResponse);
-//                    Utils.setStrToken("");
-                    objMyApplication.clearStrToken();
-                    if (orderPayResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
-                        startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "Success")
-                                .putExtra("subtype", CheckOutConstants.CheckOut));
-
-                    } else {
-                        startActivity(new Intent(PINActivity.this, GiftCardBindingLayoutActivity.class)
-                                .putExtra("status", "Failed")
-                                .putExtra("subtype", CheckOutConstants.CheckOut));
-                    }
-                    finish();
-                } else {
-                    Utils.displayAlert("something went wrong", PINActivity.this, "", "");
-                }
-            }
-        });
-
-
-        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-            @Override
-            public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
-
-                if (businessTrackerResponse != null) {
-                    if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
-                        objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
-
-                        Log.e("Tracker resp PIN", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
-                    }
-                }
-            }
-        });
-
         coyniViewModel.getStepUpResponseMutableLiveData().observe(this, new Observer<StepUpResponse>() {
             @Override
             public void onChanged(StepUpResponse stepUpResponse) {
@@ -589,9 +524,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     if (stepUpResponse != null) {
                         if (!stepUpResponse.getStatus().toLowerCase().equals("error")) {
                             Utils.setStrAuth(stepUpResponse.getData().getJwtToken());
-                            if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                businessIdentityVerificationViewModel.getBusinessTracker();
-                            }
                             shakeAnimateUpDown();//new
 
                             new Handler().postDelayed(new Runnable() {
@@ -665,7 +597,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                     pDialog.dismiss();
                 }
                 if (buyTokenResponse != null) {
-//                    Utils.setStrToken("");
                     objMyApplication.clearStrToken();
                     objMyApplication.setBuyTokenResponse(buyTokenResponse);
                     if (buyTokenResponse.getStatus().equalsIgnoreCase("success")) {
@@ -698,7 +629,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
             loginViewModel.getEmailresendMutableLiveData().observe(this, new Observer<EmailResendResponse>() {
                 @Override
                 public void onChanged(EmailResendResponse emailResponse) {
-//                    dismissDialog();
                     if (emailResponse != null) {
                         if (emailResponse.getStatus().toLowerCase().toString().equals("success")) {
                             Intent i = new Intent(PINActivity.this, OTPValidation.class);
@@ -722,7 +652,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
         }
 
     }
-
 
     @Override
     public void onClick(View view) {
@@ -1228,20 +1157,6 @@ public class PINActivity extends AppCompatActivity implements View.OnClickListen
                 payViewModel.paidOrder(request);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    private void checkOutPayAPICall() {
-        if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
-            OrderPayRequest request = new OrderPayRequest();
-            if (getIntent().getStringExtra(Utils.amount) != null) {
-                request.setAmount(getIntent().getStringExtra(Utils.amount));
-            }
-            request.setEncryptedToken(objMyApplication.getCheckOutModel().getEncryptedToken());
-            objMyApplication.setWithdrawAmount(Double.parseDouble(getIntent().getStringExtra(Utils.amount)));
-            if (request.getAmount() != null && request.getEncryptedToken() != null) {
-                checkOutViewModel.orderPay(request);
             }
         }
     }
