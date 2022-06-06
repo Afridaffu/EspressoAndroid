@@ -33,6 +33,7 @@
                     android:layout_height="@dimen/_38sdp"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
+                    android:background="@drawable/corecircle"
                     android:padding="@dimen/_2sdp">
 
                     <androidx.cardview.widget.CardView
