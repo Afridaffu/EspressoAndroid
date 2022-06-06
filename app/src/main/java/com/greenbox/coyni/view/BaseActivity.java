@@ -112,7 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void launchCheckout() {
         if (myApplication.getCheckOutModel() != null) {
             CheckOutModel checkOutModel = myApplication.getCheckOutModel();
-            if (checkOutModel.isCheckOutFlag() && checkOutModel.getCheckOutWalletId() != null) {
+            if (checkOutModel.isCheckOutFlag() ) {
                 dismissDialog();
                 if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                         && myApplication.getMyProfile().getData().getAccountStatus() != null) {
@@ -135,9 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void launchCheckoutFlow(CheckOutModel checkOutModel) {
         try {
             dismissDialog();
-            startActivity(new Intent(BaseActivity.this, CheckOutPaymentActivity.class)
-                    .putExtra(CheckOutConstants.WALLET_ID, checkOutModel.getCheckOutWalletId())
-                    .putExtra(CheckOutConstants.CheckOutAmount, checkOutModel.getCheckOutAmount()));
+            startActivity(new Intent(BaseActivity.this, CheckOutPaymentActivity.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

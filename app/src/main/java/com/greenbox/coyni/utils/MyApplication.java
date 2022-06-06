@@ -14,6 +14,7 @@ import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
 import com.greenbox.coyni.view.IdentityVerificationActivity;
 import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -58,6 +59,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +69,7 @@ public class MyApplication extends Application {
     private UserData mCurrentUserData;
     private static Context context;
     private CheckOutModel checkOutModel;
+    private List<States> listStates = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -82,6 +85,7 @@ public class MyApplication extends Application {
     public void setCheckOutModel(CheckOutModel checkOutModel) {
         this.checkOutModel = checkOutModel;
     }
+
 
 
     public static Context getContext() {
@@ -122,6 +126,14 @@ public class MyApplication extends Application {
 
     public void setPaidOrderResp(PaidOrderResp paidOrderResp) {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
+    }
+
+    public void setOrderPayResponse(OrderPayResponse orderPayResponse){
+        mCurrentUserData.setOrderPayResponse(orderPayResponse);
+    }
+
+    public OrderPayResponse getOrderPayResponse(){
+        return mCurrentUserData.getOrderPayResponse();
     }
 
 //    public Double getMerchantBalance() {
@@ -221,11 +233,11 @@ public class MyApplication extends Application {
     }
 
     public List<States> getListStates() {
-        return mCurrentUserData.getListStates();
+        return listStates;
     }
 
     public void setListStates(List<States> listStates) {
-        mCurrentUserData.setListStates(listStates);
+        this.listStates = listStates;
     }
 
     public Boolean getBiometric() {

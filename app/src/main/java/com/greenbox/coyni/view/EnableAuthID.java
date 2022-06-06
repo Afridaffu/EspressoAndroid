@@ -3,10 +3,8 @@ package com.greenbox.coyni.view;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,7 +27,6 @@ import com.google.gson.Gson;
 import com.greenbox.coyni.R;
 import com.greenbox.coyni.model.biometric.BiometricRequest;
 import com.greenbox.coyni.model.biometric.BiometricResponse;
-import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.utils.DatabaseHandler;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -39,18 +35,18 @@ import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
 import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 public class EnableAuthID extends BaseActivity {
-    CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
-    TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
-    RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
-    String enableType, enableTypeCopy, strScreen = "";
-    int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
-    DatabaseHandler dbHandler;
-    ImageView succesCloseIV;
-    CoyniViewModel coyniViewModel;
-    Long mLastClickTime = 0L;
-    LinearLayout layoutNotnow, layoutNotnowFace;
-    MyApplication objMyApplication;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private CardView enableFaceCV, enableTouchCV, successGetStartedCV, businessGetStartedCV;
+    private TextView notNowSuccessTV, dontRemindTouchTV, dontRemindFace, tvEnableFace, tvDisableTouch;
+    private RelativeLayout faceIDRL, touchIDRL, successRL, businessSuccessRL;
+    private String enableType, enableTypeCopy, strScreen = "";
+    private int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
+    private DatabaseHandler dbHandler;
+    private ImageView succesCloseIV;
+    private CoyniViewModel coyniViewModel;
+    private Long mLastClickTime = 0L;
+    private LinearLayout layoutNotnow, layoutNotnowFace;
+    private MyApplication objMyApplication;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private static int CODE_AUTHENTICATION_VERIFICATION = 512;
 
@@ -405,22 +401,6 @@ public class EnableAuthID extends BaseActivity {
                 }
             }
         });
-
-        businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-            @Override
-            public void onChanged(BusinessTrackerResponse btResp) {
-
-                try {
-                    if (btResp != null) {
-                        if (btResp.getStatus().toLowerCase().toString().equals("success")) {
-                            objMyApplication.setBusinessTrackerResponse(btResp);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     @Override
@@ -542,7 +522,6 @@ public class EnableAuthID extends BaseActivity {
             successRL.setVisibility(View.VISIBLE);
             businessSuccessRL.setVisibility(View.GONE);
         } else if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-            businessIdentityVerificationViewModel.getBusinessTracker();
             successRL.setVisibility(View.GONE);
             businessSuccessRL.setVisibility(View.VISIBLE);
         }

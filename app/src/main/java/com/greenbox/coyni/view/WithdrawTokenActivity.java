@@ -795,17 +795,12 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
 
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
-            if (objLimit.getTokenLimitFlag()) {
-                tvLimit.setVisibility(View.VISIBLE);
-                Double week = 0.0, daily = 0.0;
-                String strCurrency = "", strAmount = "";
-                if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("NA") && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("unlimited")) {
-                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
-                }
-                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().toLowerCase().equals("NA") && !objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
-                }
-                strCurrency = " " + getString(R.string.currency);
+            tvLimit.setVisibility(View.VISIBLE);
+            String strCurrency = "", strAmount = "";
+            if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
+                maxValue = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+            }
+            strCurrency = " " + getString(R.string.currency);
 //                if ((week == 0 || week < 0) && daily > 0) {
 //                    strLimit = "daily";
 //                    maxValue = daily;
@@ -825,24 +820,19 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
 //                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
 //                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
 //                }
-                if (objLimit.getLimitType().toLowerCase().equals("daily")) {
-                    strLimit = "daily";
-                    maxValue = daily;
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(daily));
-                    tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
-                } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
-                    strLimit = "week";
-                    maxValue = week;
-                    strAmount = Utils.convertBigDecimalUSDC(String.valueOf(week));
-                    tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
-                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-                    tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
-                    strLimit = "unlimited";
-                } else {
-                    strLimit = "";
-                    tvLimit.setVisibility(View.GONE);
-                }
+            if (objLimit.getLimitType().toLowerCase().equals("daily")) {
+                strLimit = "daily";
+                strAmount = Utils.convertBigDecimalUSDC(String.valueOf(maxValue));
+                tvLimit.setText("Your daily limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+            } else if (objLimit.getLimitType().toLowerCase().equals("weekly")) {
+                strLimit = "week";
+                strAmount = Utils.convertBigDecimalUSDC(String.valueOf(maxValue));
+                tvLimit.setText("Your weekly limit is " + Utils.USNumberFormat(Double.parseDouble(strAmount)) + strCurrency);
+            } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+                tvLimit.setText("Your daily limit is " + objLimit.getDailyAccountLimit() + strCurrency);
+                strLimit = "unlimited";
             } else {
+                strLimit = "";
                 tvLimit.setVisibility(View.GONE);
             }
 
@@ -978,7 +968,7 @@ public class WithdrawTokenActivity extends BaseActivity implements TextWatcher, 
                 value = false;
             } else if (Double.parseDouble(strPay.replace(",", "")) <= 0) {
                 value = false;
-            } else if (objResponse.getData().getTokenLimitFlag() && !strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
+            } else if (!strLimit.equals("unlimited") && Double.parseDouble(strPay.replace(",", "")) > maxValue) {
 //                if (strLimit.equals("daily")) {
 //                    tvError.setText("Amount entered exceeds your daily limit");
 //                } else if (strLimit.equals("week")) {
