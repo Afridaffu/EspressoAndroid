@@ -1,9 +1,11 @@
 package com.greenbox.coyni.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -13,18 +15,28 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.greenbox.coyni.R;
+import com.greenbox.coyni.model.logout.LogoutResponse;
+import com.greenbox.coyni.utils.DatabaseHandler;
+import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
+import com.greenbox.coyni.viewmodel.LoginViewModel;
 
-public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity {
+public class IdentityVerificationBindingLayoutActivity extends BaseActivity {
     String strScreen = "";
-    LinearLayout successCloseIV,underReviewCloseIV;
+    LinearLayout successCloseIV, underReviewCloseIV;
     MyApplication objMyApplication;
-    CardView ivSuccessCV,idveriCardViewExitBtn,idveriDoneBtn;
+    CardView ivSuccessCV, idveriCardViewExitBtn, idveriDoneBtn;
     TextView contactUSTV;
+    Long mLastClickTime = 0L;
+    private LoginViewModel loginViewModel;
+    private DisplayImageUtility displayImageUtility;
+    private DatabaseHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +47,7 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_iv_binding_layout);
             initialization();
+            initObserver();
             if (getIntent().getStringExtra("screen") != null && !getIntent().getStringExtra("screen").equals("")) {
                 strScreen = getIntent().getStringExtra("screen");
                 ControlMethod(strScreen);
@@ -46,6 +59,9 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
 
     private void initialization() {
         try {
+            loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+            dbHandler = DatabaseHandler.getInstance(IdentityVerificationBindingLayoutActivity.this);
+            displayImageUtility = DisplayImageUtility.getInstance(this);
             successCloseIV = findViewById(R.id.successCloseIV);
             ivSuccessCV = findViewById(R.id.ivSuccessCV);
 
@@ -57,12 +73,12 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
 
             objMyApplication = (MyApplication) getApplicationContext();
 
-            Log.d("objMyApplication","objMyApplication"+objMyApplication.getAccountType());
+            Log.d("objMyApplication", "objMyApplication" + objMyApplication.getAccountType());
 
             ivSuccessCV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(objMyApplication.getAccountType()==2) {
+                    if (objMyApplication.getAccountType() == 2) {
                         Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, BusinessDashboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
@@ -77,7 +93,7 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
             successCloseIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(objMyApplication.getAccountType()==2) {
+                    if (objMyApplication.getAccountType() == 2) {
                         Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, BusinessDashboardActivity.class);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
@@ -102,9 +118,16 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
             idveriCardViewExitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, OnboardActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
+                    try {
+                        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                            return;
+                        }
+                        mLastClickTime = SystemClock.elapsedRealtime();
+                        showProgressDialog();
+                        loginViewModel.logout();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
 
@@ -162,8 +185,56 @@ public class IdentityVerificationBindingLayoutActivity extends AppCompatActivity
     public void onBackPressed() {
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    public void initObserver() {
+        try {
+            loginViewModel.getLogoutLiveData().observe(this, new Observer<LogoutResponse>() {
+                @Override
+                public void onChanged(LogoutResponse logoutResponse) {
+                    dismissDialog();
+                    if (logoutResponse != null) {
+                        if (logoutResponse.getStatus().toLowerCase().equals("success")) {
+                            onLogoutSuccess();
+                        } else {
+                            if (!logoutResponse.getError().getErrorDescription().equals("")) {
+                                Utils.displayAlert(logoutResponse.getError().getErrorDescription(), IdentityVerificationBindingLayoutActivity.this, "", "");
+                            } else {
+                                Utils.displayAlert(logoutResponse.getError().getFieldErrors().get(0), IdentityVerificationBindingLayoutActivity.this, "", "");
+                            }
+                        }
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onLogoutSuccess() {
+        objMyApplication.setStrRetrEmail("");
+        objMyApplication.clearUserData();
+        dropAllTables();
+        displayImageUtility.clearCache();
+        Intent i = new Intent(IdentityVerificationBindingLayoutActivity.this, OnboardActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
+
+    private void dropAllTables() {
+        try {
+            dbHandler.clearAllTables();
+            SharedPreferences prefs = getSharedPreferences("DeviceID", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.clear();
+            editor.apply();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

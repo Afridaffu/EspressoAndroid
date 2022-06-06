@@ -556,11 +556,13 @@ public class DashboardActivity extends BaseActivity {
                             ll_identity_verification_failed.setVisibility(View.GONE);
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus()) ||
                                 objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-                            cvHeaderRL.setVisibility(View.GONE);
-                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
-                            getStartedCV.setVisibility(View.GONE);
-                            transactionsNSV.setVisibility(View.GONE);
-                            ll_identity_verification_failed.setVisibility(View.VISIBLE);
+//                            cvHeaderRL.setVisibility(View.GONE);
+//                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
+//                            getStartedCV.setVisibility(View.GONE);
+//                            transactionsNSV.setVisibility(View.GONE);
+//                            ll_identity_verification_failed.setVisibility(View.VISIBLE);
+                            startActivity(new Intent(DashboardActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "FAILED"));
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);

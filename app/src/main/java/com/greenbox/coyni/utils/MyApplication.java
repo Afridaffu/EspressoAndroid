@@ -12,6 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.view.IdentityVerificationActivity;
+import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
@@ -704,9 +706,16 @@ public class MyApplication extends Application {
     }
 
     public void launchDeclinedActivity(Context context) {
-        Intent declinedIntent = new Intent(context, VerificationFailedActivity.class);
-        declinedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(declinedIntent);
+        if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            Intent declinedIntent = new Intent(context, VerificationFailedActivity.class);
+            declinedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(declinedIntent);
+        } else if (getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            Intent intent = new Intent(context, IdentityVerificationBindingLayoutActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("screen", "FAILED");
+            startActivity(intent);
+        }
     }
 
     public boolean checkForDeclinedStatus() {

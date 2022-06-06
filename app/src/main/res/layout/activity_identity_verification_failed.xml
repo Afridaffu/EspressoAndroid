@@ -30,7 +30,7 @@
             android:layout_marginTop="30.5dp"
             android:fontFamily="@font/opensans_bold"
             android:gravity="center"
-            android:text="@string/iv_failed"
+            android:text="@string/iv_declined"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_16ssp" />
 
@@ -42,7 +42,7 @@
             android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginRight="@dimen/_21sdp"
             android:fontFamily="@font/opensans_regular"
-            android:text="@string/iv_verification_failed_content"
+            android:text="@string/iv_verification_declined_content"
             android:textAlignment="center"
             android:textColor="@color/primary_black"
             android:textSize="@dimen/_12ssp" />

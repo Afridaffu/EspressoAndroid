@@ -24,6 +24,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -531,6 +532,30 @@ public class Utils {
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
+    public static void hideKeypadWithHandler(Context context) {
+        new Handler().postDelayed(() -> {
+            try {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 100);
+
+    }
+
+    public static void shwForcedKeypadWithHandler(Context context) {
+        new Handler().postDelayed(() -> {
+            try {
+                InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 100);
+
+    }
+
     public static void hideKeypad(Context context) {
         try {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -818,7 +843,7 @@ public class Utils {
         int width = mertics.widthPixels;
 
         Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         WindowManager.LayoutParams wlp = window.getAttributes();
 

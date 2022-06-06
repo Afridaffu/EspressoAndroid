@@ -1214,10 +1214,10 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
             CardView doneBtn = cvvDialog.findViewById(R.id.doneBtn);
             TextInputLayout addNoteTIL = cvvDialog.findViewById(R.id.etlMessage);
             LinearLayout cancelBtn = cvvDialog.findViewById(R.id.cancelBtn);
+            addNoteET.requestFocus();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    addNoteET.requestFocus();
                     if (!Utils.isKeyboardVisible)
                         Utils.shwForcedKeypad(PayRequestActivity.this);
                 }
