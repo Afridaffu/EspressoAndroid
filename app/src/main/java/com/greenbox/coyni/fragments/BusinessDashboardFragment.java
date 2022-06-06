@@ -63,7 +63,6 @@ import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
-import com.greenbox.coyni.view.business.BusinessRegistrationTrackerActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -129,6 +128,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String defaultAmount = "0.00";
     private RangeDates rangeDates;
     private String strFromDate, strToDate;
+    int walletCount = 0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -509,24 +509,22 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                walletCount++;
                 try {
                     if (businessWalletResponse != null) {
                         myApplication.setWalletResponseData(businessWalletResponse.getData());
-                        Double merchantBalance = getMerchantBalance();
-                        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
-                        if (merchantBalance != null && merchantBalance == 0.00) {
-                            businessIdentityVerificationViewModel.getDBAInfo();
-                        } else {
-                            monthlyVolumeViewLl.setVisibility(View.GONE);
-                        }
                         if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-//
                             myApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
                                     businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
                         }
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+                if(walletCount == 3) {
+                    walletCount = 0;
+                    updateUIAfterWalletBalance();
                 }
             }
         });
@@ -547,6 +545,15 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     }
 
+    private void updateUIAfterWalletBalance() {
+        Double merchantBalance = getMerchantBalance();
+        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
+        if (merchantBalance != null && merchantBalance == 0.00) {
+            businessIdentityVerificationViewModel.getDBAInfo();
+        } else {
+            monthlyVolumeViewLl.setVisibility(View.GONE);
+        }
+    }
     private void showData(List<BatchPayoutListItems> items) {
         showBatchPayouts(items);
     }
@@ -570,10 +577,10 @@ public class BusinessDashboardFragment extends BaseFragment {
 //        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
         businessDashboardViewModel.meMerchantWallet(walletRequest);
 
-        walletRequest.setWalletType(Utils.TOKEN);
+        walletRequest.setWalletType(Utils.RESERVE);
         businessDashboardViewModel.meMerchantWallet(walletRequest);
 
-        walletRequest.setWalletType(Utils.RESERVE);
+        walletRequest.setWalletType(Utils.TOKEN);
         businessDashboardViewModel.meMerchantWallet(walletRequest);
     }
 
