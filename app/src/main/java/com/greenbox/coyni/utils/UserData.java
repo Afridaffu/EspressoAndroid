@@ -12,6 +12,7 @@ import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.buytoken.BuyTokenRequest;
 import com.greenbox.coyni.model.buytoken.BuyTokenResponse;
+import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.model.giftcard.BrandsResponse;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.login.LoginResponse;
@@ -70,6 +71,7 @@ public class UserData {
     private TransferPayRequest transferPayRequest;
     private PaidOrderRequest paidOrderRequest;
     private PaidOrderResp paidOrderResp;
+    private OrderPayResponse orderPayResponse;
     private List<Contacts> listContacts = new ArrayList<>();
     private TransactionListRequest transactionListSearch = new TransactionListRequest();
     private Double withdrawAmount;
@@ -93,6 +95,14 @@ public class UserData {
     boolean isReserveEnabled = false;
     private String strToken;
     private boolean isLoggedIn = false;
+
+    public OrderPayResponse getOrderPayResponse() {
+        return orderPayResponse;
+    }
+
+    public void setOrderPayResponse(OrderPayResponse orderPayResponse) {
+        this.orderPayResponse = orderPayResponse;
+    }
 
     public String getStrToken() {
         return strToken;
@@ -220,14 +230,6 @@ public class UserData {
 
     public void setUserDetails(UserDetails userDetails) {
         this.userDetails = userDetails;
-    }
-
-    public List<States> getListStates() {
-        return listStates;
-    }
-
-    public void setListStates(List<States> listStates) {
-        this.listStates = listStates;
     }
 
     public LatestTxnResponse getListLatestTxn() {

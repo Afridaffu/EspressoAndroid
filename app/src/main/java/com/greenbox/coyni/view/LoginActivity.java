@@ -3,8 +3,6 @@ package com.greenbox.coyni.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -21,7 +19,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -49,7 +46,6 @@ import com.greenbox.coyni.R;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.APIError;
 import com.greenbox.coyni.model.States;
-import com.greenbox.coyni.model.business_id_verification.BusinessTrackerResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
 import com.greenbox.coyni.model.login.LoginRequest;
 import com.greenbox.coyni.model.login.LoginResponse;
@@ -71,26 +67,25 @@ import java.net.URL;
 import java.util.List;
 
 public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityListener {
-    TextInputLayout etlEmail, etlPassword;
-    TextInputEditText etEmail, etPassword;
-    CardView cvNext;
-    LinearLayout layoutEmailError, layoutPwdError;
-    TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
-    String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "";
-    LoginViewModel loginViewModel;
-    Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
-    ImageView loginBGIV, endIconIV, coyniLogoIV;
-    CheckBox chkRemember;
-    DatabaseHandler dbHandler;
-    MyApplication objMyApplication;
-    LinearLayout layoutClose;
-    RelativeLayout layoutMain;
+    private TextInputLayout etlEmail, etlPassword;
+    private TextInputEditText etEmail, etPassword;
+    private CardView cvNext;
+    private LinearLayout layoutEmailError, layoutPwdError, layoutClose;
+    private TextView tvEmailError, tvPwdError, forgotpwd, tvRetEmail;
+    private String strEmail = "", strPwd = "", strMsg = "", strToken = "", strFirstUser = "";
+    private LoginViewModel loginViewModel;
+    private Boolean isFaceLock = false, isTouchId = false, isPwdEye = false, isExpiry = false;
+    private ImageView loginBGIV, endIconIV, coyniLogoIV;
+    private CheckBox chkRemember;
+    private DatabaseHandler dbHandler;
+    private MyApplication objMyApplication;
+    private RelativeLayout layoutMain;
     private long mLastClickTime = 0;
     private static int CODE_AUTHENTICATION_VERIFICATION = 241;
-    LoginResponse loginResponse;
-    BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
-    boolean closeClicked = false;
-    int logoClickCount = 0;
+    private LoginResponse loginResponse;
+    private BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
+    private boolean closeClicked = false;
+    private int logoClickCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +95,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             setContentView(R.layout.activity_login);
-//            Window window = getWindow();
-//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            window.setStatusBarColor(Color.TRANSPARENT);
             if (getIntent() != null && getIntent().getExtras() != null) {
                 LogUtils.v("TAG", getIntent().getExtras() + "");
             }
@@ -159,25 +150,11 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                         layoutEmailError.setVisibility(GONE);
                     }
                 }
-//                    etPassword.setText("");
-//                    etPassword.setHint("");
-//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
-//                    clearPwdControl();
-//                } else {
-//                    etPassword.setText("");
-//                    etPassword.setHint("");
-//                    Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
-//                    etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
                 clearPwdControl();
-//                }
                 if (objMyApplication.getStrRetrEmail() != null && !objMyApplication.getStrRetrEmail().equals("")) {
                     if (chkRemember.isChecked()) {
                         etPassword.setText("");
                         chkRemember.setChecked(false);
-//                        etEmail.setText("");
-//                        Utils.setUpperHintColor(etlEmail, getColor(R.color.light_gray));
-//                        etlEmail.setBoxStrokeColorStateList(Utils.getNormalColorState());
                         clearEmailControl();
                         Utils.setUpperHintColor(etlPassword, getColor(R.color.light_gray));
                         etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
@@ -204,6 +181,7 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
         }
         if (Utils.isKeyboardVisible)
             Utils.hideKeypad(LoginActivity.this);
+
     }
 
     @Override
@@ -369,7 +347,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                     etlPassword.setBoxStrokeColorStateList(Utils.getErrorColorState(LoginActivity.this));
                                     Utils.setUpperHintColor(etlPassword, getColor(R.color.error_red));
                                     layoutPwdError.setVisibility(VISIBLE);
-//                                tvPwdError.setText("Invalid Password");
                                     tvPwdError.setText("Please enter a valid Password");
                                 } else if (etPassword.getText().toString().trim().length() == 0) {
                                     etlPassword.setBoxStrokeColorStateList(Utils.getNormalColorState(LoginActivity.this));
@@ -388,7 +365,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 Utils.setUpperHintColor(etlPassword, getColor(R.color.primary_green));
                                 layoutPwdError.setVisibility(GONE);
                                 etPassword.setHint("\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605\u2605");
-//                                etPassword.setHint("★★★★★★★★★★★★");
 
                                 if (etPassword.getText().toString().length() > 0)
                                     etPassword.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
@@ -421,9 +397,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                             etEmail.setText(etEmail.getText().toString().replaceAll(" ", ""));
                             etEmail.setSelection(etEmail.getText().length());
                         }
-//                        if (isEmailValid(str)) {
-//                            Utils.setUpperHintColor(etlEmail, getResources().getColor(R.color.primary_black));
-//                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -570,7 +543,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-//                    startActivity(new Intent(LoginActivity.this, CompanyInformationActivity.class));
                 }
             });
 
@@ -700,8 +672,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 objMyApplication.setAccountType(login.getData().getAccountType());
                                 objMyApplication.setDbaOwnerId(login.getData().getDbaOwnerId());
                                 objMyApplication.setIsReserveEnabled(login.getData().isReserveEnabled());
-//                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
-//                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (login.getData().getPasswordExpired()) {
                                     isExpiry = true;
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
@@ -774,8 +744,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                                 objMyApplication.setBiometric(loginResponse.getData().getBiometricEnabled());
                                 getStatesUrl(loginResponse.getData().getStateList().getUS());
                                 objMyApplication.setAccountType(loginResponse.getData().getAccountType());
-                                if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT)
-                                    businessIdentityVerificationViewModel.getBusinessTracker();
                                 if (loginResponse.getData().getPasswordExpired()) {
                                     Intent i = new Intent(LoginActivity.this, PINActivity.class);
                                     i.putExtra("screen", "loginExpiry");
@@ -825,19 +793,6 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
                         }
                     }
 
-                }
-            });
-
-            businessIdentityVerificationViewModel.getGetBusinessTrackerResponse().observe(this, new Observer<BusinessTrackerResponse>() {
-                @Override
-                public void onChanged(BusinessTrackerResponse businessTrackerResponse) {
-
-                    if (businessTrackerResponse != null) {
-                        if (businessTrackerResponse.getStatus().toLowerCase().toString().equals("success")) {
-                            objMyApplication.setBusinessTrackerResponse(businessTrackerResponse);
-                            Log.e("Tracker resp", new Gson().toJson(objMyApplication.getBusinessTrackerResponse()));
-                        }
-                    }
                 }
             });
 

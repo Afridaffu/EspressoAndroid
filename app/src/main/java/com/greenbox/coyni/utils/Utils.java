@@ -120,6 +120,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public static final String COMPANY_ID = "companyId";
+    public static final String BOOLEAN = "Boolean";
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
     public static final String TOKEN = "0", MERCHANT = "1", RESERVE = "2";
@@ -323,6 +325,7 @@ public class Utils {
     public static final String SELECTED_MERCHANT_TRANSACTION_TXN_TYPE = "Selected_Merchant_transaction_txn_type";
     public static final String SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE = "Selected_Merchant_transaction_txn_sub_type";
     public static final float slidePercentage = 0.3f;
+    public static final float slidePercentagehalf = 0.5f;
 
     public static boolean isKeyboardVisible = false;
     public static boolean isSettingsBtnClicked = false;
@@ -360,7 +363,9 @@ public class Utils {
     public static final String MonthlyServiceFee = "Monthly Service Fee";
 
     public static final String ADD_BUSINESS = "ADDBUSINESS";
-    public static final String ADD_DBA = "ADDDBA";
+    public static final String ADD_DBA = "ADD_DBA";
+    public static final String IS_FIRST_DBA = "is_first_dba";
+    public static final String NEW_DBA = "NEW DBA";
     public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
 
     public static final int boTargetPercentage = 51;
@@ -827,6 +832,66 @@ public class Utils {
         settingsBtn = dialog.findViewById(R.id.settings_tv);
         headerText = dialog.findViewById(R.id.headerTextTV);
         descriptionText = dialog.findViewById(R.id.descriptonTV);
+
+        if (header != null) {
+            headerText.setText(header);
+        }
+        if (description != null) {
+            descriptionText.setText(description);
+        }
+
+        notNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                isSettingsBtnClicked = true;
+                context.startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.getPackageName(), null)));
+            }
+        });
+
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+
+
+    }
+    public static void showDialogCheckOut(final Context context, String header, String description) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_permission);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = context.getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        TextView notNowBtn, settingsBtn, headerText, descriptionText;
+
+        notNowBtn = dialog.findViewById(R.id.not_now_tv);
+        settingsBtn = dialog.findViewById(R.id.settings_tv);
+        headerText = dialog.findViewById(R.id.headerTextTV);
+        descriptionText = dialog.findViewById(R.id.descriptonTV);
+
+        settingsBtn.setText("Yes");
+        notNowBtn.setText("No");
 
         if (header != null) {
             headerText.setText(header);

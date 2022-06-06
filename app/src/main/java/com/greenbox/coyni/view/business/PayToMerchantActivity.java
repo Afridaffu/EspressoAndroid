@@ -288,7 +288,7 @@ public class PayToMerchantActivity extends AppCompatActivity implements TextWatc
 
         WalletRequest walletRequest = new WalletRequest();
         walletRequest.setWalletType(Utils.TOKEN);
-        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
 
         businessDashboardViewModel.meMerchantWallet(walletRequest);
     }

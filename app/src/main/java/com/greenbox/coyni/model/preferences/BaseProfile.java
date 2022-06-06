@@ -15,6 +15,7 @@ public class BaseProfile {
     private String accountStatus;
     private String dbaOwner;
     private boolean isSelected = false;
+    private int dbaCount = 0;
 
     public boolean isSelected() {
         return isSelected;
@@ -110,6 +111,14 @@ public class BaseProfile {
 
     public void setDbaOwner(String dbaOwner) {
         this.dbaOwner = dbaOwner;
+    }
+
+    public int getDbaCount() {
+        return dbaCount;
+    }
+
+    public void setDbaCount(int dbaCount) {
+        this.dbaCount = dbaCount;
     }
 
     @Override
