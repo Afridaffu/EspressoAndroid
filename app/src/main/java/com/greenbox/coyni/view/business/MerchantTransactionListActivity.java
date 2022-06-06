@@ -98,7 +98,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         globalPosted.clear();
                         currentPage = 0;
                         filterTransactionList = null;
-                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+                        filterIV.setImageResource(R.drawable.ic_filtericon);
                         TransactionListRequest transactionListRequest = new TransactionListRequest();
                         transactionListRequest.setMerchantTransactions(true);
 //                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
@@ -175,7 +175,10 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             pendingTxt.setVisibility(View.GONE);
             noTransactionTV.setVisibility(View.VISIBLE);
         } else if (charSequence.toString().trim().length() == 0) {
-            loadData();
+//            loadData();
+            TransactionListRequest transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setGbxTransactionId(charSequence.toString());
+            getTransactions(transactionListRequest);
             dismissDialog();
         }
     }
@@ -316,7 +319,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             globalPosted.clear();
             currentPage = 0;
             total = 0;
-            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+//            filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
             noMoreTransactionTV.setVisibility(View.GONE);
             TransactionListRequest transactionListRequest = new TransactionListRequest();
             transactionListRequest.setMerchantTransactions(true);
@@ -367,9 +370,9 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         filterTransactionList.setManualUpdate(true);
                     }
                     if (filterTransactionList.isFilters()) {
-                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filter_enabled));
+                        filterIV.setImageResource(R.drawable.ic_filter_enabled);
                     } else {
-                        filterIV.setImageDrawable(getDrawable(R.drawable.ic_filtericon));
+                        filterIV.setImageResource(R.drawable.ic_filtericon);
                     }
                     getTransactions(filterTransactionList);
                 }
