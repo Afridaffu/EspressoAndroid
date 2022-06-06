@@ -1,10 +1,16 @@
 package com.greenbox.coyni.model.check_out_transactions;
 
-public class CheckOutModel {
-
-    private boolean isCheckOutFlag;
+public class OrderPayRequest {
+    private String amount;
     private String encryptedToken;
 
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
 
     public String getEncryptedToken() {
         return encryptedToken;
@@ -13,13 +19,6 @@ public class CheckOutModel {
     public void setEncryptedToken(String encryptedToken) {
         this.encryptedToken = encryptedToken;
     }
-
-    public boolean isCheckOutFlag() {
-        return isCheckOutFlag;
-    }
-
-    public void setCheckOutFlag(boolean checkOutFlag) {
-        isCheckOutFlag = checkOutFlag;
-    }
-
 }
+
+
