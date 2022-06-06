@@ -182,7 +182,7 @@ public class BusinessAccountFragment extends BaseFragment {
         if (Utils.checkInternet(requireContext().getApplicationContext())) {
             WalletRequest walletRequest = new WalletRequest();
             walletRequest.setWalletType(Utils.TOKEN);
-            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
             businessDashboardViewModel.meMerchantWallet(walletRequest);
             dashboardViewModel.getLatestTxns();
             ((BusinessDashboardActivity) getActivity()).showProgressDialog();

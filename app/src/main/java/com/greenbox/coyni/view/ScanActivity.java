@@ -1060,7 +1060,8 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 layoutHead.setVisibility(View.GONE);
                 closeBtnScanMe.setVisibility(View.GONE);
                 closeBtnScanCode.setVisibility(View.VISIBLE);
-
+                flashLL.setVisibility(View.VISIBLE);
+                Utils.isSettingsBtnClicked = false;
             }
             if (!isAlbumClicked) {
                 if (ContextCompat.checkSelfPermission(this,

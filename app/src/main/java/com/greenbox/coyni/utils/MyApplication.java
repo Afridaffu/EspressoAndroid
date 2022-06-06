@@ -57,6 +57,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +67,7 @@ public class MyApplication extends Application {
     private UserData mCurrentUserData;
     private static Context context;
     private CheckOutModel checkOutModel;
+    private List<States> listStates = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -81,6 +83,7 @@ public class MyApplication extends Application {
     public void setCheckOutModel(CheckOutModel checkOutModel) {
         this.checkOutModel = checkOutModel;
     }
+
 
 
     public static Context getContext() {
@@ -228,11 +231,11 @@ public class MyApplication extends Application {
     }
 
     public List<States> getListStates() {
-        return mCurrentUserData.getListStates();
+        return listStates;
     }
 
     public void setListStates(List<States> listStates) {
-        mCurrentUserData.setListStates(listStates);
+        this.listStates = listStates;
     }
 
     public Boolean getBiometric() {

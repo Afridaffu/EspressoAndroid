@@ -232,14 +232,6 @@ public class UserData {
         this.userDetails = userDetails;
     }
 
-    public List<States> getListStates() {
-        return listStates;
-    }
-
-    public void setListStates(List<States> listStates) {
-        this.listStates = listStates;
-    }
-
     public LatestTxnResponse getListLatestTxn() {
         return listLatestTxn;
     }
