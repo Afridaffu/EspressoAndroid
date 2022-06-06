@@ -2,6 +2,7 @@ package com.greenbox.coyni.network;
 
 import com.greenbox.coyni.model.Agreements;
 import com.greenbox.coyni.model.AgreementsPdf;
+import com.greenbox.coyni.model.BatchNow.BatchNowPaymentRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
 import com.greenbox.coyni.model.BatchPayoutIdDetails.BatchPayoutDetailsRequest;
@@ -334,7 +335,10 @@ public interface ApiService {
     @DELETE("api/v2/banks/me")
     Call<BankDeleteResponseData> deleteBank(@Query("accountId") Integer accountId);
 
-    @POST("api/v2/user/authenticate")
+//    @POST("api/v2/user/authenticate")
+//    Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
+
+    @POST("api/v2/user/verify")
     Call<LoginResponse> authenticatePassword(@Body PasswordRequest request);
 
     @Multipart
@@ -633,10 +637,10 @@ public interface ApiService {
     Call<RefundDataResponce> getRefundDetails(@Body RefundReferenceRequest refundrefrequest);
 
     @POST("api/v2/node/refund/process")
-    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest refundrefrequest);
+    Call<RefundDataResponce> getRefundProcess(@Body RefundReferenceRequest request);
 
-    @POST("api/v2/transactions/merchant-payout/{batchId}")
-    Call<BatchNowResponse> getSlideBatchNow(@Path("batchId") String batchId);
+    @POST("api/v2/transactions/merchant-payout")
+    Call<BatchNowResponse> getSlideBatchNow(@Body BatchNowPaymentRequest request);
 
     @POST("api/v2/transactions/admin/reserve/summary")
     Call<ReserveListResponse> getReserveListItems();

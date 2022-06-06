@@ -254,6 +254,7 @@ public class BusinessAdditionalActionRequiredActivity extends BaseActivity imple
             public void onChanged(ActionRequiredSubmitResponse actionRequiredSubmitResponse) {
                 dismissDialog();
                 if (actionRequiredSubmitResponse != null && actionRequiredSubmitResponse.getStatus().equalsIgnoreCase(Utils.SUCCESS)) {
+                    setResult(RESULT_OK);
                     finish();
                 } else {
                     String errorMessage = getString(R.string.something_went_wrong);

@@ -19,6 +19,69 @@ public class ProfileData {
     private String status;
     private String dbaName;
     private String companyName;
+    private String identityDocument;
+    private String identityUploadDate;
+    private String identityDocumentName;
+    private String dob;
+    private boolean isReserveEnabled;
+    private int ssn;
+    private int accountype;
+
+    public String getIdentityDocument() {
+        return identityDocument;
+    }
+
+    public void setIdentityDocument(String identityDocument) {
+        this.identityDocument = identityDocument;
+    }
+
+    public String getIdentityUploadDate() {
+        return identityUploadDate;
+    }
+
+    public void setIdentityUploadDate(String identityUploadDate) {
+        this.identityUploadDate = identityUploadDate;
+    }
+
+    public String getIdentityDocumentName() {
+        return identityDocumentName;
+    }
+
+    public void setIdentityDocumentName(String identityDocumentName) {
+        this.identityDocumentName = identityDocumentName;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public boolean isReserveEnabled() {
+        return isReserveEnabled;
+    }
+
+    public void setReserveEnabled(boolean reserveEnabled) {
+        isReserveEnabled = reserveEnabled;
+    }
+
+    public int getSsn() {
+        return ssn;
+    }
+
+    public void setSsn(int ssn) {
+        this.ssn = ssn;
+    }
+
+    public int getAccountype() {
+        return accountype;
+    }
+
+    public void setAccountype(int accountype) {
+        this.accountype = accountype;
+    }
 
     public int getId() {
         return id;

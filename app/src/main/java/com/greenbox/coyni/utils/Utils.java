@@ -58,6 +58,7 @@ import android.widget.Toast;
 import androidx.biometric.BiometricManager;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -329,6 +330,8 @@ public class Utils {
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
+    public static final String ACTION_TYPE = "action_type";
+    public static final String TRANSACTION_TOKEN = "Transaction_token";
     public static final String ACCOUNT_TYPE = "account_type";
     public static final String changeActionType = "CHANGE";
     public static final String withdrawActionType = "WITHDRAW";
@@ -336,6 +339,8 @@ public class Utils {
     public static final String sendActionType = "SEND";
     public static final String pinActionType = "COYNIPIN";
     public static final String paidActionType = "PAIDORDER";
+    public static final String refundActionType = "REFUND";
+    public static final String batchnowActionType = "MERCHANT_PAYOUT";
 
     public static final String MERCHANT_TRANSACTION_PARTIAL_REFUND = "Partial Refund";
     public static final String MERCHANT_TRANSACTION_COMPLETED = "Completed";
@@ -688,6 +693,21 @@ public class Utils {
             ex.printStackTrace();
         }
         return strValue;
+    }
+
+    public static void checkAuthentication(Fragment fragment, int CODE_AUTHENTICATION_VERIFICATION) {
+        try {
+            KeyguardManager km = (KeyguardManager) fragment.getContext().getSystemService(KEYGUARD_SERVICE);
+            if (km.isKeyguardSecure()) {
+                if (android.os.Build.VERSION.SDK_INT >= 21) {
+                    Intent i = km.createConfirmDeviceCredentialIntent("Authentication required", "password");
+                    fragment.startActivityForResult(i, CODE_AUTHENTICATION_VERIFICATION);
+                }
+            } else
+                displayAlert("You enabled the Security permission in coyni App. Please enable the Security settings in device for making the transactions.", fragment.getActivity(), "", "");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void checkAuthentication(Activity context, int CODE_AUTHENTICATION_VERIFICATION) {

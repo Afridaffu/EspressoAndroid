@@ -1,5 +1,7 @@
 package com.greenbox.coyni.model.login;
 
+import org.json.JSONArray;
+
 public class LoginData {
     private int userId;
     private String email;
@@ -28,6 +30,33 @@ public class LoginData {
     private boolean isPersonIdentified;
     private String firstName;
     private String lastName;
+    private String requestToken;
+    private int businessUserId;
+    private Object[] authorities;
+
+    public String getRequestToken() {
+        return requestToken;
+    }
+
+    public void setRequestToken(String requestToken) {
+        this.requestToken = requestToken;
+    }
+
+    public int getBusinessUserId() {
+        return businessUserId;
+    }
+
+    public void setBusinessUserId(int businessUserId) {
+        this.businessUserId = businessUserId;
+    }
+
+    public Object[] getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Object[] authorities) {
+        this.authorities = authorities;
+    }
 
     public int getDbaOwnerId() {
         return dbaOwnerId;

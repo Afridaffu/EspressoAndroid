@@ -39,8 +39,6 @@ import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
 import java.util.List;
 
-import okhttp3.internal.Util;
-
 public class BusinessAccountFragment extends BaseFragment {
 
     private LinearLayout viewMoreLL;
@@ -109,22 +107,12 @@ public class BusinessAccountFragment extends BaseFragment {
         });
 
         mUserIconRelativeLayout.setOnClickListener(view -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+            ((BusinessDashboardActivity) getActivity()).launchSwitchAccountPage();
         });
-
 
         initObservers();
         showUserData();
         return currentView;
-    }
-
-    @Override
-    public void updateData() {
-        showUserData();
     }
 
     private void showUserData() {

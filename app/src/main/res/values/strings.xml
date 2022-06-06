@@ -491,6 +491,7 @@
     <string name="merchant_payout">Merchant Payout</string>
     <string name="withdrawn">Withdrawn</string>
     <string name="monthly_service_fee">Monthly Service Fee</string>
+    <string name="enter_your_pin">Enter your PIN</string>
     <string name="enter_the_amount">Enter the amount</string>
     <string name="set_amount">Set Amount</string>
     <string name="clear_amount">Clear Amount</string>
@@ -697,6 +698,8 @@
     <string name="gbx_merchant">GreenBox-Merchant</string>
 
     <string name="complete_idve">Please complete your Identity Verification process.</string>
+    <string name="otp_retry_error">Looks like something went wrong. Please try again</string>
+
     <string name="alert">Alert</string>
     <string name="checkout_cancel_message">Do you want to cancel the Payment.</string>
 </resources>

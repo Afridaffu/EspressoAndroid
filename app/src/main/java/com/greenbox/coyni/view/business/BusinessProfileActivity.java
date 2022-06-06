@@ -290,7 +290,7 @@ public class BusinessProfileActivity extends BaseActivity {
             bpbackBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
+                    onBackPressed();
                 }
             });
 
@@ -513,6 +513,12 @@ public class BusinessProfileActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void enableDisableMerchantSettings() {
