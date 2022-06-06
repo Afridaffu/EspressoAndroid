@@ -1,6 +1,8 @@
 package com.greenbox.coyni.fragments;
 
-import android.app.Activity;
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.greenbox.coyni.dialogs.BatchNowDialog;
 import com.greenbox.coyni.dialogs.DateRangePickerDialog;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.dialogs.ProcessingVolumeDialog;
+import com.greenbox.coyni.model.BatchNow.BatchNowPaymentRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowRequest;
 import com.greenbox.coyni.model.BatchNow.BatchNowResponse;
 import com.greenbox.coyni.model.BusinessBatchPayout.BatchPayoutListItems;
@@ -39,6 +42,8 @@ import com.greenbox.coyni.model.DashboardReserveList.ReserveListData;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListItems;
 import com.greenbox.coyni.model.DashboardReserveList.ReserveListResponse;
 import com.greenbox.coyni.model.RangeDates;
+import com.greenbox.coyni.model.biometric.BiometricTokenRequest;
+import com.greenbox.coyni.model.biometric.BiometricTokenResponse;
 import com.greenbox.coyni.model.business_activity.BusinessActivityData;
 import com.greenbox.coyni.model.business_activity.BusinessActivityRequest;
 import com.greenbox.coyni.model.business_activity.BusinessActivityResp;
@@ -55,7 +60,7 @@ import com.greenbox.coyni.utils.SeekBarWithFloatingText;
 import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
-import com.greenbox.coyni.view.PINActivity;
+import com.greenbox.coyni.view.ValidatePinActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
@@ -63,6 +68,7 @@ import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.view.business.ReserveReleasesActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BusinessIdentityVerificationViewModel;
+import com.greenbox.coyni.viewmodel.CoyniViewModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -99,6 +105,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private Long mLastClickTime = 0L;
     static boolean isFaceLock = false, isTouchId = false, isBiometric = false;
     private final int CODE_AUTHENTICATION_VERIFICATION = 251;
+    int TOUCH_ID_ENABLE_REQUEST_CODE = 100;
     static String strToken = "";
     private DatabaseHandler dbHandler;
     private String batchId;
@@ -107,7 +114,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private LinearLayout mTicketsLayout;
     private UserData userData;
     private String reserveRules = "";
-
+    CoyniViewModel coyniViewModel;
     //Processing Volume Types
     private static final String todayValue = "Today";
     private static final String yesterdayValue = "Yesterday";
@@ -216,6 +223,12 @@ public class BusinessDashboardFragment extends BaseFragment {
         rulePeriodTV = mCurrentView.findViewById(R.id.rulePeriodTV);
         mDateHighestTicket = mCurrentView.findViewById(R.id.date_of_highest_ticket);
 
+        coyniViewModel = new ViewModelProvider(this).get(CoyniViewModel.class);
+
+        isBiometric = Utils.getIsBiometric();
+        setFaceLock();
+        setTouchId();
+
         if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
             ((BusinessDashboardActivity) getActivity()).showProgressDialog("connecting...");
         }
@@ -245,11 +258,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         });
 
         mUserIconRelativeLayout.setOnClickListener(view -> {
-            if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
-                return;
-            }
-            mLastClickTimeQA = SystemClock.elapsedRealtime();
-            startActivity(new Intent(getActivity(), BusinessCreateAccountsActivity.class));
+            ((BusinessDashboardActivity) getActivity()).launchSwitchAccountPage();
         });
 
         mTvMerchantTransactions.setOnClickListener(v -> {
@@ -327,8 +336,8 @@ public class BusinessDashboardFragment extends BaseFragment {
                 if (batchNowResponse != null) {
                     if (batchNowResponse.getStatus() != null && batchNowResponse.getData() != null) {
                         Log.d(TAG, "Batched successfully");
-                        batchReq();
                         Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+                        batchReq();
                     } else {
                         Log.d(TAG, "No items found");
                         String msg = getString(R.string.something_went_wrong);
@@ -525,6 +534,21 @@ public class BusinessDashboardFragment extends BaseFragment {
                 }
             }
         });
+
+        coyniViewModel.getBiometricTokenResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BiometricTokenResponse>() {
+            @Override
+            public void onChanged(BiometricTokenResponse biometricTokenResponse) {
+                if (biometricTokenResponse != null) {
+                    if (biometricTokenResponse.getStatus().toLowerCase().equals("success")) {
+                        if (biometricTokenResponse.getData().getRequestToken() != null && !biometricTokenResponse.getData().getRequestToken().equals("")) {
+//                            Utils.setStrToken(biometricTokenResponse.getData().getRequestToken());
+                            tokenReq(biometricTokenResponse.getData().getRequestToken());
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     private void showData(List<BatchPayoutListItems> items) {
@@ -532,7 +556,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     }
 
     private void setMonthlyVolumeData() {
-//        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
+        monthlyVolumeViewLl.setVisibility(View.VISIBLE);
         if (myApplication.getMyProfile() != null && myApplication.getMyProfile().getData() != null
                 && myApplication.getMyProfile().getData().getCompanyName() != null) {
             mTvOfficiallyVerified.setText(getResources().getString(R.string.business_officially_verified, myApplication.getMyProfile().getData().getCompanyName()));
@@ -598,12 +622,11 @@ public class BusinessDashboardFragment extends BaseFragment {
                     mLastClickTime = SystemClock.elapsedRealtime();
 //                    businessDashboardViewModel.batchNowSlideData((String) value);
                     if ((isFaceLock || isTouchId) && Utils.checkAuthentication(getActivity())) {
-//                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
-//                            Utils.checkAuthentication(getActivity(), CODE_AUTHENTICATION_VERIFICATION);
-//                        }
+                        if (isBiometric && ((isTouchId && Utils.isFingerPrint(getActivity())) || (isFaceLock))) {
+                            Utils.checkAuthentication(BusinessDashboardFragment.this, CODE_AUTHENTICATION_VERIFICATION);
+                        }
                     } else {
-                        launchPinActivity(batchId);
-//                        businessDashboardViewModel.batchNowSlideData((String) value);
+                        launchPinActivity();
                     }
                 }
             }
@@ -611,11 +634,10 @@ public class BusinessDashboardFragment extends BaseFragment {
         batchNowDialog.show();
     }
 
-    private void launchPinActivity(String batchNow) {
-        batchId = batchNow;
-        Intent inPin = new Intent(getActivity(), PINActivity.class);
-        inPin.putExtra("TYPE", "ENTER");
-        inPin.putExtra("screen", "BatchNow");
+
+    private void launchPinActivity() {
+        Intent inPin = new Intent(getActivity(), ValidatePinActivity.class);
+        inPin.putExtra(Utils.ACTION_TYPE, Utils.batchnowActionType);
         pinActivityResultLauncher.launch(inPin);
     }
 
@@ -628,16 +650,40 @@ public class BusinessDashboardFragment extends BaseFragment {
     ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    //Call API Here
+                if (result.getResultCode() == RESULT_OK) {
                     LogUtils.v(TAG, "RESULT_OK" + result);
-                    businessDashboardViewModel.batchNowSlideData(batchId);
-                    //Utils.showCustomToast(getActivity(), getResources().getString(R.string.Successfully_Closed_Batch), R.drawable.ic_custom_tick, "Batch");
+                    tokenReq(result.getData().getStringExtra(Utils.TRANSACTION_TOKEN));
                 }
             });
 
-    public void setToken() {
-        strToken = dbHandler.getPermanentToken();
+    public void tokenReq(String token) {
+        BatchNowPaymentRequest request = new BatchNowPaymentRequest();
+        request.setRequestToken(token);
+        request.setPayoutId(batchId);
+        businessDashboardViewModel.batchNowSlideData(request);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    try {
+                        BiometricTokenRequest request = new BiometricTokenRequest();
+                        request.setDeviceId(Utils.getDeviceID());
+                        request.setMobileToken(myApplication.getStrMobileToken());
+                        request.setActionType(Utils.batchnowActionType);
+                        coyniViewModel.biometricToken(request);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+                case RESULT_CANCELED:
+                    launchPinActivity();
+                    break;
+            }
+        }
     }
 
     public void setFaceLock() {
@@ -757,7 +803,6 @@ public class BusinessDashboardFragment extends BaseFragment {
                         }
                     }
                 });
-
 
             }
             break;

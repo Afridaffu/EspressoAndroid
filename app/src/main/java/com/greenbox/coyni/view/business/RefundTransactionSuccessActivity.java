@@ -15,7 +15,7 @@ import com.greenbox.coyni.view.BaseActivity;
 
 public class RefundTransactionSuccessActivity extends BaseActivity {
 
-    private TextView tvrAmount,tvrReferenceID,tvrMessage;
+    private TextView tvrAmount, tvrReferenceID, tvrMessage;
     private CardView cvrDone;
     private LinearLayout layoutRReferenceLL;
 
@@ -45,10 +45,12 @@ public class RefundTransactionSuccessActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    startActivity(new Intent(RefundTransactionSuccessActivity.this,MerchantTransactionDetailsActivity.class)
+                    startActivity(new Intent(RefundTransactionSuccessActivity.this, MerchantTransactionDetailsActivity.class)
                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID,getIntent().getStringExtra(Utils.gbxTransID))
-                    .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE,Utils.refundtxntype));
+                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_GBX_ID, getIntent().getStringExtra(Utils.gbxTransID))
+                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_TYPE, Utils.refundtxntype)
+                            .putExtra(Utils.SELECTED_MERCHANT_TRANSACTION_TXN_SUB_TYPE, Utils.sentt));
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -56,31 +58,28 @@ public class RefundTransactionSuccessActivity extends BaseActivity {
         });
 
         try {
-            if (getIntent().getStringExtra(Utils.amount) != null && !getIntent().getStringExtra(Utils.amount).equals("")){
+            if (getIntent().getStringExtra(Utils.amount) != null && !getIntent().getStringExtra(Utils.amount).equals("")) {
                 tvrAmount.setText(getIntent().getStringExtra(Utils.amount));
-            }
-            else {
+            } else {
                 tvrAmount.setText("");
             }
 
-            if (getIntent().getStringExtra(Utils.gbxTransID) != null && !getIntent().getStringExtra(Utils.gbxTransID).equals("")){
+            if (getIntent().getStringExtra(Utils.gbxTransID) != null && !getIntent().getStringExtra(Utils.gbxTransID).equals("")) {
                 String refID = getIntent().getStringExtra(Utils.gbxTransID);
-                if (refID.length() > 30){
-                    tvrReferenceID.setText(refID.substring(0,15)+"...");
-                }
-                else {
+                if (refID.length() > 30) {
+                    tvrReferenceID.setText(refID.substring(0, 15) + "...");
+                } else {
                     tvrReferenceID.setText(refID);
                 }
                 layoutRReferenceLL.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Utils.copyText(refID,RefundTransactionSuccessActivity.this);
+                        Utils.copyText(refID, RefundTransactionSuccessActivity.this);
                     }
                 });
 
-    //            tvrReferenceID.setText(getIntent().getStringExtra("gbxTransID"));
-            }
-            else {
+                //            tvrReferenceID.setText(getIntent().getStringExtra("gbxTransID"));
+            } else {
                 tvrReferenceID.setText("");
             }
         } catch (Exception e) {
