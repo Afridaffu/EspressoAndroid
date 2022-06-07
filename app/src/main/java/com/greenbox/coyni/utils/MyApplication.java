@@ -70,6 +70,7 @@ public class MyApplication extends Application {
     private static Context context;
     private CheckOutModel checkOutModel;
     private List<States> listStates = new ArrayList<>();
+    private String strMobileToken = "";
 
     @Override
     public void onCreate() {
@@ -85,7 +86,6 @@ public class MyApplication extends Application {
     public void setCheckOutModel(CheckOutModel checkOutModel) {
         this.checkOutModel = checkOutModel;
     }
-
 
 
     public static Context getContext() {
@@ -128,11 +128,11 @@ public class MyApplication extends Application {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
     }
 
-    public void setOrderPayResponse(OrderPayResponse orderPayResponse){
+    public void setOrderPayResponse(OrderPayResponse orderPayResponse) {
         mCurrentUserData.setOrderPayResponse(orderPayResponse);
     }
 
-    public OrderPayResponse getOrderPayResponse(){
+    public OrderPayResponse getOrderPayResponse() {
         return mCurrentUserData.getOrderPayResponse();
     }
 
@@ -556,11 +556,13 @@ public class MyApplication extends Application {
     }
 
     public String getStrMobileToken() {
-        return mCurrentUserData.getStrMobileToken();
+//        return mCurrentUserData.getStrMobileToken();
+        return strMobileToken;
     }
 
     public void setStrMobileToken(String strMobileToken) {
-        mCurrentUserData.setStrMobileToken(strMobileToken);
+//        mCurrentUserData.setStrMobileToken(strMobileToken);
+        this.strMobileToken = strMobileToken;
     }
 
     public BuyTokenResponse getBuyTokenResponse() {
