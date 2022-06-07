@@ -108,8 +108,8 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
     @Override
     public void onBackPressed() {
         try {
-            super.onBackPressed();
             objMyApplication.setStrRetrEmail("");
+            new Handler().postDelayed((Runnable) super::onBackPressed, 100);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -549,6 +549,9 @@ public class LoginActivity extends BaseActivity implements OnKeyboardVisibilityL
             layoutClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(LoginActivity.this);
+
                     closeClicked = true;
                     objMyApplication.setStrRetrEmail("");
                     onBackPressed();

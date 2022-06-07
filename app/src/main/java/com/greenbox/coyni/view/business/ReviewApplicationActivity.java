@@ -101,7 +101,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
     private TextView noBanksTv, noBoTV, ssnEinTV;
-    private LinearLayout banksLL, boLL, CloseLL;
+    private LinearLayout banksLL, boLL, CloseLL,companyEditLL;
     private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
@@ -157,11 +157,17 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         if (getIntent().getBooleanExtra(Utils.ADD_DBA, false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             addDBA = getIntent().getBooleanExtra(Utils.ADD_DBA, false);
+//            companyEditLL.setVisibility(GONE);
         }
 
         initFields();
         initObservers();
 
+        if(addDBA == true){
+            companyEditLL.setVisibility(GONE);
+        }else{
+            companyEditLL.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initFields() {
@@ -187,6 +193,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         ssnEinTV = findViewById(R.id.ssnEinTV);
         spannableTV = findViewById(R.id.spannableTV);
         httpHeader = findViewById(R.id.httpHeader);
+        companyEditLL = findViewById(R.id.companyEditLL);
 
         setSpannableText();
 

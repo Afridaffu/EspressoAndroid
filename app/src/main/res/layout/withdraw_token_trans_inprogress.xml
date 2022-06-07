@@ -7,145 +7,140 @@
     android:orientation="vertical"
     android:padding="@dimen/_12sdp">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
         android:layout_above="@+id/cvDone"
-        android:scrollbars="none">
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/_23sdp"
+            android:src="@drawable/ic_in_progress_icon" />
+
+        <TextView
+            android:id="@+id/tvHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:text="Transaction In Progress"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/tvAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/opensans_bold"
+            android:text="159.40"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_35ssp" />
+
+        <TextView
+            android:id="@+id/tvWDMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="center"
+            android:text="This total amount of [Amount] will appear on your\nbank statement as {description}."
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_11ssp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imgLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_65sdp"
-                android:layout_marginBottom="@dimen/_23sdp"
-                android:src="@drawable/ic_in_progress_icon" />
+            android:layout_marginTop="@dimen/_30sdp"
+            android:orientation="horizontal"
+            android:padding="@dimen/_10sdp">
 
             <TextView
-                android:id="@+id/tvHeading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_7sdp"
-                android:fontFamily="@font/opensans_semibold"
-                android:gravity="center"
-                android:text="Transaction In Progress"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/tvAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/opensans_bold"
-                android:text="159.40"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_35ssp" />
-
-            <TextView
-                android:id="@+id/tvWDMessage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_weight="1"
                 android:fontFamily="@font/opensans_regular"
-                android:gravity="center"
-                android:text="This total amount of [Amount] will appear on your\nbank statement as {description}."
-                android:textColor="@color/primary_black"
+                android:text="Reference ID"
+                android:textColor="@color/xdark_gray"
                 android:textSize="@dimen/_11ssp" />
 
             <LinearLayout
+                android:id="@+id/layoutReference"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:orientation="horizontal"
-                android:padding="@dimen/_10sdp">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="Reference ID"
-                    android:textColor="@color/xdark_gray"
-                    android:textSize="@dimen/_11ssp" />
-
-                <LinearLayout
-                    android:id="@+id/layoutReference"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvReferenceID"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/opensans_semibold"
-                        android:gravity="right"
-                        android:singleLine="true"
-                        android:text="SND34239274DANN"
-                        android:textColor="@color/primary_black"
-                        android:textSize="@dimen/_11ssp" />
-
-                    <ImageView
-                        android:layout_width="@dimen/_11sdp"
-                        android:layout_height="@dimen/_11sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:src="@drawable/ic_copy" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/_10sdp"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/opensans_regular"
-                    android:text="Account Balance"
-                    android:textColor="@color/xdark_gray"
-                    android:textSize="@dimen/_11ssp" />
-
-                <TextView
-                    android:id="@+id/tvBalance"
+                    android:id="@+id/tvReferenceID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/opensans_semibold"
                     android:gravity="right"
-                    android:text="1,000.00 CYN"
-                    android:textColor="@color/primary_black" />
+                    android:singleLine="true"
+                    android:text="SND34239274DANN"
+                    android:textColor="@color/primary_black"
+                    android:textSize="@dimen/_11ssp" />
+
+                <ImageView
+                    android:layout_width="@dimen/_11sdp"
+                    android:layout_height="@dimen/_11sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:src="@drawable/ic_copy" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/_10sdp"
+            android:visibility="gone">
 
             <TextView
-                android:id="@+id/tvDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_weight="1"
                 android:fontFamily="@font/opensans_regular"
-                android:gravity="left"
-                android:paddingLeft="@dimen/_10sdp"
-                android:text="We are processing your request, please allow a few \nminutes for your coyni Debit/Credit card purchase to be reflected in your token account. Learn More"
-                android:textColor="@color/primary_black"
-                android:textSize="@dimen/_10sdp" />
+                android:text="Account Balance"
+                android:textColor="@color/xdark_gray"
+                android:textSize="@dimen/_11ssp" />
 
+            <TextView
+                android:id="@+id/tvBalance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_semibold"
+                android:gravity="right"
+                android:text="1,000.00 CYN"
+                android:textColor="@color/primary_black" />
         </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:fontFamily="@font/opensans_regular"
+            android:gravity="left"
+            android:paddingLeft="@dimen/_10sdp"
+            android:text="We are processing your request, please allow a few \nminutes for your coyni Debit/Credit card purchase to be reflected in your token account. Learn More"
+            android:textColor="@color/primary_black"
+            android:textSize="@dimen/_10sdp" />
+
+    </LinearLayout>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvDone"
@@ -153,7 +148,7 @@
         android:layout_height="@dimen/_43sdp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_33sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginRight="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         app:cardBackgroundColor="@color/primary_green"

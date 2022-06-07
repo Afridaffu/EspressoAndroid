@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -877,7 +878,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 //            cvvDialog.setCanceledOnTouchOutside(true);
             cvvDialog.show();
             addNoteET.requestFocus();
-            Utils.shwForcedKeypad(RefundTransactionActivity.this);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(RefundTransactionActivity.this);
+                }
+            }, 100);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -183,9 +184,11 @@ public class CreatePasswordActivity extends BaseActivity implements OnKeyboardVi
                         if (getIntent().getStringExtra("screen").equals("loginExpiry")) {
                             if (Utils.isKeyboardVisible)
                                 Utils.hideKeypad(CreatePasswordActivity.this);
-                            Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
-                            loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(loginIntent);
+                            new Handler().postDelayed(() -> {
+                                Intent loginIntent = new Intent(CreatePasswordActivity.this, LoginActivity.class);
+                                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(loginIntent);
+                            }, 100);
                         } else {
                             onBackPressed();
                             //                        finish();
