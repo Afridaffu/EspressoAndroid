@@ -99,18 +99,19 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
                         currentPage = 0;
                         filterTransactionList = null;
                         filterIV.setImageResource(R.drawable.ic_filtericon);
-                        TransactionListRequest transactionListRequest = new TransactionListRequest();
-                        transactionListRequest.setMerchantTransactions(true);
-//                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
-                        transactionListRequest.setPageNo(String.valueOf(currentPage));
-                        transactionListRequest.setWalletCategory(Utils.walletCategory);
-                        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
+                        loadData();
+//                        TransactionListRequest transactionListRequest = new TransactionListRequest();
+//                        transactionListRequest.setMerchantTransactions(true);
+////                        transactionListRequest.setTransactionType(getDefaultTransactionTypes());
+//                        transactionListRequest.setPageNo(String.valueOf(currentPage));
+//                        transactionListRequest.setWalletCategory(Utils.walletCategory);
+//                        transactionListRequest.setPageSize(String.valueOf(Utils.pageSize));
 
 //                        getTransactions(transactionListRequest);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    searchET.setText("");
+//                    searchET.setText("");
                 }
             });
 
@@ -175,10 +176,13 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             pendingTxt.setVisibility(View.GONE);
             noTransactionTV.setVisibility(View.VISIBLE);
         } else if (charSequence.toString().trim().length() == 0) {
-//            loadData();
-            TransactionListRequest transactionListRequest = new TransactionListRequest();
-            transactionListRequest.setGbxTransactionId(charSequence.toString());
-            getTransactions(transactionListRequest);
+            if (filterTransactionList != null) {
+                globalPending.clear();
+                globalPosted.clear();
+                getTransactions(filterTransactionList);
+            }else {
+                loadData();
+            }
             dismissDialog();
         }
     }
@@ -328,6 +332,8 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
             transactionListRequest.setWalletCategory(Utils.walletCategory);
             transactionListRequest.setPageNo(String.valueOf(currentPage));
             getTransactions(transactionListRequest);
+            objMyApplication.initializeTransactionSearch();
+            objMyApplication.setTransactionListSearch(transactionListRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -381,6 +387,7 @@ public class MerchantTransactionListActivity extends BaseActivity implements Tex
 ////                    filterIV.setImageResource(R.drawable.ic_filter_enabled);
 //                }
                 else if (action.equals(Utils.resetFilter)) {
+                    filterIV.setImageResource(R.drawable.ic_filtericon);
                     filterTransactionList = null;
                     loadData();
                     dismissDialog();
