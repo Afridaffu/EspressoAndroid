@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
@@ -157,17 +158,11 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         if (getIntent().getBooleanExtra(Utils.ADD_DBA, false)) {
             loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
             addDBA = getIntent().getBooleanExtra(Utils.ADD_DBA, false);
-//            companyEditLL.setVisibility(GONE);
         }
 
         initFields();
         initObservers();
-
-        if(addDBA == true){
-            companyEditLL.setVisibility(GONE);
-        }else{
-            companyEditLL.setVisibility(View.VISIBLE);
-        }
+        companyEditLL.setVisibility(addDBA ? companyEditLL.GONE : companyEditLL.VISIBLE);
     }
 
     private void initFields() {
