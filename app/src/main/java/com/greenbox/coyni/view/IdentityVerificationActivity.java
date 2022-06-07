@@ -959,14 +959,19 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
             closebtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(IdentityVerificationActivity.this);
+                    new Handler().postDelayed(() -> finish(), 100);
+
                 }
             });
 
             exitBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    if (Utils.isKeyboardVisible)
+                        Utils.hideKeypad(IdentityVerificationActivity.this);
+                    new Handler().postDelayed(() -> finish(), 100);
                 }
             });
 
@@ -1121,7 +1126,9 @@ public class IdentityVerificationActivity extends AppCompatActivity implements O
         if (addBusiness.equalsIgnoreCase("true")) {
             loginViewModel.postChangeAccount(myApplicationObj.getLoginUserId());
         } else {
-            finish();
+            if (Utils.isKeyboardVisible)
+                Utils.hideKeypad(IdentityVerificationActivity.this);
+            new Handler().postDelayed(() -> finish(), 100);
         }
     }
 
