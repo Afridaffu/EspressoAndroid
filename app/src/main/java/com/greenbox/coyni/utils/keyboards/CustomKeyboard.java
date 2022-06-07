@@ -208,20 +208,22 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
                         refundTransactionActivity.clearAmountCards();
                     }
                 }
-                String value = keyValues.get(view.getId());
+                if (enteredText.length() < 8) {
+                    String value = keyValues.get(view.getId());
 //                inputConnection.commitText(value, 1);
-                if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
-
-                } else {
-                    String[] split = enteredText.split("\\.");
-                    if (split.length == 2 && split[1].length() == 2) {
+                    if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
 
                     } else {
+//                    String[] split = enteredText.split("\\.");
+//                    if (split.length == 2 && split[1].length() == 2) {
+//
+//                    } else {
                         enteredText = enteredText + value;
                         inputConnection.commitText(value, 1);
-                    }
-                    if (strScreen.equals("addcard")) {
-                        AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+//                    }
+                        if (strScreen.equals("addcard")) {
+                            AddCardActivity.addCardActivity.enableOrDisableFocus(enteredText);
+                        }
                     }
                 }
             }
@@ -264,7 +266,7 @@ public class CustomKeyboard extends LinearLayout implements View.OnClickListener
         enteredText = strText;
     }
 
-    public void setEnteredText(String text){
+    public void setEnteredText(String text) {
         enteredText = text.trim();
     }
 }
