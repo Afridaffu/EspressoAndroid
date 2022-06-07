@@ -226,7 +226,7 @@
     <string name="calendar_saturday">S</string>
     <string name="something_went_wrong">something went wrong</string>
     <string name="signet_account">Signet Account</string>
-    <string name="signet_ac_withdrawing_funds">Can be used for withdrawing funds from \nyour coyni account.</string>
+    <string name="signet_ac_withdrawing_funds">Can be used for withdrawing funds from your coyni account.</string>
     <string name="withdraw_to_usd">Withdraw to USD</string>
     <string name="scan">Scan</string>
     <string name="pay_request">Pay/Request</string>
