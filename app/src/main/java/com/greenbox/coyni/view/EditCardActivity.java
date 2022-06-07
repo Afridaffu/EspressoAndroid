@@ -221,7 +221,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 public void onClick(View view) {
                     onBackPressed();
                     finish();
-                    if (Utils.isKeyboardVisible){
+                    if (Utils.isKeyboardVisible) {
                         Utils.hideKeypad(EditCardActivity.this);
                     }
                 }
@@ -270,7 +270,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 @Override
                 public void onClick(View view) {
                     try {
-                        if (Utils.isKeyboardVisible){
+                        if (Utils.isKeyboardVisible) {
                             Utils.hideKeypad(EditCardActivity.this);
                         }
                         if (!selectedCard.getExpired()) {
@@ -298,7 +298,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                                 return;
                             }
                             mLastClickTime = SystemClock.elapsedRealtime();
-                            if (Utils.isKeyboardVisible){
+                            if (Utils.isKeyboardVisible) {
                                 Utils.hideKeypad(EditCardActivity.this);
                             }
                             CardEditRequest request = new CardEditRequest();
@@ -332,7 +332,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
         paymentMethodsViewModel.getCardEditResponseMutableLiveData().observe(this, new Observer<CardEditResponse>() {
             @Override
             public void onChanged(CardEditResponse cardEditResponse) {
-                dialog.dismiss();
+                dismissDialog();
                 if (cardEditResponse != null) {
                     try {
                         if (cardEditResponse.getStatus().toLowerCase().equals("success")) {
@@ -373,7 +373,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
             @Override
             public void onChanged(APIError apiError) {
                 try {
-                    dialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), EditCardActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -444,7 +444,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                             etExpiry.setHint("MM/YY");
                             etExpiry.requestFocus();
                             if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(EditCardActivity.this);
+                                Utils.shwForcedKeypad(EditCardActivity.this);
                             etlExpiry.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlExpiry, getColor(R.color.primary_green));
                             expiryErrorLL.setVisibility(GONE);
@@ -476,7 +476,7 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                         } else {
 //                            etAddress1.setHint("Billing Address Line 1");
                             if (!Utils.isKeyboardVisible)
-                            Utils.shwForcedKeypad(EditCardActivity.this);
+                                Utils.shwForcedKeypad(EditCardActivity.this);
                             etlAddress1.setBoxStrokeColor(getResources().getColor(R.color.primary_green));
                             Utils.setUpperHintColor(etlAddress1, getColor(R.color.primary_green));
                             etAddress1.setSelection(etAddress1.getText().length());
@@ -680,8 +680,8 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                     }
                     enableOrDisableNext();
 
-                    if (etAddress1.getText().toString().contains("  ")){
-                        etAddress1.setText(etAddress1.getText().toString().replace("  "," "));
+                    if (etAddress1.getText().toString().contains("  ")) {
+                        etAddress1.setText(etAddress1.getText().toString().replace("  ", " "));
                         etAddress1.setSelection(etAddress1.getText().length());
                     }
 
@@ -725,8 +725,8 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                 }
 
 
-                if (etAddress2.getText().toString().contains("  ")){
-                    etAddress2.setText(etAddress2.getText().toString().replace("  "," "));
+                if (etAddress2.getText().toString().contains("  ")) {
+                    etAddress2.setText(etAddress2.getText().toString().replace("  ", " "));
                     etAddress2.setSelection(etAddress2.getText().length());
                 }
             }
@@ -762,8 +762,8 @@ public class EditCardActivity extends BaseActivity implements OnKeyboardVisibili
                     }
                     enableOrDisableNext();
 
-                    if (etCity.getText().toString().contains("  ")){
-                        etCity.setText(etCity.getText().toString().replace("  "," "));
+                    if (etCity.getText().toString().contains("  ")) {
+                        etCity.setText(etCity.getText().toString().replace("  ", " "));
                         etCity.setSelection(etCity.getText().length());
                     }
 
