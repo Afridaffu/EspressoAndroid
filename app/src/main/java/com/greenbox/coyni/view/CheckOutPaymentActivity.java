@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,7 +52,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private BuyTokenViewModel buyTokenViewModel;
     private CheckOutViewModel checkOutViewModel;
     private MyApplication myApplication;
-    private TextView mTokenBalance, mUserName, errorText;
+    private TextView mTokenBalance, mUserName, errorText,tvCurrency;
     private LinearLayout lyBalance;
     private EditText mAmount;
     private double availableBalance;
@@ -69,6 +70,7 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private String actionTypeYes = "YES";
     private String actionTypeNo = "No";
     private double transactionLimit = 0.0, minimumLimit = 0.0, userAmount = 0.0;
+    private float fontSize,dollarFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,10 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         mTokenBalance = findViewById(R.id.available_token_balance_tv);
         lyBalance = findViewById(R.id.available_balance_tv);
         mUserName = findViewById(R.id.checkout_user_name_tv);
+        tvCurrency = findViewById(R.id.tvCurrency);
         mAmount = findViewById(R.id.checkout_amount);
+        fontSize = mAmount.getTextSize();
+        dollarFont = tvCurrency.getTextSize();
         errorText = findViewById(R.id.error_tv);
         merchantImage = findViewById(R.id.merchant_profile_iv);
         slideToConfirm = findViewById(R.id.slide_to_confirm_ml);
@@ -162,15 +167,16 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         if (!isAuthenticationCalled) {
                             tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
-                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
-                                if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
-                                    Utils.checkAuthentication(CheckOutPaymentActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-                                } else {
-                                    launchPinActivity();
-                                }
-                            } else {
-                                launchPinActivity();
-                            }
+//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
+//                                if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
+//                                    Utils.checkAuthentication(CheckOutPaymentActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+//                                } else {
+//                                    launchPinActivity();
+//                                }
+//                            } else {
+//                                launchPinActivity();
+//                            }
+                            checkOutPayAPICall("");
                         }
                     }
                 } catch (Exception e) {
@@ -192,7 +198,10 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
         mAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (i == 0 && i2 == 0) {
+                    mAmount.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, fontSize));
+                    tvCurrency.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, dollarFont));
+                }
             }
 
             @Override
@@ -202,11 +211,32 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                    try {
+                        if (editable.length() > 0 && !editable.toString().equals(".") && !editable.toString().equals(".00")) {
+                            mAmount.setHint("");
+//                            convertUSDValue();
+                            if (editable.length() > 8) {
+                                mAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 23);
+                            } else if (editable.length() > 5) {
+                                mAmount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 43);
+                                tvCurrency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 33);
+                            } else {
+                                mAmount.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, fontSize));
+                                tvCurrency.setTextSize(Utils.pixelsToSp(CheckOutPaymentActivity.this, dollarFont));
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
 
-            }
+
+
         });
 
     }
+
 
     private void initObservers() {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(this, new Observer<BusinessWalletResponse>() {
@@ -323,30 +353,35 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     private void validation(TransactionLimitResponse transactionLimitResponse) {
 
         try {
-            String strPay = mAmount.getText().toString().trim().replace("\"", "");
-            if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
-                //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
-                errorText.setText("Amount should be greater than zero.");
-                errorText.setVisibility(View.VISIBLE);
+            if (transactionLimitResponse != null) {
+                String strPay = mAmount.getText().toString().trim().replace("\"", "");
+                if (Double.parseDouble(strPay.replace(",", "")) == 0.0) {
+                    //Utils.displayAlert("Amount should be greater than zero.", PayRequestActivity.this, "Oops!", "");
+                    errorText.setText("Amount should be greater than zero.");
+                    errorText.setVisibility(View.VISIBLE);
+                    slideToConfirm.setInteractionEnabled(false);
+                    lyBalance.setVisibility(View.GONE);
+                } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit()))) {
+                    errorText.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit())) + " CYN");
+                    errorText.setVisibility(View.VISIBLE);
+                    lyBalance.setVisibility(View.GONE);
+                    slideToConfirm.setInteractionEnabled(false);
+    //            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
+                } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit())) {
+                    errorText.setText("Amount entered exceeds transaction limit.");
+                    errorText.setVisibility(View.VISIBLE);
+                    lyBalance.setVisibility(View.GONE);
+                    slideToConfirm.setInteractionEnabled(false);
+                } else {
+                    errorText.setVisibility(View.GONE);
+                    lyBalance.setVisibility(View.VISIBLE);
+                    slideToConfirm.setInteractionEnabled(true);
+                    slideToConfirm.setBackground(getDrawable(R.drawable.shape_round_rectable_green));
+                    tv_lable.setTextColor(getColor(R.color.white));
+                }
+            }
+            else {
                 slideToConfirm.setInteractionEnabled(false);
-                lyBalance.setVisibility(View.GONE);
-            } else if ((Double.parseDouble(strPay.replace(",", "")) < Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit()))) {
-                errorText.setText("Minimum Amount is " + Utils.USNumberFormat(Double.parseDouble(transactionLimitResponse.getData().getMinimumLimit())) + " CYN");
-                errorText.setVisibility(View.VISIBLE);
-                lyBalance.setVisibility(View.GONE);
-                slideToConfirm.setInteractionEnabled(false);
-//            } else if (cynValue > Double.parseDouble(objResponse.getData().getTransactionLimit())) {
-            } else if (Double.parseDouble(strPay.replace(",", "")) > Double.parseDouble(transactionLimitResponse.getData().getTransactionLimit())) {
-                errorText.setText("Amount entered exceeds transaction limit.");
-                errorText.setVisibility(View.VISIBLE);
-                lyBalance.setVisibility(View.GONE);
-                slideToConfirm.setInteractionEnabled(false);
-            } else {
-                errorText.setVisibility(View.GONE);
-                lyBalance.setVisibility(View.VISIBLE);
-                slideToConfirm.setInteractionEnabled(true);
-                slideToConfirm.setBackground(getDrawable(R.drawable.shape_round_rectable_green));
-                tv_lable.setTextColor(getColor(R.color.white));
             }
         } catch (Exception ex) {
             ex.printStackTrace();

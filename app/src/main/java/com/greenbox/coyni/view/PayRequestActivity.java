@@ -1124,25 +1124,22 @@ public class PayRequestActivity extends BaseActivity implements View.OnClickList
 
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
-            if (objLimit.getTokenLimitFlag()) {
-                Double week = 0.0, daily = 0.0;
-                if (objLimit.getWeeklyAccountLimit() != null && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("NA") && !objLimit.getWeeklyAccountLimit().toLowerCase().equals("unlimited")) {
-                    week = Double.parseDouble(objLimit.getWeeklyAccountLimit());
-                }
-                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().toLowerCase().equals("NA") && !objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
-                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
-                }
-                if ((week == 0 || week < 0) && daily > 0) {
+//                Double week = 0.0, daily = 0.0;
+            if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
+                maxValue = Double.parseDouble(objLimit.getTransactionLimit());
+            }
+//                if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().toLowerCase().equals("NA") && !objLimit.getTransactionLimit().toLowerCase().equals("unlimited")) {
+//                    daily = Double.parseDouble(objLimit.getTransactionLimit());
+//                }
+            if (maxValue > 0) {
+                if (objLimit.getLimitType().equalsIgnoreCase("daily")) {
                     strLimit = "daily";
-                    maxValue = daily;
-                } else if ((daily == 0 || daily < 0) && week > 0) {
+                } else if (objLimit.getLimitType().equalsIgnoreCase("weekly")) {
                     strLimit = "week";
-                    maxValue = week;
-                } else if (objLimit.getDailyAccountLimit().toLowerCase().equals("unlimited")) {
+                } else if (objLimit.getLimitType().equalsIgnoreCase("unlimited")) {
                     strLimit = "unlimited";
                 } else {
                     strLimit = "daily";
-                    maxValue = daily;
                 }
             }
 
