@@ -27,6 +27,7 @@ import com.greenbox.coyni.adapters.LatestTxnAdapter;
 import com.greenbox.coyni.model.businesswallet.BusinessWalletResponse;
 import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
+import com.greenbox.coyni.model.identity_verification.LatestTransactionsRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
@@ -37,6 +38,7 @@ import com.greenbox.coyni.view.business.BusinessTransactionListActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.DashboardViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BusinessAccountFragment extends BaseFragment {
@@ -83,8 +85,13 @@ public class BusinessAccountFragment extends BaseFragment {
         latestTxnRefresh.setColorSchemeColors(getResources().getColor(R.color.primary_green, null));
         latestTxnRefresh.setOnRefreshListener(() -> {
             try {
+                LatestTransactionsRequest request = new LatestTransactionsRequest();
+                if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+                    request.setUserId(objMyApplication.getMyProfile().getData().getId());
+                }
+                request.setTransactionType(getDefaultTransactionTypes());
                 ((BusinessDashboardActivity) getActivity()).showProgressDialog();
-                dashboardViewModel.getLatestTxns();
+                dashboardViewModel.getLatestTxns(request);
                 transactionsNSV.smoothScrollTo(0, 0);
                 latestTxnRefresh.setRefreshing(false);
             } catch (Exception ex) {
@@ -184,7 +191,13 @@ public class BusinessAccountFragment extends BaseFragment {
             walletRequest.setWalletType(Utils.TOKEN);
 //            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
             businessDashboardViewModel.meMerchantWallet(walletRequest);
-            dashboardViewModel.getLatestTxns();
+            LatestTransactionsRequest request = new LatestTransactionsRequest();
+            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+                request.setUserId(objMyApplication.getMyProfile().getData().getId());
+            }
+            request.setTransactionType(getDefaultTransactionTypes());
+
+            dashboardViewModel.getLatestTxns(request);
             ((BusinessDashboardActivity) getActivity()).showProgressDialog();
             transactionsNSV.smoothScrollTo(0, 0);
         } else {
@@ -224,4 +237,16 @@ public class BusinessAccountFragment extends BaseFragment {
             e.printStackTrace();
         }
     }
+
+    private ArrayList<Integer> getDefaultTransactionTypes() {
+        ArrayList<Integer> transactionType = new ArrayList<>();
+        transactionType.add(Utils.payRequest);
+        transactionType.add(Utils.withdraw);
+        transactionType.add(Utils.buyTokens);
+        transactionType.add(Utils.refund);
+        transactionType.add(Utils.paidInvoice);
+        transactionType.add(Utils.businessPayout);
+        return transactionType;
+    }
+
 }
