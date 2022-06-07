@@ -151,9 +151,21 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 transAmountEndET.setText(strEndAmount);
             }
 
-            strF = filterTransactionListRequest.getUpdatedFromDate();
+            if (filterTransactionListRequest.getUpdatedFromDate() != null && !filterTransactionListRequest.getUpdatedFromDate().equals("")){
+                strF = filterTransactionListRequest.getUpdatedFromDate();
+                if (strF.contains(".")) {
+                    strF = strF.substring(0, strF.lastIndexOf("."));
+                }
+                strF = objMyApplication.convertZoneDateTime(strF, "yyyy-MM-dd HH:mm:ss", "MM-dd-yyyy");
+            }
 
-            strT = filterTransactionListRequest.getUpdatedToDate();
+            if (filterTransactionListRequest.getUpdatedToDate() != null && !filterTransactionListRequest.getUpdatedToDate().equals("")){
+                strT = filterTransactionListRequest.getUpdatedToDate();
+                if (strT.contains(".")) {
+                    strT = strT.substring(0, strT.lastIndexOf("."));
+                }
+                strT = objMyApplication.convertZoneDateTime(strT, "yyyy-MM-dd HH:mm:ss", "MM-dd-yyyy");
+            }
 
             String formatToDisplay = "MMM dd, yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatToDisplay);
@@ -564,13 +576,13 @@ public class MerchantTransactionsFilterDialog extends BaseDialog {
                 if (!strFromDate.equals("")) {
                     isFilters = true;
 //                    filterTransactionListRequest.setUpdatedFromDate((objMyApplication.exportDate(strFromDate + " 00:00:00.000")).split("\\ ")[0] + " 00:00:00");
-                    filterTransactionListRequest.setUpdatedFromDate(strFromDate);
+                    filterTransactionListRequest.setUpdatedFromDate(Utils.payoutDate(strFromDate));
                     filterTransactionListRequest.setUpdatedFromDateOperator(">=");
                 }
                 if (!strToDate.equals("")) {
                     isFilters = true;
 //                    filterTransactionListRequest.setUpdatedToDate((objMyApplication.exportDate(strToDate + "00:00:00.000")).split("\\ ")[0] + " 23:59:59");
-                    filterTransactionListRequest.setUpdatedToDate(strToDate);
+                    filterTransactionListRequest.setUpdatedToDate(Utils.payoutDate(strToDate));
                     filterTransactionListRequest.setUpdatedToDateOperator("<=");
                 }
 
