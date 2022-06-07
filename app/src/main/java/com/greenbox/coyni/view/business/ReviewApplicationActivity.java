@@ -606,18 +606,28 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
                             if (dbaInfo.getMonthlyProcessingVolume() != null) {
                                 // monthlyProcVolume=cir.getMonthlyProcessingVolume();
-                                if (Integer.parseInt(dbaInfo.getMonthlyProcessingVolume().toString()) != 0)
+                                if (Integer.parseInt(dbaInfo.getMonthlyProcessingVolume().toString()) != 0) {
                                     mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
+                                }else{
+                                    mMonthlyProcVolumeTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getMonthlyProcessingVolume().toString()));
+
+                                }
                             }
 
                             if (dbaInfo.getHighTicket() != null) {
-                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0) {
                                     mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
+                                }else{
+                                    mHighTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getHighTicket().toString()));
+                                }
                             }
 
                             if (dbaInfo.getAverageTicket() != null) {
-                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0)
+                                if (Integer.parseInt(dbaInfo.getHighTicket().toString()) != 0){
                                     mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
+                            }else{
+                                    mAverageTicketTx.setText(getResources().getString(R.string.dollor) + " " + convertTwoDecimal(dbaInfo.getAverageTicket().toString()));
+                                }
                             }
 
                             if (dbaInfo.getEmail() != null) {

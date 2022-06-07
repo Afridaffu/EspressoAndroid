@@ -694,6 +694,11 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 if (!addDBA) {
                     dbaIncompleteLL.setClickable(false);
                 }
+                if(addDBA) {
+                    dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color_primary_border));
+                }else{
+                    dbaIncompleteLL.setBackground(getResources().getDrawable(R.drawable.bg_white_color));
+                }
                 addBankIncompleteLL.setClickable(false);
                 boIncompleteLL.setClickable(false);
                 aggrementsIncompleteLL.setClickable(false);
