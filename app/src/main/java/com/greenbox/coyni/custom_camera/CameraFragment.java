@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
@@ -59,6 +60,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     private Camera mCamera;
     private SquareCameraPreview mPreviewView;
     private SurfaceHolder mSurfaceHolder;
+    private Long mLastClickTime = 0L;
 
     private boolean mIsSafeToTakePhoto = false;
 
@@ -220,6 +222,10 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         takePhotoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 takePicture();
             }
         });

@@ -371,6 +371,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         if (dbaOwnerId != 0) {
             inTracker.putExtra(Utils.ADD_BUSINESS, true);
             inTracker.putExtra(Utils.ADD_DBA, true);
+            inTracker.putExtra(Utils.IS_TRACKER,true);
         }
         startActivity(inTracker);
     }
@@ -426,7 +427,10 @@ public class BusinessDashboardActivity extends BaseActivity {
                     dismissDialog();
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
-                        objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                        if (profile.getData() != null) {
+                            objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
+                            objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                        }
                         enableDisableTabView();
                         checkLoadFragment(profile);
                         Utils.setUserEmail(BusinessDashboardActivity.this, profile.getData().getEmail());
