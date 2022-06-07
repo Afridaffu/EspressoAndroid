@@ -37,6 +37,7 @@ import com.greenbox.coyni.fragments.GetStartedFragment;
 import com.greenbox.coyni.fragments.UnderReviewFragment;
 import com.greenbox.coyni.fragments.VerificationFailedFragment;
 import com.greenbox.coyni.model.bank.SignOn;
+import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.profile.Profile;
@@ -46,6 +47,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -100,6 +102,19 @@ public class BusinessDashboardActivity extends BaseActivity {
 //            e.printStackTrace();
 //        }
 //    }
+
+    private void getWalletData() {
+        WalletRequest walletRequest = new WalletRequest();
+        walletRequest.setWalletType(Utils.MERCHANT);
+//        walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.TOKEN);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.RESERVE);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+    }
 
     public void onDashboardTabSelected(View view) {
         try {
@@ -356,6 +371,7 @@ public class BusinessDashboardActivity extends BaseActivity {
         if (dbaOwnerId != 0) {
             inTracker.putExtra(Utils.ADD_BUSINESS, true);
             inTracker.putExtra(Utils.ADD_DBA, true);
+            inTracker.putExtra(Utils.IS_TRACKER,true);
         }
         startActivity(inTracker);
     }
@@ -411,9 +427,13 @@ public class BusinessDashboardActivity extends BaseActivity {
                     dismissDialog();
                     if (profile != null) {
                         objMyApplication.setMyProfile(profile);
-                        objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                        if (profile.getData() != null) {
+                            objMyApplication.setIsReserveEnabled(profile.getData().isReserveEnabled());
+                            objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
+                        }
                         enableDisableTabView();
                         checkLoadFragment(profile);
+                        Utils.setUserEmail(BusinessDashboardActivity.this, profile.getData().getEmail());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

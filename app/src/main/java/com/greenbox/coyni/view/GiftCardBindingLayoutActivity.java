@@ -589,7 +589,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
                 }
             });
 
-            if (!objMyApplication.getBiometric()) {
+            if (!objMyApplication.getBiometric() || !objMyApplication.getLocalBiometric()) {
                 if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
                     if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
                         enableType = "TOUCH";
@@ -659,7 +659,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
             }
         });
 
-        if (!objMyApplication.getBiometric()) {
+        if (!objMyApplication.getBiometric() || !objMyApplication.getLocalBiometric()) {
             if (Utils.checkAuthentication(GiftCardBindingLayoutActivity.this)) {
                 if (Utils.isFingerPrint(GiftCardBindingLayoutActivity.this)) {
                     enableType = "TOUCH";
@@ -743,10 +743,15 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
     private void failedTransaction(String type) {
         try {
             if (!type.equals("pay") && !type.equals("request")) {
-                if (objMyApplication.getWithdrawResponse() != null) {
+                if (objMyApplication.getWithdrawResponse() != null)  {
                     tvMessage.setText("The transaction failed due to error code:\n" +
                             objMyApplication.getWithdrawResponse().getError().getErrorCode() + " - " +
                             objMyApplication.getWithdrawResponse().getError().getErrorDescription() + ". Please try again.");
+                }
+                else if (objMyApplication.getBuyTokenResponse() != null && type.equals("buy")){
+                    tvMessage.setText("The transaction failed due to error code:\n" +
+                            objMyApplication.getBuyTokenResponse().getError().getErrorCode() + " - " +
+                            objMyApplication.getBuyTokenResponse().getError().getErrorDescription() + ". Please try again.");
                 }
 
                 cvTryAgain.setOnClickListener(new View.OnClickListener() {

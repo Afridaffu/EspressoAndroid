@@ -326,14 +326,14 @@ public class OnboardActivity extends BaseActivity {
                                 } else {
                                     Utils.setStrAuth(loginResponse.getData().getJwtToken());
                                     objMyApplication.setIsLoggedIn(true);
-                                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
-                                        businessIdentityVerificationViewModel.getBusinessTracker();
-                                    } else {
+//                                    if (objMyApplication.getAccountType() == Utils.BUSINESS_ACCOUNT) {
+//                                        businessIdentityVerificationViewModel.getBusinessTracker();
+//                                    } else {
 //                                        Intent i = new Intent(OnboardActivity.this, DashboardActivity.class);
 //                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                                        startActivity(i);
                                         launchDashboard();
-                                    }
+//                                    }
 //                                    Intent i = null;
 //                                    if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT)
 //                                        i = new Intent(OnboardActivity.this, DashboardActivity.class);

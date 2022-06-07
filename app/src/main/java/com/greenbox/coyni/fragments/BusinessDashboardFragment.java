@@ -62,7 +62,6 @@ import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.NotificationsActivity;
 import com.greenbox.coyni.view.ValidatePinActivity;
 import com.greenbox.coyni.view.business.BusinessBatchPayoutSearchActivity;
-import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.view.business.BusinessDashboardActivity;
 import com.greenbox.coyni.view.business.MerchantTransactionListActivity;
 import com.greenbox.coyni.view.business.ReserveReleasesActivity;
@@ -129,6 +128,7 @@ public class BusinessDashboardFragment extends BaseFragment {
     private static final String defaultAmount = "0.00";
     private RangeDates rangeDates;
     private String strFromDate, strToDate;
+    int walletCount = 0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -228,10 +228,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         isBiometric = Utils.getIsBiometric();
         setFaceLock();
         setTouchId();
-
-        if (myApplication.getCheckOutModel() != null && myApplication.getCheckOutModel().isCheckOutFlag()) {
-            ((BusinessDashboardActivity) getActivity()).showProgressDialog("connecting...");
-        }
 
         notificationsRL.setOnClickListener(view -> {
             if (SystemClock.elapsedRealtime() - mLastClickTimeQA < 1000) {
@@ -513,24 +509,22 @@ public class BusinessDashboardFragment extends BaseFragment {
         businessDashboardViewModel.getBusinessWalletResponseMutableLiveData().observe(getViewLifecycleOwner(), new Observer<BusinessWalletResponse>() {
             @Override
             public void onChanged(BusinessWalletResponse businessWalletResponse) {
+                walletCount++;
                 try {
                     if (businessWalletResponse != null) {
                         myApplication.setWalletResponseData(businessWalletResponse.getData());
-                        Double merchantBalance = getMerchantBalance();
-                        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
-                        if (merchantBalance != null && merchantBalance == 0.00) {
-                            businessIdentityVerificationViewModel.getDBAInfo();
-                        } else {
-                            monthlyVolumeViewLl.setVisibility(View.GONE);
-                        }
                         if (businessWalletResponse.getData() != null && businessWalletResponse.getData().getWalletNames() != null && businessWalletResponse.getData().getWalletNames().size() > 0) {
-//
                             myApplication.setGBTBalance(businessWalletResponse.getData().getWalletNames().get(0).getAvailabilityToUse(),
                                     businessWalletResponse.getData().getWalletNames().get(0).getWalletType());
                         }
+
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                }
+                if(walletCount == 3) {
+                    walletCount = 0;
+                    updateUIAfterWalletBalance();
                 }
             }
         });
@@ -551,6 +545,16 @@ public class BusinessDashboardFragment extends BaseFragment {
 
     }
 
+    private void updateUIAfterWalletBalance() {
+        Double merchantBalance = getMerchantBalance();
+        merchantBalanceTV.setText(Utils.convertBigDecimalUSDC(String.valueOf(merchantBalance)));
+        if (merchantBalance != null && merchantBalance == 0.00) {
+            businessIdentityVerificationViewModel.getDBAInfo();
+        } else {
+            monthlyVolumeViewLl.setVisibility(View.GONE);
+        }
+        showReserveReleaseBalance();
+    }
     private void showData(List<BatchPayoutListItems> items) {
         showBatchPayouts(items);
     }
@@ -571,13 +575,13 @@ public class BusinessDashboardFragment extends BaseFragment {
     private void getWalletData() {
         WalletRequest walletRequest = new WalletRequest();
         walletRequest.setWalletType(Utils.MERCHANT);
-        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
-        businessDashboardViewModel.meMerchantWallet(walletRequest);
-
-        walletRequest.setWalletType(Utils.TOKEN);
+//        walletRequest.setUserId(String.valueOf(myApplication.getLoginUserId()));
         businessDashboardViewModel.meMerchantWallet(walletRequest);
 
         walletRequest.setWalletType(Utils.RESERVE);
+        businessDashboardViewModel.meMerchantWallet(walletRequest);
+
+        walletRequest.setWalletType(Utils.TOKEN);
         businessDashboardViewModel.meMerchantWallet(walletRequest);
     }
 
@@ -640,12 +644,6 @@ public class BusinessDashboardFragment extends BaseFragment {
         inPin.putExtra(Utils.ACTION_TYPE, Utils.batchnowActionType);
         pinActivityResultLauncher.launch(inPin);
     }
-
-//    private void batchAPI(String batchId) {
-//     BatchNowSlideRequest req = new BatchNowSlideRequest();
-//        req.setBatchId(batchId);
-//        businessDashboardViewModel.batchNowSlideData(req.getBatchId());
-//    }
 
     ActivityResultLauncher<Intent> pinActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -1022,8 +1020,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             }
 
         } else {
-//            releaseNoTransaction.setVisibility(View.VISIBLE);
-//            mTvReserveList.setVisibility(View.GONE);
             LogUtils.v(TAG, "Reserve release summary is empty");
         }
     }
@@ -1047,7 +1043,6 @@ public class BusinessDashboardFragment extends BaseFragment {
             e.printStackTrace();
         }
     }
-
 
     private Date yesterday() {
         final Calendar cal = Calendar.getInstance();

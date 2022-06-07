@@ -18,6 +18,7 @@ import com.greenbox.coyni.model.ChangePassword;
 import com.greenbox.coyni.model.ChangePasswordRequest;
 import com.greenbox.coyni.model.activtity_log.ActivityLogResp;
 import com.greenbox.coyni.model.buytoken.CancelBuyTokenResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTransactionsRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.paymentmethods.PaymentMethodsResponse;
 import com.greenbox.coyni.model.preferences.Preferences;
@@ -624,10 +625,10 @@ public class DashboardViewModel extends AndroidViewModel {
 
     }
 
-    public void getLatestTxns() {
+    public void getLatestTxns(LatestTransactionsRequest request) {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
-            Call<LatestTxnResponse> mCall = apiService.getLatestTransactions();
+            Call<LatestTxnResponse> mCall = apiService.getLatestTransactions(request);
             mCall.enqueue(new Callback<LatestTxnResponse>() {
                 @Override
                 public void onResponse(Call<LatestTxnResponse> call, Response<LatestTxnResponse> response) {

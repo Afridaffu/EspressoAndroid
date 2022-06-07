@@ -3,6 +3,7 @@ package com.greenbox.coyni.utils.keyboards;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +91,7 @@ public class PayRequestCustomKeyboard extends LinearLayout implements View.OnCli
                 } catch (Exception e) {
 //                    e.printStackTrace();
                 }
+                Log.e("entered back", enteredText);
             }
         });
 
@@ -121,17 +123,19 @@ public class PayRequestCustomKeyboard extends LinearLayout implements View.OnCli
                     inputConnection.commitText("", 1);
                 }
             } else {
-                String value = keyValues.get(view.getId());
+                if (enteredText.length() < 8) {
+                    String value = keyValues.get(view.getId());
 //                inputConnection.commitText(value, 1);
-                if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
-
-                } else {
-                    String[] split = enteredText.split("\\.");
-                    if (split.length == 2 && split[1].length() == 2) {
+                    if ((enteredText.equals("") || enteredText.contains(".") || (strScreen.equals("addcard") && enteredText.length() == 3)) && value.equals(".")) {
 
                     } else {
+//                    String[] split = enteredText.split("\\.");
+//                    if (split.length == 2 && split[1].length() == 2) {
+//
+//                    } else {
                         enteredText = enteredText + value;
                         inputConnection.commitText(value, 1);
+//                    }
                     }
                 }
             }
@@ -153,7 +157,7 @@ public class PayRequestCustomKeyboard extends LinearLayout implements View.OnCli
         enteredText = "";
     }
 
-    public void setEnteredText(String text){
+    public void setEnteredText(String text) {
         enteredText = text.trim();
     }
 }

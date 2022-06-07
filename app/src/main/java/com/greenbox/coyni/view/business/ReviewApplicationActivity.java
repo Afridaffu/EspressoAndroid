@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.greenbox.coyni.utils.Utils.convertTwoDecimal;
 import static com.greenbox.coyni.view.PreferencesActivity.customerProfileViewModel;
 
@@ -101,7 +102,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
     private List<BeneficialOwnerInfo> beneficialOwnerList = new ArrayList<>();
     private RecyclerView bankRecyclerView, boRecyclerView;
     private TextView noBanksTv, noBoTV, ssnEinTV;
-    private LinearLayout banksLL, boLL, CloseLL;
+    private LinearLayout banksLL, boLL, CloseLL,companyEditLL;
     private LinearLayout uploadArticlesLL, uploadEINLL, uploadW9LL, dbaFillingLL, llDBADocuments;
     private ApplicationSubmissionViewModel applicationSubmissionViewModel;
     private BusinessApplicationSummaryViewModel summaryViewModel;
@@ -161,7 +162,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
 
         initFields();
         initObservers();
-
+        companyEditLL.setVisibility(addDBA ? companyEditLL.GONE : companyEditLL.VISIBLE);
     }
 
     private void initFields() {
@@ -187,6 +188,7 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
         ssnEinTV = findViewById(R.id.ssnEinTV);
         spannableTV = findViewById(R.id.spannableTV);
         httpHeader = findViewById(R.id.httpHeader);
+        companyEditLL = findViewById(R.id.companyEditLL);
 
         setSpannableText();
 
@@ -804,10 +806,6 @@ public class ReviewApplicationActivity extends BaseActivity implements Benificia
                         if (addBusiness) {
                             loginViewModel.postChangeAccount(objMyApplication.getLoginUserId());
                         } else {
-                            if (objMyApplication.getBusinessTrackerResponse() != null
-                                    && objMyApplication.getBusinessTrackerResponse().getData() != null) {
-                                objMyApplication.getBusinessTrackerResponse().getData().setProfileVerified(true);
-                            }
                             Intent intent = new Intent(ReviewApplicationActivity.this, BusinessDashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

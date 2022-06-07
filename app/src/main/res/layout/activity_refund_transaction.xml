@@ -76,7 +76,8 @@
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:background="@color/white"
-                        app:cardCornerRadius="@dimen/_10sdp">
+                        app:cardCornerRadius="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_1sdp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -202,7 +203,9 @@
                                     android:layout_weight="1"
                                     android:clickable="true"
                                     app:cardCornerRadius="@dimen/_21sdp"
-                                    app:cardBackgroundColor="@color/slidebtn_bg">
+                                    app:cardBackgroundColor="@color/slidebtn_bg"
+                                    android:layout_marginStart="@dimen/_1sdp"
+                                    android:layout_marginBottom="@dimen/_1sdp">
 
                                     <TextView
                                         android:id="@+id/FullamountTV"
@@ -224,7 +227,9 @@
                                     android:layout_marginStart="@dimen/_5sdp"
                                     android:layout_weight="1"
                                     app:cardCornerRadius="@dimen/_21sdp"
-                                    app:cardBackgroundColor="@color/slidebtn_bg">
+                                    app:cardBackgroundColor="@color/slidebtn_bg"
+                                    android:layout_marginEnd="@dimen/_1sdp"
+                                    android:layout_marginBottom="@dimen/_1sdp">
 
                                     <TextView
                                         android:id="@+id/halfamountTV"

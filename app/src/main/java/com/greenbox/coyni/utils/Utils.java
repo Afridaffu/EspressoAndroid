@@ -24,6 +24,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -120,6 +121,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+    public static final String COMPANY_ID = "companyId";
+    public static final String IS_TRACKER = "is_Tracker";
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
     public static final String TOKEN = "0", MERCHANT = "1", RESERVE = "2";
@@ -361,7 +364,9 @@ public class Utils {
     public static final String MonthlyServiceFee = "Monthly Service Fee";
 
     public static final String ADD_BUSINESS = "ADDBUSINESS";
-    public static final String ADD_DBA = "ADDDBA";
+    public static final String ADD_DBA = "ADD_DBA";
+    public static final String IS_FIRST_DBA = "is_first_dba";
+    public static final String NEW_DBA = "NEW DBA";
     public static final String ACCESS_TOKEN_EXPIRED = "Access token expired";
 
     public static final int boTargetPercentage = 51;
@@ -525,6 +530,30 @@ public class Utils {
     public static void shwForcedKeypad(Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    public static void hideKeypadWithHandler(Context context) {
+        new Handler().postDelayed(() -> {
+            try {
+                InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 100);
+
+    }
+
+    public static void shwForcedKeypadWithHandler(Context context) {
+        new Handler().postDelayed(() -> {
+            try {
+                InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 100);
+
     }
 
     public static void hideKeypad(Context context) {
@@ -814,7 +843,7 @@ public class Utils {
         int width = mertics.widthPixels;
 
         Window window = dialog.getWindow();
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         WindowManager.LayoutParams wlp = window.getAttributes();
 

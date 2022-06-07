@@ -44,6 +44,7 @@ import com.greenbox.coyni.model.businesswallet.WalletInfo;
 import com.greenbox.coyni.model.businesswallet.WalletRequest;
 import com.greenbox.coyni.model.businesswallet.WalletResponseData;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.model.identity_verification.LatestTransactionsRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.notification.Notifications;
 import com.greenbox.coyni.model.notification.NotificationsDataItems;
@@ -66,6 +67,7 @@ import com.greenbox.coyni.viewmodel.NotificationsViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardActivity extends BaseActivity {
@@ -374,10 +376,16 @@ public class DashboardActivity extends BaseActivity {
 //                        if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()
 //                                && objMyApplication.getTrackerResponse().getData().isPaymentModeAdded()) {
                         if (objMyApplication.getTrackerResponse().getData().isPersonIdentified()) {
-                            dashboardViewModel.getLatestTxns();
+                            LatestTransactionsRequest request = new LatestTransactionsRequest();
+                            if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+                                request.setUserId(objMyApplication.getMyProfile().getData().getId());
+                            }
+                            request.setTransactionType(getDefaultTransactionTypes());
+                            dashboardViewModel.getLatestTxns(request);
+
                             WalletRequest walletRequest = new WalletRequest();
                             walletRequest.setWalletType(Utils.TOKEN);
-                            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//                            walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                             businessDashboardViewModel.meMerchantWallet(walletRequest);
                             transactionsNSV.smoothScrollTo(0, 0);
                         } else {
@@ -546,7 +554,13 @@ public class DashboardActivity extends BaseActivity {
                             txnRV.setVisibility(View.GONE);
                             noTxnTV.setVisibility(View.VISIBLE);
                         }
-                        dashboardViewModel.getLatestTxns();
+                        LatestTransactionsRequest request = new LatestTransactionsRequest();
+                        if (objMyApplication.getMyProfile() != null && objMyApplication.getMyProfile().getData() != null) {
+                            request.setUserId(objMyApplication.getMyProfile().getData().getId());
+                        }
+                        request.setTransactionType(getDefaultTransactionTypes());
+
+                        dashboardViewModel.getLatestTxns(request);
                     } else {
                         if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNVERIFIED.getStatus())) {
                             cvHeaderRL.setVisibility(View.GONE);
@@ -556,11 +570,13 @@ public class DashboardActivity extends BaseActivity {
                             ll_identity_verification_failed.setVisibility(View.GONE);
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DEACTIVE.getStatus()) ||
                                 objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.DECLINED.getStatus())) {
-                            cvHeaderRL.setVisibility(View.GONE);
-                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
-                            getStartedCV.setVisibility(View.GONE);
-                            transactionsNSV.setVisibility(View.GONE);
-                            ll_identity_verification_failed.setVisibility(View.VISIBLE);
+//                            cvHeaderRL.setVisibility(View.GONE);
+//                            cvSmallHeaderRL.setVisibility(View.VISIBLE);
+//                            getStartedCV.setVisibility(View.GONE);
+//                            transactionsNSV.setVisibility(View.GONE);
+//                            ll_identity_verification_failed.setVisibility(View.VISIBLE);
+                            startActivity(new Intent(DashboardActivity.this, IdentityVerificationBindingLayoutActivity.class)
+                                    .putExtra("screen", "FAILED"));
                         } else if (objMyApplication.getMyProfile().getData().getAccountStatus().equals(Utils.BUSINESS_ACCOUNT_STATUS.UNDER_REVIEW.getStatus())) {
                             cvHeaderRL.setVisibility(View.VISIBLE);
                             cvSmallHeaderRL.setVisibility(View.GONE);
@@ -917,7 +933,7 @@ public class DashboardActivity extends BaseActivity {
                 dashboardViewModel.mePaymentMethods();
                 WalletRequest walletRequest = new WalletRequest();
                 walletRequest.setWalletType(Utils.TOKEN);
-                walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
+//                walletRequest.setUserId(String.valueOf(objMyApplication.getLoginUserId()));
                 businessDashboardViewModel.meMerchantWallet(walletRequest);
                 notificationsViewModel.getNotifications();
             } catch (Exception ex) {
@@ -1142,5 +1158,17 @@ public class DashboardActivity extends BaseActivity {
 
 
     }
+
+    private ArrayList<Integer> getDefaultTransactionTypes() {
+        ArrayList<Integer> transactionType = new ArrayList<>();
+        transactionType.add(Utils.payRequest);
+        transactionType.add(Utils.withdraw);
+        transactionType.add(Utils.buyTokens);
+        transactionType.add(Utils.refund);
+        transactionType.add(Utils.paidInvoice);
+        transactionType.add(Utils.businessPayout);
+        return transactionType;
+    }
+
 
 }

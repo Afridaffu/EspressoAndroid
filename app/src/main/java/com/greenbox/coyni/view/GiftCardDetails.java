@@ -481,9 +481,9 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 //                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
                             Double walletAmount = 0.0;
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getAvailableBalance() + "".replace(",", ""));
                             } else {
-                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
+                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getAvailableBalance() + "".replace(",", ""));
                             }
 //                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
                             Double giftCardAmount = Double.parseDouble(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
@@ -513,7 +513,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
                                 amountErrorTV.setText("Amount entered exceeds limit");
-                            } else if (objTranLimit.getData().getTokenLimitFlag()) {
+                            }
+                            else {
                                 String limitType = objTranLimit.getData().getLimitType();
                                 if (limitType.equalsIgnoreCase("PER TRANSACTION")) {
                                     if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
@@ -525,7 +526,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                         amountErrorLL.setVisibility(GONE);
                                     }
                                 } else if (limitType.equalsIgnoreCase("DAILY")) {
-                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getDailyAccountLimit())) {
+                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds daily limit");
@@ -534,7 +535,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                         amountErrorLL.setVisibility(GONE);
                                     }
                                 } else {
-                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getWeeklyAccountLimit())) {
+                                    if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
                                         isAmount = false;
                                         amountErrorLL.setVisibility(VISIBLE);
                                         amountErrorTV.setText("Amount entered exceeds weekly limit");
@@ -543,9 +544,6 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                         amountErrorLL.setVisibility(GONE);
                                     }
                                 }
-                            } else {
-                                isAmount = true;
-                                amountErrorLL.setVisibility(GONE);
                             }
                         } else if (amountET.getText().toString().trim().length() == 0) {
                             amountErrorLL.setVisibility(GONE);

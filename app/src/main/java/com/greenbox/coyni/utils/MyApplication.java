@@ -12,6 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.greenbox.coyni.dialogs.OnDialogClickListener;
 import com.greenbox.coyni.model.check_out_transactions.CheckOutModel;
+import com.greenbox.coyni.view.IdentityVerificationActivity;
+import com.greenbox.coyni.view.IdentityVerificationBindingLayoutActivity;
 import com.greenbox.coyni.model.check_out_transactions.OrderPayResponse;
 import com.greenbox.coyni.view.business.VerificationFailedActivity;
 import com.greenbox.coyni.model.AgreementsPdf;
@@ -57,6 +59,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +69,8 @@ public class MyApplication extends Application {
     private UserData mCurrentUserData;
     private static Context context;
     private CheckOutModel checkOutModel;
+    private List<States> listStates = new ArrayList<>();
+    private String strMobileToken = "";
 
     @Override
     public void onCreate() {
@@ -123,11 +128,11 @@ public class MyApplication extends Application {
         mCurrentUserData.setPaidOrderResp(paidOrderResp);
     }
 
-    public void setOrderPayResponse(OrderPayResponse orderPayResponse){
+    public void setOrderPayResponse(OrderPayResponse orderPayResponse) {
         mCurrentUserData.setOrderPayResponse(orderPayResponse);
     }
 
-    public OrderPayResponse getOrderPayResponse(){
+    public OrderPayResponse getOrderPayResponse() {
         return mCurrentUserData.getOrderPayResponse();
     }
 
@@ -228,11 +233,11 @@ public class MyApplication extends Application {
     }
 
     public List<States> getListStates() {
-        return mCurrentUserData.getListStates();
+        return listStates;
     }
 
     public void setListStates(List<States> listStates) {
-        mCurrentUserData.setListStates(listStates);
+        this.listStates = listStates;
     }
 
     public Boolean getBiometric() {
@@ -551,11 +556,13 @@ public class MyApplication extends Application {
     }
 
     public String getStrMobileToken() {
-        return mCurrentUserData.getStrMobileToken();
+//        return mCurrentUserData.getStrMobileToken();
+        return strMobileToken;
     }
 
     public void setStrMobileToken(String strMobileToken) {
-        mCurrentUserData.setStrMobileToken(strMobileToken);
+//        mCurrentUserData.setStrMobileToken(strMobileToken);
+        this.strMobileToken = strMobileToken;
     }
 
     public BuyTokenResponse getBuyTokenResponse() {
@@ -701,9 +708,16 @@ public class MyApplication extends Application {
     }
 
     public void launchDeclinedActivity(Context context) {
-        Intent declinedIntent = new Intent(context, VerificationFailedActivity.class);
-        declinedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(declinedIntent);
+        if (getAccountType() == Utils.BUSINESS_ACCOUNT) {
+            Intent declinedIntent = new Intent(context, VerificationFailedActivity.class);
+            declinedIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(declinedIntent);
+        } else if (getAccountType() == Utils.PERSONAL_ACCOUNT) {
+            Intent intent = new Intent(context, IdentityVerificationBindingLayoutActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.putExtra("screen", "FAILED");
+            startActivity(intent);
+        }
     }
 
     public boolean checkForDeclinedStatus() {

@@ -126,7 +126,9 @@
     <string name="iv_success_content">Thank you for verifying your identification and trusting us as your token account platform. Lastly, add a payment method to your account profile.</string>
 
     <string name="iv_failed">Identity Verification Canceled</string>
+    <string name="iv_declined">Identity Verification Failed</string>
     <string name="iv_verification_failed_content">Thank you for your interest in coyni. Please contact coyni customer support if you need further assistance.</string>
+    <string name="iv_verification_declined_content">Thank you for your interest in coyni. However, we regret to inform you that your application has not been approved and is no longer in consideration.</string>
     <string name="iv_failedcontentextention"> If you need any help please</string>
     <string name="contactus"><u>Contact Us</u></string>
 
@@ -179,7 +181,7 @@
     <string name="bank_acount"><b>Bank Accounts:</b> All Bank account transactions typically take up to 3 business days to process.</string>
     <string name="learn_more1"> <u>Learn More</u></string>
     <string name="learn"><u>Learn More</u></string>
-    <string name="privay_policy"><u>Privay Policy</u></string>
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
     <string name="termsservice"><u> Terms of Service</u></string>
 
     <string name="EST">Eastern (EST)</string>

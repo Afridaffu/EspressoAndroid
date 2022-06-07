@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -188,18 +189,18 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         }
 
+
         refundET.addTextChangedListener(this);
         if (getIntent().getStringExtra(Utils.amount) != null && !getIntent().getStringExtra(Utils.amount).equals("")) {
             refundET.setText(getIntent().getStringExtra(Utils.amount));
             USFormat(refundET);
 //            refundET.setEnabled(true);
-        } else {
-            cKey = (CustomKeyboard) findViewById(R.id.ckbrefund);
-            InputConnection ic = refundET.onCreateInputConnection(new EditorInfo());
-            cKey.setInputConnection(ic);
-            cKey.setKeyAction("Refund", RefundTransactionActivity.this);
-            cKey.setScreenName("refundables");
         }
+        cKey = (CustomKeyboard) findViewById(R.id.ckbrefund);
+        InputConnection ic = refundET.onCreateInputConnection(new EditorInfo());
+        cKey.setInputConnection(ic);
+        cKey.setKeyAction("Refund", RefundTransactionActivity.this);
+        cKey.setScreenName("refundables");
 
         remarksll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,6 +229,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         halfamount.setCardBackgroundColor(getResources().getColor(R.color.slidebtn_bg));
                         isfullamount = true;
                         ishalfamount = false;
+                        cKey.setEnteredText(refundET.getText().toString().trim());
                     } else {
                         ishalfamount = false;
                         isfullamount = false;
@@ -253,6 +255,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
                         fullamount.setCardBackgroundColor(getResources().getColor(R.color.slidebtn_bg));
                         ishalfamount = true;
                         isfullamount = false;
+                        cKey.setEnteredText(refundET.getText().toString().trim());
                     } else {
                         ishalfamount = false;
                         isfullamount = false;
@@ -269,7 +272,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CODE_AUTHENTICATION_VERIFICATION) {
+        if (requestCode == CODE_AUTHENTICATION_VERIFICATION) {
             switch (resultCode) {
                 case RESULT_OK:
                     try {
@@ -314,6 +317,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 
         return refundrefrequest;
     }
+
     public RefundReferenceRequest refundTransaction() {
         RefundReferenceRequest request = new RefundReferenceRequest();
         try {
@@ -776,6 +780,7 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
             strReturn = Utils.USNumberFormat(Double.parseDouble(strAmount));
             changeTextSize(strReturn);
             setDefaultLength();
+            cKey.setEnteredText(refundET.getText().toString().trim());
 //            refundET.clearFocus();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -877,7 +882,13 @@ public class RefundTransactionActivity extends BaseActivity implements TextWatch
 //            cvvDialog.setCanceledOnTouchOutside(true);
             cvvDialog.show();
             addNoteET.requestFocus();
-            Utils.shwForcedKeypad(RefundTransactionActivity.this);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!Utils.isKeyboardVisible)
+                        Utils.shwForcedKeypad(RefundTransactionActivity.this);
+                }
+            }, 100);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
