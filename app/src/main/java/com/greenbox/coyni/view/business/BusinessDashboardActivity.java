@@ -47,6 +47,7 @@ import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.BaseActivity;
 import com.greenbox.coyni.view.BusinessReceivePaymentActivity;
+import com.greenbox.coyni.view.DashboardActivity;
 import com.greenbox.coyni.view.ScanActivity;
 import com.greenbox.coyni.view.WithdrawPaymentMethodsActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
@@ -428,6 +429,7 @@ public class BusinessDashboardActivity extends BaseActivity {
                         objMyApplication.setStrUserName(Utils.capitalize(profile.getData().getFirstName() + " " + profile.getData().getLastName()));
                         enableDisableTabView();
                         checkLoadFragment(profile);
+                        Utils.setUserEmail(BusinessDashboardActivity.this, profile.getData().getEmail());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
