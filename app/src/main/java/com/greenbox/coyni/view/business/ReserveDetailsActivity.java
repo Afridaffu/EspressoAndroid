@@ -281,7 +281,6 @@ public class ReserveDetailsActivity extends BaseActivity {
         if (selected.getStatus().equalsIgnoreCase(Utils.RELEASED)) {
             getReserveDetails(selected.getBatchId());
         }
-        lycopy.setOnClickListener(v -> Utils.copyText(reserveIDTV.getText().toString(), ReserveDetailsActivity.this));
 
         if (myApplication.getCurrentUserData().getReserveGBTBalance() != null) {
             reserveAmount = Utils.convertTwoDecimal(String.valueOf(myApplication.getCurrentUserData().getReserveGBTBalance()));
@@ -293,14 +292,20 @@ public class ReserveDetailsActivity extends BaseActivity {
             if (timeDate.contains(".")) {
                 timeDate = timeDate.substring(0, timeDate.lastIndexOf("."));
             }
-            timeDate = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a");
+            timeDate = myApplication.convertZoneDateTime(timeDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a").toLowerCase();
         }
         releaseDateTime.setText(timeDate);
 
         if (selected != null && selected.getBatchId() != null) {
             batchId = selected.getBatchId();
             reserveID.setText(batchId);
-            reserveIDTV.setText(Html.fromHtml("<u>"+batchId+"</u>"));
+            lycopy.setOnClickListener(v -> Utils.copyText(batchId, ReserveDetailsActivity.this));
+
+            if (batchId.length() > 14) {
+                reserveIDTV.setText(Html.fromHtml("<u>"+batchId.substring(0, 14) + "..."+"</u>"));
+            } else {
+                reserveIDTV.setText(Html.fromHtml("<u>"+batchId+"</u>"));
+            }
         }
         getDateDescription();
 
@@ -359,6 +364,8 @@ public class ReserveDetailsActivity extends BaseActivity {
         //Released Details
         if (selected != null && selected.getReserveAmount() != null) {
             releasedAMT.setText(selected.getReserveAmount() + " CYN");
+        } else {
+            releasedAMT.setText("0.00 CYN");
         }
         if (selected.getScheduledRelease() != null && !selected.getScheduledRelease().equals("")) {
             releaseDate = selected.getScheduledRelease();
@@ -366,7 +373,7 @@ public class ReserveDetailsActivity extends BaseActivity {
             if (releaseDate.contains(".")) {
                 releaseDate = releaseDate.substring(0, releaseDate.lastIndexOf("."));
             }
-            releaseDate = myApplication.convertZoneDateTime(releaseDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a");
+            releaseDate = myApplication.convertZoneDateTime(releaseDate, "yyyy-MM-dd HH:mm:ss", "MM/dd/yyyy @ hh:mm a").toLowerCase();
             releasedDateTime.setText(releaseDate);
         }
         tvDBAName.setText(myApplication.getStrUserName());
