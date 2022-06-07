@@ -122,7 +122,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     public static final String COMPANY_ID = "companyId";
-    public static final String BOOLEAN = "Boolean";
+    public static final String IS_TRACKER = "is_Tracker";
     public static int PERSONAL_ACCOUNT = 1, BUSINESS_ACCOUNT = 2, SHARED_ACCOUNT = 3;
     public static String PERSONAL = "Personal", BUSINESS = "Business", SHARED = "Shared";
     public static final String TOKEN = "0", MERCHANT = "1", RESERVE = "2";

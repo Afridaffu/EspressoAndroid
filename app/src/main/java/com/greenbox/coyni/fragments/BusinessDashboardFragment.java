@@ -553,6 +553,7 @@ public class BusinessDashboardFragment extends BaseFragment {
         } else {
             monthlyVolumeViewLl.setVisibility(View.GONE);
         }
+        showReserveReleaseBalance();
     }
     private void showData(List<BatchPayoutListItems> items) {
         showBatchPayouts(items);

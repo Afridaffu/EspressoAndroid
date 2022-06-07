@@ -22,16 +22,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
 import com.greenbox.coyni.R;
-import com.greenbox.coyni.adapters.BeneficialOwnersAdapter;
 import com.greenbox.coyni.interfaces.OnKeyboardVisibilityListener;
 import com.greenbox.coyni.model.BeneficialOwners.BOIdResp;
 import com.greenbox.coyni.model.BeneficialOwners.BOResp;
@@ -99,8 +95,8 @@ public class BusinessRegistrationTrackerActivity extends BaseActivity implements
                 new_DBA = getIntent().getBooleanExtra(Utils.NEW_DBA, false);
             }
 
-            if (getIntent().getBooleanExtra(Utils.BOOLEAN, false)) {
-                isTrackerCall = getIntent().getBooleanExtra(Utils.BOOLEAN, false);
+            if (getIntent().getBooleanExtra(Utils.IS_TRACKER, false)) {
+                isTrackerCall = getIntent().getBooleanExtra(Utils.IS_TRACKER, false);
             }
 
             if (getIntent().getIntExtra("dbaId", 0) != 0) {
