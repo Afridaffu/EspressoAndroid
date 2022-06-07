@@ -80,6 +80,7 @@ import com.greenbox.coyni.model.identity_verification.GetIdentityResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressRequest;
 import com.greenbox.coyni.model.identity_verification.IdentityAddressResponse;
 import com.greenbox.coyni.model.identity_verification.IdentityImageResponse;
+import com.greenbox.coyni.model.identity_verification.LatestTransactionsRequest;
 import com.greenbox.coyni.model.identity_verification.LatestTxnResponse;
 import com.greenbox.coyni.model.identity_verification.RemoveIdentityResponse;
 import com.greenbox.coyni.model.login.BiometricLoginRequest;
@@ -391,8 +392,8 @@ public interface ApiService {
     @GET("api/v2/profile/identity")
     Call<GetIdentityResponse> getIdentity();
 
-    @GET("api/v2/transactions/me/latest-txns")
-    Call<LatestTxnResponse> getLatestTransactions();
+    @POST("api/v2/transactions/latest-transactions")
+    Call<LatestTxnResponse> getLatestTransactions(@Body LatestTransactionsRequest request);
 
     @PATCH("api/v2/cards/me")
     Call<CardEditResponse> editCards(@Body CardEditRequest request, @Query("cardId") Integer cardId);
