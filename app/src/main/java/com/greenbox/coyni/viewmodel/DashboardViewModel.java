@@ -629,6 +629,7 @@ public class DashboardViewModel extends AndroidViewModel {
         try {
             ApiService apiService = AuthApiClient.getInstance().create(ApiService.class);
             Call<LatestTxnResponse> mCall = apiService.getLatestTransactions(request);
+
             mCall.enqueue(new Callback<LatestTxnResponse>() {
                 @Override
                 public void onResponse(Call<LatestTxnResponse> call, Response<LatestTxnResponse> response) {

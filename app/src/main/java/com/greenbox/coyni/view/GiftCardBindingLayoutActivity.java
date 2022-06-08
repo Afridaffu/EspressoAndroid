@@ -682,7 +682,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
 
         giftCardTypeTV.setText("Transaction Successful");
         imgLogo.setImageResource(R.drawable.ic_success_icon);
-        LinearLayout lyReference = findViewById(R.id.refIDLL);
+        LinearLayout lyReference = findViewById(R.id.lyReference);
 
         TextView giftCardAmountTV = findViewById(R.id.giftCardAmountTV);
         TextView giftCardDescTV = findViewById(R.id.giftCardDescTV);
@@ -692,6 +692,7 @@ public class GiftCardBindingLayoutActivity extends AppCompatActivity {
         LinearLayout lyMessage = findViewById(R.id.lyMessage);
 
 
+        lyReference.setVisibility(View.GONE);
         if (objMyApplication.getCheckOutModel() != null && objMyApplication.getCheckOutModel().isCheckOutFlag()) {
             objMyApplication.setCheckOutModel(null);
         }

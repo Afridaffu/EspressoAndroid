@@ -157,6 +157,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     TransactionLimitResponse objResponse;
     BusinessIdentityVerificationViewModel businessIdentityVerificationViewModel;
     private String businessTypeValue = "";
+    private boolean slideActionEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1090,7 +1091,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 flashLL.setVisibility(View.VISIBLE);
                 Utils.isSettingsBtnClicked = false;
             }
-            if (!isAlbumClicked) {
+            if (!isAlbumClicked && !slideActionEnabled) {
                 if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA)
                         == PackageManager.PERMISSION_GRANTED) {
@@ -1102,6 +1103,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 }
             } else {
                 isAlbumClicked = false;
+                slideActionEnabled = false;
             }
 
         } catch (Exception e) {
@@ -1644,8 +1646,9 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
                 LogUtils.v("Scan", "onDialog Clicked " + action);
                 if (action.equalsIgnoreCase("payTransaction")) {
                     if (!isAuthenticationCalled) {
+                        isAuthenticationCalled = true;
+                        slideActionEnabled = true;
                         if (payValidation()) {
-                            isAuthenticationCalled = true;
                             if ((isFaceLock || isTouchId) && Utils.checkAuthentication(ScanActivity.this)) {
                                 if (objMyApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(ScanActivity.this)) || (isFaceLock))) {
                                     Utils.checkAuthentication(ScanActivity.this, CODE_AUTHENTICATION_VERIFICATION);
@@ -1771,6 +1774,7 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
     }
 
     private Boolean payValidation() {
+
         boolean value = false;
         try {
             String strPay = strQRAmount.toString().trim().replace("\"", "");
@@ -1791,13 +1795,16 @@ public class ScanActivity extends BaseActivity implements TextWatcher, OnKeyboar
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        if (!value){
+            mcodeScanner.stopPreview();
+        }
         return value;
     }
 
     private void setDailyWeekLimit(LimitResponseData objLimit) {
         try {
                 if (objLimit.getTransactionLimit() != null && !objLimit.getTransactionLimit().equalsIgnoreCase("NA") && !objLimit.getTransactionLimit().equalsIgnoreCase("unlimited")) {
-                    maxValue = Double.parseDouble(objLimit.getWeeklyAccountLimit());
+                    maxValue = Double.parseDouble(objLimit.getTransactionLimit());
                 }
 //                if (objLimit.getDailyAccountLimit() != null && !objLimit.getDailyAccountLimit().equalsIgnoreCase("NA") && !objLimit.getDailyAccountLimit().equalsIgnoreCase("unlimited")) {
 //                    daily = Double.parseDouble(objLimit.getDailyAccountLimit());
