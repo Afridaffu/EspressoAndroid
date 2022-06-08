@@ -37,6 +37,7 @@ import com.greenbox.coyni.model.profile.BusinessAccountsListInfo;
 import com.greenbox.coyni.model.users.UserPreferenceModel;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
+import com.greenbox.coyni.utils.UserData;
 import com.greenbox.coyni.utils.Utils;
 import com.greenbox.coyni.view.business.BusinessCreateAccountsActivity;
 import com.greenbox.coyni.viewmodel.CustomerProfileViewModel;
@@ -50,6 +51,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
 
     private MyApplication myApplicationObj;
     Dialog dialog;
+    private UserData mCurrentUserData;
     private DashboardViewModel dashboardViewModel;
     private boolean isProfile = false;
     private TextInputLayout timeZoneTIL, accountTIL, currencyTIL;
@@ -79,6 +81,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
     private String personalAccountExist;
     ProfilesResponse globalProfileResp;
     private String childName;
+    private int userId;
 
 
     @Override
@@ -120,6 +123,8 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
             timezonetext = findViewById(R.id.timezoneTextTV);
             defaultaccLL = findViewById(R.id.defaultaccLL);
 
+            mCurrentUserData = new UserData();
+            userId = myApplicationObj.getLoginUserId();
             timeZoneTIL.setBoxStrokeColorStateList(Utils.getNormalColorState(getApplicationContext()));
             Utils.setUpperHintColor(currencyTIL, getColor(R.color.et_bg_gray));
 
@@ -372,7 +377,7 @@ public class PreferencesActivity extends BaseActivity implements BusinessProfile
         boolean showDBA = false;
         AccountsData accountsData = new AccountsData(filterList);
         profilesListView.setVisibility(View.VISIBLE);
-        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, myApplicationObj.getLoginUserId(), showDBA);
+        profilesListAdapter = new BusinessProfileRecyclerAdapter(PreferencesActivity.this, accountsData, userId, showDBA);
 
         profilesListAdapter.setOnItemClickListener(new BusinessProfileRecyclerAdapter.OnItemClickListener() {
             @Override
