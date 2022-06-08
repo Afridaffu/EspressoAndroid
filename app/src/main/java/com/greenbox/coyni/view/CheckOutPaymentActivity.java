@@ -400,8 +400,13 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     }
 
     private void initUserData(OrderInfoResponse orderInfoResponse) {
-        DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
-        utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
+        if (orderInfoResponse.getData().getMerchantLogo()!= null) {
+            DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
+            utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
+        }
+        else {
+            merchantImage.setImageResource(R.drawable.ic_case);
+        }
         if (orderInfoResponse.getData().getMerchantName() != null) {
             mUserName.setText(orderInfoResponse.getData().getMerchantName());
         } else {
