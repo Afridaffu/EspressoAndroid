@@ -167,16 +167,16 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         if (!isAuthenticationCalled) {
                             tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
-//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
-//                                if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
-//                                    Utils.checkAuthentication(CheckOutPaymentActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                                } else {
-//                                    launchPinActivity();
-//                                }
-//                            } else {
-//                                launchPinActivity();
-//                            }
-                            checkOutPayAPICall("");
+                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
+                                if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
+                                    Utils.checkAuthentication(CheckOutPaymentActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                } else {
+                                    launchPinActivity();
+                                }
+                            } else {
+                                launchPinActivity();
+                            }
+//                            checkOutPayAPICall("");
                         }
                     }
                 } catch (Exception e) {
