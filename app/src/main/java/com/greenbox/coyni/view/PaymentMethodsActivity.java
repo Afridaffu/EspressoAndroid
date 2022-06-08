@@ -339,7 +339,7 @@ public class PaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getDelBankResponseMutableLiveData().observe(this, new Observer<BankDeleteResponseData>() {
             @Override
             public void onChanged(BankDeleteResponseData bankDeleteResponseData) {
-                dismissDialog();
+                pDialog.dismiss();
                 if (bankDeleteResponseData.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(PaymentMethodsActivity.this, "Bank has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
@@ -350,7 +350,7 @@ public class PaymentMethodsActivity extends BaseActivity {
         paymentMethodsViewModel.getCardDeleteResponseMutableLiveData().observe(this, new Observer<CardDeleteResponse>() {
             @Override
             public void onChanged(CardDeleteResponse cardDeleteResponse) {
-                dismissDialog();
+               pDialog.dismiss();
                 if (cardDeleteResponse.getStatus().toLowerCase().equals("success")) {
                     Utils.showCustomToast(PaymentMethodsActivity.this, "Card has been removed.", R.drawable.ic_custom_tick, "");
                     getPaymentMethods();
