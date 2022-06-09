@@ -2,6 +2,7 @@ package com.greenbox.coyni.view.business;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -167,7 +168,7 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
                 inAddDba.putExtra(Utils.NEW_DBA, true);
                 inAddDba.putExtra(Utils.COMPANY_ID, selectedProfile.getId());
                 startActivity(inAddDba);
-
+                dialog.dismiss();
             }
         });
 
@@ -184,6 +185,18 @@ public class BusinessAddNewBusinessAccountActivity extends BaseActivity {
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (selectedProfile != null) {
+                    for (int i = 0; i < businessAccountList.size(); i++) {
+                        businessAccountList.get(i).setSelected(false);
+                    }
+                }
+                selectedProfile = null;
+            }
+        });
     }
 
     private void prepareCompanyList() {

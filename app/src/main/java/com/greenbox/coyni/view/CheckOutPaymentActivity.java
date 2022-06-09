@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +45,7 @@ import com.greenbox.coyni.utils.DisplayImageUtility;
 import com.greenbox.coyni.utils.LogUtils;
 import com.greenbox.coyni.utils.MyApplication;
 import com.greenbox.coyni.utils.Utils;
+import com.greenbox.coyni.view.business.PayToMerchantActivity;
 import com.greenbox.coyni.viewmodel.BusinessDashboardViewModel;
 import com.greenbox.coyni.viewmodel.BuyTokenViewModel;
 import com.greenbox.coyni.viewmodel.CheckOutViewModel;
@@ -167,16 +172,18 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
                         if (!isAuthenticationCalled) {
                             tv_lable.setText("Verifying");
                             isAuthenticationCalled = true;
-//                            if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
-//                                if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
-//                                    Utils.checkAuthentication(CheckOutPaymentActivity.this, CODE_AUTHENTICATION_VERIFICATION);
-//                                } else {
-//                                    launchPinActivity();
-//                                }
-//                            } else {
-//                                launchPinActivity();
-//                            }
-                            checkOutPayAPICall("");
+                            if (payValidation()) {
+                                if ((isFaceLock || isTouchId) && Utils.checkAuthentication(CheckOutPaymentActivity.this)) {
+                                    if (myApplication.getBiometric() && ((isTouchId && Utils.isFingerPrint(CheckOutPaymentActivity.this)) || (isFaceLock))) {
+                                        Utils.checkAuthentication(CheckOutPaymentActivity.this, CODE_AUTHENTICATION_VERIFICATION);
+                                    } else {
+                                        launchPinActivity();
+                                    }
+                                } else {
+                                    launchPinActivity();
+                                }
+                            }
+//                            checkOutPayAPICall("");
                         }
                     }
                 } catch (Exception e) {
@@ -400,8 +407,13 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
     }
 
     private void initUserData(OrderInfoResponse orderInfoResponse) {
-        DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
-        utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
+        if (orderInfoResponse.getData().getMerchantLogo()!= null) {
+            DisplayImageUtility utility = DisplayImageUtility.getInstance(CheckOutPaymentActivity.this);
+            utility.addImage(orderInfoResponse.getData().getMerchantLogo(), merchantImage, R.drawable.ic_case);
+        }
+        else {
+            merchantImage.setImageResource(R.drawable.ic_case);
+        }
         if (orderInfoResponse.getData().getMerchantName() != null) {
             mUserName.setText(orderInfoResponse.getData().getMerchantName());
         } else {
@@ -513,6 +525,70 @@ public class CheckOutPaymentActivity extends AppCompatActivity {
             }
         }
     }
+    private boolean payValidation() {
+            String strPay = mAmount.getText().toString().trim().replace("\"", "");
+            boolean value;
 
+            if (userAmount > availableBalance) {
+                displayAlert("Seems like no token available in your account. Please follow one of the prompts below to buy token.", "Oops!");
+                value = false;
+            } else {
+                value = true;
+            }
+            return  value;
+        }
+
+    private void displayAlert(String msg, String headerText) {
+        // custom dialog
+        final Dialog dialog = new Dialog(CheckOutPaymentActivity.this);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_alert_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DisplayMetrics mertics = getResources().getDisplayMetrics();
+        int width = mertics.widthPixels;
+
+        TextView header = dialog.findViewById(R.id.tvHead);
+        TextView message = dialog.findViewById(R.id.tvMessage);
+        CardView actionCV = dialog.findViewById(R.id.cvAction);
+        TextView actionText = dialog.findViewById(R.id.tvAction);
+        actionText.setText("Buy Token");
+
+        if (!headerText.equals("")) {
+            header.setVisibility(View.VISIBLE);
+            header.setText(headerText);
+        }
+
+        actionCV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                myApplication.setStrScreen("payRequest");
+                Intent i = new Intent(CheckOutPaymentActivity.this, BuyTokenPaymentMethodsActivity.class);
+                i.putExtra("screen", "payRequest");
+                startActivity(i);
+                //finish();
+            }
+        });
+
+        message.setText(msg);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+
+        if (myApplication.getCheckOutModel()!= null && myApplication.getCheckOutModel().isCheckOutFlag()) {
+            dialog.setCanceledOnTouchOutside(false);
+        } else {
+            dialog.setCanceledOnTouchOutside(true);
+        }
+        dialog.show();
+    }
 
 }
