@@ -791,8 +791,8 @@ public class MyApplication extends Application {
         return Utils.getDate(date);
     }
 
-    public PaymentMethodsResponse businessPaymentMethods(PaymentMethodsResponse objResponse) {
-        return Utils.businessPaymentMethods(getAccountType(), objResponse);
+    public PaymentMethodsResponse businessPaymentMethods(PaymentMethodsResponse objResponse,String strScreen) {
+        return Utils.businessPaymentMethods(getAccountType(), objResponse,strScreen);
     }
 
     public String setNameHead(String strName) {
