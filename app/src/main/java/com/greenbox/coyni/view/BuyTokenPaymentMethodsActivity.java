@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -23,6 +24,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -305,7 +307,7 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(SyncAccount syncAccount) {
                 try {
-                    dialog.dismiss();
+                    pDialog.dismiss();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
 
@@ -1095,8 +1097,12 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     try {
                         extBankDialog.dismiss();
                         if (strCurrent.equals("firstError")) {
+//                            ControlMethod("addpayment");
+//                            strCurrent = "addpayment";
+
                             ControlMethod("addpayment");
                             strCurrent = "addpayment";
+
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1123,6 +1129,21 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+            extBankDialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                @Override
+                public boolean onKey(DialogInterface arg0, int keyCode,
+                                     KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        extBankDialog.dismiss();
+                        if (strCurrent.equals("firstError")) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                        }
+                    }
+                    return true;
                 }
             });
         } catch (Exception ex) {

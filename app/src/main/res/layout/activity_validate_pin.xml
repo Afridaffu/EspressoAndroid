@@ -149,7 +149,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_24sdp"
             android:fontFamily="@font/opensans_semibold"
-            android:text="Forgot PIN"
+            android:text="@string/forgot_pin"
             android:textColor="@color/primary_green"
             android:textSize="@dimen/_12ssp"
             android:visibility="visible" />

@@ -4,6 +4,7 @@ import static android.view.View.VISIBLE;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -65,7 +67,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
     PaymentMethodsViewModel paymentMethodsViewModel;
     LinearLayout lyBPayClose, lyExternalClose, lySelBack, lyAddPay;
     RelativeLayout layoutDCard, lyExternal, layoutSignet;
-    String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "";
+    String strCurrent = "", strSignOn = "", strScreen = "", strOnPauseScreen = "", strMenu = "";
     SignOnData signOnData;
     Dialog dialog, pDialog;
     TextView tvBankError, tvDCardError, tvSignetError, tvExtBankHead, tvExtBankMsg, tvDCardHead, tvDCardMsg, tvSignetCount, tvSignetMsg;
@@ -190,9 +192,14 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
 
     private void initialization() {
         try {
+            if (getIntent().getStringExtra("menuitem") != null) {
+                strMenu = getIntent().getStringExtra("menuitem");
+            } else {
+                strMenu = "";
+            }
             objMyApplication = (MyApplication) getApplicationContext();
             paymentMethodsResponse = objMyApplication.getPaymentMethodsResponse();
-            paymentMethodsResponse = objMyApplication.businessPaymentMethods(objMyApplication.getPaymentMethodsResponse());
+            paymentMethodsResponse = objMyApplication.businessPaymentMethods(objMyApplication.getPaymentMethodsResponse(), strMenu);
             customerProfileViewModel = new ViewModelProvider(this).get(CustomerProfileViewModel.class);
             dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
             paymentMethodsViewModel = new ViewModelProvider(this).get(PaymentMethodsViewModel.class);
@@ -328,7 +335,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                         paymentMethodsResponse = objResponse;
                     } else {
                         objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
-                        paymentMethodsResponse = objMyApplication.businessPaymentMethods(payMethodsResponse);
+                        paymentMethodsResponse = objMyApplication.businessPaymentMethods(payMethodsResponse, strMenu);
                     }
 //                    PaymentMethodsResponse objResponse = objMyApplication.filterPaymentMethods(payMethodsResponse);
 //                    objMyApplication.setPaymentMethodsResponse(objResponse);
@@ -729,7 +736,9 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                 public void onClick(View v) {
 //                    ControlMethod("externalBank");
 //                    strCurrent = "externalBank";
-                    showExternalBank();
+                    ControlMethod("externalBank");
+                    strScreen = "externalBank";
+
                 }
             });
         } catch (Exception ex) {
@@ -1026,7 +1035,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
 
     private void showExternalBank() {
         try {
-            extBankDialog = new Dialog(SelectPaymentMethodActivity.this,R.style.DialogTheme);
+            extBankDialog = new Dialog(SelectPaymentMethodActivity.this);
             extBankDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
             extBankDialog.setContentView(R.layout.activity_add_external_bank_acc);
             extBankDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -1039,7 +1048,7 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
             LinearLayout lyClose = extBankDialog.findViewById(R.id.lyExternalClose);
 
             Window window = extBankDialog.getWindow();
-            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             extBankDialog.setCanceledOnTouchOutside(false);
@@ -1087,6 +1096,21 @@ public class SelectPaymentMethodActivity extends AppCompatActivity {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                }
+            });
+            extBankDialog.setOnKeyListener(new Dialog.OnKeyListener() {
+
+                @Override
+                public boolean onKey(DialogInterface arg0, int keyCode,
+                                     KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        extBankDialog.dismiss();
+                        if (strCurrent.equals("firstError")) {
+                            ControlMethod("addpayment");
+                            strCurrent = "addpayment";
+                        }
+                    }
+                    return true;
                 }
             });
         } catch (Exception ex) {
