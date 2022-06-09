@@ -76,6 +76,7 @@ public class DashboardActivity extends BaseActivity {
     LinearLayout scanQr, viewMoreLL, notificationsSmallLL, ll_identity_verification_failed;
     RelativeLayout notificationsLL;
     DashboardViewModel dashboardViewModel;
+
     BusinessDashboardViewModel businessDashboardViewModel;
     CustomerProfileViewModel customerProfileViewModel;
     IdentityVerificationViewModel identityVerificationViewModel;
