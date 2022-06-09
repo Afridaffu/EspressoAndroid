@@ -105,6 +105,7 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     private MyApplication myApplicationObj;
     private DatabaseHandler dbHandler;
     private ExpandableListView profilesListView;
+    private Long mLastClickTime = 0L;
 
     private List<ProfilesResponse.Profiles> filterList = new ArrayList<>();
     private List<ProfilesResponse.Profiles> businessAccountList = new ArrayList<>();
@@ -118,7 +119,6 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
     Dialog dialog;
     DashboardViewModel dashboardViewModel;
     boolean isProfile = false;
-    Long mLastClickTime = 0L;
     private String personalAccountExist;
 
     String emailId = "", address = "", phoneNo = "";
@@ -483,6 +483,11 @@ public class UserDetailsActivity extends BaseActivity implements OnKeyboardVisib
 
             business_defaultaccountET.setOnClickListener(view -> {
                 try {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
+                        return;
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
                     final Dialog dialog = new Dialog(UserDetailsActivity.this);
                     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.default_account_dialog);
