@@ -21,6 +21,7 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
+    <string name="forgot_pin"><u>Forgot PIN</u></string>
     <string name="additional_documents">Additional Documents </string>
     <string name="uploaded_articles">Uploaded Articles of Incorporation</string>
     <string name="previous">Previous</string>

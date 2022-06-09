@@ -260,6 +260,7 @@ public class BusinessDashboardActivity extends BaseActivity {
 //            mLastClickTimeQA = SystemClock.elapsedRealtime();
             Intent i = new Intent(BusinessDashboardActivity.this, SelectPaymentMethodActivity.class);
             i.putExtra("screen", "dashboard");
+            i.putExtra("menuitem", "buy");
             startActivity(i);
         } catch (Exception ex) {
             ex.printStackTrace();
