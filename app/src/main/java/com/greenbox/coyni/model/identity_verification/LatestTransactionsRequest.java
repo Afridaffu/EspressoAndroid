@@ -21,4 +21,5 @@ public class LatestTransactionsRequest {
     public void setTransactionType(ArrayList<Integer> transactionType) {
         this.transactionType = transactionType;
     }
+
 }
