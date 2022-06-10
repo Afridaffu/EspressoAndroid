@@ -56,7 +56,7 @@ import com.greenbox.coyni.viewmodel.PaymentMethodsViewModel;
 
 import java.util.List;
 
-public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
+public class BuyTokenPaymentMethodsActivity extends BaseActivity {
     MyApplication objMyApplication;
     PaymentMethodsResponse paymentMethodsResponse;
     CustomerProfileViewModel customerProfileViewModel;
@@ -167,7 +167,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
                     if (extBankDialog != null) {
                         extBankDialog.dismiss();
                     }
-                    dialog = Utils.showProgressDialog(this);
+//                    dialog = Utils.showProgressDialog(this);
+                    showProgressDialog();
                     customerProfileViewModel.meSyncAccount();
                 }
             } else if (requestCode == 3) {
@@ -239,9 +240,10 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(SignOn signOn) {
                 try {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
+//                    if (dialog != null) {
+//                        dialog.dismiss();
+//                    }
+                    dismissDialog();
                     if (signOn != null) {
                         if (signOn.getStatus().toUpperCase().equals("SUCCESS")) {
                             objMyApplication.setSignOnData(signOn.getData());
@@ -274,7 +276,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(APIError apiError) {
                 try {
-                    dialog.dismiss();
+//                    dialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
                         if (apiError.getError().getErrorCode().equals(getString(R.string.error_code)) && !objMyApplication.getResolveUrl()) {
                             Log.e("setResolveUrl", "252 setResolveUrl");
@@ -307,7 +310,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(SyncAccount syncAccount) {
                 try {
-                    pDialog.dismiss();
+//                    dialog.dismiss();
+                    dismissDialog();
                     if (syncAccount != null) {
                         if (syncAccount.getStatus().toLowerCase().equals("success")) {
 
@@ -337,9 +341,10 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
         dashboardViewModel.getPaymentMethodsResponseMutableLiveData().observe(this, new Observer<PaymentMethodsResponse>() {
             @Override
             public void onChanged(PaymentMethodsResponse payMethodsResponse) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+//                if (dialog != null) {
+//                    dialog.dismiss();
+//                }
+                dismissDialog();
                 if (payMethodsResponse != null) {
 //                    objMyApplication.setPaymentMethodsResponse(payMethodsResponse);
 //                    paymentMethodsResponse = payMethodsResponse;
@@ -393,7 +398,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
             @Override
             public void onChanged(APIError apiError) {
                 try {
-                    pDialog.dismiss();
+//                    pDialog.dismiss();
+                    dismissDialog();
                     if (apiError != null) {
                         if (!apiError.getError().getErrorDescription().equals("")) {
                             Utils.displayAlert(apiError.getError().getErrorDescription(), BuyTokenPaymentMethodsActivity.this, "", apiError.getError().getFieldErrors().get(0));
@@ -425,7 +431,8 @@ public class BuyTokenPaymentMethodsActivity extends AppCompatActivity {
     private void getPaymentMethods() {
         try {
             isPayments = true;
-            dialog = Utils.showProgressDialog(this);
+//            dialog = Utils.showProgressDialog(this);
+            showProgressDialog();
             dashboardViewModel.mePaymentMethods();
         } catch (Exception ex) {
             ex.printStackTrace();
