@@ -98,7 +98,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     DatabaseHandler dbHandler;
     Brand objBrand;
     Dialog pDialog;
-    Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0,feeInAmount = 0.0, feeInPercentage = 0.0;;
+    Double fee = 0.0, min = 0.0, max = 0.0, maxValue = 0.0, minValue = 0.0, feeInAmount = 0.0, feeInPercentage = 0.0;
+    ;
     List<Items> listAmounts = new ArrayList<>();
     String amountETString = "", amount = "", strLimit = "", strBrandDesc = "";
     public String selectedFixedAmount = "";
@@ -348,7 +349,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 //                            Glide.with(GiftCardDetails.this).load(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim()).into(brandIV);
 
                             DisplayImageUtility utility = DisplayImageUtility.getInstance(GiftCardDetails.this);
-                            utility.addImage(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim(), brandIV,0);
+                            utility.addImage(brandsResponse.getData().getBrands().get(0).getImageUrls().get_1200w326ppi().trim(), brandIV, 0);
 
                             if (objBrand.getItems() != null && objBrand.getItems().size() > 0) {
                                 listAmounts = new ArrayList<>();
@@ -481,9 +482,9 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
 //                            Utils.setUpperHintColor(amountTIL, getResources().getColor(R.color.primary_black));
                             Double walletAmount = 0.0;
                             if (objMyApplication.getAccountType() == Utils.PERSONAL_ACCOUNT) {
-                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getAvailableBalance() + "".replace(",", ""));
+                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getTokenWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             } else {
-                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getAvailableBalance() + "".replace(",", ""));
+                                walletAmount = Double.parseDouble(objMyApplication.getCurrentUserData().getMerchantWalletResponse().getWalletNames().get(0).getExchangeAmount() + "".replace(",", ""));
                             }
 //                            Double giftCardAmount = (Double.parseDouble(amountET.getText().toString().replace(",", "")) + Double.parseDouble(fee.toString().replace(",", "")));
                             Double giftCardAmount = Double.parseDouble(amountET.getText().toString().replace(",", "")) * (1 - (feeInPercentage / 100)) - feeInAmount;
@@ -495,12 +496,14 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                 minValue = min;
                             }
 
+                            String strPFee = Utils.convertBigDecimalUSDC(String.valueOf(fee));
+                            Double total = Double.parseDouble(amountET.getText().toString()) + Double.parseDouble(strPFee);
                             if (walletAmount.equals(giftCardETAmount)) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
                                 amountErrorTV.setText("Insufficient funds. Your transaction fee will increase your total withdrawal amount, exceeding your balance.");
 
-                            } else if (walletAmount < giftCardAmount) {
+                            } else if ((walletAmount < giftCardAmount) || (total > walletAmount)) {
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
                                 amountErrorTV.setText("Amount entered exceeds available balance");
@@ -513,8 +516,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                                 isAmount = false;
                                 amountErrorLL.setVisibility(VISIBLE);
                                 amountErrorTV.setText("Amount entered exceeds limit");
-                            }
-                            else {
+                            } else {
                                 String limitType = objTranLimit.getData().getLimitType();
                                 if (limitType.equalsIgnoreCase("PER TRANSACTION")) {
                                     if (giftCardETAmount > Double.parseDouble(objTranLimit.getData().getTransactionLimit())) {
@@ -598,8 +600,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                         isFirstName = false;
                     }
 
-                    if (firstNameET.getText().toString().contains("  ")){
-                        firstNameET.setText(firstNameET.getText().toString().replace("  "," "));
+                    if (firstNameET.getText().toString().contains("  ")) {
+                        firstNameET.setText(firstNameET.getText().toString().replace("  ", " "));
                         firstNameET.setSelection(firstNameET.getText().length());
                     }
                     enableOrDisableNext();
@@ -649,8 +651,8 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
                         isLastName = false;
                     }
 
-                    if (lastNameET.getText().toString().contains("  ")){
-                        lastNameET.setText(lastNameET.getText().toString().replace("  "," "));
+                    if (lastNameET.getText().toString().contains("  ")) {
+                        lastNameET.setText(lastNameET.getText().toString().replace("  ", " "));
                         lastNameET.setSelection(lastNameET.getText().length());
                     }
                     enableOrDisableNext();
@@ -1206,7 +1208,7 @@ public class GiftCardDetails extends BaseActivity implements OnKeyboardVisibilit
     private void withdrawGiftCard() {
         try {
             if (Utils.checkInternet(GiftCardDetails.this)) {
-                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(),objMyApplication.getStrToken());
+                buyTokenViewModel.withdrawTokens(objMyApplication.getWithdrawRequest(), objMyApplication.getStrToken());
             }
         } catch (Exception ex) {
             ex.printStackTrace();
